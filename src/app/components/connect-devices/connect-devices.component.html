@@ -1,0 +1,354 @@
+<div class="wrapper col-md-12 " style="padding-left: 0px">
+    <app-header></app-header>
+    <div class="main-panel col-md-12" style="height: unset;max-height: unset;">
+        <!-- Navbar -->
+        <!-- <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
+                  <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
+                  <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+                </button>
+                    </div>
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                  <span class="navbar-toggler-bar bar1"></span>
+                  <span class="navbar-toggler-bar bar2"></span>
+                  <span class="navbar-toggler-bar bar3"></span>
+                </button>
+                    </div>
+                    <a class="navbar-brand">LOGO</a>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+            </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                    <ul class="navbar-nav">
+                        <li>
+                            <span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">
+                                        Logout
+                                        <p>
+                                            <span class="d-lg-none d-md-block">Account</span>
+                                        </p>
+                                    </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav> -->
+
+        <!-- End Navbar -->
+        <div class="content " style="margin-top: 40px;">
+            <div class="row">
+                <div class="col-md-4">
+                    <form class="form-horizontal" id="formData" #deviceData="ngForm" (ngSubmit)="referesh('device_id')">
+                        <div class="card ">
+                            <!-- <div class="card-header text-center" style="width: 100%; height: 30%;">
+                                <h4 class="card-title" style="font-size: 18px;">ADD New Device</h4>
+                                <hr>
+                            </div> -->
+
+                            <div class="card-body" style="padding: 0px;">
+                                <div class="">
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">Name:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.name}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">Device Id:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.device_id}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">client Id:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.client_id}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">PGP Email:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.email}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">Model:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.model}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">IMEI:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.imei}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">Mac:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.mac_address}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">SIM:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.simno}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">IP Address:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.ip_address}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">S-Dealer:</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.s_dealer_name}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">Status</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.account_status == 'suspended' ? 'Suspended' : device_data.status}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">Start Date</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.start_date}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row col_head">
+                                        <label class="col-sm-4 col-form-label left_headed">Expiry Date</label>
+                                        <div class="col-sm-7">
+                                            <div class="form-group">
+                                                {{device_data.expiry_date}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <!-- <div class="row"> -->
+                                    <!-- <label class="col-sm-4 col-form-label"></label> -->
+                                    <!-- <div class="col-sm-12"> -->
+                                        
+                                        <button type="submit" style="margin-left: 0px;background: #24d824;" class="btn btn-primary btn-block">Refresh</button>
+                                       
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card" style="height: 107%;border-radius: unset;padding-bottom: 7px;">
+                        <div class="deviceS">
+                            <div class="app" style="margin-top: 8px;">
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="btn-group phone_actions_container">
+                            <a href="" class="btn btn-light phone_actions" style="">
+                                <span class="fa fa-check" style="color:green;"></span><br> 
+                                <p style="">Apply</p>
+                            </a>
+                            <a href="" class="btn btn-light phone_actions" style=" ">
+                                <span class="fa fa-undo" style="color:orange;"></span><br> 
+                                <p style="">Undo</p>
+                            </a>
+                            <a href="" class="btn btn-light phone_actions" style=" ">
+                                <span class="fa fa-refresh" style="color:orange;"></span><br> 
+                                <p style="">Redo</p>
+                            </a>
+                            <a href="" class="btn btn-light phone_actions" style="">
+                                <span class="fa fa-close" style="color:red;"></span><br> 
+                                <p style="">Clear All</p>
+                            </a>
+
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-4">
+                    <div class="card" style="border-radius: unset;">
+                        
+                        <table class="table table-responsive action_table">
+                            <thead>
+                                <tr>
+                                    <td colspan="2">
+                                        <select class="form-control" >
+                                            <option>Display</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-primary purple">Load Profile
+                                        </button>
+                                        <span class="fa fa-user-o pull-right" style=""></span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary purple">Save Profile</button>
+                                        <span class="fa fa-floppy-o pull-right" style=""></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-primary purple">Load History</button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary purple">Load Policy</button><br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-primary purple">Disable</button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary purple">Power</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-primary purple">N/A</button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary purple">N/A</button><br>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-primary purple">N/A</button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary purple">N/A</button><br>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            
+                            <tfoot>
+                                <br>
+                                <tr>
+
+                                    <td colspan="2">
+                                        <button class="btn btn-warning btn-block" style=" margin: 0px; font-size: 14px;">SUSPEND</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <button class="btn btn-primary btn-block" style="background:#51cbce; margin: 0px; font-size: 14px;">UNLINK</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <button class="btn btn-danger btn-block" style=" margin: 0px; font-size: 14px;">POWER</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        
+                        </table>
+                      
+                        
+                        <!-- <table class="table-responsive table-menu" style="text-align:center  !important">
+                            <tr>
+                                <td>
+                                    <button class="btn sideMenu">Push</button>
+                                </td>
+                                <td>
+                                    <button class="btn sideMenu">Apps</button><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn sideMenu">Pull</button>
+                                </td>
+                                <td>
+                                    <button class="btn sideMenu">N/A</button><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn sideMenu">Load<br>Profile</button>
+                                </td>
+                                <td>
+                                    <button class="btn sideMenu">N/A</button><br>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button class="btn sideMenu">Save<br>Profile</button>
+                                </td>
+                                <td>
+                                    <button class="btn sideMenu">N/A</button><br>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button class="btn sideMenu">Disable</button>
+                                </td>
+                                <td>
+                                    <button class="btn sideMenu">Power</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><br>
+                                    <button class="btn btn-primary " style="background:#51cbce; margin: 0px auto; padding: 14px 50px; font-size: 14px; border-radius: 8px;">UNLINK</button>
+                                </td>
+                            </tr>
+                        </table> -->
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,241 @@
+<style>
+    .tooltiptext {
+        visibility: hidden;
+        width: 54px;
+        background-color: #fab526;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+        font-weight: 500;
+        padding: 6px 0;
+        position: absolute;
+        z-index: 1;
+        font-size: 14px;
+        top: 0px;
+        left: -54px;
+        text-transform: capitalize;
+    }
+    
+    .remove .tooltiptext {
+        width: 69px;
+        background-color: #eb6532;
+        left: -69px;
+    }
+    
+    .edit,
+    .remove {
+        overflow: visible;
+    }
+    
+    a.edit:hover .tooltiptext,
+    a.remove:hover .tooltiptext {
+        visibility: visible;
+        transition: all .15s linear;
+    }
+</style>
+<div class="wrapper ">
+    <app-dealer-header></app-dealer-header>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
+                <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
+                <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+              </button>
+                    </div>
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+                    </div>
+                    <a class="navbar-brand">LOGO</a>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+          </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+
+                    <ul class="navbar-nav">
+                        <li>
+                            <span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">
+                                <!-- <i class="nc-icon nc-button-power"></i> -->
+                                Logout
+                                <p>
+                                    <span class="d-lg-none d-md-block">Account</span>
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card" style="box-shadow:none;">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h4 class="card-title float-center col-md-12" align="center">S-Dealers</h4>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <a routerLink="/dealer/create-sdealer" class="">
+                                            <button class="btn btn-success">ADD S-Dealer</button></a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <br>
+                            </div>
+                            <div class="card-body cardHig" style="overflow: scroll;">
+                                <div class="toolbar">
+                                    <!--  Here you can write extra buttons/actions for the toolbar  -->
+                                </div>
+                                <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="disabled-sorting">Account</th>
+                                            <th class="disabled-sorting">Action</th>
+                                            <th (click)="sort('sdealer_name')">Name<span class="fa fa-sort"></span></th>
+                                            <th (click)="sort('sdealer_email')">Email<span class="fa fa-sort"></span></th>
+                                            <th (click)="sort('sdealer_link_code')">Dealer PIN<span class="fa fa-sort"></span></th>
+                                            <th (click)="sort('sdealer_connected_devices')">Connected<br>Devices<span class="fa fa-sort"></span></th>
+                                            <th>Tokens<span class="fa fa-sort"></span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let dealer of allSubDelears  | orderBy: key : reverse | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">
+
+                                            <td class="text-right btnFull">
+                                                <a href="javascript:void(0)" (click)="showEditForm(dealer)" data-toggle="modal" data-target="#edit"><button
+                                                                class="btn btn-primary btn-sm" >Edit</button></a>
+                                                <a href="javascript:void(0)" *ngIf="(dealer.sdealer_account_status==null || dealer.sdealer_account_status=='')" (click)="suspendForm(dealer.sdealer_id);"><button
+                                                                class="btn btn-danger btn-sm">Suspend</button></a>
+                                                <a href="javascript:void(0)" *ngIf=" dealer.sdealer_account_status=='suspended' " (click)="activateForm(dealer.sdealer_id);"><button
+                                                                class="btn btn-danger btn-sm">Activate</button></a>
+                                                <a href="javascript:void(0)"><button
+                                                                class="btn btn-info btn-sm"  *ngIf=" dealer.sdealer_unlink_status== 0 " (click)="unlinkSdealerUser(dealer.sdealer_id)">Delete</button></a>
+                                                <a href="javascript:void(0)"><button
+                                                                    class="btn btn-info btn-sm"  *ngIf=" dealer.sdealer_unlink_status== 1 " (click)="undoUser(dealer.sdealer_id)">Undo</button></a>
+                                            </td>
+                                            <td class="text-left btnFull">
+                                                <a href="javascript:void(0)" (click)="passEditForm(dealer);" data-toggle="modal" data-target="#passedit"><button
+                                                                    class="btn btn-primary btn-sm">Reset<br>Password</button></a>
+                                                <a><button
+                                                                    class="btn btn-danger btn-sm" >Connect</button></a>
+                                            </td>
+
+
+                                            <td>{{ dealer.sdealer_name }}</td>
+                                            <td>{{ dealer.sdealer_email }}</td>
+                                            <td>{{ dealer.sdealer_link_code }}</td>
+                                            <td>{{ dealer.sdealer_connected_devices[0].total }}</td>
+
+                                            <td></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <div class="row text-center" style="display: block;">
+                                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                </div>
+                                <div class="modal fade" id="passedit" tabindex="-1" role="dialog" aria-labelledby="passedit" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title custom_align">Reset Password</h5>
+                                                <span class="close" id="from" onclick="removepassClass()">&times;</span>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="formmbgg" #deviceData="ngForm" method="" (ngSubmit)="updatePassSubDealer()" ngNativeValidate>
+                                                    <p> (*)- Mandotory fields</p>
+                                                    <div class="form-group">
+                                                        <label>Email *</label>
+                                                        <input type="email" class="form-control" name="email" [(ngModel)]="data.email" required disabled>
+                                                        <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>New Password</label>
+                                                        <input type="password" id="myInput" class="form-control" required="" name="password" [(ngModel)]="data.newpwd">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" onclick="myFunction()">
+                                                        <span class="form-check-sign"></span>
+                                                        Show Password
+                                                    </label>
+                                                        </div>
+                                                    </div>
+                                                    <br>
+                                                    <button type="submit" class="btn btn-primary">UPDATE</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title custom_align">Edit Your Detail</h5>
+                                                <span class="close" id="from" onclick="removeClass()">&times;</span>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="formData" #deviceData="ngForm" method="" (ngSubmit)="updateSubDealer()" ngNativeValidate>
+                                                    <p> (*)- Mandotory fields</p>
+                                                    <div class="form-group">
+                                                        <label>Name *</label>
+                                                        <input type="text" class="form-control" name="name" [(ngModel)]="data.name">
+                                                        <font class="errortext" color="red" *ngIf="!deviceData.form.controls.name?.valid && deviceData.form.controls.name?.touched">Please Enter Your Name</font>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Email *</label>
+                                                        <input type="email" class="form-control" name="email" [(ngModel)]="data.email" required>
+                                                        <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Dealer Pin</label>
+                                                        <input type="text" class="form-control" name="link_code" [(ngModel)]="data.link_code" disabled>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Connected Devices</label>
+                                                        <input type="text" class="form-control" name="connected_devices" [(ngModel)]="data.connected_devices" disabled>
+                                                    </div>
+
+                                                    <br>
+                                                    <button type="submit" class="btn btn-primary">UPDATE</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                            </div>
+                            <!-- end content-->
+                        </div>
+                        <!--  end card  -->
+                    </div>
+                    <!-- end col-md-12 -->
+                </div>
+                <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>

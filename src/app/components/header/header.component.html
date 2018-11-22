@@ -1,0 +1,101 @@
+ <!-- navbar -->
+<div class="wrap-all-nav">
+    <!--nav satu-->
+    
+    <nav class="navbar navbar-default">
+            <div class="col-xs-6 col-sm-2 col-md-1">
+                <a class="navbar-brand" href="#" style="color:black!important;">
+                    <!-- <img src="/assets/images/bg.jpg" class="img-responsive" style="height: 70px; width: 70px;"> -->
+                    Your Logo
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-4 hidden-xs no-padding">
+                <span class="badge badge-default pull-right" >WEBMDM_V1.02</span>
+                
+            </div>
+            <div class="col-sm-6 col-md-6 hidden-xs no-padding">
+                <div class="input-group stylish-input-group pull-right">
+                    
+                    <input type="text" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" placeholder="Search" >
+                    
+                    <button  class="btn btn-primary btn-circle btn-lg"><i class="fa fa-power-off"></i></button>
+                </div>
+            </div>
+
+    </nav>
+    
+    <!--end nav dua-->
+</div>
+    <!-- end navbar -->
+
+
+<div class="sidebar" data-color="purple" data-active-color="orange" style="">
+    <div class="logo">
+        <a class="simple-text logo-normal" align="center">
+            Admin Dashboard
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="user">
+            <div class="photo">
+                <img src="assets/img/faces/ayo-ogunseinde-2.jpg" />
+            </div>
+            <div class="info">
+                <a data-toggle="collapse" routerLink="#collapseExample" class="collapsed">
+                    <span class="view" style="font-size: 12px;">
+                    Admin
+          </span>
+                </a>
+                <div class="clearfix"></div>
+                <div class="collapse" id="collapseExample">
+
+                </div>
+            </div>
+        </div>
+        <ul id="menu" class="lefttNav">
+            <li class="xyz">
+                <a routerLink="/devices" routerLinkActive="active">
+                    <i class="nc-icon nc-mobile" style="font-size: 12px;"></i>
+                    <p>DEVICES</p>
+                </a>
+            </li>
+            <li class="xyz">
+                <a routerLinkActive="active">
+                    <i class="nc-icon nc-badge" style="font-size: 12px;"></i>
+                    <p> Account </p>
+                </a>
+            </li>
+            <li class="xyz">
+                <a routerLink="/dealer" routerLinkActive="active" class="submenu">
+
+                    <i class="fa fa-users" style="font-size: 12px;"></i>
+                    <span class="sidebar-normal"><p>Dealers</p></span>
+                </a>
+            </li>
+            <li class="xyz">
+                <a routerLink="/sdealer" routerLinkActive="active" class="submenu">
+                    <i class="fa fa-users" style="font-size: 12px;"></i>
+                    <span class="sidebar-normal"><p>S-Dealer</p></span>
+                </a>
+            </li>
+            <li class="xyz">
+                <a routerLinkActive="active" class="submenu">
+                    <i class="fa fa-users" style="font-size: 12px;"></i>
+                    <span class="sidebar-normal"><p>Client</p></span>
+                </a>
+            </li>
+            <li class="xyz">
+                <a routerLinkActive="active" routerLink="/view-apk">
+                    <i class="nc-icon nc-settings" style="font-size: 12px;"></i>
+                    <p>Upload Apk</p>
+                </a>
+            </li>
+            <li class="xyz">
+                <a routerLinkActive="active">
+                    <i class="nc-icon nc-settings" style="font-size: 12px;"></i>
+                    <p>Settings</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

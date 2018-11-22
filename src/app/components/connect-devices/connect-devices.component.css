@@ -1,0 +1,115 @@
+.card-manu {
+    margin-top: -20px !important;
+}
+
+.refreshButton {
+    margin-bottom: 0px !important;
+}
+
+.scrollbar {
+    height: 440px !important;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.sideMenu {
+    background: #ee0f0f;
+    border-radius: 8px;
+    padding: 8px 8px;
+    font-size: 14px;
+    width: 80px;
+    height: 45px;
+}
+
+.table-menu {
+    margin: 20px;
+    overflow: hidden !important;
+    padding-bottom: 7px;
+}
+
+.form-group {
+    margin-top: 8px;
+}
+
+.scrollbar {
+    margin-top: 7px;
+}
+.left_headed{
+    color:orange;
+}
+.col_head div div{
+    color: #434373;
+}
+.phone_actions_container{
+    border: 1px solid #f5efef;
+}
+
+.phone_actions{
+    height: 50px;
+    padding-top:10px;
+    margin:0px;
+    margin-left: 1px;
+    background: white !important; 
+    color:black;
+    /*border-right: 1px solid #cac4c4;*/
+}
+.phone_actions:hover p{
+    color:black;
+}
+.phone_actions span{
+    font-size: 18px;
+}
+
+.phone_actions p{
+    font-size: 9px;
+}
+
+.action_table{
+    overflow: unset;
+    margin-left: 15px;
+    border-collapse: separate;
+    border-spacing: 3px;
+
+}
+
+.action_table tr td{
+    border-top: unset;
+    padding: 0px;
+
+}
+.action_table select{
+    width: 100%;
+}
+
+.action_table button{
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.action_table .purple{
+    background: #1a074a;
+    width: 82%!important;
+    height: 50px;
+    float: left;
+}
+.action_table span {
+    color: white;
+    /*padding: 7px;*/
+    line-height: 50px;
+    text-align: center;
+    width: 18%!important;
+    height: 50px;
+    margin: 0px;
+}
+
+.action_table .purple:hover{
+    background: #1a074a!important;
+}
+
+.action_table  tbody td{
+    background: #1a074a;
+}
+
+.action_table tfoot td{
+    padding: 2px;
+}

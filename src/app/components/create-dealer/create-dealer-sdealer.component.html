@@ -1,0 +1,86 @@
+<div class="wrapper ">
+    <app-header></app-header>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
+              <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
+              <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+            </button>
+                    </div>
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+            </button>
+                    </div>
+                    <a class="navbar-brand">LOGO</a>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+        </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+
+                    <ul class="navbar-nav">
+                        <li>
+                            <span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">
+                                Logout
+                                <p>
+                                    <span class="d-lg-none d-md-block">Account</span>
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content shadow">
+            <div class="row">
+                <div class="col-md-8 m-auto d-block">
+                    <form name="myForm" class="form-horizontal" action="/dealer" id="formData" #dealerData="ngForm" (ngSubmit)="addDealer(dealerData.value)" ngNativeValidate>
+                        <div class="card ">
+                            <div class="card-header text-center">
+                                <h4 class="card-title">ADD New Dealer</h4>
+                                <hr>
+                            </div>
+                            <div class="card-body ">
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label">Name:</label>
+                                    <div class="col-sm-8">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="dealerName" ngModel>
+                                            <font class="errortext" color="red" *ngIf="!dealerData.form.controls.dealerName?.valid && dealerData.form.controls.dealerName?.touched">Please Enter Your Name</font>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label">Email</label>
+                                    <div class="col-sm-8">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control" name="dealerEmail" required ngModel>
+                                            <font class="errortext" color="red" *ngIf="!dealerData.form.controls.dealerEmail?.valid && dealerData.form.controls.dealerEmail?.touched">Please Enter Your Email</font>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label"></label>
+                                    <div class="col-sm-8">
+                                        <div class="form-group">
+                                            <input type="submit" class="btn btn-primary" value="Add Dealer" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- end row -->
+                            </div>
+                        </div>

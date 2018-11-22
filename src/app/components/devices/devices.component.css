@@ -1,0 +1,20 @@
+    .tooltiptext[_ngcontent-c1] {
+        visibility: hidden;
+        width: 54px;
+        background-color: #fab526;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+        font-weight: 500;
+        padding: 6px 0;
+        position: absolute;
+        z-index: 1;
+        font-size: 14px;
+        top: 0px;
+        left: -54px;
+        text-transform: capitalize;
+    }
+    
+    thead>tr>th {
+        cursor: pointer;
+    }

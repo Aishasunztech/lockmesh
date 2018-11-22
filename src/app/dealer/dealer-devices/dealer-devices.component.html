@@ -1,0 +1,322 @@
+<style>
+    .tooltiptext {
+        visibility: hidden;
+        width: 54px;
+        background-color: #fab526;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+        font-weight: 500;
+        padding: 6px 0;
+        position: absolute;
+        z-index: 1;
+        font-size: 14px;
+        top: 0px;
+        left: -54px;
+        text-transform: capitalize;
+    }
+    
+    .remove .tooltiptext {
+        width: 69px;
+        background-color: #eb6532;
+        left: -69px;
+    }
+    
+    .edit,
+    .remove {
+        overflow: visible;
+    }
+    
+    a.edit:hover .tooltiptext,
+    a.remove:hover .tooltiptext {
+        visibility: visible;
+        transition: all .15s linear;
+    }
+    
+    .tooltiptext[_ngcontent-c1] {
+        width: 90px;
+        left: -90px;
+    }
+</style>
+<div class="wrapper ">
+    <app-dealer-header></app-dealer-header>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
+                       <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
+                       <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+                       </button>
+                    </div>
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                       <span class="navbar-toggler-bar bar1"></span>
+                       <span class="navbar-toggler-bar bar2"></span>
+                       <span class="navbar-toggler-bar bar3"></span>
+                       </button>
+                    </div>
+                    <a class="navbar-brand">LOGO</a>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                 <span class="navbar-toggler-bar navbar-kebab"></span>
+                 <span class="navbar-toggler-bar navbar-kebab"></span>
+                 <span class="navbar-toggler-bar navbar-kebab"></span>
+                 </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+
+                    <ul class="navbar-nav">
+                        <li>
+                            <span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-rotate text-right" href="javascript:void(0)" (click)="onLogout()">
+                            
+                                Logout
+                                <p>
+                                    <span class="d-lg-none d-md-block">Account</span>
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title float-centercol-md-12" align="center">All Devices</h4>
+
+                            <!--Display Search-->
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event, null)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                                    </angular2-multiselect>
+                                </div>
+                                <div class="col-md-4 search-btn">
+                                    <input class="form-control" type="text" placeholder="search" (input)="searchDevice($event.target.value)">
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <br>
+                        </div>
+                        <div class="card-body cardHig" style="overflow-x: scroll;">
+                            <div class="toolbar">
+                                <!--  Here you can write extra buttons/actions for the toolbar-->
+                            </div>
+                            <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr class="text-center btnFull">
+                                        <th class="disabled-sorting">Account</th>
+                                        <th class="disabled-sorting">Action</th>
+                                        <th nowrap *ngIf="state.name == true" (click)="sort('name')">Name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.email == true" (click)="sort('email')">Email
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.client_id == true" (click)="sort('client_id')">Client Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.link_code == true" (click)="sort('link_code')">Link Code
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.imei == true" (click)="sort('imei')">IMEI
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.simno == true" (click)="sort('simno')">SIM
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.status == true" (click)="sort('status')">Status
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.device_id == true" (click)="sort('device_id')">Device Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.model == true" (click)="sort('model')">Model
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.start_date == true" (click)="sort('start_date')">Start Date
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.expiry_date == true" (click)="sort('expiry_date')">Expiry Date
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.dealer_name == true" (click)="sort('dealer_name')">Dealer Name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.online == true" (click)="sort('online')">Online
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.serial_number == true" (click)="sort('serial_number')">Serial Number
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.mac_address == true" (click)="sort('mac_address')">Mac Address
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.s_dealer == true" (click)="sort('s_dealer')">S-dealer Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th nowrap *ngIf="state.s_dealer_name == true" (click)="sort('s_dealer_name')">S-dealer Name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let device of alldealerDevice | orderBy: key : reverse | paginate: { itemsPerPage: 10, currentPage: p }; let i = index;">
+                                        <td class="text-center btnFull">
+                                            <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit"><button
+                                                        class="btn btn-success btn-sm">Add</button></a>
+                                            <a href="javascript:void(0)" *ngIf="device.device_status==1" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit"><button
+                                                    class="btn btn-primary btn-sm" >Edit</button></a>
+                                            <a href="javascript:void(0)" *ngIf="device.device_status==1 && (device.account_status==null || device.account_status=='')" (click)="suspendForm(device.device_id);"><button
+                                                        class="btn btn-danger btn-sm">Suspend</button></a>
+                                            <a href="javascript:void(0)" *ngIf="device.device_status==1 &&  device.account_status=='suspended' " (click)="activateForm(device.device_id);"><button
+                                                            class="btn btn-danger btn-sm">Activate</button></a>
+                                        </td>
+
+                                        <td class="text-left btnFull">
+                                            <a routerLink="/dealer/connect-devices/{{device.device_id}}"><button
+                                                    class="btn btn-danger btn-sm" *ngIf="device.device_status==1">Connect</button></a>
+                                            <a href="javascript:void(0)"><button
+                                                    class="btn btn-info btn-sm" *ngIf="device.device_status==1" (click)="unlinkUser(device.device_id)">Unlink</button></a>
+                                            <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)"><button 
+                                                    class="btn btn-warning btn-sm">Decline</button></a>
+                                        </td>
+                                        <td *ngIf="state.name == true">
+                                            <span *ngIf="device.name != 'null';else showBlank">{{ device.name }}</span>
+                                        </td>
+                                        <td *ngIf="state.email == true">
+                                            <span *ngIf="device.email != 'null';else showBlank">{{ device.email }}</span>
+                                        </td>
+                                        <td *ngIf="state.client_id == true">
+                                            <span *ngIf="device.client_id != 'null';else showBlank">{{ device.client_id }}</span>
+                                        </td>
+                                        <td *ngIf="state.link_code == true">
+                                            <span *ngIf="device.link_code != 'null';else showBlank">{{ device.link_code }}</span>
+                                        </td>
+                                        <td *ngIf="state.imei == true">
+                                            <span *ngIf="device.dealer_name != 'null';else showBlank">{{ device.imei }}</span>
+                                        </td>
+                                        <td *ngIf="state.simno == true">
+                                            <span *ngIf="device.simno != 'null';else showBlank">{{ device.simno}}</span>
+                                        </td>
+                                        <td *ngIf="state.status == true">
+                                            <span *ngIf="device.status != 'null';else showBlank">{{device.account_status == 'suspended' ? 'Suspended' : device.status }}</span></td>
+                                        <td *ngIf="state.device_id == true">
+                                            <span *ngIf="device.device_id != 'null';else showBlank">{{ device.device_id }}</span></td>
+                                        <td *ngIf="state.model == true">
+                                            <span *ngIf="device.model != 'null';else showBlank">{{ device.model }}</span></td>
+                                        <td *ngIf="state.start_date == true">
+                                            <span *ngIf="device.start_date != 'null';else showBlank">
+                                                <span style="white-space: nowrap ;">{{ device.start_date | date:'dd.MM.yyyy H:mm'}}</span></span>
+                                        </td>
+                                        <td *ngIf="state.expiry_date == true">
+                                            <span *ngIf="device.expiry_date != 'null';else showBlank">
+                                                <span *ngIf="device.expiry_date!='' || device.expiry_date!=null" style="white-space: nowrap ;">{{ device.expiry_date | date:'dd.MM.yyyy H:mm' }}</span></span>
+                                        </td>
+                                        <td *ngIf="state.dealer_name == true">
+                                            <span *ngIf="device.dealer_name != 'null';else showBlank">{{device.dealer_name}}</span>
+                                        </td>
+                                        <td *ngIf="state.online == true">
+                                            <span *ngIf="device.online != 'null';else showBlank">{{ device.online }}</span>
+                                        </td>
+                                        <td *ngIf="state.serial_number == true">
+                                            <span *ngIf="device.serial_number != 'null';else showBlank">{{ device.serial_number}}</span>
+                                        </td>
+                                        <td *ngIf="state.mac_address == true">
+                                            <span *ngIf="device.mac_address != 'null';else showBlank">{{ device.mac_address }}</span>
+                                        </td>
+                                        <td *ngIf="state.s_dealer == true">
+                                            <span *ngIf="device.s_dealer != 'null';else showBlank">{{ device.s_dealer }}</span>
+                                        </td>
+                                        <td *ngIf="state.s_dealer_name == true">
+                                            <span *ngIf="device.s_dealer_name != 'null';else showBlank">{{ device.s_dealer_name }}</span>
+                                        </td>
+                                        <ng-template #showBlank> </ng-template>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row text-center" style="display: block;">
+                                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                            </div>
+
+                            <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title custom_align">Edit Your Detail</h5>
+                                            <span class="close" id="from" onclick="removeClass()">&times;</span>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="formData" #deviceData="ngForm" method="" (ngSubmit)="updateDealer()" ngNativeValidate>
+                                                <p> (*)- Mandotory fields</p>
+                                                <div class="form-group">
+                                                    <label>Name *</label>
+                                                    <input type="text" class="form-control" required="" name="name" [(ngModel)]="data.name">
+                                                    <font class="errortext" color="red" *ngIf="!deviceData.form.controls.name?.valid && deviceData.form.controls.name?.touched">Please Enter Your Name</font>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Client_Id</label>
+                                                    <input type="text" class="form-control" name="client_id" [(ngModel)]="data.client_id">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Model</label>
+                                                    <input type="text" class="form-control" name="model" [(ngModel)]="data.model">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email *</label>
+                                                    <input type="email" class="form-control" name="email" [(ngModel)]="data.email" required>
+                                                    <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>IMEI</label>
+                                                    <input type="text" class="form-control" name="imei" [(ngModel)]="data.imei" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>S-dealer</label>
+                                                    <div class="form-group">
+                                                        <select id="position" class="form-control" [disabled]="sdealer" name="s_dealer" [(ngModel)]="data.s_dealer">
+                                                        <option value="">Select S-Dealer Name</option>
+                                                            <option *ngFor="let dealer of allSubDealers" value="{{dealer.sdealer_id}}"
+                                                            [attr.selected]="dealer.sdealer_id == data.sdealer ? true : null"  >{{ dealer.sdealer_name }}</option>
+                                                                </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Online</label>
+                                                    <input type="text" class="form-control" name="online" [(ngModel)]="data.online" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Start Date</label>
+                                                    <input type="text" class="form-control" name="start_date" [(ngModel)]="data.start_date" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Expiry Date</label>
+                                                    <ng-datepicker name="expiry_date" [ngStyle]="{'width':'100%'}" [options]="options" [(ngModel)]="data.expiry_date"></ng-datepicker>
+                                                </div>
+                                                <br>
+                                                <button type="submit" class="btn btn-primary">UPDATE</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                        </div>
+                        <!-- end content-->
+                    </div>
+                    <!--  end card  -->
+                </div>
+                <!-- end col-md-12 -->
+            </div>
+            <!-- end row -->
+        </div>
+    </div>
+</div>

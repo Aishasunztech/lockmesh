@@ -1,0 +1,11 @@
+.form-group input[type=file] {
+    opacity: 100 !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 67px !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 100 !important;
+}
