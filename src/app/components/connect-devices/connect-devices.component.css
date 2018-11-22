@@ -106,6 +106,13 @@
     background: #1a074a!important;
 }
 
+.action_table .purple:active{
+    background: #1a074a!important;
+}
+.action_table .purple:focus{
+    background: #1a074a!important;
+}
+
 .action_table  tbody td{
     background: #1a074a;
 }
