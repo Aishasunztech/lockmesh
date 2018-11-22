@@ -20,4 +20,7 @@ export class HeaderComponent implements OnInit {
       document.body.style.zoom = '100%';
   }
 
+  onLogout() {
+    this.restService.authSignOut();
+  }
 }
