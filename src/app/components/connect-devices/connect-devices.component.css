@@ -45,13 +45,19 @@
 }
 
 .phone_actions{
-    height: 50px;
+    /* height: 50px;
     padding-top:10px;
     margin:0px;
     margin-left: 1px;
-    background: white !important; 
-    color:black;
+    background: white !important;
+    color:black; */
     /*border-right: 1px solid #cac4c4;*/
+    padding-top: 13px;
+    width: 26%;
+    margin: 0px;
+    margin-bottom: -9px;
+    background: white !important;
+    color: black;
 }
 .phone_actions:hover p{
     color:black;

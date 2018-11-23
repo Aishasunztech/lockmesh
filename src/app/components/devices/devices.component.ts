@@ -98,7 +98,7 @@ export class DevicesComponent implements OnInit {
     setTimeout(() => {
       this.spinnerService.hide();
     }, 1000);
-    document.body.style.zoom = '40%';
+    //document.body.style.zoom = '40%';
     $('#tablescroll').css('height', ($( window ).height() - $('#navbar').height() - 65));
     this.dropdownList = [
       {'id': 1, 'itemName': 'name'},
