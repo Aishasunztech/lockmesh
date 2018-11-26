@@ -6,7 +6,7 @@ import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {Router} from '@angular/router';
 import * as enLocale from 'date-fns/locale/en';
 import * as $ from 'jquery';
-//import * from 'dragtable';
+
 
 
 import { DatepickerOptions } from 'ng2-datepicker';
@@ -228,12 +228,14 @@ export class DevicesComponent implements OnInit {
         return selected.map(function(e) { return e.id; }).indexOf(el.id) < 0;
       });
 
-      var showstring="";
+      var showstring="<pre>";
       toShow.map(function(e){
         if(device[e.itemName]){
-          showstring = showstring + "<b>" + e.itemName + "</b>: " + device[e.itemName] + "<br/>";
+          showstring = showstring + "<b>" + e.itemName + "</b>:        " + device[e.itemName] + "<br/>";
         }
       });
+      showstring = showstring + "</pre>";
+
       $(document).find('.detailed_row_'+device.device_id).children('td').html(showstring);
       $(document).find('.detailed_row_'+device.device_id).show();
 
@@ -245,12 +247,13 @@ export class DevicesComponent implements OnInit {
         return selected.map(function(e) { return e.id; }).indexOf(el.id) < 0;
       });
 
-      var showstring="";
+      var showstring="<pre>";
       toShow.map(function(e){
         if(device[e.itemName]){
-          showstring = showstring + "<b>" + e.itemName + "</b>: " + device[e.itemName] + "<br/>";
+          showstring = showstring + "<b>" + e.itemName + "</b>:        " + device[e.itemName] + "<br/>";
         }
       });
+      showstring = showstring + "</pre>";
       $(document).find('.detailed_row_'+ device.device_id).children('td').html(showstring);
       $(document).find('.detailed_row_'+ device.device_id).show();
     }else if(clsName == "unexpand rounded"){
@@ -478,7 +481,9 @@ this.restService.postAdminSelectedItems(this.selectedItems);
 }
 
   showEditForm(dealer) {
-  console.log(dealer);
+    $.noConflict();
+
+
   this.data = dealer;
   if (this.data.start_date === 'null' || this.data.start_date === null || this.data.start_date === '') {
     this.data.start_date = date;
@@ -772,6 +777,8 @@ this.restService.postAdminSelectedItems(this.selectedItems);
       }else if(name=="dealer_id" && ele.dealer_id.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else if(name=="dealer_pin" && ele.dealer_pin.toUpperCase().includes(value.toUpperCase())){
+        this.allDevice.push(ele);
+      }else if(name=="model" && ele.model!=null && ele.model.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }
     });

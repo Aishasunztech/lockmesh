@@ -63,3 +63,7 @@ table thead tr th input{
   /* visibility: !important; */
 
 }
+#classTable th{
+  text-align: center;
+  font-size: 12px;
+}
