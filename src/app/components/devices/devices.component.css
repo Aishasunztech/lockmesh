@@ -59,3 +59,7 @@ table thead tr th input{
   font-size: 11px;
   height: 40px;
 }
+.notify_button{
+  /* visibility: !important; */
+
+}

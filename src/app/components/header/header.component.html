@@ -1,7 +1,7 @@
  <!-- navbar -->
 <div class="wrap-all-nav">
     <!--nav satu-->
-    
+
     <nav class="navbar navbar-default">
             <div class="col-xs-6 col-sm-2 col-md-1">
                 <a class="navbar-brand" href="#" style="color:black!important;">
@@ -11,19 +11,22 @@
             </div>
             <div class="col-sm-6 col-md-4 hidden-xs no-padding">
                 <span class="badge badge-default pull-right" >WEBMDM_V1.02</span>
-                
+
             </div>
             <div class="col-sm-6 col-md-6 hidden-xs no-padding">
                 <div class="input-group stylish-input-group pull-right">
-                    
+
                     <input type="text" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" placeholder="Search" >
-                    
-                    <button  class="btn btn-primary btn-circle btn-lg" (click)="onLogout()"><i class="fa fa-power-off"></i></button>
+                    <div class="btn-group" style="margin-left: 4px;">
+                      <button  class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 3px 14px 3px 14px;"><i class="fa fa-bell-o"></i></button>
+                      <button  class="btn btn-primary rounded-circle btn-lg" (click)="onLogout()" style="background: #0a0a8a;margin-left: -15px;color: #94753b;padding: 3px 14px 3px 14px;"><i class="fa fa-power-off"></i></button>
+                    </div>
+
                 </div>
             </div>
 
     </nav>
-    
+
     <!--end nav dua-->
 </div>
     <!-- end navbar -->

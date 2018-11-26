@@ -49,7 +49,7 @@ import { SConnectDevicesComponent } from './sdealer/s-connect-devices/s-connect-
 import { UploadApkComponent } from './components/upload-apk/upload-apk.component';
 import { ViewApkComponent } from './components/view-apk/view-apk.component';
 import { UiSwitchModule } from 'ngx-toggle-switch';
-//import { LayoutHeaderComponent } from './layouts/layout-header/layout-header.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,8 +86,7 @@ import { UiSwitchModule } from 'ngx-toggle-switch';
     SdealerprofileComponent,
     SConnectDevicesComponent,
     UploadApkComponent,
-    ViewApkComponent,
-  //  LayoutHeaderComponent,
+    ViewApkComponent
   ],
   imports: [
     BrowserModule,
