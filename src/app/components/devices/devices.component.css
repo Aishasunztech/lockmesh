@@ -14,7 +14,48 @@
         left: -54px;
         text-transform: capitalize;
     }
-    
+
     thead>tr>th {
         cursor: pointer;
+        min-width: 120px;
+        border: 1px solid #eae6e6;
     }
+
+    .expand{
+      background: #0ab50a;
+      color: white!important;
+      padding: 0px 3px 0px 2px;
+      font-size: 13px;
+      margin-left: 6px;
+      margin-right: 19px!important;
+      border: 1px solid #0ab50a !important;
+
+
+    }
+    .unexpand{
+      background: #d80909;
+      color: white!important;
+      padding: 0px 3px 0px 3px;
+      font-size: 14px;
+      margin-left: 6px;
+      margin-right: 19px!important;
+      /* border: 1px solid #d80909!important; */
+    }
+
+  td.btnFull .btn{
+      display: block;
+      width: 80px;
+      margin: 2px 2px;
+    }
+.headings{
+  background: rgba(244,244,244,1);
+}
+table thead tr th input{
+  font-family:Arial, FontAwesome;
+  font-size: 11px;
+}
+
+.inputs{
+  font-size: 11px;
+  height: 40px;
+}

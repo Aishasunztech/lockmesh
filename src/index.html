@@ -25,11 +25,12 @@
     <link href="assets/css/multicheckDropdown.css" rel="stylesheet" />
     <!-- Extra details for Live View on GitHub Pages -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="assets/css/dragtable.css" />
     <style>
         .ngx-datepicker-container[_ngcontent-c3] .ngx-datepicker-calendar-container[_ngcontent-c3] {
             z-index: 9999 !important;
         }
-        
+
         .ngx-datepicker-container[_ngcontent-c3] .ngx-datepicker-input[_ngcontent-c3] {
             padding: 5px 10px;
             font-size: 14px;
@@ -45,6 +46,8 @@
     <!--   Core JS Files   -->
     <script src="assets/js/core/jquery.min.js"></script>
     <script src="assets/js/core/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
     <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <script src="assets/js/plugins/moment.min.js"></script>
     <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
@@ -82,11 +85,16 @@
     <!-- Sharrre libray -->
     <script src="assets/demo/jquery.sharrre.js"></script>
     <script src="assets/js/multicheckDropdown.js"></script>
+    <script src="assets/js/dragndrop.table.columns.js" type="text/javascript"></script>
+    <script src="assets/js/jquery.dragtable.js"></script>
     <script>
         function togglelogo() {
             var sider = document.getElementById("bodyC");
             sider.classList.toggle("sidebar-mini");
         }
+        $(document).ready(function(){
+          //$('#datatable').dragableColumns();
+        })
     </script>
     <script>
         function removeClass(from) {
@@ -130,8 +138,9 @@
                 x.type = "password";
             }
         }
-    </script>
-    <script>
+        $(document).ready(function(){
+
+        })
     </script>
 </body>
 

@@ -6,6 +6,11 @@
 <div class="wrapper ">
     <app-header></app-header>
     <div class="main-panel">
+      <div class="row container" style="margin-top: 20px">
+        <div class="col-sm-12 ">
+          <button type="button" data-toggle="modal" data-target="#newrequestmodel" class="btn btn-primary pull-right"><i class="fa fa-bell-o" style="font-size: 17px;margin-right: 10px;margin-left: -13px;"></i>   new Requests</button>
+        </div>
+      </div>
         <!-- Navbar -->
         <!-- <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
             <div class="container-fluid">
@@ -48,31 +53,276 @@
             </div>
         </nav> -->
         <!-- End Navbar -->
-        <div class="content">
+        <div class="content" style="margin-top:30px">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card">
+                    <div class="card" style="border-radius:unset;">
                         <div class="card-header">
-                            <h4 class="card-title col-md-12 text-center">All Devices</h4>
+                            <!-- <h4 class="card-title col-md-12 text-center">All Devices</h4> -->
                             <div class="row text-center">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event, null)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
                                     </angular2-multiselect>
                                 </div>
-                                <div class="col-md-4 search-btn">
-                                    <input class="form-control" type="text" placeholder="search" (input)="searchDevice($event.target.value)">
+                                <div class="col-md-3 show_devices">
+                                    <select class="form-control inputs" placeholder="Device">
+                                      <option value="">SHOW DEVICES</option>
+                                      <option>Linked</option>
+                                      <option>Unlinked</option>
+                                      <option>Expired</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <a class="mbTop" routerLink="/black-list-devices"><button
-                                            class="btn btn-dange bld">Black List Devices</button></a>
+                                <div class="col-md-3 search-btn">
+                                    <input class="form-control inputs" type="text" placeholder="SEARCH" (input)="searchDevice($event.target.value)">
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- <a class="mbTop" routerLink="/black-list-devices"><button
+                                            class="btn btn-dange bld">Black List Devices</button></a> -->
+                                    <select class="form-control inputs" name="paging">
+                                        <option>10</option>
+                                        <option>20</option>
+                                        <option>30</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div><br>
+                        </div>
+                    </div>
+                    <div class="card" style="border-radius:unset;">
+                        <div class="card-header">
 
+                        </div>
                         <div class="card-body cardHig" style="overflow-x: scroll;">
                             <div class="toolbar">
                             </div>
-                            
+                            <table id="datatable" class="table table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                      <th class="disabled-sorting" style="min-width: 35px;"></th>
+                                      <th class="disabled-sorting"></th>
+                                      <th nowrap *ngIf="state.name == true" >
+                                          <input class="form-control" type="text" name="name" placeholder="Name              &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.email == true" >
+                                          <input class="form-control" type="text" name="email" placeholder="Email                                               &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.client_id == true" >
+                                          <input class="form-control" type="text" name="client_id" placeholder="Client Id     &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.dealer_id == true" >
+                                          <input class="form-control" type="text" name="dealer_id" placeholder="Dealer Id    &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.link_code == true" >
+                                          <input class="form-control" type="text" name="dealer_pin" placeholder="Dealer Pin  &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.imei == true" >
+                                          <input class="form-control" type="text" name="imei" placeholder="IMEI          &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.simno == true" >
+                                          <input class="form-control" type="text" name="sim" placeholder="SIM            &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.status == true" >
+                                          <input class="form-control" type="text" name="status" placeholder="Status         &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.device_id == true" >
+                                          <input class="form-control" type="text" name="device_id" placeholder="Device Id   &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.model == true" >
+                                          <input class="form-control" type="text" name="model" placeholder="Model         &#xF002;" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.start_date == true" >
+                                          <input class="form-control" type="text" name="start_date" placeholder="Start Date " (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.expiry_date == true" >
+                                          <input class="form-control" type="text" name="expiry_date" placeholder="Expiry Date" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.dealer_name == true" >
+                                          <input class="form-control" type="text" name="dealer_name" placeholder="Dealer Name" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.online == true" >
+                                          <input class="form-control" type="text" name="online" placeholder="Online" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.serial_number == true" >
+                                          <input class="form-control" type="text" name="serial_number" placeholder="Serial Number" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.mac_address == true" >
+                                          <input class="form-control" type="text" name="mac_address" placeholder="Mac Address" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.s_dealer == true" >
+                                          <input class="form-control" type="text" name="s_deare_id" placeholder="S-dealer Id" (input)="searchField($event)">
+                                      </th>
+                                      <th nowrap *ngIf="state.s_dealer_name == true" >
+                                          <input class="form-control" type="text" name="s_dealer_name" placeholder="s-dealer Name" (input)="searchField($event)">
+                                      </th>
+                                    </tr>
+                                    <tr class="text-center btnFull" >
+                                        <th class="disabled-sorting headings" style="min-width: 35px;"></th>
+                                        <th class="disabled-sorting headings">Action</th>
+                                        <th class="headings" drag-me drop-me nowrap *ngIf="state.name == true" (click)="sort('name')">Name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" drag-me drop-me nowrap *ngIf="state.email == true" (click)="sort('email')">Email
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.client_id == true" (click)="sort('client_id')">Client Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.dealer_id == true" (click)="sort('dealer_id')">Dealer Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap   *ngIf="state.link_code == true" (click)="sort('link_code')">Dealer Pin
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.imei == true" (click)="sort('imei')">IMEI
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.simno == true" (click)="sort('simno')">SIM
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.status == true" (click)="sort('status')">Status
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.device_id == true" (click)="sort('device_id')">Device Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.model == true" (click)="sort('model')">Model
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.start_date == true" (click)="sort('start_date')">Start Date
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.expiry_date == true" (click)="sort('expiry_date')">Expiry Date
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.dealer_name == true" (click)="sort('dealer_name')">Dealer Name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.online == true" (click)="sort('online')">Online
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.serial_number == true" (click)="sort('serial_number')">Serial Number
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.mac_address == true" (click)="sort('mac_address')">Mac Address
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.s_dealer == true" (click)="sort('s_dealer')">S-dealer Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th class="headings" nowrap *ngIf="state.s_dealer_name == true" (click)="sort('s_dealer_name')">s_dealer_name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: 10, currentPage: p } ; let i = index;">
+                                    <tr class="row_{{device.device_id}}" *ngIf="device.device_status==1">
+
+                                        <td class="text-center btnFull">
+                                          <a href="javascrtip:void(0)" class="expand rounded" (click)="collapse(device,$event);">
+                                            <span class="fa fa-plus" ></span>
+                                          </a>
+
+                                        </td>
+
+                                        <td class="text-left btnFull">
+                                          <div class="btn-group">
+                                          <a href="javascript:void(0)" *ngIf="device.device_status==1 && (device.account_status==null || device.account_status=='')" (click)="suspendForm(device.device_id);">
+                                            <button class="btn btn-danger btn-sm">Suspend</button>
+                                          </a>
+
+                                          <a href="javascript:void(0)" *ngIf="device.device_status==1" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                            <button class="btn btn-warning btn-sm" >Edit</button>
+                                          </a>
+
+                                          <a routerLink="/connect-devices/{{device.device_id}}">
+                                            <button class="btn btn-primary btn-sm" *ngIf="device.device_status==1">Connect</button>
+                                          </a>
+
+                                          <!-- <a href="javascript:void(0)"><button class="btn btn-info btn-sm" *ngIf="device.device_status==1" (click)="unlinkUser(device.device_id)">Unlink</button></a> -->
+
+
+                                          <a href="javascript:void(0)" *ngIf="device.device_status==1 &&  device.account_status=='suspended' " (click)="activateForm(device.device_id);">
+                                            <button class="btn btn-danger btn-sm">Activate</button>
+                                          </a>
+
+                                            <!-- <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                              <button class="btn btn-success btn-sm">Accept</button>
+                                            </a> -->
+
+                                            <!-- <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)">
+                                              <button class="btn btn-warning btn-sm">Decline</button>
+                                            </a> -->
+                                            </div>
+                                        </td>
+                                        <td *ngIf="state.name == true">
+                                            <span *ngIf="device.name != 'null';else showBlank">{{ device.name }}</span>
+                                        </td>
+                                        <td *ngIf="state.email == true">
+                                            <span *ngIf="device.email != 'null';else showBlank">{{ device.email }}</span>
+                                        </td>
+                                        <td *ngIf="state.client_id == true">
+                                            <span *ngIf="device.client_id != 'null';else showBlank">{{ device.client_id }}</span>
+                                        </td>
+                                        <td *ngIf="state.dealer_id == true">
+                                            <span *ngIf="device.dealer_id != 'null';else showBlank">{{ device.dealer_id }}</span>
+                                        </td>
+                                        <td *ngIf="state.link_code == true">
+                                            <span *ngIf="device.link_code != 'null';else showBlank">{{ device.link_code }}</span>
+                                        </td>
+                                        <td *ngIf="state.imei == true">
+                                            <span *ngIf="device.dealer_name != 'null';else showBlank">{{ device.imei }}</span>
+                                        </td>
+                                        <td *ngIf="state.simno == true">
+                                            <span *ngIf="device.simno != 'null';else showBlank">{{ device.simno}}</span>
+                                        </td>
+                                        <td *ngIf="state.status == true">
+                                            <span *ngIf="device.status != 'null';else showBlank">{{device.account_status == 'suspended' ? 'Suspended' : device.status }}</span></td>
+                                        <td *ngIf="state.device_id == true">
+                                            <span *ngIf="device.device_id != 'null';else showBlank">{{ device.device_id }}</span></td>
+                                        <td *ngIf="state.model == true">
+                                            <span *ngIf="device.model != 'null';else showBlank">{{ device.model }}</span></td>
+                                        <td *ngIf="state.start_date == true">
+                                            <span *ngIf="device.start_date != 'null';else showBlank">
+                                            <span style="white-space: nowrap ;">{{ device.start_date | date:'dd.MM.yyyy H:mm' }}</span></span>
+                                        </td>
+                                        <td *ngIf="state.expiry_date == true">
+                                            <span *ngIf="device.expiry_date != 'null';else showBlank">
+                                            <span *ngIf="device.expiry_date!='' || device.expiry_date!=null" style="white-space: nowrap ;">{{ device.expiry_date |  date:'dd.MM.yyyy H:mm'  }}</span></span>
+                                        </td>
+                                        <td *ngIf="state.dealer_name == true">
+                                            <span *ngIf="device.dealer_name != 'null';else showBlank">{{device.dealer_name}}</span>
+                                        </td>
+
+                                        <td *ngIf="state.online == true">
+                                            <span *ngIf="device.online != 'null';else showBlank">{{ device.online }}</span>
+                                        </td>
+                                        <td *ngIf="state.serial_number == true">
+                                            <span *ngIf="device.serial_number != 'null';else showBlank">{{ device.serial_number}}</span>
+                                        </td>
+                                        <td *ngIf="state.mac_address == true">
+                                            <span *ngIf="device.mac_address != 'null';else showBlank">{{ device.mac_address }}</span>
+                                        </td>
+                                        <td *ngIf="state.s_dealer == true">
+                                            <span *ngIf="device.s_dealer != 'null';else showBlank">{{ device.s_dealer }}</span>
+                                        </td>
+                                        <td *ngIf="state.s_dealer_name == true">
+                                            <span *ngIf="device.s_dealer_name != 'null';else showBlank">{{ device.s_dealer_name }}</span>
+                                        </td>
+
+                                        <ng-template #showBlank></ng-template>
+                                        <!-- <div class="show_details">
+                                          <p>
+                                            hello
+                                          </p>
+                                        </div> -->
+                                    </tr>
+                                    <tr *ngIf="device.device_status==1" style="display:none;" class="detailed_row_{{device.device_id}}">
+                                      <td colspan="25" style="text-align:left!important"></td>
+                                    </tr>
+                                  </ng-container>
+                                </tbody>
+                            </table>
                             <div class="row text-center" style="display: block;">
                                 <pagination-controls (pageChange)="p = $event"></pagination-controls>
                             </div>
@@ -131,6 +381,65 @@
                                 </div>
                                 <!-- /.modal-dialog -->
                             </div>
+
+                            <div id="newrequestmodel" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true" >
+                              <div class="modal-dialog modal-lg" style="max-width: 1285px;">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                      ×
+                                    </button>
+
+                                  </div>
+                                  <div class="modal-body">
+                                    <table id="classTable" class="table table-striped table-bordered" cellspacing="0">
+                                      <thead>
+                                        <th>ACTION</th>
+                                        <th>DEALER ID</th>
+                                        <th>DEALER PIN</th>
+                                        <th>S-DEALER</th>
+                                        <th>DEVICE ID</th>
+                                        <th>IMEI</th>
+                                        <th>SIM</th>
+                                        <th>Online</th>
+
+                                      </thead>
+                                      <tbody>
+                                        <tr *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: 10, currentPage: p } ; let i = index;">
+                                          <ng-container *ngIf="device.device_status==0">
+                                            <td class="text-left btnFull">
+                                              <div class="btn-group">
+                                                <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                                  <button class="btn btn-success btn-sm">Accept</button>
+                                                </a>
+
+                                                <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)">
+                                                  <button class="btn btn-warning btn-sm">Decline</button>
+                                                </a>
+                                              </div>
+                                            </td>
+                                            <td>{{device.dealer_id}}</td>
+                                            <td>{{device.dealer_pin}}</td>
+                                            <td>{{device.dealer_name}}</td>
+                                            <td>{{device.device_id}}</td>
+                                            <td>{{device.emei}}</td>
+                                            <td>{{device.simno}}</td>
+                                            <td>{{device.online}}</td>
+
+                                          </ng-container>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                      Close
+                                    </button> -->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
                         </div>
                         <!-- end content-->
                     </div>
