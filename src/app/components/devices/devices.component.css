@@ -46,23 +46,26 @@
       width: 80px;
       margin: 2px 2px;
     }
-.headings{
-  background: rgba(244,244,244,1);
-}
-table thead tr th input{
-  font-family:Arial, FontAwesome;
-  font-size: 11px;
-}
+  td a:hover{
+    text-decoration: none;
+  }
+  .headings{
+    background: rgba(244,244,244,1);
+  }
+  table thead tr th input{
+    font-family:Arial, FontAwesome;
+    font-size: 11px;
+  }
 
-.inputs{
-  font-size: 11px;
-  height: 40px;
-}
-.notify_button{
-  /* visibility: !important; */
+  .inputs{
+    font-size: 11px;
+    height: 40px;
+  }
+  .notify_button{
+    /* visibility: !important; */
 
-}
-#classTable th{
-  text-align: center;
-  font-size: 12px;
-}
+  }
+  #classTable th{
+    text-align: center;
+    font-size: 12px;
+  }
