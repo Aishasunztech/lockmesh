@@ -26,7 +26,7 @@
       color: white!important;
       padding: 0 3px 0 2px;
       font-size: 13px;
-      margin: auto 12px!important;
+      margin: auto auto !important;
       border: 1px solid #0ab50a !important;
 
 
