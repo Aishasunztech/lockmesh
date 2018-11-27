@@ -485,7 +485,7 @@ this.restService.postAdminSelectedItems(this.selectedItems);
 
   showEditForm(dealer) {
     $.noConflict();
-    closeModal('#newrequestmodel');
+    // closeModal('#newrequestmodel');
 
     this.data = dealer;
     if (this.data.start_date === 'null' || this.data.start_date === null || this.data.start_date === '') {

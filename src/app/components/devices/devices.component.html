@@ -465,7 +465,7 @@
                                           <ng-container *ngIf="device.device_status==0">
                                             <td class="text-left btnFull">
                                               <div class="btn-group">
-                                                <a class="acceptbut" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                                <a class="acceptbut" onclick="closeModal()" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
                                                   <button class="btn btn-success btn-sm" >Accept</button>
                                                 </a>
 

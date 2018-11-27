@@ -15,24 +15,24 @@
         left: -54px;
         text-transform: capitalize;
     }
-    
+
     .remove .tooltiptext {
         width: 69px;
         background-color: #eb6532;
         left: -69px;
     }
-    
+
     .edit,
     .remove {
         overflow: visible;
     }
-    
+
     a.edit:hover .tooltiptext,
     a.remove:hover .tooltiptext {
         visibility: visible;
         transition: all .15s linear;
     }
-    
+
     .tooltiptext[_ngcontent-c1] {
         width: 90px;
         left: -90px;
@@ -42,7 +42,7 @@
     <app-dealer-header></app-dealer-header>
     <div class="main-panel">
         <!-- Navbar -->
-        <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <!-- <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
                     <div class="navbar-minimize">
@@ -73,7 +73,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link btn-rotate text-right" href="javascript:void(0)" (click)="onLogout()">
-                            
+
                                 Logout
                                 <p>
                                     <span class="d-lg-none d-md-block">Account</span>
@@ -83,7 +83,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav> -->
         <!-- End Navbar -->
         <div class="content">
             <div class="row">
@@ -185,7 +185,7 @@
                                                     class="btn btn-danger btn-sm" *ngIf="device.device_status==1">Connect</button></a>
                                             <a href="javascript:void(0)"><button
                                                     class="btn btn-info btn-sm" *ngIf="device.device_status==1" (click)="unlinkUser(device.device_id)">Unlink</button></a>
-                                            <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)"><button 
+                                            <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)"><button
                                                     class="btn btn-warning btn-sm">Decline</button></a>
                                         </td>
                                         <td *ngIf="state.name == true">

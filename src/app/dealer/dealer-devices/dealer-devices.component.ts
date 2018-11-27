@@ -98,13 +98,13 @@ export class DealerDevicesComponent implements OnInit {
   @ViewChild('deviceData') projectForm: NgForm;
 
   async  ngOnInit() {
+    document.body.style.zoom = '100%';
     console.log(this.restService.sessionLogin('token'));
     this.spinnerService.show();
     await this.alldealerDeviceView();
     setTimeout(() => {
       this.spinnerService.hide();
     }, 1000);
-    document.body.style.zoom = '40%';
   // const _this = this;
     $('#tablescroll').css('height', ($( window ).height() - $('#navbar').height() - 65));
     $('#tablescroll').css('height', ($( window ).height() - $('#navbar').height() - 65));
