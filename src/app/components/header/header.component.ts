@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
     if (this.restService.sessionLogin('email') === null ) {
         this.router.navigate(['/login']);
       }
-      document.body.style.zoom = '100%';
+      
   }
 
   onLogout() {

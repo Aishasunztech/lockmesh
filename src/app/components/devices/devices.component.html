@@ -382,13 +382,14 @@
                             <div class="row text-center" style="display: block;">
                                 <pagination-controls (pageChange)="p = $event"></pagination-controls>
                             </div>
-                            <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+
+                            <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true" style="top:-50px">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <span class="close" id="from" onclick="removeClass()">&times;</span>
+                                            <span class="close" id="from" data-dismiss="modal">&times;</span>
                                         </div>
-                                        <div class="modal-body">
+                                        <div class="modal-body" style="scroll-behavior: smooth;height: 80vh;overflow-y: scroll;">
                                             <form id="formData" #deviceData="ngForm" method="" (ngSubmit)="updateAdmin()" ngNativeValidate>
                                                 <p> (*)- Mandotory fields</p>
                                                 <div class="form-group">
@@ -465,7 +466,7 @@
                                             <td class="text-left btnFull">
                                               <div class="btn-group">
                                                 <a class="acceptbut" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
-                                                  <button class="btn btn-success btn-sm">Accept</button>
+                                                  <button class="btn btn-success btn-sm" >Accept</button>
                                                 </a>
 
                                                 <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)">
