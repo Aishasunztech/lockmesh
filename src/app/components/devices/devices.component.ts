@@ -485,45 +485,45 @@ this.restService.postAdminSelectedItems(this.selectedItems);
 
   showEditForm(dealer) {
     $.noConflict();
+    closeModal('#newrequestmodel');
 
-
-  this.data = dealer;
-  if (this.data.start_date === 'null' || this.data.start_date === null || this.data.start_date === '') {
-    this.data.start_date = date;
-    console.log(this.data.start_date);
-  } else {
-     this.data.start_date = dealer.start_date.split('T')[0];
-  }
-  if (this.data.expiry_date === 'null' || this.data.expiry_date.includes('NaN-NaN-NaN')) {
-    this.data.expiry_date = '';
-    console.log(this.data.expiry_date);
-  }
-  if (!this.data) {
-    this.data.name = '';
-    this.data.client_id = '';
-    this.data.model = '';
-    this.data.imei = '';
-    this.data.s_dealer = '';
-    this.data.status = '';
-    this.data.online = '';
-    this.data.expiry_date = '';
-    this.data.start_date = '';
-    this.data.ammount = '';
-  } else {
-    if (this.data.name === 'null') {
+    this.data = dealer;
+    if (this.data.start_date === 'null' || this.data.start_date === null || this.data.start_date === '') {
+      this.data.start_date = date;
+      console.log(this.data.start_date);
+    } else {
+       this.data.start_date = dealer.start_date.split('T')[0];
+    }
+    if (this.data.expiry_date === 'null' || this.data.expiry_date.includes('NaN-NaN-NaN')) {
+      this.data.expiry_date = '';
+      console.log(this.data.expiry_date);
+    }
+    if (!this.data) {
       this.data.name = '';
-      console.log(this.data.name);
-    }
-    if (this.data.client_id === 'null') {
       this.data.client_id = '';
-    }
-    if (this.data.email === 'null') {
-      this.data.email = '';
-    }
-    if (this.data.model === null) {
       this.data.model = '';
+      this.data.imei = '';
+      this.data.s_dealer = '';
+      this.data.status = '';
+      this.data.online = '';
+      this.data.expiry_date = '';
+      this.data.start_date = '';
+      this.data.ammount = '';
+    } else {
+      if (this.data.name === 'null') {
+        this.data.name = '';
+        console.log(this.data.name);
+      }
+      if (this.data.client_id === 'null') {
+        this.data.client_id = '';
+      }
+      if (this.data.email === 'null') {
+        this.data.email = '';
+      }
+      if (this.data.model === null) {
+        this.data.model = '';
+      }
     }
-  }
 }
 
   // update password

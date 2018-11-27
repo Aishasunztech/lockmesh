@@ -85,8 +85,8 @@
     <!-- Sharrre libray -->
     <script src="assets/demo/jquery.sharrre.js"></script>
     <script src="assets/js/multicheckDropdown.js"></script>
-    <script src="assets/js/dragndrop.table.columns.js" type="text/javascript"></script>
-    <script src="assets/js/jquery.dragtable.js"></script>
+
+    <!-- <script src="assets/js/jquery.dragtable.js"></script> -->
     <script>
         function togglelogo() {
             var sider = document.getElementById("bodyC");
@@ -98,6 +98,11 @@
             $("#edit").modal('hide');
             var element = document.getElementById("edit");
             element.classList.remove("show");
+        }
+        function closeModal(elem){
+          $(elem).modal('hide');
+          //$(elem).attr('aria-hidden',"true");
+          $('#bodyC').attr('class','changeese modal-open');
         }
 
         function removepassClass(from) {
@@ -123,7 +128,11 @@
             $('.multiselect-ui').multiselect({
                 includeSelectAllOption: true
             });
-            //   document.body.style.zoom = "40%";
+            $(document).on('hide.bs.modal','#edit', function () {
+                $(".modal-backdrop").remove();
+                $("#bodyC").attr('class','changeese');
+           //Do stuff here
+          });
         });
     </script>
     <script>
@@ -135,9 +144,8 @@
                 x.type = "password";
             }
         }
-        $(document).ready(function(){
 
-        })
+
     </script>
 </body>
 
