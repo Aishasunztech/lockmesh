@@ -36,6 +36,7 @@ export class DevicesComponent implements OnInit {
   key = 'status'; // set default
   reverse = true;
   // initializing p to one
+  componentName = null;
   p = 1;
   state: any = {
     name: false,
@@ -94,6 +95,7 @@ export class DevicesComponent implements OnInit {
 
   async ngOnInit() {
 
+    this.componentName = this.constructor.name;
 
    // const _this = this;
     this.spinnerService.show();
@@ -132,11 +134,12 @@ export class DevicesComponent implements OnInit {
 
     await this.getAdminSelectedItems();
     this.dropdownSettings = {
-      text: 'Display',
+      text: 'DISPLAY',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
       enableSearchFilter: false,
       classes: 'myclass custom-class',
+      searchPlaceholderText: 'DISPLAY',
       showCheckbox: true
     };
 
@@ -743,7 +746,9 @@ this.restService.postAdminSelectedItems(this.selectedItems);
     this.allDevice = [];
     var name = field.target.name;
     var value = field.target.value;
-
+    console.log(name);
+    console.log(value);
+    console.log(list);
     list.forEach( ele => {
 
       if(name=="name" && ele.name.toUpperCase().includes(value.toUpperCase())){
@@ -751,8 +756,6 @@ this.restService.postAdminSelectedItems(this.selectedItems);
       }else if(name=="email" && ele.email.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else if(name=="client_id" && ele.client_id.toUpperCase().includes(value.toUpperCase())){
-        this.allDevice.push(ele);
-      }else if(name=="link_code" && ele.link_code.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else if(name=="status" && ele.status.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
@@ -768,19 +771,22 @@ this.restService.postAdminSelectedItems(this.selectedItems);
         this.allDevice.push(ele);
       }else if(name=="simno" && ele.simno.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
-      }else if(name=="online" && ele.online.toUpperCase().includes(value.toUpperCase())){
+      }else if(name=="online" && ele.online!=null && ele.online.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
-      }else if(name=="serial_number" && ele.serial_number.toUpperCase().includes(value.toUpperCase())){
+      }else if(name=="serial_number" && ele.serial_number!=null && ele.serial_number.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
-      }else if(name=="mac_address" && ele.mac_address.toUpperCase().includes(value.toUpperCase())){
+      }else if(name=="mac_address" && ele.mac_address!=null && ele.mac_address.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
-      }else if(name=="dealer_id" && ele.dealer_id.toUpperCase().includes(value.toUpperCase())){
+      }else if(name=="dealer_id" && ele.dealer_id!=null && ele.dealer_id.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
-      }else if(name=="dealer_pin" && ele.dealer_pin.toUpperCase().includes(value.toUpperCase())){
+      }else if(name=="dealer_pin" && ele.link_code!=null && ele.link_code.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else if(name=="model" && ele.model!=null && ele.model.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
+      }else{
+        console.log("hello else");
       }
+      console.log(this.allDevice);
     });
   }
 }

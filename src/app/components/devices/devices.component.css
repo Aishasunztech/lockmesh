@@ -57,6 +57,15 @@
     font-family:Arial, FontAwesome;
     font-size: 11px;
   }
+  #datatable th label{
+    width: 100%;
+    position: relative;
+  }
+  #datatable th label span{
+    position: absolute;
+    right: 5px;
+    top: 8px;
+  }
 
   .inputs{
     font-size: 11px;
@@ -69,4 +78,14 @@
   #classTable th{
     text-align: center;
     font-size: 12px;
+  }
+
+  .search-btn{
+    position: relative;
+  }
+
+  .search-btn span{
+    position: absolute;
+    right: 23px;
+    top: 12px;
   }

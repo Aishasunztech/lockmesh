@@ -61,7 +61,8 @@
                             <!-- <h4 class="card-title col-md-12 text-center">All Devices</h4> -->
                             <div class="row text-center">
                                 <div class="col-md-3">
-                                    <angular2-multiselect [data]="dropdownList" placeholder="DISPLAY" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event, null)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+                                    <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event, null)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
+
                                     </angular2-multiselect>
                                 </div>
                                 <div class="col-md-3 show_devices">
@@ -74,6 +75,7 @@
                                 </div>
                                 <div class="col-md-3 search-btn">
                                     <input class="form-control inputs" type="text" placeholder="SEARCH" (input)="searchDevice($event.target.value)">
+                                    <span class="fa fa-search"></span>
                                 </div>
                                 <div class="col-md-3">
                                     <!-- <a class="mbTop" routerLink="/black-list-devices"><button
@@ -100,58 +102,112 @@
                                       <th class="disabled-sorting" style="min-width: 35px;"></th>
                                       <th class="disabled-sorting"></th>
                                       <th nowrap *ngIf="state.name == true" >
-                                          <input class="form-control" type="text" name="name" placeholder="Name               &#xF002;" (input)="searchField($event)">
+                                          <label>
+                                            <input class="form-control" type="text" name="name" placeholder="Name" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
+                                          </label>
                                       </th>
                                       <th nowrap *ngIf="state.email == true" >
-                                          <input class="form-control" type="text" name="email" placeholder="Email                                                      &#xF002;" (input)="searchField($event)">
+                                          <label>
+                                            <input class="form-control" type="text" name="email" placeholder="Email" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
+                                          </label>
                                       </th>
                                       <th nowrap *ngIf="state.client_id == true" >
-                                          <input class="form-control" type="text" name="client_id" placeholder="Client Id           &#xF002;" (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="client_id" placeholder="Client Id" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.dealer_id == true" >
-                                          <input class="form-control" type="text" name="dealer_id" placeholder="Dealer Id          &#xF002;" (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="dealer_id" placeholder="Dealer Id" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.link_code == true" >
-                                          <input class="form-control" type="text" name="dealer_pin" placeholder="Dealer Pin      &#xF002;" (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="dealer_pin" placeholder="Dealer Pin" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.imei == true" >
-                                          <input class="form-control" type="text" name="imei" placeholder="IMEI             &#xF002;" (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="imei" placeholder="IMEI" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.simno == true" >
-                                          <input class="form-control" type="text" name="sim" placeholder="SIM            &#xF002;" (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="sim" placeholder="SIM" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.status == true" >
-                                          <input class="form-control" type="text" name="status" placeholder="Status         &#xF002;" (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="status" placeholder="Status" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.device_id == true" >
-                                          <input class="form-control" type="text" name="device_id" placeholder="Device Id   &#xF002;" (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="device_id" placeholder="Device Id" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.model == true" >
-                                          <input class="form-control" type="text" name="model" placeholder="Model         &#xF002;" (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="model" placeholder="Model" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.start_date == true" >
-                                          <input class="form-control" type="text" name="start_date" placeholder="Start Date " (input)="searchField($event)">
+                                        <label>
+                                          <input class="form-control" type="text" name="start_date" placeholder="Start Date" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.expiry_date == true" >
+                                        <label>
                                           <input class="form-control" type="text" name="expiry_date" placeholder="Expiry Date" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.dealer_name == true" >
+                                        <label>
                                           <input class="form-control" type="text" name="dealer_name" placeholder="Dealer Name" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.online == true" >
+                                        <label>
                                           <input class="form-control" type="text" name="online" placeholder="Online" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.serial_number == true" >
+                                        <label>
                                           <input class="form-control" type="text" name="serial_number" placeholder="Serial Number" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.mac_address == true" >
+                                        <label>
                                           <input class="form-control" type="text" name="mac_address" placeholder="Mac Address" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.s_dealer == true" >
+                                        <label>
                                           <input class="form-control" type="text" name="s_deare_id" placeholder="S-dealer Id" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                       <th nowrap *ngIf="state.s_dealer_name == true" >
+                                        <label>
                                           <input class="form-control" type="text" name="s_dealer_name" placeholder="s-dealer Name" (input)="searchField($event)">
+                                          <span class="fa fa-search"></span>
+                                        </label>
                                       </th>
                                     </tr>
                                     <tr class="text-center btnFull" >

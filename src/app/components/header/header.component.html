@@ -16,10 +16,10 @@
             <div class="col-sm-6 col-md-6 hidden-xs no-padding">
                 <div class="input-group stylish-input-group pull-right">
 
-                    <input type="text" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" placeholder="Search" >
+                    <input type="text" class="form-control" style="border: 1px solid #ccc; border-radius: 5px;" placeholder="SEARCH" >
                     <div class="btn-group" style="margin-left: 10px;">
-                      <button  class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 3px 11px 3px 11px"><i class="fa fa-bell-o"></i></button>
-                      <button  class="btn btn-primary rounded-circle btn-lg" (click)="onLogout()" style="background: #0a0a8a;margin-left: -10px;color: #94753b;padding: 3px 14px 3px 14px;"><i class="fa fa-power-off"></i></button>
+                      <button *ngIf="router.url === '/devices'" class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 3px 11px 3px 11px"><i class="fa fa-bell-o"></i></button>
+                      <button  class="btn btn-primary rounded-circle btn-lg" (click)="onLogout()" style="background: #0a0a8a;margin-left: -10px;color: #94753b!important;padding: 3px 14px 3px 14px;"><i class="fa fa-power-off"></i></button>
                     </div>
 
                 </div>
