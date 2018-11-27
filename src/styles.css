@@ -33,7 +33,7 @@ td.btnFull .btn {
 
 .sidebar-mini .sidebar .sidebar-wrapper>.lefttNav li>a p {
     transform: translate3d(-25px, 0, 0);
-    opacity: 0;
+    opacity: 1;
 }
 
 .sidebar-mini .sidebar:hover .sidebar-wrapper>.lefttNav li>a p {
