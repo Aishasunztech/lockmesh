@@ -85,10 +85,12 @@ ul.lefttNav a i {
     line-height: 30px;
     width: 34px;
     text-align: center;
-    color: hsla(0, 0%, 100%, .5);
+    color: white;
     position: relative;
 }
-
+ul.lefttNav a i:hover {
+  opacity: 1;
+}
 ul.lefttNav li>a {
     margin: 10px 15px 0;
     color: #fff;
@@ -101,6 +103,14 @@ ul.lefttNav li>a {
     padding: 0px 8px;
     line-height: 30px;
     opacity: .7;
+}
+
+.active[_ngcontent-c3] {
+  background: orange;
+  opacity: 1;
+}
+ul.lefttNav li>a:hover{
+  opacity: 1;
 }
 
 * {
@@ -268,7 +278,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
 .table>tfoot>tr>th,
 .table>thead>tr>td,
 .table>thead>tr>th {
-    padding: 12px 3px;
+    padding: 8px 3px;
     vertical-align: middle;
     text-align: center !important;
     font-size: 12px;
@@ -309,7 +319,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
 
 .active p,
 .active i {
-    color: #51CBCE !important;
+    color: #FFF !important;
 }
 
 th {
@@ -334,3 +344,20 @@ span.nav-link.btn-rotate.d-md-ver {
 .navbar .navbar-nav>a.btn.btn-icon:not(.btn-footer) .nc-icon {
     top: 33% !important;
 } */
+
+
+/*.selected-list .c-angle-down, .selected-list .c-angle-up {*/
+  /*display: none !important;*/
+/*}*/
+
+/*.selected-list .c-angle-down, .selected-list .c-angle-up:before {*/
+  /*content: "\f0d7";*/
+  /*display: inline-block;*/
+  /*font: normal normal normal 14px/1 FontAwesome;*/
+  /*font-size: inherit;*/
+  /*text-rendering: auto;*/
+/*}*/
+.main-panel>.content {
+  padding: 0;
+  margin: 20px;
+}
