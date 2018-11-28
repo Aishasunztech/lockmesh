@@ -23,9 +23,13 @@
     <link href="assets/demo/demo.css" rel="stylesheet" />
     <link href="assets/css/fontsgoogle.css" rel="stylesheet" />
     <link href="assets/css/multicheckDropdown.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.css" />
     <!-- Extra details for Live View on GitHub Pages -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-    <link rel="stylesheet" type="text/css" href="assets/css/dragtable.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="assets/css/dragtable.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="assets/css/multi-select.css"> -->
+    <link rel="stylesheet" type="text/css" href="assets/css/multiple-select.css">
     <style>
         .ngx-datepicker-container[_ngcontent-c3] .ngx-datepicker-calendar-container[_ngcontent-c3] {
             z-index: 9999 !important;
@@ -44,9 +48,14 @@
 <body id="bodyC" class="changeese">
     <app-root></app-root>
     <!--   Core JS Files   -->
+
+    <script type="text/javascript" src="./assets/js/core/popper.min.js">
+    </script>
+
     <script src="assets/js/core/jquery.min.js"></script>
     <script src="assets/js/core/bootstrap.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script> -->
 
     <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <script src="assets/js/plugins/moment.min.js"></script>
@@ -86,6 +95,27 @@
     <script src="assets/demo/jquery.sharrre.js"></script>
     <script src="assets/js/multicheckDropdown.js"></script>
 
+    <script src="assets/js/multiple-select.js"></script>
+    <script>
+      $(function() {
+          $('#ms').change(function() {
+              console.log($(this).val());
+          }).multipleSelect({
+            placeholder: "Here is the placeholder",
+            width: "100%",
+            multipleWidth: 100
+          });
+      });
+  </script>
+    <!-- <script src="assets/js/multi-select.js">
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $('.multiselect-ui').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+    </script> -->
     <!-- <script src="assets/js/jquery.dragtable.js"></script> -->
     <script>
         function togglelogo() {
