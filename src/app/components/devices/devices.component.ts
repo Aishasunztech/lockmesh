@@ -228,13 +228,13 @@ export class DevicesComponent implements OnInit {
         return selected.map(function(e) { return e.id; }).indexOf(el.id) < 0;
       });
 
-      var showstring="<pre>";
+      var showstring="<tr>";
       toShow.map(function(e){
         if(device[e.itemName]){
-          showstring = showstring + "<b>" + e.itemName + "</b>:        " + device[e.itemName] + "<br/>";
+          showstring = showstring + "<tr><th>" + e.itemName + ":</th>" + "<td>" + device[e.itemName] + "</td></tr>";
         }
       });
-      showstring = showstring + "</pre>";
+      showstring = showstring + "</tr>";
 
       $(document).find('.detailed_row_'+device.device_id).children('td').html(showstring);
       $(document).find('.detailed_row_'+device.device_id).show();
@@ -247,13 +247,13 @@ export class DevicesComponent implements OnInit {
         return selected.map(function(e) { return e.id; }).indexOf(el.id) < 0;
       });
 
-      var showstring="<pre>";
+      var showstring="<tr>";
       toShow.map(function(e){
         if(device[e.itemName]){
-          showstring = showstring + "<b>" + e.itemName + "</b>:        " + device[e.itemName] + "<br/>";
+          showstring = showstring + "<tr><th>" + e.itemName + ":</th>" + "<td>" + device[e.itemName] + "</td></tr>";
         }
       });
-      showstring = showstring + "</pre>";
+      showstring = showstring + "</tr>";
       $(document).find('.detailed_row_'+ device.device_id).children('td').html(showstring);
       $(document).find('.detailed_row_'+ device.device_id).show();
     }else if(clsName == "unexpand rounded"){
