@@ -15,7 +15,7 @@
     padding: 0;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid #aaa;
+    border: none;
     text-align: left;
     white-space: nowrap;
     line-height: 26px;
@@ -36,14 +36,16 @@
 
 .ms-choice > span {
     position: absolute;
-    top: 0;
+    top: 5px;
     left: 0;
     right: 20px;
+  font-size: 11px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
-    padding-left: 8px;
+  padding: 0 12px;
+  color: #66615b !important;
 }
 
 .ms-choice > span.placeholder {
@@ -52,7 +54,7 @@
 
 .ms-choice > div {
     position: absolute;
-    top: 0;
+    top: 5px;
     right: 0;
     width: 20px;
     height: 25px;
