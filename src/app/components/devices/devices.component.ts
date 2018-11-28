@@ -27,6 +27,7 @@ export class DevicesComponent implements OnInit {
   name = 'Angular';
   private resp: any = null;
   i = 0;
+  perPage = 10;
   dropdownList: any = [];
   selectedItems: any = [];
   dropdownSettings: any = [];
@@ -133,24 +134,20 @@ export class DevicesComponent implements OnInit {
     ];
 
     await this.getAdminSelectedItems();
-    this.dropdownSettings = {
-      text: 'DISPLAY',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      enableSearchFilter: false,
-      classes: 'myclass custom-class',
-      searchPlaceholderText: 'DISPLAY',
-      showCheckbox: true
-    };
+      this.dropdownSettings = {
+        text: 'DISPLAY',
+        selectAllText: 'Select All',
+        unSelectAllText: 'UnSelect All',
+        enableSearchFilter: false,
+        classes: 'myclass custom-class',
+        searchPlaceholderText: 'DISPLAY',
+        showCheckbox: true
+      };
 
-  }
+    }
 
   ngAfterViewInit() {
     console.log("hello hello hello");
-    // var s = document.createElement("script");
-    // s.type = "text/javascript";
-    // s.src = "http://somedomain.com/somescript";
-    // this.elementRef.nativeElement.appendChild(s);
   }
   // get admin selected device items
   async getAdminSelectedItems() {
@@ -174,48 +171,48 @@ export class DevicesComponent implements OnInit {
   onItemSelect(item: any, initVal) {
 
     if ( item.itemName === 'name') {
-      this.state.name = true;
-  } else if (item.itemName === 'link_code') {
-    this.state.link_code = true;
-  } else if (item.itemName === 'Client_id') {
-    this.state.client_id = true;
-  } else if (item.itemName === 'Model') {
-    this.state.model = true;
-  } else if (item.itemName === 'Dealer_Name') {
-    this.state.dealer_name = true;
-  } else if (item.itemName === 'IMEI') {
-    this.state.imei = true;
-  } else if (item.itemName === 'Sim') {
-    this.state.simno = true;
-  } else if (item.itemName === 'Status') {
-    this.state.status = true;
-  } else if (item.itemName === 'Serial_No') {
-    this.state.serial_number = true;
-  } else if (item.itemName === 'Mac') {
-    this.state.mac_address = true;
-  } else if (item.itemName === 'device_id') {
-    this.state.device_id = true;
-  } else if (item.itemName === 'Start date') {
-    this.state.start_date = true;
-  } else if (item.itemName === 'Expiry_date') {
-    this.state.expiry_date = true;
-  } else if (item.itemName === 'email') {
-    this.state.email = true;
-  } else if (item.itemName === 'online') {
-    this.state.online = true;
-  } else if (item.itemName === 's_dealer_name') {
-    this.state.s_dealer_name = true;
+        this.state.name = true;
+    } else if (item.itemName === 'link_code') {
+      this.state.link_code = true;
+    } else if (item.itemName === 'Client_id') {
+      this.state.client_id = true;
+    } else if (item.itemName === 'Model') {
+      this.state.model = true;
+    } else if (item.itemName === 'Dealer_Name') {
+      this.state.dealer_name = true;
+    } else if (item.itemName === 'IMEI') {
+      this.state.imei = true;
+    } else if (item.itemName === 'Sim') {
+      this.state.simno = true;
+    } else if (item.itemName === 'Status') {
+      this.state.status = true;
+    } else if (item.itemName === 'Serial_No') {
+      this.state.serial_number = true;
+    } else if (item.itemName === 'Mac') {
+      this.state.mac_address = true;
+    } else if (item.itemName === 'device_id') {
+      this.state.device_id = true;
+    } else if (item.itemName === 'Start date') {
+      this.state.start_date = true;
+    } else if (item.itemName === 'Expiry_date') {
+      this.state.expiry_date = true;
+    } else if (item.itemName === 'email') {
+      this.state.email = true;
+    } else if (item.itemName === 'online') {
+      this.state.online = true;
+    } else if (item.itemName === 's_dealer_name') {
+      this.state.s_dealer_name = true;
 
-  } else if (item.itemName === 'dealer_id') {
-    this.state.dealer_id = true;
-  } else if (item.itemName === 's_dealer') {
-    this.state.s_dealer = true;
+    } else if (item.itemName === 'dealer_id') {
+      this.state.dealer_id = true;
+    } else if (item.itemName === 's_dealer') {
+      this.state.s_dealer = true;
+    }
+    // update selected items for dealer
+    if (initVal == null) {
+      this.restService.postAdminSelectedItems(this.selectedItems);
+    }
   }
-  // update selected items for dealer
-  if (initVal == null) {
-    this.restService.postAdminSelectedItems(this.selectedItems);
-  }
-}
 
   collapse(device,e){
     var clsName=e.target.attributes.class.nodeValue;
@@ -484,47 +481,47 @@ this.restService.postAdminSelectedItems(this.selectedItems);
 }
 
   showEditForm(dealer) {
-    $.noConflict();
-    // closeModal('#newrequestmodel');
+      $.noConflict();
+      // closeModal('#newrequestmodel');
 
-    this.data = dealer;
-    if (this.data.start_date === 'null' || this.data.start_date === null || this.data.start_date === '') {
-      this.data.start_date = date;
-      console.log(this.data.start_date);
-    } else {
-       this.data.start_date = dealer.start_date.split('T')[0];
-    }
-    if (this.data.expiry_date === 'null' || this.data.expiry_date.includes('NaN-NaN-NaN')) {
-      this.data.expiry_date = '';
-      console.log(this.data.expiry_date);
-    }
-    if (!this.data) {
-      this.data.name = '';
-      this.data.client_id = '';
-      this.data.model = '';
-      this.data.imei = '';
-      this.data.s_dealer = '';
-      this.data.status = '';
-      this.data.online = '';
-      this.data.expiry_date = '';
-      this.data.start_date = '';
-      this.data.ammount = '';
-    } else {
-      if (this.data.name === 'null') {
+      this.data = dealer;
+      if (this.data.start_date === 'null' || this.data.start_date === null || this.data.start_date === '') {
+        this.data.start_date = date;
+        console.log(this.data.start_date);
+      } else {
+         this.data.start_date = dealer.start_date.split('T')[0];
+      }
+      if (this.data.expiry_date === 'null' || this.data.expiry_date.includes('NaN-NaN-NaN')) {
+        this.data.expiry_date = '';
+        console.log(this.data.expiry_date);
+      }
+      if (!this.data) {
         this.data.name = '';
-        console.log(this.data.name);
-      }
-      if (this.data.client_id === 'null') {
         this.data.client_id = '';
-      }
-      if (this.data.email === 'null') {
-        this.data.email = '';
-      }
-      if (this.data.model === null) {
         this.data.model = '';
+        this.data.imei = '';
+        this.data.s_dealer = '';
+        this.data.status = '';
+        this.data.online = '';
+        this.data.expiry_date = '';
+        this.data.start_date = '';
+        this.data.ammount = '';
+      } else {
+        if (this.data.name === 'null') {
+          this.data.name = '';
+          console.log(this.data.name);
+        }
+        if (this.data.client_id === 'null') {
+          this.data.client_id = '';
+        }
+        if (this.data.email === 'null') {
+          this.data.email = '';
+        }
+        if (this.data.model === null) {
+          this.data.model = '';
+        }
       }
-    }
-}
+  }
 
   // update password
   updatePassDealer() {
@@ -545,34 +542,34 @@ this.restService.postAdminSelectedItems(this.selectedItems);
   }
 
   updateAdmin() {
-  if (this.data.email === '' || this.data.name === '' ||  this.data.email === 'null' || this.data.name === 'null' ) {
-    Swal({
-     text: 'Please Fill Name And Email .... ',
-     type: 'error',
-      customClass: 'swal-height'
-       }).then(okay => {
-         return;
-      });
-  } else {
-   // console.log(this.data);
-    const extdate = new Date(this.data.expiry_date);
-    // tslint:disable-next-line:max-line-length
-    this.data.expiry_date = extdate.getFullYear() + '-' + this.getdate(extdate.getMonth() + 1) + '-' + this.getdate(extdate.getDate()) + ' ' + timest;
-    console.log(this.data);
-    if (this.data.expiry_date.trim() === null || this.data.expiry_date.trim() === ''
-     || this.data.expiry_date.trim() === 'NaN-NaN-NaN Invalid' || this.data.expiry_date.split(' ')[0] === '1970-1-1') {
+    if (this.data.email === '' || this.data.name === '' ||  this.data.email === 'null' || this.data.name === 'null' ) {
+      Swal({
+       text: 'Please Fill Name And Email .... ',
+       type: 'error',
+        customClass: 'swal-height'
+         }).then(okay => {
+           return;
+        });
+    } else {
+     // console.log(this.data);
+      const extdate = new Date(this.data.expiry_date);
+      // tslint:disable-next-line:max-line-length
+      this.data.expiry_date = extdate.getFullYear() + '-' + this.getdate(extdate.getMonth() + 1) + '-' + this.getdate(extdate.getDate()) + ' ' + timest;
+      console.log(this.data);
+      if (this.data.expiry_date.trim() === null || this.data.expiry_date.trim() === ''
+       || this.data.expiry_date.trim() === 'NaN-NaN-NaN Invalid' || this.data.expiry_date.split(' ')[0] === '1970-1-1') {
+        console.log(this.data.expiry_date);
+        this.data.expiry_date = '';
+      }
       console.log(this.data.expiry_date);
-      this.data.expiry_date = '';
-    }
-    console.log(this.data.expiry_date);
-    if (this.data.expiry_date.includes('NaN-NaN-NaN')) {
-      this.data.expiry_date = '';
-      console.log(this.data.expiry_date);
-    }
-    this.data.s_dealer = '';
-    this.spinnerService.show();
-    this.data.name = this.capitalize(this.data.name);
-    this.restService.updateAdminDetails(this.data).subscribe((response) => {
+      if (this.data.expiry_date.includes('NaN-NaN-NaN')) {
+        this.data.expiry_date = '';
+        console.log(this.data.expiry_date);
+      }
+      this.data.s_dealer = '';
+      this.spinnerService.show();
+      this.data.name = this.capitalize(this.data.name);
+      this.restService.updateAdminDetails(this.data).subscribe((response) => {
         this.restService.authtoken(response);
         this.resp = response;
         if (this.resp.status === true) {
@@ -595,101 +592,101 @@ this.restService.postAdminSelectedItems(this.selectedItems);
 
   // suspend dealer-device
   suspendForm(device_id) {
-  Swal({
-    text: 'Are you sure to suspend the device?',
-    showCancelButton: true,
-    useRejections: true,
-    cancelButtonText: 'No',
-    confirmButtonText: 'Yes',
-    type: 'warning'
-  }).then((okay) =>  {
-    if (okay) {
-      // location.reload(true);
-      this.spinnerService.show();
-      this.restService.suspendForm(device_id).subscribe((response) => {
-     //   this.spinnerService.hide();
-        this.restService.authtoken(response);
-        this.resp = response;
-        console.log(response);
-        if (this.resp.status === true) {
-          Swal({
-          text: this.resp.msg,
-          type: 'success',
-            customClass: 'swal-height'
-            }).then(result => {
-            if (result.value) {
-              location.reload(true);
-              }
-            });
-        } else {
-          if (this.resp.status === false) {
+    Swal({
+      text: 'Are you sure to suspend the device?',
+      showCancelButton: true,
+      useRejections: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'warning'
+    }).then((okay) =>  {
+      if (okay) {
+        // location.reload(true);
+        this.spinnerService.show();
+        this.restService.suspendForm(device_id).subscribe((response) => {
+       //   this.spinnerService.hide();
+          this.restService.authtoken(response);
+          this.resp = response;
+          console.log(response);
+          if (this.resp.status === true) {
             Swal({
             text: this.resp.msg,
-            type: 'warning',
+            type: 'success',
               customClass: 'swal-height'
               }).then(result => {
               if (result.value) {
-                location.reload(false);
+                location.reload(true);
                 }
               });
+          } else {
+            if (this.resp.status === false) {
+              Swal({
+              text: this.resp.msg,
+              type: 'warning',
+                customClass: 'swal-height'
+                }).then(result => {
+                if (result.value) {
+                  location.reload(false);
+                  }
+                });
+            }
           }
-        }
-      });
-      this.spinnerService.hide();
-    }
-  });
+        });
+        this.spinnerService.hide();
+      }
+    });
   }
 
   // activate admin-device
   activateForm(device_id) {
-  // console.log(device_id);
-  Swal({
-    text: 'Are you sure to activate the device?',
-    showCancelButton: true,
-    useRejections: true,
-    cancelButtonText: 'No',
-    confirmButtonText: 'Yes',
-    type: 'warning'
-  }).then((okay) =>  {
-    if (okay) {
-      this.spinnerService.show();
-      this.restService.activateForm(device_id).subscribe((response) => {
-       // this.spinnerService.hide();
-        this.restService.authtoken(response);
-        this.resp = response;
-        if (this.resp.status === true) {
-          this.spinnerService.hide();
-          Swal({
-          text: this.resp.msg,
-          type: 'success',
-            customClass: 'swal-height'
-            }).then(result => {
-            if (result.value) {
-              location.reload(true);
-              }
-            });
-        } else {
-          if (this.resp.status === false) {
+    // console.log(device_id);
+    Swal({
+      text: 'Are you sure to activate the device?',
+      showCancelButton: true,
+      useRejections: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'warning'
+    }).then((okay) =>  {
+      if (okay) {
+        this.spinnerService.show();
+        this.restService.activateForm(device_id).subscribe((response) => {
+         // this.spinnerService.hide();
+          this.restService.authtoken(response);
+          this.resp = response;
+          if (this.resp.status === true) {
             this.spinnerService.hide();
             Swal({
             text: this.resp.msg,
-            type: 'warning',
+            type: 'success',
               customClass: 'swal-height'
               }).then(result => {
               if (result.value) {
-                location.reload(false);
+                location.reload(true);
                 }
               });
+          } else {
+            if (this.resp.status === false) {
+              this.spinnerService.hide();
+              Swal({
+              text: this.resp.msg,
+              type: 'warning',
+                customClass: 'swal-height'
+                }).then(result => {
+                if (result.value) {
+                  location.reload(false);
+                  }
+                });
+            }
           }
-        }
-   // this.spinnerService.hide();
-      });
-    }
-  });
+     // this.spinnerService.hide();
+        });
+      }
+    });
   }
 
-    // Unlink dealer-device
-    unlinkUser(device_id) {
+  // Unlink dealer-device
+  unlinkUser(device_id) {
     console.log(device_id);
     Swal({
       text: 'Are you sure to unlink the device?',
@@ -704,7 +701,7 @@ this.restService.postAdminSelectedItems(this.selectedItems);
         this.spinnerService.hide();
       }
     });
-    }
+  }
 
   deleteUserDetails(device_id) {
     console.log(device_id);
@@ -746,9 +743,7 @@ this.restService.postAdminSelectedItems(this.selectedItems);
     this.allDevice = [];
     var name = field.target.name;
     var value = field.target.value;
-    console.log(name);
-    console.log(value);
-    console.log(list);
+
     list.forEach( ele => {
 
       if(name=="name" && ele.name.toUpperCase().includes(value.toUpperCase())){
@@ -769,7 +764,7 @@ this.restService.postAdminSelectedItems(this.selectedItems);
         this.allDevice.push(ele);
       }else if(name=="imei" && ele.imei.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
-      }else if(name=="simno" && ele.simno.toUpperCase().includes(value.toUpperCase())){
+      }else if(name=="sim" && ele.simno.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else if(name=="online" && ele.online!=null && ele.online.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
@@ -785,8 +780,30 @@ this.restService.postAdminSelectedItems(this.selectedItems);
         this.allDevice.push(ele);
       }else{
         console.log("hello else");
+        //this.allDevice.push(list);
       }
-      console.log(this.allDevice);
+
     });
+  }
+  deviceFilter(elem){
+    const list = this.allDeviceDummyList;
+    this.allDevice = [];
+    //var name = elem.target.name;
+    var value = elem.target.value;
+    console.log(value);
+    list.forEach( ele => {
+      if( ele.status.toUpperCase().includes(value.toUpperCase())){
+        this.allDevice.push(ele);
+      }
+    });
+
+  }
+  paging(elem){
+    
+    var value = elem.target.value;
+    // console.log(value);
+    this.perPage=value;
+    console.log(this.perPage);
+
   }
 }

@@ -91,3 +91,7 @@
     right: 23px;
     top: 12px;
   }
+  #formData label{
+    text-align: right;
+    line-height: 35px;
+  }
