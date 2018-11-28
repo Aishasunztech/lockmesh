@@ -387,6 +387,20 @@ span.nav-link.btn-rotate.d-md-ver {
   background-color: #4e0d6f;
 }
 
+.cs-card {
+  border-radius: unset;
+  padding: 20px
+}
+
+.cs-table {
+  padding: 0;
+  margin: 0;
+}
+
+.cs-table .form-control{
+    margin-bottom: 26px;
+}
+
 @media screen and (max-width: 768px){
   .nd-xs {
     display: none;
