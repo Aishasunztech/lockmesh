@@ -372,6 +372,21 @@ span.nav-link.btn-rotate.d-md-ver {
   margin: 10px 0 0 0;
 }
 
+.perfect-scrollbar-on .main-panel, .perfect-scrollbar-on .sidebar {
+  height: auto;
+  max-height: initial;
+}
+.off-canvas-sidebar .sidebar-wrapper, .sidebar .sidebar-wrapper {
+  padding-bottom: 0;
+}
+.wrap-all-nav {
+  background-color: white;
+}
+
+.changeese {
+  background-color: #4e0d6f;
+}
+
 @media screen and (max-width: 768px){
   .nd-xs {
     display: none;
