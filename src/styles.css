@@ -385,6 +385,7 @@ span.nav-link.btn-rotate.d-md-ver {
 
 .changeese {
   background-color: #4e0d6f;
+  padding-right: 0 !important;
 }
 
 .cs-card {
@@ -399,6 +400,12 @@ span.nav-link.btn-rotate.d-md-ver {
 
 .cs-table .form-control{
     margin-bottom: 26px;
+}
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: -webkit-paged-x;
+  padding: 0 !important;
 }
 
 @media screen and (max-width: 768px){
