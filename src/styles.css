@@ -422,6 +422,11 @@ select.form-control {
   line-height: 15px;
 
 }
+
+.card-body .cardHig {
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
 @media screen and (max-width: 768px){
   .nd-xs {
     display: none;
