@@ -68,6 +68,7 @@
                                 <div class="col-md-3 show_devices">
                                     <select class="form-control inputs on-small-margin" placeholder="Device" name="display_device" (input)="deviceFilter($event)">
                                       <option value="">SHOW DEVICES</option>
+                                      <option>active</option>
                                       <option>Linked</option>
                                       <option>Unlinked</option>
                                       <option>Expired</option>
@@ -380,7 +381,7 @@
                                 </tbody>
                             </table>
                             <div class="row text-center" style="display: block;">
-                                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                                <pagination-controls (pageChange)="p = $event" ></pagination-controls>
                             </div>
 
                             <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true" style="top:-50px">

@@ -12,22 +12,23 @@ import {Router, ActivatedRoute} from '@angular/router';
   styleUrls: ['./connect-devices.component.css']
 })
 export class ConnectAdminDevicesComponent implements OnInit {
+  path: any;
   device_data = {
     account_status: '',
-  client_id: '',
-  device_id: '',
-  email: '',
-  expiry_date: '',
-  imei: '',
-  ip_address: '',
-  mac_address: '',
-  model: '',
-  name: '',
-  s_dealer_name: '',
-  serial_number: '',
-  simno: '',
-  start_date: '',
-  status: '',
+    client_id: '',
+    device_id: '',
+    email: '',
+    expiry_date: '',
+    imei: '',
+    ip_address: '',
+    mac_address: '',
+    model: '',
+    name: '',
+    s_dealer_name: '',
+    serial_number: '',
+    simno: '',
+    start_date: '',
+    status: '',
   };
 
   constructor(private restService: RestService, private route: ActivatedRoute,
@@ -35,19 +36,29 @@ export class ConnectAdminDevicesComponent implements OnInit {
   private spinnerService: Ng4LoadingSpinnerService) { }
 
   ngOnInit() {
+
     document.body.style.zoom = '100%';
+  }
+  ngAfterViewInit() {
+    this.path = this.router.url.split('/');
+    var device_id = this.path[2];
+    this.restService.refreshlist(device_id).subscribe((response) => {
+      this.device_data = response;
+      this.spinnerService.hide();
+      this.restService.authtoken(response);
+    });
   }
   onLogout() {
     this.restService.authSignOut();
   }
-// refresh button
-referesh(device_id) {
-  device_id = this.route.snapshot.paramMap.get('device_id');
-  this.restService.refreshlist(device_id).subscribe((response) => {
-    console.log(response);
-    this.device_data = response;
-    this.spinnerService.hide();
-    this.restService.authtoken(response);
+  // refresh button
+  referesh(device_id) {
+    device_id = this.route.snapshot.paramMap.get('device_id');
+    this.restService.refreshlist(device_id).subscribe((response) => {
+      console.log(response);
+      this.device_data = response;
+      this.spinnerService.hide();
+      this.restService.authtoken(response);
     });
-}
+  }
 }
