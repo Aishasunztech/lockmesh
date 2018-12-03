@@ -98,24 +98,20 @@
     <script src="assets/js/multiple-select.js"></script>
     <script>
       $(function() {
-          $('#ms').change(function() {
-              console.log($(this).val());
-          }).multipleSelect({
+        var select_item_loaded=window.setInterval(function(){
+
+          $('#ms').multipleSelect({
             placeholder: "SELECT FIELDS",
             width: "100%",
             multipleWidth: 100
           });
+          clearInterval(select_item_loaded);
+        }, 1500);
       });
   </script>
     <!-- <script src="assets/js/multi-select.js">
-    </script>
-    <script type="text/javascript">
-        $(function() {
-            $('.multiselect-ui').multiselect({
-                includeSelectAllOption: true
-            });
-        });
-    </script> -->
+    </script>-->
+
     <!-- <script src="assets/js/jquery.dragtable.js"></script> -->
     <script>
         function togglelogo() {
@@ -161,8 +157,8 @@
             $(document).on('hide.bs.modal','#edit', function () {
                 $(".modal-backdrop").remove();
                 $("#bodyC").attr('class','changeese');
-           //Do stuff here
-          });
+             //Do stuff here
+            });
         });
     </script>
     <script>

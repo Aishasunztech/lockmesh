@@ -134,20 +134,21 @@ export class DevicesComponent implements OnInit {
     ];
 
     await this.getAdminSelectedItems();
-      this.dropdownSettings = {
-        text: 'DISPLAY',
-        selectAllText: 'Select All',
-        unSelectAllText: 'UnSelect All',
-        enableSearchFilter: false,
-        classes: 'myclass custom-class',
-        searchPlaceholderText: 'DISPLAY',
-        showCheckbox: true
-      };
+    // this.isSelectedItems();
+    this.dropdownSettings = {
+      text: 'DISPLAY',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      enableSearchFilter: false,
+      classes: 'myclass custom-class',
+      searchPlaceholderText: 'DISPLAY',
+      showCheckbox: true
+    };
 
-    }
+  }
 
   ngAfterViewInit() {
-    console.log("hello hello hello");
+    console.log("ngAfterViewInit");
   }
   // get admin selected device items
   async getAdminSelectedItems() {
@@ -160,6 +161,9 @@ export class DevicesComponent implements OnInit {
     }
   }
 
+  getSelectedItems(item){
+    console.log("hello");
+  }
   sort(key) {
     this.key = key;
     this.reverse = !this.reverse;
@@ -168,8 +172,23 @@ export class DevicesComponent implements OnInit {
   activeDevices(key){
 
   }
-  onItemSelect(item: any, initVal) {
 
+  isSelectedItems(){
+    var self=this;
+    this.dropdownList.map(function(s) {
+      self.selectedItems.map(function(i){
+        if(s.itemName===i.itemName){
+          s.isSelected=true;
+        }
+      });
+    });
+
+  }
+  // getSelectedOptions(selected){
+  //   console.log("i am here");
+  // }
+
+  onItemSelect(item: any, initVal) {
     if ( item.itemName === 'name') {
         this.state.name = true;
     } else if (item.itemName === 'link_code') {
@@ -272,163 +291,156 @@ export class DevicesComponent implements OnInit {
   }
 
   showItems (itemName) {
-}
+  }
+
   OnItemDeSelect(item: any) {
-  if ( item.itemName === 'name') {
-    this.state.name = false;
-} else if (item.itemName === 'link_code') {
-  this.state.link_code = false;
-} else if (item.itemName === 'Client_id') {
-  this.state.client_id = false;
-} else if (item.itemName === 'Model') {
-  this.state.model = false;
-} else if (item.itemName === 'Dealer_Name') {
-  this.state.dealer_name = false;
-} else if (item.itemName === 'IMEI') {
-  this.state.imei = false;
-} else if (item.itemName === 'Sim') {
-  this.state.simno = false;
-} else if (item.itemName === 'Status') {
-  this.state.status = false;
-} else if (item.itemName === 'Serial_No') {
-  this.state.serial_number = false;
-} else if (item.itemName === 'Mac') {
-  this.state.mac_address = false;
-} else if (item.itemName === 'device_id') {
-  this.state.device_id = false;
-} else if (item.itemName === 'Start date') {
-  this.state.start_date = false;
-} else if (item.itemName === 'Expiry_date') {
-  this.state.expiry_date = false;
-  console.log(this.state.expiry_date);
-} else if (item.itemName === 'email') {
-  this.state.email = false;
-} else if (item.itemName === 'online') {
-  this.state.online = false;
-} else if (item.itemName === 's_dealer_name') {
-  this.state.s_dealer_name = false;
-  console.log(this.state.s_dealer_name);
-} else if (item.itemName === 'dealer_id') {
-  this.state.dealer_id = false;
-} else if (item.itemName === 's_dealer') {
-  this.state.s_dealer = false;
-  console.log(this.state.s_dealer);
-}
-this.restService.postAdminSelectedItems(this.selectedItems);
-}
+    if ( item.itemName === 'name') {
+      this.state.name = false;
+    } else if (item.itemName === 'link_code') {
+      this.state.link_code = false;
+    } else if (item.itemName === 'Client_id') {
+      this.state.client_id = false;
+    } else if (item.itemName === 'Model') {
+      this.state.model = false;
+    } else if (item.itemName === 'Dealer_Name') {
+      this.state.dealer_name = false;
+    } else if (item.itemName === 'IMEI') {
+      this.state.imei = false;
+    } else if (item.itemName === 'Sim') {
+      this.state.simno = false;
+    } else if (item.itemName === 'Status') {
+      this.state.status = false;
+    } else if (item.itemName === 'Serial_No') {
+      this.state.serial_number = false;
+    } else if (item.itemName === 'Mac') {
+      this.state.mac_address = false;
+    } else if (item.itemName === 'device_id') {
+      this.state.device_id = false;
+    } else if (item.itemName === 'Start date') {
+      this.state.start_date = false;
+    } else if (item.itemName === 'Expiry_date') {
+      this.state.expiry_date = false;
+    } else if (item.itemName === 'email') {
+      this.state.email = false;
+    } else if (item.itemName === 'online') {
+      this.state.online = false;
+    } else if (item.itemName === 's_dealer_name') {
+      this.state.s_dealer_name = false;
+    } else if (item.itemName === 'dealer_id') {
+      this.state.dealer_id = false;
+    } else if (item.itemName === 's_dealer') {
+      this.state.s_dealer = false;
+    }
+    this.restService.postAdminSelectedItems(this.selectedItems);
+  }
 
   onSelectAll(items: any) {
-  this.i =  0;
-  for ( this.i = 0; this.i < items.length; this.i++) {
-  const item = items[this.i];
-  if ( item.itemName === 'name') {
-    this.state.name = true;
-} else if (item.itemName === 'link_code') {
-  this.state.link_code = true;
-} else if (item.itemName === 'Client_id') {
-  this.state.client_id = true;
-} else if (item.itemName === 'Model') {
-  this.state.model = true;
-} else if (item.itemName === 'Dealer_Name') {
-  this.state.dealer_name = true;
-} else if (item.itemName === 'IMEI') {
-  this.state.imei = true;
-} else if (item.itemName === 'Sim') {
-  this.state.simno = true;
-} else if (item.itemName === 'Status') {
-  this.state.status = true;
-} else if (item.itemName === 'Serial_No') {
-  this.state.serial_number = true;
-} else if (item.itemName === 'Mac') {
-  this.state.mac_address = true;
-} else if (item.itemName === 'device_id') {
-  this.state.device_id = true;
-} else if (item.itemName === 'Start date') {
-  this.state.start_date = true;
-  console.log(this.state.start_date);
-} else if (item.itemName === 'Expiry_date') {
-  this.state.expiry_date = true;
-//  console.log(this.state.expiry_date);
-} else if (item.itemName === 'email') {
-  this.state.email = true;
-} else if (item.itemName === 'online') {
-  this.state.online = true;
-} else if (item.itemName === 's_dealer_name') {
-  this.state.s_dealer_name = true;
-  console.log(this.state.s_dealer_name);
-} else if (item.itemName === 'dealer_id') {
-  this.state.dealer_id = true;
-} else if (item.itemName === 's_dealer') {
-  this.state.dealer_id = true;
-  console.log(this.state.s_dealer);
-}
-}
-setTimeout(() => {
-console.log(this.state);
-}, 1000);
+    this.i =  0;
+    for ( this.i = 0; this.i < items.length; this.i++) {
+      const item = items[this.i];
+      if ( item.itemName === 'name') {
+        this.state.name = true;
+      } else if (item.itemName === 'link_code') {
+        this.state.link_code = true;
+      } else if (item.itemName === 'Client_id') {
+        this.state.client_id = true;
+      } else if (item.itemName === 'Model') {
+        this.state.model = true;
+      } else if (item.itemName === 'Dealer_Name') {
+        this.state.dealer_name = true;
+      } else if (item.itemName === 'IMEI') {
+        this.state.imei = true;
+      } else if (item.itemName === 'Sim') {
+        this.state.simno = true;
+      } else if (item.itemName === 'Status') {
+        this.state.status = true;
+      } else if (item.itemName === 'Serial_No') {
+        this.state.serial_number = true;
+      } else if (item.itemName === 'Mac') {
+        this.state.mac_address = true;
+      } else if (item.itemName === 'device_id') {
+        this.state.device_id = true;
+      } else if (item.itemName === 'Start date') {
+        this.state.start_date = true;
+      } else if (item.itemName === 'Expiry_date') {
+        this.state.expiry_date = true;
+      } else if (item.itemName === 'email') {
+        this.state.email = true;
+      } else if (item.itemName === 'online') {
+        this.state.online = true;
+      } else if (item.itemName === 's_dealer_name') {
+        this.state.s_dealer_name = true;
+      } else if (item.itemName === 'dealer_id') {
+        this.state.dealer_id = true;
+      } else if (item.itemName === 's_dealer') {
+        this.state.dealer_id = true;
+      }
+    }
+    setTimeout(() => {
+    console.log(this.state);
+    }, 1000);
 
-// save in db
-this.restService.postAdminSelectedItems(this.selectedItems);
-}
+    // save in db
+    this.restService.postAdminSelectedItems(this.selectedItems);
+ }
 
-  onDeSelectAll(items: any) {
-  console.log(items);
-  this.state.name = false;
-  this.state.link_code = false;
-  this.state.client_id = false;
-  this.state.model = false;
-  this.state.dealer_name = false;
-  this.state.imei = false;
-  this.state.simno = false;
-  this.state.status = false;
-  this.state.serial_number = false;
-  this.state.mac_address = false;
-  this.state.device_id = false;
-  this.state.start_date = false;
-  console.log(this.state.start_date);
-  this.state.expiry_date = false;
-//  console.log(this.state.expiry_date);
-  this.state.email = false;
-  this.state.online = false;
-  this.state.s_dealer_name = false;
-  this.state.dealer_id = false;
-  this.state.s_dealer = false;
-  setTimeout(() => {
-  console.log(this.state);
-  }, 1000);
+ onDeSelectAll(items: any) {
+   this.state.name = false;
+   this.state.link_code = false;
+   this.state.client_id = false;
+   this.state.model = false;
+   this.state.dealer_name = false;
+   this.state.imei = false;
+   this.state.simno = false;
+   this.state.status = false;
+   this.state.serial_number = false;
+   this.state.mac_address = false;
+   this.state.device_id = false;
+   this.state.start_date = false;
+   console.log(this.state.start_date);
+   this.state.expiry_date = false;
+   //  console.log(this.state.expiry_date);
+   this.state.email = false;
+   this.state.online = false;
+   this.state.s_dealer_name = false;
+   this.state.dealer_id = false;
+   this.state.s_dealer = false;
+   setTimeout(() => {
+     console.log(this.state);
+   }, 1000);
 
-  // save selected items on db
-  this.restService.postAdminSelectedItems(this.selectedItems);
-}
+   // save selected items on db
+   this.restService.postAdminSelectedItems(this.selectedItems);
+ }
 
   addDevice(device) {
     this.restService.addDevice(device);
   }
 
   onLogout() {
-  this.restService.authSignOut();
-}
+    this.restService.authSignOut();
+  }
 
   async allDeviceView() {
-  this.allDevice = [];
-//  this.spinnerService.show();
+    this.allDevice = [];
+    //  this.spinnerService.show();
     const response = await this.restService.getUserDevice(Headers).toPromise();
     // this.restService.getUserDevice(Headers).subscribe((response) => {
 
     this.allDevice = response.data;
-    console.log(this.allDevice);
+
     this.allDevice.forEach( search => {
       if ( search.expiry_date != null && search.expiry_date !== '' ) {
         const time = search.expiry_date.split(' ');
         const time1 = time[1].split(':');
         search.expiry_date = time[0] + ' ' + time1[0] + ':' + time1[1];
-       // console.log(search.expiry_date);
+        // console.log(search.expiry_date);
       }
       if ( search.start_date != null && search.start_date !== '') {
         const time = search.start_date.split(' ');
         const time1 = time[1].split(':');
         search.start_date = time[0] + ' ' + time1[0] + ':' + time1[1];
-      //  console.log(search.start_date);
+        //  console.log(search.start_date);
       }
     });
     this.allDeviceDummyList = this.allDevice;
@@ -477,8 +489,8 @@ this.restService.postAdminSelectedItems(this.selectedItems);
       }
     });
     this.restService.authtoken(response);
-  // });
-}
+    // });
+  }
 
   showEditForm(dealer) {
       $.noConflict();
@@ -651,35 +663,35 @@ this.restService.postAdminSelectedItems(this.selectedItems);
       if (okay) {
         this.spinnerService.show();
         this.restService.activateForm(device_id).subscribe((response) => {
-         // this.spinnerService.hide();
+          // this.spinnerService.hide();
           this.restService.authtoken(response);
           this.resp = response;
           if (this.resp.status === true) {
             this.spinnerService.hide();
             Swal({
-            text: this.resp.msg,
-            type: 'success',
+              text: this.resp.msg,
+              type: 'success',
               customClass: 'swal-height'
-              }).then(result => {
+            }).then(result => {
               if (result.value) {
                 location.reload(true);
-                }
-              });
+              }
+            });
           } else {
             if (this.resp.status === false) {
               this.spinnerService.hide();
               Swal({
-              text: this.resp.msg,
-              type: 'warning',
+                text: this.resp.msg,
+                type: 'warning',
                 customClass: 'swal-height'
-                }).then(result => {
+              }).then(result => {
                 if (result.value) {
                   location.reload(false);
-                  }
-                });
+                }
+              });
             }
           }
-     // this.spinnerService.hide();
+          // this.spinnerService.hide();
         });
       }
     });
@@ -723,20 +735,20 @@ this.restService.postAdminSelectedItems(this.selectedItems);
     const list = this.allDeviceDummyList;
     this.allDevice = [];
     list.forEach( ele => {
-          if (ele.name.toUpperCase().includes(value.toUpperCase()) || ele.email.toUpperCase().includes(value.toUpperCase()) ||
-              ele.client_id.toUpperCase().includes(value.toUpperCase()) || ele.link_code.toUpperCase().includes(value.toUpperCase()) ||
-              ele.status.toUpperCase().includes(value.toUpperCase()) || ele.device_id.toUpperCase().includes(value.toUpperCase()) ||
-              ele.start_date.toUpperCase().includes(value.toUpperCase()) || ele.expiry_date.toUpperCase().includes(value.toUpperCase()) ||
-              ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.imei.toUpperCase().includes(value.toUpperCase()) ||
-              ele.simno.toUpperCase().includes(value.toUpperCase()) || ele.online.toUpperCase().includes(value.toUpperCase()) ||
-              ele.serial_number.toUpperCase().includes(value.toUpperCase()) ||
-              ele.mac_address.toUpperCase().includes(value.toUpperCase())) {
-              this.allDevice.push(ele);
-              }
+      if (ele.name.toUpperCase().includes(value.toUpperCase()) || ele.email.toUpperCase().includes(value.toUpperCase()) ||
+      ele.client_id.toUpperCase().includes(value.toUpperCase()) || ele.link_code.toUpperCase().includes(value.toUpperCase()) ||
+      ele.status.toUpperCase().includes(value.toUpperCase()) || ele.device_id.toUpperCase().includes(value.toUpperCase()) ||
+      ele.start_date.toUpperCase().includes(value.toUpperCase()) || ele.expiry_date.toUpperCase().includes(value.toUpperCase()) ||
+      ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.imei.toUpperCase().includes(value.toUpperCase()) ||
+      ele.simno.toUpperCase().includes(value.toUpperCase()) || ele.online.toUpperCase().includes(value.toUpperCase()) ||
+      ele.serial_number.toUpperCase().includes(value.toUpperCase()) ||
+      ele.mac_address.toUpperCase().includes(value.toUpperCase())) {
+        this.allDevice.push(ele);
+      }
     });
 
 
-}
+  }
 
   searchField(field){
     const list = this.allDeviceDummyList;
@@ -799,7 +811,7 @@ this.restService.postAdminSelectedItems(this.selectedItems);
 
   }
   paging(elem){
-    
+
     var value = elem.target.value;
     // console.log(value);
     this.perPage=value;
