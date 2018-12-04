@@ -26,17 +26,14 @@
             </div>
         </nav>
         <!-- End Navbar -->
-        <div class="container">
-<div class="row">
-    <div class="back-button col-md-2 col-md-offset-8">
-        <a routerLink="#">  <button class="btn btn-primary" style="cursor: -webkit-grabbing;"> Back</button></a>
-    </div>
 
-    </div>
-</div>
         <div class="content shadow">
             <div class="row">
                 <div class="col-md-8 m-auto d-block">
+                    <div class="back-button col-md-2 col-md-offset-9" style="padding-bottom: 11px">
+                        <a routerLink="/view-apk" class="">
+                            <button class="btn btn-success">Back</button></a>
+                    </div>
                     <form class="form-horizontal" id="formData" #apkData="ngForm" (ngSubmit)="addApk(apkData.value)" ngNativeValidate>
                         <div class="card ">
                             <div class="card-header text-center">
@@ -74,11 +71,13 @@
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-primary">Upload</button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
             <!-- end row -->

@@ -69,7 +69,7 @@
                                 <div class="row">
 
                                     <div class="col-md-offset-8 col-md-4 text-center">
-                                        <a href="#">
+                                        <a routerLink="/create-sdealer">
                                             <button class="btn btn-success">ADD S-Dealer</button></a>
                                     </div>
                                 </div>
@@ -135,8 +135,9 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title custom_align">Reset Password</h5>
                                                 <span class="close" id="from" onclick="removepassClass()">&times;</span>
+                                                <h5 class="modal-title custom_align">Reset Password</h5>
+
                                             </div>
                                             <div class="modal-body">
                                                 <form id="formData" #deviceData="ngForm" method="" (ngSubmit)="updatePassSubDealer()" ngNativeValidate>
@@ -173,8 +174,9 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title custom_align">Edit Your Detail</h5>
                                                 <span class="close" id="from" onclick="removeClass()">&times;</span>
+                                                <h5 class="modal-title custom_align">Edit Your Detail</h5>
+
                                             </div>
                                             <div class="modal-body">
                                                 <form id="formbgg" #deviceData="ngForm" method="" (ngSubmit)="updateSubDealer()" ngNativeValidate>
