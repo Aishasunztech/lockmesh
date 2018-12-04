@@ -550,27 +550,50 @@ export class RestService {
 
   // Dropdown Api
   getAdminSelectedItems(headers) {
+  // console.log(this.baseUrl);
+  // this.token = this.sessionLogin('token');
+  // const header = new HttpHeaders();
+  //
+  // header.append('authorization', this.sessionLogin('token'));
+  // this.response = this.http.get(this.baseUrl + '/users/admin/gtdropdown', {headers: { 'authorization': this.sessionLogin('token')} });
+  // this.authtoken(this.response);
+  // return this.response;
+
   console.log(this.baseUrl);
   this.token = this.sessionLogin('token');
   const header = new HttpHeaders();
-
+  const dealer_id = this.sessionLogin('id');
   header.append('authorization', this.sessionLogin('token'));
-  this.response = this.http.get(this.baseUrl + '/users/admin/gtdropdown', {headers: { 'authorization': this.sessionLogin('token')} });
+  // tslint:disable-next-line:max-line-length
+  this.response = this.http.get(this.baseUrl + '/users/dealer/gtdropdown/' + dealer_id, {headers: { 'authorization': this.sessionLogin('token')} });
   this.authtoken(this.response);
   return this.response;
 }
 
   postAdminSelectedItems(selectedItems) {
-  const items = JSON.stringify(selectedItems);
-  console.log('selectedItems:- ' + items);
-  console.log(this.baseUrl);
-  this.token = this.sessionLogin('token');
-  const header = new HttpHeaders();
-  header.append('authorization', this.sessionLogin('token'));
-  this.http.post(this.baseUrl + '/users/admin/dropdown', {selected_items: items}, {
-    headers: { 'authorization': this.sessionLogin('token')}
-  }).subscribe(tradeBotInfo => {
- });
+ //  const items = JSON.stringify(selectedItems);
+ //  console.log('selectedItems:- ' + items);
+ //  console.log(this.baseUrl);
+ //  this.token = this.sessionLogin('token');
+ //  const header = new HttpHeaders();
+ //  header.append('authorization', this.sessionLogin('token'));
+ //  this.http.post(this.baseUrl + '/users/admin/dropdown', {selected_items: items}, {
+ //    headers: { 'authorization': this.sessionLogin('token')}
+ //  }).subscribe(tradeBotInfo => {
+ // });
+ const items = JSON.stringify(selectedItems);
+ console.log('selectedItems:- ' + items);
+ console.log(this.baseUrl);
+ this.token = this.sessionLogin('token');
+ const header = new HttpHeaders();
+ const dealer_id = this.sessionLogin('id');
+
+ header.append('authorization', this.sessionLogin('token'));
+ this.http.post(this.baseUrl + '/users/dealer/dropdown', {dealer_id: dealer_id, selected_items: items}, {
+   headers: { 'authorization': this.sessionLogin('token')}
+ }).subscribe(tradeBotInfo => {
+    console.log(tradeBotInfo);
+});
 }
 
   // Dealer and sdealers items apis
