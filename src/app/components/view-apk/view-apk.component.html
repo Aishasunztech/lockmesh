@@ -15,18 +15,18 @@
         left: -54px;
         text-transform: capitalize;
     }
-    
+
     .remove .tooltiptext {
         width: 69px;
         background-color: #eb6532;
         left: -69px;
     }
-    
+
     .edit,
     .remove {
         overflow: visible;
     }
-    
+
     a.edit:hover .tooltiptext,
     a.remove:hover .tooltiptext {
         visibility: visible;
@@ -37,56 +37,42 @@
     <app-header></app-header>
     <div class="main-panel">
         <!-- Navbar -->
-        <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent" style="border: 0">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
                     <div class="navbar-minimize">
-                        <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
-            <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
-            <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
-          </button>
+                        <!--<button onclick="togglelogo();" id="" class="btn btn-icon btn-round">-->
+                        <!--<i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>-->
+                        <!--<i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>-->
+                        <!--</button>-->
                     </div>
                     <div class="navbar-toggle">
                         <button type="button" class="navbar-toggler">
-            <span class="navbar-toggler-bar bar1"></span>
-            <span class="navbar-toggler-bar bar2"></span>
-            <span class="navbar-toggler-bar bar3"></span>
-          </button>
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
                     </div>
-                    <a class="navbar-brand">LOGO</a>
+                    <!--<a class="navbar-brand">LOGO</a>-->
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-        <span class="navbar-toggler-bar navbar-kebab"></span>
-      </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                    <ul class="navbar-nav">
-                        <li>
-                            <span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">
-                                Logout
-                                <p>
-                                    <span class="d-lg-none d-md-block">Account</span>
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                </button>
+
             </div>
         </nav>
         <!-- End Navbar -->
         <div class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card">
+                    <div class="card" >
                         <div class="card" style="box-shadow:none;">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <h4 class="card-title float-center col-md-12" align="center">APK</h4>
+                                        <h5 class="card-title float-center col-md-12" align="left">UPLOAD APK</h5>
                                     </div>
                                     <div class="col-md-4 text-center">
                                         <a routerLink="/upload-apk" class="">
@@ -96,35 +82,40 @@
                                 <div class="clearfix"></div>
                                 <br>
                             </div>
-                            <div class="card-body cardHig" style="overflow: scroll;">
+                            <div class="card-body cardHig" style="overflow: scroll;overflow-y: hidden;">
                                 <div class="toolbar">
                                     <!--  Here you can write extra buttons/actions for the toolbar  -->
                                 </div>
                                 <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
-                                        <tr class="text-center btnFull">
-                                            <th class="disabled-sorting">Action</th>
-                                            <th class="disabled-sorting">APK Status</th>
-                                            <th nowrap (click)="sort('apk_name')">Name <span class="fa fa-sort"></span></th>
-                                            <th (click)="sort('logo')"> Logo<span class="fa fa-sort"></span></th>
-                                            <th (click)="sort('apk')">APK <span class="fa fa-sort"></span></th>
-                                        </tr>
+                                    <tr class="text-center btnFull">
+                                        <th class="disabled-sorting">Actions</th>
+                                        <th class="disabled-sorting">APK Status</th>
+                                        <th (click)="sort('apk')">APK <span class="fa fa-sort"></span></th>
+                                        <th nowrap (click)="sort('apk_name')">Name <span class="fa fa-sort"></span></th>
+                                       <th (click)="sort('logo')"> Logo<span class="fa fa-sort"></span></th>
+
+
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let apk of apkList | orderBy: key : reverse | paginate: { itemsPerPage: 5, currentPage: p }">
-                                            <td>
-                                                <a href="javascript:void(0)" (click)="showEditForm(apk);" data-toggle="modal" data-target="#edit"><button
-                                                class="btn btn-primary btn-sm" >Edit</button></a>
-                                                <a href="javascript:void(0)"><button
-                                                 class="btn btn-info btn-sm"   (click)="unlinkdealerUser(apk.apk_id)">Delete</button></a>
-                                            </td>
-                                            <td>
-                                                <ui-switch [checked]="getEnabled(apk.apk_status)" (change)="onChange($event,apk.apk_id)"></ui-switch>
-                                            </td>
-                                            <td>{{apk.apk_name}}</td>
-                                            <td><img src="{{basrUrl}}/users/getFile/{{apk.logo}}" height="20px" width="20px"></td>
-                                            <td>{{apk.apk}}</td>
-                                        </tr>
+                                    <tr *ngFor="let apk of apkList | orderBy: key : reverse | paginate: { itemsPerPage: 5, currentPage: p }">
+                                        <td>
+
+                                            <a href="javascript:void(0)"><button
+                                                    class="btn btn-danger btn-xs"   (click)="unlinkdealerUser(apk.apk_id)">Delete</button></a>
+                                            <a href="javascript:void(0)" (click)="showEditForm(apk);" data-toggle="modal" data-target="#edit"><button
+                                                    class="btn btn-warning btn-xs " style=" margin: -12px;">Edit</button></a>
+                                        </td>
+                                        <td>
+                                            <ui-switch [checked]="getEnabled(apk.apk_status)" (change)="onChange($event,apk.apk_id)"></ui-switch>
+                                        </td>
+                                        <td>{{apk.apk}}</td>
+                                        <td>{{apk.apk_name}}</td>
+                                        <td><img src="{{basrUrl}}/users/getFile/{{apk.logo}}" height="20px" width="20px"></td>
+
+
+                                    </tr>
                                     </tbody>
                                 </table>
                                 <div class="row text-center" style="display: block;">

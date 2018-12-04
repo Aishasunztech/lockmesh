@@ -9,3 +9,16 @@
     height: 100% !important;
     z-index: 100 !important;
 }
+
+.col-md-12 {
+   padding-left: 2px;
+}
+.card {
+     border-radius: 2px;
+}
+
+.card-title {
+
+    font-weight: 500;
+}
+.table>tbody>tr>td  {padding: 5px 47px;}
