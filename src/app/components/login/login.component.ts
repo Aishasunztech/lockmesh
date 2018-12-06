@@ -46,7 +46,10 @@ export class LoginComponent implements OnInit {
           this.storage.set('email', this.resp.user.email);
           this.storage.set('id', this.resp.user.id);
           this.storage.set('token', this.resp.token);
-          this.storage.set('type', 'admin');
+          this.storage.set('name', this.resp.user.dealer_name);
+          this.storage.set('firstName', this.resp.user.firstName);
+          this.storage.set('lastName', this.resp.user.lastName);
+          this.storage.set('type', this.resp.user.user_type);
           this.router.navigate(['/devices']);
         } else {
             Swal ({
@@ -71,4 +74,3 @@ export class LoginComponent implements OnInit {
     // }
   // }
 }
-

@@ -7,8 +7,6 @@ import {Router} from '@angular/router';
 import * as enLocale from 'date-fns/locale/en';
 import * as $ from 'jquery';
 
-
-
 import { DatepickerOptions } from 'ng2-datepicker';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { element } from '@angular/core/src/render3/instructions';

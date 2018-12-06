@@ -34,6 +34,25 @@ export class RestService {
     return this.storage.get(key);
   }
 
+  isComponentAllowed(componentName){
+       var self = this;
+       this.spinnerService.show();
+       this.token = this.sessionLogin('token');
+
+      this.response= this.http.get(this.baseUrl + '/users/check_component/' + componentName, { headers: { 'authorization': this.sessionLogin('token') } });
+
+       // .then(function(res){
+       //   self.componentAllowed=res.componentAllowed;
+       //   console.log("hello " +self.componentAllowed);
+       // });
+       // .subscribe(function(res){
+       //   self.componentAllowed=res.componentAllowed;
+       //   console.log("hello " +self.componentAllowed);
+       // });
+       // this.authtoken(this.response);
+        console.log(this.response);
+        //console.log(response);
+   }
   // for admin
   getUserDevice(headers) {
     this.token = this.sessionLogin('token');
@@ -46,19 +65,17 @@ export class RestService {
 
   // for sdealer list
   sdealerlist(dealer_id) {
-    console.log(this.baseUrl);
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
-    console.log( this.token);
-    this.response = this.http.get(this.baseUrl + '/users/ /sdealers/' + dealer_id,
-     {headers: { 'authorization': this.sessionLogin('token')} });
-    this.authtoken(this.response);
-    return this.response;
+      this.response = this.http.get(this.baseUrl + '/users/ /sdealers/' + dealer_id,
+       {headers: { 'authorization': this.sessionLogin('token')} });
+      this.authtoken(this.response);
+      return this.response;
   }
 
   // For Dealer(devices)
   getUserDealerDevice(id) {
-  //  console.log(this.baseUrl);
+    //  console.log(this.baseUrl);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
@@ -203,28 +220,28 @@ export class RestService {
     console.log(sdealer);
     console.log(this.baseUrl);
     //  console.log(this.baseUrl);
-      this.token = this.sessionLogin('token');
-      const header = new HttpHeaders();
-      header.append('authorization', this.sessionLogin('token'));
-      this.response = this.http.post(this.baseUrl + '/users/resetpwd', sdealer,
-      {headers: { 'authorization': this.sessionLogin('token')} });
-      this.authtoken(this.response);
-      return this.response;
-    }
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    header.append('authorization', this.sessionLogin('token'));
+    this.response = this.http.post(this.baseUrl + '/users/resetpwd', sdealer,
+    {headers: { 'authorization': this.sessionLogin('token')} });
+    this.authtoken(this.response);
+    return this.response;
+  }
 
   // for dealer reset password(dealer dashboard)
   updatedealerPassDealerDetails(dealer) {
     //  console.log(this.baseUrl);
     // dealer.dealerId = this.sessionLogin('id');
     console.log(dealer.dealerId);
-      this.token = this.sessionLogin('token');
-      const header = new HttpHeaders();
-      header.append('authorization', this.sessionLogin('token'));
-      this.response = this.http.post(this.baseUrl + '/users/resetpwd', dealer,
-      {headers: { 'authorization': this.sessionLogin('token')} });
-      this.authtoken(this.response);
-      return this.response;
-    }
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    header.append('authorization', this.sessionLogin('token'));
+    this.response = this.http.post(this.baseUrl + '/users/resetpwd', dealer,
+    {headers: { 'authorization': this.sessionLogin('token')} });
+    this.authtoken(this.response);
+    return this.response;
+  }
 
   // for dealer (add devices)
   addDealerdevices(devices) {
@@ -279,7 +296,8 @@ export class RestService {
       const header = new HttpHeaders();
       header.append('authorization', this.sessionLogin('token'));
     this.response = this.http.post(this.baseUrl + '/users/unlink/' + device_id, '',
-    {headers: { 'authorization': this.sessionLogin('token')} } ).subscribe(response => {
+    {headers: { 'authorization': this.sessionLogin('token')} } )
+    .subscribe(response => {
       this.spinnerService.hide();
       this.authtoken(response);
       console.log(response);
@@ -478,20 +496,20 @@ export class RestService {
 
   // Adnin login
   adminLogin(admin): Observable<any> {
-  console.log(admin);
-  return this.http.post(this.baseUrl + '/users/Login', admin);
-}
+    console.log(admin);
+    return this.http.post(this.baseUrl + '/users/Login', admin);
+  }
 
   addDevice(devices) {
-  console.log(devices);
-  console.log(this.baseUrl);
-  this.token = this.sessionLogin('token');
+    console.log(devices);
+    console.log(this.baseUrl);
+    this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
-  this.response = this.http.post(this.baseUrl + '/users/new/devices', devices,  {headers: { 'authorization': this.sessionLogin('token')} });
-  this.authtoken(this.response);
-  return this.response;
-}
+    this.response = this.http.post(this.baseUrl + '/users/new/devices', devices,  {headers: { 'authorization': this.sessionLogin('token')} });
+    this.authtoken(this.response);
+    return this.response;
+  }
 
   // for logout
   authSignOut() {
@@ -503,126 +521,122 @@ export class RestService {
 
   // for dealerLogout
   authdealerSignOut() {
-  localStorage.removeItem('email');
-  localStorage.removeItem('id');
-  localStorage.removeItem('type');
-  this.router.navigate(['/dealer/login']);
-}
+    localStorage.removeItem('email');
+    localStorage.removeItem('id');
+    localStorage.removeItem('type');
+    this.router.navigate(['/dealer/login']);
+  }
 
   // for SdealerLogout
   authSdealerSignOut() {
-  localStorage.removeItem('email');
-  localStorage.removeItem('id');
-  localStorage.removeItem('type');
-  this.router.navigate(['/sdealer/login']);
-}
+    localStorage.removeItem('email');
+    localStorage.removeItem('id');
+    localStorage.removeItem('type');
+    this.router.navigate(['/sdealer/login']);
+  }
 
   // for authentication token
   authtoken(response) {
-  console.log(response);
-  if (response.success === false && response.message === 'Failed to authenticate token.') {
-    Swal({
-      text: response.message,
-      type: 'error',
-       customClass: 'swal-height'
-        }).then(okay => {
-          this.router.navigate(['/login']);
-       });
-  }
+    if (response.success === false && response.message === 'Failed to authenticate token.') {
+      Swal({
+        text: response.message,
+        type: 'error',
+        customClass: 'swal-height'
+      }).then(okay => {
+        this.router.navigate(['/login']);
+      });
+    }
 
-}
+  }
 
   // Undo For Dealer and Sub dealer
   undoUser(id) {
-  console.log(this.baseUrl);
-  this.token = this.sessionLogin('token');
-  const header = new HttpHeaders();
-  header.append('authorization', this.sessionLogin('token'));
-  this.response = this.http.post(this.baseUrl + '/users/dealer/undo', {dealerId: id},
-  {headers: { 'authorization': this.sessionLogin('token')} });
-  this.authtoken(this.response);
-  return this.response;
-}
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    header.append('authorization', this.sessionLogin('token'));
+    this.response = this.http.post(this.baseUrl + '/users/dealer/undo', {dealerId: id},
+    {headers: { 'authorization': this.sessionLogin('token')} });
+    this.authtoken(this.response);
+    return this.response;
+  }
 
   errorHandler(error: Response) {
-  return error;
-}
+    return error;
+  }
 
   // Dropdown Api
   getAdminSelectedItems(headers) {
-  // console.log(this.baseUrl);
-  // this.token = this.sessionLogin('token');
-  // const header = new HttpHeaders();
-  //
-  // header.append('authorization', this.sessionLogin('token'));
-  // this.response = this.http.get(this.baseUrl + '/users/admin/gtdropdown', {headers: { 'authorization': this.sessionLogin('token')} });
-  // this.authtoken(this.response);
-  // return this.response;
+    // console.log(this.baseUrl);
+    // this.token = this.sessionLogin('token');
+    // const header = new HttpHeaders();
+    //
+    // header.append('authorization', this.sessionLogin('token'));
+    // this.response = this.http.get(this.baseUrl + '/users/admin/gtdropdown', {headers: { 'authorization': this.sessionLogin('token')} });
+    // this.authtoken(this.response);
+    // return this.response;
 
-  console.log(this.baseUrl);
-  this.token = this.sessionLogin('token');
-  const header = new HttpHeaders();
-  const dealer_id = this.sessionLogin('id');
-  header.append('authorization', this.sessionLogin('token'));
-  // tslint:disable-next-line:max-line-length
-  this.response = this.http.get(this.baseUrl + '/users/dealer/gtdropdown/' + dealer_id, {headers: { 'authorization': this.sessionLogin('token')} });
-  this.authtoken(this.response);
-  return this.response;
-}
+    console.log(this.baseUrl);
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    const dealer_id = this.sessionLogin('id');
+    header.append('authorization', this.sessionLogin('token'));
+    // tslint:disable-next-line:max-line-length
+    this.response = this.http.get(this.baseUrl + '/users/dealer/gtdropdown/' + dealer_id, {headers: { 'authorization': this.sessionLogin('token')} });
+    this.authtoken(this.response);
+    return this.response;
+  }
 
   postAdminSelectedItems(selectedItems) {
- //  const items = JSON.stringify(selectedItems);
- //  console.log('selectedItems:- ' + items);
- //  console.log(this.baseUrl);
- //  this.token = this.sessionLogin('token');
- //  const header = new HttpHeaders();
- //  header.append('authorization', this.sessionLogin('token'));
- //  this.http.post(this.baseUrl + '/users/admin/dropdown', {selected_items: items}, {
- //    headers: { 'authorization': this.sessionLogin('token')}
- //  }).subscribe(tradeBotInfo => {
- // });
- const items = JSON.stringify(selectedItems);
- console.log('selectedItems:- ' + items);
- console.log(this.baseUrl);
- this.token = this.sessionLogin('token');
- const header = new HttpHeaders();
- const dealer_id = this.sessionLogin('id');
+    //  const items = JSON.stringify(selectedItems);
+    //  console.log('selectedItems:- ' + items);
+    //  console.log(this.baseUrl);
+    //  this.token = this.sessionLogin('token');
+    //  const header = new HttpHeaders();
+    //  header.append('authorization', this.sessionLogin('token'));
+    //  this.http.post(this.baseUrl + '/users/admin/dropdown', {selected_items: items}, {
+    //    headers: { 'authorization': this.sessionLogin('token')}
+    //  }).subscribe(tradeBotInfo => {
+    // });
+    const items = JSON.stringify(selectedItems);
+    console.log('selectedItems:- ' + items);
+    console.log(this.baseUrl);
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    const dealer_id = this.sessionLogin('id');
 
- header.append('authorization', this.sessionLogin('token'));
- this.http.post(this.baseUrl + '/users/dealer/dropdown', {dealer_id: dealer_id, selected_items: items}, {
-   headers: { 'authorization': this.sessionLogin('token')}
- }).subscribe(tradeBotInfo => {
-    console.log(tradeBotInfo);
-});
-}
+    header.append('authorization', this.sessionLogin('token'));
+    this.http.post(this.baseUrl + '/users/dealer/dropdown', {dealer_id: dealer_id, selected_items: items}, {
+      headers: { 'authorization': this.sessionLogin('token')}
+    }).subscribe(tradeBotInfo => {
+      console.log(tradeBotInfo);
+    });
+  }
 
   // Dealer and sdealers items apis
   getDealerSelectedItems(headers) {
-  console.log(this.baseUrl);
-  this.token = this.sessionLogin('token');
-  const header = new HttpHeaders();
-  const dealer_id = this.sessionLogin('id');
-  header.append('authorization', this.sessionLogin('token'));
-  // tslint:disable-next-line:max-line-length
-  this.response = this.http.get(this.baseUrl + '/users/dealer/gtdropdown/' + dealer_id, {headers: { 'authorization': this.sessionLogin('token')} });
-  this.authtoken(this.response);
-  return this.response;
-}
+    console.log(this.baseUrl);
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    const dealer_id = this.sessionLogin('id');
+    header.append('authorization', this.sessionLogin('token'));
+    // tslint:disable-next-line:max-line-length
+    this.response = this.http.get(this.baseUrl + '/users/dealer/gtdropdown/' + dealer_id, {headers: { 'authorization': this.sessionLogin('token')} });
+    this.authtoken(this.response);
+    return this.response;
+  }
 
   postDealerSelectedItems(selectedItems) {
-  const items = JSON.stringify(selectedItems);
-  console.log('selectedItems:- ' + items);
-  console.log(this.baseUrl);
-  this.token = this.sessionLogin('token');
-  const header = new HttpHeaders();
-  const dealer_id = this.sessionLogin('id');
+    const items = JSON.stringify(selectedItems);
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    const dealer_id = this.sessionLogin('id');
 
-  header.append('authorization', this.sessionLogin('token'));
-  this.http.post(this.baseUrl + '/users/dealer/dropdown', {dealer_id: dealer_id, selected_items: items}, {
-    headers: { 'authorization': this.sessionLogin('token')}
-  }).subscribe(tradeBotInfo => {
-     console.log(tradeBotInfo);
- });
-}
+    header.append('authorization', this.sessionLogin('token'));
+    this.http.post(this.baseUrl + '/users/dealer/dropdown', {dealer_id: dealer_id, selected_items: items}, {
+      headers: { 'authorization': this.sessionLogin('token')}
+    }).subscribe(tradeBotInfo => {
+      console.log(tradeBotInfo);
+    });
+  }
 
 }

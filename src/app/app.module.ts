@@ -22,6 +22,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { ClientComponent } from './components/client/client.component';
 import {Common} from './entity/common';
 import {RestService} from './rest.service';
+import {HelperService} from './helper.service';
 import { DealerDevicesComponent } from './dealer/dealer-devices/dealer-devices.component';
 import { DealerSDealerComponent } from './dealer/dealer-s-dealer/dealer-s-dealer.component';
 import { DealerClientComponent } from './dealer/dealer-client/dealer-client.component';
@@ -103,123 +104,213 @@ import { UiSwitchModule } from 'ngx-toggle-switch';
     RouterModule.forRoot([
       {
         path: '',
-        component: LoginComponent
+        component: LoginComponent,
+        data :{
+          componentName:"LoginComponent"
+        }
       },
       {
         path: 'header',
-        component: HeaderComponent
+        component: HeaderComponent,
+        data :{
+          componentName:"HeaderComponent"
+        }
       },
       {
         path: 'devices',
-        component: DevicesComponent
+        component: DevicesComponent,
+        data :{
+          componentName:"DevicesComponent"
+        }
       },
       {
         path: 'black-list-devices',
         component: BlankComponent,
+        data :{
+          componentName : "BlankComponent"
+        }
       },
       {
         path: 'add-device',
-        component: AddDeviceComponent
+        component: AddDeviceComponent,
+        data :{
+          componentName:"AddDeviceComponent"
+        }
       },
       {
         path: 'dealer',
-        component: DealerComponent
+        component: DealerComponent,
+        data :{
+          componentName:"DealerComponent"
+        }
       },
       {
         path: 'sdealer',
-        component: SdealerComponent
+        component: SdealerComponent,
+        data :{
+          componentName:"SdealerComponent"
+        }
       },
       {
         path: 'client',
-        component: ClientComponent
+        component: ClientComponent,
+        data :{
+          componentName:"ClientComponent"
+        }
       },
       {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
+        data :{
+          componentName:"LoginComponent"
+        }
       },
       {
         path: 'register',
-        component: RegisterComponent
+        component: RegisterComponent,
+        data :{
+          componentName:"RegisterComponent"
+        }
       },
       {
         path: 'create-dealer-sdealer',
-        component: CreateDealerSdealerComponent
+        component: CreateDealerSdealerComponent,
+        data :{
+          componentName:"CreateDealerSdealerComponent"
+        }
       },
       {
         path: 'create-sdealer',
-        component: CreateSdealerComponent
+        component: CreateSdealerComponent,
+        data :{
+          componentName:"CreateSdealerComponent"
+        }
       },
       {
         path: 'dealer/create-sdealer',
-        component: DealerCreateSdealerComponent
+        component: DealerCreateSdealerComponent,
+        data :{
+          componentName:"DealerCreateSdealerComponent"
+        }
       },
       {
         path: 'profile',
-        component: ProfileComponent
+        component: ProfileComponent,
+        data :{
+          componentName:"ProfileComponent"
+        }
       },
       {
         path: 'create-cilent',
-        component: CreateClientComponent
+        component: CreateClientComponent,
+        data :{
+          componentName:"CreateClientComponent"
+        }
       },
       {
         path: 'upload-apk',
-        component: UploadApkComponent
+        component: UploadApkComponent,
+        data :{
+          componentName:"UploadApkComponent"
+        }
       },
       {
         path: 'view-apk',
-        component: ViewApkComponent
+        component: ViewApkComponent,
+        data :{
+          componentName:"ViewApkComponent"
+        }
       },
       {
         path: 'connect-devices/:device_id',
-        component: ConnectAdminDevicesComponent
+        component: ConnectAdminDevicesComponent,
+        data :{
+          componentName:"ConnectDevicesComponent"
+        }
       },
       {
         path: 'settings',
-        component: SettingsComponent
+        component: SettingsComponent,
+        data :{
+          componentName:"SettingsComponent"
+        }
       },
       {
         path: 'dealer/header',
-        component: DealerHeaderComponent
+        component: DealerHeaderComponent,
+        data :{
+          componentName:"DealerHeaderComponent"
+        }
       },
       {
         path: 'dealer/devices',
-        component: DealerDevicesComponent
+        component: DealerDevicesComponent,
+        data :{
+          componentName:"DealerDevicesComponent"
+        }
       },
       {
         path: 'sdealer/devices',
-        component: SdealerDevicesComponent
+        component: SdealerDevicesComponent,
+        data :{
+          componentName:"SdealerDevicesComponent"
+        }
       },
       {
         path: 'sdealer/sdealerprofile',
-        component: SdealerprofileComponent
+        component: SdealerprofileComponent,
+        data :{
+          componentName:"SdealerprofileComponent"
+        }
       },
       {
         path: 'dealer/client',
-        component: DealerClientComponent
+        component: DealerClientComponent,
+        data :{
+          componentName:"DealerClientComponent"
+        }
       },
       {
         path: 'dealer/login',
-        component: DealerLoginComponent
+        component: DealerLoginComponent,
+        data :{
+          componentName:"DealerLoginComponent"
+        }
       },
       {
         path: 'sdealer/login',
-        component: SdealerLoginComponent
+        component: SdealerLoginComponent,
+        data :{
+          componentName:"SdealerLoginComponent"
+        }
       },
       {
         path: 'dealer/s-dealer',
-        component: DealerSDealerComponent
+        component: DealerSDealerComponent,
+        data :{
+          componentName:"DealerSDealerComponent"
+        }
       },
       {
         path: 'dealer/add-devices',
-        component: DealerAddDevicesComponent
+        component: DealerAddDevicesComponent,
+        data :{
+          componentName:"DealerAddDevicesComponent"
+        }
       },
       {
         path: 'dealer/connect-devices/:device_id',
-        component: ConnectDevicesComponent
+        component: ConnectDevicesComponent,
+        data :{
+          componentName:"ConnectDevicesComponent"
+        }
       },
       {
         path: 'sdealer/connect-devices/:device_id',
-        component: SConnectDevicesComponent
+        component: SConnectDevicesComponent,
+        data :{
+          componentName:"SConnectDevicesComponent"
+        }
       },
     ],
     { enableTracing: true, useHash: false })
@@ -227,6 +318,8 @@ import { UiSwitchModule } from 'ngx-toggle-switch';
 
   providers: [Common,
               RestService,
+              HelperService
+              ,
               {provide: LocationStrategy, useClass: HashLocationStrategy}
             ],
   bootstrap: [AppComponent]
