@@ -31,6 +31,7 @@ export class DevicesComponent implements OnInit {
   dropdownSettings: any = [];
   public allDevice: any = [];
   allDeviceDummyList = [];
+  isAdmin=false;
   // sorting
   key = 'status'; // set default
   reverse = true;
@@ -94,7 +95,6 @@ export class DevicesComponent implements OnInit {
 
   async ngOnInit() {
 
-    this.componentName = this.constructor.name;
 
    // const _this = this;
     this.spinnerService.show();
@@ -143,6 +143,18 @@ export class DevicesComponent implements OnInit {
       showCheckbox: true
     };
 
+    await this.aclHandler();
+    setTimeout(() => {
+      //this.spinnerService.hide();
+    }, 1000);
+
+  }
+
+  async aclHandler(){
+    // this.isComponentAllowed =
+    const response1 = await this.restService.isAdmin().toPromise();
+    this.isAdmin = response1.isAdmin;
+    console.log(this.isAdmin);
   }
 
   ngAfterViewInit() {

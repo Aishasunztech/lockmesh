@@ -175,7 +175,9 @@ export class RestService {
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
     console.log( this.token);
-    this.response = this.http.get(this.baseUrl + '/users/getinfo/' + this.sessionLogin('id') + '/dealer',
+    /*this.response = this.http.get(this.baseUrl + '/users/getinfo/' + this.sessionLogin('id') + '/dealer',
+     {headers: { 'authorization': this.sessionLogin('token')} });*/
+    this.response = this.http.get(this.baseUrl + '/users/getinfo',
      {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
     return this.response;

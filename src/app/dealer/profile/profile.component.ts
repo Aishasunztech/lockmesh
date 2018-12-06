@@ -19,17 +19,16 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.profilelist();
-    document.body.style.zoom = '100%';
   }
   onLogout() {
     this.restService.authdealerSignOut();
-}
+  }
 
-profilelist() {
-  this.restService.profilelist().subscribe((response) => {
-    this.profile = response;
-      console.log(this.profile);
-  });
-}
+  profilelist() {
+    this.restService.profilelist().subscribe((response) => {
+      this.profile = response;
+        console.log(this.profile);
+    });
+  }
 
 }
