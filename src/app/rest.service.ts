@@ -46,6 +46,19 @@ export class RestService {
       });
     return this.response;
    }
+
+   isAdmin(){
+     var self = this;
+     this.spinnerService.show();
+     this.token = this.sessionLogin('token');
+
+      this.response= this.http.get(this.baseUrl + '/users/check_admin',{
+         headers: {
+           'authorization': this.sessionLogin('token')
+         }
+       });
+     return this.response;
+  }
   // for admin
   getUserDevice(headers) {
     this.token = this.sessionLogin('token');

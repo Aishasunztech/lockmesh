@@ -15,6 +15,7 @@ import * as $ from 'jquery';
 export class HeaderComponent implements OnInit {
   componentName : string;
   isComponentAllowed = false;
+  isAdmin=false;
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
@@ -36,7 +37,7 @@ export class HeaderComponent implements OnInit {
       this.componentName=this.route.snapshot.data['componentName'];
 
       //this.spinnerService.show();
-      await this.setComponentAllowed();
+      await this.aclHandler();
       setTimeout(() => {
         //this.spinnerService.hide();
       }, 1000);
@@ -47,10 +48,13 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  async setComponentAllowed(){
+  async aclHandler(){
     // this.isComponentAllowed =
     const response = await this.restService.isComponentAllowed(this.componentName).toPromise();
     this.isComponentAllowed=response.componentAllowed;
+    const response1 = await this.restService.isAdmin().toPromise();
+    this.isAdmin = response1.isAdmin;
+    console.log(this.isAdmin);
   }
 
   onLogout() {
