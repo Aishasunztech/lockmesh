@@ -35,23 +35,16 @@ export class RestService {
   }
 
   isComponentAllowed(componentName){
-       var self = this;
-       this.spinnerService.show();
-       this.token = this.sessionLogin('token');
+    var self = this;
+    this.spinnerService.show();
+    this.token = this.sessionLogin('token');
 
-      this.response= this.http.get(this.baseUrl + '/users/check_component/' + componentName, { headers: { 'authorization': this.sessionLogin('token') } });
-
-       // .then(function(res){
-       //   self.componentAllowed=res.componentAllowed;
-       //   console.log("hello " +self.componentAllowed);
-       // });
-       // .subscribe(function(res){
-       //   self.componentAllowed=res.componentAllowed;
-       //   console.log("hello " +self.componentAllowed);
-       // });
-       // this.authtoken(this.response);
-        console.log(this.response);
-        //console.log(response);
+     this.response= this.http.get(this.baseUrl + '/users/check_component/' + componentName,{
+        headers: {
+          'authorization': this.sessionLogin('token')
+        }
+      });
+    return this.response;
    }
   // for admin
   getUserDevice(headers) {
@@ -513,9 +506,13 @@ export class RestService {
 
   // for logout
   authSignOut() {
-  localStorage.removeItem('email');
-  localStorage.removeItem('id');
-  localStorage.removeItem('type');
+  window.localStorage.removeItem('email');
+  window.localStorage.removeItem('id');
+  window.localStorage.removeItem('type');
+  window.localStorage.removeItem('name');
+  window.localStorage.removeItem('firstName');
+  window.localStorage.removeItem('lastName');
+  window.localStorage.removeItem('token');
   this.router.navigate(['/login']);
 }
 

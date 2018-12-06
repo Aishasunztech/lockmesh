@@ -21,8 +21,6 @@ export class HelperService {
   response: any = {
     msg: ''
   };
-  componentAllowed: any;
-  _this = this;
 
   constructor(
     private http: HttpClient,
@@ -43,25 +41,8 @@ export class HelperService {
   }
 
    isComponentAllowed(componentName){
-      var self = this;
-      this.spinnerService.show();
-      this.token = this.sessionLogin('token');
 
-     var response= this.http.get(this.baseUrl + '/users/check_component/' + componentName,{
-        headers: {
-          'authorization': this.sessionLogin('token')
-        }
-      })
-      //console.log(response);
-      // .then(function(res){
-      //   self.componentAllowed=res.componentAllowed;
-      //   console.log("hello " +self.componentAllowed);
-      // });
-      .subscribe(function(res){
-        // self.componentAllowed=res.componentAllowed;
-        // console.log("hello " +self.componentAllowed);
-      });
-
+      //console.log("world"+this.componentAllowed);
   }
 
   isAdmin(){

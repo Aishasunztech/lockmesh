@@ -34,11 +34,24 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['/login']);
     }else{
       this.componentName=this.route.snapshot.data['componentName'];
-      await this.restService.isComponentAllowed(this.componentName);
 
+      //this.spinnerService.show();
+      await this.setComponentAllowed();
+      setTimeout(() => {
+        //this.spinnerService.hide();
+      }, 1000);
+
+      if(this.isComponentAllowed==false){
+        this.onLogout();
+      }
     }
   }
 
+  async setComponentAllowed(){
+    // this.isComponentAllowed =
+    const response = await this.restService.isComponentAllowed(this.componentName).toPromise();
+    this.isComponentAllowed=response.componentAllowed;
+  }
 
   onLogout() {
     this.restService.authSignOut();
