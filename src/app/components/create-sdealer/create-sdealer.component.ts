@@ -16,13 +16,14 @@ export class CreateSdealerComponent implements OnInit {
   private resp: any = null;
   allDelears: any = [];
   sDealer: any = {};
+  userType: any;
   constructor(private restService: RestService, private router: Router, private spinnerService: Ng4LoadingSpinnerService) { }
   @ViewChild('deviceData') projectForm: NgForm;
 
    ngOnInit() {
-   this.getDealerNames();
-   document.body.style.zoom = '100%';
-  }
+     this.getDealerNames();
+     this.userType=window.localStorage.getItem('type').replace(/['"]+/g, '');
+   }
 
   onLogout() {
     this.restService.authSignOut();
@@ -38,15 +39,43 @@ export class CreateSdealerComponent implements OnInit {
 
   async addSDealer() {
     this.sDealer.type = 'sdealer';
-    console.log(this.sDealer);
    await  this.spinnerService.show();
-    this.restService.addSDealer(this.sDealer).subscribe((resp) => {
+   if(this.userType=='admin'){
+     this.restService.addSDealer(this.sDealer).subscribe((resp) => {
+       console.log(resp);
+       // const resp = JSON.parse(response['body']);
+         // console.log(resp);
+         this.resp = resp;
+         if (this.resp.status === true) {
+           this.spinnerService.hide();
+           Swal({
+           text: 'You have successfully add S-dealers',
+           type: 'success',
+             customClass: 'swal-height'
+             }).then(okay => {
+             if (okay) {
+               this.router.navigate(['/sdealer']);
+               }
+           });
+         } else {
+           this.spinnerService.hide();
+           Swal({
+             text: resp.msg,
+             type: 'error',
+               customClass: 'swal-height'
+               }).then(okay => {
+               if (okay) {
+                 }
+             });
+
+         }
+     });
+   }else if(this.userType=="dealer"){
+     await  this.restService.addSDealerbydealer(this.sDealer).subscribe((resp) => {
+      this.spinnerService.hide();
       console.log(resp);
-      // const resp = JSON.parse(response['body']);
-        // console.log(resp);
         this.resp = resp;
         if (this.resp.status === true) {
-          this.spinnerService.hide();
           Swal({
           text: 'You have successfully add S-dealers',
           type: 'success',
@@ -57,7 +86,6 @@ export class CreateSdealerComponent implements OnInit {
               }
           });
         } else {
-          this.spinnerService.hide();
           Swal({
             text: resp.msg,
             type: 'error',
@@ -69,7 +97,8 @@ export class CreateSdealerComponent implements OnInit {
 
         }
     });
+   }
+
     $('input.ng-invalid, select.ng-invalid, textarea.ng-invalid,checkbox.ng-invalid, file.ng-invalid').addClass('ng-touched');
   }
 }
-

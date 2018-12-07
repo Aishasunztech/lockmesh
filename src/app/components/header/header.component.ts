@@ -54,7 +54,6 @@ export class HeaderComponent implements OnInit {
         this.onLogout();
       }
       this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
-      console.log(this.userType);
     }
   }
 profilelist() {

@@ -464,18 +464,14 @@ export class RestService {
   }
 
   addSDealer(dealer) {
-    console.log(dealer);
-    console.log(this.baseUrl);
+
    // dealer.dealerId = this.sessionLogin('id');
     this.response = this.http.post(this.baseUrl + '/users/add/sdealer', dealer, {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
     return this.response;
   }
   addSDealerbydealer(dealer) {
-    console.log(dealer);
-    console.log(this.baseUrl);
     dealer.dealerId = this.sessionLogin('id');
-    console.log(dealer.dealerId);
     this.response = this.http.post(this.baseUrl + '/users/add/sdealer', dealer, {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
     return this.response;
