@@ -525,7 +525,9 @@ export class RestService {
     localStorage.removeItem('type');
     this.router.navigate(['/dealer/login']);
   }
-
+  InvalidPage() {
+    
+  }
   // for SdealerLogout
   authSdealerSignOut() {
     localStorage.removeItem('email');

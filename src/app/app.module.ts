@@ -50,6 +50,7 @@ import { SConnectDevicesComponent } from './sdealer/s-connect-devices/s-connect-
 import { UploadApkComponent } from './components/upload-apk/upload-apk.component';
 import { ViewApkComponent } from './components/view-apk/view-apk.component';
 import { UiSwitchModule } from 'ngx-toggle-switch';
+import { InvalidPage } from './components/invalid_page/invalid_page.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { UiSwitchModule } from 'ngx-toggle-switch';
     SdealerprofileComponent,
     SConnectDevicesComponent,
     UploadApkComponent,
-    ViewApkComponent
+    ViewApkComponent,
+    InvalidPage
   ],
   imports: [
     BrowserModule,
@@ -310,6 +312,13 @@ import { UiSwitchModule } from 'ngx-toggle-switch';
         component: SConnectDevicesComponent,
         data :{
           componentName:"SConnectDevicesComponent"
+        }
+      },
+      {
+        path: 'invalid_page/:type',
+        component: InvalidPage,
+        data :{
+          componentName:"InvalidPage"
         }
       },
     ],

@@ -51,7 +51,8 @@ export class HeaderComponent implements OnInit {
       }, 1000);
       this.profilelist();
       if(this.isComponentAllowed==false){
-        this.onLogout();
+        this.router.navigate(['/invalid_page/denied']);
+        //this.onLogout();
       }
       this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
     }
