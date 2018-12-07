@@ -17,7 +17,9 @@
 
                     <input type="text" class="form-control top-search" style="border: 1px solid #ccc; border-radius: 5px;" placeholder="SEARCH" >
                     <div class="btn-group xnds" style="margin-left: 0px;">
-                      <button *ngIf="router.url === '/devices'" class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 0; width: 40px; height: 40px; margin:0 0 0 10px;"><i class="fa fa-bell-o"></i></button>
+                      <button *ngIf="router.url === '/devices'" class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 0; width: 40px; height: 40px; margin:0 0 0 10px;"><i class="fa fa-bell-o"></i>
+                        <div class="notification">2</div>
+                      </button>
                       <button  class="btn btn-primary rounded-circle btn-lg nav-small-button" (click)="onLogout()" style="background: #0a0a8a;color: #94753b!important;padding: 0; width: 40px; height: 40px; margin: 0 0 0 10px;"><i class="fa fa-power-off"></i></button>
                     </div>
 
