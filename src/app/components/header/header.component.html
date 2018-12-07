@@ -74,7 +74,7 @@
                     <span class="sidebar-normal"><p>Dealers</p></span>
                 </a>
             </li>
-            <li class="xyz" *ngIf="isAdmin==true">
+            <li class="xyz" *ngIf="isAdmin==true || userType=='dealer'">
                 <a routerLink="/sdealer" routerLinkActive="active" class="submenu">
                     <i class="fa fa-users" style="font-size: 12px;"></i>
                     <span class="sidebar-normal"><p>S-Dealer</p></span>

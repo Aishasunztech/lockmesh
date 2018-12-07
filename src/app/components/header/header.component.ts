@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   componentName : string;
   isComponentAllowed = false;
   isAdmin=false;
+  userType:any;
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
@@ -52,12 +53,13 @@ export class HeaderComponent implements OnInit {
       if(this.isComponentAllowed==false){
         this.onLogout();
       }
+      this.userType =window.localStorage.getItem('type');
+      console.log(this.userType);
     }
   }
 profilelist() {
     this.restService.profilelist().subscribe((response) => {
       this.profile = response;
-        console.log(this.profile);
     });
   }
   async aclHandler(){
