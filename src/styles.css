@@ -161,6 +161,15 @@ ul.nt li a {
     color: #fff !IMPORTANT;
 }
 
+
+.select_placeholder{
+  font-family: Montserrat, Helvetica Neue, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  margin: 0;
+  color: #66615b;
+  padding: .375rem .75rem;
+}
 .tooltiptext[_ngcontent-c1] {
     visibility: hidden;
     width: 54px;
@@ -303,7 +312,9 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
 /*****C-list styles****/
 
 .selected-list .c-btn {
-    height: 35px;
+    height: 40px;
+    margin: 0;
+    border-radius: 4px;
 }
 
 .selected-list .c-list {
@@ -346,8 +357,23 @@ span.nav-link.btn-rotate.d-md-ver {
 .navbar .navbar-nav>a.btn.btn-icon:not(.btn-footer) .nc-icon {
     top: 33% !important;
 } */
-
-
+c-icon, c-icon svg{
+  display: hidden !important;
+  display: none !important;
+  visibility: hidden !important;
+  opacity:0;
+  fill: #fff;
+  color: white;
+  background: white;
+}
+c-icon, c-icon svg{
+  display: none !important;
+  visibility: hidden !important;
+  opacity:0;
+  fill: #fff;
+  color: white;
+  background: white;
+}
 /*.selected-list .c-angle-down, .selected-list .c-angle-up {*/
   /*display: none !important;*/
 /*}*/
