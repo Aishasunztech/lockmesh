@@ -1,4 +1,6 @@
-<div class="wrapper ">
+<div class="wrapper" style="overflow: hidden">
+
+
     <!-- <div class="col-md-3"> -->
     <app-header></app-header>
     <!-- </div> -->
@@ -19,19 +21,20 @@
                             <div class="card-body card-manu row">
                                 <div class="col-sm-4"></div>
 
-                                <div class="col-sm-4">
+                                <div class="col-sm-7" style="text-align: left">
                                     <div class="scrollbar">
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label">Name:</label>
-                                            <div class="col-sm-7">
+                                            <label class="col-sm-3 col-form-label">Name:</label>
+                                            <div class="col-sm-5">
                                                 <div class="form-group">
                                                     {{profile.dealer_name}}
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label">Dealer Id:</label>
-                                            <div class="col-sm-7">
+                                            <label class="col-sm-3 col-form-label">Dealer Id:</label>
+                                            <div class="col-sm-5">
                                                 <div class="form-group">
                                                     {{profile.dealer_id}}
                                                 </div>
@@ -40,7 +43,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label">Email:</label>
+                                            <label class="col-sm-3 col-form-label">Email:</label>
                                             <div class="col-sm-7">
                                                 <div class="form-group">
                                                     {{profile.dealer_email}}
@@ -48,9 +51,8 @@
                                             </div>
 
                                         </div>
-
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label">Link Code:</label>
+                                            <label class="col-sm-3 col-form-label">Link Code:</label>
                                             <div class="col-sm-7">
                                                 <div class="form-group">
                                                     {{profile.link_code}}

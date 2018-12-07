@@ -147,7 +147,9 @@ export class DevicesComponent implements OnInit {
     setTimeout(() => {
       //this.spinnerService.hide();
     }, 1000);
-
+    $('.c-btn span').remove();
+    $('.c-btn').append("<span class='select_placeholder'>DISPLAY</span>");
+    $('.c-btn').append("<span class='c-angle-up fa fa-caret-down'></span>");
   }
 
   async aclHandler(){
