@@ -45,7 +45,7 @@
             <div class="info">
                 <a data-toggle="collapse" routerLink="#collapseExample" class="collapsed">
                     <span class="view" style="font-size: 12px;">
-                    Admin
+                    {{profile.dealer_name}}
           </span>
                 </a>
                 <div class="clearfix"></div>
@@ -74,7 +74,7 @@
                     <span class="sidebar-normal"><p>Dealers</p></span>
                 </a>
             </li>
-            <li class="xyz" *ngIf="isAdmin==true">
+            <li class="xyz" *ngIf="userType=='admin' || userType=='dealer'">
                 <a routerLink="/sdealer" routerLinkActive="active" class="submenu">
                     <i class="fa fa-users" style="font-size: 12px;"></i>
                     <span class="sidebar-normal"><p>S-Dealer</p></span>

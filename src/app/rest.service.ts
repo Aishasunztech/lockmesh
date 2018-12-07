@@ -85,7 +85,6 @@ export class RestService {
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
-    console.log( this.token);
     this.response = this.http.get(this.baseUrl + '/users/dealer/devices/' + id, {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
     return this.response;
@@ -93,11 +92,10 @@ export class RestService {
 
   // For Dealer(devices)
   getUserSubDealerDevice(id) {
-      //  console.log(this.baseUrl);
+
       this.token = this.sessionLogin('token');
       const header = new HttpHeaders();
       header.append('authorization', this.sessionLogin('token'));
-      console.log( this.token);
       this.response = this.http.get(this.baseUrl + '/users/dealer/devices/' + id,
        {headers: { 'authorization': this.sessionLogin('token')} });
       this.authtoken(this.response);
@@ -106,11 +104,10 @@ export class RestService {
 
    // For Dealer(devices)
   getUserSDealerDevice(id) {
-    //  console.log(this.baseUrl);
+
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
-    console.log( this.token);
     this.response = this.http.get(this.baseUrl + '/users/dealer/devices/'
     + id, {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
@@ -129,8 +126,6 @@ export class RestService {
 
   // For Admin update
   updateAdminDetails(dealer) {
-    console.log(this.baseUrl);
-    console.log(dealer);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
@@ -141,7 +136,6 @@ export class RestService {
 
   // For dealer(admin dashboard)
   updateAdminDealerDetails(dealer) {
-    console.log(this.baseUrl);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
@@ -153,7 +147,6 @@ export class RestService {
 
   // For Apk edit(admin dashboard)
   updateApkDetails(apk_name, logo, apk, apk_id) {
-   // console.log(this.baseUrl);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
@@ -170,11 +163,9 @@ export class RestService {
 
   // dealer profile
   profilelist() {
-    console.log(this.baseUrl);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
-    console.log( this.token);
     /*this.response = this.http.get(this.baseUrl + '/users/getinfo/' + this.sessionLogin('id') + '/dealer',
      {headers: { 'authorization': this.sessionLogin('token')} });*/
     this.response = this.http.get(this.baseUrl + '/users/getinfo',
@@ -473,18 +464,14 @@ export class RestService {
   }
 
   addSDealer(dealer) {
-    console.log(dealer);
-    console.log(this.baseUrl);
+
    // dealer.dealerId = this.sessionLogin('id');
     this.response = this.http.post(this.baseUrl + '/users/add/sdealer', dealer, {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
     return this.response;
   }
   addSDealerbydealer(dealer) {
-    console.log(dealer);
-    console.log(this.baseUrl);
     dealer.dealerId = this.sessionLogin('id');
-    console.log(dealer.dealerId);
     this.response = this.http.post(this.baseUrl + '/users/add/sdealer', dealer, {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
     return this.response;

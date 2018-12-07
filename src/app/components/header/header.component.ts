@@ -13,9 +13,17 @@ import * as $ from 'jquery';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  profile: any = {
+    dealer_name: '',
+    dealer_id: '',
+    dealer_email: '',
+    link_code: '',
+    tokens: '',
+  };
   componentName : string;
   isComponentAllowed = false;
   isAdmin=false;
+  userType:any;
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
@@ -41,13 +49,18 @@ export class HeaderComponent implements OnInit {
       setTimeout(() => {
         //this.spinnerService.hide();
       }, 1000);
-
+      this.profilelist();
       if(this.isComponentAllowed==false){
         this.onLogout();
       }
+      this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
     }
   }
-
+profilelist() {
+    this.restService.profilelist().subscribe((response) => {
+      this.profile = response;
+    });
+  }
   async aclHandler(){
     // this.isComponentAllowed =
     const response = await this.restService.isComponentAllowed(this.componentName).toPromise();
