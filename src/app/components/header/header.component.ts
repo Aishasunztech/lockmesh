@@ -13,6 +13,13 @@ import * as $ from 'jquery';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  profile: any = {
+    dealer_name: '',
+    dealer_id: '',
+    dealer_email: '',
+    link_code: '',
+    tokens: '',
+  };
   componentName : string;
   isComponentAllowed = false;
   isAdmin=false;
@@ -41,13 +48,18 @@ export class HeaderComponent implements OnInit {
       setTimeout(() => {
         //this.spinnerService.hide();
       }, 1000);
-
+      this.profilelist();
       if(this.isComponentAllowed==false){
         this.onLogout();
       }
     }
   }
-
+profilelist() {
+    this.restService.profilelist().subscribe((response) => {
+      this.profile = response;
+        console.log(this.profile);
+    });
+  }
   async aclHandler(){
     // this.isComponentAllowed =
     const response = await this.restService.isComponentAllowed(this.componentName).toPromise();
