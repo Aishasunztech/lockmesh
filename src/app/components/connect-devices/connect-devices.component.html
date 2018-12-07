@@ -1,6 +1,6 @@
 <div class="wrapper" style="padding-left: 0px">
     <app-header></app-header>
-    <div class="main-panel col-md-12" style="height: -webkit-fill-available; max-height: unset;">
+    <div class="main-panel col-md-12" style=" max-height: initial;">
         <!-- Navbar -->
         <!-- <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
             <div class="container-fluid">
@@ -54,12 +54,12 @@
                                 <hr>
                             </div> -->
 
-                            <div class="card-body" style="padding: 0px;">
+                            <div class="card-body" style="padding: 11px;">
                                 <div class="">
                                     <div class="row col_head">
                                         <label class="col-sm-4 col-form-label left_headed">Name:</label>
                                         <div class="col-sm-7">
-                                            <div class="form-group">
+                                          <div class="form-group">
                                                 {{device_data.name}}
                                             </div>
                                         </div>
@@ -173,7 +173,7 @@
                                     <!-- <label class="col-sm-4 col-form-label"></label> -->
                                     <!-- <div class="col-sm-12"> -->
 
-                                        <button type="submit" style="margin-left: 0px;background: #24d824;" class="btn btn-primary btn-block">Refresh</button>
+                                        <button type="submit" style="margin-left: 0px;b " class="btn btn-primary btn-block">Refresh</button>
 
                                     <!-- </div> -->
                                 <!-- </div> -->
@@ -182,8 +182,8 @@
                     </form>
                     <div class="clearfix"></div>
                 </div>
-                <div class="col-md-4" style="padding: 0px;">
-                    <div class="card" style="height: 100%;border-radius: 34px 34px 0px 0px;padding-bottom: 7px;">
+                <div class="col-md-4" style="padding: 0px; padding-bottom: 27px;">
+                    <div class="card" style="height: 100%;padding-bottom: 7px;">
                         <div class="deviceS" style="padding: 20% 9% 17% 9%;">
                             <div class="app" style="margin-top: 8px;">
 
@@ -207,7 +207,7 @@
                                 <span class="fa fa-close" style="color:red;"></span><br>
                                 <p style="">Clear All</p>
                             </a>
-
+<!---->
                         </div>
                     </div>
 
@@ -228,6 +228,18 @@
                             </thead>
 
                             <tbody>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-sm btn-primary purple">PUSH
+                                    </button>
+
+
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary purple">PULL</button>
+
+                                </td>
+                            </tr>
                                 <tr>
                                     <td>
                                         <button class="btn btn-primary purple">Load Profile
@@ -292,6 +304,7 @@
                                         <button class="btn btn-danger btn-block" style=" margin: 0px; font-size: 14px;">POWER</button>
                                     </td>
                                 </tr>
+
                             </tfoot>
 
                         </table>

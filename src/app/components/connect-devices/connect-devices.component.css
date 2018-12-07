@@ -1,7 +1,11 @@
+
 .card-manu {
     margin-top: -20px !important;
 }
+ .cs-card {
 
+     padding: 26px;
+}
 .refreshButton {
     margin-bottom: 0px !important;
 }
@@ -72,9 +76,10 @@
 
 .action_table{
     overflow: unset;
+    width: 75%!important;
     margin-left: 15px;
     border-collapse: separate;
-    border-spacing: 3px;
+    border-spacing: 4px;
 
 }
 
@@ -88,10 +93,12 @@
 }
 
 .action_table button{
-    width: 100%;
-    margin-left: 0px;
-    margin-right: 0px;
-}
+     width: 100%;
+     margin-left: 0;
+     margin-right: 0;
+
+ }
+
 .action_table .purple{
     background: #1a074a;
     width: 82%!important;
@@ -109,7 +116,7 @@
 }
 
 .action_table .purple:hover{
-    background: #1a074a!important;
+    background: #1a074a !important;
 }
 
 .action_table .purple:active{
