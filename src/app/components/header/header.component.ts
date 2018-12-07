@@ -53,7 +53,7 @@ export class HeaderComponent implements OnInit {
       if(this.isComponentAllowed==false){
         this.onLogout();
       }
-      this.userType =window.localStorage.getItem('type');
+      this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
       console.log(this.userType);
     }
   }
