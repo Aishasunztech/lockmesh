@@ -24,7 +24,7 @@ body {
 }
 
 .notfound {
-  max-width: 767px;
+  /*max-width: 767px;*/
   width: 100%;
   line-height: 1.4;
   padding: 110px 40px;
