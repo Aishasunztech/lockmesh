@@ -32,6 +32,7 @@ export class DevicesComponent implements OnInit {
   public allDevice: any = [];
   allDeviceDummyList = [];
   isAdmin=false;
+  userType:any;
   // sorting
   key = 'status'; // set default
   reverse = true;
@@ -42,7 +43,7 @@ export class DevicesComponent implements OnInit {
     name: false,
     email: false,
     client_id: false,
-    dealer_id: false,
+    // dealer_id: false,
     model: false,
     imei: false,
     simno: false,
@@ -55,11 +56,11 @@ export class DevicesComponent implements OnInit {
     start_date: false,
     expiry_date: false,
     status: false,
-    s_dealer: false,
-    s_dealer_name: false
+    // s_dealer: false,
+    // s_dealer_name: false
   };
 
-   data: any = {
+  data: any = {
     name: '',
     email: '',
     client_id: '',
@@ -74,7 +75,8 @@ export class DevicesComponent implements OnInit {
     mac_address: '',
     device_id: ''
    };
-   options: DatepickerOptions = {
+
+  options: DatepickerOptions = {
     displayFormat: 'YYYY-MM-DD',
     barTitleFormat: 'YYYY MMMM',
     dayNamesFormat: 'dd',
@@ -95,39 +97,48 @@ export class DevicesComponent implements OnInit {
 
   async ngOnInit() {
 
+    this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
 
-   // const _this = this;
+    this.dropdownList = [
+     {'id': 1, 'itemName': 'name'},
+     {'id': 2, 'itemName': 'email'},
+     {'id': 3, 'itemName': 'Client_id'},
+     {'id': 4, 'itemName': 'link_code'},
+     {'id': 5, 'itemName': 'Status'},
+     {'id': 6, 'itemName': 'device_id'},
+     {'id': 7, 'itemName': 'Model'},
+     {'id': 8, 'itemName': 'Start date'},
+     {'id': 9, 'itemName': 'Expiry_date'},
+     {'id': 10, 'itemName': 'Dealer_Name'},
+     {'id': 11, 'itemName': 'IMEI'},
+     {'id': 12, 'itemName': 'Sim'},
+     {'id': 13, 'itemName': 'online'},
+     {'id': 14, 'itemName': 'Serial_No'},
+     {'id': 15, 'itemName': 'Mac'}
+   ];
+
+    if(this.userType=="admin"){
+      this.dropdownList.push({'id': 17, 'itemName': 'dealer_id'});
+      this.state.dealer_id= false;
+    }
+
+    if (this.userType=="dealer" || this.userType=="admin"){
+      this.dropdownList.push(
+        {'id': 16, 'itemName': 's_dealer_name'},
+        {'id': 18, 'itemName': 's_dealer'}
+      );
+      this.dropdownList.s_dealer= false;
+      this.dropdownList.s_dealer_name= false;
+    }
+
     this.spinnerService.show();
     await this.allDeviceView();
     setTimeout(() => {
       this.spinnerService.hide();
     }, 1000);
-    //document.body.style.zoom = '40%';
+
     $('#tablescroll').css('height', ($( window ).height() - $('#navbar').height() - 65));
 
-     //document.getElementById('datatable').dragtable();
-     //$('#datatable').dragtable();
-
-    this.dropdownList = [
-      {'id': 1, 'itemName': 'name'},
-      {'id': 2, 'itemName': 'email'},
-      {'id': 3, 'itemName': 'Client_id'},
-      {'id': 4, 'itemName': 'link_code'},
-      {'id': 5, 'itemName': 'Status'},
-      {'id': 6, 'itemName': 'device_id'},
-      {'id': 7, 'itemName': 'Model'},
-      {'id': 8, 'itemName': 'Start date'},
-      {'id': 9, 'itemName': 'Expiry_date'},
-      {'id': 10, 'itemName': 'Dealer_Name'},
-      {'id': 11, 'itemName': 'IMEI'},
-      {'id': 12, 'itemName': 'Sim'},
-      {'id': 13, 'itemName': 'online'},
-      {'id': 14, 'itemName': 'Serial_No'},
-      {'id': 15, 'itemName': 'Mac'},
-      {'id': 16, 'itemName': 's_dealer_name'},
-      {'id': 17, 'itemName': 'dealer_id'},
-      {'id': 18, 'itemName': 's_dealer'}
-    ];
     this.selectedItems = [
     ];
 
@@ -147,7 +158,9 @@ export class DevicesComponent implements OnInit {
     setTimeout(() => {
       //this.spinnerService.hide();
     }, 1000);
-
+    $('.c-btn span').remove();
+    $('.c-btn').append("<span class='select_placeholder'>DISPLAY</span>");
+    $('.c-btn').append("<span class='c-angle-up fa fa-caret-down'></span>");
   }
 
   async aclHandler(){
@@ -435,8 +448,7 @@ export class DevicesComponent implements OnInit {
     this.allDevice = [];
     //  this.spinnerService.show();
     const response = await this.restService.getUserDevice(Headers).toPromise();
-    // this.restService.getUserDevice(Headers).subscribe((response) => {
-
+    
     this.allDevice = response.data;
 
     this.allDevice.forEach( search => {

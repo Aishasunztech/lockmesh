@@ -525,7 +525,9 @@ export class RestService {
     localStorage.removeItem('type');
     this.router.navigate(['/dealer/login']);
   }
+  InvalidPage() {
 
+  }
   // for SdealerLogout
   authSdealerSignOut() {
     localStorage.removeItem('email');
@@ -597,7 +599,6 @@ export class RestService {
     //  }).subscribe(tradeBotInfo => {
     // });
     const items = JSON.stringify(selectedItems);
-    console.log('selectedItems:- ' + items);
     console.log(this.baseUrl);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();

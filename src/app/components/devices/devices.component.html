@@ -64,16 +64,6 @@
                                     <angular2-multiselect  [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="onItemSelect($event, null)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelectAll)="onDeSelectAll($event)">
                                     </angular2-multiselect>
 
-                                    <!-- <select id="ms" class="form-control inputs on-small-margin" multiple="multiple"
-
-                                    (change)="getSelectedItems($this)"
-                                    >
-                                    <ng-container *ngFor="let item of dropdownList;">
-                                      <option [selected]="item.isSelected" value="{{item.id}}">{{item.itemName}}</option>
-                                    </ng-container>
-
-                                    </select> -->
-
                                 </div>
                                 <div class="col-md-3 show_devices">
                                     <select class="form-control inputs on-small-margin" placeholder="Device" name="display_device" (input)="deviceFilter($event)">
@@ -130,7 +120,7 @@
                                           <span class="fa fa-search"></span>
                                         </label>
                                       </th>
-                                      <th nowrap *ngIf="state.dealer_id == true" >
+                                      <th nowrap *ngIf="(state.dealer_id == true) && (userType=='admin')" >
                                         <label>
                                           <input class="form-control" type="text" name="dealer_id" placeholder="Dealer Id" (input)="searchField($event)">
                                           <span class="fa fa-search"></span>
@@ -208,13 +198,13 @@
                                           <span class="fa fa-search"></span>
                                         </label>
                                       </th>
-                                      <th nowrap *ngIf="state.s_dealer == true" >
+                                      <th nowrap *ngIf="(state.s_dealer == true) && (userType=='admin' || userType=='dealer')" >
                                         <label>
                                           <input class="form-control" type="text" name="s_deare_id" placeholder="S-dealer Id" (input)="searchField($event)">
                                           <span class="fa fa-search"></span>
                                         </label>
                                       </th>
-                                      <th nowrap *ngIf="state.s_dealer_name == true" >
+                                      <th nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" >
                                         <label>
                                           <input class="form-control" type="text" name="s_dealer_name" placeholder="s-dealer Name" (input)="searchField($event)">
                                           <span class="fa fa-search"></span>
@@ -233,7 +223,7 @@
                                         <th class="headings" nowrap *ngIf="state.client_id == true" (click)="sort('client_id')">Client Id
                                             <span class="fa fa-sort"></span>
                                         </th>
-                                        <th class="headings" nowrap *ngIf="state.dealer_id == true" (click)="sort('dealer_id')">Dealer Id
+                                        <th class="headings" nowrap *ngIf="(state.dealer_id == true)  && (userType=='admin')" (click)="sort('dealer_id')">Dealer Id
                                             <span class="fa fa-sort"></span>
                                         </th>
                                         <th class="headings" nowrap   *ngIf="state.link_code == true" (click)="sort('link_code')">Dealer Pin
@@ -272,10 +262,10 @@
                                         <th class="headings" nowrap *ngIf="state.mac_address == true" (click)="sort('mac_address')">Mac Address
                                             <span class="fa fa-sort"></span>
                                         </th>
-                                        <th class="headings" nowrap *ngIf="state.s_dealer == true" (click)="sort('s_dealer')">S-dealer Id
+                                        <th class="headings" nowrap *ngIf="(state.s_dealer == true)  && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer')">S-dealer Id
                                             <span class="fa fa-sort"></span>
                                         </th>
-                                        <th class="headings" nowrap *ngIf="state.s_dealer_name == true" (click)="sort('s_dealer_name')">s_dealer_name
+                                        <th class="headings" nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer_name')">s_dealer_name
                                             <span class="fa fa-sort"></span>
                                         </th>
 
