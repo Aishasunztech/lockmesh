@@ -99,7 +99,7 @@ export class DealerDevicesComponent implements OnInit {
 
   async  ngOnInit() {
     document.body.style.zoom = '100%';
-    console.log(this.restService.sessionLogin('token'));
+    
     this.spinnerService.show();
     await this.alldealerDeviceView();
     setTimeout(() => {
