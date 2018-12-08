@@ -6,3 +6,33 @@
     position: absolute;top:10px;
     right:30px;
 }
+.table {
+    width: 167%;
+    max-width: 141%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+}
+
+
+.table>thead>tr>th {
+    padding:0 0;
+    vertical-align: middle;
+    text-align: center !important;
+    font-size: 12px;
+    border:1px solid #eae6e6;
+}
+.table>tbody>tr>td {
+     padding: 8px 0;
+     vertical-align: middle;
+     text-align: center !important;
+     font-size: 12px;
+ }
+td.btnFull .btn{
+    display: block;
+    width: auto;
+    text-align: center;
+    margin: 2px 2px;
+}
+td a:hover{
+    text-decoration: none;
+}

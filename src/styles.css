@@ -4,7 +4,25 @@ body {
     color: #fff !important;
 
 }
+.delete {
+    background-color: #4e0d6f;
+}
+.delete a:hover {
+    background-color: #4e0d6f;
+}
+.connect {
+    background-color:#9cd514;
+}
 
+.suspend {
+    background-color:#d61415;
+}
+.edit{
+    background-color: #f09f2c;
+}
+.reset {
+    background-color: #40aebf;
+}
 ul.lefttNav li {
     display: inline;
 }
@@ -28,7 +46,7 @@ ul.lefttNav {
 
 td.btnFull .btn {
     display: block;
-    width: 133px;
+    width: 80%;
     margin: 10px auto;
 }
 
@@ -388,7 +406,7 @@ span.nav-link.btn-rotate.d-md-ver {
 }
 
 .changeese {
-  background-color:#4e0d6f!important;
+  background-color:#f3f2ee !important;
   padding-right: 0 !important;
 }
 

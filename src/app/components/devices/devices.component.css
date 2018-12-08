@@ -95,3 +95,16 @@
     text-align: right;
     line-height: 35px;
   }
+    .connect {
+        background-color:#9cd514;
+    }
+
+    .suspend {
+        background-color:#d61415;
+    }
+    .edit{
+        background-color: #f09f2c;
+    }
+    .activate {
+      background-color:  #9cd514;
+    }

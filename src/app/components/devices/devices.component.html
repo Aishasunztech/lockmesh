@@ -295,22 +295,22 @@
                                         <td class="text-left btnFull">
                                           <div class="btn-group">
                                           <a href="javascript:void(0)" *ngIf="device.device_status==1 && (device.account_status==null || device.account_status=='')" (click)="suspendForm(device.device_id);">
-                                            <button class="btn btn-danger btn-sm">Suspend</button>
+                                            <button class="btn btn-sm suspend">Suspend</button>
                                           </a>
 
                                           <a href="javascript:void(0)" *ngIf="device.device_status==1" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
-                                            <button class="btn btn-warning btn-sm" >Edit</button>
+                                            <button class="btn btn-sm edit" >Edit</button>
                                           </a>
 
                                           <a routerLink="/connect-devices/{{device.device_id}}">
-                                            <button class="btn btn-primary btn-sm" *ngIf="device.device_status==1">Connect</button>
+                                            <button class="btn btn-sm connect" *ngIf="device.device_status==1">Connect</button>
                                           </a>
 
                                           <!-- <a href="javascript:void(0)"><button class="btn btn-info btn-sm" *ngIf="device.device_status==1" (click)="unlinkUser(device.device_id)">Unlink</button></a> -->
 
 
                                           <a href="javascript:void(0)" *ngIf="device.device_status==1 &&  device.account_status=='suspended' " (click)="activateForm(device.device_id);">
-                                            <button class="btn btn-danger btn-sm">Activate</button>
+                                            <button class="btn btn-sm activate">Activate</button>
                                           </a>
 
                                             <!-- <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">

@@ -80,13 +80,15 @@
                                 <div class="clearfix"></div>
                                 <br>
                             </div>
-                            <div class="card-body cardHig" >
+                            <div class="card-body cardHig" style="overflow-x: scroll;">
+
                                 <div class="toolbar">
                                     <!--  Here you can write extra buttons/actions for the toolbar  -->
                                 </div>
-                                <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <table id="datatable" class="table table-bordered" cellspacing="0" width="100%" style="overflow: auto">
                                     <thead>
-                                        <tr class="text-center btnFull">
+
+                                            <tr class="text-center btnFull" style="background: #f4f4f4">
                                             <th class="disabled-sorting">Account</th>
                                             <th class="disabled-sorting">Action</th>
                                             <th nowrap (click)="sort('dealer_name');">Name <span class="fa fa-sort"></span></th>
@@ -102,22 +104,24 @@
                                     <tbody>
                                         <tr *ngFor="let dealer of allDelears | orderBy: key : reverse | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">
                                             <td class="text-center btnFull">
+                                                <div class="btn-group">
                                                 <a href="javascript:void(0)" (click)="showEditForm(dealer);" data-toggle="modal" data-target="#edit"><button
-                                                            class="btn btn-primary btn-sm" >Edit</button></a>
+                                                            class="btn btn-sm edit" >Edit</button></a>
                                                 <a href="javascript:void(0)" *ngIf="(dealer.account_status==null || dealer.account_status=='')" (click)="suspendForm(dealer.dealer_id);"><button
-                                                            class="btn btn-danger btn-sm">Suspend</button></a>
+                                                            class="btn btn-sm suspend">Suspend</button></a>
                                                 <a href="javascript:void(0)" *ngIf=" dealer.account_status=='suspended'" (click)="activatedealerForm(dealer.dealer_id);"><button
-                                                            class="btn btn-danger btn-sm">Activate</button></a>
+                                                            class="btn btn-sm connect">Activate</button></a>
                                                 <a href="javascript:void(0)"><button
-                                                            class="btn btn-info btn-sm"  *ngIf="dealer.unlink_status=='0'" (click)="unlinkdealerUser(dealer.dealer_id)">Delete</button></a>
+                                                        class="btn btn-sm delete"  *ngIf="dealer.unlink_status=='0'" (click)="unlinkdealerUser(dealer.dealer_id)">Delete</button></a>
                                                 <a href="javascript:void(0)"><button
-                                                             class="btn btn-info btn-sm"  *ngIf="dealer.unlink_status=='1'" (click)="undoUser(dealer.dealer_id)">Undo</button></a>
+                                                             class="btn btn-sm delete"  *ngIf="dealer.unlink_status=='1'" (click)="undoUser(dealer.dealer_id)">Undo</button></a></div>
                                             </td>
                                             <td class="text-center btnFull">
+                                                <div class="btn-group">
                                                 <a href="javascript:void(0)" (click)="passEditForm(dealer);" data-toggle="modal" data-target="#passedit"><button
-                                                             class="btn btn-primary btn-sm ResetPp">Reset<br>Password</button></a>
+                                                             class="btn btn-sm ResetPp reset">Reset Password</button></a>
                                                 <a><button
-                                                             class="btn btn-danger btn-sm" >Connect</button></a>
+                                                        class="btn btn-sm connect" >Connect</button></a></div>
                                             </td>
                                             <td>{{ dealer.dealer_name }}</td>
                                             <td>{{ dealer.dealer_email }}</td>
@@ -126,6 +130,7 @@
                                             <td>{{ dealer.connected_devices[0].total }}</td>
                                             <td>{{ dealer.tokens }}</td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                                 <div class="row text-center" style="display: block;">

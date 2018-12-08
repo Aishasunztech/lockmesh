@@ -41,7 +41,7 @@
     <div class="main-panel" style="min-height: fit-content" >
         <!-- Navbar -->
         <!-- End Navbar -->
-        <div class="content" style="margin-top: 40px;">
+        <div class="content" style="margin-top: 20px;">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card" >
@@ -63,7 +63,7 @@
                                 <div class="toolbar">
                                     <!--  Here you can write extra buttons/actions for the toolbar  -->
                                 </div>
-                                <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <table id="datatable" class="table table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                     <tr class="text-center btnFull">
                                         <th class="disabled-sorting">Actions</th>
@@ -80,9 +80,9 @@
                                         <td>
 
                                             <a href="javascript:void(0)"><button
-                                                    class="btn btn-danger btn-xs"   (click)="unlinkdealerUser(apk.apk_id)">Delete</button></a>
+                                                    class="btn btn-xs delete"   (click)="unlinkdealerUser(apk.apk_id)">Delete</button></a>
                                             <a href="javascript:void(0)" (click)="showEditForm(apk);" data-toggle="modal" data-target="#edit"><button
-                                                    class="btn btn-warning btn-xs " style=" margin: -12px;">Edit</button></a>
+                                                    class="btn btn-xs edit " style=" margin: -12px;">Edit</button></a>
                                         </td>
                                         <td>
                                             <ui-switch [checked]="getEnabled(apk.apk_status)" (change)="onChange($event,apk.apk_id)"></ui-switch>
