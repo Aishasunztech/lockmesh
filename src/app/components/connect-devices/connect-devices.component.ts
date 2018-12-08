@@ -37,7 +37,6 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
   ngOnInit() {
 
-    document.body.style.zoom = '100%';
   }
   ngAfterViewInit() {
     this.path = this.router.url.split('/');
@@ -62,7 +61,6 @@ export class ConnectAdminDevicesComponent implements OnInit {
     });
   }
   unlinkUser(device_id) {
-    console.log(device_id);
     Swal({
       text: 'Are you sure to unlink the device?',
       showCancelButton: true,
@@ -71,9 +69,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
       type: 'warning'
     }).then((result) =>  {
       this.spinnerService.show();
-      if (result.value) {
+      if (result) {
         this.restService.unlinkUser(device_id);
         this.spinnerService.hide();
+        this.router.navigate(['/devices']);
       }
     });
   }
