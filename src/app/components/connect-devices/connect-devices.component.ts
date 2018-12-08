@@ -61,4 +61,20 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.restService.authtoken(response);
     });
   }
+  unlinkUser(device_id) {
+    console.log(device_id);
+    Swal({
+      text: 'Are you sure to unlink the device?',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'warning'
+    }).then((result) =>  {
+      this.spinnerService.show();
+      if (result.value) {
+        this.restService.unlinkUser(device_id);
+        this.spinnerService.hide();
+      }
+    });
+  }
 }
