@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
   isComponentAllowed = false;
   isAdmin=false;
   userType:any;
+  newRequest=0;
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
@@ -50,6 +51,12 @@ export class HeaderComponent implements OnInit {
         //this.spinnerService.hide();
       }, 1000);
       this.profilelist();
+
+      await this.allDeviceView();
+      setTimeout(() => {
+        //this.spinnerService.hide();
+      }, 1000);
+
       if(this.isComponentAllowed==false){
         this.router.navigate(['/invalid_page/denied']);
         //this.onLogout();
@@ -57,11 +64,23 @@ export class HeaderComponent implements OnInit {
       this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
     }
   }
-profilelist() {
+  profilelist() {
     this.restService.profilelist().subscribe((response) => {
       this.profile = response;
     });
   }
+
+  async allDeviceView() {
+    const response = await this.restService.getUserDevice(Headers).toPromise();
+
+    response.data.forEach( search => {
+      if(search.device_status==0){
+        this.newRequest = this.newRequest + 1;
+      }
+    });
+    this.restService.authtoken(response);
+  }
+
   async aclHandler(){
     // this.isComponentAllowed =
     const response = await this.restService.isComponentAllowed(this.componentName).toPromise();
