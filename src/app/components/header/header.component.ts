@@ -1,10 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import {Router, ActivatedRoute} from '@angular/router';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {HelperService} from '../../helper.service';
 import { RestService } from '../../rest.service';
+import { GlobalSearchService } from '../../global-search.service';
 import * as $ from 'jquery';
 
 @Component({
@@ -25,6 +26,9 @@ export class HeaderComponent implements OnInit {
   isAdmin=false;
   userType:any;
   newRequest=0;
+  searchFilterValue: any;
+  @Output() globalSearch = new EventEmitter<Event>();
+
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
@@ -89,7 +93,11 @@ export class HeaderComponent implements OnInit {
     this.isAdmin = response1.isAdmin;
     console.log(this.isAdmin);
   }
-
+  searchFilter(e){
+    this.searchFilterValue = e.target.value;
+    //this.globalSearch.setGlobalSearchFilterValue(this.searchFilterValue);
+    this.globalSearch.emit(this.searchFilterValue);
+  }
   onLogout() {
     this.restService.authSignOut();
   }

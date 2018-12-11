@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { RestService } from '../../rest.service';
+import { GlobalSearchService } from '../../global-search.service';
 import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
@@ -33,6 +34,7 @@ export class DevicesComponent implements OnInit {
   allDeviceDummyList = [];
   isAdmin=false;
   userType:any;
+  searchFilterValue: any;
   // sorting
   key = 'status'; // set default
   reverse = true;
@@ -91,8 +93,12 @@ export class DevicesComponent implements OnInit {
     useEmptyBarTitle: false, // Defaults to true. If set to false then barTitleIfEmpty will be disregarded and a date will always be shown
   };
 
-  constructor(private restService: RestService, private router: Router, @Inject(LOCAL_STORAGE) private storage: WebStorageService,
-   private spinnerService: Ng4LoadingSpinnerService) { }
+  constructor(
+    private restService: RestService,
+    private router: Router,
+    @Inject(LOCAL_STORAGE) private storage: WebStorageService,
+   private spinnerService: Ng4LoadingSpinnerService
+  ) { }
   @ViewChild('deviceData') projectForm: NgForm;
 
   async ngOnInit() {
@@ -107,14 +113,14 @@ export class DevicesComponent implements OnInit {
      {'id': 5, 'itemName': 'Status'},
      {'id': 6, 'itemName': 'device_id'},
      {'id': 7, 'itemName': 'Model'},
-     {'id': 8, 'itemName': 'Start date'},
+     {'id': 8, 'itemName': 'Start_date'},
      {'id': 9, 'itemName': 'Expiry_date'},
      {'id': 10, 'itemName': 'Dealer_Name'},
      {'id': 11, 'itemName': 'IMEI'},
-     {'id': 12, 'itemName': 'Sim'},
+     {'id': 12, 'itemName': 'Simno'},
      {'id': 13, 'itemName': 'online'},
-     {'id': 14, 'itemName': 'Serial_No'},
-     {'id': 15, 'itemName': 'Mac'}
+     {'id': 14, 'itemName': 'serial_number'},
+     {'id': 15, 'itemName': 'Mac_address'}
    ];
 
     if(this.userType=="admin"){
@@ -161,6 +167,7 @@ export class DevicesComponent implements OnInit {
     $('.c-btn span').remove();
     $('.c-btn').append("<span class='select_placeholder'>DISPLAY</span>");
     $('.c-btn').append("<span class='c-angle-up fa fa-caret-down'></span>");
+
   }
 
   async aclHandler(){
@@ -184,9 +191,6 @@ export class DevicesComponent implements OnInit {
     }
   }
 
-  getSelectedItems(item){
-    console.log("hello");
-  }
   sort(key) {
     this.key = key;
     this.reverse = !this.reverse;
@@ -212,6 +216,8 @@ export class DevicesComponent implements OnInit {
   // }
 
   onItemSelect(item: any, initVal) {
+    console.log(item);
+
     if ( item.itemName === 'name') {
         this.state.name = true;
     } else if (item.itemName === 'link_code') {
@@ -224,17 +230,17 @@ export class DevicesComponent implements OnInit {
       this.state.dealer_name = true;
     } else if (item.itemName === 'IMEI') {
       this.state.imei = true;
-    } else if (item.itemName === 'Sim') {
+    } else if (item.itemName === 'Simno') {
       this.state.simno = true;
     } else if (item.itemName === 'Status') {
       this.state.status = true;
-    } else if (item.itemName === 'Serial_No') {
+    } else if (item.itemName === 'serial_number') {
       this.state.serial_number = true;
-    } else if (item.itemName === 'Mac') {
+    } else if (item.itemName === 'Mac_address') {
       this.state.mac_address = true;
     } else if (item.itemName === 'device_id') {
       this.state.device_id = true;
-    } else if (item.itemName === 'Start date') {
+    } else if (item.itemName === 'Start_date') {
       this.state.start_date = true;
     } else if (item.itemName === 'Expiry_date') {
       this.state.expiry_date = true;
@@ -272,9 +278,10 @@ export class DevicesComponent implements OnInit {
 
       var showstring="<tr>";
       toShow.map(function(e){
-        if(device[e.itemName]){
-          showstring = showstring + "<tr><th>" + e.itemName + ":</th>" + "<td>" + device[e.itemName] + "</td></tr>";
-        }
+
+        // if(device[e.itemName.toLowerCase()]){
+          showstring = showstring + "<tr><th>" + e.itemName.toLowerCase() + ":</th>" + "<td>" + device[e.itemName.toLowerCase()] + "</td></tr>";
+        // }
       });
       showstring = showstring + "</tr>";
 
@@ -291,9 +298,9 @@ export class DevicesComponent implements OnInit {
 
       var showstring="<tr>";
       toShow.map(function(e){
-        if(device[e.itemName]){
-          showstring = showstring + "<tr><th>" + e.itemName + ":</th>" + "<td>" + device[e.itemName] + "</td></tr>";
-        }
+        // if(device[e.itemName.toLowerCase()]){
+          showstring = showstring + "<tr><th>" + e.itemName.toLowerCase() + ":</th>" + "<td>" + device[e.itemName.toLowerCase()] + "</td></tr>";
+        // }
       });
       showstring = showstring + "</tr>";
       $(document).find('.detailed_row_'+ device.device_id).children('td').html(showstring);
@@ -329,17 +336,17 @@ export class DevicesComponent implements OnInit {
       this.state.dealer_name = false;
     } else if (item.itemName === 'IMEI') {
       this.state.imei = false;
-    } else if (item.itemName === 'Sim') {
+    } else if (item.itemName === 'Simno') {
       this.state.simno = false;
     } else if (item.itemName === 'Status') {
       this.state.status = false;
-    } else if (item.itemName === 'Serial_No') {
+    } else if (item.itemName === 'serial_number') {
       this.state.serial_number = false;
-    } else if (item.itemName === 'Mac') {
+    } else if (item.itemName === 'Mac_address') {
       this.state.mac_address = false;
     } else if (item.itemName === 'device_id') {
       this.state.device_id = false;
-    } else if (item.itemName === 'Start date') {
+    } else if (item.itemName === 'Start_date') {
       this.state.start_date = false;
     } else if (item.itemName === 'Expiry_date') {
       this.state.expiry_date = false;
@@ -373,17 +380,17 @@ export class DevicesComponent implements OnInit {
         this.state.dealer_name = true;
       } else if (item.itemName === 'IMEI') {
         this.state.imei = true;
-      } else if (item.itemName === 'Sim') {
+      } else if (item.itemName === 'Simno') {
         this.state.simno = true;
       } else if (item.itemName === 'Status') {
         this.state.status = true;
-      } else if (item.itemName === 'Serial_No') {
+      } else if (item.itemName === 'serial_number') {
         this.state.serial_number = true;
-      } else if (item.itemName === 'Mac') {
+      } else if (item.itemName === 'Mac_address') {
         this.state.mac_address = true;
       } else if (item.itemName === 'device_id') {
         this.state.device_id = true;
-      } else if (item.itemName === 'Start date') {
+      } else if (item.itemName === 'Start_date') {
         this.state.start_date = true;
       } else if (item.itemName === 'Expiry_date') {
         this.state.expiry_date = true;
@@ -420,7 +427,6 @@ export class DevicesComponent implements OnInit {
    this.state.mac_address = false;
    this.state.device_id = false;
    this.state.start_date = false;
-   console.log(this.state.start_date);
    this.state.expiry_date = false;
    //  console.log(this.state.expiry_date);
    this.state.email = false;
@@ -448,7 +454,7 @@ export class DevicesComponent implements OnInit {
     this.allDevice = [];
     //  this.spinnerService.show();
     const response = await this.restService.getUserDevice(Headers).toPromise();
-    
+
     this.allDevice = response.data;
 
     this.allDevice.forEach( search => {
@@ -839,5 +845,21 @@ export class DevicesComponent implements OnInit {
     this.perPage=value;
     console.log(this.perPage);
 
+  }
+  childInputChanged(value){
+    const list = this.allDeviceDummyList;
+    this.allDevice = [];
+    list.forEach( ele => {
+      if (ele.name.toUpperCase().includes(value.toUpperCase()) || ele.email.toUpperCase().includes(value.toUpperCase()) ||
+      ele.client_id.toUpperCase().includes(value.toUpperCase()) || ele.link_code.toUpperCase().includes(value.toUpperCase()) ||
+      ele.status.toUpperCase().includes(value.toUpperCase()) || ele.device_id.toUpperCase().includes(value.toUpperCase()) ||
+      ele.start_date.toUpperCase().includes(value.toUpperCase()) || ele.expiry_date.toUpperCase().includes(value.toUpperCase()) ||
+      ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.imei.toUpperCase().includes(value.toUpperCase()) ||
+      ele.simno.toUpperCase().includes(value.toUpperCase()) || ele.online.toUpperCase().includes(value.toUpperCase()) ||
+      ele.serial_number.toUpperCase().includes(value.toUpperCase()) ||
+      ele.mac_address.toUpperCase().includes(value.toUpperCase())) {
+        this.allDevice.push(ele);
+      }
+    });
   }
 }
