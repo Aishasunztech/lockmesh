@@ -119,3 +119,35 @@
         text-align: center !important;
         font-size: 12px;
     }
+
+    @media screen and (max-width: 768px) {
+
+        .table>tbody>tr>td {
+            padding: 20px 6px 15px 0;
+            vertical-align: middle;
+            text-align: right !important;
+            font-size: 12px;
+
+            margin-top: 10px;
+        }
+
+        .table>tbody>tr {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .table-bordered {
+            border: none;
+        }
+
+        .on-small-margin {
+            margin-bottom: 0;
+            margin-top: 15px;
+        }
+
+        .search-btn span {
+            position: absolute;
+            right: 23px;
+            top: 19px;
+        }
+    }

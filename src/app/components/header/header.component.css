@@ -73,3 +73,19 @@
 .custom-badge{
   background-color: #918373;
 }
+
+.wcontrol {
+    width: 80%;
+}
+
+@media screen  and (max-width: 768px){
+    .wcontrol {
+        width: 67%;
+    }
+
+    .btn-group {
+        position: absolute;
+        float: right;
+        right: 0;
+    }
+}

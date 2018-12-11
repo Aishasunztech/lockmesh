@@ -35,3 +35,30 @@ td.btnFull .btn{
 td a:hover{
     text-decoration: none;
 }
+
+
+@media screen and (max-width: 768px) {
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+        border: none;
+    }
+
+    .table > tbody > tr > td {
+        padding: 21px 7px 7px 0;
+        margin-top: 5px;
+        vertical-align: middle;
+        text-align: right !important;
+        font-size: 12px;
+    }
+
+    .table>tbody>tr {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    .no-small-col {
+        display: none;
+    }
+}
