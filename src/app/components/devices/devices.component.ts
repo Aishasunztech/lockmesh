@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { RestService } from '../../rest.service';
+import { GlobalSearchService } from '../../global-search.service';
 import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
@@ -33,6 +34,7 @@ export class DevicesComponent implements OnInit {
   allDeviceDummyList = [];
   isAdmin=false;
   userType:any;
+  searchFilterValue: any;
   // sorting
   key = 'status'; // set default
   reverse = true;
@@ -91,8 +93,12 @@ export class DevicesComponent implements OnInit {
     useEmptyBarTitle: false, // Defaults to true. If set to false then barTitleIfEmpty will be disregarded and a date will always be shown
   };
 
-  constructor(private restService: RestService, private router: Router, @Inject(LOCAL_STORAGE) private storage: WebStorageService,
-   private spinnerService: Ng4LoadingSpinnerService) { }
+  constructor(
+    private restService: RestService,
+    private router: Router,
+    @Inject(LOCAL_STORAGE) private storage: WebStorageService,
+   private spinnerService: Ng4LoadingSpinnerService
+  ) { }
   @ViewChild('deviceData') projectForm: NgForm;
 
   async ngOnInit() {
@@ -161,6 +167,7 @@ export class DevicesComponent implements OnInit {
     $('.c-btn span').remove();
     $('.c-btn').append("<span class='select_placeholder'>DISPLAY</span>");
     $('.c-btn').append("<span class='c-angle-up fa fa-caret-down'></span>");
+
   }
 
   async aclHandler(){
@@ -838,5 +845,21 @@ export class DevicesComponent implements OnInit {
     this.perPage=value;
     console.log(this.perPage);
 
+  }
+  childInputChanged(value){
+    const list = this.allDeviceDummyList;
+    this.allDevice = [];
+    list.forEach( ele => {
+      if (ele.name.toUpperCase().includes(value.toUpperCase()) || ele.email.toUpperCase().includes(value.toUpperCase()) ||
+      ele.client_id.toUpperCase().includes(value.toUpperCase()) || ele.link_code.toUpperCase().includes(value.toUpperCase()) ||
+      ele.status.toUpperCase().includes(value.toUpperCase()) || ele.device_id.toUpperCase().includes(value.toUpperCase()) ||
+      ele.start_date.toUpperCase().includes(value.toUpperCase()) || ele.expiry_date.toUpperCase().includes(value.toUpperCase()) ||
+      ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.imei.toUpperCase().includes(value.toUpperCase()) ||
+      ele.simno.toUpperCase().includes(value.toUpperCase()) || ele.online.toUpperCase().includes(value.toUpperCase()) ||
+      ele.serial_number.toUpperCase().includes(value.toUpperCase()) ||
+      ele.mac_address.toUpperCase().includes(value.toUpperCase())) {
+        this.allDevice.push(ele);
+      }
+    });
   }
 }

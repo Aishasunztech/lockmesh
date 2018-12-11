@@ -4,7 +4,7 @@
     }
 </style>
 <div class="wrapper ">
-    <app-header></app-header>
+    <app-header (globalSearch)="childInputChanged($event)" ></app-header>
     <div class="main-panel">
       <!-- <div class="row container" style="margin-top: 20px">
         <div class="col-sm-12 ">

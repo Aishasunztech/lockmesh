@@ -23,6 +23,7 @@ import { ClientComponent } from './components/client/client.component';
 import {Common} from './entity/common';
 import {RestService} from './rest.service';
 import {HelperService} from './helper.service';
+import {GlobalSearchService} from './global-search.service';
 import { DealerDevicesComponent } from './dealer/dealer-devices/dealer-devices.component';
 import { DealerSDealerComponent } from './dealer/dealer-s-dealer/dealer-s-dealer.component';
 import { DealerClientComponent } from './dealer/dealer-client/dealer-client.component';
@@ -327,7 +328,8 @@ import { InvalidPage } from './components/invalid_page/invalid_page.component';
 
   providers: [Common,
               RestService,
-              HelperService
+              HelperService,
+              GlobalSearchService
               ,
               {provide: LocationStrategy, useClass: HashLocationStrategy}
             ],
