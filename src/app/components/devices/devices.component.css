@@ -108,3 +108,9 @@
     .activate {
       background-color:  #9cd514;
     }
+    .table>tbody>tr>td {
+        padding: 15px 3px;
+        vertical-align: middle;
+        text-align: center !important;
+        font-size: 12px;
+    }

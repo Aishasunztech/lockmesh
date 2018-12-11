@@ -14,3 +14,10 @@
 .form-horizontal .label-on-right {
     text-align:left;
 }
+.profile-head {
+    background-color:	#9cd514;
+    line-height: 0.45em;
+    margin-top: 21px;
+    margin-bottom: 15px;
+    padding: 4px;
+}

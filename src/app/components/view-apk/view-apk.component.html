@@ -63,33 +63,33 @@
                                 <div class="toolbar">
                                     <!--  Here you can write extra buttons/actions for the toolbar  -->
                                 </div>
-                                <table id="datatable" class="table table-bordered" cellspacing="0" width="100%">
+                                <table id="datatable" class="table table-bordered responsive" cellspacing="0" width="100%">
                                     <thead>
                                     <tr class="text-center btnFull">
-                                        <th class="disabled-sorting">Actions</th>
-                                        <th class="disabled-sorting">APK Status</th>
-                                        <th (click)="sort('apk')">APK <span class="fa fa-sort"></span></th>
-                                        <th nowrap (click)="sort('apk_name')">Name <span class="fa fa-sort"></span></th>
-                                       <th (click)="sort('logo')"> Logo<span class="fa fa-sort"></span></th>
+                                        <th scope="col" class="disabled-sorting" >Actions</th>
+                                        <th scope="col" class="disabled-sorting">APK Status</th>
+                                        <th scope="col" (click)="sort('apk')">APK <span class="fa fa-sort"></span></th>
+                                        <th scope="col" nowrap (click)="sort('apk_name')">Name <span class="fa fa-sort"></span></th>
+                                       <th scope="col" (click)="sort('logo')"> Logo<span class="fa fa-sort"></span></th>
 
 
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr *ngFor="let apk of apkList | orderBy: key : reverse | paginate: { itemsPerPage: 5, currentPage: p }">
-                                        <td>
+                                        <td data-table-header="ACTIONS">
 
                                             <a href="javascript:void(0)"><button
                                                     class="btn btn-xs delete"   (click)="unlinkdealerUser(apk.apk_id)">Delete</button></a>
                                             <a href="javascript:void(0)" (click)="showEditForm(apk);" data-toggle="modal" data-target="#edit"><button
                                                     class="btn btn-xs edit " style=" margin: -12px;">Edit</button></a>
                                         </td>
-                                        <td>
+                                        <td data-table-header="APK STATUS">
                                             <ui-switch [checked]="getEnabled(apk.apk_status)" (change)="onChange($event,apk.apk_id)"></ui-switch>
                                         </td>
-                                        <td>{{apk.apk}}</td>
-                                        <td>{{apk.apk_name}}</td>
-                                        <td><img src="{{basrUrl}}/users/getFile/{{apk.logo}}" height="20px" width="20px"></td>
+                                        <td data-table-header="APK">{{apk.apk}}</td>
+                                        <td data-table-header="NAME">{{apk.apk_name}}</td>
+                                        <td data-table-header="LOGO"><img src="{{basrUrl}}/users/getFile/{{apk.logo}}" height="20px" width="20px"></td>
 
 
                                     </tr>
