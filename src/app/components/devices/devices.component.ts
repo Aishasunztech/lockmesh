@@ -107,14 +107,14 @@ export class DevicesComponent implements OnInit {
      {'id': 5, 'itemName': 'Status'},
      {'id': 6, 'itemName': 'device_id'},
      {'id': 7, 'itemName': 'Model'},
-     {'id': 8, 'itemName': 'Start date'},
+     {'id': 8, 'itemName': 'Start_date'},
      {'id': 9, 'itemName': 'Expiry_date'},
      {'id': 10, 'itemName': 'Dealer_Name'},
      {'id': 11, 'itemName': 'IMEI'},
-     {'id': 12, 'itemName': 'Sim'},
+     {'id': 12, 'itemName': 'Simno'},
      {'id': 13, 'itemName': 'online'},
-     {'id': 14, 'itemName': 'Serial_No'},
-     {'id': 15, 'itemName': 'Mac'}
+     {'id': 14, 'itemName': 'serial_number'},
+     {'id': 15, 'itemName': 'Mac_address'}
    ];
 
     if(this.userType=="admin"){
@@ -184,9 +184,6 @@ export class DevicesComponent implements OnInit {
     }
   }
 
-  getSelectedItems(item){
-    console.log("hello");
-  }
   sort(key) {
     this.key = key;
     this.reverse = !this.reverse;
@@ -212,6 +209,8 @@ export class DevicesComponent implements OnInit {
   // }
 
   onItemSelect(item: any, initVal) {
+    console.log(item);
+
     if ( item.itemName === 'name') {
         this.state.name = true;
     } else if (item.itemName === 'link_code') {
@@ -224,17 +223,17 @@ export class DevicesComponent implements OnInit {
       this.state.dealer_name = true;
     } else if (item.itemName === 'IMEI') {
       this.state.imei = true;
-    } else if (item.itemName === 'Sim') {
+    } else if (item.itemName === 'Simno') {
       this.state.simno = true;
     } else if (item.itemName === 'Status') {
       this.state.status = true;
-    } else if (item.itemName === 'Serial_No') {
+    } else if (item.itemName === 'serial_number') {
       this.state.serial_number = true;
-    } else if (item.itemName === 'Mac') {
+    } else if (item.itemName === 'Mac_address') {
       this.state.mac_address = true;
     } else if (item.itemName === 'device_id') {
       this.state.device_id = true;
-    } else if (item.itemName === 'Start date') {
+    } else if (item.itemName === 'Start_date') {
       this.state.start_date = true;
     } else if (item.itemName === 'Expiry_date') {
       this.state.expiry_date = true;
@@ -272,9 +271,10 @@ export class DevicesComponent implements OnInit {
 
       var showstring="<tr>";
       toShow.map(function(e){
-        if(device[e.itemName]){
-          showstring = showstring + "<tr><th>" + e.itemName + ":</th>" + "<td>" + device[e.itemName] + "</td></tr>";
-        }
+
+        // if(device[e.itemName.toLowerCase()]){
+          showstring = showstring + "<tr><th>" + e.itemName.toLowerCase() + ":</th>" + "<td>" + device[e.itemName.toLowerCase()] + "</td></tr>";
+        // }
       });
       showstring = showstring + "</tr>";
 
@@ -291,9 +291,9 @@ export class DevicesComponent implements OnInit {
 
       var showstring="<tr>";
       toShow.map(function(e){
-        if(device[e.itemName]){
-          showstring = showstring + "<tr><th>" + e.itemName + ":</th>" + "<td>" + device[e.itemName] + "</td></tr>";
-        }
+        // if(device[e.itemName.toLowerCase()]){
+          showstring = showstring + "<tr><th>" + e.itemName.toLowerCase() + ":</th>" + "<td>" + device[e.itemName.toLowerCase()] + "</td></tr>";
+        // }
       });
       showstring = showstring + "</tr>";
       $(document).find('.detailed_row_'+ device.device_id).children('td').html(showstring);
@@ -329,17 +329,17 @@ export class DevicesComponent implements OnInit {
       this.state.dealer_name = false;
     } else if (item.itemName === 'IMEI') {
       this.state.imei = false;
-    } else if (item.itemName === 'Sim') {
+    } else if (item.itemName === 'Simno') {
       this.state.simno = false;
     } else if (item.itemName === 'Status') {
       this.state.status = false;
-    } else if (item.itemName === 'Serial_No') {
+    } else if (item.itemName === 'serial_number') {
       this.state.serial_number = false;
-    } else if (item.itemName === 'Mac') {
+    } else if (item.itemName === 'Mac_address') {
       this.state.mac_address = false;
     } else if (item.itemName === 'device_id') {
       this.state.device_id = false;
-    } else if (item.itemName === 'Start date') {
+    } else if (item.itemName === 'Start_date') {
       this.state.start_date = false;
     } else if (item.itemName === 'Expiry_date') {
       this.state.expiry_date = false;
@@ -373,17 +373,17 @@ export class DevicesComponent implements OnInit {
         this.state.dealer_name = true;
       } else if (item.itemName === 'IMEI') {
         this.state.imei = true;
-      } else if (item.itemName === 'Sim') {
+      } else if (item.itemName === 'Simno') {
         this.state.simno = true;
       } else if (item.itemName === 'Status') {
         this.state.status = true;
-      } else if (item.itemName === 'Serial_No') {
+      } else if (item.itemName === 'serial_number') {
         this.state.serial_number = true;
-      } else if (item.itemName === 'Mac') {
+      } else if (item.itemName === 'Mac_address') {
         this.state.mac_address = true;
       } else if (item.itemName === 'device_id') {
         this.state.device_id = true;
-      } else if (item.itemName === 'Start date') {
+      } else if (item.itemName === 'Start_date') {
         this.state.start_date = true;
       } else if (item.itemName === 'Expiry_date') {
         this.state.expiry_date = true;
@@ -420,7 +420,6 @@ export class DevicesComponent implements OnInit {
    this.state.mac_address = false;
    this.state.device_id = false;
    this.state.start_date = false;
-   console.log(this.state.start_date);
    this.state.expiry_date = false;
    //  console.log(this.state.expiry_date);
    this.state.email = false;
@@ -448,7 +447,7 @@ export class DevicesComponent implements OnInit {
     this.allDevice = [];
     //  this.spinnerService.show();
     const response = await this.restService.getUserDevice(Headers).toPromise();
-    
+
     this.allDevice = response.data;
 
     this.allDevice.forEach( search => {

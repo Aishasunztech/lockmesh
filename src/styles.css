@@ -161,7 +161,14 @@ ul.lefttNav li>a:hover{
 div#datatable_filter {
     display: none;
 }
-
+.c-btn span:first-child {
+  color: transparent;
+  display: none;
+}
+.c-btn span.select_placeholder{
+  display: inherit;
+  color: #252422;
+}
 .selected-list .c-btn {
     background: white !important;
     padding: 7px !important;
