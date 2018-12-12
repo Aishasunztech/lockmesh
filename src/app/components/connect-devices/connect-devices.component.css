@@ -98,8 +98,8 @@
  }
 
 .action_table .purple{
-    background: #1a074a;
-    width: 82%!important;
+    background: #4e0d6f;
+    width: 100%!important;
     height: 50px;
     float: left;
 }
@@ -116,22 +116,23 @@
     overflow: unset;
     width: 100%!important;
     margin-left: 15px;
-    border-collapse: separate;
+    border-collapse:
+            separate;
     border-spacing: 4px;
 }
 .action_table .purple:hover{
-    background: #1a074a !important;
+    background: #4e0d6f !important;
 }
 
 .action_table .purple:active{
-    background: #1a074a!important;
+    background: #4e0d6f!important;
 }
 .action_table .purple:focus{
-    background: #1a074a!important;
+    background:#4e0d6f!important;
 }
 
 .action_table  tbody td{
-    background: #1a074a;
+    background: #4e0d6f;
 }
 
 .action_table tfoot td{
