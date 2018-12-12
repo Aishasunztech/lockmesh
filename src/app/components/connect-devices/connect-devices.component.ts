@@ -1,10 +1,12 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef  } from '@angular/core';
 import { RestService } from '../../rest.service';
+import { PushNotificationService } from '../../push-notification.service';
 import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {Router, ActivatedRoute} from '@angular/router';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-connect-devices',
@@ -13,6 +15,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 })
 export class ConnectAdminDevicesComponent implements OnInit {
   path: any;
+  private resp: any = null;
   device_data = {
     account_status: '',
     client_id: '',
@@ -30,13 +33,27 @@ export class ConnectAdminDevicesComponent implements OnInit {
     start_date: '',
     status: '',
   };
+  socket: SocketIOClient.Socket;
+  constructor(
+    private restService: RestService,
+    private route: ActivatedRoute,
+    private router: Router,
+    @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
+    private spinnerService: Ng4LoadingSpinnerService,
+    private pushNotification: PushNotificationService
+  ) {
+    this.socket = io('http://localhost:3000');
 
-  constructor(private restService: RestService, private route: ActivatedRoute,
-    private router: Router, @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
-  private spinnerService: Ng4LoadingSpinnerService) { }
+  }
 
   ngOnInit() {
+    this.pushNotification.onNewMessage().subscribe(function(resp){
+      console.log(resp + "123");
+    });
 
+  }
+  onBtClick(){
+    this.pushNotification.sendMessage();
   }
   ngAfterViewInit() {
     this.path = this.router.url.split('/');
@@ -73,6 +90,50 @@ export class ConnectAdminDevicesComponent implements OnInit {
         this.restService.unlinkUser(device_id);
         this.spinnerService.hide();
         this.router.navigate(['/devices']);
+      }
+    });
+  }
+  suspendForm(device_id) {
+    Swal({
+      text: 'Are you sure to suspend the device?',
+      showCancelButton: true,
+      useRejections: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'warning'
+    }).then((okay) =>  {
+      if (okay) {
+        // location.reload(true);
+        this.spinnerService.show();
+        this.restService.suspendForm(device_id).subscribe((response) => {
+       //   this.spinnerService.hide();
+          this.restService.authtoken(response);
+          this.resp = response;
+          if (this.resp.status === true) {
+            Swal({
+            text: this.resp.msg,
+            type: 'success',
+              customClass: 'swal-height'
+              }).then(result => {
+              if (result.value) {
+                this.router.navigate(['/devices']);
+                }
+              });
+          } else {
+            if (this.resp.status === false) {
+              Swal({
+              text: this.resp.msg,
+              type: 'warning',
+                customClass: 'swal-height'
+                }).then(result => {
+                if (result.value) {
+                  location.reload(false);
+                  }
+                });
+            }
+          }
+        });
+        this.spinnerService.hide();
       }
     });
   }

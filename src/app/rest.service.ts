@@ -176,11 +176,9 @@ export class RestService {
 
   // sdealer profile
   sdealerprofilelist() {
-    console.log(this.baseUrl);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
-    console.log( this.token);
     this.response = this.http.get(this.baseUrl + '/users/getinfo/' + this.sessionLogin('id') + '/sdealer',
      {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
@@ -189,11 +187,10 @@ export class RestService {
 
   // connect devices for dealer dash.
   refreshlist(device_id) {
-    console.log(this.baseUrl);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
-    console.log( this.token);
+
     this.response = this.http.get(this.baseUrl + '/users/connect/'
     + device_id, {headers: { 'authorization': this.sessionLogin('token')} });
     this.authtoken(this.response);
@@ -202,9 +199,6 @@ export class RestService {
 
   // for dealer reset password(admin dashboard)
   updateAdminPassDealerDetails(dealer) {
-    console.log(dealer);
-    console.log(this.baseUrl);
-  //  console.log(this.baseUrl);
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
@@ -216,9 +210,7 @@ export class RestService {
 
   // for dealer reset password(admin dashboard)
   updateAdminsabPassDealerDetails(sdealer) {
-    console.log(sdealer);
-    console.log(this.baseUrl);
-    //  console.log(this.baseUrl);
+
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
@@ -230,9 +222,7 @@ export class RestService {
 
   // for dealer reset password(dealer dashboard)
   updatedealerPassDealerDetails(dealer) {
-    //  console.log(this.baseUrl);
-    // dealer.dealerId = this.sessionLogin('id');
-    console.log(dealer.dealerId);
+    
     this.token = this.sessionLogin('token');
     const header = new HttpHeaders();
     header.append('authorization', this.sessionLogin('token'));
