@@ -19,11 +19,11 @@
                     </div>
                     <!--<a class="navbar-brand">LOGO</a>-->
                 </div>
-                <button class="navbar-toggler" id="option-button" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-bar navbar-kebab"></span>
-                    <span class="navbar-toggler-bar navbar-kebab"></span>
-                    <span class="navbar-toggler-bar navbar-kebab"></span>
-                </button>
+                <!--<button class="navbar-toggler" id="option-button" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">-->
+                <!--<span class="navbar-toggler-bar navbar-kebab"></span>-->
+                <!--<span class="navbar-toggler-bar navbar-kebab"></span>-->
+                <!--<span class="navbar-toggler-bar navbar-kebab"></span>-->
+                <!--</button>-->
                 <div class="collapse navbar-collapse justify-content-end" id="navigation">
                     <ul class="navbar-nav">
                         <li>
@@ -40,12 +40,12 @@
                     </ul>
                 </div>
             </div>
-        </nav> -->
+        </nav>
 
         <!-- End Navbar -->
         <div class="content " style="margin-top: 40px;">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 no-padding-all">
                     <form class="form-horizontal" id="formData" #deviceData="ngForm" (ngSubmit)="referesh('device_id')">
                         <div class="card ">
                             <!-- <div class="card-header text-center" style="width: 100%; height: 30%;">
@@ -56,17 +56,17 @@
                             <div class="card-body" style="padding: 11px;">
                                 <div class="">
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">Name:</label>
-                                        <div class="col-sm-7">
-                                          <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Name:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.name}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">Device Id:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Device Id:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.device_id}}
                                             </div>
                                         </div>
@@ -74,9 +74,9 @@
                                     </div>
 
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">client Id:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">client Id:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.client_id}}
                                             </div>
                                         </div>
@@ -84,84 +84,84 @@
                                     </div>
 
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">PGP Email:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">PGP Email:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.email}}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">Model:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Model:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.model}}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">IMEI:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">IMEI:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive">
+                                            <div class="form-group  text-left-force">
                                                 {{device_data.imei}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">Mac:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Mac:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.mac_address}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">SIM:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">SIM:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.simno}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">IP Address:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">IP Address:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.ip_address}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">S-Dealer:</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">S-Dealer:</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.s_dealer_name}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">Status</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Status</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.account_status == 'suspended' ? 'Suspended' : device_data.status}}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">Start Date</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Start Date</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.start_date}}
                                             </div>
                                         </div>
 
                                     </div>
                                     <div class="row col_head">
-                                        <label class="col-sm-4 col-form-label left_headed">Expiry Date</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
+                                        <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Expiry Date</label>
+                                        <div class="col-sm-7 col-width-sixtyfive ">
+                                            <div class="form-group text-left-force">
                                                 {{device_data.expiry_date}}
                                             </div>
                                         </div>
@@ -169,12 +169,12 @@
                                 </div>
                                 <br>
                                 <!-- <div class="row"> -->
-                                    <!-- <label class="col-sm-4 col-form-label"></label> -->
-                                    <!-- <div class="col-sm-12"> -->
+                                <!-- <label class="col-sm-4 col-form-label"></label> -->
+                                <!-- <div class="col-sm-12"> -->
 
-                                        <button type="submit" style="margin-left: 0px;b " class="btn btn-primary btn-block">Refresh</button>
+                                <button type="submit" style="margin-left: 0px;b " class="btn btn-primary btn-block">Refresh</button>
 
-                                    <!-- </div> -->
+                                <!-- </div> -->
                                 <!-- </div> -->
                             </div>
                         </div>
@@ -206,7 +206,7 @@
                                 <span class="fa fa-close" style="color:red;"></span><br>
                                 <p style="">Clear All</p>
                             </a>
-<!---->
+                            <!---->
                         </div>
                     </div>
 
@@ -216,14 +216,14 @@
 
                         <table class="table table-responsive action_table cs-table" id="third-card">
                             <thead>
-                                <tr>
-                                    <td colspan="12">
-                                        <select class="form-control" >
-                                            <option>Display</option>
-                                        </select>
+                            <tr>
+                                <td colspan="12">
+                                    <select class="form-control" >
+                                        <option>Display</option>
+                                    </select>
 
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                             </thead>
 
                             <tbody>
@@ -239,72 +239,72 @@
 
                                 </td>
                             </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-primary purple">Load Profile
-                                            <span class="fa fa-user-o" style="line-height: 38px;"></span></button>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary purple">Load Profile
+                                        <span class="fa fa-user-o" style="line-height: 38px;"></span></button>
 
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary purple">Save Profile
-                                            <span class="fa fa-floppy-o" style="line-height: 38px;"></span></button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary purple">Save Profile
+                                        <span class="fa fa-floppy-o" style="line-height: 38px;"></span></button>
 
-                                    </td>
+                                </td>
 
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-primary purple">Load History</button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary purple">Load Policy</button><br>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-primary purple">Disable</button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary purple">Power</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-primary purple">N/A</button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary purple">N/A</button><br>
-                                    </td>
-                                </tr>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary purple">Load History</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary purple">Load Policy</button><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary purple">Disable</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary purple">Power</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary purple">N/A</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary purple">N/A</button><br>
+                                </td>
+                            </tr>
 
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-primary purple">N/A</button>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary purple">N/A</button><br>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary purple">N/A</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary purple">N/A</button><br>
+                                </td>
+                            </tr>
                             </tbody>
 
                             <tfoot>
-                                <br>
-                                <tr>
+                            <br>
+                            <tr>
 
-                                    <td colspan="2">
-                                        <button (click)="suspendForm(device_data.device_id);" class="btn btn-warning btn-block" style=" margin: 0px; font-size: 14px;">SUSPEND</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <button (click)="unlinkUser(device_data.device_id)" class="btn btn-primary btn-block" style="background:#51cbce; margin: 0px; font-size: 14px;">UNLINK</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <button class="btn btn-danger btn-block" style=" margin: 0px; font-size: 14px;">POWER</button>
-                                    </td>
-                                </tr>
+                                <td colspan="2">
+                                    <button (click)="suspendForm(device_data.device_id);" class="btn btn-warning btn-block" style=" margin: 0px; font-size: 14px;">SUSPEND</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button (click)="unlinkUser(device_data.device_id)" class="btn btn-primary btn-block" style="background:#51cbce; margin: 0px; font-size: 14px;">UNLINK</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button class="btn btn-danger btn-block" style=" margin: 0px; font-size: 14px;">POWER</button>
+                                </td>
+                            </tr>
 
                             </tfoot>
 

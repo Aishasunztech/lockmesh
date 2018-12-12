@@ -91,11 +91,11 @@
 }
 
 .action_table button{
-     width: 100%;
-     margin-left: 0;
-     margin-right: 0;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
 
- }
+}
 
 .action_table .purple{
     background: #4e0d6f;
@@ -153,8 +153,8 @@
     box-shadow: none;
     border-bottom: 0 solid #ddd;
 }
-@media only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+@media only screen and (min-width: 768px){
 
     #option-button {
         display: none;
@@ -163,12 +163,9 @@
         margin-top: 33px;
     }
     #third-card {
-          margin-left: 42px;
-      }
+        margin-left: 42px;
+    }
 
-}
-@media only screen and (min-width: 760px),
-(max-device-width: 768px) and (min-device-width: 1024px)  {
     #navbar {
         display: none;
     }
@@ -179,8 +176,47 @@
         margin-left: 0px;
         margin-right: 12px;
     }
+    .main-panel>.content {
+        margin: 40px 0 0 0 !important;
+    }
 
 
 
+}
+
+@media screen and (max-width: 768px) {
+    .main-panel .content {
+        padding-left: -15px;
+        padding-right: 15px;
+        margin: 40px 0 0 0 !important;
+    }
+
+    .text-left-force {
+        text-align: left!important;
+    }
+
+    .margin-left {
+        margin-left: 0 !important;
+    }
+
+    .no-padding-all {
+        padding: 20px 0 0 0 !important;
+    }
+
+    .no-padding-let {
+        padding-left: 0 !important;
+    }
+
+    .no-padding-right {
+        padding-right: 0 !important;
+    }
+
+    .col-width-thirtyfive {
+        width: 35% !important;
+    }
+
+    .col-width-sixtyfive {
+        width: 65% !important;
+    }
 
 }
