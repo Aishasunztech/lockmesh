@@ -174,7 +174,7 @@ export class DevicesComponent implements OnInit {
     // this.isComponentAllowed =
     const response1 = await this.restService.isAdmin().toPromise();
     this.isAdmin = response1.isAdmin;
-    console.log(this.isAdmin);
+
   }
 
   ngAfterViewInit() {
@@ -216,7 +216,6 @@ export class DevicesComponent implements OnInit {
   // }
 
   onItemSelect(item: any, initVal) {
-    console.log(item);
 
     if ( item.itemName === 'name') {
         this.state.name = true;
@@ -527,13 +526,11 @@ export class DevicesComponent implements OnInit {
       this.data = dealer;
       if (this.data.start_date === 'null' || this.data.start_date === null || this.data.start_date === '') {
         this.data.start_date = date;
-        console.log(this.data.start_date);
       } else {
          this.data.start_date = dealer.start_date.split('T')[0];
       }
       if (this.data.expiry_date === 'null' || this.data.expiry_date.includes('NaN-NaN-NaN')) {
         this.data.expiry_date = '';
-        console.log(this.data.expiry_date);
       }
       if (!this.data) {
         this.data.name = '';
@@ -647,7 +644,6 @@ export class DevicesComponent implements OnInit {
        //   this.spinnerService.hide();
           this.restService.authtoken(response);
           this.resp = response;
-          console.log(response);
           if (this.resp.status === true) {
             Swal({
             text: this.resp.msg,
@@ -819,8 +815,7 @@ export class DevicesComponent implements OnInit {
       }else if(name=="model" && ele.model!=null && ele.model.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else{
-        console.log("hello else");
-        //this.allDevice.push(list);
+        this.allDevice.push(ele);
       }
 
     });
@@ -830,7 +825,6 @@ export class DevicesComponent implements OnInit {
     this.allDevice = [];
     //var name = elem.target.name;
     var value = elem.target.value;
-    console.log(value);
     list.forEach( ele => {
       if( ele.status.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);

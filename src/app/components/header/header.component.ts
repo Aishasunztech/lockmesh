@@ -91,7 +91,6 @@ export class HeaderComponent implements OnInit {
     this.isComponentAllowed=response.componentAllowed;
     const response1 = await this.restService.isAdmin().toPromise();
     this.isAdmin = response1.isAdmin;
-    console.log(this.isAdmin);
   }
   searchFilter(e){
     this.searchFilterValue = e.target.value;
