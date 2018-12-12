@@ -2,10 +2,7 @@
 .card-manu {
     margin-top: -20px !important;
 }
- .cs-card {
 
-     padding: 26px;
-}
 .refreshButton {
     margin-bottom: 0px !important;
 }
@@ -43,6 +40,7 @@
 }
 .col_head div div{
     color: #434373;
+    text-align: center;
 }
 .phone_actions_container{
     border: 1px solid #f5efef;
@@ -114,7 +112,13 @@
     height: 50px;
     margin: 0px;
 }
-
+.action_table[_ngcontent-c2] {
+    overflow: unset;
+    width: 100%!important;
+    margin-left: 15px;
+    border-collapse: separate;
+    border-spacing: 4px;
+}
 .action_table .purple:hover{
     background: #1a074a !important;
 }
@@ -132,4 +136,50 @@
 
 .action_table tfoot td{
     padding: 2px;
+}
+.left_headed{
+    text-align: center;
+}
+.navbar.navbar-absolute {
+    position: absolute;
+    width: 34%;
+    padding-top: 10px;
+    z-index: 1029;
+    left: 6px;
+}
+.navbar.navbar-transparent {
+    background-color: transparent!important;
+    box-shadow: none;
+    border-bottom: 0 solid #ddd;
+}
+@media only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+    #option-button {
+        display: none;
+    }
+    .content {
+        margin-top: 33px;
+    }
+    #third-card {
+          margin-left: 42px;
+      }
+
+}
+@media only screen and (min-width: 760px),
+(max-device-width: 768px) and (min-device-width: 1024px)  {
+    #navbar {
+        display: none;
+    }
+    .content {
+        margin-top: 22px;
+    }
+    #third-card {
+        margin-left: 0px;
+        margin-right: 12px;
+    }
+
+
+
+
 }

@@ -1,43 +1,42 @@
 <div class="wrapper" style="padding-left: 0px">
     <app-header></app-header>
-    <div class="main-panel col-md-12" style=" max-height: initial;">
-        <!-- Navbar -->
-        <!-- <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+    <div class="main-panel col-md-12"  style=" max-height: initial;">
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
                     <div class="navbar-minimize">
                         <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
-                  <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
-                  <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
-                </button>
+                            <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
+                            <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+                        </button>
                     </div>
                     <div class="navbar-toggle">
                         <button type="button" class="navbar-toggler">
-                  <span class="navbar-toggler-bar bar1"></span>
-                  <span class="navbar-toggler-bar bar2"></span>
-                  <span class="navbar-toggler-bar bar3"></span>
-                </button>
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
                     </div>
-                    <a class="navbar-brand">LOGO</a>
+                    <!--<a class="navbar-brand">LOGO</a>-->
                 </div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-bar navbar-kebab"></span>
-              <span class="navbar-toggler-bar navbar-kebab"></span>
-              <span class="navbar-toggler-bar navbar-kebab"></span>
-            </button>
+                <button class="navbar-toggler" id="option-button" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navigation">
                     <ul class="navbar-nav">
                         <li>
-                            <span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>
+                            <!--<span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>-->
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">
-                                        Logout
-                                        <p>
-                                            <span class="d-lg-none d-md-block">Account</span>
-                                        </p>
-                                    </a>
-                        </li>
+                        <!--<li class="nav-item">-->
+                        <!--<a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">-->
+                        <!--Logout-->
+                        <!--<p>-->
+                        <!--<span class="d-lg-none d-md-block">Account</span>-->
+                        <!--</p>-->
+                        <!--</a>-->
+                        <!--</li>-->
                     </ul>
                 </div>
             </div>
@@ -182,9 +181,9 @@
                     </form>
                     <div class="clearfix"></div>
                 </div>
-                <div class="col-md-4" style="padding: 0px; padding-bottom: 27px;">
-                    <div class="card" style="height: 100%;padding-bottom: 7px;">
-                        <div class="deviceS" style="padding: 20% 9% 17% 9%;">
+                <div class="col-md-4" style="padding: 0; padding-bottom: 27px; height: 622px;">
+                    <div class="card" style="height: 97%;padding-bottom: 7px;">
+                        <div class="deviceS" style="padding: 15% 9% 17% 9%;">
                             <div class="app" style="margin-top: 8px;">
 
                             </div>
@@ -215,10 +214,10 @@
                 <div class="col-md-4">
                     <div class="card cs-card">
 
-                        <table class="table table-responsive action_table cs-table" style="margin: 0">
+                        <table class="table table-responsive action_table cs-table" id="third-card">
                             <thead>
                                 <tr>
-                                    <td colspan="2">
+                                    <td colspan="12">
                                         <select class="form-control" >
                                             <option>Display</option>
                                         </select>
@@ -242,14 +241,16 @@
                             </tr>
                                 <tr>
                                     <td>
-                                        <button class="btn btn-primary purple" (click)="onBtClick()">Load Profile
-                                        </button>
-                                        <span class="fa fa-user-o pull-right" style=""></span>
+                                        <button class="btn btn-primary purple">Load Profile
+                                            <span class="fa fa-user-o" style="line-height: 38px;"></span></button>
+
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary purple">Save Profile</button>
-                                        <span class="fa fa-floppy-o pull-right" style=""></span>
+                                        <button class="btn btn-primary purple">Save Profile
+                                            <span class="fa fa-floppy-o" style="line-height: 38px;"></span></button>
+
                                     </td>
+
                                 </tr>
                                 <tr>
                                     <td>

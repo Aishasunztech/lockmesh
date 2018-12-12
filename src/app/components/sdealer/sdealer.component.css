@@ -36,6 +36,18 @@ td.btnFull .btn{
 td a:hover{
     text-decoration: none;
 }
+.navbar.navbar-absolute {
+    position: absolute;
+    width: 34%;
+    padding-top: 10px;
+    z-index: 1029;
+    left: 6px;
+}
+.navbar.navbar-transparent {
+    background-color: transparent!important;
+    box-shadow: none;
+    border-bottom: 0px solid #ddd;
+}
 @media screen and (max-width: 768px) {
     .table {
         width: 100%;

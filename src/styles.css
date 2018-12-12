@@ -128,6 +128,7 @@ ul.lefttNav li>a {
 .active[_ngcontent-c3] {
   background: orange;
   opacity: 1;
+
 }
 ul.lefttNav li>a:hover{
   opacity: 1;
@@ -145,6 +146,7 @@ ul.lefttNav li>a:hover{
 .card-body label.col-sm-3 {
     font-size: 14px;
     margin-top: -3px;
+
 }
 
 .swal2-icon.swal2-info,

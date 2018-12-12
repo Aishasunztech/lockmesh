@@ -4,59 +4,71 @@
     }
     @media only screen and (max-width: 760px),
     (min-device-width: 768px) and (max-device-width: 1024px)  {
-    #plus {display:none}}
+        #plus {display:none}
+        #option-button {
+            display: none;
+        }
+       }
+        @media only screen and (min-width: 760px),
+        (min-device-width: 768px) and (max-device-width: 1024px)  {
+            #navbar {
+                display: none;
+            }
+            .content {
+                margin-top: -22px;
+            }
+
+        }
 </style>
 <div class="wrapper ">
     <app-header (globalSearch)="childInputChanged($event)" ></app-header>
-    <div class="main-panel">
-      <!-- <div class="row container" style="margin-top: 20px">
-        <div class="col-sm-12 ">
-          <button type="button" data-toggle="modal" data-target="#newrequestmodel" class="btn btn-primary pull-right"><i class="fa fa-bell-o" style="font-size: 17px;margin-right: 10px;margin-left: -13px;"></i>   new Requests</button>
+    <div class="main-panel" style="min-height: fit-content;">
+        <div class="row container" style="margin-top: 20px">
+
         </div>
-      </div> -->
         <!-- Navbar -->
-        <!-- <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
-            <div class="container-fluid">
-                <div class="navbar-wrapper">
-                    <div class="navbar-minimize">
-                        <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
-              <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
-              <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
-            </button>
-                    </div>
-                    <div class="navbar-toggle">
-                        <button type="button" class="navbar-toggler">
-              <span class="navbar-toggler-bar bar1"></span>
-              <span class="navbar-toggler-bar bar2"></span>
-              <span class="navbar-toggler-bar bar3"></span>
-            </button>
-                    </div>
-                    <a class="navbar-brand">LOGO</a>
+        <!--&lt;!&ndash;--> <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+            <div class="navbar-wrapper">
+                <div class="navbar-minimize">
+                    <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
+                        <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
+                        <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+                    </button>
                 </div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-        </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                    <ul class="navbar-nav">
-                        <li>
-                            <span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">
-                                Logout
-                                <p>
-                                    <span class="d-lg-none d-md-block">Account</span>
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
+                <div class="navbar-toggle">
+                    <button type="button" class="navbar-toggler">
+                        <span class="navbar-toggler-bar bar1"></span>
+                        <span class="navbar-toggler-bar bar2"></span>
+                        <span class="navbar-toggler-bar bar3"></span>
+                    </button>
                 </div>
+                <!--<a class="navbar-brand">LOGO</a>-->
             </div>
-        </nav> -->
+            <button class="navbar-toggler" id="option-button" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-bar navbar-kebab"></span>
+                <span class="navbar-toggler-bar navbar-kebab"></span>
+                <span class="navbar-toggler-bar navbar-kebab"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                <ul class="navbar-nav">
+                    <li>
+                        <!--<span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>-->
+                    </li>
+                    <!--<li class="nav-item">-->
+                    <!--<a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">-->
+                    <!--Logout-->
+                    <!--<p>-->
+                    <!--<span class="d-lg-none d-md-block">Account</span>-->
+                    <!--</p>-->
+                    <!--</a>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+        </div>
+    </nav> -->
         <!-- End Navbar -->
-        <div class="content" style="margin-top:20px">
+        <div class="content" >
             <div class="row" style="margin: 0 -15px">
                 <div class="col-md-12">
                     <div class="card" style="border-radius:unset;">
@@ -70,11 +82,11 @@
                                 </div>
                                 <div class="col-md-3 show_devices">
                                     <select class="form-control inputs on-small-margin" placeholder="Device" name="display_device" (input)="deviceFilter($event)">
-                                      <option value="">SHOW DEVICES</option>
-                                      <option>Active</option>
-                                      <option>Linked</option>
-                                      <option>Unlinked</option>
-                                      <option>Expired</option>
+                                        <option value="">SHOW DEVICES</option>
+                                        <option>Active</option>
+                                        <option>Linked</option>
+                                        <option>Unlinked</option>
+                                        <option>Expired</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3 search-btn">
@@ -102,217 +114,217 @@
                             </div>
                             <table id="datatable" class="table table-bordered responsive" cellspacing="0" width="100%">
                                 <thead>
-                                    <tr>
-                                      <th  class="disabled-sorting" style="min-width: 35px;"></th>
-                                      <th class="disabled-sorting"></th>
-                                      <th nowrap *ngIf="state.name == true" >
-                                          <label>
+                                <tr>
+                                    <th  class="disabled-sorting" style="min-width: 35px;"></th>
+                                    <th class="disabled-sorting"></th>
+                                    <th nowrap *ngIf="state.name == true" >
+                                        <label>
                                             <input class="form-control" type="text" name="name" placeholder="Name" (input)="searchField($event)">
                                             <span class="fa fa-search"></span>
-                                          </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.email == true" >
-                                          <label>
+                                        </label>
+                                    </th>
+                                    <th nowrap *ngIf="state.email == true" >
+                                        <label>
                                             <input class="form-control" type="text" name="email" placeholder="Email" (input)="searchField($event)">
                                             <span class="fa fa-search"></span>
-                                          </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.client_id == true" >
-                                        <label>
-                                          <input class="form-control" type="text" name="client_id" placeholder="Client Id" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="(state.dealer_id == true) && (userType=='admin')" >
+                                    </th>
+                                    <th nowrap *ngIf="state.client_id == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="dealer_id" placeholder="Dealer Id" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="client_id" placeholder="Client Id" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.link_code == true" >
+                                    </th>
+                                    <th nowrap *ngIf="(state.dealer_id == true) && (userType=='admin')" >
                                         <label>
-                                          <input class="form-control" type="text" name="dealer_pin" placeholder="Dealer Pin" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="dealer_id" placeholder="Dealer Id" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.imei == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.link_code == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="imei" placeholder="IMEI" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="dealer_pin" placeholder="Dealer Pin" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.simno == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.imei == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="sim" placeholder="SIM" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="imei" placeholder="IMEI" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.status == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.simno == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="status" placeholder="Status" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="sim" placeholder="SIM" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.device_id == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.status == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="device_id" placeholder="Device Id" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="status" placeholder="Status" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.model == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.device_id == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="model" placeholder="Model" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="device_id" placeholder="Device Id" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.start_date == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.model == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="start_date" placeholder="Start Date" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="model" placeholder="Model" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.expiry_date == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.start_date == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="expiry_date" placeholder="Expiry Date" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="start_date" placeholder="Start Date" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.dealer_name == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.expiry_date == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="dealer_name" placeholder="Dealer Name" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="expiry_date" placeholder="Expiry Date" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.online == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.dealer_name == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="online" placeholder="Online" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="dealer_name" placeholder="Dealer Name" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.serial_number == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.online == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="serial_number" placeholder="Serial Number" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="online" placeholder="Online" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="state.mac_address == true" >
+                                    </th>
+                                    <th nowrap *ngIf="state.serial_number == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="mac_address" placeholder="Mac Address" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="serial_number" placeholder="Serial Number" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="(state.s_dealer == true) && (userType=='admin' || userType=='dealer')" >
+                                    </th>
+                                    <th nowrap *ngIf="state.mac_address == true" >
                                         <label>
-                                          <input class="form-control" type="text" name="s_deare_id" placeholder="S-dealer Id" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="mac_address" placeholder="Mac Address" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                      <th nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" >
+                                    </th>
+                                    <th nowrap *ngIf="(state.s_dealer == true) && (userType=='admin' || userType=='dealer')" >
                                         <label>
-                                          <input class="form-control" type="text" name="s_dealer_name" placeholder="s-dealer Name" (input)="searchField($event)">
-                                          <span class="fa fa-search"></span>
+                                            <input class="form-control" type="text" name="s_deare_id" placeholder="S-dealer Id" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
                                         </label>
-                                      </th>
-                                    </tr>
-                                    <tr class="text-center btnFull" >
-                                        <th class="disabled-sorting headings" style="min-width: 35px;"></th>
-                                        <th  scope="col" class="disabled-sorting headings">Action</th>
-                                        <th  scope="col"  class="headings" drag-me drop-me nowrap *ngIf="state.name == true" (click)="sort('name')">Name
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th  scope="col"  class="headings" drag-me drop-me nowrap *ngIf="state.email == true" (click)="sort('email')">Email
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.client_id == true" (click)="sort('client_id')">Client Id
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th  scope="col"  class="headings" nowrap *ngIf="(state.dealer_id == true)  && (userType=='admin')" (click)="sort('dealer_id')">Dealer Id
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap   *ngIf="state.link_code == true" (click)="sort('link_code')">Dealer Pin
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.imei == true" (click)="sort('imei')">IMEI
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.simno == true" (click)="sort('simno')">SIM
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.status == true" (click)="sort('status')">Status
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th  scope="col"  class="headings" nowrap *ngIf="state.device_id == true" (click)="sort('device_id')">Device Id
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.model == true" (click)="sort('model')">Model
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.start_date == true" (click)="sort('start_date')">Start Date
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.expiry_date == true" (click)="sort('expiry_date')">Expiry Date
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th  scope="col"  class="headings" nowrap *ngIf="state.dealer_name == true" (click)="sort('dealer_name')">Dealer Name
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.online == true" (click)="sort('online')">Online
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.serial_number == true" (click)="sort('serial_number')">Serial Number
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.mac_address == true" (click)="sort('mac_address')">Mac Address
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="(state.s_dealer == true)  && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer')">S-dealer Id
-                                            <span class="fa fa-sort"></span>
-                                        </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer_name')">s_dealer_name
-                                            <span class="fa fa-sort"></span>
-                                        </th>
+                                    </th>
+                                    <th nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" >
+                                        <label>
+                                            <input class="form-control" type="text" name="s_dealer_name" placeholder="s-dealer Name" (input)="searchField($event)">
+                                            <span class="fa fa-search"></span>
+                                        </label>
+                                    </th>
+                                </tr>
+                                <tr class="text-center btnFull" >
+                                    <th class="disabled-sorting headings" style="min-width: 35px;"></th>
+                                    <th  scope="col" class="disabled-sorting headings">Action</th>
+                                    <th  scope="col"  class="headings" drag-me drop-me nowrap *ngIf="state.name == true" (click)="sort('name')">Name
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th  scope="col"  class="headings" drag-me drop-me nowrap *ngIf="state.email == true" (click)="sort('email')">Email
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.client_id == true" (click)="sort('client_id')">Client Id
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th  scope="col"  class="headings" nowrap *ngIf="(state.dealer_id == true)  && (userType=='admin')" (click)="sort('dealer_id')">Dealer Id
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap   *ngIf="state.link_code == true" (click)="sort('link_code')">Dealer Pin
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.imei == true" (click)="sort('imei')">IMEI
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.simno == true" (click)="sort('simno')">SIM
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.status == true" (click)="sort('status')">Status
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th  scope="col"  class="headings" nowrap *ngIf="state.device_id == true" (click)="sort('device_id')">Device Id
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.model == true" (click)="sort('model')">Model
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.start_date == true" (click)="sort('start_date')">Start Date
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.expiry_date == true" (click)="sort('expiry_date')">Expiry Date
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th  scope="col"  class="headings" nowrap *ngIf="state.dealer_name == true" (click)="sort('dealer_name')">Dealer Name
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.online == true" (click)="sort('online')">Online
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.serial_number == true" (click)="sort('serial_number')">Serial Number
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="state.mac_address == true" (click)="sort('mac_address')">Mac Address
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="(state.s_dealer == true)  && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer')">S-dealer Id
+                                        <span class="fa fa-sort"></span>
+                                    </th>
+                                    <th   scope="col" class="headings" nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer_name')">s_dealer_name
+                                        <span class="fa fa-sort"></span>
+                                    </th>
 
-                                    </tr>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                  <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p } ; let i = index;">
+                                <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p } ; let i = index;">
                                     <tr  class="row_{{device.device_id}}" *ngIf="device.device_status==1">
 
                                         <td class="text-center btnFull" id="plus">
-                                          <a href="javascrtip:void(0)" class="expand rounded" (click)="collapse(device,$event);">
-                                            <span class="fa fa-plus" ></span>
-                                          </a>
+                                            <a href="javascrtip:void(0)" class="expand rounded" (click)="collapse(device,$event);">
+                                                <span class="fa fa-plus" ></span>
+                                            </a>
 
                                         </td>
 
                                         <td data-table-header="ACTION"  class="text-left btnFull">
-                                          <div class="btn-group">
-                                          <a href="javascript:void(0)" *ngIf="device.device_status==1 && (device.account_status==null || device.account_status=='')" (click)="suspendForm(device.device_id);">
-                                            <button class="btn btn-sm suspend">Suspend</button>
-                                          </a>
+                                            <div class="btn-group">
+                                                <a href="javascript:void(0)" *ngIf="device.device_status==1 && (device.account_status==null || device.account_status=='')" (click)="suspendForm(device.device_id);">
+                                                    <button class="btn btn-sm suspend">Suspend</button>
+                                                </a>
 
-                                          <a href="javascript:void(0)" *ngIf="device.device_status==1" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
-                                            <button class="btn btn-sm edit" >Edit</button>
-                                          </a>
+                                                <a href="javascript:void(0)" *ngIf="device.device_status==1" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                                    <button class="btn btn-sm edit" >Edit</button>
+                                                </a>
 
-                                          <a routerLink="/connect-devices/{{device.device_id}}">
-                                            <button class="btn btn-sm connect" *ngIf="device.device_status==1">Connect</button>
-                                          </a>
+                                                <a routerLink="/connect-devices/{{device.device_id}}">
+                                                    <button class="btn btn-sm connect" *ngIf="device.device_status==1">Connect</button>
+                                                </a>
 
-                                          <!-- <a href="javascript:void(0)"><button class="btn btn-info btn-sm" *ngIf="device.device_status==1" (click)="unlinkUser(device.device_id)">Unlink</button></a> -->
+                                                <!-- <a href="javascript:void(0)"><button class="btn btn-info btn-sm" *ngIf="device.device_status==1" (click)="unlinkUser(device.device_id)">Unlink</button></a> -->
 
 
-                                          <a href="javascript:void(0)" *ngIf="device.device_status==1 &&  device.account_status=='suspended' " (click)="activateForm(device.device_id);">
-                                            <button class="btn btn-sm activate">Activate</button>
-                                          </a>
+                                                <a href="javascript:void(0)" *ngIf="device.device_status==1 &&  device.account_status=='suspended' " (click)="activateForm(device.device_id);">
+                                                    <button class="btn btn-sm activate">Activate</button>
+                                                </a>
 
-                                            <!-- <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
-                                              <button class="btn btn-success btn-sm">Accept</button>
-                                            </a> -->
+                                                <!-- <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                                  <button class="btn btn-success btn-sm">Accept</button>
+                                                </a> -->
 
-                                            <!-- <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)">
-                                              <button class="btn btn-warning btn-sm">Decline</button>
-                                            </a> -->
+                                                <!-- <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)">
+                                                  <button class="btn btn-warning btn-sm">Decline</button>
+                                                </a> -->
                                             </div>
                                         </td>
                                         <td data-table-header="NAME" *ngIf="state.name == true">
@@ -378,9 +390,9 @@
                                         </div> -->
                                     </tr>
                                     <tr *ngIf="device.device_status==1" style="display:none;" class="detailed_row_{{device.device_id}}">
-                                      <td colspan="25" style="text-align:left!important;padding-left:50px;"></td>
+                                        <td colspan="25" style="text-align:left!important;padding-left:50px;"></td>
                                     </tr>
-                                  </ng-container>
+                                </ng-container>
                                 </tbody>
                             </table>
                             <div class="row text-center" style="display: block;">
@@ -399,35 +411,35 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-4">Name *</label>
                                                     <div class="col-sm-8">
-                                                      <input type="text" class="form-control" name="name" [(ngModel)]="data.name"/>
-                                                      <font class="errortext" color="red" *ngIf="!deviceData.form.controls.name?.valid && deviceData.form.controls.name?.touched">Please Enter Your Name</font>
+                                                        <input type="text" class="form-control" name="name" [(ngModel)]="data.name"/>
+                                                        <font class="errortext" color="red" *ngIf="!deviceData.form.controls.name?.valid && deviceData.form.controls.name?.touched">Please Enter Your Name</font>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label class="col-sm-4">Client_Id</label>
                                                     <div class="col-sm-8">
-                                                      <input type="text" class="form-control" name="client_id" [(ngModel)]="data.client_id">
+                                                        <input type="text" class="form-control" name="client_id" [(ngModel)]="data.client_id">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-4">Model</label>
                                                     <div class="col-sm-8">
-                                                      <input type="text" class="form-control" name="model" [(ngModel)]="data.model">
+                                                        <input type="text" class="form-control" name="model" [(ngModel)]="data.model">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-4">Email *</label>
                                                     <div class="col-sm-8">
-                                                      <input type="email" class="form-control" required="" name="email" [(ngModel)]="data.email" required>
-                                                      <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
+                                                        <input type="email" class="form-control" required="" name="email" [(ngModel)]="data.email" required>
+                                                        <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
 
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-4">IMEI</label>
                                                     <div class="col-sm-8">
-                                                      <input type="text" class="form-control" name="imei" [(ngModel)]="data.imei" disabled>
+                                                        <input type="text" class="form-control" name="imei" [(ngModel)]="data.imei" disabled>
                                                     </div>
                                                 </div>
                                                 <!-- <div class="form-group">
@@ -437,25 +449,25 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-4">Start Date</label>
                                                     <div class="col-sm-8">
-                                                      <input type="text" class="form-control" name="start_date" [(ngModel)]="data.start_date" disabled>
+                                                        <input type="text" class="form-control" name="start_date" [(ngModel)]="data.start_date" disabled>
 
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-4">Expiry Date</label>
                                                     <div class="col-sm-8">
-                                                      <ng-datepicker name="expiry_date" [ngStyle]="{'width':'100%'}" [options]="options" [(ngModel)]="data.expiry_date"></ng-datepicker>
+                                                        <ng-datepicker name="expiry_date" [ngStyle]="{'width':'100%'}" [options]="options" [(ngModel)]="data.expiry_date"></ng-datepicker>
 
                                                     </div>
                                                     <!-- <input type="text" class="form-control" required="" id="expiredate" name="expiry_date" [(ngModel)]="data.expiry_date"> -->
                                                 </div>
                                                 <div class="row">
-                                                  <div class="col-sm-5">
+                                                    <div class="col-sm-5">
 
-                                                  </div>
-                                                  <div class=" col-sm-6">
-                                                    <button type="submit" class="btn btn-primary">UPDATE</button>
-                                                  </div>
+                                                    </div>
+                                                    <div class=" col-sm-6">
+                                                        <button type="submit" class="btn btn-primary">UPDATE</button>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -466,61 +478,61 @@
                             </div>
 
                             <div id="newrequestmodel" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true" >
-                              <div class="modal-dialog modal-lg" style="max-width: 1285px;">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                      ×
-                                    </button>
+                                <div class="modal-dialog modal-lg" style="max-width: 1285px;">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                ×
+                                            </button>
 
-                                  </div>
-                                  <div class="modal-body">
-                                    <table id="classTable" class="table table-striped table-bordered" cellspacing="0">
-                                      <thead>
-                                        <th>ACTION</th>
-                                        <th>DEALER ID</th>
-                                        <th>DEALER PIN</th>
-                                        <th>S-DEALER</th>
-                                        <th>DEVICE ID</th>
-                                        <th>IMEI</th>
-                                        <th>SIM</th>
-                                        <th>Online</th>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table id="classTable" class="table table-striped table-bordered" cellspacing="0">
+                                                <thead>
+                                                <th>ACTION</th>
+                                                <th>DEALER ID</th>
+                                                <th>DEALER PIN</th>
+                                                <th>S-DEALER</th>
+                                                <th>DEVICE ID</th>
+                                                <th>IMEI</th>
+                                                <th>SIM</th>
+                                                <th>Online</th>
 
-                                      </thead>
-                                      <tbody>
-                                        <tr *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: 10, currentPage: p } ; let i = index;">
-                                          <ng-container *ngIf="device.device_status==0">
-                                            <td class="text-left btnFull">
-                                              <div class="btn-group">
-                                                <a class="acceptbut" onclick="closeModal()" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
-                                                  <button class="btn btn-success btn-sm" >Accept</button>
-                                                </a>
+                                                </thead>
+                                                <tbody>
+                                                <tr *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: 10, currentPage: p } ; let i = index;">
+                                                    <ng-container *ngIf="device.device_status==0">
+                                                        <td class="text-left btnFull">
+                                                            <div class="btn-group">
+                                                                <a class="acceptbut" onclick="closeModal()" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                                                    <button class="btn btn-success btn-sm" >Accept</button>
+                                                                </a>
 
-                                                <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)">
-                                                  <button class="btn btn-warning btn-sm">Decline</button>
-                                                </a>
-                                              </div>
-                                            </td>
-                                            <td>{{device.dealer_id}}</td>
-                                            <td>{{device.link_code}}</td>
-                                            <td>{{device.dealer_name}}</td>
-                                            <td>{{device.device_id}}</td>
-                                            <td>{{device.imei}}</td>
-                                            <td>{{device.simno}}</td>
-                                            <td>{{device.online}}</td>
+                                                                <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)">
+                                                                    <button class="btn btn-warning btn-sm">Decline</button>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{device.dealer_id}}</td>
+                                                        <td>{{device.link_code}}</td>
+                                                        <td>{{device.dealer_name}}</td>
+                                                        <td>{{device.device_id}}</td>
+                                                        <td>{{device.imei}}</td>
+                                                        <td>{{device.simno}}</td>
+                                                        <td>{{device.online}}</td>
 
-                                          </ng-container>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">
-                                      Close
-                                    </button> -->
-                                  </div>
+                                                    </ng-container>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                              Close
+                                            </button> -->
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
                             </div>
 
                         </div>
@@ -535,7 +547,7 @@
     </div>
 </div>
 <script type="text/javascript">
-  $('.acceptbut').on('click',function(){
-    alert('hello');
-  });
+    $('.acceptbut').on('click',function(){
+        alert('hello');
+    });
 </script>
