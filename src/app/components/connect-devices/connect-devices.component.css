@@ -74,7 +74,7 @@
 
 .action_table{
     overflow: unset;
-    width: 75%!important;
+    width: 100%!important;
     margin-left: 15px;
     border-collapse: separate;
     border-spacing: 4px;
@@ -139,7 +139,11 @@
     padding: 2px;
 }
 .left_headed{
-    text-align: center;
+    text-align: left;
+}
+.col_head[_ngcontent-c2] div[_ngcontent-c2] div[_ngcontent-c2] {
+    color: #434373;
+    text-align: left;
 }
 .navbar.navbar-absolute {
     position: absolute;
