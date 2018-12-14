@@ -223,10 +223,11 @@ ul.nt li a {
 
 .app {
     background-image: url(./assets/img/1dbab5_0.png);
-    height: 6%;
     background-size: 100% 100%;
-    padding: 0% 9% 8% 1%;
-    width: 2%;
+    width: 37px;
+    height: 37px;
+    margin: 5px;
+
 }
 
 ul.popopWinbtn {

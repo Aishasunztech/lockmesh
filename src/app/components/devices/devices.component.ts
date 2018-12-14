@@ -98,7 +98,9 @@ export class DevicesComponent implements OnInit {
     private router: Router,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService,
    private spinnerService: Ng4LoadingSpinnerService
-  ) { }
+  ) {
+  }
+
   @ViewChild('deviceData') projectForm: NgForm;
 
   async ngOnInit() {
@@ -196,9 +198,6 @@ export class DevicesComponent implements OnInit {
     this.reverse = !this.reverse;
   }
 
-  activeDevices(key){
-
-  }
 
   isSelectedItems(){
     var self=this;
@@ -723,7 +722,6 @@ export class DevicesComponent implements OnInit {
 
   // Unlink dealer-device
   unlinkUser(device_id) {
-    console.log(device_id);
     Swal({
       text: 'Are you sure to unlink the device?',
       showCancelButton: true,
@@ -751,6 +749,7 @@ export class DevicesComponent implements OnInit {
         this.spinnerService.show();
       this.restService.deleteAdminUser(device_id);
       this.spinnerService.hide();
+      location.reload(true);
     });
   }
 
@@ -783,7 +782,9 @@ export class DevicesComponent implements OnInit {
     list.forEach( ele => {
 
       if(name=="name" && ele.name.toUpperCase().includes(value.toUpperCase())){
+        console.log(name);
         this.allDevice.push(ele);
+        console.log(this.allDevice);
       }else if(name=="email" && ele.email.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else if(name=="client_id" && ele.client_id.toUpperCase().includes(value.toUpperCase())){
@@ -814,12 +815,11 @@ export class DevicesComponent implements OnInit {
         this.allDevice.push(ele);
       }else if(name=="model" && ele.model!=null && ele.model.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
-      }else{
-        this.allDevice.push(ele);
       }
 
     });
   }
+
   deviceFilter(elem){
     const list = this.allDeviceDummyList;
     this.allDevice = [];
