@@ -157,7 +157,11 @@
     box-shadow: none;
     border-bottom: 0 solid #ddd;
 }
-
+.ngx-datepicker-position-bottom-right {
+    /* top: -230px!important;
+    left: -5px!important;
+    z-index: 10000; */
+}
 @media only screen and (min-width: 768px){
 
     #option-button {
