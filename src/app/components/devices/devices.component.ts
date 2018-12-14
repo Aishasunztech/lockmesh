@@ -769,8 +769,6 @@ export class DevicesComponent implements OnInit {
         this.allDevice.push(ele);
       }
     });
-
-
   }
 
   searchField(field){
@@ -836,9 +834,7 @@ export class DevicesComponent implements OnInit {
 
     var value = elem.target.value;
     // console.log(value);
-    this.perPage=value;
-    console.log(this.perPage);
-
+    this.perPage=(value);
   }
   childInputChanged(value){
     const list = this.allDeviceDummyList;

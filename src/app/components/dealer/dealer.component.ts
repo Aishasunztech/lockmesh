@@ -21,6 +21,8 @@ export class DealerComponent implements OnInit {
   reverse = false;
   // initializing p to one
   p = 1;
+  perPage=10;
+
   dealer: any = {};
   allDelears: any = [];
   data: any = {
@@ -351,8 +353,27 @@ Swal({
       }
     });
   }
+  paging(elem){
+    console.log(elem);
+    var value = elem.target.value;
+    // console.log(value);
+    this.perPage=value;
+    console.log(this.perPage);
 
-// delete
+  }
+  searchDealer(value){
+    const list = this.allDelears;
+    //this.allDelears = [];
+    list.forEach( ele => {
+
+      if (ele.status.includes(value.toUpperCase()) || ele.dealer_id.toUpperCase().includes(value.toUpperCase()) ||
+      ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.account_status.toUpperCase().includes(value.toUpperCase()) ||
+      ele.dealer_email.toUpperCase().includes(value.toUpperCase())) {
+        this.allDelears.push(ele);
+      }
+    });
+  }
+  // delete
   deleteUserDetails(dealer_id) {
       console.log(dealer_id);
        Swal({

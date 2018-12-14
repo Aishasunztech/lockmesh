@@ -27,6 +27,8 @@ export class SdealerComponent implements OnInit {
   reverse = false;
    // initializing p to one
    p = 1;
+   perPage = 10;
+
   constructor(private restService: RestService, private router: Router, @Inject(LOCAL_STORAGE, ) private storage: WebStorageService,
   private spinnerService: Ng4LoadingSpinnerService) { }
   @ViewChild('deviceData') projectForm: NgForm;
@@ -277,10 +279,10 @@ activateForm(dealer_id) {
           });
         }
       });
-    }
+  }
 
   // Unlink dealer-device
-unlinkSdealerUser(dealer_id) {
+  unlinkSdealerUser(dealer_id) {
   console.log(dealer_id);
   Swal({
     text: 'Are you sure to delete the S-dealer?',
@@ -297,48 +299,68 @@ unlinkSdealerUser(dealer_id) {
   });
 }
 
+  paging(elem){
+    console.log(elem);
+    var value = elem.target.value;
+    // console.log(value);
+    this.perPage=value;
+    console.log(this.perPage);
+
+  }
+  searchSDealer(value){
+    const list = this.allSDelears;
+    // this.allSDelears = [];
+    list.forEach( ele => {
+
+      if (ele.status.toUpperCase().includes(value.toUpperCase()) || ele.dealer_id.toUpperCase().includes(value.toUpperCase()) ||
+      ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.account_status.toUpperCase().includes(value.toUpperCase()) ||
+      ele.dealer_email.toUpperCase().includes(value.toUpperCase()) ) {
+        this.allSDelears.push(ele);
+      }
+    });
+  }
   // Undo dealer-device
-undoUser(dealer_id) {
-  console.log(dealer_id);
-  Swal({
-    text: 'Are you sure to undo the S-dealer?',
-    showCancelButton: true,
-    cancelButtonText: 'No',
-    confirmButtonText: 'Yes',
-    type: 'warning'
-  }).then((result) =>  {
-    if (result.value) {
-      this.spinnerService.show();
-      this.restService.undoUser(dealer_id).subscribe((response) => {
-        //  console.log(response);
-        this.resp = response;
-        if (this.resp.status === true) {
-          this.spinnerService.hide();
-          Swal({
-          text: this.resp.msg,
-          type: 'success',
-            customClass: 'swal-height'
-            }).then(res => {
-              if (res.value) {
-                location.reload(false);
-                }
-              });
-        } else {
-          if (this.resp.status === false) {
+  undoUser(dealer_id) {
+    console.log(dealer_id);
+    Swal({
+      text: 'Are you sure to undo the S-dealer?',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'warning'
+    }).then((result) =>  {
+      if (result.value) {
+        this.spinnerService.show();
+        this.restService.undoUser(dealer_id).subscribe((response) => {
+          //  console.log(response);
+          this.resp = response;
+          if (this.resp.status === true) {
             this.spinnerService.hide();
             Swal({
             text: this.resp.msg,
-            type: 'warning',
+            type: 'success',
               customClass: 'swal-height'
               }).then(res => {
-              if (res.value) {
-                location.reload(false);
-                }
-              });
+                if (res.value) {
+                  location.reload(false);
+                  }
+                });
+          } else {
+            if (this.resp.status === false) {
+              this.spinnerService.hide();
+              Swal({
+              text: this.resp.msg,
+              type: 'warning',
+                customClass: 'swal-height'
+                }).then(res => {
+                if (res.value) {
+                  location.reload(false);
+                  }
+                });
+            }
           }
-        }
-      });
-    }
-  });
-}
+        });
+      }
+    });
+  }
 }

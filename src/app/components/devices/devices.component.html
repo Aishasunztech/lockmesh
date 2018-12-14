@@ -301,7 +301,7 @@
                                 </thead>
                                 <tbody>
                                 <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p } ; let i = index;">
-                                    <tr  class="row_{{device.device_id}}" *ngIf="device.device_status==1">
+                                    <tr class="row_{{device.device_id}}" *ngIf="device.device_status==1">
 
                                         <td class="text-center btnFull" id="plus">
                                             <a href="javascrtip:void(0)" class="expand rounded" (click)="collapse(device,$event);">

@@ -21,12 +21,12 @@
         background-color: #eb6532;
         left: -69px;
     }
-    
+
     .edit,
     .remove {
         overflow: visible;
     }
-    
+
     a.edit:hover .tooltiptext,
     a.remove:hover .tooltiptext {
         visibility: visible;
@@ -107,7 +107,7 @@
                       <div class="row" style="margin: 0">
                         <div class="col-md-6 no-small-col"></div>
                         <div class="col-md-3  search-btn" >
-                          <input class="form-control inputs on-small-margin" type="text" placeholder="SEARCH" (input)="searchDevice($event.target.value)">
+                          <input class="form-control inputs on-small-margin" type="text" placeholder="SEARCH" (input)="searchSDealer($event.target.value)">
                             <span class="fa fa-search" ></span>
                         </div>
                         <div class="col-md-3">
@@ -157,7 +157,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let dealer of allSDelears  | orderBy: key : reverse | paginate: { itemsPerPage: 5, currentPage: p }; let i = index;">
+                                        <tr *ngFor="let dealer of allSDelears  | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p }; let i = index;">
 
                                             <td data-table-header="ACCOUNT" class="text-center btnFull">
                                                 <div class="btn-group">
