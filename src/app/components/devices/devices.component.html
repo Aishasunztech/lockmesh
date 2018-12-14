@@ -19,10 +19,23 @@
             }
 
         }
+
+    @media screen and (max-width:768px){
+        #classTable[_ngcontent-c2] th[_ngcontent-c2],
+        tr[_ngcontent-c2]{
+            display:none;
+        }
+        .modal-body {
+            padding: 20px 25px;
+            color: #000;
+        }
+
+    }
 </style>
+
 <div class="wrapper ">
     <app-header (globalSearch)="childInputChanged($event)" ></app-header>
-    <div class="main-panel" style="min-height: fit-content;">
+    <div class="main-panel" style="min-height:fit-content">
         <div class="row container" style="margin-top: 20px">
 
         </div>
@@ -477,9 +490,9 @@
                                 <!-- /.modal-dialog -->
                             </div>
 
-                            <div id="newrequestmodel" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true" >
-                                <div class="modal-dialog modal-lg" style="max-width: 1285px;">
-                                    <div class="modal-content">
+                            <div  id="newrequestmodel" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true" >
+                                <div  class="modal-dialog modal-lg" style="max-width: 1285px;">
+                                    <div data-spy="scroll" class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                                 ×
@@ -487,22 +500,22 @@
 
                                         </div>
                                         <div class="modal-body">
-                                            <table id="classTable" class="table table-striped table-bordered" cellspacing="0">
+                                            <table id="classTable" class="table table-striped table-bordered responsive" cellspacing="0">
                                                 <thead>
-                                                <th>ACTION</th>
-                                                <th>DEALER ID</th>
-                                                <th>DEALER PIN</th>
-                                                <th>S-DEALER</th>
-                                                <th>DEVICE ID</th>
-                                                <th>IMEI</th>
-                                                <th>SIM</th>
-                                                <th>Online</th>
+                                                <th scope="col">ACTION</th>
+                                                <th scope="col">DEALER ID</th>
+                                                <th scope="col">DEALER PIN</th>
+                                                <th scope="col">S-DEALER</th>
+                                                <th scope="col">DEVICE ID</th>
+                                                <th scope="col">IMEI</th>
+                                                <th scope="col">SIM</th>
+                                                <th scope="col">Online</th>
 
                                                 </thead>
                                                 <tbody>
                                                 <tr *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: 10, currentPage: p } ; let i = index;">
                                                     <ng-container *ngIf="device.device_status==0">
-                                                        <td class="text-left btnFull">
+                                                        <td data-table-header="ACTION" class="text-left btnFull">
                                                             <div class="btn-group">
                                                                 <a class="acceptbut" onclick="closeModal()" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
                                                                     <button class="btn btn-success btn-sm" >Accept</button>
@@ -513,13 +526,13 @@
                                                                 </a>
                                                             </div>
                                                         </td>
-                                                        <td>{{device.dealer_id}}</td>
-                                                        <td>{{device.link_code}}</td>
-                                                        <td>{{device.dealer_name}}</td>
-                                                        <td>{{device.device_id}}</td>
-                                                        <td>{{device.imei}}</td>
-                                                        <td>{{device.simno}}</td>
-                                                        <td>{{device.online}}</td>
+                                                        <td data-table-header="DEALER ID">{{device.dealer_id}}</td>
+                                                        <td data-table-header="DEALER PIN">{{device.link_code}}</td>
+                                                        <td data-table-header="S-DEALER">{{device.dealer_name}}</td>
+                                                        <td data-table-header="DEVICE ID">{{device.device_id}}</td>
+                                                        <td data-table-header="IMEI">{{device.imei}}</td>
+                                                        <td data-table-header="SIM">{{device.simno}}</td>
+                                                        <td data-table-header="ONLINE">{{device.online}}</td>
 
                                                     </ng-container>
                                                 </tr>
