@@ -467,7 +467,7 @@ c-icon, c-icon svg{
 
 .modal-open .modal {
   overflow-x: hidden;
-  overflow-y: -webkit-paged-x;
+  overflow-y: scroll;
   padding: 0 !important;
 }
 select.form-control {
