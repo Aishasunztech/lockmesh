@@ -321,6 +321,11 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
     text-align: center !important;
     font-size: 12px;
 }
+.ngx-datepicker-position-bottom-right {
+    top: -230px!important;
+    left: -5px!important;
+    z-index: 10000;
+}
 
 @media (max-width:992px) {
     .navbar .navbar-wrapper .navbar-minimize {
@@ -553,4 +558,6 @@ select.form-control {
     */
     .responsive td:before { content: attr(data-table-header);
     }
+
+
 }
