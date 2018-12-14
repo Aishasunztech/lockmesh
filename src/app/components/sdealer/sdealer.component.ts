@@ -4,7 +4,12 @@ import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {Router} from '@angular/router';
+
+import * as enLocale from 'date-fns/locale/en';
+import * as $ from 'jquery';
+
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { element } from '@angular/core/src/render3/instructions';
 
 @Component({
   selector: 'app-sdealer',
@@ -309,12 +314,11 @@ activateForm(dealer_id) {
   }
   searchSDealer(value){
     const list = this.allSDelears;
-    // this.allSDelears = [];
     list.forEach( ele => {
-
-      if (ele.status.toUpperCase().includes(value.toUpperCase()) || ele.dealer_id.toUpperCase().includes(value.toUpperCase()) ||
-      ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.account_status.toUpperCase().includes(value.toUpperCase()) ||
-      ele.dealer_email.toUpperCase().includes(value.toUpperCase()) ) {
+      if (
+        ele.dealer_id.includes(value.toUpperCase()) || ele.dealer_name.toUpperCase().includes(value.toUpperCase()) ||
+        ele.account_status.toUpperCase().includes(value.toUpperCase()) || ele.dealer_email.toUpperCase().includes(value.toUpperCase())
+      ) {
         this.allSDelears.push(ele);
       }
     });
