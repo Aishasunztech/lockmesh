@@ -19,6 +19,7 @@ import { element } from '@angular/core/src/render3/instructions';
 export class SdealerComponent implements OnInit {
   private resp: any = null;
   allSDelears: any = [];
+  allDemoSDealers = [];
   data: any = {
     dealer_name: '',
     dealer_id: '',
@@ -43,7 +44,6 @@ export class SdealerComponent implements OnInit {
     setTimeout(() => {
       this.allSDelearsView();
     }, 1000);
-    document.body.style.zoom = '100%';
     $('#tablescroll').css('height', ($( window ).height() - $('#navbar').height() - 65));
   }
 
@@ -62,6 +62,7 @@ export class SdealerComponent implements OnInit {
       console.log(response);
       this.spinnerService.hide();
       this.allSDelears = response;
+      this.allDemoSDealers = response;
       console.log(this.allSDelears);
       this.restService.authtoken(response);
     });
@@ -313,14 +314,18 @@ activateForm(dealer_id) {
 
   }
   searchSDealer(value){
-    const list = this.allSDelears;
-    list.forEach( ele => {
-      if (
-        ele.dealer_id.includes(value.toUpperCase()) || ele.dealer_name.toUpperCase().includes(value.toUpperCase()) ||
-        ele.account_status.toUpperCase().includes(value.toUpperCase()) || ele.dealer_email.toUpperCase().includes(value.toUpperCase())
-      ) {
-        this.allSDelears.push(ele);
-      }
+    var list = this.allDemoSDealers;
+    this.allSDelears = [];
+    value = value.toLowerCase();
+    this.allSDelears = list.filter(function (o) {
+      return ['status','dealer_id','dealer_name','dealer_email','link_code'].some(function (k) {
+           if(o[k]!=null){
+             return o[k].toString().toLowerCase().indexOf(value) !== -1;
+
+           }else{
+             return o[k];
+           }
+       });
     });
   }
   // Undo dealer-device

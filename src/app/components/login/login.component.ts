@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
   @ViewChild('deviceData') projectForm: NgForm;
 
   ngOnInit() {
-    document.body.style.zoom = '100%';
   }
 
   adminLogin() {

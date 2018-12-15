@@ -3,9 +3,9 @@ import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 import {Router, ActivatedRoute} from '@angular/router';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
-import {HelperService} from '../../helper.service';
+import { HelperService } from '../../helper.service';
 import { RestService } from '../../rest.service';
-import { GlobalSearchService } from '../../global-search.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import * as $ from 'jquery';
 
 @Component({
@@ -35,7 +35,8 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
     location: Location,
-    private acl: HelperService
+    private acl: HelperService,
+    private spinnerService: Ng4LoadingSpinnerService
   ) {
 
   }
@@ -47,26 +48,42 @@ export class HeaderComponent implements OnInit {
     ) {
         this.router.navigate(['/login']);
     }else{
+
       this.componentName=this.route.snapshot.data['componentName'];
 
-      //this.spinnerService.show();
+      this.spinnerService.show();
       await this.aclHandler();
       setTimeout(() => {
-        //this.spinnerService.hide();
+      this.spinnerService.hide();
       }, 1000);
-      this.profilelist();
 
+      this.spinnerService.show();
+      this.profilelist();
+      this.spinnerService.hide();
+
+      this.spinnerService.show();
       await this.allDeviceView();
       setTimeout(() => {
-        //this.spinnerService.hide();
+        this.spinnerService.hide();
       }, 1000);
 
-      if(this.isComponentAllowed==false){
+      if(this.isComponentAllowed==false || this.componentName=="InvalidPage"){
         this.router.navigate(['/invalid_page/denied']);
-        //this.onLogout();
       }
+
+      this.spinnerService.show();
+      setTimeout(() => {
+        this.spinnerService.hide();
+      }, 1000);
       this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
+
     }
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    this.spinnerService.show();
+    await delay(5000);
+    setTimeout(() => {
+      this.spinnerService.hide();
+    }, 1000);
   }
   profilelist() {
     this.restService.profilelist().subscribe((response) => {
@@ -92,9 +109,9 @@ export class HeaderComponent implements OnInit {
     const response1 = await this.restService.isAdmin().toPromise();
     this.isAdmin = response1.isAdmin;
   }
+
   searchFilter(e){
     this.searchFilterValue = e.target.value;
-    //this.globalSearch.setGlobalSearchFilterValue(this.searchFilterValue);
     this.globalSearch.emit(this.searchFilterValue);
   }
   onLogout() {

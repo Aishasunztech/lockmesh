@@ -25,6 +25,7 @@ export class DealerComponent implements OnInit {
 
   dealer: any = {};
   allDelears: any = [];
+  allDemoDealers=[];
   data: any = {
     dealer_name: '',
     dealer_id: '',
@@ -43,28 +44,26 @@ export class DealerComponent implements OnInit {
     setTimeout(() => {
       this.allDelearsView();
     }, 1000);
-    document.body.style.zoom = '100%';
-     $('#tablescroll').css('height', ($( window ).height() - $('#navbar').height() - 65));
+    $('#tablescroll').css('height', ($( window ).height() - $('#navbar').height() - 65));
   }
 
   addDelear(delear) {
     this.restService.addDealer(delear);
-}
-sort(key) {
-  this.key = key;
-  this.reverse = !this.reverse;
-  console.log(this.key + ':' + this.reverse);
-}
+  }
 
-onLogout() {
-  this.restService.authSignOut();
-}
-async allDelearsView() {
- await this.restService.getUserDealers().subscribe((response) => {
-    this.allDelears = response;
-    console.log(response);
-    this.spinnerService.hide();
-    this.restService.authtoken(response);
+  sort(key) {
+    this.key = key;
+    this.reverse = !this.reverse;
+    console.log(this.key + ':' + this.reverse);
+  }
+
+
+  async allDelearsView() {
+   await this.restService.getUserDealers().subscribe((response) => {
+      this.allDelears = response;
+      this.allDemoDealers = response;
+      this.spinnerService.hide();
+      this.restService.authtoken(response);
     });
   }
 
@@ -94,159 +93,159 @@ async allDelearsView() {
     }
   }
 
- // form for password reset
+  // form for password reset
   passEditForm(dealer) {
-  console.log(dealer);
-  this.data = dealer;
-  this.data.dealerId =  dealer.dealer_id;
-  this.data.email = dealer.dealer_email;
-  this.data.email = this.data.dealer_email;
-  if (!this.data) {
-    this.data.email = '';
-  } else {
-    if (this.data.email === null) {
+    console.log(dealer);
+    this.data = dealer;
+    this.data.dealerId =  dealer.dealer_id;
+    this.data.email = dealer.dealer_email;
+    this.data.email = this.data.dealer_email;
+    if (!this.data) {
       this.data.email = '';
+    } else {
+      if (this.data.email === null) {
+        this.data.email = '';
+      }
     }
   }
-}
 
-updatePassDealer() {
-  if (this.data.email === '' ||  this.data.email === 'null' ) {
-    Swal({
-      text: 'Please Fill Email .... ',
-      type: 'error',
-       customClass: 'swal-height'
-        }).then(okay => {
-          return;
-       });
-      } else {
-        console.log(this.data);
-        this.spinnerService.show();
-        this.data.type = 'dealer';
-        console.log(this.data);
-        this.restService.updateAdminPassDealerDetails( this.data).subscribe((response) => {
-            this.restService.authtoken(response);
-            this.resp = response;
-            if (this.resp.status === true) {
-              this.spinnerService.hide();
-              Swal({
-              text: this.resp.msg,
-              type: 'success',
-                customClass: 'swal-height'
-                }).then(okay => {
-                if (okay) {
-                  location.reload(true);
-                  }
-                });
-            } else {
-              this.spinnerService.hide();
-              Swal({
-                text: this.resp.msg,
-                type: 'warning',
-                  customClass: 'swal-height'
-                  }).then(okay => {
-                  if (okay) {
-                    location.reload(true);
-                    }
-                  });
-                //  this.spinnerService.hide();
+  updatePassDealer() {
+    if (this.data.email === '' ||  this.data.email === 'null' ) {
+      Swal({
+        text: 'Please Fill Email .... ',
+        type: 'error',
+        customClass: 'swal-height'
+      }).then(okay => {
+        return;
+      });
+    } else {
+      console.log(this.data);
+      this.spinnerService.show();
+      this.data.type = 'dealer';
+      console.log(this.data);
+      this.restService.updateAdminPassDealerDetails( this.data).subscribe((response) => {
+        this.restService.authtoken(response);
+        this.resp = response;
+        if (this.resp.status === true) {
+          this.spinnerService.hide();
+          Swal({
+            text: this.resp.msg,
+            type: 'success',
+            customClass: 'swal-height'
+          }).then(okay => {
+            if (okay) {
+              location.reload(true);
             }
           });
-          $('input.ng-invalid, select.ng-invalid, textarea.ng-invalid,checkbox.ng-invalid, file.ng-invalid').addClass('ng-touched');
+        } else {
+          this.spinnerService.hide();
+          Swal({
+            text: this.resp.msg,
+            type: 'warning',
+            customClass: 'swal-height'
+          }).then(okay => {
+            if (okay) {
+              location.reload(true);
+            }
+          });
+          //  this.spinnerService.hide();
         }
-}
+      });
+      $('input.ng-invalid, select.ng-invalid, textarea.ng-invalid,checkbox.ng-invalid, file.ng-invalid').addClass('ng-touched');
+    }
+  }
 
   updateAdminDealer() {
     if (this.data.email === '' || this.data.name === '' ||  this.data.email === 'null' || this.data.name === 'null' ) {
       Swal({
-       text: 'Please Fill Name And Email .... ',
-       type: 'error',
+        text: 'Please Fill Name And Email .... ',
+        type: 'error',
         customClass: 'swal-height'
-         }).then(okay => {
-           return;
-        });
+      }).then(okay => {
+        return;
+      });
     } else {
       console.log(this.data);
       this.spinnerService.show();
       this.restService.updateAdminDealerDetails(this.data).subscribe((response) => {
+        this.restService.authtoken(response);
+        this.resp = response;
+        if (this.resp.status === true) {
+          this.spinnerService.hide();
+          Swal({
+            text: this.resp.msg,
+            type: 'success',
+            customClass: 'swal-height'
+          }).then(okay => {
+            if (okay) {
+              location.reload(true);
+            }
+          });
+        } else {
+          this.spinnerService.hide();
+          Swal({
+            text: this.resp.msg,
+            type: 'warning',
+            customClass: 'swal-height'
+          }).then(okay => {
+            if (okay) {
+              location.reload(true);
+            }
+          });
+        }
+      });
+      $('input.ng-invalid, select.ng-invalid, textarea.ng-invalid,checkbox.ng-invalid, file.ng-invalid').addClass('ng-touched');
+    }
+  }
+
+  // suspend dealer-device
+  suspendForm(dealer_id) {
+    Swal({
+      text: 'Are you sure to suspend the device? Suspending Dealers also suspend all the S-Dealer..?',
+      showCancelButton: true,
+      useRejections: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'warning'
+    }).then((okay) =>  {
+      if (okay) {
+        // location.reload(true);
+        console.log(dealer_id);
+        this.spinnerService.show();
+        this.restService.suspendsdealerForm(dealer_id).subscribe((response) => {
+          //   this.spinnerService.hide();
           this.restService.authtoken(response);
           this.resp = response;
+          console.log(response);
           if (this.resp.status === true) {
             this.spinnerService.hide();
             Swal({
-            text: this.resp.msg,
-            type: 'success',
-              customClass: 'swal-height'
-              }).then(okay => {
-              if (okay) {
-                location.reload(true);
-                }
-              });
-          } else {
-            this.spinnerService.hide();
-            Swal({
               text: this.resp.msg,
-              type: 'warning',
-                customClass: 'swal-height'
-                }).then(okay => {
-                if (okay) {
-                  location.reload(true);
-                  }
-                });
-          }
-        });
-        $('input.ng-invalid, select.ng-invalid, textarea.ng-invalid,checkbox.ng-invalid, file.ng-invalid').addClass('ng-touched');
-      }
-    }
-
-// suspend dealer-device
-suspendForm(dealer_id) {
-Swal({
-  text: 'Are you sure to suspend the device? Suspending Dealers also suspend all the S-Dealer..?',
-  showCancelButton: true,
-  useRejections: true,
-  cancelButtonText: 'No',
-  confirmButtonText: 'Yes',
-  type: 'warning'
-}).then((okay) =>  {
-  if (okay) {
-    // location.reload(true);
-    console.log(dealer_id);
-    this.spinnerService.show();
-    this.restService.suspendsdealerForm(dealer_id).subscribe((response) => {
-   //   this.spinnerService.hide();
-      this.restService.authtoken(response);
-      this.resp = response;
-      console.log(response);
-      if (this.resp.status === true) {
-        this.spinnerService.hide();
-        Swal({
-        text: this.resp.msg,
-        type: 'success',
-          customClass: 'swal-height'
-          }).then(result => {
-          if (result.value) {
-            location.reload(true);
-            }
-          });
-      } else {
-        if (this.resp.status === false) {
-          this.spinnerService.hide();
-          Swal({
-          text: this.resp.msg,
-          type: 'warning',
-            customClass: 'swal-height'
+              type: 'success',
+              customClass: 'swal-height'
             }).then(result => {
-            if (result.value) {
-              location.reload(false);
+              if (result.value) {
+                location.reload(true);
               }
             });
-        }
+          } else {
+            if (this.resp.status === false) {
+              this.spinnerService.hide();
+              Swal({
+                text: this.resp.msg,
+                type: 'warning',
+                customClass: 'swal-height'
+              }).then(result => {
+                if (result.value) {
+                  location.reload(false);
+                }
+              });
+            }
+          }
+        });
       }
     });
   }
-});
-}
 
   // activate dealer-device
   activatedealerForm(dealer_id) {
@@ -265,26 +264,26 @@ Swal({
           if (this.resp.status === true) {
             this.spinnerService.hide();
             Swal({
-            text: this.resp.msg,
-            type: 'success',
+              text: this.resp.msg,
+              type: 'success',
               customClass: 'swal-height'
-              }).then(result => {
+            }).then(result => {
               if (result.value) {
                 location.reload(true);
-                }
-              });
+              }
+            });
           } else {
             if (this.resp.status === false) {
               this.spinnerService.hide();
               Swal({
-              text: this.resp.msg,
-              type: 'warning',
+                text: this.resp.msg,
+                type: 'warning',
                 customClass: 'swal-height'
-                }).then(result => {
+              }).then(result => {
                 if (result.value) {
                   location.reload(false);
-                  }
-                });
+                }
+              });
             }
           }
         });
@@ -303,9 +302,9 @@ Swal({
       type: 'warning'
     }).then(async (result) =>  {
       if (result.value) {
-      this.spinnerService.show();
-      await this.restService.unlinkdealerUser(dealer_id);
-      this.spinnerService.hide();
+        this.spinnerService.show();
+        await this.restService.unlinkdealerUser(dealer_id);
+        this.spinnerService.hide();
       }
     });
   }
@@ -362,20 +361,22 @@ Swal({
 
   }
   searchDealer(value){
-    const list = this.allDelears;
-    //this.allDelears = [];
-    list.forEach( ele => {
+     var list = this.allDemoDealers;
+     this.allDelears = [];
+     value = value.toLowerCase();
+     this.allDelears = list.filter(function (o) {
+       return ['status','dealer_id','dealer_name','dealer_email','link_code'].some(function (k) {
+            if(o[k]!=null){
+              return o[k].toString().toLowerCase().indexOf(value) !== -1;
 
-      if (ele.status.includes(value.toUpperCase()) || ele.dealer_id.toUpperCase().includes(value.toUpperCase()) ||
-      ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.account_status.toUpperCase().includes(value.toUpperCase()) ||
-      ele.dealer_email.toUpperCase().includes(value.toUpperCase())) {
-        this.allDelears.push(ele);
-      }
-    });
+            }else{
+              return o[k];
+            }
+        });
+     });
   }
   // delete
   deleteUserDetails(dealer_id) {
-      console.log(dealer_id);
        Swal({
           text: 'Are you sure to delete the S Dealer?',
           showCancelButton: true,
@@ -389,5 +390,9 @@ Swal({
           this.spinnerService.hide();
         }
       });
-    }
   }
+
+  onLogout() {
+    this.restService.authSignOut();
+  }
+}

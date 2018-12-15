@@ -34,7 +34,7 @@ export class DevicesComponent implements OnInit {
   allDeviceDummyList = [];
   isAdmin=false;
   userType:any;
-  searchFilterValue: any;
+  
   // sorting
   key = 'status'; // set default
   reverse = true;
@@ -179,9 +179,6 @@ export class DevicesComponent implements OnInit {
 
   }
 
-  ngAfterViewInit() {
-    console.log("ngAfterViewInit");
-  }
   // get admin selected device items
   async getAdminSelectedItems() {
     const response = await this.restService.getAdminSelectedItems(Headers).toPromise();
