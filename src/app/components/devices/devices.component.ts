@@ -831,10 +831,8 @@ export class DevicesComponent implements OnInit {
 
   }
   paging(elem){
-
     var value = elem.target.value;
-    // console.log(value);
-    this.perPage=(value);
+    this.perPage=value;
   }
   childInputChanged(value){
     const list = this.allDeviceDummyList;
