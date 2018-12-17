@@ -34,7 +34,7 @@ export class DevicesComponent implements OnInit {
   allDeviceDummyList = [];
   isAdmin=false;
   userType:any;
-  
+
   // sorting
   key = 'status'; // set default
   reverse = true;
@@ -827,8 +827,8 @@ export class DevicesComponent implements OnInit {
     });
 
   }
-  paging(elem){
-    var value = elem.target.value;
+  paging(value){
+    console.log(value);
     this.perPage=value;
   }
   childInputChanged(value){

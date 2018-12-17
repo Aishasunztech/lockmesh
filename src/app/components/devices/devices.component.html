@@ -109,7 +109,7 @@
                                 <div class="col-md-3">
                                     <!-- <a class="mbTop" routerLink="/black-list-devices"><button
                                             class="btn btn-dange bld">Black List Devices</button></a> -->
-                                    <select class="form-control inputs on-small-margin" name="paging" (change)="paging($event)">
+                                    <select class="form-control inputs on-small-margin" name="paging" (change)="paging($event.target.value)">
                                         <option>10</option>
                                         <option>20</option>
                                         <option>30</option>
@@ -300,7 +300,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p } ; let i = index;">
+                                <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: {id: 'datatable', itemsPerPage: perPage, currentPage: p } ; let i = index;">
                                     <tr class="row_{{device.device_id}}" *ngIf="device.device_status==1">
 
                                         <td class="text-center btnFull" id="plus">
@@ -409,7 +409,7 @@
                                 </tbody>
                             </table>
                             <div class="row text-center" style="display: block;">
-                                <pagination-controls (pageChange)="p = $event" ></pagination-controls>
+                                <pagination-controls (pageChange)="p = $event" id="datatable" ></pagination-controls>
                             </div>
 
                             <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true" style="top:-50px">
