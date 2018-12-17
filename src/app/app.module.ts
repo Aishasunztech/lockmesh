@@ -326,12 +326,14 @@ import { InvalidPage } from './components/invalid_page/invalid_page.component';
     { enableTracing: true, useHash: false })
     ],
 
-  providers: [Common,
+  providers: [
+              Common,
               RestService,
               HelperService,
-              GlobalSearchService
-              ,
-              {provide: LocationStrategy, useClass: HashLocationStrategy}
+              GlobalSearchService,{
+                provide: LocationStrategy,
+                useClass: HashLocationStrategy
+              }
             ],
   bootstrap: [AppComponent]
 })
