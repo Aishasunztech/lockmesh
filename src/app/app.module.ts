@@ -330,7 +330,8 @@ import { InvalidPage } from './components/invalid_page/invalid_page.component';
               Common,
               RestService,
               HelperService,
-              GlobalSearchService,{
+              GlobalSearchService,
+              {
                 provide: LocationStrategy,
                 useClass: HashLocationStrategy
               }
