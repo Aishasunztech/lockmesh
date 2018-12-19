@@ -181,43 +181,193 @@
                     </form>
                     <div class="clearfix"></div>
                 </div>
-                <div class="col-md-4" style="padding: 0; padding-bottom: 27px; height: 622px;">
-                    <div class="card" style="height: 97%;padding-bottom: 7px;">
-                        <div class="deviceS" style="padding: 18% 4% 0 0;">
-                          <div class="container">
+                <div class="col-md-4 apps_grid" >
+                    <div class="card apps_card">
+                        <div class="deviceS" style="padding: 18% 23px 0 20px;">
+                          <div class="container apps_header">
+                            <div class="row pull-right" >
+                               <button class="btn btn-defualt btn-xs" type="button" id="btndropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin: 13px;padding: 5px 10px;background: black;">
+                                 <span class="fa fa-ellipsis-v"></span>
+                               </button>
+                               <ul class="dropdown-menu" aria-labelledby="btndropdown">
+                                 <li>
+                                     <label class="radio-btn">
+                                         <input type="checkbox" value='on_guest'  name="check_all" (change)="checkApps($event)">
+                                         Turn on Guests All
+                                     </label>
+                                 </li>
+                                 <li>
+                                     <label class="radio-btn">
+                                       <input type="checkbox" value='on_encrypted' name="check_all" (change)="checkApps($event)">
+                                       Turn On Encrypted All
+                                     </label>
+                                 </li>
+                                 <li>
+                                     <label class="radio-btn">
+                                       <input type="checkbox" value='enable_all' name="check_all" (change)="checkApps($event)">
+                                       Enable All
+                                     </label>
+                                 </li>
+                               </ul>
+                            </div>
+                          </div>
+                          <div class="container apps_container" >
                             <div class="row">
-                              <div class="col-md-12" style="display: inline-flex;">
-                                <!-- <div class="app" style="background-image: url(./assets/img/agenda.png)!important;">
-                                </div>
-                                <div class="app">
-                                </div> -->
-                                <table class="table table-inverse">
+                              <div class="col-md-12" style="display: inline-flex;padding: 9px 15px 0 0;">
+
+                                <table class="table table-inverse table-dark apps_table">
                                   <thead>
-                                    <tr>
-                                      <th>#</th>
-                                      <th>First Name</th>
-                                      <th>Last Name</th>
-                                      <th>Username</th>
+                                    <tr class="apps_head">
+                                      <th>App Name</th>
+                                      <th>Guest</th>
+                                      <th>Encrypted</th>
+                                      <th>Enable</th>
                                     </tr>
                                   </thead>
-                                  <tbody>
-                                    <tr>
-                                      <th scope="row">1</th>
-                                      <td>Mark</td>
-                                      <td>Otto</td>
-                                      <td>@mdo</td>
+                                  <tbody >
+                                    <tr class="apps" id="light">
+                                      <td>
+                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
+                                        <span class="app_name">test application</span>
+                                      </td>
+                                      <td >
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td >
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td >
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
                                     </tr>
-                                    <tr>
-                                      <th scope="row">2</th>
-                                      <td>Jacob</td>
-                                      <td>Thornton</td>
-                                      <td>@fat</td>
+                                    <tr class="apps">
+                                      <td>
+                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
+                                        <span class="app_name">test application</span>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
                                     </tr>
-                                    <tr>
-                                      <th scope="row">3</th>
-                                      <td>Larry</td>
-                                      <td>the Bird</td>
-                                      <td>@twitter</td>
+                                    <tr class="apps">
+                                      <td>
+                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
+                                        <span class="app_name">test application</span>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                    </tr>
+                                    <tr class="apps">
+                                      <td>
+                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
+                                        <span class="app_name">test application</span>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                    </tr>
+                                    <tr class="apps">
+                                      <td>
+                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
+                                        <span class="app_name">test application</span>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                    </tr>
+                                    <tr class="apps">
+                                      <td>
+                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
+                                        <span class="app_name">test application</span>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
+                                      <td>
+                                        <label class="switch">
+                                          <input type="checkbox">
+                                          <span class="slider round"></span>
+                                        </label>
+                                      </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -267,7 +417,7 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <button class="btn btn-sm btn-primary purple">PUSH
+                                    <button class="btn btn-sm btn-primary purple" (click)="onBtClick()">PUSH
                                     </button>
 
 

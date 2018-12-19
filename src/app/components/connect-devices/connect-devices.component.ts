@@ -42,13 +42,12 @@ export class ConnectAdminDevicesComponent implements OnInit {
     private spinnerService: Ng4LoadingSpinnerService,
     private pushNotification: PushNotificationService
   ) {
-    this.socket = io('http://localhost:3000');
 
   }
 
   ngOnInit() {
     this.pushNotification.onNewMessage().subscribe(function(resp){
-      console.log(resp + "123");
+      console.log(resp);
     });
 
   }
@@ -136,5 +135,36 @@ export class ConnectAdminDevicesComponent implements OnInit {
         this.spinnerService.hide();
       }
     });
+  }
+  checkApps(event){
+    console.log(event);
+    
+    var name = event.target.name;
+    var value = event.target.value;
+    var checked = event.target.checked;
+    var id = event.target.id;
+    var className = event.target.class;
+
+    console.log(className);
+    console.log(checked);
+    console.log(value);
+    console.log(name);
+    console.log(id);
+
+    if(name == "check_all"){
+      if(checked==true){
+        if(value == "enable_all"){
+          console.log(value);
+        }else if(value == "on_encrypted"){
+          console.log(value);
+        }else if(value == "on_guest"){
+          console.log(value);
+        }
+      }else{
+
+      }
+    }else{
+
+    }
   }
 }
