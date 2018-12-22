@@ -7,6 +7,7 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {Router, ActivatedRoute} from '@angular/router';
 import * as io from 'socket.io-client';
+import { ConvertActionBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
 
 @Component({
   selector: 'app-connect-devices',
@@ -33,6 +34,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
     start_date: '',
     status: '',
   };
+  appList = [];
+
   socket: SocketIOClient.Socket;
   constructor(
     private restService: RestService,
@@ -46,14 +49,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pushNotification.onNewMessage().subscribe(function(resp){
-      console.log(resp);
-    });
-
+    
   }
-  onBtClick(){
-    this.pushNotification.sendMessage();
-  }
+  
   ngAfterViewInit() {
     this.path = this.router.url.split('/');
     var device_id = this.path[2];
@@ -61,6 +59,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.device_data = response;
       this.spinnerService.hide();
       this.restService.authtoken(response);
+    });
+    this.pushNotification.onGetApps(device_id).subscribe((resp) => {
+      this.appList = JSON.parse(resp.data);
     });
   }
   onLogout() {
@@ -70,10 +71,12 @@ export class ConnectAdminDevicesComponent implements OnInit {
   referesh(device_id) {
     device_id = this.route.snapshot.paramMap.get('device_id');
     this.restService.refreshlist(device_id).subscribe((response) => {
-      console.log(response);
       this.device_data = response;
       this.spinnerService.hide();
       this.restService.authtoken(response);
+    });
+    this.pushNotification.onGetApps(this.device_data.device_id).subscribe((resp) => {
+      this.appList = JSON.parse(resp.data);
     });
   }
   unlinkUser(device_id) {
@@ -92,6 +95,16 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     });
   }
+  imageToBase64(byte){
+    var binary = '';
+    var bytes = new Uint8Array(byte);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return "data:image/JPEG;base64," + window.btoa(binary);
+  }
+
   suspendForm(device_id) {
     Swal({
       text: 'Are you sure to suspend the device?',
@@ -138,7 +151,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
   checkApps(event){
     console.log(event);
-    
+
     var name = event.target.name;
     var value = event.target.value;
     var checked = event.target.checked;

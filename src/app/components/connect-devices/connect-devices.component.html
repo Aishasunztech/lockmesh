@@ -172,7 +172,7 @@
                                 <!-- <label class="col-sm-4 col-form-label"></label> -->
                                 <!-- <div class="col-sm-12"> -->
 
-                                <button type="submit" style="margin-left: 0px;b " class="btn btn-primary btn-block">Refresh</button>
+                                <button type="submit" style="margin-left: 0px; " class="btn btn-primary btn-block">Refresh</button>
 
                                 <!-- </div> -->
                                 <!-- </div> -->
@@ -225,10 +225,10 @@
                                     </tr>
                                   </thead>
                                   <tbody >
-                                    <tr class="apps" id="light">
+                                    <tr class="apps" id="light" *ngFor="let app of appList ; let i = index;">
                                       <td>
-                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
-                                        <span class="app_name">test application</span>
+                                        <img class="app_img" src="{{imageToBase64(app.icon)}}" alt="">
+                                        <span class="app_name">{{app.label}}</span>
                                       </td>
                                       <td >
                                         <label class="switch">
@@ -249,126 +249,7 @@
                                         </label>
                                       </td>
                                     </tr>
-                                    <tr class="apps">
-                                      <td>
-                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
-                                        <span class="app_name">test application</span>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                    </tr>
-                                    <tr class="apps">
-                                      <td>
-                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
-                                        <span class="app_name">test application</span>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                    </tr>
-                                    <tr class="apps">
-                                      <td>
-                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
-                                        <span class="app_name">test application</span>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                    </tr>
-                                    <tr class="apps">
-                                      <td>
-                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
-                                        <span class="app_name">test application</span>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                    </tr>
-                                    <tr class="apps">
-                                      <td>
-                                        <img class="app_img" src="../../../assets/img/logo-small.png" alt="">
-                                        <span class="app_name">test application</span>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                      <td>
-                                        <label class="switch">
-                                          <input type="checkbox">
-                                          <span class="slider round"></span>
-                                        </label>
-                                      </td>
-                                    </tr>
+
                                   </tbody>
                                 </table>
                               </div>

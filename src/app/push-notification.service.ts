@@ -28,15 +28,19 @@ export class PushNotificationService {
     this.socket = io.connect(this.baseUrl.toString());
 
   }
-  onNewMessage(){
+  onGetApps(device_id){
+    console.log("device_id" + device_id);
+
+    this.socket.emit('requestApp',{
+      device_id:device_id
+    });
     return Observable.create(observer => {
-      this.socket.on('newMessage', msg => {
-        observer.next(msg);
+      this.socket.on('getApps_' + device_id, data => {
+        console.log("applications");
+        console.log(data);
+        observer.next(data);
       });
     });
-  }
-  sendMessage(){
-      this.socket.emit('newMessage', { message: "hello world" });
   }
 
   onLinkDevice(){

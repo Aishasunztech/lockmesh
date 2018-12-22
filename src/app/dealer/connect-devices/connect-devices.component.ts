@@ -11,23 +11,23 @@ import {Router, ActivatedRoute} from '@angular/router';
   styleUrls: ['./connect-devices.component.css']
 })
 export class ConnectDevicesComponent implements OnInit {
-device_data = {
-  account_status: '',
-client_id: '',
-device_id: '',
-email: '',
-expiry_date: '',
-imei: '',
-ip_address: '',
-mac_address: '',
-model: '',
-name: '',
-s_dealer_name: '',
-serial_number: '',
-simno: '',
-start_date: '',
-status: '',
-};
+  device_data = {
+    account_status: '',
+    client_id: '',
+    device_id: '',
+    email: '',
+    expiry_date: '',
+    imei: '',
+    ip_address: '',
+    mac_address: '',
+    model: '',
+    name: '',
+    s_dealer_name: '',
+    serial_number: '',
+    simno: '',
+    start_date: '',
+    status: '',
+  };
   constructor(private restService: RestService, private route: ActivatedRoute,
     private router: Router, @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
   private spinnerService: Ng4LoadingSpinnerService) { }

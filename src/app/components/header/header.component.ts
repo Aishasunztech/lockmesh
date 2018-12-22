@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit {
     const response = await this.restService.getUserDevice(Headers).toPromise();
 
     response.data.forEach( search => {
-      if(search.device_status==0){
+      if(search.device_status==0 ){
         this.newRequest = this.newRequest + 1;
       }
     });
