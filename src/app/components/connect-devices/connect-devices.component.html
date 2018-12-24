@@ -232,19 +232,19 @@
                                       </td>
                                       <td >
                                         <label class="switch">
-                                          <input type="checkbox">
+                                          <input type="checkbox" class="guest" value='guest' name="app_name" (change)="checkApps($event)">
                                           <span class="slider round"></span>
                                         </label>
                                       </td>
                                       <td >
                                         <label class="switch">
-                                          <input type="checkbox">
+                                          <input type="checkbox" class="encrypted" value='encrypted' name="app_name" (change)="checkApps($event)">
                                           <span class="slider round"></span>
                                         </label>
                                       </td>
                                       <td >
                                         <label class="switch">
-                                          <input type="checkbox">
+                                          <input type="checkbox" class="enabled" value='enabled' name="app_name" (change)="checkApps($event)">
                                           <span class="slider round"></span>
                                         </label>
                                       </td>
@@ -259,21 +259,21 @@
                         </div>
 
                         <div class="btn-group phone_actions_container">
-                            <a href="" class="btn btn-light phone_actions" style="">
+                            <a href="" class="btn btn-light phone_actions" >
                                 <span class="fa fa-check" style="color:green;"></span><br>
-                                <p style="">Apply</p>
+                                <p>Apply</p>
                             </a>
-                            <a href="" class="btn btn-light phone_actions" style=" ">
+                            <a href="" class="btn btn-light phone_actions" >
                                 <span class="fa fa-undo" style="color:orange;"></span><br>
-                                <p style="">Undo</p>
+                                <p>Undo</p>
                             </a>
-                            <a href="" class="btn btn-light phone_actions" style=" ">
+                            <a href="" class="btn btn-light phone_actions" >
                                 <span class="fa fa-refresh" style="color:orange;"></span><br>
-                                <p style="">Redo</p>
+                                <p>Redo</p>
                             </a>
-                            <a href="" class="btn btn-light phone_actions" style="">
+                            <a href="" class="btn btn-light phone_actions" >
                                 <span class="fa fa-close" style="color:red;"></span><br>
-                                <p style="">Clear All</p>
+                                <p>Clear All</p>
                             </a>
                             <!---->
                         </div>

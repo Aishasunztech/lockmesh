@@ -735,7 +735,6 @@ export class DevicesComponent implements OnInit {
   }
 
   deleteUserDetails(device_id) {
-    console.log(device_id);
      Swal({
         text: 'Are you sure delete this user?',
         showCancelButton: true,
@@ -755,14 +754,22 @@ export class DevicesComponent implements OnInit {
     const list = this.allDeviceDummyList;
     this.allDevice = [];
     list.forEach( ele => {
-      if (ele.name.toUpperCase().includes(value.toUpperCase()) || ele.email.toUpperCase().includes(value.toUpperCase()) ||
-      ele.client_id.toUpperCase().includes(value.toUpperCase()) || ele.link_code.toUpperCase().includes(value.toUpperCase()) ||
-      ele.status.toUpperCase().includes(value.toUpperCase()) || ele.device_id.toUpperCase().includes(value.toUpperCase()) ||
-      ele.start_date.toUpperCase().includes(value.toUpperCase()) || ele.expiry_date.toUpperCase().includes(value.toUpperCase()) ||
-      ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || ele.imei.toUpperCase().includes(value.toUpperCase()) ||
-      ele.simno.toUpperCase().includes(value.toUpperCase()) || ele.online.toUpperCase().includes(value.toUpperCase()) ||
-      ele.serial_number.toUpperCase().includes(value.toUpperCase()) ||
-      ele.mac_address.toUpperCase().includes(value.toUpperCase())) {
+      if (
+        ele.name.toUpperCase().includes(value.toUpperCase()) || 
+        ele.email.toUpperCase().includes(value.toUpperCase()) ||
+        ele.client_id.toUpperCase().includes(value.toUpperCase()) || 
+        ele.link_code.toUpperCase().includes(value.toUpperCase()) ||
+        ele.status.toUpperCase().includes(value.toUpperCase()) || 
+        ele.device_id.toUpperCase().includes(value.toUpperCase()) ||
+        ele.start_date.toUpperCase().includes(value.toUpperCase()) || 
+        ele.expiry_date.toUpperCase().includes(value.toUpperCase()) ||
+        ele.dealer_name.toUpperCase().includes(value.toUpperCase()) || 
+        ele.imei.toUpperCase().includes(value.toUpperCase()) ||
+        ele.simno.toUpperCase().includes(value.toUpperCase()) || 
+        ele.online.toUpperCase().includes(value.toUpperCase()) ||
+        ele.serial_number.toUpperCase().includes(value.toUpperCase()) ||
+        ele.mac_address.toUpperCase().includes(value.toUpperCase())
+      ) {
         this.allDevice.push(ele);
       }
     });
@@ -804,7 +811,7 @@ export class DevicesComponent implements OnInit {
         this.allDevice.push(ele);
       }else if(name=="mac_address" && ele.mac_address!=null && ele.mac_address.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
-      }else if(name=="dealer_id" && ele.dealer_id!=null && ele.dealer_id.toUpperCase().includes(value.toUpperCase())){
+      } else if (name == "dealer_id" && ele.dealer_id != null && ele.dealer_id.toString().toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else if(name=="dealer_pin" && ele.link_code!=null && ele.link_code.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);

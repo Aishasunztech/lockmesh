@@ -149,32 +149,33 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     });
   }
+
   checkApps(event){
     console.log(event);
 
     var name = event.target.name;
     var value = event.target.value;
     var checked = event.target.checked;
-    var id = event.target.id;
+    // var id = event.target.id;
     var className = event.target.class;
-
-    console.log(className);
-    console.log(checked);
-    console.log(value);
-    console.log(name);
-    console.log(id);
 
     if(name == "check_all"){
       if(checked==true){
         if(value == "enable_all"){
-          console.log(value);
+          $('.enabled').prop('checked',true);
         }else if(value == "on_encrypted"){
-          console.log(value);
+          $('.encrypted').prop('checked', true);
         }else if(value == "on_guest"){
-          console.log(value);
+          $('.guest').prop('checked', true);
         }
       }else{
-
+        if (value == "enable_all") {
+          $('.enabled').prop('checked', false);
+        } else if (value == "on_encrypted") {
+          $('.encrypted').prop('checked', false);
+        } else if (value == "on_guest") {
+          $('.guest').prop('checked', false);
+        }
       }
     }else{
 
