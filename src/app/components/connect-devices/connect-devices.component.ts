@@ -6,7 +6,7 @@ import { NgForm } from '@angular/forms';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {Router, ActivatedRoute} from '@angular/router';
-import * as io from 'socket.io-client';
+import { Event } from '../../entity/event';
 import { ConvertActionBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
 
 @Component({
@@ -35,8 +35,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
     status: '',
   };
   appList = [];
+  connected=false;
 
-  socket: SocketIOClient.Socket;
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
@@ -45,56 +45,87 @@ export class ConnectAdminDevicesComponent implements OnInit {
     private spinnerService: Ng4LoadingSpinnerService,
     private pushNotification: PushNotificationService
   ) {
-
+    
   }
 
   ngOnInit() {
+    if(this.connected){
+      console.log("this.connected: " + this.connected);
+
+      this.pushNotification.onGetApps().subscribe((resp) => {
+        this.appList = JSON.parse(resp.data);
+      });
+    }
+  }
+  
+   async initIoConnection(device_id) {
+    await this.pushNotification.connect(device_id);
+
+    this.pushNotification.onRequestApps();
     
+    this.pushNotification.onGetApps().subscribe((resp) => {
+      console.log("get Applications response");
+      this.appList = JSON.parse(resp.data);
+    });
+    
+    this.pushNotification.onEvent(Event.CONNECT)
+      .subscribe(() => {
+        this.connected=true;
+        console.log('connected');
+    });
+
+    this.pushNotification.onEvent(Event.DISCONNECT)
+      .subscribe(() => {
+        this.connected = false;
+
+        console.log('disconnected');
+        this.pushNotification.reconnect();
+    });
   }
   
   ngAfterViewInit() {
     this.path = this.router.url.split('/');
     var device_id = this.path[2];
+
     this.restService.refreshlist(device_id).subscribe((response) => {
       this.device_data = response;
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
-    this.pushNotification.onGetApps(device_id).subscribe((resp) => {
-      this.appList = JSON.parse(resp.data);
+
+    this.restService.getDeviceApps(device_id).subscribe((response) => {
+      this.appList = response;
+      this.spinnerService.hide();
+      this.restService.authtoken(response);
     });
+    // this.initIoConnection(device_id);    
   }
-  onLogout() {
-    this.restService.authSignOut();
-  }
+  
   // refresh button
   referesh(device_id) {
+    console.log(this.connected);
+    
     device_id = this.route.snapshot.paramMap.get('device_id');
+    
     this.restService.refreshlist(device_id).subscribe((response) => {
       this.device_data = response;
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
-    this.pushNotification.onGetApps(this.device_data.device_id).subscribe((resp) => {
-      this.appList = JSON.parse(resp.data);
+    this.restService.getDeviceApps(device_id).subscribe((response) => {
+      this.appList = response;
+      this.spinnerService.hide();
+      this.restService.authtoken(response);
     });
+
+    // this.pushNotification.onRequestApps();
+
+    // this.pushNotification.onGetApps().subscribe((resp) => {
+    //   console.log("get Applications response");
+    //   this.appList = JSON.parse(resp.data);
+    // });
   }
-  unlinkUser(device_id) {
-    Swal({
-      text: 'Are you sure to unlink the device?',
-      showCancelButton: true,
-      cancelButtonText: 'No',
-      confirmButtonText: 'Yes',
-      type: 'warning'
-    }).then((result) =>  {
-      this.spinnerService.show();
-      if (result) {
-        this.restService.unlinkUser(device_id);
-        this.spinnerService.hide();
-        this.router.navigate(['/devices']);
-      }
-    });
-  }
+  
   imageToBase64(byte){
     var binary = '';
     var bytes = new Uint8Array(byte);
@@ -103,6 +134,23 @@ export class ConnectAdminDevicesComponent implements OnInit {
       binary += String.fromCharCode(bytes[i]);
     }
     return "data:image/JPEG;base64," + window.btoa(binary);
+  }
+
+  unlinkUser(device_id) {
+    Swal({
+      text: 'Are you sure to unlink the device?',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'warning'
+    }).then((result) => {
+      this.spinnerService.show();
+      if (result) {
+        this.restService.unlinkUser(device_id);
+        this.spinnerService.hide();
+        this.router.navigate(['/devices']);
+      }
+    });
   }
 
   suspendForm(device_id) {
@@ -151,13 +199,17 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   checkApps(event){
-    console.log(event);
 
     var name = event.target.name;
     var value = event.target.value;
     var checked = event.target.checked;
     // var id = event.target.id;
-    var className = event.target.class;
+    var className = event.target.attributes.class.nodeValue;
+    
+    console.log(name);
+    console.log(value);
+    console.log(checked);
+    console.log(className);
 
     if(name == "check_all"){
       if(checked==true){
@@ -178,7 +230,28 @@ export class ConnectAdminDevicesComponent implements OnInit {
         }
       }
     }else{
+      if (className =="guest" && checked==false){
+        $('.on_guest').prop('checked', false);
+      }
 
+      if(className == "encrypted" && checked==false){
+        $('.on_encrypted').prop('checked', false);
+      }
+
+      if(className == "enabled" && checked==false){
+        $('.enable_all').prop('checked', false);
+
+      }
     }
+  }
+
+  onLogout() {
+    this.pushNotification.disconnect();
+    this.restService.authSignOut();
+  }
+
+  ngOnDestroy(){
+    this.pushNotification.disconnect();
+    this.connected=false;
   }
 }

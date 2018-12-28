@@ -196,7 +196,16 @@ export class RestService {
     this.authtoken(this.response);
     return this.response;
   }
+  getDeviceApps(device_id){
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    header.append('authorization', this.sessionLogin('token'));
 
+    this.response = this.http.get(this.baseUrl + '/users/get_apps/'
+      + device_id, { headers: { 'authorization': this.sessionLogin('token') } });
+    this.authtoken(this.response);
+    return this.response;
+  }
   // for dealer reset password(admin dashboard)
   updateAdminPassDealerDetails(dealer) {
     this.token = this.sessionLogin('token');

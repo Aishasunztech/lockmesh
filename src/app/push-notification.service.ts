@@ -1,6 +1,7 @@
 import { Injectable, Inject, OnInit} from '@angular/core';
-import * as io from 'socket.io-client';
+import * as socketIo from 'socket.io-client';
 import { Common } from './entity/common';
+import { Event } from './entity/event';
 import { HttpClient } from '@angular/common/http';
 import { Http, Response, Headers, RequestOptions, RequestMethod } from '@angular/http';
 import { HttpHeaders } from '@angular/common/http';
@@ -11,13 +12,18 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class PushNotificationService {
 
   private baseUrl = this.curl.baseurl;
-  private socket: SocketIOClient.Socket;
+  private socket:SocketIOClient.Socket;
+  token: String;
+  device_id: String;
+  query: String;
+
   constructor(
     private http: HttpClient,
     private curl: Common,
@@ -25,24 +31,59 @@ export class PushNotificationService {
     private activeRouter: ActivatedRoute,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService,
     private spinnerService: Ng4LoadingSpinnerService) {
-    this.socket = io.connect(this.baseUrl.toString());
-
+    //  this.socket = socketIo();
+    // console.log("loging socket object");
+    // console.log(this.socket);
   }
-  onGetApps(device_id){
-    console.log("device_id" + device_id);
+  
+  async connect(device_id){
+    this.token = this.sessionLogin("token");
+    this.device_id = device_id;
+    console.log("device_id: "+ device_id);
+    let makeToken = "token=" + this.token + "&device_id=" + this.device_id + "&isWeb=true";
+    console.log("token query: " + makeToken);
+    
+     this.socket = await socketIo.connect(this.baseUrl.toString(), { query: makeToken });
+    
+    console.log(this.socket);
+    
+  }
 
-    this.socket.emit('requestApp',{
-      device_id:device_id
+  reconnect(){
+    console.log('reconnecting');
+    this.connect(this.device_id);
+  }
+
+  sessionLogin(key) {
+    return this.storage.get(key);
+  }
+
+  onRequestApps(){
+    console.log("requesting application for: "+ this.device_id);
+    
+    this.socket.emit('requestApps_'+ this.device_id,{
+      device_id:this.device_id
     });
+    
+  }
+  
+  onGetApps(){
+    console.log("start getting apps");
+    console.log(this.device_id);
     return Observable.create(observer => {
-      this.socket.on('getApps_' + device_id, data => {
-        console.log("applications");
-        console.log(data);
+      this.socket.on('getApps_' + this.device_id, data => {
+        console.log('request respond: ' + this.device_id);
         observer.next(data);
       });
     });
   }
-
+  public onEvent(event: Event): Observable<any> {
+    return new Observable<Event>(observer => {
+      this.socket.on(event, () => {
+        observer.next()
+      });
+    });
+  }
   onLinkDevice(){
 
   }
@@ -55,5 +96,13 @@ export class PushNotificationService {
   }
   onPush(){
 
+  }
+  
+  bind_socket(){
+    
+  }
+  disconnect(){
+    // this.socket.off();
+    // this.socket.disconnect();
   }
 }

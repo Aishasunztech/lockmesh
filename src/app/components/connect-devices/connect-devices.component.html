@@ -192,19 +192,19 @@
                                <ul class="dropdown-menu" aria-labelledby="btndropdown">
                                  <li>
                                      <label class="radio-btn">
-                                         <input type="checkbox" value='on_guest'  name="check_all" (change)="checkApps($event)">
+                                         <input type="checkbox" value='on_guest' class="on_guest"  name="check_all" (change)="checkApps($event)">
                                          Turn on Guests All
                                      </label>
                                  </li>
                                  <li>
                                      <label class="radio-btn">
-                                       <input type="checkbox" value='on_encrypted' name="check_all" (change)="checkApps($event)">
+                                       <input type="checkbox" value='on_encrypted' class="on_encrypted" name="check_all" (change)="checkApps($event)">
                                        Turn On Encrypted All
                                      </label>
                                  </li>
                                  <li>
                                      <label class="radio-btn">
-                                       <input type="checkbox" value='enable_all' name="check_all" (change)="checkApps($event)">
+                                       <input type="checkbox" value='enable_all' class="enable_all" name="check_all" (change)="checkApps($event)">
                                        Enable All
                                      </label>
                                  </li>
@@ -232,19 +232,19 @@
                                       </td>
                                       <td >
                                         <label class="switch">
-                                          <input type="checkbox" class="guest" value='guest' name="app_name" (change)="checkApps($event)">
+                                          <input type="checkbox" class="guest" value='guest' [checked]="app.guest" name="{{app.uniqueName}}" (change)="checkApps($event)">
                                           <span class="slider round"></span>
                                         </label>
                                       </td>
                                       <td >
                                         <label class="switch">
-                                          <input type="checkbox" class="encrypted" value='encrypted' name="app_name" (change)="checkApps($event)">
+                                          <input type="checkbox" class="encrypted" value='encrypted' [checked]="app.encrypted" name="{{app.uniqueName}}" (change)="checkApps($event)">
                                           <span class="slider round"></span>
                                         </label>
                                       </td>
                                       <td >
                                         <label class="switch">
-                                          <input type="checkbox" class="enabled" value='enabled' name="app_name" (change)="checkApps($event)">
+                                          <input type="checkbox" class="enabled" value='enable' [checked]="app.enable" name="{{app.uniqueName}}" (change)="checkApps($event)">
                                           <span class="slider round"></span>
                                         </label>
                                       </td>
