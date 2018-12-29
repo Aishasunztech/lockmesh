@@ -48,6 +48,7 @@
                 <div class="col-md-4 no-padding-all">
                     <form class="form-horizontal" id="formData" #deviceData="ngForm" (ngSubmit)="referesh('device_id')">
                         <div class="card ">
+
                             <!-- <div class="card-header text-center" style="width: 100%; height: 30%;">
                                 <h4 class="card-title" style="font-size: 18px;">ADD New Device</h4>
                                 <hr>
@@ -184,34 +185,35 @@
                 <div class="col-md-4 apps_grid" >
                     <div class="card apps_card">
                         <div class="deviceS" style="padding: 18% 23px 0 20px;">
-                          <div class="container apps_header">
-                            <div class="row pull-right" >
-                               <button class="btn btn-defualt btn-xs" type="button" id="btndropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin: 13px;padding: 5px 10px;background: black;">
-                                 <span class="fa fa-ellipsis-v"></span>
-                               </button>
-                               <ul class="dropdown-menu" aria-labelledby="btndropdown">
-                                 <li>
-                                     <label class="radio-btn">
-                                         <input type="checkbox" value='on_guest' class="on_guest"  name="check_all" (change)="checkApps($event)">
-                                         Turn on Guests All
-                                     </label>
-                                 </li>
-                                 <li>
-                                     <label class="radio-btn">
-                                       <input type="checkbox" value='on_encrypted' class="on_encrypted" name="check_all" (change)="checkApps($event)">
-                                       Turn On Encrypted All
-                                     </label>
-                                 </li>
-                                 <li>
-                                     <label class="radio-btn">
-                                       <input type="checkbox" value='enable_all' class="enable_all" name="check_all" (change)="checkApps($event)">
-                                       Enable All
-                                     </label>
-                                 </li>
-                               </ul>
-                            </div>
-                          </div>
-                          <div class="container apps_container" >
+
+                                <div class="container apps_header" id="#header">
+                                    <div class="row pull-right" >
+                                   <button class="btn btn-defualt btn-xs" type="button" id="btndropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="margin: 13px;padding: 5px 10px;background: black;">
+                                     <span class="fa fa-ellipsis-v"></span>
+                                   </button>
+                                   <ul class="dropdown-menu" aria-labelledby="btndropdown">
+                                     <li>
+                                         <label class="radio-btn">
+                                             <input type="checkbox" value='on_guest' class="on_guest"  name="check_all" (change)="checkApps($event)">
+                                             Turn on Guests All
+                                         </label>
+                                     </li>
+                                     <li>
+                                         <label class="radio-btn">
+                                           <input type="checkbox" value='on_encrypted' class="on_encrypted" name="check_all" (change)="checkApps($event)">
+                                           Turn On Encrypted All
+                                         </label>
+                                     </li>
+                                     <li>
+                                         <label class="radio-btn">
+                                           <input type="checkbox" value='enable_all' class="enable_all" name="check_all" (change)="checkApps($event)">
+                                           Enable All
+                                         </label>
+                                     </li>
+                                   </ul>
+                                </div>
+                              </div>
+                          <!--<div class="container apps_container" >
                             <div class="row">
                               <div class="col-md-12" style="display: inline-flex;padding: 9px 15px 0 0;">
 
@@ -254,11 +256,35 @@
                                 </table>
                               </div>
                             </div>
-                          </div>
+                          </div>-->
 
-                        </div>
+<!--categories screen-->
 
-                        <div class="btn-group phone_actions_container">
+                            <div class="container-fluid background-card">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <img  class="img-responsive locker-logo" src="https://surveyanyplace.com/wp-content/uploads/Your-Awesome-Logo-Transparency.jpg" alt="not found">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-12 content-list"><a class="list-link" href="#"> Connection</a></div>
+                                        <div class="col-md-12 content-list"><a class="list-link" href="#"> Set Apps & Permissions</a></div>
+                                        <div class="col-md-12 content-list"><a class="list-link" href="#"> Reset Guests & Encrypted Pass</a></div>
+                                        <div class="col-md-12 content-list"><a class="list-link" href="#">Setting Menu</a></div>
+                                        <div class="col-md-12 content-list"><a class="list-link" href="#">Change Admin Panel Code</a></div>
+                                        <div class="col-md-12 content-list"><a class="list-link" href="#">  Install Apps</a></div>
+                                        <div class="col-md-12 content-list"><a class="list-link" href="#">SIM</a></div>
+                                    </div>
+
+
+                            </div>
+
+                        <!--categories screen-->
+
+
+                        <div class="btn-group phone_actions_container" style="margin-top: 32px">
                             <a class="btn btn-light phone_actions" >
                                 <span class="fa fa-check" style="color:green;"></span><br>
                                 <p>Apply</p>
