@@ -31,7 +31,7 @@ export class PushNotificationService {
     private activeRouter: ActivatedRoute,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService,
     private spinnerService: Ng4LoadingSpinnerService) {
-    //  this.socket = socketIo();
+    // this.socket = socketIo();
     // console.log("loging socket object");
     // console.log(this.socket);
   }
@@ -43,7 +43,7 @@ export class PushNotificationService {
     let makeToken = "token=" + this.token + "&device_id=" + this.device_id + "&isWeb=true";
     console.log("token query: " + makeToken);
     
-     this.socket = await socketIo.connect(this.baseUrl.toString(), { query: makeToken });
+    this.socket = await socketIo.connect(this.baseUrl.toString(), { query: makeToken });
     
     console.log(this.socket);
     
@@ -71,12 +71,13 @@ export class PushNotificationService {
     console.log("start getting apps");
     console.log(this.device_id);
     return Observable.create(observer => {
-      this.socket.on('getApps_' + this.device_id, data => {
+      this.socket.on('sendApps_' + this.device_id, data => {
         console.log('request respond: ' + this.device_id);
         observer.next(data);
       });
     });
   }
+  
   public onEvent(event: Event): Observable<any> {
     return new Observable<Event>(observer => {
       this.socket.on(event, () => {

@@ -59,6 +59,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
   
    async initIoConnection(device_id) {
+     console.log("initIoConnection: " + device_id);
     await this.pushNotification.connect(device_id);
 
     this.pushNotification.onRequestApps();
@@ -92,13 +93,16 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
+    
+    // this.restService.getDeviceApps(device_id).subscribe((response) => {
+    //   this.appList = response;
+    //   this.spinnerService.hide();
+    //   this.restService.authtoken(response);
+    // });
 
-    this.restService.getDeviceApps(device_id).subscribe((response) => {
-      this.appList = response;
-      this.spinnerService.hide();
-      this.restService.authtoken(response);
-    });
-    // this.initIoConnection(device_id);    
+    this.initIoConnection(device_id);    
+    
+    
   }
   
   // refresh button
@@ -112,18 +116,15 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
-    this.restService.getDeviceApps(device_id).subscribe((response) => {
-      this.appList = response;
-      this.spinnerService.hide();
-      this.restService.authtoken(response);
-    });
-
-    // this.pushNotification.onRequestApps();
-
-    // this.pushNotification.onGetApps().subscribe((resp) => {
-    //   console.log("get Applications response");
-    //   this.appList = JSON.parse(resp.data);
+    // this.restService.getDeviceApps(device_id).subscribe((response) => {
+    //   this.appList = response;
+    //   this.spinnerService.hide();
+    //   this.restService.authtoken(response);
     // });
+
+    this.pushNotification.onRequestApps();
+
+    
   }
   
   imageToBase64(byte){
