@@ -251,16 +251,16 @@
   background: #f1f1f1;
 }
 .btndropdown {    
-    margin: 8px 15px;
-    padding: 5px;
-    background: #999999;
+    margin: 0px 19px;
+    padding: 0px;
+    background: #000000;
     color: #fff;
     font-size: 18px;
   }
 .btndropdown:hover ,
 .btndropdown:focus ,
 .btndropdown:active {
-  background: #999999 !important;
+  background: #000000 !important;
 }
 /* Handle */
 .apps_container::-webkit-scrollbar-thumb {
@@ -277,7 +277,7 @@
   width: 30px;
 }
 .app_name{
-  display: flex;
+  display: block;
 }
 .dropdown-menu{
   top: 0px;

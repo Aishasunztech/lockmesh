@@ -36,8 +36,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
     start_date: '',
     status: '',
   };
+  pageName = "main_menu";
   appList = [];
-  demoApps=[];
+  stackedApps=[];
   connected=false;
   baseUrl = this.common.baseurl;
 
@@ -119,6 +120,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
     });
   }
   
+  changePage(pageName,event){
+    this.pageName=pageName;
+  }
 
   unlinkUser(device_id) {
     Swal({
@@ -191,13 +195,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
     // console.log(this.appList);
 
     var name = event.target.name;
-    console.log(name);
     var value = event.target.value;
-    console.log(value);
     var checked = event.target.checked;
-    console.log(checked);
     var className = event.target.attributes.class.nodeValue;
-    console.log(className);
     
     if(name == "check_all"){
       if(checked==true){
@@ -245,7 +245,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
         }else if(className == "enabled" && checked == true){
           this.appList[appIndex].enable=1;
         }
-        this.demoApps = this.getChangedApps(this.appList, 'isChanged', 1);
+        this.stackedApps = this.getChangedApps(this.appList, 'isChanged', 1);
 
       }else{
         if (className == "guest" && checked == false) {
@@ -264,19 +264,19 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   applySettings(event){
-    console.log(this.demoApps);
-    
+    console.log(this.stackedApps);
+    this.restService.applySettings(this.stackedApps);
     console.log("applySettings");
   }
   
   undoSettings(event){
-    console.log(this.demoApps);
-    this.demoApps.pop();
-    console.log(this.demoApps);
+    console.log(this.stackedApps);
+    this.stackedApps.pop();
+    console.log(this.stackedApps);
   }
 
   redoSettings(event){
-    console.log()
+    console.log();
   }
 
   clearAll(event){

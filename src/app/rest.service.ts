@@ -638,4 +638,7 @@ export class RestService {
     });
   }
 
+  applySettings(apps){
+    console.log("hello");
+  }
 }

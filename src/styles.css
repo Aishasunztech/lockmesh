@@ -303,10 +303,16 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
 .table>tfoot>tr>th,
 .table>thead>tr>td,
 .table>thead>tr>th {
-    padding: 4px 3px;
+    padding: 4px 0px;
     vertical-align: middle;
     text-align: center !important;
-    font-size: 12px;
+    font-size: 10px;
+}
+.table>thead>tr>th {
+    text-align: left !important;
+}
+.text-center {
+    text-align: center !important;
 }
 .ngx-datepicker-position-bottom-right {
     top: -230px!important;
