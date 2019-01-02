@@ -6,8 +6,10 @@ import { NgForm } from '@angular/forms';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {Router, ActivatedRoute} from '@angular/router';
-import { Event } from '../../entity/event';
-import { ConvertActionBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
+import { Common } from '../../entity/common';
+
+// import { Event } from '../../entity/event';
+// import { ConvertActionBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
 
 @Component({
   selector: 'app-connect-devices',
@@ -35,7 +37,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
     status: '',
   };
   appList = [];
+  demoApps=[];
   connected=false;
+  baseUrl = this.common.baseurl;
 
   constructor(
     private restService: RestService,
@@ -43,7 +47,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
     private router: Router,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
     private spinnerService: Ng4LoadingSpinnerService,
-    private pushNotification: PushNotificationService
+    private pushNotification: PushNotificationService,
+    private common: Common
   ) {
     
   }
@@ -51,38 +56,34 @@ export class ConnectAdminDevicesComponent implements OnInit {
   ngOnInit() {
     if(this.connected){
       console.log("this.connected: " + this.connected);
-
-      this.pushNotification.onGetApps().subscribe((resp) => {
-        this.appList = JSON.parse(resp.data);
-      });
     }
   }
   
-   async initIoConnection(device_id) {
-     console.log("initIoConnection: " + device_id);
-    await this.pushNotification.connect(device_id);
+  //  async initIoConnection(device_id) {
+  //    console.log("initIoConnection: " + device_id);
+  //   await this.pushNotification.connect(device_id);
 
-    this.pushNotification.onRequestApps();
+  //   this.pushNotification.onRequestApps();
     
-    this.pushNotification.onGetApps().subscribe((resp) => {
-      console.log("get Applications response");
-      this.appList = JSON.parse(resp.data);
-    });
+  //   this.pushNotification.onGetApps().subscribe((resp) => {
+  //     console.log("get Applications response");
+  //     this.appList = JSON.parse(resp.data);
+  //   });
     
-    this.pushNotification.onEvent(Event.CONNECT)
-      .subscribe(() => {
-        this.connected=true;
-        console.log('connected');
-    });
+  //   this.pushNotification.onEvent(Event.CONNECT)
+  //     .subscribe(() => {
+  //       this.connected=true;
+  //       console.log('connected');
+  //   });
 
-    this.pushNotification.onEvent(Event.DISCONNECT)
-      .subscribe(() => {
-        this.connected = false;
+  //   this.pushNotification.onEvent(Event.DISCONNECT)
+  //     .subscribe(() => {
+  //       this.connected = false;
 
-        console.log('disconnected');
-        this.pushNotification.reconnect();
-    });
-  }
+  //       console.log('disconnected');
+  //       this.pushNotification.reconnect();
+  //   });
+  // }
   
   ngAfterViewInit() {
     this.path = this.router.url.split('/');
@@ -94,20 +95,15 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.restService.authtoken(response);
     });
     
-    // this.restService.getDeviceApps(device_id).subscribe((response) => {
-    //   this.appList = response;
-    //   this.spinnerService.hide();
-    //   this.restService.authtoken(response);
-    // });
-
-    this.initIoConnection(device_id);    
-    
-    
+    this.restService.getDeviceApps(device_id).subscribe((response) => {
+      this.appList = response;
+      this.spinnerService.hide();
+      this.restService.authtoken(response);
+    });
   }
   
   // refresh button
   referesh(device_id) {
-    console.log(this.connected);
     
     device_id = this.route.snapshot.paramMap.get('device_id');
     
@@ -116,26 +112,13 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
-    // this.restService.getDeviceApps(device_id).subscribe((response) => {
-    //   this.appList = response;
-    //   this.spinnerService.hide();
-    //   this.restService.authtoken(response);
-    // });
-
-    this.pushNotification.onRequestApps();
-
-    
+    this.restService.getDeviceApps(device_id).subscribe((response) => {
+      this.appList = response;
+      this.spinnerService.hide();
+      this.restService.authtoken(response);
+    });
   }
   
-  imageToBase64(byte){
-    var binary = '';
-    var bytes = new Uint8Array(byte);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return "data:image/JPEG;base64," + window.btoa(binary);
-  }
 
   unlinkUser(device_id) {
     Swal({
@@ -199,19 +182,23 @@ export class ConnectAdminDevicesComponent implements OnInit {
     });
   }
 
-  checkApps(event){
+  ngOnChanges(){
+    console.log("ngOnChanges");
+  }
+
+  checkApps(event,app=null){
+    // console.log("check apps");
+    // console.log(this.appList);
 
     var name = event.target.name;
-    var value = event.target.value;
-    var checked = event.target.checked;
-    // var id = event.target.id;
-    var className = event.target.attributes.class.nodeValue;
-    
     console.log(name);
+    var value = event.target.value;
     console.log(value);
+    var checked = event.target.checked;
     console.log(checked);
+    var className = event.target.attributes.class.nodeValue;
     console.log(className);
-
+    
     if(name == "check_all"){
       if(checked==true){
         if(value == "enable_all"){
@@ -231,28 +218,107 @@ export class ConnectAdminDevicesComponent implements OnInit {
         }
       }
     }else{
-      if (className =="guest" && checked==false){
-        $('.on_guest').prop('checked', false);
-      }
+      if(app!=null){
+        let appIndex =this.getAppIndex(this.appList,app.uniqueName);
+        
+        if(this.appList[appIndex].isChanged==undefined){
+          this.appList[appIndex].isChanged=1;
+        }
 
-      if(className == "encrypted" && checked==false){
-        $('.on_encrypted').prop('checked', false);
-      }
+        if (className == "guest" && checked == false) {
+          $('.on_guest').prop('checked', false);
+          this.appList[appIndex].guest=0;
+        }else if(className == "guest" && checked ==true){
+          this.appList[appIndex].guest=1;
+        }
 
-      if(className == "enabled" && checked==false){
-        $('.enable_all').prop('checked', false);
+        if (className == "encrypted" && checked == false) {
+          $('.on_encrypted').prop('checked', false);
+          this.appList[appIndex].encrypted=0;
+        }else if(className == "encrypted" && checked == true){
+          this.appList[appIndex].encrypted=1;
+        }
 
+        if (className == "enabled" && checked == false) {
+          $('.enable_all').prop('checked', false);
+          this.appList[appIndex].enable=0;
+        }else if(className == "enabled" && checked == true){
+          this.appList[appIndex].enable=1;
+        }
+        this.demoApps = this.getChangedApps(this.appList, 'isChanged', 1);
+
+      }else{
+        if (className == "guest" && checked == false) {
+          $('.on_guest').prop('checked', false);
+        }
+
+        if (className == "encrypted" && checked == false) {
+          $('.on_encrypted').prop('checked', false);
+        }
+
+        if (className == "enabled" && checked == false) {
+          $('.enable_all').prop('checked', false);
+        }
       }
     }
   }
 
+  applySettings(event){
+    console.log(this.demoApps);
+    
+    console.log("applySettings");
+  }
+  
+  undoSettings(event){
+    console.log(this.demoApps);
+    this.demoApps.pop();
+    console.log(this.demoApps);
+  }
+
+  redoSettings(event){
+    console.log()
+  }
+
+  clearAll(event){
+
+  }
+
+  getAppIndex(apps, value) {
+    for (var i = 0; i < apps.length; i++) {
+      if (apps[i].uniqueName === value) {
+        return i;
+      }
+    }
+  }
+
+  searchApps(apps, key, value) {
+    for (var i = 0; i < apps.length; i++) {
+      if (apps[i][key] === value) {
+        return apps[i];
+      }
+    }
+  }
+
+  getChangedApps(apps, key, value) {
+
+    let changedApps=[];
+    let j=0;
+    for (var i = 0; i < apps.length; i++) {
+      if (apps[i][key] === value) {
+        changedApps[j]=apps[i];
+        delete changedApps[i].icon;
+        j=j+1;
+      }
+    }
+    return changedApps;
+  }
   onLogout() {
-    this.pushNotification.disconnect();
+    // this.pushNotification.disconnect();
     this.restService.authSignOut();
   }
 
   ngOnDestroy(){
-    this.pushNotification.disconnect();
-    this.connected=false;
+    // this.pushNotification.disconnect();
+    // this.connected=false;
   }
 }
