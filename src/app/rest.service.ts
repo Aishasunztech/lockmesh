@@ -9,6 +9,7 @@ import { Console } from '@angular/core/src/console';
 import {Router, ActivatedRoute} from '@angular/router';
 import {LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+// import { settings } from 'cluster';
 
 @Injectable({
   providedIn: 'root'
@@ -638,4 +639,12 @@ export class RestService {
     });
   }
 
+  applySettings(device, device_id){
+    // let payload = {
+    //   device_id: device_id,
+    //   apps:apps,
+    //   password: passwords,
+    //   settings: settings
+    // };
+  }
 }

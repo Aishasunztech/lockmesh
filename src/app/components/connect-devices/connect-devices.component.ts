@@ -36,8 +36,33 @@ export class ConnectAdminDevicesComponent implements OnInit {
     start_date: '',
     status: '',
   };
+  pageName = "main_menu";
+
   appList = [];
-  demoApps=[];
+  passwords = {
+    admin_password:null,
+    guest_password:null,
+    encrypted_password:null
+  };
+  device_setting = {
+    guest: false,
+    encrypted: false,
+    enable: false
+  };
+  device_controls = [];
+  
+  stackedApps=[];
+  redoStackedApps = [];
+
+  changedSettings = {
+    guest: false,
+    encrypted: false,
+    enable: false
+  };
+  appStackTop=1;
+  stackControls = [];
+  redoStackControls = [];
+
   connected=false;
   baseUrl = this.common.baseurl;
 
@@ -97,6 +122,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
     
     this.restService.getDeviceApps(device_id).subscribe((response) => {
       this.appList = response;
+      this.stackedApps.push(JSON.parse(JSON.stringify(response)));
+      console.log("stack length: " + this.stackedApps.length);
+
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
@@ -114,11 +142,17 @@ export class ConnectAdminDevicesComponent implements OnInit {
     });
     this.restService.getDeviceApps(device_id).subscribe((response) => {
       this.appList = response;
+      // this.stackedApps.push(response);
+      console.log("stack length: "+ this.stackedApps.length);
+
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
   }
   
+  changePage(pageName,event){
+    this.pageName=pageName;
+  }
 
   unlinkUser(device_id) {
     Swal({
@@ -191,14 +225,14 @@ export class ConnectAdminDevicesComponent implements OnInit {
     // console.log(this.appList);
 
     var name = event.target.name;
-    console.log(name);
     var value = event.target.value;
-    console.log(value);
     var checked = event.target.checked;
-    console.log(checked);
     var className = event.target.attributes.class.nodeValue;
-    console.log(className);
-    
+    var id = event.target.attributes.id;
+    if(id!=undefined){
+      id=id.nodeValue;
+    }
+
     if(name == "check_all"){
       if(checked==true){
         if(value == "enable_all"){
@@ -217,13 +251,12 @@ export class ConnectAdminDevicesComponent implements OnInit {
           $('.guest').prop('checked', false);
         }
       }
-    }else{
+    }else if(id=="apps"){
       if(app!=null){
         let appIndex =this.getAppIndex(this.appList,app.uniqueName);
-        
-        if(this.appList[appIndex].isChanged==undefined){
-          this.appList[appIndex].isChanged=1;
-        }
+        // if(this.appList[appIndex].isChanged==undefined){
+        //   this.appList[appIndex].isChanged=1;
+        // }
 
         if (className == "guest" && checked == false) {
           $('.on_guest').prop('checked', false);
@@ -245,8 +278,12 @@ export class ConnectAdminDevicesComponent implements OnInit {
         }else if(className == "enabled" && checked == true){
           this.appList[appIndex].enable=1;
         }
-        this.demoApps = this.getChangedApps(this.appList, 'isChanged', 1);
+        // console.log(this.appList);
 
+        this.stackedApps.push(JSON.parse(JSON.stringify(this.appList)));
+        // this.appStackTop++;
+
+        console.log(this.stackedApps);
       }else{
         if (className == "guest" && checked == false) {
           $('.on_guest').prop('checked', false);
@@ -264,25 +301,71 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   applySettings(event){
-    console.log(this.demoApps);
-    
+    console.log(this.stackedApps);
+    console.log(this.passwords);
+    let device;
+
+    // this.restService.applySettings(device,this.device_data.device_id);
     console.log("applySettings");
   }
   
   undoSettings(event){
-    console.log(this.demoApps);
-    this.demoApps.pop();
-    console.log(this.demoApps);
+    if (this.stackedApps.length>1) {
+      
+      console.log("stack length: " + this.stackedApps.length);
+      console.log(this.stackedApps);
+
+      let apps=this.stackedApps[this.stackedApps.length -1];
+      this.stackedApps.pop();
+
+      console.log("stack length: " + this.stackedApps.length);
+      this.appList=JSON.parse(JSON.stringify(this.stackedApps[this.stackedApps.length -1]));
+      console.log(this.stackedApps);
+      console.log("apps");
+      console.log(this.appList);
+      this.redoStackedApps.push(apps);
+    
+    }
+    
   }
 
   redoSettings(event){
-    console.log()
+    console.log("stack");
+    console.log(this.stackedApps);
+    console.log("undo");
+    console.log(this.redoStackedApps);
+    if(this.stackedApps.length>1){
+      let apps = this.redoStackedApps[this.redoStackedApps.length - 1];
+      this.redoStackedApps.pop();
+      this.stackedApps.push(apps);
+      this.appList = this.stackedApps[this.stackedApps.length - 1];
+    }
+    
   }
 
   clearAll(event){
+    this.restService.getDeviceApps(this.device_data.device_id).subscribe((response) => {
+      this.appList = response;
+      // this.stackedApps.push(response);
+      console.log("stack length: " + this.stackedApps.length);
 
+      this.spinnerService.hide();
+      this.restService.authtoken(response);
+    });
   }
+  resetPassword(event){
+    var className = event.target.attributes.class.nodeValue.split(' ');
+    className=className[className.length -1];
+    console.log(className);
+    if (className == "confirm_encrypted"){
 
+    } else if (className == "confirm_guest"){
+
+    } else if (className == "confirm_admin"){
+
+    }
+    
+  }
   getAppIndex(apps, value) {
     for (var i = 0; i < apps.length; i++) {
       if (apps[i].uniqueName === value) {
@@ -299,19 +382,6 @@ export class ConnectAdminDevicesComponent implements OnInit {
     }
   }
 
-  getChangedApps(apps, key, value) {
-
-    let changedApps=[];
-    let j=0;
-    for (var i = 0; i < apps.length; i++) {
-      if (apps[i][key] === value) {
-        changedApps[j]=apps[i];
-        delete changedApps[i].icon;
-        j=j+1;
-      }
-    }
-    return changedApps;
-  }
   onLogout() {
     // this.pushNotification.disconnect();
     this.restService.authSignOut();

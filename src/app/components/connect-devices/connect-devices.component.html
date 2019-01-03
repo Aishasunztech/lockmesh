@@ -174,46 +174,53 @@
             <div class="col-lg-4 apps_grid" >
                 <div class="card apps_card">
                     <div class="second-frame">
-                        <img src="/assets/images/top_bar.jpg" class="top_bar">
-                       <!-- <div class="apps_header" id="#header">
-                            <div class="pull-right" >
-                                <button class="btn btn-defualt btn-xs btndropdown" type="button" id="btndropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <span class="fa fa-ellipsis-v"></span>
-                                </button>
-                                 <ul class="dropdown-menu" aria-labelledby="btndropdown">
-                                    <li>
-                                        <label class="radio-btn">
-                                            <input type="checkbox" value='on_guest' class="on_guest"  name="check_all" (change)="checkApps($event)">
-                                            Turn on Guests All
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="radio-btn">
-                                            <input type="checkbox" value='on_encrypted' class="on_encrypted" name="check_all" (change)="checkApps($event)">
-                                            Turn On Encrypted All
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <label class="radio-btn">
-                                            <input type="checkbox" value='enable_all' class="enable_all" name="check_all" (change)="checkApps($event)">
-                                            Enable All
-                                        </label>
-                                    </li>
-                                </ul>
+                        <img src="/assets/images/top_bar.jpg" class="top_bar">             
+                        <!-- categories screen -->
+                        <!-- <div class="background-card main_menu" *ngIf="pageName=='main_menu'">
+                            <div class="col-md-12" style="text-align: center;">
+                                <img class="img-responsive locker-logo" src="/assets/images/key.png" alt="Not found">
                             </div>
-                        </div>
-                       <div class="container apps_container" >
-                            <div class="row">
-                                <div class="col-md-12" style="display: inline-flex;padding: 9px 15px 0 0;">
-                                    
+                            <div class="col-md-12 content-list" (click)="changePage('apps_list')"><a class="list-link"> Set Apps & Permissions</a></div>
+                            <div class="col-md-12 content-list" (click)="changePage('reset_guest')"><a class="list-link"> Reset Guests</a></div>
+                            <div class="col-md-12 content-list" (click)="changePage('reset_encrypted')"><a class="list-link"> Encrypted Pass</a></div>
+                            <div class="col-md-12 content-list" (click)="changePage('main_menu')"><a class="list-link"> Setting Menu </a></div>
+                            <div class="col-md-12 content-list" (click)="changePage('reset_admin')"><a class="list-link"> Change Admin Panel Code </a></div>
+                        </div>-->
+                        <!-- categories screen -->
+                        <!--<div class="background-card apps_list" *ngIf="pageName=='apps_list'">
+                            <div class="pin_header">
+                                <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
+                                <div class="pull-right">
+                                    <button class="btn btn-defualt btn-xs btndropdown" type="button" id="btndropdown" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="true">
+                                        <span class="fa fa-ellipsis-v"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="btndropdown">
+                                        <li>
+                                            <label class="radio-btn">
+                                                <input type="checkbox" value='on_guest' [(ngModel)]="appList.guest" class="on_guest" name="check_all" (change)="checkApps($event)">
+                                                Turn on Guests All
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="radio-btn">
+                                                <input type="checkbox" value='on_encrypted' [(ngModel)]="appList.encrypted" class="on_encrypted" name="check_all" (change)="checkApps($event)">
+                                                Turn On Encrypted All
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="radio-btn">
+                                                <input type="checkbox" value='enable_all' [(ngModel)]="appList.enable" class="enable_all" name="check_all" (change)="checkApps($event)">
+                                                Enable All
+                                            </label>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                        </div> -->
-                        <!-- <div class="background-card">
                             <table class="table table-inverse table-dark apps_table">
                                 <thead>
                                     <tr class="apps_head">
-                                        <th>App Name</th>
+                                        <th class="text-center">App Name</th>
                                         <th>Guest</th>
                                         <th>Encrypted</th>
                                         <th>Enable</th>
@@ -227,20 +234,20 @@
                                         </td>
                                         <td>
                                             <label class="switch">
-                                                <input type="checkbox" class="guest" value='guest' [checked]="app.guest" name="{{app.uniqueName}}" (change)="checkApps($event,app)">
+                                                <input type="checkbox" class="guest" id="apps" value='guest' [checked]="app.guest" name="{{app.uniqueName}}" (change)="checkApps($event,app)">
                                                 <span class="slider round"></span>
                                             </label>
                                         </td>
                                         <td>
                                             <label class="switch">
-                                                <input type="checkbox" class="encrypted" value='encrypted' [checked]="app.encrypted" name="{{app.uniqueName}}"
+                                                <input type="checkbox" class="encrypted" id="apps" value='encrypted' [checked]="app.encrypted" name="{{app.uniqueName}}"
                                                     (change)="checkApps($event,app)">
                                                 <span class="slider round"></span>
                                             </label>
                                         </td>
                                         <td>
                                             <label class="switch">
-                                                <input type="checkbox" class="enabled" value='enabled' [checked]="app.enable" name="{{app.uniqueName}}"
+                                                <input type="checkbox" class="enabled" id="apps" value='enabled' [checked]="app.enable" name="{{app.uniqueName}}"
                                                     (change)="checkApps($event,app)">
                                                 <span class="slider round"></span>
                                             </label>
@@ -249,29 +256,48 @@
                                 </tbody>
                             </table>
                         </div> -->
-                        <!-- categories screen  -->
-                        <!-- <div class="background-card">
-                            <div class="col-md-12" style="text-align: center;">
-                                <img  class="img-responsive locker-logo" src="/assets/images/key.png" alt="Not found">
-                            </div>
-                            <div class="col-md-12 content-list"><a class="list-link" > Set Apps & Permissions</a></div>
-                            <div class="col-md-12 content-list"><a class="list-link" > Reset Guests</a></div>
-                            <div class="col-md-12 content-list"><a class="list-link" > Encrypted Pass</a></div>
-                            <div class="col-md-12 content-list"><a class="list-link" > Setting Menu </a></div>
-                            <div class="col-md-12 content-list"><a class="list-link" > Change Admin Panel Code </a></div>
-                        </div>  -->
-                         <!-- categories screen -->
                         <!-- Confirm Password design start -->
-                        <!-- <div class="pin_header">
-                            <i class="fa fa-angle-left" aria-hidden="true"></i>
-                            <span class="header_text">Guest Pin Code</span>
-                        </div>
-                        <div class="confirm_password">
-                            <input type="number" class="pin" placeholder="Please enter guest pin" required />
-                            <input type="number" class="pin" placeholder="Please confirm your pin" required />
-                            <button class="btn confirm_pass">Confirm Pin</button>
+                        <!-- Admin password -->
+                       <!--  <div class="reset_admin" *ngIf="pageName=='reset_admin'">
+                            <div class="pin_header">
+                                <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
+                                <span class="header_text">Admin Pin Code</span>
+                            </div>
+                            <div class="confirm_password">
+                                <input type="password" class="pin admin_pin" name="admin_pwd" [(ngModel)]="passwords.admin_password" placeholder="Please enter guest pin" required />
+                                <input type="password" class="pin admin_pin" name="admin_pwd_c" placeholder="Please confirm your pin" required />
+                                <button class="btn confirm_pass confirm_admin" (click)="resetPassword($event)">Confirm Pin</button>
+                            </div>
                         </div> -->
-                        <!-- Confirm Password design end -->
+                        <!-- Admin password -->
+                        
+                        <!-- Guest password -->                        
+                        <!-- <div class="reset_guest" *ngIf="pageName=='reset_guest'">
+                            <div class="pin_header">
+                                <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
+                                <span class="header_text">Guest Pin Code</span>
+                            </div>
+                            <div class="confirm_password">
+                                <input type="password" class="pin guest_pin" name="guest_pwd" [(ngModel)]="passwords.guest_password" placeholder="Please enter guest pin" required />
+                                <input type="password" class="pin guest_pin" name="guest_pwd_c" placeholder="Please confirm your pin" required />
+                                <button class="btn confirm_pass confirm_guest" (click)="resetPassword($event)">Confirm Pin</button>
+                            </div>
+                        </div> -->
+                        <!-- Guest password -->
+
+                        <!-- Encrypted password -->
+                        <!-- <div class="reset_encrypted" *ngIf="pageName=='reset_encrypted'">
+                            <div class="pin_header">
+                                <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
+                                <span class="header_text">Encrypted Pin Code</span>
+                            </div>
+                            <div class="confirm_password">
+                                <input type="password" class="pin encrypted_pin" name="encrypted_pwd" [(ngModel)]="passwords.encrypted_password" placeholder="Please enter guest pin" required />
+                                <input type="password" class="pin encrypted_pin" name="encrypted_pwd_c" placeholder="Please confirm your pin" required />
+                                <button class="btn confirm_pass confirm_encrypted" (click)="resetPassword($event)">Confirm Pin</button>
+                            </div>
+                        </div> -->
+                        <!-- Encrypted password --> 
 
                         <!-- Setting menu design start -->
                         <div class="setting_background">
@@ -284,8 +310,7 @@
                                     <span>Guest</span>
                                     <input id="guest" name="guest" type="checkbox"/>
                                     <label for="guest" class="label-default"></label>
-                                </div>
-                        
+                                </div>                        
                                 <div class="material-switch header_btns">
                                     <span>Encrypt</span>
                                     <input id="encrypt" name="encrypt" type="checkbox"/>
