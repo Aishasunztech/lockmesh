@@ -175,7 +175,7 @@
                 <div class="card apps_card">
                     <div class="second-frame">
                         <img src="/assets/images/top_bar.jpg" class="top_bar">
-                        <div class="apps_header" id="#header">
+                       <!-- <div class="apps_header" id="#header">
                             <div class="pull-right" >
                                 <button class="btn btn-defualt btn-xs btndropdown" type="button" id="btndropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     <span class="fa fa-ellipsis-v"></span>
@@ -202,7 +202,7 @@
                                 </ul>
                             </div>
                         </div>
-                         <!--<div class="container apps_container" >
+                       <div class="container apps_container" >
                             <div class="row">
                                 <div class="col-md-12" style="display: inline-flex;padding: 9px 15px 0 0;">
                                     
@@ -249,8 +249,8 @@
                                 </tbody>
                             </table>
                         </div> -->
-                        <!-- categories screen -->
-                        <div class="background-card">
+                        <!-- categories screen  -->
+                        <!-- <div class="background-card">
                             <div class="col-md-12" style="text-align: center;">
                                 <img  class="img-responsive locker-logo" src="/assets/images/key.png" alt="Not found">
                             </div>
@@ -259,10 +259,8 @@
                             <div class="col-md-12 content-list"><a class="list-link" > Encrypted Pass</a></div>
                             <div class="col-md-12 content-list"><a class="list-link" > Setting Menu </a></div>
                             <div class="col-md-12 content-list"><a class="list-link" > Change Admin Panel Code </a></div>
-                        </div> 
-                      <!-- categories screen -->
-
-
+                        </div>  -->
+                         <!-- categories screen -->
                         <!-- Confirm Password design start -->
                         <!-- <div class="pin_header">
                             <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -275,7 +273,81 @@
                         </div> -->
                         <!-- Confirm Password design end -->
 
+                        <!-- Setting menu design start -->
+                        <div class="setting_background">
+                            <div class="setting_header">
+                                <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                <span class="header_text">Setting Menu</span>
+                            </div>
+                            <div class="content-list_header">
+                                <div class="material-switch header_btns">
+                                    <span>Guest</span>
+                                    <input id="guest" name="guest" type="checkbox"/>
+                                    <label for="guest" class="label-default"></label>
+                                </div>
                         
+                                <div class="material-switch header_btns">
+                                    <span>Encrypt</span>
+                                    <input id="encrypt" name="encrypt" type="checkbox"/>
+                                    <label for="encrypt" class="label-default"></label>
+                                </div>
+                            
+                                <div class="material-switch header_btns">
+                                    <span>Enable</span>
+                                    <input id="enable" name="enable" type="checkbox"/>
+                                    <label for="enable" class="label-default"></label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 content-list"><a class="list-link" > Wifi </a>
+                                <div class="material-switch">
+                                    <span>OFF</span>
+                                    <input id="wifi" name="wifi" type="checkbox" checked/>
+                                    <label for="wifi" class="label-default"></label>
+                                    <span>ON</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 content-list"><a class="list-link" > Bluetooth </a>
+                                <div class="material-switch">
+                                    <span>OFF</span>
+                                    <input id="bluetooth" name="bluetooth" type="checkbox"/>
+                                    <label for="bluetooth" class="label-default"></label>
+                                    <span>ON</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 content-list"><a class="list-link" > Hotspot </a>
+                                <div class="material-switch">
+                                    <span>OFF</span>
+                                    <input id="hotspot" name="hotspot" type="checkbox"/>
+                                    <label for="hotspot" class="label-default"></label>
+                                    <span>ON</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 content-list"><a class="list-link" > Location Services  </a>
+                                <div class="material-switch">
+                                    <span>OFF</span>
+                                    <input id="location" name="location" type="checkbox" checked/>
+                                    <label for="location" class="label-default"></label>
+                                    <span>ON</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 content-list"><a class="list-link" > Screen Capture  </a>
+                                <div class="material-switch">
+                                    <span>OFF</span>
+                                    <input id="screen" name="screen" type="checkbox"/>
+                                    <label for="screen" class="label-default"></label>
+                                    <span>ON</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 content-list"><a class="list-link" > Block Calls  </a>
+                                <div class="material-switch">
+                                    <span>OFF</span>
+                                    <input id="calls" name="calls" type="checkbox"/>
+                                    <label for="calls" class="label-default"></label>
+                                    <span>ON</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Setting menu design end -->                        
                         <img src="/assets/images/nav_bar.jpg" class="android_nav_bar">
                     </div>
                     <div class="btn-group phone_actions_container" style="margin-top: 5px">
@@ -301,88 +373,107 @@
                 </div>
             </div>
             <div class="col-lg-4 app_btns">
-                    <div class="card cs-card">
-                        <div class="action_table cs-table" id="third-card">
-                            <select class="form-control" >
-                                <option>Display</option>
-                            </select>
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-5">
-                                    <!-- <a href="javascript:void(0)" class="btn_new">
-                                        <span class="left title">PUSH</span>
-                                        <span class="right icon icon-tablet"></span>
-                                    </a> -->
-                                    <button class="btn btn-sm btn-primary purple">PUSH</button>
-                                </div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">PULL</button>
-                                </div>
-                                <div class="col-sm-1"></div>
+                <div class="card cs-card">
+                    <div class="action_table cs-table" id="third-card">
+                        <select class="form-control" >
+                            <option>Display</option>
+                        </select>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">Push
+                                    <span class="fa fa-arrow-up icon_purple"></span>
+                                    </span>
+                                </a>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">Load Profile
-                                    <span class="fa fa-user-o"></span></button>
-                                </div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">Save Profile
-                                    <span class="fa fa-floppy-o"></span></button>
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">Load History</button>
-                                </div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">Load Policy</button><br>
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">Disable</button>
-                                </div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">Power</button>
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">N/A</button>
-                                </div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">N/A</button><br>
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-1"></div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">N/A</button>
-                                </div>
-                                <div class="col-sm-5">
-                                    <button class="btn btn-primary purple">N/A</button><br>
-                                </div>
-                                <div class="col-sm-1"></div>
-                            </div>
-                            <div class="col-sm-12">
-                                <button (click)="suspendForm(device_data.device_id);" class="btn btn-warning btn-block" style=" margin: 15px 0 0; font-size: 14px;">SUSPEND</button>
-                            </div>
-                            <div class="col-sm-12">
-                               <button (click)="unlinkUser(device_data.device_id)" class="btn btn-primary btn-block" style="background:#51cbce; margin: 15px 0 0; font-size: 14px;">UNLINK</button>
-                            </div>
-                            <div class="col-sm-12">
-                                <button class="btn btn-danger btn-block" style=" margin: 15px 0 15px; font-size: 14px;">POWER</button>
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">Pull
+                                    <span class="fa fa-arrow-down icon_purple"></span></span>
+                                </a>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">Load Profile
+                                    <span class="fa fa-spinner icon_purple"></span></span>
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">Save Profile
+                                    <span class="fa fa-floppy-o icon_purple"></span></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">Load History
+                                    <span class="fa fa-history icon_purple"></span></span>
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">Load Policy
+                                    <span class="fa fa-pencil-square-o icon_purple"></span></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">Disable
+                                    <span class="fa fa-ban icon_purple"></span></span>
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">Power
+                                    <span class="fa fa-mobile icon_purple"></span></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">N/A
+                                    <span class="fa fa-times icon_purple"></span></span>
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">N/A
+                                    <span class="fa fa-times icon_purple"></span></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">N/A
+                                    <span class="fa fa-times icon_purple"></span></span>
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">N/A
+                                    <span class="fa fa-times icon_purple"></span></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <button (click)="suspendForm(device_data.device_id);" class="btn btn-block btn_suspend">Suspend</button>
+                        </div>
+                        <div class="col-sm-12">
+                           <button (click)="unlinkUser(device_data.device_id)" class="btn btn-block btn_unlink">Unlink</button>
+                        </div>
+                        <div class="col-sm-12">
+                            <button class="btn btn-block btn_power">Power</button>
+                        </div>
                     </div>
+                </div>
             </div>
             <!-- end row -->
         </div>
