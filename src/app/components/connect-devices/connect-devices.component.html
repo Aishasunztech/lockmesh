@@ -176,18 +176,18 @@
                     <div class="second-frame">
                         <img src="/assets/images/top_bar.jpg" class="top_bar">             
                         <!-- categories screen -->
-                        <!-- <div class="background-card main_menu" *ngIf="pageName=='main_menu'">
+                        <div class="background-card main_menu" *ngIf="pageName=='main_menu'">
                             <div class="col-md-12" style="text-align: center;">
                                 <img class="img-responsive locker-logo" src="/assets/images/key.png" alt="Not found">
                             </div>
                             <div class="col-md-12 content-list" (click)="changePage('apps_list')"><a class="list-link"> Set Apps & Permissions</a></div>
                             <div class="col-md-12 content-list" (click)="changePage('reset_guest')"><a class="list-link"> Reset Guests</a></div>
                             <div class="col-md-12 content-list" (click)="changePage('reset_encrypted')"><a class="list-link"> Encrypted Pass</a></div>
-                            <div class="col-md-12 content-list" (click)="changePage('main_menu')"><a class="list-link"> Setting Menu </a></div>
+                            <div class="col-md-12 content-list" (click)="changePage('setting_list')"><a class="list-link"> Setting Menu </a></div>
                             <div class="col-md-12 content-list" (click)="changePage('reset_admin')"><a class="list-link"> Change Admin Panel Code </a></div>
-                        </div>-->
+                        </div>
                         <!-- categories screen -->
-                        <!--<div class="background-card apps_list" *ngIf="pageName=='apps_list'">
+                        <div class="background-card apps_list" *ngIf="pageName=='apps_list'">
                             <div class="pin_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <div class="pull-right">
@@ -255,10 +255,11 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div> -->
+                        </div>
                         <!-- Confirm Password design start -->
+                        
                         <!-- Admin password -->
-                       <!--  <div class="reset_admin" *ngIf="pageName=='reset_admin'">
+                        <div class="reset_admin" *ngIf="pageName=='reset_admin'">
                             <div class="pin_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <span class="header_text">Admin Pin Code</span>
@@ -268,11 +269,11 @@
                                 <input type="password" class="pin admin_pin" name="admin_pwd_c" placeholder="Please confirm your pin" required />
                                 <button class="btn confirm_pass confirm_admin" (click)="resetPassword($event)">Confirm Pin</button>
                             </div>
-                        </div> -->
+                        </div>
                         <!-- Admin password -->
                         
                         <!-- Guest password -->                        
-                        <!-- <div class="reset_guest" *ngIf="pageName=='reset_guest'">
+                        <div class="reset_guest" *ngIf="pageName=='reset_guest'">
                             <div class="pin_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <span class="header_text">Guest Pin Code</span>
@@ -282,11 +283,11 @@
                                 <input type="password" class="pin guest_pin" name="guest_pwd_c" placeholder="Please confirm your pin" required />
                                 <button class="btn confirm_pass confirm_guest" (click)="resetPassword($event)">Confirm Pin</button>
                             </div>
-                        </div> -->
+                        </div>
                         <!-- Guest password -->
 
                         <!-- Encrypted password -->
-                        <!-- <div class="reset_encrypted" *ngIf="pageName=='reset_encrypted'">
+                        <div class="reset_encrypted" *ngIf="pageName=='reset_encrypted'">
                             <div class="pin_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <span class="header_text">Encrypted Pin Code</span>
@@ -296,13 +297,13 @@
                                 <input type="password" class="pin encrypted_pin" name="encrypted_pwd_c" placeholder="Please confirm your pin" required />
                                 <button class="btn confirm_pass confirm_encrypted" (click)="resetPassword($event)">Confirm Pin</button>
                             </div>
-                        </div> -->
+                        </div>
                         <!-- Encrypted password --> 
 
                         <!-- Setting menu design start -->
-                        <div class="setting_background">
+                        <div class="setting_background" *ngIf="pageName=='setting_list'">
                             <div class="setting_header">
-                                <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <span class="header_text">Setting Menu</span>
                             </div>
                             <div class="content-list_header">

@@ -406,7 +406,7 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 .background-card {
-    height: 310px;
+    height: 335px;
     background: #303030;
     overflow: overlay;
 }
@@ -494,7 +494,7 @@ input:checked + .slider:before {
 .confirm_password {
     background: #303030;
     text-align: center;
-    height: 400px;
+    height: 300px;
 }
 .header_text {
     margin-left: 25px;
