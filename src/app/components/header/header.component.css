@@ -37,13 +37,13 @@
 .sidebar{
 	position: absolute;
 	top: 90px;
-	background: #4e0d6f!important;
+	background: #301967!important;
 }
 
 .sidebar:after{
 	position: absolute;
 	top: 90px;
-	background: #4e0d6f!important;
+	background: #301967!important;
 }
 .col_head{
 	border-bottom: 1px solid gray;
@@ -93,7 +93,7 @@
     .sidebar[_ngcontent-c3] {
         position: absolute;
         top: 104px;
-        background: #4e0d6f !important;
+        background: #301967 !important;
     }
 }
 

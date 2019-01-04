@@ -232,7 +232,7 @@ ul.popopWinbtn {
 .selected-list .c-list .c-token .c-remove svg {
     fill: #ccc !important;
 }
-
+ 
 .show-btn {
     display: block !important;
 }
@@ -433,6 +433,10 @@ c-icon, c-icon svg{
 }
 .off-canvas-sidebar .sidebar-wrapper, .sidebar .sidebar-wrapper {
   padding-bottom: 0;
+  background: #301967;
+}
+.sidebar-wrapper:after {
+    background: #301967!important;
 }
 .wrap-all-nav {
   background-color: white;
@@ -550,4 +554,7 @@ select.form-control {
     }
 
 
+}
+.btn.active, .btn.active:focus, .btn.active:hover, .btn:active, .btn:active:focus, .btn:active:hover, .btn:focus, .btn:hover, .navbar .navbar-nav>a.btn.active, .navbar .navbar-nav>a.btn.active:focus, .navbar .navbar-nav>a.btn.active:hover, .navbar .navbar-nav>a.btn:active, .navbar .navbar-nav>a.btn:active:focus, .navbar .navbar-nav>a.btn:active:hover, .navbar .navbar-nav>a.btn:focus, .navbar .navbar-nav>a.btn:hover, .show>.btn.dropdown-toggle, .show>.btn.dropdown-toggle:focus, .show>.btn.dropdown-toggle:hover, .show>.navbar .navbar-nav>a.btn.dropdown-toggle, .show>.navbar .navbar-nav>a.btn.dropdown-toggle:focus, .show>.navbar .navbar-nav>a.btn.dropdown-toggle:hover {
+    background-color: #00000000;
 }
