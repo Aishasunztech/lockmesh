@@ -212,11 +212,11 @@
     box-shadow: none;
     border-bottom: 0 solid #ddd;
 }
-.ngx-datepicker-position-bottom-right {
+/* .ngx-datepicker-position-bottom-right {
     /* top: -230px!important;
     left: -5px!important;
-    z-index: 10000; */
-}
+    z-index: 10000; 
+} */
 .apps_card{
     height: 100%;
     padding-bottom: 0px;
@@ -253,14 +253,14 @@
 .btndropdown {    
     margin: 0px 19px;
     padding: 0px;
-    background: #000000;
+    background: #131313;
     color: #fff;
     font-size: 18px;
   }
 .btndropdown:hover ,
 .btndropdown:focus ,
 .btndropdown:active {
-  background: #000000 !important;
+  background: #131313 !important;
 }
 /* Handle */
 .apps_container::-webkit-scrollbar-thumb {
@@ -561,9 +561,9 @@ input[type=number]::-webkit-outer-spin-button {
     .content {
         margin-top: 33px;
     }
-    #third-card {
-       /* margin-left: 42px;*/
-    }
+    /* #third-card {
+       /* margin-left: 42px;
+    } */
 
     #navbar {
         display: none;
@@ -571,10 +571,11 @@ input[type=number]::-webkit-outer-spin-button {
     .content {
         margin-top: 22px;
     }
-    #third-card {
+    /*#third-card {
         /*margin-left: 0px;
-        margin-right: 12px;*/
+        margin-right: 12px;
     }
+    */
     .main-panel>.content {
         margin: 40px 0 0 0 !important;
     }

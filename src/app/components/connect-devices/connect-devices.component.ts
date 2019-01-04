@@ -254,9 +254,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
     }else if(id=="apps"){
       if(app!=null){
         let appIndex =this.getAppIndex(this.appList,app.uniqueName);
-        // if(this.appList[appIndex].isChanged==undefined){
-        //   this.appList[appIndex].isChanged=1;
-        // }
+        
+        if(this.appList[appIndex].isChanged==undefined){
+          this.appList[appIndex].isChanged=1;
+        }
 
         if (className == "guest" && checked == false) {
           $('.on_guest').prop('checked', false);
@@ -301,14 +302,30 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   applySettings(event){
-    console.log(this.stackedApps);
-    console.log(this.passwords);
-    let device;
-
-    // this.restService.applySettings(device,this.device_data.device_id);
-    console.log("applySettings");
+    if(this.stackedApps.length>1){
+      let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length -1]);
+      let device_setting ={
+        app_list: app_list
+      };
+      this.restService.applySettings(device_setting,this.device_data.device_id);
+      this.clearStack();
+    }
   }
-  
+  clearStack(){
+    this.stackedApps = JSON.parse(JSON.stringify(this.appList));
+    this.redoStackedApps = [];
+  }
+  getChangedApps(apps){
+    console.log(apps);
+    let retApps=[];
+    
+    for (var i = 0; i < apps.length; i++) {
+      if (apps[i].isChanged!=undefined){
+        retApps.push(JSON.parse(JSON.stringify(apps[i])));
+      }
+    }
+    return retApps;
+  }
   undoSettings(event){
     if (this.stackedApps.length>1) {
       
@@ -330,15 +347,12 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   redoSettings(event){
-    console.log("stack");
-    console.log(this.stackedApps);
-    console.log("undo");
-    console.log(this.redoStackedApps);
-    if(this.stackedApps.length>1){
+    if(this.redoStackedApps.length>0){
+      console.log("hello");
       let apps = this.redoStackedApps[this.redoStackedApps.length - 1];
       this.redoStackedApps.pop();
       this.stackedApps.push(apps);
-      this.appList = this.stackedApps[this.stackedApps.length - 1];
+      this.appList = JSON.parse(JSON.stringify(this.stackedApps[this.stackedApps.length - 1]));
     }
     
   }
