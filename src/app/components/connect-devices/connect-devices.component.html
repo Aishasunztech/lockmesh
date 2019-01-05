@@ -45,7 +45,7 @@
     <div class="content " style="margin-top: 40px;">
         <div class="row">
             <div class="col-lg-4 no-padding-all">
-                <form class="form-horizontal" id="formData" #deviceData="ngForm" (ngSubmit)="referesh('device_id')">
+                <form class="form-horizontal" id="formData" #deviceData="ngForm" (ngSubmit)="refresh('device_id')">
                     <div class="card ">
                         <!-- <div class="card-header text-center" style="width: 100%; height: 30%;">
                             <h4 class="card-title" style="font-size: 18px;">ADD New Device</h4>
@@ -173,10 +173,10 @@
             </div>
             <div class="col-lg-4 apps_grid" >
                 <div class="card apps_card">
-                    <div class="second-frame">
+                    <div class="second-frame" >
                         <img src="/assets/images/top_bar.jpg" class="top_bar">             
                         <!-- categories screen -->
-                        <div class="background-card main_menu" *ngIf="pageName=='main_menu'">
+                        <div class="background-card main_menu" *ngIf="pageName=='main_menu' && device_data.is_sync==1">
                             <div class="col-md-12" style="text-align: center;">
                                 <img class="img-responsive locker-logo" src="/assets/images/key.png" alt="Not found">
                             </div>
@@ -186,8 +186,9 @@
                             <div class="col-md-12 content-list" (click)="changePage('setting_list')"><a class="list-link"> Setting Menu </a></div>
                             <div class="col-md-12 content-list" (click)="changePage('reset_admin')"><a class="list-link"> Change Admin Panel Code </a></div>
                         </div>
+                        <div class="background-card" *ngIf="device_data.is_sync==0"></div>
                         <!-- categories screen -->
-                        <div class="background-card apps_list" *ngIf="pageName=='apps_list'">
+                        <div class="background-card apps_list" *ngIf="pageName=='apps_list' && device_data.is_sync==1">
                             <div class="pin_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <div class="pull-right">
@@ -259,7 +260,7 @@
                         <!-- Confirm Password design start -->
                         
                         <!-- Admin password -->
-                        <div class="reset_admin" *ngIf="pageName=='reset_admin'">
+                        <div class="reset_admin" *ngIf="pageName=='reset_admin' && device_data.is_sync==1">
                             <div class="pin_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <span class="header_text">Admin Pin Code</span>
@@ -273,7 +274,7 @@
                         <!-- Admin password -->
                         
                         <!-- Guest password -->                        
-                        <div class="reset_guest" *ngIf="pageName=='reset_guest'">
+                        <div class="reset_guest" *ngIf="pageName=='reset_guest' && device_data.is_sync==1">
                             <div class="pin_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <span class="header_text">Guest Pin Code</span>
@@ -287,7 +288,7 @@
                         <!-- Guest password -->
 
                         <!-- Encrypted password -->
-                        <div class="reset_encrypted" *ngIf="pageName=='reset_encrypted'">
+                        <div class="reset_encrypted" *ngIf="pageName=='reset_encrypted' && device_data.is_sync==1">
                             <div class="pin_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <span class="header_text">Encrypted Pin Code</span>
@@ -301,7 +302,7 @@
                         <!-- Encrypted password --> 
 
                         <!-- Setting menu design start -->
-                        <div class="setting_background" *ngIf="pageName=='setting_list'">
+                        <div class="setting_background" *ngIf="pageName=='setting_list' && device_data.is_sync==1">
                             <div class="setting_header">
                                 <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
                                 <span class="header_text">Setting Menu</span>

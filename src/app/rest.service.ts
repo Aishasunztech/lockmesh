@@ -661,7 +661,6 @@ export class RestService {
       delete elem.device_id;
       delete elem.isChanged;
     });
-    console.log(device_setting);
     const header = new HttpHeaders();
 
     header.append('authorization', this.sessionLogin('token'));

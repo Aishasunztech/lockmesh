@@ -35,6 +35,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
     simno: '',
     start_date: '',
     status: '',
+    is_sync:''
   };
   pageName = "main_menu";
 
@@ -79,6 +80,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("ngOnInit");
     if(this.connected){
       console.log("this.connected: " + this.connected);
     }
@@ -111,9 +113,11 @@ export class ConnectAdminDevicesComponent implements OnInit {
   // }
   
   ngAfterViewInit() {
+    console.log("ngAfterViewInit");
+
     this.path = this.router.url.split('/');
     var device_id = this.path[2];
-
+    
     this.restService.refreshlist(device_id).subscribe((response) => {
       this.device_data = response;
       this.spinnerService.hide();
@@ -122,8 +126,11 @@ export class ConnectAdminDevicesComponent implements OnInit {
     
     this.restService.getDeviceApps(device_id).subscribe((response) => {
       this.appList = response;
-      this.stackedApps.push(JSON.parse(JSON.stringify(response)));
+      this.stackedApps.push(this.copyObject(response));
       console.log("stack length: " + this.stackedApps.length);
+      
+      console.log("stack apps");
+      console.log(this.stackedApps);
 
       this.spinnerService.hide();
       this.restService.authtoken(response);
@@ -131,7 +138,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
   
   // refresh button
-  referesh(device_id) {
+  refresh(device_id) {
+    console.log("refresh click");
     
     device_id = this.route.snapshot.paramMap.get('device_id');
     
@@ -140,11 +148,17 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
+    console.log(this.device_data);
+    
+    this.emptyStack();
+    
     this.restService.getDeviceApps(device_id).subscribe((response) => {
       this.appList = response;
-      // this.stackedApps.push(response);
+    
+      this.stackedApps.push(this.copyObject(response));
       console.log("stack length: "+ this.stackedApps.length);
-
+      console.log("stack apps");
+      console.log(this.stackedApps);
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
@@ -234,23 +248,47 @@ export class ConnectAdminDevicesComponent implements OnInit {
     }
 
     if(name == "check_all"){
+
+      
+      
       if(checked==true){
         if(value == "enable_all"){
           $('.enabled').prop('checked',true);
+          this.setSelectAll('enable',1);
         }else if(value == "on_encrypted"){
           $('.encrypted').prop('checked', true);
+          this.setSelectAll('encrypted', 1);
+
         }else if(value == "on_guest"){
           $('.guest').prop('checked', true);
+          this.setSelectAll('guest', 1);
+
         }
       }else{
         if (value == "enable_all") {
           $('.enabled').prop('checked', false);
+          this.setSelectAll('enable', 0);
+
         } else if (value == "on_encrypted") {
           $('.encrypted').prop('checked', false);
+          this.setSelectAll('encrypted', 0);
+
         } else if (value == "on_guest") {
           $('.guest').prop('checked', false);
+          this.setSelectAll('guest', 0);
+
         }
       }
+      this.appList.forEach((elem) => {
+        if (elem.isChanged == undefined) {
+          elem.isChanged = 1;
+        }
+      });
+
+      this.stackedApps.push(this.copyObject(this.appList));
+
+      console.log("on select/unselect all");
+      console.log(this.stackedApps);
     }else if(id=="apps"){
       if(app!=null){
         let appIndex =this.getAppIndex(this.appList,app.uniqueName);
@@ -300,10 +338,21 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     }
   }
+  setSelectAll(key,value){
+    this.appList.forEach((elem)=>{
+      elem[key]=value
+    });
+  }
 
   applySettings(event){
+    console.log("apply settings");
+    console.log("stack apps");
+    console.log(this.stackedApps);
     if(this.stackedApps.length>1){
       let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length -1]);
+      console.log("app_list");
+      console.log(app_list);
+
       let device_setting ={
         app_list: app_list
       };
@@ -312,11 +361,15 @@ export class ConnectAdminDevicesComponent implements OnInit {
     }
   }
   clearStack(){
-    this.stackedApps = JSON.parse(JSON.stringify(this.appList));
+    this.stackedApps = [];
+    this.redoStackedApps = [];
+    this.stackedApps.push(this.copyObject(this.appList));
+  }
+  emptyStack(){
+    this.stackedApps = [];
     this.redoStackedApps = [];
   }
   getChangedApps(apps){
-    console.log(apps);
     let retApps=[];
     
     for (var i = 0; i < apps.length; i++) {
@@ -345,7 +398,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
     }
     
   }
-
+  copyObject(obj){
+    return JSON.parse(JSON.stringify(obj));
+  }
   redoSettings(event){
     if(this.redoStackedApps.length>0){
       console.log("hello");
