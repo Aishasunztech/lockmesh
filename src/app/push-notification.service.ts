@@ -25,25 +25,29 @@ export class PushNotificationService {
   query: String;
 
   constructor(
-    private http: HttpClient,
     private curl: Common,
     private router: Router,
     private activeRouter: ActivatedRoute,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService,
-    private spinnerService: Ng4LoadingSpinnerService) {
-    // this.socket = socketIo();
-    // console.log("loging socket object");
-    // console.log(this.socket);
+    private spinnerService: Ng4LoadingSpinnerService
+    ) {
+      console.log('socket constructor');
   }
   
-  async connect(device_id){
-    this.token = this.sessionLogin("token");
+
+  connect(device_id){
+    this.token = this.sessionKey("token");
     this.device_id = device_id;
     console.log("device_id: "+ device_id);
     let makeToken = "token=" + this.token + "&device_id=" + this.device_id + "&isWeb=true";
     console.log("token query: " + makeToken);
     
-    this.socket = await socketIo.connect(this.baseUrl.toString(), { query: makeToken });
+    this.socket = socketIo.connect(this.baseUrl.toString(), { 
+      query: makeToken,
+      reconnectionDelay:1000,
+      reconnection:true,
+      forceNew:true
+    });
     
     console.log(this.socket);
     
@@ -51,40 +55,33 @@ export class PushNotificationService {
 
   reconnect(){
     console.log('reconnecting');
-    this.connect(this.device_id);
   }
 
-  sessionLogin(key) {
+  sessionKey(key) {
     return this.storage.get(key);
   }
 
-  onRequestApps(){
-    console.log("requesting application for: "+ this.device_id);
-    
-    this.socket.emit('requestApps_'+ this.device_id,{
-      device_id:this.device_id
-    });
-    
-  }
   
   onGetApps(){
-    console.log("start getting apps");
-    console.log(this.device_id);
     return Observable.create(observer => {
-      this.socket.on('sendApps_' + this.device_id, data => {
+      this.socket.on('get_sync_status_' + this.device_id, data => {
         console.log('request respond: ' + this.device_id);
         observer.next(data);
       });
     });
   }
-  
-  public onEvent(event: Event): Observable<any> {
-    return new Observable<Event>(observer => {
-      this.socket.on(event, () => {
-        observer.next()
-      });
+  connnections(){
+    this.socket.on("disconnect",function(){
+      console.log("disconnected");
     });
   }
+  // public onEvent(event: Event): Observable<any> {
+  //   return new Observable<Event>(observer => {
+  //     this.socket.on(event, () => {
+  //       observer.next()
+  //     });
+  //   });
+  // }
   onLinkDevice(){
 
   }

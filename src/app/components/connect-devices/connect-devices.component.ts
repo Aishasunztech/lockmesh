@@ -1,12 +1,13 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef  } from '@angular/core';
+import { Component, OnInit, Inject, } from '@angular/core';
 import { RestService } from '../../rest.service';
-import { PushNotificationService } from '../../push-notification.service';
+// import { PushNotificationService } from '../../push-notification.service';
 import Swal from 'sweetalert2';
-import { NgForm } from '@angular/forms';
+// import { NgForm } from '@angular/forms';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {Router, ActivatedRoute} from '@angular/router';
 import { Common } from '../../entity/common';
+import * as io from "socket.io-client";
 
 // import { Event } from '../../entity/event';
 // import { ConvertActionBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
@@ -63,58 +64,23 @@ export class ConnectAdminDevicesComponent implements OnInit {
   appStackTop=1;
   stackControls = [];
   redoStackControls = [];
-
-  connected=false;
+  
   baseUrl = this.common.baseurl;
-
+  private sockets;
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
     private router: Router,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
     private spinnerService: Ng4LoadingSpinnerService,
-    private pushNotification: PushNotificationService,
     private common: Common
+    // private sockets:PushNotificationService
   ) {
     
   }
 
   ngOnInit() {
     console.log("ngOnInit");
-    if(this.connected){
-      console.log("this.connected: " + this.connected);
-    }
-  }
-  
-  //  async initIoConnection(device_id) {
-  //    console.log("initIoConnection: " + device_id);
-  //   await this.pushNotification.connect(device_id);
-
-  //   this.pushNotification.onRequestApps();
-    
-  //   this.pushNotification.onGetApps().subscribe((resp) => {
-  //     console.log("get Applications response");
-  //     this.appList = JSON.parse(resp.data);
-  //   });
-    
-  //   this.pushNotification.onEvent(Event.CONNECT)
-  //     .subscribe(() => {
-  //       this.connected=true;
-  //       console.log('connected');
-  //   });
-
-  //   this.pushNotification.onEvent(Event.DISCONNECT)
-  //     .subscribe(() => {
-  //       this.connected = false;
-
-  //       console.log('disconnected');
-  //       this.pushNotification.reconnect();
-  //   });
-  // }
-  
-  ngAfterViewInit() {
-    console.log("ngAfterViewInit");
-
     this.path = this.router.url.split('/');
     var device_id = this.path[2];
     
@@ -123,18 +89,56 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
-    
+
     this.restService.getDeviceApps(device_id).subscribe((response) => {
       this.appList = response;
       this.stackedApps.push(this.copyObject(response));
       console.log("stack length: " + this.stackedApps.length);
-      
+
       console.log("stack apps");
       console.log(this.stackedApps);
 
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
+
+    let token = window.localStorage.getItem('token');
+
+    let makeToken = "token=" + token + "&device_id=" + device_id + "&isWeb=true";
+    console.log("token query: " + makeToken);
+
+    this.sockets = io.connect(this.baseUrl.toString(), {
+      query: makeToken,
+      reconnectionDelay: 1000,
+      reconnection: true,
+      forceNew: true
+    });
+    console.log("get_sync_status_"+ device_id);
+    this.sockets.on('get_sync_status_' + device_id, (data) => {
+      this.refresh(device_id);
+      // this.todos.push(data.todo);
+    });
+    
+  }
+
+  
+  ngAfterViewInit() {
+    console.log("ngAfterViewInit");
+
+    // this.path = this.router.url.split('/');
+    // var device_id = this.path[2];
+    
+    // console.log(this.sockets);
+
+    // this.sockets.connect
+
+    // this.sockets.onGetApps().subscribe((resp) => {
+    //   console.log("get Applications response");
+    //   if (resp.refresh_data == true) {
+    //     // this.refresh(resp.deivce_id);
+    //   }
+    // });  
+    // this.sockets.connnections();
   }
   
   // refresh button
@@ -149,7 +153,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.restService.authtoken(response);
     });
     console.log(this.device_data);
-    
+
     this.emptyStack();
     
     this.restService.getDeviceApps(device_id).subscribe((response) => {
@@ -452,12 +456,11 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   onLogout() {
-    // this.pushNotification.disconnect();
+    // this.sockets.disconnect();
     this.restService.authSignOut();
   }
 
   ngOnDestroy(){
-    // this.pushNotification.disconnect();
-    // this.connected=false;
+    // this.sockets.disconnect();
   }
 }

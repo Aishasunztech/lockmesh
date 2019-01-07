@@ -666,8 +666,8 @@ export class RestService {
     header.append('authorization', this.sessionLogin('token'));
     this.http.post(this.baseUrl + '/users/apply_settings/' + device_id, device_setting, {
       headers: { 'authorization': this.sessionLogin('token') }
-    }).subscribe(tradeBotInfo => {
-      console.log(tradeBotInfo);
+    }).subscribe(resp => {
+
     });
   }
 }

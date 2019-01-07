@@ -513,7 +513,7 @@
 
                                                 </thead>
                                                 <tbody>
-                                                <tr *ngFor="let device of allDevice | orderBy: key : reverse | paginate: { itemsPerPage: 10, currentPage: p } ; let i = index;">
+                                                <tr *ngFor="let device of allDevice | orderBy: key : reverse ; let i = index;">
                                                     <ng-container *ngIf="device.device_status==0 ">
                                                         <td data-table-header="ACTION" class="text-left btnFull">
                                                             <div class="btn-group">

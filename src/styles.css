@@ -304,12 +304,14 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
 .table>thead>tr>td,
 .table>thead>tr>th {
     padding: 4px 0px;
+    /* padding: unset; */
+    font-size: 11px;
     vertical-align: middle;
     text-align: center !important;
-    font-size: 10px;
+    /* font-size: 10px; */
 }
 .table>thead>tr>th {
-    text-align: left !important;
+    /* text-align: left !important; */
 }
 .text-center {
     text-align: center !important;
