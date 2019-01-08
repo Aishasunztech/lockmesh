@@ -524,6 +524,10 @@ input:checked + .slider:before {
     border:0;
     border-bottom:1px solid #9f9f9f;
     padding: 10px 15px;
+    cursor: pointer;
+}
+.fa-angle-left{
+    cursor: pointer;
 }
 .list-link {
     text-decoration: none;
@@ -590,8 +594,9 @@ input:checked + .slider:before {
 .confirm_password {
     background: #303030;
     text-align: center;
-    height: 300px;
+    height: 400px;
 }
+
 .header_text {
     margin-left: 25px;
     font-size: 15px;

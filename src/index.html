@@ -45,6 +45,7 @@
         }
     </style>
     <link rel="stylesheet" href="assets/css/simpleCheck.min.css">
+    <!-- <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" /> -->
 </head>
 
 <body id="bodyC" class="changeese">
@@ -99,35 +100,28 @@
 
     <script src="assets/js/multiple-select.js"></script>
     <script src="assets/js/simpleCheck.min.js"></script>
-    <script>
-      $(function() {
-        var select_item_loaded=window.setInterval(function(){
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script> -->
 
-          $('#ms').multipleSelect({
-            placeholder: "SELECT FIELDS",
-            width: "100%",
-            multipleWidth: 100
-          });
-          clearInterval(select_item_loaded);
-        }, 1500);
-      });
-  </script>
     <!-- <script src="assets/js/multi-select.js">
     </script>-->
 
     <!-- <script src="assets/js/jquery.dragtable.js"></script> -->
     <script>
+        // $(document).ready(function () {
+        //     $('#username').editable();
+        // });
         function togglelogo() {
             var sider = document.getElementById("bodyC");
             sider.classList.toggle("sidebar-mini");
         }
-    </script>
-    <script>
+        
         function removeClass(from) {
             $("#edit").modal('hide');
             var element = document.getElementById("edit");
             element.classList.remove("show");
         }
+        
         function closeModal(){
           $("#newrequestmodel").modal('hide');
           //$(elem).attr('aria-hidden',"true");
@@ -139,8 +133,7 @@
             var element = document.getElementById("passedit");
             element.classList.remove("show");
         }
-    </script>
-    <script>
+
         function togglebtns() {
             var element = document.getElementById("btnsShow");
             element.classList.toggle("show-btn");
@@ -150,19 +143,17 @@
             var element = document.getElementById("btnsShow");
             element.classList.toggle("active");
         }
-    </script>
-
-    <script type="text/javascript">
-        $(function() {
-            $('.multiselect-ui').multiselect({
-                includeSelectAllOption: true
-            });
-            $(document).on('hide.bs.modal','#edit', function () {
-                $(".modal-backdrop").remove();
-                $("#bodyC").attr('class','changeese');
-             //Do stuff here
-            });
-        });
+        
+        // $(function() {
+        //     $('.multiselect-ui').multiselect({
+        //         includeSelectAllOption: true
+        //     });
+        //     $(document).on('hide.bs.modal','#edit', function () {
+        //         $(".modal-backdrop").remove();
+        //         $("#bodyC").attr('class','changeese');
+        //      //Do stuff here
+        //     });
+        // });
     </script>
     <script>
         function myFunction() {
@@ -173,8 +164,9 @@
                 x.type = "password";
             }
         }
+
+        
     </script>
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 </body>
 
 </html>
