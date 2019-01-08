@@ -54,20 +54,24 @@
     background: white !important;
     color:black; */
     /*border-right: 1px solid #cac4c4;*/
-    padding-top: 13px;
     width: 24%;
-    margin: 0px;
-    margin-bottom: -9px;
     background: white !important;
     color: black;
+    padding: 10px !important;
+    margin:  3px !important;
+}
+.phone_actions p{
+    color:black ;
+}
+.phone_actions:hover {
+    background-color: #301967 !important;
 }
 .phone_actions:hover p{
-    color:black;
+   color: white !important;
 }
-.phone_actions:hover,
-.phone_actions:focus,
-.phone_actions:active{
-    background-color: #ffffff!important;
+
+.phone_actions:hover span{
+    color: white !important;
 }
 .phone_actions span{
     font-size: 18px;
@@ -412,7 +416,8 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 .background-card {
-    height: 335px;
+    min-height: 434px;
+    max-height: 434px;
     background: #303030;
     overflow: overlay;
 }
@@ -442,6 +447,7 @@ input:checked + .slider:before {
     text-decoration: none;
     color: white;
     font-size: 12px;
+    cursor: pointer;
 }
 .locker-logo {
     margin: 15px 0 20px;
@@ -469,6 +475,8 @@ input:checked + .slider:before {
     transition: all .15s linear;
     margin: 0;
     border-radius: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     background-color: #9cd514;
 }
 .btn-refresh:hover , .btn-refresh:active  {
@@ -673,6 +681,10 @@ input[type=number]::-webkit-outer-spin-button {
         margin: 40px 0 0 0 !important;
     }
    
+}
+
+.text-left-force {
+    text-align: left!important;
 }
 
 @media screen and (max-width: 768px) {
