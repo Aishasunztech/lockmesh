@@ -136,7 +136,89 @@
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
 }
-
+.save_profile {
+    background: #fff;
+    width: 70% !important;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 10px;
+    padding: 0px;
+    margin: 10px 0 0 0 !important;
+    font-weight: 500;
+    font-size: 12px;
+    border-radius: 3px 0 0 3px;
+    border: 1px solid #1e0d5180;
+    text-align: center;
+    color: #434373;
+}
+.save_profile_icon {
+      margin-top: 10px;
+}
+#slct {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background-image: none;
+    background: #301967;
+    width: 100% !important;
+    height: 44px;
+    line-height: 44px;
+    cursor: pointer;
+    margin: 0;
+    padding: 0 0 0 1em;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+}
+#slct:hover {
+  background: #1e0d51
+}
+#slct option {
+  font-size: 15px;
+}
+/* Custom Select */
+.select {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 40px;
+    line-height: 3;
+    background: #2c3e50;
+    overflow: hidden;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+#slct::-ms-expand {
+  display: none;
+}
+/* Arrow */
+.select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    width: 30%;
+    background: #1e0d51;
+    pointer-events: none;
+    color: #fff;
+}
+/* Transition */
+.select:hover::after {
+  color: #fff;
+}
+.select::after {
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}
 .action_table {
     overflow: unset;
     width: 100%!important;
@@ -678,7 +760,7 @@ input[type=number]::-webkit-outer-spin-button {
     }
     */
     .main-panel>.content {
-        margin: 40px 0 0 0 !important;
+        margin: 30px 0 0 0 !important;
     }
    
 }
@@ -691,7 +773,7 @@ input[type=number]::-webkit-outer-spin-button {
     .main-panel .content {
         padding-left: 15px;
         padding-right: 15px;
-        margin: 40px 0 0 0 !important;
+        margin: 30px 0 0 0 !important;
     }
     .text-left-force {
         text-align: left!important;

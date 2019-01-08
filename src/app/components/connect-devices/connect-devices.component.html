@@ -42,7 +42,7 @@
         </div>
     </nav>
     <!-- End Navbar -->
-    <div class="content " style="margin-top: 40px;">
+    <div class="content ">
         <div class="row">
             <div class="col-lg-4 no-padding-all">
                 <form class="form-horizontal" id="formData" #deviceData="ngForm" (ngSubmit)="refresh('device_id')">
@@ -171,7 +171,7 @@
                 </form>
                 <div class="clearfix"></div>
             </div>
-            <div class="col-lg-4 apps_grid" style="padding-left: 0px;padding-right: 0px;">
+            <div class="col-lg-4 apps_grid">
                 <div class="card apps_card">
                     <div class="second-frame" >
                         <img src="/assets/images/top_bar.jpg" class="top_bar">             
@@ -423,14 +423,20 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
-                                    <span class="btn purple">Load Profile
-                                    <span class="fa fa-spinner icon_purple"></span></span>
+                                    <div class="select">
+                                        <select name="slct" id="slct">
+                                            <option>Load Profile</option>
+                                            <option value="1">option 1</option>
+                                            <option value="2">option 2</option>
+                                            <option value="3">option 3</option>
+                                        </select>
+                                    </div>
                                 </a>
                             </div>
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
-                                    <span class="btn purple">Save Profile
-                                    <span class="fa fa-floppy-o icon_purple"></span></span>
+                                    <input type="text" class="save_profile" name="save_profile" placeholder="Save Profile">
+                                    <span class="fa fa-floppy-o icon_purple save_profile_icon"></span>
                                 </a>
                             </div>
                         </div>
