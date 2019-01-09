@@ -146,10 +146,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
     console.log("refresh click");
     
     device_id = this.route.snapshot.paramMap.get('device_id');
-    
+    this.spinnerService.show();
+
     this.restService.refreshlist(device_id).subscribe((response) => {
-      this.device_data = response;
-      this.spinnerService.hide();
+      this.device_data = response;  
       this.restService.authtoken(response);
     });
     console.log(this.device_data);
@@ -163,9 +163,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
       console.log("stack length: "+ this.stackedApps.length);
       console.log("stack apps");
       console.log(this.stackedApps);
-      this.spinnerService.hide();
       this.restService.authtoken(response);
     });
+    this.spinnerService.hide();
   }
   
   changePage(pageName,event){
@@ -350,18 +350,40 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
   applySettings(event){
     console.log("apply settings");
+    console.log(this.passwords);
     console.log("stack apps");
     console.log(this.stackedApps);
-    if(this.stackedApps.length>1){
+    if(this.stackedApps.length>1 || this.passwords.admin_password!=null || this.passwords.guest_password!=null || this.passwords.encrypted_password !=null){
       let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length -1]);
       console.log("app_list");
       console.log(app_list);
 
       let device_setting ={
-        app_list: app_list
+        app_list: app_list,
+        passwords: this.passwords
       };
+      console.log(device_setting);
       this.restService.applySettings(device_setting,this.device_data.device_id);
-      this.clearStack();
+      Swal({
+        text: 'Settings are successfully applied',
+        showCancelButton: false,
+        useRejections: false,
+        // cancelButtonText: 'No',
+        // confirmButtonText: 'Yes',
+        type: 'success'
+      }).then(()=>{
+        this.clearStack();
+      });
+    }else{
+      Swal({
+        text: 'please make a change before apply!',
+        showCancelButton: false,
+        useRejections: false,
+        // cancelButtonText: 'No',
+        // confirmButtonText: 'Yes',
+        type: 'info'
+      }).then(() => {
+      });
     }
   }
   clearStack(){
@@ -399,6 +421,16 @@ export class ConnectAdminDevicesComponent implements OnInit {
       console.log(this.appList);
       this.redoStackedApps.push(apps);
     
+    }else{
+      Swal({
+        text: 'there is no setting to undo',
+        showCancelButton: false,
+        useRejections: false,
+        // cancelButtonText: 'No',
+        // confirmButtonText: 'Yes',
+        type: 'info'
+      }).then(() => {
+      });
     }
     
   }
@@ -412,6 +444,16 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.redoStackedApps.pop();
       this.stackedApps.push(apps);
       this.appList = JSON.parse(JSON.stringify(this.stackedApps[this.stackedApps.length - 1]));
+    }else{
+      Swal({
+        text: 'there is no setting to redo',
+        showCancelButton: false,
+        useRejections: false,
+        // cancelButtonText: 'No',
+        // confirmButtonText: 'Yes',
+        type: 'info'
+      }).then(() => {
+      });
     }
     
   }
@@ -421,21 +463,35 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.appList = response;
       // this.stackedApps.push(response);
       console.log("stack length: " + this.stackedApps.length);
-
+      Swal({
+        text: 'settings are cleared successfully',
+        showCancelButton: false,
+        useRejections: false,
+        // cancelButtonText: 'No',
+        // confirmButtonText: 'Yes',
+        type: 'success'
+      }).then(() => {
+      });
       this.spinnerService.hide();
       this.restService.authtoken(response);
     });
   }
-  resetPassword(event){
+  resetPassword(event,value){
     var className = event.target.attributes.class.nodeValue.split(' ');
     className=className[className.length -1];
-    console.log(className);
+    
     if (className == "confirm_encrypted"){
-
+      if(this.passwords.encrypted_password==value){
+        console.log(value);
+      }
     } else if (className == "confirm_guest"){
-
+      if (this.passwords.guest_password == value) {
+        console.log(value);
+      }
     } else if (className == "confirm_admin"){
-
+      if (this.passwords.admin_password == value) {
+        console.log(value);
+      }
     }
     
   }

@@ -267,8 +267,8 @@
                             </div>
                             <div class="confirm_password">
                                 <input type="password" class="pin admin_pin" name="admin_pwd" [(ngModel)]="passwords.admin_password" placeholder="Please enter guest pin" required />
-                                <input type="password" class="pin admin_pin" name="admin_pwd_c" placeholder="Please confirm your pin" required />
-                                <button class="btn confirm_pass confirm_admin" (click)="resetPassword($event)">Confirm Pin</button>
+                                <input type="password" class="pin admin_pin" name="admin_pwd_c" [(ngModel)]='conf_admin_pwd' placeholder="Please confirm your pin" required />
+                                <button class="btn confirm_pass confirm_admin" (click)="resetPassword($event,conf_admin_pwd)">Confirm Pin</button>
                             </div>
                         </div>
                         <!-- Admin password -->
@@ -281,8 +281,8 @@
                             </div>
                             <div class="confirm_password">
                                 <input type="password" class="pin guest_pin" name="guest_pwd" [(ngModel)]="passwords.guest_password" placeholder="Please enter guest pin" required />
-                                <input type="password" class="pin guest_pin" name="guest_pwd_c" placeholder="Please confirm your pin" required />
-                                <button class="btn confirm_pass confirm_guest" (click)="resetPassword($event)">Confirm Pin</button>
+                                <input type="password" class="pin guest_pin" name="guest_pwd_c" [(ngModel)]='conf_guest_pwd' placeholder="Please confirm your pin" required />
+                                <button class="btn confirm_pass confirm_guest" (click)="resetPassword($event,conf_guest_pwd)">Confirm Pin</button>
                             </div>
                         </div>
                         <!-- Guest password -->
@@ -295,8 +295,8 @@
                             </div>
                             <div class="confirm_password">
                                 <input type="password" class="pin encrypted_pin" name="encrypted_pwd" [(ngModel)]="passwords.encrypted_password" placeholder="Please enter guest pin" required />
-                                <input type="password" class="pin encrypted_pin" name="encrypted_pwd_c" placeholder="Please confirm your pin" required />
-                                <button class="btn confirm_pass confirm_encrypted" (click)="resetPassword($event)">Confirm Pin</button>
+                                <input type="password" class="pin encrypted_pin" name="encrypted_pwd_c" [(ngModel)]='conf_enc_pwd' placeholder="Please confirm your pin" required />
+                                <button class="btn confirm_pass confirm_encrypted" (click)="resetPassword($event, conf_enc_pwd)">Confirm Pin</button>
                             </div>
                         </div>
                         <!-- Encrypted password --> 
@@ -428,7 +428,7 @@
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="javasacript:void(0)" class="action_btn">
+                                <a class="action_btn" id="username" data-type="text" data-pk="1" data-title="Enter username">
                                     <span class="btn purple">Save Profile
                                     <span class="fa fa-floppy-o icon_purple"></span></span>
                                 </a>
@@ -490,6 +490,24 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-times"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="javasacript:void(0)" class="action_btn">
+                                    <span class="btn purple">N/A
+                                        <span class="fa fa-times icon_purple"></span></span>
+                                </a>
+                            </div>
+                        </div>
+                        
                         <div class="col-sm-12">
                             <button (click)="suspendForm(device_data.device_id);" class="btn btn-block btn_suspend">Suspend</button>
                         </div>
