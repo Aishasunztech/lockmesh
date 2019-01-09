@@ -170,6 +170,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
   
   changePage(pageName,event){
     this.pageName=pageName;
+    $('input').val('');
   }
 
   unlinkUser(device_id) {
