@@ -18,7 +18,7 @@ profile: any = {
   link_code: '',
   tokens: '',
 };
-  constructor(private restService: RestService, private router: Router, @Inject(LOCAL_STORAGE) private storage: WebStorageService) {}
+  constructor(private restService: RestService, public router: Router, @Inject(LOCAL_STORAGE) private storage: WebStorageService) {}
 
   ngOnInit() {
     this.username = this.restService.sessionLogin('name');
@@ -34,5 +34,7 @@ profile: any = {
         console.log(this.profile);
     });
   }
-
+  onLogout() {
+    this.restService.authSignOut();
+  }
 }

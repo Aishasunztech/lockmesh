@@ -52,7 +52,7 @@ import { UploadApkComponent } from './components/upload-apk/upload-apk.component
 import { ViewApkComponent } from './components/view-apk/view-apk.component';
 import { UiSwitchModule } from 'ngx-toggle-switch';
 import { InvalidPage } from './components/invalid_page/invalid_page.component';
-
+// import { FilterProfilePipe } from "./shared/filter-profile.pipe";
 @NgModule({
   declarations: [
     AppComponent,

@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
     location: Location,
     private acl: HelperService,
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit {
     const response = await this.restService.getUserDevice(Headers).toPromise();
 
     response.data.forEach( search => {
-      if(search.device_status==0 ){
+      if(search.device_status==0 && search.dealer_id!-0){
         this.newRequest = this.newRequest + 1;
       }
     });

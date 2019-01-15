@@ -447,7 +447,7 @@
     width: auto;
     border:solid 20px #000;
     border-radius:40px;
-    border-bottom:solid 20px #000;
+    border-bottom:solid 10px #000;
     border-top:solid 60px #000;
     margin-left:auto;
     margin-right:auto;
@@ -625,7 +625,7 @@ input:checked + .slider:before {
     background: #303030;
     margin-top: 15px;
     color: #40dcff;
-    font-size: 13px;
+    font-size: 15px;
 }
 .pin:focus,
 .pin:valid {

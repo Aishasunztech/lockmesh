@@ -218,6 +218,21 @@ export class RestService {
     return this.response;
   }
 
+  getProfiles( dealer_id=null,profile_id=null,device_id=null){
+    // let is_admin =req.body.is_admin;\
+    let payload = {
+      dealer_id: dealer_id,
+      profile_id: profile_id,
+      device_id: device_id
+    }
+    this.token = this.sessionLogin('token');
+    const header = new HttpHeaders();
+    header.append('authorization', this.sessionLogin('token'));
+    this.response = this.http.post(this.baseUrl + '/users/get_profiles',payload, { headers: { 'authorization': this.sessionLogin('token') } });
+    this.authtoken(this.response);
+    return this.response;
+  }
+
   // for dealer reset password(admin dashboard)
   updateAdminsabPassDealerDetails(sdealer) {
 
@@ -639,7 +654,7 @@ export class RestService {
     });
   }
 
-  applySettings(device_setting, device_id){
+  applySettings(device_setting, device_id,type="history",name=null,dealer_id=0){
 
     device_setting.app_list.forEach((elem)=>{
       elem.packageName = elem.uniqueName.replace(elem.label,'');
@@ -664,7 +679,12 @@ export class RestService {
     const header = new HttpHeaders();
 
     header.append('authorization', this.sessionLogin('token'));
-    this.http.post(this.baseUrl + '/users/apply_settings/' + device_id, device_setting, {
+    this.http.post(this.baseUrl + '/users/apply_settings/' + device_id, {
+      device_setting,
+      type: type,
+      name: name,
+      dealer_id: dealer_id
+    }, {
       headers: { 'authorization': this.sessionLogin('token') }
     }).subscribe(resp => {
 

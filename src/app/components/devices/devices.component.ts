@@ -182,12 +182,15 @@ export class DevicesComponent implements OnInit {
   // get admin selected device items
   async getAdminSelectedItems() {
     const response = await this.restService.getAdminSelectedItems(Headers).toPromise();
-    response.data = JSON.parse(response.data);
-    const alength = response.data.length;
-    for ( this.i = 0; this.i < alength; this.i++) {
-      this.onItemSelect(response.data[this.i], 'initVal');
-      this.selectedItems.push(response.data[this.i]);
+    if(response.data!=undefined){
+      response.data = JSON.parse(response.data);
+      const alength = response.data.length;
+      for (this.i = 0; this.i < alength; this.i++) {
+        this.onItemSelect(response.data[this.i], 'initVal');
+        this.selectedItems.push(response.data[this.i]);
+      }
     }
+    
   }
 
   sort(key) {
@@ -575,7 +578,7 @@ export class DevicesComponent implements OnInit {
   }
 
   updateAdmin() {
-    if (this.data.email === '' || this.data.name === '' ||  this.data.email === 'null' || this.data.name === 'null' ) {
+    if (this.data.email === '' || this.data.name === '' || this.data.email === 'null' || this.data.name === 'null' || this.data.expiry_date ==='' || this.data.expiry_date === 'null') {
       Swal({
        text: 'Please Fill Name And Email .... ',
        type: 'error',
@@ -827,11 +830,26 @@ export class DevicesComponent implements OnInit {
     this.allDevice = [];
     //var name = elem.target.name;
     var value = elem.target.value;
-    list.forEach( ele => {
-      if( ele.status.toUpperCase().includes(value.toUpperCase())){
-        this.allDevice.push(ele);
-      }
-    });
+    
+    if(value == "Suspended"){
+      list.forEach(ele => {
+        if (ele.account_status!= null && ele.account_status.toString().toUpperCase().includes(value.toUpperCase())) {
+          this.allDevice.push(ele);
+        }
+      });
+    }else if(value == "Unlinked"){
+      list.forEach(ele => {
+        if (ele.unlink_status == 1) {
+          this.allDevice.push(ele);
+        }
+      });
+    }else{
+      list.forEach(ele => {
+        if (ele.status.toUpperCase().includes(value.toUpperCase())) {
+          this.allDevice.push(ele);
+        }
+      });  
+    }
 
   }
   paging(value){

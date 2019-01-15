@@ -97,9 +97,9 @@
                                     <select class="form-control inputs on-small-margin" placeholder="Device" name="display_device" (input)="deviceFilter($event)">
                                         <option value="">SHOW DEVICES</option>
                                         <option>Active</option>
-                                        <option>Linked</option>
                                         <option>Unlinked</option>
                                         <option>Expired</option>
+                                        <option>Suspended</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3 search-btn">
@@ -127,182 +127,188 @@
                             </div>
                             <table id="datatable" class="table table-bordered responsive" cellspacing="0" width="100%">
                                 <thead>
-                                <tr>
-                                    <th  class="disabled-sorting" style="min-width: 35px;"></th>
-                                    <th class="disabled-sorting"></th>
-                                    <th nowrap *ngIf="state.name == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="name" placeholder="Name" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.email == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="email" placeholder="Email" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.client_id == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="client_id" placeholder="Client Id" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="(state.dealer_id == true) && (userType=='admin')" >
-                                        <label>
-                                            <input class="form-control" type="text" name="dealer_id" placeholder="Dealer Id" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.link_code == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="dealer_pin" placeholder="Dealer Pin" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.imei == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="imei" placeholder="IMEI" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.simno == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="sim" placeholder="SIM" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.status == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="status" placeholder="Status" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.device_id == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="device_id" placeholder="Device Id" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.model == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="model" placeholder="Model" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.start_date == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="start_date" placeholder="Start Date" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.expiry_date == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="expiry_date" placeholder="Expiry Date" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.dealer_name == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="dealer_name" placeholder="Dealer Name" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.online == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="online" placeholder="Online" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.serial_number == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="serial_number" placeholder="Serial Number" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="state.mac_address == true" >
-                                        <label>
-                                            <input class="form-control" type="text" name="mac_address" placeholder="Mac Address" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="(state.s_dealer == true) && (userType=='admin' || userType=='dealer')" >
-                                        <label>
-                                            <input class="form-control" type="text" name="s_deare_id" placeholder="S-dealer Id" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                    <th nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" >
-                                        <label>
-                                            <input class="form-control" type="text" name="s_dealer_name" placeholder="s-dealer Name" (input)="searchField($event)">
-                                            <span class="fa fa-search"></span>
-                                        </label>
-                                    </th>
-                                </tr>
-                                <tr class="text-center btnFull" >
-                                    <th class="disabled-sorting headings" style="min-width: 35px;"></th>
-                                    <th  scope="col" class="disabled-sorting headings">Action</th>
-                                    <th  scope="col"  class="headings" drag-me drop-me nowrap *ngIf="state.name == true" (click)="sort('name')">Name
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th  scope="col"  class="headings" drag-me drop-me nowrap *ngIf="state.email == true" (click)="sort('email')">Email
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.client_id == true" (click)="sort('client_id')">Client Id
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th  scope="col"  class="headings" nowrap *ngIf="(state.dealer_id == true)  && (userType=='admin')" (click)="sort('dealer_id')">Dealer Id
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap   *ngIf="state.link_code == true" (click)="sort('link_code')">Dealer Pin
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.imei == true" (click)="sort('imei')">IMEI
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.simno == true" (click)="sort('simno')">SIM
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.status == true" (click)="sort('status')">Status
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th  scope="col"  class="headings" nowrap *ngIf="state.device_id == true" (click)="sort('device_id')">Device Id
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.model == true" (click)="sort('model')">Model
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.start_date == true" (click)="sort('start_date')">Start Date
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.expiry_date == true" (click)="sort('expiry_date')">Expiry Date
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th  scope="col"  class="headings" nowrap *ngIf="state.dealer_name == true" (click)="sort('dealer_name')">Dealer Name
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.online == true" (click)="sort('online')">Online
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.serial_number == true" (click)="sort('serial_number')">Serial Number
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="state.mac_address == true" (click)="sort('mac_address')">Mac Address
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th   scope="col" class="headings" nowrap *ngIf="(state.s_dealer == true)  && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer')">S-dealer Id
-                                        <span class="fa fa-sort"></span>
-                                    </th>
-                                    <th scope="col" class="headings" nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer_name')">s_dealer_name
-                                        <span class="fa fa-sort"></span>
-                                    </th>
+                                    <tr>
+                                        <th  class="disabled-sorting" style="min-width: 35px;"></th>
+                                        <th class="disabled-sorting"></th>
+                                        <th nowrap *ngIf="state.name == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="name" placeholder="Name" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.email == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="email" placeholder="Email" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.client_id == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="client_id" placeholder="Client Id" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="(state.dealer_id == true) && (userType=='admin')" >
+                                            <label>
+                                                <input class="form-control" type="text" name="dealer_id" placeholder="Dealer Id" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.link_code == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="dealer_pin" placeholder="Dealer Pin" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.imei == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="imei" placeholder="IMEI" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.simno == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="sim" placeholder="SIM" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.status == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="status" placeholder="Status" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.device_id == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="device_id" placeholder="Device Id" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.model == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="model" placeholder="Model" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.start_date == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="start_date" placeholder="Start Date" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.expiry_date == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="expiry_date" placeholder="Expiry Date" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.dealer_name == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="dealer_name" placeholder="Dealer Name" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.online == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="online" placeholder="Online" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.serial_number == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="serial_number" placeholder="Serial Number" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="state.mac_address == true" >
+                                            <label>
+                                                <input class="form-control" type="text" name="mac_address" placeholder="Mac Address" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="(state.s_dealer == true) && (userType=='admin' || userType=='dealer')" >
+                                            <label>
+                                                <input class="form-control" type="text" name="s_deare_id" placeholder="S-dealer Id" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                        <th nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" >
+                                            <label>
+                                                <input class="form-control" type="text" name="s_dealer_name" placeholder="s-dealer Name" (input)="searchField($event)">
+                                                <span class="fa fa-search"></span>
+                                            </label>
+                                        </th>
+                                    </tr>
+                                    <tr class="text-center btnFull" >
+                                        <th class="disabled-sorting headings" style="min-width: 35px;"></th>
+                                        <th  scope="col" class="disabled-sorting headings">Action</th>
+                                        <!-- name -->
+                                        <th  scope="col"  class="headings" drag-me drop-me nowrap *ngIf="state.name == true" (click)="sort('name')">Name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <!-- email -->
+                                        <th  scope="col"  class="headings" drag-me drop-me nowrap *ngIf="state.email == true" (click)="sort('email')">Email
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <!-- client id -->
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.client_id == true" (click)="sort('client_id')">Client Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <!-- dealer id -->
+                                        <th  scope="col"  class="headings" nowrap *ngIf="(state.dealer_id == true)  && (userType=='admin')" (click)="sort('dealer_id')">Dealer Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <!-- dealer_pin -->
+                                        <th   scope="col" class="headings" nowrap   *ngIf="state.link_code == true" (click)="sort('link_code')">Dealer Pin
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <!-- imei -->
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.imei == true" (click)="sort('imei')">IMEI
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.simno == true" (click)="sort('simno')">SIM
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.status == true" (click)="sort('status')">Status
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th  scope="col"  class="headings" nowrap *ngIf="state.device_id == true" (click)="sort('device_id')">Device Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.model == true" (click)="sort('model')">Model
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.start_date == true" (click)="sort('start_date')">Start Date
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.expiry_date == true" (click)="sort('expiry_date')">Expiry Date
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th  scope="col"  class="headings" nowrap *ngIf="state.dealer_name == true" (click)="sort('dealer_name')">Dealer Name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.online == true" (click)="sort('online')">Online
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.serial_number == true" (click)="sort('serial_number')">Serial Number
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.mac_address == true" (click)="sort('mac_address')">Mac Address
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th   scope="col" class="headings" nowrap *ngIf="(state.s_dealer == true)  && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer')">S-dealer Id
+                                            <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th scope="col" class="headings" nowrap *ngIf="(state.s_dealer_name == true) && (userType=='admin' || userType=='dealer')" (click)="sort('s_dealer_name')">s_dealer_name
+                                            <span class="fa fa-sort"></span>
+                                        </th>
 
-                                </tr>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: {id: 'datatable', itemsPerPage: perPage, currentPage: p } ; let i = index;">
-                                    <tr class="row_{{device.device_id}}" *ngIf="device.device_status==1">
-
+                                    <tr class="row_{{device.device_id}}" *ngIf="device.device_status!=0 || device.unlink_status==1">
+                                        <!-- blank -->
                                         <td class="text-center btnFull" id="plus">
                                             <a href="javascrtip:void(0)" class="expand rounded" (click)="collapse(device,$event);">
                                                 <span class="fa fa-plus" ></span>
@@ -310,6 +316,7 @@
 
                                         </td>
 
+                                        <!-- actions -->
                                         <td data-table-header="ACTION"  class="text-left btnFull">
                                             <div class="btn-group">
                                                 <a href="javascript:void(0)" *ngIf="device.device_status==1 && (device.account_status==null || device.account_status=='')" (click)="suspendForm(device.device_id);">
@@ -340,15 +347,21 @@
                                                 </a> -->
                                             </div>
                                         </td>
+
+                                        <!-- name -->
                                         <td data-table-header="NAME" *ngIf="state.name == true">
                                             <span *ngIf="device.name != 'null';else showBlank">{{ device.name }}</span>
                                         </td>
+                                        <!-- email -->
                                         <td  data-table-header="EMAIL" *ngIf="state.email == true">
                                             <span *ngIf="device.email != 'null';else showBlank">{{ device.email }}</span>
                                         </td>
+
+                                        <!-- client id -->
                                         <td  data-table-header="CLIENT ID" *ngIf="state.client_id == true">
                                             <span *ngIf="device.client_id != 'null';else showBlank">{{ device.client_id }}</span>
                                         </td>
+
                                         <td  data-table-header="DEALER ID" *ngIf="state.dealer_id == true">
                                             <span *ngIf="device.dealer_id != 'null';else showBlank">{{ device.dealer_id }}</span>
                                         </td>
@@ -362,7 +375,8 @@
                                             <span *ngIf="device.simno != 'null';else showBlank">{{ device.simno}}</span>
                                         </td>
                                         <td  data-table-header="STATUS" *ngIf="state.status == true">
-                                            <span *ngIf="device.status != 'null';else showBlank">{{device.account_status == 'suspended' ? 'Suspended' : device.status }}</span></td>
+                                            <span *ngIf="device.status != 'null';else showBlank">{{device.account_status == 'suspended' ? 'Suspended' : device.status }}</span>
+                                        </td>
                                         <td  data-table-header="DEVICE ID" *ngIf="state.device_id == true">
                                             <span *ngIf="device.device_id != 'null';else showBlank">{{ device.device_id }}</span></td>
                                         <td  data-table-header="MODEL" *ngIf="state.model == true">
@@ -402,7 +416,7 @@
                                           </p>
                                         </div> -->
                                     </tr>
-                                    <tr *ngIf="device.device_status==1" style="display:none;" class="detailed_row_{{device.device_id}}">
+                                    <tr *ngIf="device.device_status!=0" style="display:none;" class="detailed_row_{{device.device_id}}">
                                         <td colspan="25" style="text-align:left!important;padding-left:50px;"></td>
                                     </tr>
                                 </ng-container>
@@ -469,7 +483,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-4">Expiry Date</label>
                                                     <div class="col-sm-8">
-                                                        <ng-datepicker name="expiry_date" [ngStyle]="{'width':'100%'}" [options]="options" [(ngModel)]="data.expiry_date"></ng-datepicker>
+                                                        <ng-datepicker ng-required="true" name="expiry_date" [ngStyle]="{'width':'100%'}" [options]="options" [(ngModel)]="data.expiry_date"></ng-datepicker>
 
                                                     </div>
                                                     <!-- <input type="text" class="form-control" required="" id="expiredate" name="expiry_date" [(ngModel)]="data.expiry_date"> -->
@@ -514,7 +528,7 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr *ngFor="let device of allDevice | orderBy: key : reverse ; let i = index;">
-                                                    <ng-container *ngIf="device.device_status==0 ">
+                                                    <ng-container *ngIf="device.device_status==0 && device.dealer_id!=0 && device.unlink_status==0">
                                                         <td data-table-header="ACTION" class="text-left btnFull">
                                                             <div class="btn-group">
                                                                 <a class="acceptbut" onclick="closeModal()" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
