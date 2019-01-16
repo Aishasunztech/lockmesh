@@ -50,16 +50,16 @@ export class HeaderComponent implements OnInit {
     }else{
 
       this.componentName=this.route.snapshot.data['componentName'];
+      console.log("componentName: "+ this.componentName);
 
       this.spinnerService.show();
+      
       await this.aclHandler();
+      
       setTimeout(() => {
-      this.spinnerService.hide();
       }, 1000);
 
-      this.spinnerService.show();
       this.profilelist();
-      this.spinnerService.hide();
 
       this.spinnerService.show();
       await this.allDeviceView();
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit {
     const response = await this.restService.getUserDevice(Headers).toPromise();
 
     response.data.forEach( search => {
-      if(search.device_status==0 && search.dealer_id!-0){
+      if (search.device_status == 0 && search.dealer_id != 0 && search.unlink_status == 0){
         this.newRequest = this.newRequest + 1;
       }
     });

@@ -416,7 +416,7 @@
                                           </p>
                                         </div> -->
                                     </tr>
-                                    <tr *ngIf="device.device_status!=0" style="display:none;" class="detailed_row_{{device.device_id}}">
+                                    <tr *ngIf="device.device_status!=0 || device.unlink_status==1" style="display:none;" class="detailed_row_{{device.device_id}}">
                                         <td colspan="25" style="text-align:left!important;padding-left:50px;"></td>
                                     </tr>
                                 </ng-container>

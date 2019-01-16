@@ -404,7 +404,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: red;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -481,7 +481,7 @@
   font-style:normal;
   }
 input:checked + .slider {
-  background-color: #5a5a5b;
+  background-color: green;
 }
 input:checked + .slider:before {
   -webkit-transform: translateX(18px);

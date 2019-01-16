@@ -82,7 +82,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
   deviceHistories = [];
 
   dealer_id:number;
-
+  connected_dealer:number;
   profileName:string;
   policyName:string;
 
@@ -98,7 +98,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
     this.dealer_id=Number(window.localStorage.getItem("id"));
     if (window.localStorage.getItem("type").replace(/"/g, "") == "admin") this.isAdmin = true;
     this.userType = window.localStorage.getItem("type").replace(/"/g,"");
-    // if (this.isAdmin) this.profile_type = "policy";
+    this.connected_dealer = Number(window.localStorage.getItem("connected_dealer"));
+    
   }
 
   ngOnInit() {
@@ -178,8 +179,20 @@ export class ConnectAdminDevicesComponent implements OnInit {
         this.restService.authtoken(response);
       });
     } else if (this.userType == "sdealer") {
-      // all policies, his dealer profiles
 
+      this.restService.getProfiles(this.connected_dealer).subscribe((response) => {
+        response.profiles.forEach(elem => {
+          if (elem.type == "profile") {
+            this.profiles.push(elem);
+          } else if (elem.type = "policy") {
+            this.policies.push(elem);
+          }
+        });
+        this.mainProfiles = response.profiles;
+
+        this.restService.authtoken(response);
+
+      });
     }
   }
 

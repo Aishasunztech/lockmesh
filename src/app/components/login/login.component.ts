@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
           this.storage.set('name', this.resp.user.dealer_name);
           this.storage.set('firstName', this.resp.user.firstName);
           this.storage.set('lastName', this.resp.user.lastName);
+          this.storage.set('connected_dealer',this.resp.user.connected_dealer);
           this.storage.set('type', this.resp.user.user_type);
           this.router.navigate(['/devices']);
         } else {

@@ -52,6 +52,7 @@ import { UploadApkComponent } from './components/upload-apk/upload-apk.component
 import { ViewApkComponent } from './components/view-apk/view-apk.component';
 import { UiSwitchModule } from 'ngx-toggle-switch';
 import { InvalidPage } from './components/invalid_page/invalid_page.component';
+import { ProfileListComponent } from './components/profile-list/profile-list.component';
 // import { FilterProfilePipe } from "./shared/filter-profile.pipe";
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { InvalidPage } from './components/invalid_page/invalid_page.component';
     SConnectDevicesComponent,
     UploadApkComponent,
     ViewApkComponent,
-    InvalidPage
+    InvalidPage,
+    ProfileListComponent
   ],
   imports: [
     BrowserModule,
@@ -313,6 +315,13 @@ import { InvalidPage } from './components/invalid_page/invalid_page.component';
         component: SConnectDevicesComponent,
         data :{
           componentName:"SConnectDevicesComponent"
+        }
+      },
+      {
+        path: 'profiles-list/:profile_type',
+        component: ProfileListComponent,
+        data: {
+          componentName: "ProfileListComponent"
         }
       },
       {

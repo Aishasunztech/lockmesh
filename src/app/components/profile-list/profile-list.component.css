@@ -1,0 +1,218 @@
+    .tooltiptext[_ngcontent-c1] {
+        visibility: hidden;
+        width: 54px;
+        background-color: #fab526;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+        font-weight: 500;
+        padding: 6px 0;
+        position: absolute;
+        z-index: 1;
+        font-size: 14px;
+        top: 0px;
+        left: -54px;
+        text-transform: capitalize;
+    }
+
+    thead>tr>th {
+        cursor: pointer;
+        min-width: 120px;
+        border: 1px solid #eae6e6;
+    }
+
+    .expand{
+      background: #0ab50a;
+      color: white!important;
+      padding: 0 3px 0 2px;
+      font-size: 13px;
+      margin: auto auto !important;
+      border: 1px solid #0ab50a !important;
+
+
+    }
+    .unexpand{
+      background: #d80909;
+      color: white!important;
+      padding: 0px 3px 0px 3px;
+      font-size: 14px;
+      margin-left: 6px;
+      margin-right: 19px!important;
+      /* border: 1px solid #d80909!important; */
+    }
+    .navbar.navbar-absolute {
+        position: absolute;
+        width: 34%;
+        padding-top: 10px;
+        z-index: 1029;
+        left: 6px;
+    }
+    .navbar.navbar-transparent {
+        background-color: transparent!important;
+        box-shadow: none;
+        border-bottom: 0px solid #ddd;
+    }
+
+  td.btnFull .btn{
+      display: block;
+      width: 80px;
+      margin: 2px 2px;
+    }
+  td a:hover{
+    text-decoration: none;
+  }
+  .headings{
+    background: rgba(244,244,244,1);
+  }
+  table thead tr th input{
+    font-family:Arial, FontAwesome;
+    font-size: 11px;
+  }
+  #datatable th label{
+    width: 100%;
+    position: relative;
+  }
+  #datatable th label span{
+    position: absolute;
+    right: 5px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .inputs{
+    font-size: 11px;
+    height: 40px;
+  }
+  
+  #classTable th{
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .search-btn{
+    position: relative;
+  }
+
+  .search-btn span{
+    position: absolute;
+    right: 23px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    color: #66615b;
+    font-size: 11px;
+  }
+  #formData label{
+    text-align: right;
+    line-height: 35px;
+  }
+    .connect {
+        background-color:#9cd514;
+    }
+
+    .suspend {
+        background-color:#d61415;
+    }
+    .edit{
+        background-color: #f09f2c;
+    }
+    .activate {
+      background-color:  #9cd514;
+    }
+    .table>tbody>tr>td {
+        padding: 15px 3px;
+        vertical-align: middle;
+        text-align: center !important;
+        font-size: 12px;
+    }
+
+    @media screen and (max-width: 768px) {
+
+        .table>tbody>tr>td {
+            padding: 20px 6px 15px 0;
+            vertical-align: middle;
+            text-align: right !important;
+            font-size: 12px;
+
+            margin-top: 10px;
+        }
+
+        .table>tbody>tr {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .table-bordered {
+            border: none;
+        }
+
+        .on-small-margin {
+            margin-bottom: 0;
+            margin-top: 15px;
+        }
+
+        .search-btn span {
+            position: absolute;
+            right: 23px;
+            top: 19px;
+        }
+    }
+    /*****************************mobile view table css*****************/
+
+
+    @media only screen and (max-width: 760px),
+    (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+        /* Force table to not be like tables anymore */
+        table.responsive, .responsive thead, .responsive tbody, .responsive th, .responsive td, .responsive tr {
+
+            display: block;
+        }
+
+        /* Hide table headers (but not display: none;, for accessibility) */
+        .responsive thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        .responsive tr { border: 1px solid #ccc;
+        }
+        #tokens {
+            padding:16px;
+
+        }
+
+        .responsive td {
+            /* Behave  like a "row" */
+            border: none;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 50%;
+
+        }
+
+        .responsive td:before {
+            /* Now like a table header */
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            /* width: 45%; */
+            padding-right: 10px;
+            font-weight: bolder;
+            white-space: nowrap;
+        }
+        /*
+        Label the data
+        */
+        .responsive td:before { content: attr(data-table-header);
+        }
+    }
+    .modal-open .modal {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        padding: 0 !important;
+    }
