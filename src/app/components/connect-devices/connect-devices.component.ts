@@ -468,6 +468,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
         this.changeActionButton('.apply_action',false);
         this.changeActionButton('.undo_action',false);
         this.changeActionButton('.clear_all_action',false);
+        $('.on_guest').prop('checked', this.checkedAll('guest'));
+        $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
+        $('.enable_all').prop('checked', this.checkedAll('enable'));
       }
     });
   }
@@ -485,6 +488,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
         this.changeActionButton('.apply_action', false);
         this.changeActionButton('.undo_action', false);
         this.changeActionButton('.clear_all_action', false);
+        $('.on_guest').prop('checked', this.checkedAll('guest'));
+        $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
+        $('.enable_all').prop('checked', this.checkedAll('enable'));
       }
     });
   }
