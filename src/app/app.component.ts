@@ -23,8 +23,4 @@ export class AppComponent implements OnInit{
 
   }
 
-  onActivate(event){
-  }
-  onDeactivate(event){
-  }
 }

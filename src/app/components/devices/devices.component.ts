@@ -629,7 +629,7 @@ export class DevicesComponent implements OnInit {
   // suspend dealer-device
   suspendForm(device_id) {
     Swal({
-      text: 'Are you sure to suspend the device?',
+      text: 'Are you sure, you want to suspend the device?',
       showCancelButton: true,
       useRejections: true,
       cancelButtonText: 'No',
@@ -676,7 +676,7 @@ export class DevicesComponent implements OnInit {
   activateForm(device_id) {
     // console.log(device_id);
     Swal({
-      text: 'Are you sure to activate the device?',
+      text: 'Are you sure, you want to activate the device?',
       showCancelButton: true,
       useRejections: true,
       cancelButtonText: 'No',
@@ -723,7 +723,7 @@ export class DevicesComponent implements OnInit {
   // Unlink dealer-device
   unlinkUser(device_id) {
     Swal({
-      text: 'Are you sure to unlink the device?',
+      text: 'Are you sure, you want to unlink the device?',
       showCancelButton: true,
       cancelButtonText: 'No',
       confirmButtonText: 'Yes',
@@ -739,7 +739,7 @@ export class DevicesComponent implements OnInit {
 
   deleteUserDetails(device_id) {
      Swal({
-        text: 'Are you sure delete this user?',
+        text: 'Are you sure, you want to delete this Device?',
         showCancelButton: true,
         cancelButtonText: 'No',
         confirmButtonText: 'Yes',

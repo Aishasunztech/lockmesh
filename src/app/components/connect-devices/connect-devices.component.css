@@ -214,6 +214,9 @@
 .select:hover::after {
   color: #fff;
 }
+.apps_list{
+    overflow-y: scroll;
+}
 .select::after {
   -webkit-transition: .25s all ease;
   -o-transition: .25s all ease;
@@ -360,7 +363,8 @@
   width: 30px;
 }
 .app_name{
-  display: block;
+    display: block;
+    width: 80px;
 }
 .dropdown-menu{
   top: 0px;
@@ -643,7 +647,7 @@ input:checked + .slider:before {
     height: 50px;
 }
 .setting_background {
-    height: 360px;
+    height: 430px;
     background: #303030;
     overflow: overlay;
 }

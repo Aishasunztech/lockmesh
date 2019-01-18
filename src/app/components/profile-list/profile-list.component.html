@@ -120,13 +120,13 @@
                       
                       <td data-table-header="ACTION" class="text-left btnFull">
                         <div class="btn-group">
-                          <a href="javascript:void(0)" (click)="deleteProfile($event,profile.id)">
+                          <a href="javascript:void(0)" (click)="deleteProfile($event,profile.id)" *ngIf="(profileType=='policy' && isAdmin==true) || ((profileType=='profile' && connected_dealer==0) || isAdmin==true)">
                             <button class="btn btn-sm suspend">Delete</button>
                           </a>
                 
-                          <a href="javascript:void(0)" >
+                          <!-- <a href="javascript:void(0)"  *ngIf="(profileType=='policy' && isAdmin==true) || ((profileType=='profile' && connected_dealer==0) || isAdmin==true)">
                             <button class="btn btn-sm edit">Edit</button>
-                          </a>
+                          </a> -->
                 
                         </div>
                       </td>

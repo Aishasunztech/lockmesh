@@ -188,36 +188,40 @@
                         </div>
                         <div class="background-card" *ngIf="device_data.is_sync==0"></div>
                         <!-- categories screen -->
-                        <div class="background-card apps_list" *ngIf="pageName=='apps_list' && device_data.is_sync==1">
-                            <div class="pin_header">
-                                <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
-                                <div class="pull-right">
-                                    <button class="btn btn-defualt btn-xs btndropdown" type="button" id="btndropdown" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="true">
-                                        <span class="fa fa-ellipsis-v"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="btndropdown">
-                                        <li>
-                                            <label class="radio-btn">
-                                                <input type="checkbox" value='on_guest' [(ngModel)]="appList.guest" class="on_guest" name="check_all" (change)="checkApps($event)">
-                                                Turn on Guests All
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="radio-btn">
-                                                <input type="checkbox" value='on_encrypted' [(ngModel)]="appList.encrypted" class="on_encrypted" name="check_all" (change)="checkApps($event)">
-                                                Turn On Encrypted All
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="radio-btn">
-                                                <input type="checkbox" value='enable_all' [(ngModel)]="appList.enable" class="enable_all" name="check_all" (change)="checkApps($event)">
-                                                Enable All
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
+                        <div class="pin_header" *ngIf="pageName=='apps_list' && device_data.is_sync==1">
+                            <i class="fa fa-angle-left" aria-hidden="true" (click)="changePage('main_menu')"></i>
+                            <div class="pull-right">
+                                <button class="btn btn-defualt btn-xs btndropdown" type="button" id="btndropdown" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="true">
+                                    <span class="fa fa-ellipsis-v"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="btndropdown">
+                                    <li>
+                                        <label class="radio-btn">
+                                            <input type="checkbox" value='on_guest' [(ngModel)]="appList.guest" class="on_guest" name="check_all"
+                                                (change)="checkApps($event)">
+                                            Turn on Guests All
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="radio-btn">
+                                            <input type="checkbox" value='on_encrypted' [(ngModel)]="appList.encrypted" class="on_encrypted"
+                                                name="check_all" (change)="checkApps($event)">
+                                            Turn On Encrypted All
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="radio-btn">
+                                            <input type="checkbox" value='enable_all' [(ngModel)]="appList.enable" class="enable_all" name="check_all"
+                                                (change)="checkApps($event)">
+                                            Enable All
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
+                        </div>
+                        <div class="background-card apps_list" *ngIf="pageName=='apps_list' && device_data.is_sync==1">
+                            
                             <table class="table table-inverse table-dark apps_table">
                                 <thead>
                                     <tr class="apps_head">
@@ -391,21 +395,21 @@
                         <img src="/assets/images/nav_bar.jpg" class="android_nav_bar">
                     </div>
                     <div class="btn-group phone_actions_container" style="margin-top: 5px">
-                        <a class="btn btn-light phone_actions" (click)="applySettings($event)">
+                        <a class="btn btn-light phone_actions apply_action" (click)="applySettings($event)" disabled>
                             <span class="fa fa-check" style="color:green;">
                             </span>
                             <br>
                             <p>Apply</p>
                         </a>
-                        <a class="btn btn-light phone_actions" (click)="undoSettings($event)">
+                        <a class="btn btn-light phone_actions undo_action" (click)="undoSettings($event)" disabled>
                             <span class="fa fa-undo" style="color:orange;"></span><br>
                             <p>Undo</p>
                         </a>
-                        <a class="btn btn-light phone_actions" (click)="redoSettings($event)">
+                        <a class="btn btn-light phone_actions redo_action" (click)="redoSettings($event)" disabled>
                             <span class="fa fa-refresh" style="color:orange;"></span><br>
                             <p>Redo</p>
                         </a>
-                        <a class="btn btn-light phone_actions" (click)="clearAll($event)">
+                        <a class="btn btn-light phone_actions clear_all_action" (click)="clearAll($event)" disabled>
                             <span class="fa fa-close" style="color:red;"></span><br>
                             <p>Clear All</p>
                         </a>
@@ -494,7 +498,7 @@
                                         <select name="slct" id="slct" (change)="loadHistory($event)">
                                             <option value="">Load History</option>
                                             <option *ngFor="let profile of deviceHistories ; let i = index;" value="{{ profile.id }} ">
-                                                {{ profile.created_at }}
+                                                {{ profile.created_at | date:'MM/dd H:m:s'}}
                                             </option>
                                         </select>
                                     </div>

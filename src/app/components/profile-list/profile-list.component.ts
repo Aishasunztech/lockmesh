@@ -109,37 +109,10 @@ export class ProfileListComponent implements OnInit {
       type: 'warning'
     }).then((okay) => {
       if (okay) {
-        // location.reload(true);
-      //   this.spinnerService.show();
-      //   this.restService.suspendForm(device_id).subscribe((response) => {
-      //     //   this.spinnerService.hide();
-      //     this.restService.authtoken(response);
-      //     this.resp = response;
-      //     if (this.resp.status === true) {
-      //       Swal({
-      //         text: this.resp.msg,
-      //         type: 'success',
-      //         customClass: 'swal-height'
-      //       }).then(result => {
-      //         if (result.value) {
-      //           location.reload(true);
-      //         }
-      //       });
-      //     } else {
-      //       if (this.resp.status === false) {
-      //         Swal({
-      //           text: this.resp.msg,
-      //           type: 'warning',
-      //           customClass: 'swal-height'
-      //         }).then(result => {
-      //           if (result.value) {
-      //             location.reload(false);
-      //           }
-      //         });
-      //       }
-      //     }
-      //   });
-      //   this.spinnerService.hide();
+        this.spinnerService.show();
+        this.restService.deleteProfile(profileId);
+        location.reload(true);
+        this.spinnerService.hide();
       }
     });
     console.log(profileId);

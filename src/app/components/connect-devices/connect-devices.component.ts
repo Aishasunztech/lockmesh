@@ -126,7 +126,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
     
     $('.on_guest').prop('checked', this.checkedAll('guest'));
     $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
-    $('.enable_all').prop('checked', this.checkedAll('encrypted'));
+    $('.enable_all').prop('checked', this.checkedAll('enable'));
     
     let makeToken = "token=" + token + "&device_id=" + device_id + "&isWeb=true";
     console.log("token query: " + makeToken);
@@ -238,8 +238,13 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
     $('.on_guest').prop('checked', this.checkedAll('guest'));
     $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
-    $('.enable_all').prop('checked', this.checkedAll('encrypted'));
+    $('.enable_all').prop('checked', this.checkedAll('enable'));
 
+    this.changeActionButton('.clear_all_action',true);
+    this.changeActionButton('.apply_action',true);
+    this.changeActionButton('.undo_action',true);
+    this.changeActionButton('.redo_action',true);
+    
     this.conf_admin_pwd = null;
     this.conf_guest_pwd = null;
     this.conf_enc_pwd = null;
@@ -261,14 +266,14 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
   unlinkUser(device_id) {
     Swal({
-      text: 'Are you sure to unlink the device?',
+      text: 'Are you sure, you want to unlink the device?',
       showCancelButton: true,
       cancelButtonText: 'No',
       confirmButtonText: 'Yes',
       type: 'warning'
     }).then((result) => {
-      this.spinnerService.show();
-      if (result) {
+      if (result.value==true) {
+        this.spinnerService.show();
         this.restService.unlinkUser(device_id);
         this.spinnerService.hide();
         this.router.navigate(['/devices']);
@@ -314,18 +319,19 @@ export class ConnectAdminDevicesComponent implements OnInit {
           useRejections: false,
           // cancelButtonText: 'No',
           // confirmButtonText: 'Yes',
-          type: 'info'
+          type: 'warning'
         }).then(() => {
         });
       }
     }else{
+
       Swal({
-        text: 'please insert a name',
+        text: 'A name must be provided',
         showCancelButton: false,
         useRejections: false,
         // cancelButtonText: 'No',
         // confirmButtonText: 'Yes',
-        type: 'info'
+        type: 'warning'
       }).then(() => {
       });
     }
@@ -333,7 +339,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
   suspendForm(device_id) {
     Swal({
-      text: 'Are you sure to suspend the device?',
+      text: 'Are you sure, you want to suspend the device?',
       showCancelButton: true,
       useRejections: true,
       cancelButtonText: 'No',
@@ -383,7 +389,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
     this.mainProfiles.forEach(elem=>{
       if(elem.id == profileId){
         this.appList = JSON.parse(elem.app_list);
-        this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));  
+        this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
+        this.changeActionButton('.apply_action',false);
+        this.changeActionButton('.undo_action',false);
+        this.changeActionButton('.clear_all_action',false);
       }
     });
   }
@@ -391,11 +400,14 @@ export class ConnectAdminDevicesComponent implements OnInit {
   loadHistory(event){
     let profileId = event.target.value;
     console.log(this.mainProfiles);
-
+    
     this.deviceHistories.forEach(elem => {
       if (elem.id == profileId) {
         this.appList = JSON.parse(elem.app_list);
         this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
+        this.changeActionButton('.apply_action', false);
+        this.changeActionButton('.undo_action', false);
+        this.changeActionButton('.clear_all_action', false);
       }
     });
   }
@@ -403,7 +415,17 @@ export class ConnectAdminDevicesComponent implements OnInit {
   ngOnChanges(){
     console.log("ngOnChanges");
   }
-
+  changeActionButton(className,val=false){
+    console.log(className);
+    if(val){
+      $(className).attr('disabled', 'disabled');
+      // $(className).prop('disabled', val);
+      
+    }else{
+      $(className).removeAttr('disabled');
+      $(className).prop('disabled', val);
+    }
+  }
   checkApps(event,app=null){
     // console.log("check apps");
     // console.log(this.appList);
@@ -484,7 +506,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
           this.appList[appIndex].enable=0;
         }else if(className == "enabled" && checked == true){
           this.appList[appIndex].enable=1;
-          $('.enable_all').prop('checked', this.checkedAll('encrypted'));
+          $('.enable_all').prop('checked', this.checkedAll('enable'));
 
         }
         // console.log(this.appList);
@@ -507,14 +529,22 @@ export class ConnectAdminDevicesComponent implements OnInit {
         }
       }
     }
+    this.changeActionButton('.apply_action',false);
+    this.changeActionButton('.undo_action',false);
+    this.changeActionButton('.clear_all_action',false);
+
   }
+
   checkedAll(key){
+    console.log(key);
     var i = 0;
     this.appList.forEach((elem) => {
-      if (elem[key] == 1) {
+      if (elem[key] == 1 || elem[key] == true) {
         i = i + 1;
       }
     });
+    console.log("i:" + i);
+    console.log("length:" + this.appList.length);
     if(this.appList.length==i){
       return true;
     }else{
@@ -596,13 +626,19 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.stackedApps.pop();
 
       console.log("stack length: " + this.stackedApps.length);
-      this.appList=JSON.parse(JSON.stringify(this.stackedApps[this.stackedApps.length -1]));
-      console.log(this.stackedApps);
-      console.log("apps");
-      console.log(this.appList);
+      // this.appList= this.copyObject(this.stackedApps[this.stackedApps.length -1]);
+      this.copytoApps(this.stackedApps[this.stackedApps.length -1]);
+      if(this.stackedApps.length==1){
+        this.changeActionButton('.undo_action',true);
+        this.changeActionButton('.apply_action',true);
+      }
+      this.changeActionButton('.redo_action', false);
+
       this.redoStackedApps.push(apps);
     
     }else{
+      this.changeActionButton('.undo_action', true);
+      
       Swal({
         text: 'there is no setting to undo',
         showCancelButton: false,
@@ -618,14 +654,28 @@ export class ConnectAdminDevicesComponent implements OnInit {
   copyObject(obj){
     return JSON.parse(JSON.stringify(obj));
   }
+  copytoApps(obj){
+    for(let i=0; i< obj.length; i++){
+      this.appList[i].guest = obj[i].guest;
+      this.appList[i].encrypted = obj[i].encrypted;
+      this.appList[i].enable = obj[i].enable;
+    }
+  }
   redoSettings(event){
     if(this.redoStackedApps.length>0){
       console.log("hello");
       let apps = this.redoStackedApps[this.redoStackedApps.length - 1];
       this.redoStackedApps.pop();
       this.stackedApps.push(apps);
-      this.appList = JSON.parse(JSON.stringify(this.stackedApps[this.stackedApps.length - 1]));
+      if(this.redoStackedApps.length==0){
+        this.changeActionButton('.redo_action',true);
+      }
+      this.changeActionButton('.undo_action',false);
+      this.changeActionButton('.apply_action',false);
+      this.copytoApps(this.stackedApps[this.stackedApps.length - 1]);
     }else{
+      this.changeActionButton('.redo_action', true);
+
       Swal({
         text: 'there is no setting to redo',
         showCancelButton: false,
@@ -641,7 +691,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
   clearAll(event){
       Swal({
-        text: 'settings are cleared successfully',
+        text: 'All changes are undone',
         showCancelButton: false,
         useRejections: false,
         // cancelButtonText: 'No',
@@ -658,18 +708,24 @@ export class ConnectAdminDevicesComponent implements OnInit {
     if (className == "confirm_encrypted"){
       if(this.passwords.encrypted_password==value){
         this.toggleClass('.pwd_confirmed');
+        this.changeActionButton('.apply_action');
+        this.changeActionButton('.clear_all_action');
       }else{
         this.toggleClass('.not_matched');        
       }
     } else if (className == "confirm_guest"){
       if (this.passwords.guest_password == value) {
         this.toggleClass('.pwd_confirmed');
+        this.changeActionButton('.apply_action');
+        this.changeActionButton('.clear_all_action');
       } else {
         this.toggleClass('.not_matched');
       }
     } else if (className == "confirm_admin"){
       if (this.passwords.admin_password == value) {
         this.toggleClass('.pwd_confirmed');
+        this.changeActionButton('.apply_action');
+        this.changeActionButton('.clear_all_action');
       } else {
         this.toggleClass('.not_matched');
       }
