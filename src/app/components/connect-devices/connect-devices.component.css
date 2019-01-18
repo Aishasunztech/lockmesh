@@ -1,4 +1,7 @@
 
+body {
+  font-family: Montserrat, Helvetica Neue, Arial, sans-serif !important;
+}
 .card-manu {
     margin-top: -20px !important;
 }
@@ -254,7 +257,7 @@
 .btn_suspend:hover,
 .btn_suspend:focus,
 .btn_suspend:active {
-  background-color: #f09f2c !important;
+    background-color: #ce8723 !important;
 }
 .btn_unlink {
   background-color: #40aebf; 
@@ -264,17 +267,18 @@
 .btn_unlink:hover,
 .btn_unlink:focus,
 .btn_unlink:active {
- background-color: #40aebf !important; 
+    background-color: #128fa2 !important;
 }
 .btn_power {
-  margin: 15px 0 15px; 
+  margin: 15px 0 15px;
   font-size: 14px;
-  background-color: #d61414;
+  background-color: #e26b6b;
+  cursor: not-allowed !important;
 }
 .btn_power:hover,
 .btn_power:focus,
 .btn_power:active {
-  background-color: #d61414 !important;
+    background-color: #d89999 !important;
 }
 .col_head[_ngcontent-c2] div[_ngcontent-c2] div[_ngcontent-c2] {
     color: #434373;
