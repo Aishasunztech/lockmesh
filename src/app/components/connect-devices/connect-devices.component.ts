@@ -84,7 +84,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
   dealer_id:number;
   connected_dealer:number;
   profileName:string;
-  policyName:string;
+  policyName:string ;
 
   constructor(
     private restService: RestService,
@@ -263,7 +263,21 @@ export class ConnectAdminDevicesComponent implements OnInit {
     // this.passwords.guest_password='';
     // this.passwords.encrypted_password='';
   }
+  clearDropDown(className){
+    console.log("clear dropdown");
+    console.log(className);
 
+    if(className == ".load_history"){
+      $('.load_profile').val('');
+      $('.load_policy').val('');
+    } else if (className == ".load_profile"){
+      $('.load_policy').val('');
+      $('.load_history').val('');
+    }else{
+      $('.load_history').val('');
+      $('.load_profile').val('');
+    }
+  }
   unlinkUser(device_id) {
     Swal({
       text: 'Are you sure, you want to unlink the device?',
@@ -288,53 +302,112 @@ export class ConnectAdminDevicesComponent implements OnInit {
       profileName = this.profileName;
     }
 
-    if(profileName!=null && profileName != ''){
-      if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password) {
-        // let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
-        let app_list = this.stackedApps[this.stackedApps.length - 1];
-        console.log("app_list");
-        console.log(app_list);
+    Swal.queue([{
+      title: profile_type.charAt(0).toUpperCase() + profile_type.slice(1) + ' Name',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off',
+        required:"required"
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      showLoaderOnConfirm: true,
+      preConfirm: (pName) => {
+        if(pName != null && pName!=''){
+          profileName = pName;
+          if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password) {
+            // let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
+            let app_list = this.stackedApps[this.stackedApps.length - 1];
+            console.log("app_list");
+            console.log(app_list);
 
-        let device_setting = {
-          app_list: app_list,
-          passwords: this.passwords
-        };
+            let device_setting = {
+              app_list: app_list,
+              passwords: this.passwords
+            };
+
+            this.restService.applySettings(device_setting, this.device_data.device_id, profile_type, profileName, this.dealer_id);
+            this.clearStack();
+            Swal.insertQueueStep({
+              text: 'Settings are successfully saved as ' + profile_type,
+              showCancelButton: false,
+              // cancelButtonText: 'No',
+              // confirmButtonText: 'Yes',
+              type: 'success'
+            });
+          } else {
+            Swal.insertQueueStep({
+              text: 'please make a change before save settings!',
+              showCancelButton: false,
+              // cancelButtonText: 'No',
+              // confirmButtonText: 'Yes',
+              type: 'warning'
+            });
+          }
+        } else {
+          Swal.insertQueueStep({
+            text: 'A name must be provided',
+            showCancelButton: false,
+            // cancelButtonText: 'No',
+            // confirmButtonText: 'Yes',
+            type: 'warning'
+          });
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }]);
+    // .then((result) => {
+    // });
+    // console.log(result);
+    // if (result.value) {
+    //   Swal({
+    //     text: 'Settings are successfully saved as ' + profile_type,
+    //     showCancelButton: false,
+    //     useRejections: false,
+    //     // cancelButtonText: 'No',
+    //     // confirmButtonText: 'Yes',
+    //     type: 'success'
+    //   }).then(() => {
+    //   });
+    // }
+    
+    // if(profileName!=null && profileName != ''){
+    //   if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password) {
+    //     // let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
+    //     let app_list = this.stackedApps[this.stackedApps.length - 1];
+    //     console.log("app_list");
+    //     console.log(app_list);
+
+    //     let device_setting = {
+    //       app_list: app_list,
+    //       passwords: this.passwords
+    //     };
         
-        this.restService.applySettings(device_setting, this.device_data.device_id, profile_type, profileName, this.dealer_id);
-        this.clearStack();
+    //     this.restService.applySettings(device_setting, this.device_data.device_id, profile_type, profileName, this.dealer_id);
+    //     this.clearStack();
 
-        Swal({
-          text: 'Settings are successfully saved as ' + this.profileName,
-          showCancelButton: false,
-          useRejections: false,
-          // cancelButtonText: 'No',
-          // confirmButtonText: 'Yes',
-          type: 'success'
-        }).then(() => {
-        });
-      } else {
-        Swal({
-          text: 'please make a change before save settings!',
-          showCancelButton: false,
-          useRejections: false,
-          // cancelButtonText: 'No',
-          // confirmButtonText: 'Yes',
-          type: 'warning'
-        }).then(() => {
-        });
-      }
-    }else{
+    //     Swal({
+    //       text: 'Settings are successfully saved as ' + this.profileName,
+    //       showCancelButton: false,
+    //       useRejections: false,
+    //       // cancelButtonText: 'No',
+    //       // confirmButtonText: 'Yes',
+    //       type: 'success'
+    //     }).then(() => {
+    //     });
+    //   } else {
+    //     Swal({
+    //       text: 'please make a change before save settings!',
+    //       showCancelButton: false,
+    //       useRejections: false,
+    //       // cancelButtonText: 'No',
+    //       // confirmButtonText: 'Yes',
+    //       type: 'warning'
+    //     }).then(() => {
+    //     });
+    //   }
+    // }else{
 
-      Swal({
-        text: 'A name must be provided',
-        showCancelButton: false,
-        useRejections: false,
-        // cancelButtonText: 'No',
-        // confirmButtonText: 'Yes',
-        type: 'warning'
-      }).then(() => {
-      });
-    }
     
   }
   suspendForm(device_id) {
@@ -383,6 +456,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
   
   loadProfile(event){
+    var className = event.target.attributes.class.nodeValue;
+    this.clearDropDown('.' + className);
     let profileId = event.target.value;
     console.log(this.mainProfiles);
 
@@ -398,6 +473,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   loadHistory(event){
+    this.clearDropDown('.load_history');
+
     let profileId = event.target.value;
     console.log(this.mainProfiles);
     

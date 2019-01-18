@@ -441,7 +441,7 @@
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
                                     <div class="select">
-                                        <select name="slct" id="slct" (change)="loadProfile($event)">
+                                        <select name="load_policy" id="slct" class="load_policy" (change)="loadProfile($event)">
                                             <option value="" >Load Policy</option>
                                             <option *ngFor="let profile of policies ; let i = index;" value="{{ profile.id }} ">
                                                 {{ profile.name }}
@@ -456,10 +456,11 @@
                                     <span class="btn purple">Add Policy
                                         <span class="fa fa-floppy-o icon_purple"></span></span>
                                 </a> -->
-                                <a *ngIf="isAdmin==true" href="javasacript:void(0)" class="action_btn">
-                                    <input type="text" class="save_profile" name="save_policy" [(ngModel)]="policyName"
-                                        placeholder="Save Policy">
-                                    <span class="fa fa-floppy-o icon_purple save_profile_icon" (click)="saveProfile($event,'policy')"></span>
+                                <a *ngIf="isAdmin==true" href="javasacript:void(0)" class="action_btn" (click)="saveProfile($event,'policy')">
+                                    <!-- <input type="text" class="save_profile" name="save_policy" [(ngModel)]="policyName" placeholder="Save Policy"> -->
+                                        <span class="btn purple">Save Policy
+                                            <span class="fa fa-floppy-o icon_purple"></span></span>
+                                    
                                 </a>
                                 <a *ngIf="isAdmin==false" href="javasacript:void(0)" class="action_btn">
                                     <span class="btn purple">N/A
@@ -471,7 +472,7 @@
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
                                     <div class="select">
-                                        <select name="slct" id="slct" (change)="loadProfile($event)">
+                                        <select name="load_profile" id="slct" class="load_profile" (change)="loadProfile($event)">
                                             <option value="">Load Profile</option>
                                             <option *ngFor="let profile of profiles ; let i = index;" value="{{ profile.id }} ">
                                                 {{ profile.name }}
@@ -481,9 +482,10 @@
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="javasacript:void(0)" class="action_btn" *ngIf="userType!='sdealer'">
-                                    <input type="text" class="save_profile" name="save_profile" [(ngModel)]="profileName"  placeholder="Save Profile">
-                                    <span class="fa fa-floppy-o icon_purple save_profile_icon" (click)="saveProfile($event,'profile')"></span>
+                                <a href="javasacript:void(0)" class="action_btn" *ngIf="userType!='sdealer'" (click)="saveProfile($event,'profile')">
+                                    <!-- <input type="text" class="save_profile" name="save_profile" [(ngModel)]="profileName"  placeholder="Save Profile"> -->
+                                    <span class="btn purple">Save Profile
+                                        <span class="fa fa-floppy-o icon_purple"></span></span>
                                 </a>
                                 <a *ngIf="userType=='sdealer'" href="javasacript:void(0)" class="action_btn">
                                     <span class="btn purple">N/A
@@ -495,7 +497,7 @@
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
                                     <div class="select">
-                                        <select name="slct" id="slct" (change)="loadHistory($event)">
+                                        <select name="load_history" id="slct" class="load_history" (change)="loadHistory($event)">
                                             <option value="">Load History</option>
                                             <option *ngFor="let profile of deviceHistories ; let i = index;" value="{{ profile.id }} ">
                                                 {{ profile.created_at | date:'MM/dd H:m:s'}}
