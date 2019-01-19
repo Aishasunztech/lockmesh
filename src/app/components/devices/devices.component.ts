@@ -580,7 +580,7 @@ export class DevicesComponent implements OnInit {
   updateAdmin() {
     if (this.data.email === '' || this.data.name === '' || this.data.email === 'null' || this.data.name === 'null' || this.data.expiry_date ==='' || this.data.expiry_date === 'null') {
       Swal({
-       text: 'Please Fill Name And Email .... ',
+       text: 'Please provide Name, Email and Expiry Date ',
        type: 'error',
         customClass: 'swal-height'
          }).then(okay => {
