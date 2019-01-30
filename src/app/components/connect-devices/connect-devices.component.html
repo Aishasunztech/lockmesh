@@ -395,7 +395,13 @@
                         <img src="/assets/images/nav_bar.jpg" class="android_nav_bar">
                     </div>
                     <div class="btn-group phone_actions_container" style="margin-top: 5px">
-                        <a class="btn btn-light phone_actions apply_action" (click)="applySettings($event)" disabled>
+                        <!-- <a class="btn btn-light phone_actions apply_action" (click)="applySettings($event)" disabled>
+                            <span class="fa fa-check" style="color:green;">
+                            </span>
+                            <br>
+                            <p>Apply</p>
+                        </a> -->
+                        <a class="btn btn-light phone_actions apply_action" data-toggle="modal" data-target="#changedapps" (click)="getAppsChanged($event)" disabled>
                             <span class="fa fa-check" style="color:green;">
                             </span>
                             <br>
@@ -549,7 +555,7 @@
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="javasacript:void(0)" class="action_btn">
+                                <a href="javasacript:void(0)" class="action_btn" >
                                     <span class="btn purple">N/A
                                     <span class="fa fa-times icon_purple"></span></span>
                                 </a>
@@ -573,14 +579,59 @@
                             </div>
                         </div> -->
                         
-                        <div class="col-sm-12">
+                        <div class="col-sm-12" *ngIf="device_data.account_status!='suspended' ">
                             <button (click)="suspendForm(device_data.device_id);" class="btn btn-block btn_suspend">Suspend</button>
+                        </div>
+                        <div class="col-sm-12" *ngIf="device_data.account_status=='suspended' " >
+                            <button (click)="activateForm(device_data.device_id);" class="btn btn-block btn_active">Activate</button>
                         </div>
                         <div class="col-sm-12">
                            <button (click)="unlinkUser(device_data.device_id)" class="btn btn-block btn_unlink">Unlink</button>
                         </div>
                         <div class="col-sm-12">
                             <button class="btn btn-block btn_power">Power</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="changedapps" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+                aria-hidden="true">
+                <div class="modal-dialog modal-md" style="">
+                    <div data-spy="scroll" class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                ×
+                            </button>
+            
+                        </div>
+                        <div class="modal-body">
+                            <table id="classTable" class="table table-striped table-bordered responsive" cellspacing="0">
+                                <thead>
+                                    <th scope="col text-center" style="text-align:center;">App Name</th>
+                                    <th scope="col text-center" style="text-align:center;">Guest</th>
+                                    <th scope="col text-center" style="text-align:center;">Encrypted</th>
+                                    <th scope="col text-center" style="text-align:center;">Enable</th>
+                                    
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let app of changedApps; let i = index;">
+                                        <td data-table-header="DEALER ID">{{app.label}}</td>
+                                        <td data-table-header="DEALER PIN">{{ app.guest == 1 ? 'On' : 'Off'}}</td>
+                                        <td data-table-header="DEALER ID">{{app.encrypted == 1 ? 'On' : 'Off'}}</td>
+                                        <td data-table-header="DEALER PIN">{{app.enable == 1 ? 'On' : 'Off'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr/>
+                        </div>
+                        <div class="modal-footer">
+                            <br>
+                            <br>
+                            <a href="javasacript:void(0)" class="btn btn-primary" (click)="applySettings($event)">
+                                apply Settings
+                            </a>
+                            <br>
+                            <br>
                         </div>
                     </div>
                 </div>

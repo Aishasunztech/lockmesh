@@ -254,19 +254,24 @@ body {
   font-size: 14px;
   background-color: #f09f2c;
 }
+.btn_active {
+  margin: 15px 0 0;
+  font-size: 14px;
+  background-color: #40aebf;
+}
 .btn_suspend:hover,
 .btn_suspend:focus,
 .btn_suspend:active {
     background-color: #ce8723 !important;
 }
-.btn_unlink {
+.btn_unlink, .btn_active {
   background-color: #40aebf; 
   margin: 15px 0 0; 
   font-size: 14px;
 }
-.btn_unlink:hover,
-.btn_unlink:focus,
-.btn_unlink:active {
+.btn_unlink:hover, .btn_active:hover,
+.btn_unlink:focus, .btn_active:focus,
+.btn_unlink:active .btn_active:active {
     background-color: #128fa2 !important;
 }
 .btn_power {

@@ -70,7 +70,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
   appStackTop=1;
   stackControls = [];
   redoStackControls = [];
-  
+  changedApps = [];
+
   baseUrl = this.common.baseurl;
   private sockets;
   
@@ -117,16 +118,14 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.appList = response;
       this.stackedApps.push(this.copyObject(response));
       this.restService.authtoken(response);
+      this.allChecked();
     });
 
     this.getProfiles();
     this.getHistories(device_id);
+    this.allChecked();
 
     let token = window.localStorage.getItem('token');
-    
-    $('.on_guest').prop('checked', this.checkedAll('guest'));
-    $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
-    $('.enable_all').prop('checked', this.checkedAll('enable'));
     
     let makeToken = "token=" + token + "&device_id=" + device_id + "&isWeb=true";
     console.log("token query: " + makeToken);
@@ -144,6 +143,16 @@ export class ConnectAdminDevicesComponent implements OnInit {
     //   this.spinnerService.hide();
     // });
     
+  }
+
+  ngAfterInit(){
+    
+    this.allChecked();
+  }
+  private allChecked() {
+    $('.on_guest').prop('checked', this.checkedAll('guest'));
+    $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
+    $('.enable_all').prop('checked', this.checkedAll('enable'));
   }
 
   getProfiles(){
@@ -228,18 +237,15 @@ export class ConnectAdminDevicesComponent implements OnInit {
     
     this.restService.getDeviceApps(device_id).subscribe((response) => {
       this.appList = response;
-    
       this.stackedApps.push(this.copyObject(response));
       this.restService.authtoken(response);
+      this.allChecked();
     });
+
     this.getProfiles();
     this.getHistories(device_id);
 
-
-    $('.on_guest').prop('checked', this.checkedAll('guest'));
-    $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
-    $('.enable_all').prop('checked', this.checkedAll('enable'));
-
+    // change action button
     this.changeActionButton('.clear_all_action',true);
     this.changeActionButton('.apply_action',true);
     this.changeActionButton('.undo_action',true);
@@ -256,17 +262,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
   
   changePage(pageName,event){
      this.pageName=pageName;
-    // this.conf_admin_pwd='';
-    // this.conf_guest_pwd='';
-    // this.conf_enc_pwd='';
-    // this.passwords.admin_password='';
-    // this.passwords.guest_password='';
-    // this.passwords.encrypted_password='';
   }
-  clearDropDown(className){
-    console.log("clear dropdown");
-    console.log(className);
 
+  clearDropDown(className){
+  
     if(className == ".load_history"){
       $('.load_profile').val('');
       $('.load_policy').val('');
@@ -278,6 +277,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       $('.load_profile').val('');
     }
   }
+
   unlinkUser(device_id) {
     Swal({
       text: 'Are you sure, you want to unlink the device?',
@@ -294,14 +294,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     });
   }
+  
   saveProfile(event,profile_type){
     let profileName;
-    if(profile_type=="policy"){
-      profileName = this.policyName;
-    }else{
-      profileName = this.profileName;
-    }
-
+  
     Swal.queue([{
       title: profile_type.charAt(0).toUpperCase() + profile_type.slice(1) + ' Name',
       input: 'text',
@@ -356,60 +352,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
       },
       allowOutsideClick: () => !Swal.isLoading()
     }]);
-    // .then((result) => {
-    // });
-    // console.log(result);
-    // if (result.value) {
-    //   Swal({
-    //     text: 'Settings are successfully saved as ' + profile_type,
-    //     showCancelButton: false,
-    //     useRejections: false,
-    //     // cancelButtonText: 'No',
-    //     // confirmButtonText: 'Yes',
-    //     type: 'success'
-    //   }).then(() => {
-    //   });
-    // }
-    
-    // if(profileName!=null && profileName != ''){
-    //   if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password) {
-    //     // let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
-    //     let app_list = this.stackedApps[this.stackedApps.length - 1];
-    //     console.log("app_list");
-    //     console.log(app_list);
-
-    //     let device_setting = {
-    //       app_list: app_list,
-    //       passwords: this.passwords
-    //     };
-        
-    //     this.restService.applySettings(device_setting, this.device_data.device_id, profile_type, profileName, this.dealer_id);
-    //     this.clearStack();
-
-    //     Swal({
-    //       text: 'Settings are successfully saved as ' + this.profileName,
-    //       showCancelButton: false,
-    //       useRejections: false,
-    //       // cancelButtonText: 'No',
-    //       // confirmButtonText: 'Yes',
-    //       type: 'success'
-    //     }).then(() => {
-    //     });
-    //   } else {
-    //     Swal({
-    //       text: 'please make a change before save settings!',
-    //       showCancelButton: false,
-    //       useRejections: false,
-    //       // cancelButtonText: 'No',
-    //       // confirmButtonText: 'Yes',
-    //       type: 'warning'
-    //     }).then(() => {
-    //     });
-    //   }
-    // }else{
-
     
   }
+
   suspendForm(device_id) {
     Swal({
       text: 'Are you sure, you want to suspend the device?',
@@ -456,50 +401,94 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
   
   loadProfile(event){
-    var className = event.target.attributes.class.nodeValue;
-    this.clearDropDown('.' + className);
-    let profileId = event.target.value;
-    console.log(this.mainProfiles);
-
-    this.mainProfiles.forEach(elem=>{
-      if(elem.id == profileId){
-        this.appList = JSON.parse(elem.app_list);
-        this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
-        this.changeActionButton('.apply_action',false);
-        this.changeActionButton('.undo_action',false);
-        this.changeActionButton('.clear_all_action',false);
-        $('.on_guest').prop('checked', this.checkedAll('guest'));
-        $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
-        $('.enable_all').prop('checked', this.checkedAll('enable'));
+    Swal({
+      text: 'Do you really want to override settings?',
+      showCancelButton: true,
+      useRejections: false,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'info'
+    }).then((res) => {
+      console.log(res);
+      if(res.dismiss){
+        this.clearDropDown('.load_history');
+        this.clearDropDown('.load_profile');
+        this.clearDropDown('.load_policy');
+        return;
       }
+      var className = event.target.attributes.class.nodeValue;
+      this.clearDropDown('.' + className);
+      let profileId = event.target.value;
+      console.log(this.mainProfiles);
+
+      this.mainProfiles.forEach(elem => {
+        if (elem.id == profileId) {
+          this.appList = JSON.parse(elem.app_list);
+          this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
+          this.changedApps = this.stackedApps[ this.stackedApps.length -1];
+          this.changedApps.map((elem)=>{
+            elem.isChanged=1;
+          });
+          console.log(this.changedApps);
+          this.changeActionButton('.apply_action', false);
+          this.changeActionButton('.undo_action', false);
+          this.changeActionButton('.clear_all_action', false);
+          $('.on_guest').prop('checked', this.checkedAll('guest'));
+          $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
+          $('.enable_all').prop('checked', this.checkedAll('enable'));
+        }
+      });
     });
+    
   }
 
   loadHistory(event){
-    this.clearDropDown('.load_history');
-
-    let profileId = event.target.value;
-    console.log(this.mainProfiles);
-    
-    this.deviceHistories.forEach(elem => {
-      if (elem.id == profileId) {
-        this.appList = JSON.parse(elem.app_list);
-        this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
-        this.changeActionButton('.apply_action', false);
-        this.changeActionButton('.undo_action', false);
-        this.changeActionButton('.clear_all_action', false);
-        $('.on_guest').prop('checked', this.checkedAll('guest'));
-        $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
-        $('.enable_all').prop('checked', this.checkedAll('enable'));
+    Swal({
+      text: 'Do you really want to override settings?',
+      showCancelButton: true,
+      useRejections: false,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'info'
+    }).then((res) => {
+      console.log(res);
+      if (res.dismiss) {
+        this.clearDropDown('.load_history');
+        this.clearDropDown('.load_profile');
+        this.clearDropDown('.load_policy');
+        return;
       }
+      this.clearDropDown('.load_history');
+
+      let profileId = event.target.value;
+      console.log(this.mainProfiles);
+      
+      this.deviceHistories.forEach(elem => {
+        if (elem.id == profileId) {
+          this.appList = JSON.parse(elem.app_list);
+          this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
+          this.changedApps = this.stackedApps[ this.stackedApps.length -1];
+          this.changedApps.map((elem)=>{
+            elem.isChanged=1;
+          });
+          console.log(this.changedApps);
+          this.changeActionButton('.apply_action', false);
+          this.changeActionButton('.undo_action', false);
+          this.changeActionButton('.clear_all_action', false);
+          $('.on_guest').prop('checked', this.checkedAll('guest'));
+          $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
+          $('.enable_all').prop('checked', this.checkedAll('enable'));
+        }
+      });
     });
+    
   }
 
   ngOnChanges(){
-    console.log("ngOnChanges");
+    this.allChecked();
   }
+
   changeActionButton(className,val=false){
-    console.log(className);
     if(val){
       $(className).attr('disabled', 'disabled');
       // $(className).prop('disabled', val);
@@ -509,6 +498,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       $(className).prop('disabled', val);
     }
   }
+  
   checkApps(event,app=null){
     // console.log("check apps");
     // console.log(this.appList);
@@ -617,7 +607,6 @@ export class ConnectAdminDevicesComponent implements OnInit {
     this.changeActionButton('.clear_all_action',false);
 
   }
-
   checkedAll(key){
     console.log(key);
     var i = 0;
@@ -634,6 +623,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       return false;
     }
   }
+
   setSelectAll(key,value){
     this.appList.forEach((elem)=>{
       elem[key]=value
@@ -667,6 +657,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
         // confirmButtonText: 'Yes',
         type: 'success'
       }).then(()=>{
+        this.refresh(this.device_data.device_id);
       });
     }else{
       Swal({
@@ -680,6 +671,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       });
     }
   }
+  
   clearStack(){
     this.stackedApps = [];
     this.redoStackedApps = [];
@@ -698,6 +690,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     }
     return retApps;
+  }
+  getAppsChanged(e){
+    this.changedApps = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
   }
   undoSettings(event){
     if (this.stackedApps.length>1) {
@@ -837,6 +832,54 @@ export class ConnectAdminDevicesComponent implements OnInit {
     }
   }
 
+  // activate admin-device
+  activateForm(device_id) {
+    // console.log(device_id);
+    Swal({
+      text: 'Are you sure, you want to activate the device?',
+      showCancelButton: true,
+      useRejections: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'warning'
+    }).then((okay) => {
+      if (okay) {
+        this.spinnerService.show();
+        this.restService.activateForm(device_id).subscribe((response) => {
+          // this.spinnerService.hide();
+          this.restService.authtoken(response);
+          this.resp = response;
+          if (this.resp.status === true) {
+            this.spinnerService.hide();
+            Swal({
+              text: this.resp.msg,
+              type: 'success',
+              customClass: 'swal-height'
+            }).then(result => {
+              if (result.value) {
+                location.reload(true);
+              }
+            });
+          } else {
+            if (this.resp.status === false) {
+              this.spinnerService.hide();
+              Swal({
+                text: this.resp.msg,
+                type: 'warning',
+                customClass: 'swal-height'
+              }).then(result => {
+                if (result.value) {
+                  location.reload(false);
+                }
+              });
+            }
+          }
+          // this.spinnerService.hide();
+        });
+      }
+    });
+  }
+  
   onLogout() {
     // this.sockets.disconnect();
     this.restService.authSignOut();
