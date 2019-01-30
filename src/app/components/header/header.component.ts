@@ -45,26 +45,25 @@ export class HeaderComponent implements OnInit {
     if (
       this.restService.sessionLogin('email') === null ||
       this.restService.sessionLogin('token') === null
-    ) {
+      ) {
         this.router.navigate(['/login']);
-    }else{
+      }else{
+        
+        this.componentName=this.route.snapshot.data['componentName'];
+        console.log("componentName: "+ this.componentName);
 
-      this.componentName=this.route.snapshot.data['componentName'];
-      console.log("componentName: "+ this.componentName);
+        this.spinnerService.show();
+        
+        await this.aclHandler();
+        
+        setTimeout(() => {
+        }, 1000);
 
-      this.spinnerService.show();
-      
-      await this.aclHandler();
-      
-      setTimeout(() => {
-      }, 1000);
-
-      this.profilelist();
+        this.profilelist();
 
       this.spinnerService.show();
       await this.allDeviceView();
       setTimeout(() => {
-        this.spinnerService.hide();
       }, 1000);
 
       if(this.isComponentAllowed==false || this.componentName=="InvalidPage"){
@@ -73,7 +72,6 @@ export class HeaderComponent implements OnInit {
 
       this.spinnerService.show();
       setTimeout(() => {
-        this.spinnerService.hide();
       }, 1000);
       this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
 
@@ -82,7 +80,6 @@ export class HeaderComponent implements OnInit {
     this.spinnerService.show();
     await delay(5000);
     setTimeout(() => {
-      this.spinnerService.hide();
     }, 1000);
   }
   profilelist() {

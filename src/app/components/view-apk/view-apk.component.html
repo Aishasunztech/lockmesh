@@ -60,46 +60,46 @@
     <app-header></app-header>
     <div class="main-panel" style="min-height: fit-content" >
         <!-- Navbar -->
-        --> <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-wrapper">
-                <div class="navbar-minimize">
-                    <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
-                        <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
-                        <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
-                    </button>
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
+                            <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
+                            <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+                        </button>
+                    </div>
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <!--<a class="navbar-brand">LOGO</a>-->
                 </div>
-                <div class="navbar-toggle">
-                    <button type="button" class="navbar-toggler">
-                        <span class="navbar-toggler-bar bar1"></span>
-                        <span class="navbar-toggler-bar bar2"></span>
-                        <span class="navbar-toggler-bar bar3"></span>
-                    </button>
+                <button class="navbar-toggler" id="option-button" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                    <ul class="navbar-nav">
+                        <li>
+                            <!--<span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>-->
+                        </li>
+                        <!--<li class="nav-item">-->
+                        <!--<a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">-->
+                        <!--Logout-->
+                        <!--<p>-->
+                        <!--<span class="d-lg-none d-md-block">Account</span>-->
+                        <!--</p>-->
+                        <!--</a>-->
+                        <!--</li>-->
+                    </ul>
                 </div>
-                <!--<a class="navbar-brand">LOGO</a>-->
             </div>
-            <button class="navbar-toggler" id="option-button" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-bar navbar-kebab"></span>
-                <span class="navbar-toggler-bar navbar-kebab"></span>
-                <span class="navbar-toggler-bar navbar-kebab"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navigation">
-                <ul class="navbar-nav">
-                    <li>
-                        <!--<span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>-->
-                    </li>
-                    <!--<li class="nav-item">-->
-                    <!--<a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">-->
-                    <!--Logout-->
-                    <!--<p>-->
-                    <!--<span class="d-lg-none d-md-block">Account</span>-->
-                    <!--</p>-->
-                    <!--</a>-->
-                    <!--</li>-->
-                </ul>
-            </div>
-        </div>
-    </nav>
+        </nav>
         <!-- End Navbar -->
         <div class="content" >
             <div class="row">
@@ -113,7 +113,7 @@
                                     </div>
                                     <div class="col-md-4 text-center">
                                         <a routerLink="/upload-apk" class="">
-                                            <button class="btn btn-success">ADD APK</button></a>
+                                            <button class="btn btn-success">Upload APK</button></a>
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>

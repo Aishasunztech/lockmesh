@@ -11,15 +11,15 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 export class AppComponent implements OnInit{
   title = 'my-admin';
   public data: any = [ ];
+  isLoggedIn=false;
 
   constructor(@Inject(LOCAL_STORAGE) private storage: WebStorageService,private spinnerService: Ng4LoadingSpinnerService) {
 
   }
   ngOnInit(){
-    // this.spinnerService.show();
-    // setTimeout(() => {
-    //   this.spinnerService.hide();
-    // }, 90000);
+    if(this.storage.get('email') && this.storage.get('token')){
+      this.isLoggedIn = true;
+    }  
 
   }
 
