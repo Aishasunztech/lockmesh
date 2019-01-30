@@ -4,8 +4,8 @@ import { RestService } from '../../rest.service';
 import Swal from 'sweetalert2';
 // import { NgForm } from '@angular/forms';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
-import {Router, ActivatedRoute} from '@angular/router';
+import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Common } from '../../entity/common';
 import * as io from "socket.io-client";
 import { forEach } from '@angular/router/src/utils/collection';
@@ -38,20 +38,20 @@ export class ConnectAdminDevicesComponent implements OnInit {
     simno: '',
     start_date: '',
     status: '',
-    is_sync:0
+    is_sync: 0
   };
   isAdmin = false;
-  userType:string;
-  pageName:any= "main_menu";
-  conf_admin_pwd:string;
-  conf_guest_pwd:string;
-  conf_enc_pwd:string;
+  userType: string;
+  pageName: any = "main_menu";
+  conf_admin_pwd: string;
+  conf_guest_pwd: string;
+  conf_enc_pwd: string;
   appList = [];
-  
+
   passwords = {
-    admin_password:null,
-    guest_password:null,
-    encrypted_password:null
+    admin_password: null,
+    guest_password: null,
+    encrypted_password: null
   };
   device_setting = {
     guest: false,
@@ -59,22 +59,22 @@ export class ConnectAdminDevicesComponent implements OnInit {
     enable: false
   };
   device_controls = [];
-  
-  stackedApps=[];
+
+  stackedApps = [];
   redoStackedApps = [];
   changedSettings = {
     guest: false,
     encrypted: false,
     enable: false
   };
-  appStackTop=1;
+  appStackTop = 1;
   stackControls = [];
   redoStackControls = [];
   changedApps = [];
 
   baseUrl = this.common.baseurl;
   private sockets;
-  
+
   profile_type = "profile";
 
   profiles = [];
@@ -82,31 +82,31 @@ export class ConnectAdminDevicesComponent implements OnInit {
   mainProfiles = [];
   deviceHistories = [];
 
-  dealer_id:number;
-  connected_dealer:number;
-  profileName:string;
-  policyName:string ;
+  dealer_id: number;
+  connected_dealer: number;
+  profileName: string;
+  policyName: string;
 
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
     private router: Router,
-    @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
+    @Inject(LOCAL_STORAGE) private storage: WebStorageService,
     private spinnerService: Ng4LoadingSpinnerService,
     private common: Common
     // private sockets:PushNotificationService
   ) {
-    this.dealer_id=Number(window.localStorage.getItem("id"));
+    this.dealer_id = Number(window.localStorage.getItem("id"));
     if (window.localStorage.getItem("type").replace(/"/g, "") == "admin") this.isAdmin = true;
-    this.userType = window.localStorage.getItem("type").replace(/"/g,"");
+    this.userType = window.localStorage.getItem("type").replace(/"/g, "");
     this.connected_dealer = Number(window.localStorage.getItem("connected_dealer"));
-    
+
   }
 
   ngOnInit() {
     this.path = this.router.url.split('/');
     let device_id = this.path[2];
-    
+
     this.spinnerService.show();
 
     this.restService.refreshlist(device_id).subscribe((response) => {
@@ -126,7 +126,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
     this.allChecked();
 
     let token = window.localStorage.getItem('token');
-    
+
     let makeToken = "token=" + token + "&device_id=" + device_id + "&isWeb=true";
     console.log("token query: " + makeToken);
 
@@ -142,11 +142,11 @@ export class ConnectAdminDevicesComponent implements OnInit {
     //   this.refresh(device_id);
     //   this.spinnerService.hide();
     // });
-    
+
   }
 
-  ngAfterInit(){
-    
+  ngAfterInit() {
+
     this.allChecked();
   }
   private allChecked() {
@@ -155,9 +155,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
     $('.enable_all').prop('checked', this.checkedAll('enable'));
   }
 
-  getProfiles(){
-    this.profiles=[];
-    this.policies=[];
+  getProfiles() {
+    this.profiles = [];
+    this.policies = [];
 
     if (this.isAdmin) {
       // all policies, all profiles
@@ -205,52 +205,48 @@ export class ConnectAdminDevicesComponent implements OnInit {
     }
   }
 
-  getHistories(device_id){
+  getHistories(device_id) {
     console.log("histories");
     console.log(device_id);
-    this.restService.getProfiles(null,null,device_id).subscribe((response) => {
+    this.restService.getProfiles(null, null, device_id).subscribe((response) => {
       console.log(response.profiles);
       this.deviceHistories = response.profiles;
 
       this.restService.authtoken(response);
     });
-    
+
   }
   ngAfterViewInit() {
     console.log("ngAfterViewInit");
 
   }
-  
+
   // refresh button
-  refresh(device_id) {
+  refresh(device_id, check_button) {
     console.log("refresh click");
     device_id = this.route.snapshot.paramMap.get('device_id');
     this.spinnerService.show();
 
     this.restService.refreshlist(device_id).subscribe((response) => {
-      this.device_data = response;  
+      this.device_data = response;
       this.restService.authtoken(response);
     });
+
+
     console.log(this.device_data);
 
     this.emptyStack();
-    
-    this.restService.getDeviceApps(device_id).subscribe((response) => {
-      this.appList = response;
-      this.stackedApps.push(this.copyObject(response));
-      this.restService.authtoken(response);
-      this.allChecked();
-    });
+
 
     this.getProfiles();
     this.getHistories(device_id);
 
     // change action button
-    this.changeActionButton('.clear_all_action',true);
-    this.changeActionButton('.apply_action',true);
-    this.changeActionButton('.undo_action',true);
-    this.changeActionButton('.redo_action',true);
-    
+    this.changeActionButton('.clear_all_action', true);
+    this.changeActionButton('.apply_action', true);
+    this.changeActionButton('.undo_action', true);
+    this.changeActionButton('.redo_action', true);
+
     this.conf_admin_pwd = null;
     this.conf_guest_pwd = null;
     this.conf_enc_pwd = null;
@@ -258,21 +254,39 @@ export class ConnectAdminDevicesComponent implements OnInit {
     this.passwords.guest_password = null;
     this.passwords.encrypted_password = null;
     this.spinnerService.hide();
-  }
-  
-  changePage(pageName,event){
-     this.pageName=pageName;
+
+    if (check_button === "btn_ok") {
+      console.log("apps are not refreshed")
+      return;
+    }
+    this.restService.getDeviceApps(device_id).subscribe((response) => {
+      this.appList = response;
+      this.stackedApps.push(this.copyObject(response));
+      this.restService.authtoken(response);
+      this.allChecked();
+    });
+
+
+
   }
 
-  clearDropDown(className){
-  
-    if(className == ".load_history"){
+
+
+
+
+  changePage(pageName, event) {
+    this.pageName = pageName;
+  }
+
+  clearDropDown(className) {
+
+    if (className == ".load_history") {
       $('.load_profile').val('');
       $('.load_policy').val('');
-    } else if (className == ".load_profile"){
+    } else if (className == ".load_profile") {
       $('.load_policy').val('');
       $('.load_history').val('');
-    }else{
+    } else {
       $('.load_history').val('');
       $('.load_profile').val('');
     }
@@ -286,7 +300,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       confirmButtonText: 'Yes',
       type: 'warning'
     }).then((result) => {
-      if (result.value==true) {
+      if (result.value == true) {
         this.spinnerService.show();
         this.restService.unlinkUser(device_id);
         this.spinnerService.hide();
@@ -294,22 +308,22 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     });
   }
-  
-  saveProfile(event,profile_type){
+
+  saveProfile(event, profile_type) {
     let profileName;
-  
+
     Swal.queue([{
       title: profile_type.charAt(0).toUpperCase() + profile_type.slice(1) + ' Name',
       input: 'text',
       inputAttributes: {
         autocapitalize: 'off',
-        required:"required"
+        required: "required"
       },
       showCancelButton: true,
       confirmButtonText: 'Save',
       showLoaderOnConfirm: true,
       preConfirm: (pName) => {
-        if(pName != null && pName!=''){
+        if (pName != null && pName != '') {
           profileName = pName;
           if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password) {
             // let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
@@ -352,7 +366,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       },
       allowOutsideClick: () => !Swal.isLoading()
     }]);
-    
+
   }
 
   suspendForm(device_id) {
@@ -363,35 +377,35 @@ export class ConnectAdminDevicesComponent implements OnInit {
       cancelButtonText: 'No',
       confirmButtonText: 'Yes',
       type: 'warning'
-    }).then((okay) =>  {
+    }).then((okay) => {
       if (okay) {
         // location.reload(true);
         this.spinnerService.show();
         this.restService.suspendForm(device_id).subscribe((response) => {
-       //   this.spinnerService.hide();
+          //   this.spinnerService.hide();
           this.restService.authtoken(response);
           this.resp = response;
           if (this.resp.status === true) {
             Swal({
-            text: this.resp.msg,
-            type: 'success',
+              text: this.resp.msg,
+              type: 'success',
               customClass: 'swal-height'
-              }).then(result => {
+            }).then(result => {
               if (result.value) {
                 this.router.navigate(['/devices']);
-                }
-              });
+              }
+            });
           } else {
             if (this.resp.status === false) {
               Swal({
-              text: this.resp.msg,
-              type: 'warning',
+                text: this.resp.msg,
+                type: 'warning',
                 customClass: 'swal-height'
-                }).then(result => {
+              }).then(result => {
                 if (result.value) {
                   location.reload(false);
-                  }
-                });
+                }
+              });
             }
           }
         });
@@ -399,50 +413,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     });
   }
-  
-  loadProfile(event){
-    Swal({
-      text: 'Do you really want to override settings?',
-      showCancelButton: true,
-      useRejections: false,
-      cancelButtonText: 'No',
-      confirmButtonText: 'Yes',
-      type: 'info'
-    }).then((res) => {
-      console.log(res);
-      if(res.dismiss){
-        this.clearDropDown('.load_history');
-        this.clearDropDown('.load_profile');
-        this.clearDropDown('.load_policy');
-        return;
-      }
-      var className = event.target.attributes.class.nodeValue;
-      this.clearDropDown('.' + className);
-      let profileId = event.target.value;
-      console.log(this.mainProfiles);
 
-      this.mainProfiles.forEach(elem => {
-        if (elem.id == profileId) {
-          this.appList = JSON.parse(elem.app_list);
-          this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
-          this.changedApps = this.stackedApps[ this.stackedApps.length -1];
-          this.changedApps.map((elem)=>{
-            elem.isChanged=1;
-          });
-          console.log(this.changedApps);
-          this.changeActionButton('.apply_action', false);
-          this.changeActionButton('.undo_action', false);
-          this.changeActionButton('.clear_all_action', false);
-          $('.on_guest').prop('checked', this.checkedAll('guest'));
-          $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
-          $('.enable_all').prop('checked', this.checkedAll('enable'));
-        }
-      });
-    });
-    
-  }
-
-  loadHistory(event){
+  loadProfile(event) {
     Swal({
       text: 'Do you really want to override settings?',
       showCancelButton: true,
@@ -458,18 +430,18 @@ export class ConnectAdminDevicesComponent implements OnInit {
         this.clearDropDown('.load_policy');
         return;
       }
-      this.clearDropDown('.load_history');
-
+      var className = event.target.attributes.class.nodeValue;
+      this.clearDropDown('.' + className);
       let profileId = event.target.value;
       console.log(this.mainProfiles);
-      
-      this.deviceHistories.forEach(elem => {
+
+      this.mainProfiles.forEach(elem => {
         if (elem.id == profileId) {
           this.appList = JSON.parse(elem.app_list);
           this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
-          this.changedApps = this.stackedApps[ this.stackedApps.length -1];
-          this.changedApps.map((elem)=>{
-            elem.isChanged=1;
+          this.changedApps = this.stackedApps[this.stackedApps.length - 1];
+          this.changedApps.map((elem) => {
+            elem.isChanged = 1;
           });
           console.log(this.changedApps);
           this.changeActionButton('.apply_action', false);
@@ -481,25 +453,68 @@ export class ConnectAdminDevicesComponent implements OnInit {
         }
       });
     });
-    
+
   }
 
-  ngOnChanges(){
+  loadHistory(event) {
+    Swal({
+      text: 'Do you really want to override settings?',
+      showCancelButton: true,
+      useRejections: false,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Yes',
+      type: 'info'
+    }).then((res) => {
+      console.log(res);
+      if (res.dismiss) {
+        this.clearDropDown('.load_history');
+        this.clearDropDown('.load_profile');
+        this.clearDropDown('.load_policy');
+        return;
+      }
+      this.pageName = "apps_list";
+      this.clearDropDown('.load_history');
+
+      let profileId = event.target.value;
+      console.log(this.mainProfiles);
+
+      this.deviceHistories.forEach(elem => {
+        if (elem.id == profileId) {
+          this.appList = JSON.parse(elem.app_list);
+          this.stackedApps.push(this.copyObject(JSON.parse(elem.app_list)));
+          this.changedApps = this.stackedApps[this.stackedApps.length - 1];
+          this.changedApps.map((elem) => {
+            elem.isChanged = 1;
+          });
+          console.log(this.changedApps);
+          this.changeActionButton('.apply_action', false);
+          this.changeActionButton('.undo_action', false);
+          this.changeActionButton('.clear_all_action', false);
+          $('.on_guest').prop('checked', this.checkedAll('guest'));
+          $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
+          $('.enable_all').prop('checked', this.checkedAll('enable'));
+        }
+      });
+    });
+
+  }
+
+  ngOnChanges() {
     this.allChecked();
   }
 
-  changeActionButton(className,val=false){
-    if(val){
+  changeActionButton(className, val = false) {
+    if (val) {
       $(className).attr('disabled', 'disabled');
       // $(className).prop('disabled', val);
-      
-    }else{
+
+    } else {
       $(className).removeAttr('disabled');
       $(className).prop('disabled', val);
     }
   }
-  
-  checkApps(event,app=null){
+
+  checkApps(event, app = null) {
     // console.log("check apps");
     // console.log(this.appList);
 
@@ -508,26 +523,26 @@ export class ConnectAdminDevicesComponent implements OnInit {
     var checked = event.target.checked;
     var className = event.target.attributes.class.nodeValue;
     var id = event.target.attributes.id;
-    if(id!=undefined){
-      id=id.nodeValue;
+    if (id != undefined) {
+      id = id.nodeValue;
     }
 
-    if(name == "check_all"){
+    if (name == "check_all") {
 
-      if(checked==true){
-        if(value == "enable_all"){
-          $('.enabled').prop('checked',true);
-          this.setSelectAll('enable',1);
-        }else if(value == "on_encrypted"){
+      if (checked == true) {
+        if (value == "enable_all") {
+          $('.enabled').prop('checked', true);
+          this.setSelectAll('enable', 1);
+        } else if (value == "on_encrypted") {
           $('.encrypted').prop('checked', true);
           this.setSelectAll('encrypted', 1);
 
-        }else if(value == "on_guest"){
+        } else if (value == "on_guest") {
           $('.guest').prop('checked', true);
           this.setSelectAll('guest', 1);
 
         }
-      }else{
+      } else {
         if (value == "enable_all") {
           $('.enabled').prop('checked', false);
           this.setSelectAll('enable', 0);
@@ -550,35 +565,35 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
       this.stackedApps.push(this.copyObject(this.appList));
       console.log("on select/unselect all");
-    }else if(id=="apps"){
-      if(app!=null){
-        let appIndex =this.getAppIndex(this.appList,app.uniqueName);
-        
-        if(this.appList[appIndex].isChanged==undefined){
-          this.appList[appIndex].isChanged=1;
+    } else if (id == "apps") {
+      if (app != null) {
+        let appIndex = this.getAppIndex(this.appList, app.uniqueName);
+
+        if (this.appList[appIndex].isChanged == undefined) {
+          this.appList[appIndex].isChanged = 1;
         }
 
         if (className == "guest" && checked == false) {
           $('.on_guest').prop('checked', false);
-          this.appList[appIndex].guest=0;
-        }else if(className == "guest" && checked ==true){
-          this.appList[appIndex].guest=1;
+          this.appList[appIndex].guest = 0;
+        } else if (className == "guest" && checked == true) {
+          this.appList[appIndex].guest = 1;
           $('.on_guest').prop('checked', this.checkedAll('guest'));
         }
 
         if (className == "encrypted" && checked == false) {
           $('.on_encrypted').prop('checked', false);
-          this.appList[appIndex].encrypted=0;
-        }else if(className == "encrypted" && checked == true){
-          this.appList[appIndex].encrypted=1;
+          this.appList[appIndex].encrypted = 0;
+        } else if (className == "encrypted" && checked == true) {
+          this.appList[appIndex].encrypted = 1;
           $('.on_encrypted').prop('checked', this.checkedAll('encrypted'));
         }
 
         if (className == "enabled" && checked == false) {
           $('.enable_all').prop('checked', false);
-          this.appList[appIndex].enable=0;
-        }else if(className == "enabled" && checked == true){
-          this.appList[appIndex].enable=1;
+          this.appList[appIndex].enable = 0;
+        } else if (className == "enabled" && checked == true) {
+          this.appList[appIndex].enable = 1;
           $('.enable_all').prop('checked', this.checkedAll('enable'));
 
         }
@@ -588,7 +603,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
         // this.appStackTop++;
 
         console.log(this.stackedApps);
-      }else{
+      } else {
         if (className == "guest" && checked == false) {
           $('.on_guest').prop('checked', false);
         }
@@ -602,12 +617,12 @@ export class ConnectAdminDevicesComponent implements OnInit {
         }
       }
     }
-    this.changeActionButton('.apply_action',false);
-    this.changeActionButton('.undo_action',false);
-    this.changeActionButton('.clear_all_action',false);
+    this.changeActionButton('.apply_action', false);
+    this.changeActionButton('.undo_action', false);
+    this.changeActionButton('.clear_all_action', false);
 
   }
-  checkedAll(key){
+  checkedAll(key) {
     console.log(key);
     var i = 0;
     this.appList.forEach((elem) => {
@@ -617,36 +632,36 @@ export class ConnectAdminDevicesComponent implements OnInit {
     });
     console.log("i:" + i);
     console.log("length:" + this.appList.length);
-    if(this.appList.length==i){
+    if (this.appList.length == i) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
 
-  setSelectAll(key,value){
-    this.appList.forEach((elem)=>{
-      elem[key]=value
+  setSelectAll(key, value) {
+    this.appList.forEach((elem) => {
+      elem[key] = value
     });
   }
 
-  applySettings(event){
+  applySettings(event) {
     console.log("apply settings");
     console.log(this.passwords);
     console.log("stack apps");
     console.log(this.stackedApps);
-    if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password ){
+    if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password) {
       // let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length -1]);
-      let app_list = this.stackedApps[this.stackedApps.length-1];
+      let app_list = this.stackedApps[this.stackedApps.length - 1];
       console.log("app_list");
       console.log(app_list);
 
-      let device_setting ={
+      let device_setting = {
         app_list: app_list,
         passwords: this.passwords
       };
       console.log(device_setting);
-      this.restService.applySettings(device_setting,this.device_data.device_id);
+      this.restService.applySettings(device_setting, this.device_data.device_id);
       this.clearStack();
 
       Swal({
@@ -656,10 +671,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
         // cancelButtonText: 'No',
         // confirmButtonText: 'Yes',
         type: 'success'
-      }).then(()=>{
-        this.refresh(this.device_data.device_id);
+      }).then(() => {
+        this.refresh(this.device_data.device_id, "btn_ok");
       });
-    }else{
+    } else {
       Swal({
         text: 'please make a change before apply!',
         showCancelButton: false,
@@ -671,52 +686,52 @@ export class ConnectAdminDevicesComponent implements OnInit {
       });
     }
   }
-  
-  clearStack(){
+
+  clearStack() {
     this.stackedApps = [];
     this.redoStackedApps = [];
     this.stackedApps.push(this.copyObject(this.appList));
   }
-  emptyStack(){
+  emptyStack() {
     this.stackedApps = [];
     this.redoStackedApps = [];
   }
-  getChangedApps(apps){
-    let retApps=[];
-    
+  getChangedApps(apps) {
+    let retApps = [];
+
     for (var i = 0; i < apps.length; i++) {
-      if (apps[i].isChanged!=undefined){
+      if (apps[i].isChanged != undefined) {
         retApps.push(JSON.parse(JSON.stringify(apps[i])));
       }
     }
     return retApps;
   }
-  getAppsChanged(e){
+  getAppsChanged(e) {
     this.changedApps = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
   }
-  undoSettings(event){
-    if (this.stackedApps.length>1) {
-      
+  undoSettings(event) {
+    if (this.stackedApps.length > 1) {
+
       console.log("stack length: " + this.stackedApps.length);
       console.log(this.stackedApps);
 
-      let apps=this.stackedApps[this.stackedApps.length -1];
+      let apps = this.stackedApps[this.stackedApps.length - 1];
       this.stackedApps.pop();
 
       console.log("stack length: " + this.stackedApps.length);
       // this.appList= this.copyObject(this.stackedApps[this.stackedApps.length -1]);
-      this.copytoApps(this.stackedApps[this.stackedApps.length -1]);
-      if(this.stackedApps.length==1){
-        this.changeActionButton('.undo_action',true);
-        this.changeActionButton('.apply_action',true);
+      this.copytoApps(this.stackedApps[this.stackedApps.length - 1]);
+      if (this.stackedApps.length == 1) {
+        this.changeActionButton('.undo_action', true);
+        this.changeActionButton('.apply_action', true);
       }
       this.changeActionButton('.redo_action', false);
 
       this.redoStackedApps.push(apps);
-    
-    }else{
+
+    } else {
       this.changeActionButton('.undo_action', true);
-      
+
       Swal({
         text: 'there is no setting to undo',
         showCancelButton: false,
@@ -727,31 +742,31 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }).then(() => {
       });
     }
-    
+
   }
-  copyObject(obj){
+  copyObject(obj) {
     return JSON.parse(JSON.stringify(obj));
   }
-  copytoApps(obj){
-    for(let i=0; i< obj.length; i++){
+  copytoApps(obj) {
+    for (let i = 0; i < obj.length; i++) {
       this.appList[i].guest = obj[i].guest;
       this.appList[i].encrypted = obj[i].encrypted;
       this.appList[i].enable = obj[i].enable;
     }
   }
-  redoSettings(event){
-    if(this.redoStackedApps.length>0){
+  redoSettings(event) {
+    if (this.redoStackedApps.length > 0) {
       console.log("hello");
       let apps = this.redoStackedApps[this.redoStackedApps.length - 1];
       this.redoStackedApps.pop();
       this.stackedApps.push(apps);
-      if(this.redoStackedApps.length==0){
-        this.changeActionButton('.redo_action',true);
+      if (this.redoStackedApps.length == 0) {
+        this.changeActionButton('.redo_action', true);
       }
-      this.changeActionButton('.undo_action',false);
-      this.changeActionButton('.apply_action',false);
+      this.changeActionButton('.undo_action', false);
+      this.changeActionButton('.apply_action', false);
       this.copytoApps(this.stackedApps[this.stackedApps.length - 1]);
-    }else{
+    } else {
       this.changeActionButton('.redo_action', true);
 
       Swal({
@@ -764,34 +779,34 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }).then(() => {
       });
     }
-    
+
   }
 
-  clearAll(event){
-      Swal({
-        text: 'All changes are undone',
-        showCancelButton: false,
-        useRejections: false,
-        // cancelButtonText: 'No',
-        // confirmButtonText: 'Yes',
-        type: 'success'
-      }).then(() => {
-      });
-      this.refresh(this.device_data.device_id);
+  clearAll(event) {
+    Swal({
+      text: 'All changes are undone',
+      showCancelButton: false,
+      useRejections: false,
+      // cancelButtonText: 'No',
+      // confirmButtonText: 'Yes',
+      type: 'success'
+    }).then(() => {
+    });
+    this.refresh(this.device_data.device_id, "ok");
   }
-  resetPassword(event,value){
+  resetPassword(event, value) {
     var className = event.target.attributes.class.nodeValue.split(' ');
-    className=className[className.length -1];
-    
-    if (className == "confirm_encrypted"){
-      if(this.passwords.encrypted_password==value){
+    className = className[className.length - 1];
+
+    if (className == "confirm_encrypted") {
+      if (this.passwords.encrypted_password == value) {
         this.toggleClass('.pwd_confirmed');
         this.changeActionButton('.apply_action');
         this.changeActionButton('.clear_all_action');
-      }else{
-        this.toggleClass('.not_matched');        
+      } else {
+        this.toggleClass('.not_matched');
       }
-    } else if (className == "confirm_guest"){
+    } else if (className == "confirm_guest") {
       if (this.passwords.guest_password == value) {
         this.toggleClass('.pwd_confirmed');
         this.changeActionButton('.apply_action');
@@ -799,7 +814,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       } else {
         this.toggleClass('.not_matched');
       }
-    } else if (className == "confirm_admin"){
+    } else if (className == "confirm_admin") {
       if (this.passwords.admin_password == value) {
         this.toggleClass('.pwd_confirmed');
         this.changeActionButton('.apply_action');
@@ -808,9 +823,9 @@ export class ConnectAdminDevicesComponent implements OnInit {
         this.toggleClass('.not_matched');
       }
     }
-    
+
   }
-  toggleClass(className){
+  toggleClass(className) {
     console.log(className);
     $(className).fadeIn('slow', function () {
       $(className).delay(1000).fadeOut();
@@ -879,13 +894,13 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     });
   }
-  
+
   onLogout() {
     // this.sockets.disconnect();
     this.restService.authSignOut();
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     // this.sockets.disconnect();
   }
 }
