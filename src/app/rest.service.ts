@@ -122,6 +122,7 @@ export class RestService {
 
   // For Admin update
   updateAdminDetails(dealer) {
+    console.log(dealer);
     this.setHeaders(this.sessionLogin('token'));
     this.response = this.http.put(this.baseUrl + '/users/edit/devices', dealer, this.oHeaders);
     this.authtoken(this.response);

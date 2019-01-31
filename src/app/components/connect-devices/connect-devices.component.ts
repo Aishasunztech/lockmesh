@@ -13,6 +13,10 @@ import { forEach } from '@angular/router/src/utils/collection';
 // import { Reference } from '@angular/compiler/src/render3/r3_ast';
 // import { Event } from '../../entity/event';
 // import { ConvertActionBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
+const today = new Date();
+// tslint:disable-next-line:max-line-length
+const timest = (today.getHours() < 10 ? '0' + today.getHours() : today.getHours()) + ':' + (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes());
+const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + timest;
 
 @Component({
   selector: 'app-connect-devices',
@@ -259,6 +263,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       console.log("apps are not refreshed")
       return;
     }
+    this.pageName = "main_menu";
     this.restService.getDeviceApps(device_id).subscribe((response) => {
       this.appList = response;
       this.stackedApps.push(this.copyObject(response));
@@ -856,7 +861,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       useRejections: true,
       cancelButtonText: 'No',
       confirmButtonText: 'Yes',
-      type: 'warning'
+      type: 'info'
     }).then((okay) => {
       if (okay) {
         this.spinnerService.show();
@@ -894,7 +899,70 @@ export class ConnectAdminDevicesComponent implements OnInit {
       }
     });
   }
+  updateAdmin() {
+    console.log(this.device_data);
+    if (this.device_data.email === '' || this.device_data.name === '' || this.device_data.email === 'null' || this.device_data.name === 'null' || this.device_data.expiry_date === '' || this.device_data.expiry_date === 'null') {
+      Swal({
+        text: 'Please provide Name, Email and Expiry Date ',
+        type: 'error',
+        customClass: 'swal-height'
+      }).then(okay => {
+        return;
+      });
+    } else {
+      // console.log(this.data);
+      const extdate = new Date(this.device_data.expiry_date);
+      // tslint:disable-next-line:max-line-length
+      this.device_data.expiry_date = extdate.getFullYear() + '-' + this.getdate(extdate.getMonth() + 1) + '-' + this.getdate(extdate.getDate()) + ' ' + timest;
+      console.log(this.device_data);
+      if (this.device_data.expiry_date.trim() === null || this.device_data.expiry_date.trim() === ''
+        || this.device_data.expiry_date.trim() === 'NaN-NaN-NaN Invalid' || this.device_data.expiry_date.split(' ')[0] === '1970-1-1') {
+        console.log(this.device_data.expiry_date);
+        this.device_data.expiry_date = '';
+      }
+      console.log(this.device_data.expiry_date);
+      if (this.device_data.expiry_date.includes('NaN-NaN-NaN')) {
+        this.device_data.expiry_date = '';
+        console.log(this.device_data.expiry_date);
+      }
+      // this.device_data.s_dealer = '';
+      // this.spinnerService.show();
+      this.device_data.name = this.capitalize(this.device_data.name);
+      this.restService.updateAdminDetails(this.device_data).subscribe((response) => {
+        this.restService.authtoken(response);
+        this.resp = response;
+        if (this.resp.status === true) {
+          Swal({
+            text: 'You have successfully Update details',
+            type: 'success',
+            customClass: 'swal-height'
+          }).then(okay => {
+            if (okay) {
+              location.reload(true);
+            }
+          });
+        }
+      });
+      $('input.ng-invalid, select.ng-invalid, textarea.ng-invalid,checkbox.ng-invalid, file.ng-invalid').addClass('ng-touched');
+    }
+  }
+  // update password
+  updatePassDealer() {
+  }
 
+  capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
+
+  // Date format
+  getdate(dd) {
+    if (dd < 10) {
+      dd = '0' + dd;
+    } else {
+      dd = dd;
+    }
+    return dd;
+  }
   onLogout() {
     // this.sockets.disconnect();
     this.restService.authSignOut();
