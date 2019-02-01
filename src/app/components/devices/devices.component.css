@@ -126,7 +126,7 @@
       background-color:  #9cd514;
     }
     .table>tbody>tr>td {
-        padding: 15px 3px;
+        padding: 4px 4px !important;
         vertical-align: middle;
         text-align: center !important;
         font-size: 12px;
