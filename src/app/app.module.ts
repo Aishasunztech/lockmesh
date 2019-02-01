@@ -18,7 +18,7 @@ import { DealerComponent } from './components/dealer/dealer.component';
 import { CreateDealerSdealerComponent } from './components/create-dealer/create-dealer-sdealer.component';
 import { CreateSdealerComponent } from './components/create-sdealer/create-sdealer.component';
 // import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
+// import { RegisterComponent } from './components/register/register.component';
 import { ClientComponent } from './components/client/client.component';
 import {Common} from './entity/common';
 import {RestService} from './services/rest.service';
