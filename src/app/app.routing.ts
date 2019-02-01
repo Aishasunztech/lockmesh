@@ -37,7 +37,7 @@ export const routes: Routes = [
             title: 'Page 404',
             componentName: 'P404Component',
             path: '404',
-            description:"Page not Found"
+            description: "Page not Found"
         }
     },
     {
@@ -47,7 +47,7 @@ export const routes: Routes = [
             title: 'Page 500',
             componentName: 'P500Component',
             path: '500',
-            description:""
+            description: ""
         }
     },
     {
@@ -57,7 +57,7 @@ export const routes: Routes = [
             title: 'Login',
             componentName: "LoginComponent",
             path: 'login',
-            description:""
+            description: ""
         }
     },
     {
@@ -177,7 +177,7 @@ export const routes: Routes = [
             },
         ]
     }
-    { path: '**', component: P404Component }
+    , { path: '**', component: P404Component }
 ];
 
 @NgModule({
