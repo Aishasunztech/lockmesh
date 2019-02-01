@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RestService } from '../../rest.service';
+import { RestService } from '../../services/rest.service';
 import { NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, } from '@angular/core';
-import { RestService } from '../../rest.service';
+import { RestService } from '../../services/rest.service';
 // import { PushNotificationService } from '../../push-notification.service';
 import Swal from 'sweetalert2';
 // import { NgForm } from '@angular/forms';

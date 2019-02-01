@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef} from '@angular/core';
 import {ApkService} from '../../services/apk.service';
-import { RestService } from '../../rest.service';
+import { RestService } from '../../services';
 import { NgForm } from '@angular/forms';
 import {Common} from '../../entity/common';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';

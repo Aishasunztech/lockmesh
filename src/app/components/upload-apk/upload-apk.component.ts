@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import {ApkService} from '../../services/apk.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { RestService } from '../../rest.service';
+import { RestService } from '../../services';
 import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
 import * as $ from 'jquery';

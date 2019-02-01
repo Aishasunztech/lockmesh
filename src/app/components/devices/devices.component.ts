@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { RestService } from '../../rest.service';
-import { GlobalSearchService } from '../../global-search.service';
+import { RestService } from '../../services/rest.service';
+import { GlobalSearchService } from '../../services/global-search.service';
 import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
@@ -97,8 +97,12 @@ export class DevicesComponent implements OnInit {
     private restService: RestService,
     private router: Router,
     @Inject(LOCAL_STORAGE) private storage: WebStorageService,
-   private spinnerService: Ng4LoadingSpinnerService
+    private spinnerService: Ng4LoadingSpinnerService,
+    private globalSearch: GlobalSearchService
   ) {
+    this.globalSearch.globalSearch.subscribe((value)=>{
+      this.childInputChanged(value);
+    });
   }
 
   @ViewChild('deviceData') projectForm: NgForm;

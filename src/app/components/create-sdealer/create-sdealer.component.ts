@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
-import { RestService } from '../../rest.service';
+import { RestService } from '../../services/rest.service';
 import Swal from 'sweetalert2';
 import {Router} from '@angular/router';
 import { NgForm } from '@angular/forms';

@@ -1,0 +1,113 @@
+<div class="wrapper" style="overflow: hidden">
+
+
+    <!-- <div class="col-md-3"> -->
+    <!-- <app-header></app-header> -->
+    <app-acl></app-acl>
+    <!-- </div> -->
+    <div class="main-panel col-md-12">
+        <!-- Navbar -->
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button onclick="togglelogo();" id="" class="btn btn-icon btn-round">
+                            <i class="nc-icon nc-minimal-right text-center visible-on-sidebar-mini"></i>
+                            <i class="nc-icon nc-minimal-left text-center visible-on-sidebar-regular"></i>
+                        </button>
+                    </div>
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <!--<a class="navbar-brand">LOGO</a>-->
+                </div>
+                <button class="navbar-toggler" id="option-button" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                    <ul class="navbar-nav">
+                        <li>
+                            <!--<span class="nav-link btn-rotate d-md-ver">WebMDM_v1.02</span>-->
+                        </li>
+                        <!--<li class="nav-item">-->
+                        <!--<a class="nav-link btn-rotate" href="javascript:void(0)" (click)="onLogout()">-->
+                        <!--Logout-->
+                        <!--<p>-->
+                        <!--<span class="d-lg-none d-md-block">Account</span>-->
+                        <!--</p>-->
+                        <!--</a>-->
+                        <!--</li>-->
+                    </ul>
+                </div>
+            </div>
+        </nav> -->
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal" id="formData" #deviceData="ngForm" >
+                        <div class="profile-head" >
+                        <h4 class="heading" style="font-size: 18px;text-align: center">Your Profile</h4>
+                        </div>
+                        <div class="card ">
+
+
+                            <div class="card-body card-manu row">
+                                <div class="col-sm-4"></div>
+
+                                <div class="col-sm-7" style="text-align: left">
+                                    <div class="scrollbar">
+                                        <div class="row">
+                                            <label class="col-sm-3 col-form-label">Name:</label>
+                                            <div class="col-sm-5">
+                                                <div class="form-group">
+                                                    {{profile.dealer_name}}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label class="col-sm-3 col-form-label">Dealer Id:</label>
+                                            <div class="col-sm-5">
+                                                <div class="form-group">
+                                                    {{profile.dealer_id}}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <label class="col-sm-3 col-form-label">Email:</label>
+                                            <div class="col-sm-7">
+                                                <div class="form-group">
+                                                    {{profile.dealer_email}}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-sm-3 col-form-label">Dealer Pin:</label>
+                                            <div class="col-sm-7">
+                                                <div class="form-group">
+                                                    {{profile.link_code}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div>
+    </div>
+</div>
