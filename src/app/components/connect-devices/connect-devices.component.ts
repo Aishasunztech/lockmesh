@@ -7,12 +7,8 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Common } from '../../entity/common';
-import * as io from "socket.io-client";
-import { forEach } from '@angular/router/src/utils/collection';
+// import * as io from "socket.io-client";
 
-// import { Reference } from '@angular/compiler/src/render3/r3_ast';
-// import { Event } from '../../entity/event';
-// import { ConvertActionBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
 const today = new Date();
 // tslint:disable-next-line:max-line-length
 const timest = (today.getHours() < 10 ? '0' + today.getHours() : today.getHours()) + ':' + (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes());

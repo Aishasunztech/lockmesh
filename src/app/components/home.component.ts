@@ -3,7 +3,7 @@ import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core'
 // import Swal from 'sweetalert2';
 // import { NgForm } from '@angular/forms';
 // import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
-// import { Router , ActivatedRoute } from '@angular/router';
+import { Router , ActivatedRoute } from '@angular/router';
 // import * as enLocale from 'date-fns/locale/en';
 // import * as $ from 'jquery';
 
@@ -19,11 +19,14 @@ import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core'
 
 export class HomeComponent implements OnInit{
 
-  constructor() {
+  constructor(
+    private route: ActivatedRoute,
+    public router: Router
+  ) {
     
   }
 
   ngOnInit() {
-
+    // this.router.navigate(['/devices']);
   }
 }

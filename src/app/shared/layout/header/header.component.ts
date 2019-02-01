@@ -66,8 +66,8 @@ export class HeaderComponent implements OnInit {
       // }
 
       
-      // this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
-      // this.spinnerService.hide();
+      this.userType =window.localStorage.getItem('type').replace(/['"]+/g, '');
+      this.spinnerService.hide();
     }
     
   }
@@ -89,11 +89,10 @@ export class HeaderComponent implements OnInit {
   }
 
   async aclHandler(){
-    // this.isComponentAllowed =
-    // const response = await this.restService.isComponentAllowed(this.componentName).toPromise();
-    // this.isComponentAllowed=response.componentAllowed;
-    // alert("component allowed "+ this.isComponentAllowed);
+
     const response1 = await this.restService.isAdmin().toPromise();
+    console.log("headerComponent");
+    console.log(response1);
     this.isAdmin = response1.isAdmin;
   }
 

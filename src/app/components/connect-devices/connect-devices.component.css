@@ -363,6 +363,13 @@ body {
 .apps_table thead th{
     font-size: 10px;
 }
+
+.green{
+    color: green!important;
+}
+.red{
+    color: red !important;
+}
 /* .apps_head th{
     padding: unset;
     font-size: 8px;

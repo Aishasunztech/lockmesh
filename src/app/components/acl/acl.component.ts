@@ -57,7 +57,7 @@ export class ACLComponent implements OnInit {
 
             this.profilelist();
 
-            await this.allDeviceView();
+            // await this.allDeviceView();
             
             if(this.isComponentAllowed==false || this.componentName=="InvalidPage"){
               this.router.navigate(['/invalid_page/denied']);
