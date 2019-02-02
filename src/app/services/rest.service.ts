@@ -570,27 +570,29 @@ export class RestService {
   }
 
   applySettings(device_setting, device_id,type="history",name=null,dealer_id=0){
-
-    device_setting.app_list.forEach((elem)=>{
-      elem.packageName = elem.uniqueName.replace(elem.label,'');
-      if(elem.guest){
-        elem.guest=true;
-      }else{
-        elem.guest = false;
-      }
-      if(elem.encrypted){
-        elem.encrypted=true;
-      }else{
-        elem.encrypted = false;
-      }
-      if(elem.enable){
-        elem.enable=true;
-      }else{
-        elem.enable = false;
-      }
-      delete elem.device_id;
-      delete elem.isChanged;
-    });
+    console.log(device_setting);
+    if(device_setting.app_list != undefined){
+      device_setting.app_list.forEach((elem)=>{
+        elem.packageName = elem.uniqueName.replace(elem.label,'');
+        if(elem.guest){
+          elem.guest=true;
+        }else{
+          elem.guest = false;
+        }
+        if(elem.encrypted){
+          elem.encrypted=true;
+        }else{
+          elem.encrypted = false;
+        }
+        if(elem.enable){
+          elem.enable=true;
+        }else{
+          elem.enable = false;
+        }
+        delete elem.device_id;
+        delete elem.isChanged;
+      });
+    }
     this.setHeaders(this.sessionLogin('token'));    
     this.http.post(this.baseUrl + '/users/apply_settings/' + device_id, {
       device_setting,
