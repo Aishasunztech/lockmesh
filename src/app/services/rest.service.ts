@@ -185,6 +185,7 @@ export class RestService {
     this.authtoken(this.response);
     return this.response;
   }
+
   // for dealer reset password(admin dashboard)
   updateAdminPassDealerDetails(dealer) {
     this.setHeaders(this.sessionLogin('token'));    

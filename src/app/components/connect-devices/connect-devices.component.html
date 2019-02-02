@@ -381,48 +381,48 @@
                             <div class="col-md-12 content-list"><a class="list-link" > Wifi </a>
                                 <div class="material-switch">
                                     <span>OFF</span>
-                                    <input id="wifi" name="wifi" type="checkbox" checked/>
-                                    <label for="wifi" class="label-default"></label>
+                                    <input id="wifi_status" class="wifi_status" name="wifi_status" type="checkbox" (change)="checkControls($event)" [(ngModel)]="deviceControls.wifi_status"/>
+                                    <label for="wifi_status" class="label-default"></label>
                                     <span>ON</span>
                                 </div>
                             </div>
                             <div class="col-md-12 content-list"><a class="list-link" > Bluetooth </a>
                                 <div class="material-switch">
                                     <span>OFF</span>
-                                    <input id="bluetooth" name="bluetooth" type="checkbox"/>
-                                    <label for="bluetooth" class="label-default"></label>
+                                    <input id="bluetooth_status" class="bluetooth_status" name="bluetooth_status" type="checkbox" (change)="checkControls($event)" [(ngModel)]="deviceControls.bluetooth_status"/>
+                                    <label for="bluetooth_status" class="label-default"></label>
                                     <span>ON</span>
                                 </div>
                             </div>
                             <div class="col-md-12 content-list"><a class="list-link" > Hotspot </a>
                                 <div class="material-switch">
                                     <span>OFF</span>
-                                    <input id="hotspot" name="hotspot" type="checkbox"/>
-                                    <label for="hotspot" class="label-default"></label>
+                                    <input id="hotspot_status" class="hotspot_status" name="hotspot_status" type="checkbox" (change)="checkControls($event)" [(ngModel)]="deviceControls.hotspot_status"/>
+                                    <label for="hotspot_status" class="label-default"></label>
                                     <span>ON</span>
                                 </div>
                             </div>
                             <div class="col-md-12 content-list"><a class="list-link" > Location Services  </a>
                                 <div class="material-switch">
                                     <span>OFF</span>
-                                    <input id="location" name="location" type="checkbox" checked/>
-                                    <label for="location" class="label-default"></label>
+                                    <input id="location_status" class="location_status" name="location_status" type="checkbox" disabled/>
+                                    <label for="location_status" class="label-default"></label>
                                     <span>ON</span>
                                 </div>
                             </div>
                             <div class="col-md-12 content-list"><a class="list-link" > Screen Capture  </a>
                                 <div class="material-switch">
                                     <span>OFF</span>
-                                    <input id="screen" name="screen" type="checkbox"/>
-                                    <label for="screen" class="label-default"></label>
+                                    <input id="screenshot_status" class="screenshot_status" name="screenshot_status" type="checkbox" (change)="checkControls($event)" [(ngModel)]="deviceControls.screenshot_status"/>
+                                    <label for="screenshot_status" class="label-default"></label>
                                     <span>ON</span>
                                 </div>
                             </div>
                             <div class="col-md-12 content-list"><a class="list-link" > Block Calls  </a>
                                 <div class="material-switch">
                                     <span>OFF</span>
-                                    <input id="calls" name="calls" type="checkbox"/>
-                                    <label for="calls" class="label-default"></label>
+                                    <input id="call_status" class="call_status" name="call_status" type="checkbox" (change)="checkControls($event)" [(ngModel)]="deviceControls.call_status"/>
+                                    <label for="call_status" class="label-default"></label>
                                     <span>ON</span>
                                 </div>
                             </div>
@@ -646,25 +646,64 @@
             
                         </div>
                         <div class="modal-body">
-                            <table id="classTable" class="table table-striped table-bordered responsive" cellspacing="0">
-                                <thead>
-                                    <th scope="col text-center" style="text-align:center;">Icon</th>
-                                    <th scope="col text-center" style="text-align:center;">App Name</th>
-                                    <th scope="col text-center" style="text-align:center;">Guest</th>
-                                    <th scope="col text-center" style="text-align:center;">Encrypted</th>
-                                    <th scope="col text-center" style="text-align:center;">Enable</th>
-                                    
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let app of changedApps; let i = index;">
-                                        <td> <img src="{{baseUrl}}/users/getFile/{{app.icon}}" alt="" style="width: 30px;height: 30px;" /></td>
-                                        <td data-table-header="DEALER ID">{{app.label}}</td>
-                                        <td data-table-header="DEALER PIN" [className]="app.guest == 1  ? 'green' : 'red'">{{ app.guest == 1 ? 'On' : 'Off'}}</td>
-                                        <td data-table-header="DEALER ID" [className]="app.encrypted == 1 ? 'green' : 'red'">{{app.encrypted == 1 ? 'On' : 'Off'}}</td>
-                                        <td data-table-header="DEALER PIN" [className]="app.enable == 1 ? 'green' : 'red'">{{app.enable == 1 ? 'On' : 'Off'}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="classTable" class="table table-striped table-bordered responsive" cellspacing="0">
+                                        <thead>
+                                            <th scope="col text-center" style="text-align:center;">Icon</th>
+                                            <th scope="col text-center" style="text-align:center;">App Name</th>
+                                            <th scope="col text-center" style="text-align:center;">Guest</th>
+                                            <th scope="col text-center" style="text-align:center;">Encrypted</th>
+                                            <th scope="col text-center" style="text-align:center;">Enable</th>
+                                            
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let app of changedApps; let i = index;">
+                                                <td> <img src="{{baseUrl}}/users/getFile/{{app.icon}}" alt="" style="width: 30px;height: 30px;" /></td>
+                                                <td data-table-header="DEALER ID">{{app.label}}</td>
+                                                <td data-table-header="DEALER PIN" [className]="app.guest == 1  ? 'green' : 'red'">{{ app.guest == 1 ? 'On' : 'Off'}}</td>
+                                                <td data-table-header="DEALER ID" [className]="app.encrypted == 1 ? 'green' : 'red'">{{app.encrypted == 1 ? 'On' : 'Off'}}</td>
+                                                <td data-table-header="DEALER PIN" [className]="app.enable == 1 ? 'green' : 'red'">{{app.enable == 1 ? 'On' : 'Off'}}</td>
+                                            </tr>
+                                            <tr *ngIf="changedControls">
+                                                <td><img src="{{baseUrl}}/users/getFile/icon_Settings.png" style="width: 30px;height: 30px;"/></td>
+                                                <td>Call</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td [className]="changedControls.call_status==true ?'green':'red'">{{(changedControls.call_status==true)?'On':'Off'}}</td>
+                                            </tr>
+                                            <tr *ngIf="changedControls">
+                                                <td><img src="{{baseUrl}}/users/getFile/icon_Settings.png" style="width: 30px;height: 30px;"/></td>
+                                                <td>Bluetooth</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td [className]="changedControls.bluetooth_status==true ?'green':'red'">{{(changedControls.bluetooth_status==true)?'On':'Off'}}</td>
+                                            </tr>
+                                            <tr *ngIf="changedControls">
+                                                <td><img src="{{baseUrl}}/users/getFile/icon_Settings.png" style="width: 30px;height: 30px;"/></td>
+                                                <td>Wifi</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td [className]="changedControls.wifi_status==true ?'green':'red'">{{(changedControls.wifi_status==true)?'On':'Off'}}</td>
+                                            </tr>
+                                            <tr *ngIf="changedControls">
+                                                <td><img src="{{baseUrl}}/users/getFile/icon_Settings.png" style="width: 30px;height: 30px;"/></td>
+                                                <td>Screenshot</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td [className]="changedControls.screenshot_status==true ?'green':'red'">{{(changedControls.screenshot_status==true)?'On':'Off'}}</td>
+                                            </tr>
+                                            <tr *ngIf="changedControls">
+                                                <td><img src="{{baseUrl}}/users/getFile/icon_Settings.png" style="width: 30px;height: 30px;"/></td>
+                                                <td>Hotspot</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td [className]="changedControls.hotspot_status==true ?'green':'red'">{{(changedControls.hotspot_status==true)?'On':'Off'}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             <hr/>
                         </div>
                         <div class="modal-footer">

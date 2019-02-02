@@ -43,35 +43,47 @@ export class ConnectAdminDevicesComponent implements OnInit {
   isAdmin = false;
   userType: string;
   pageName: any = "main_menu";
+  
   conf_admin_pwd: string;
   conf_guest_pwd: string;
   conf_enc_pwd: string;
-  appList = [];
-
   passwords = {
     admin_password: null,
     guest_password: null,
     encrypted_password: null
   };
-  device_setting = {
-    guest: false,
-    encrypted: false,
-    enable: false
-  };
-  device_controls = [];
-
+  
+  appList = [];
   stackedApps = [];
   redoStackedApps = [];
-  changedSettings = {
-    guest: false,
-    encrypted: false,
-    enable: false
-  };
-  appStackTop = 1;
-  stackControls = [];
-  redoStackControls = [];
-  changedApps = [];
 
+  // device_setting :any;
+  // changedSettings = {
+  //   guest: false,
+  //   encrypted: false,
+  //   enable: false
+  // };
+  
+  deviceControls = {
+    call_status: false,
+    bluetooth_status: false,
+    wifi_status: false,
+    screenshot_status: false,
+    hotspot_status: false
+  };
+
+  stackedControls = [];
+  redoStackedControls = [];
+  
+  // after apply
+  changedApps = [];
+  changedControls = {
+    call_status: false,
+    bluetooth_status: false,
+    wifi_status: false,
+    screenshot_status: false,
+    hotspot_status: false
+  };
   baseUrl = this.common.baseurl;
   private sockets;
 
@@ -115,12 +127,27 @@ export class ConnectAdminDevicesComponent implements OnInit {
     });
 
     this.restService.getDeviceApps(device_id).subscribe((response) => {
-      this.appList = response;
-      this.stackedApps.push(this.copyObject(response));
+      // apps
+      this.appList = response.app_list;
+      this.stackedApps.push(this.copyObject(response.app_list));
+      if (response.controls instanceof Array){
+        this.deviceControls = {
+          call_status: false,
+          bluetooth_status: false,
+          wifi_status: false,
+          screenshot_status:false,
+          hotspot_status:false
+        };
+      }else{
+        this.deviceControls = response.controls;
+      }
+      this.stackedControls.push(this.copyObject(this.deviceControls));
+      console.log(this.stackedControls);
+      
       this.restService.authtoken(response);
       this.allChecked();
     });
-
+    
     this.getProfiles();
     this.getHistories(device_id);
     this.allChecked();
@@ -145,6 +172,80 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
   }
 
+  // refresh button
+  refresh(device_id, check_button) {
+    console.log("refresh click");
+    device_id = this.route.snapshot.paramMap.get('device_id');
+    // this.spinnerService.show();
+
+    this.restService.refreshlist(device_id).subscribe((response) => {
+      this.device_data = response;
+      this.restService.authtoken(response);
+    });
+    console.log(this.device_data);
+    this.emptyStack();
+    this.getProfiles();
+    this.getHistories(device_id);
+
+    // change action button
+    this.changeActionButton('.clear_all_action', true);
+    this.changeActionButton('.apply_action', true);
+    this.changeActionButton('.undo_action', true);
+    this.changeActionButton('.redo_action', true);
+
+    this.conf_admin_pwd = null;
+    this.conf_guest_pwd = null;
+    this.conf_enc_pwd = null;
+    this.passwords.admin_password = null;
+    this.passwords.guest_password = null;
+    this.passwords.encrypted_password = null;
+    // this.spinnerService.hide();
+
+    if (check_button === "btn_ok") {
+      console.log("apps are not refreshed")
+      return;
+    }
+    this.pageName = "main_menu";
+    this.restService.getDeviceApps(device_id).subscribe((response) => {
+      // apps
+      this.appList = response.app_list;
+      this.stackedApps.push(this.copyObject(response.app_list));
+      if (response.controls instanceof Array) {
+        this.deviceControls = {
+          call_status: false,
+          bluetooth_status: false,
+          wifi_status: false,
+          screenshot_status: false,
+          hotspot_status: false
+        };
+
+      } else {
+        this.deviceControls = response.controls;
+      }
+      this.stackedControls.push(this.copyObject(this.deviceControls));
+      console.log(this.stackedControls);
+      this.restService.authtoken(response);
+      this.allChecked();
+    });
+
+  }
+
+  // loadData(){
+  //   this.restService.refreshlist(device_id).subscribe((response) => {
+  //     this.device_data = response;
+  //     this.restService.authtoken(response);
+  //   });
+
+  //   this.restService.getDeviceApps(device_id).subscribe((response) => {
+  //     this.appList = response;
+  //     this.stackedApps.push(this.copyObject(response));
+  //     this.restService.authtoken(response);
+  //     this.allChecked();
+  //   });
+
+  //   this.getProfiles();
+  //   this.getHistories(device_id);
+  // }
   ngAfterInit() {
 
     this.allChecked();
@@ -221,59 +322,6 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
   }
 
-  // refresh button
-  refresh(device_id, check_button) {
-    console.log("refresh click");
-    device_id = this.route.snapshot.paramMap.get('device_id');
-    this.spinnerService.show();
-
-    this.restService.refreshlist(device_id).subscribe((response) => {
-      this.device_data = response;
-      this.restService.authtoken(response);
-    });
-
-
-    console.log(this.device_data);
-
-    this.emptyStack();
-
-
-    this.getProfiles();
-    this.getHistories(device_id);
-
-    // change action button
-    this.changeActionButton('.clear_all_action', true);
-    this.changeActionButton('.apply_action', true);
-    this.changeActionButton('.undo_action', true);
-    this.changeActionButton('.redo_action', true);
-
-    this.conf_admin_pwd = null;
-    this.conf_guest_pwd = null;
-    this.conf_enc_pwd = null;
-    this.passwords.admin_password = null;
-    this.passwords.guest_password = null;
-    this.passwords.encrypted_password = null;
-    this.spinnerService.hide();
-
-    if (check_button === "btn_ok") {
-      console.log("apps are not refreshed")
-      return;
-    }
-    this.pageName = "main_menu";
-    this.restService.getDeviceApps(device_id).subscribe((response) => {
-      this.appList = response;
-      this.stackedApps.push(this.copyObject(response));
-      this.restService.authtoken(response);
-      this.allChecked();
-    });
-
-
-
-  }
-
-
-
-
 
   changePage(pageName, event) {
     this.pageName = pageName;
@@ -331,10 +379,15 @@ export class ConnectAdminDevicesComponent implements OnInit {
             let app_list = this.stackedApps[this.stackedApps.length - 1];
             console.log("app_list");
             console.log(app_list);
+            
+            let controls = this.stackedControls[this.stackedControls.length - 1];
+            console.log("app_controls");
+            console.log(controls);
 
             let device_setting = {
               app_list: app_list,
-              passwords: this.passwords
+              passwords: this.passwords,
+              controls: controls
             };
 
             this.restService.applySettings(device_setting, this.device_data.device_id, profile_type, profileName, this.dealer_id);
@@ -623,6 +676,25 @@ export class ConnectAdminDevicesComponent implements OnInit {
     this.changeActionButton('.clear_all_action', false);
 
   }
+
+  checkControls(event){
+    var name = event.target.name;
+    var value = event.target.value;
+    var checked = event.target.checked;
+    var className = event.target.attributes.class.nodeValue;
+    var id = event.target.attributes.id;
+    console.log(name);
+    console.log(value);
+    console.log(checked);
+    console.log(className);
+    console.log(id);
+    this.stackedControls.push(this.copyObject(this.deviceControls));
+    console.log(this.stackedControls);
+    console.log("length of controls: "+this.stackedControls.length);
+    this.changeActionButton('.apply_action', false);
+    this.changeActionButton('.undo_action', false);
+    this.changeActionButton('.clear_all_action', false);
+  }
   checkedAll(key) {
     console.log(key);
     var i = 0;
@@ -651,15 +723,17 @@ export class ConnectAdminDevicesComponent implements OnInit {
     console.log(this.passwords);
     console.log("stack apps");
     console.log(this.stackedApps);
-    if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password) {
+    if (this.stackedApps.length > 1 || this.passwords.admin_password || this.passwords.guest_password || this.passwords.encrypted_password || this.stackedControls.length > 1) {
       // let app_list = this.getChangedApps(this.stackedApps[this.stackedApps.length -1]);
       let app_list = this.stackedApps[this.stackedApps.length - 1];
       console.log("app_list");
       console.log(app_list);
+      let controls = this.stackedControls[this.stackedControls.length -1];
 
       let device_setting = {
         app_list: app_list,
-        passwords: this.passwords
+        passwords: this.passwords,
+        controls: controls
       };
       console.log(device_setting);
       this.restService.applySettings(device_setting, this.device_data.device_id);
@@ -691,7 +765,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
   clearStack() {
     this.stackedApps = [];
     this.redoStackedApps = [];
+    this.stackedControls = [];
+    this.redoStackedControls = [];
     this.stackedApps.push(this.copyObject(this.appList));
+    this.stackedControls.push(this.copyObject(this.deviceControls));
   }
   emptyStack() {
     this.stackedApps = [];
@@ -708,27 +785,52 @@ export class ConnectAdminDevicesComponent implements OnInit {
     return retApps;
   }
   getAppsChanged(e) {
-    this.changedApps = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
+    if(this.stackedApps.length){
+      this.changedApps = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
+    }
+    if(this.changedControls){
+      this.changedControls = this.stackedControls[this.stackedControls.length -1];
+    }
   }
+
   undoSettings(event) {
-    if (this.stackedApps.length > 1) {
 
-      console.log("stack length: " + this.stackedApps.length);
-      console.log(this.stackedApps);
 
-      let apps = this.stackedApps[this.stackedApps.length - 1];
-      this.stackedApps.pop();
+    if (this.stackedApps.length > 1 || this.stackedControls.length > 1) {
+      
+      if (this.stackedApps.length > 1 && this.pageName =="apps_list"){
+        console.log("Apps Stack Length: " + this.stackedApps.length);
+        console.log(this.stackedApps);
+        let apps = this.stackedApps[this.stackedApps.length - 1];
+        this.stackedApps.pop();
 
-      console.log("stack length: " + this.stackedApps.length);
-      // this.appList= this.copyObject(this.stackedApps[this.stackedApps.length -1]);
-      this.copytoApps(this.stackedApps[this.stackedApps.length - 1]);
-      if (this.stackedApps.length == 1) {
+        console.log("stack length: " + this.stackedApps.length);
+        // this.appList= this.copyObject(this.stackedApps[this.stackedApps.length -1]);
+        this.copytoApps(this.stackedApps[this.stackedApps.length - 1]);
+        this.redoStackedApps.push(apps);
+        this.changeActionButton('.redo_action', false);
+      }
+      
+      if (this.stackedControls.length > 1 && this.pageName =="setting_list"){
+        console.log("Setting Stack Length: " + this.stackedControls.length);
+        console.log(this.stackedControls);
+
+        let controls = this.stackedControls[this.stackedControls.length - 1];
+        console.log(controls);
+
+        this.stackedControls.pop();
+        console.log("stack length: " + this.stackedControls.length);
+        this.deviceControls = this.copyObject(this.stackedControls[this.stackedControls.length - 1]);
+        this.redoStackedControls.push(controls);
+        this.changeActionButton('.redo_action', false);
+      }
+
+      if (this.stackedApps.length == 1 && this.stackedControls.length == 1) {
         this.changeActionButton('.undo_action', true);
         this.changeActionButton('.apply_action', true);
       }
-      this.changeActionButton('.redo_action', false);
+      
 
-      this.redoStackedApps.push(apps);
 
     } else {
       this.changeActionButton('.undo_action', true);
@@ -756,17 +858,31 @@ export class ConnectAdminDevicesComponent implements OnInit {
     }
   }
   redoSettings(event) {
-    if (this.redoStackedApps.length > 0) {
-      console.log("hello");
-      let apps = this.redoStackedApps[this.redoStackedApps.length - 1];
-      this.redoStackedApps.pop();
-      this.stackedApps.push(apps);
-      if (this.redoStackedApps.length == 0) {
+    if (this.redoStackedApps.length > 0 || this.redoStackedControls.length >0) {
+      if(this.redoStackedApps.length > 0 && this.pageName=="apps_list"){
+        let apps = this.redoStackedApps[this.redoStackedApps.length - 1];
+        this.redoStackedApps.pop();
+        this.stackedApps.push(apps);
+        this.copytoApps(this.stackedApps[this.stackedApps.length - 1]);
+        this.changeActionButton('.undo_action', false);
+        this.changeActionButton('.apply_action', false);
+      }
+
+      if(this.redoStackedControls.length > 0 && this.pageName == "setting_list"){
+        let controls = this.redoStackedControls[this.redoStackedControls.length - 1];
+        this.redoStackedControls.pop();
+        this.stackedControls.push(controls);
+        this.deviceControls = this.copyObject(this.stackedControls[this.stackedControls.length -1]);
+        this.changeActionButton('.undo_action', false);
+        this.changeActionButton('.apply_action', false);
+      }
+
+      if (this.redoStackedApps.length == 0 && this.redoStackedControls.length ==0) {
         this.changeActionButton('.redo_action', true);
       }
       this.changeActionButton('.undo_action', false);
       this.changeActionButton('.apply_action', false);
-      this.copytoApps(this.stackedApps[this.stackedApps.length - 1]);
+      
     } else {
       this.changeActionButton('.redo_action', true);
 
