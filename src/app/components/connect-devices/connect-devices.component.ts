@@ -140,7 +140,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
         };
       }else{
         
-        this.deviceControls = this.copyObject(response.controls);
+        this.deviceControls = response.controls;
         console.log(response.controls);
         
       }
@@ -223,7 +223,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
         };
 
       } else {
-        this.deviceControls = response.controls;
+        this.deviceControls = this.copyObject(response.controls);
       }
       this.stackedControls.push(this.copyObject(this.deviceControls));
       console.log(this.stackedControls);
