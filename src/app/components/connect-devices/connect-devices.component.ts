@@ -186,7 +186,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.restService.authtoken(response);
     });
     console.log(this.device_data);
-    this.emptyStack();
+    
     this.getProfiles();
     this.getHistories(device_id);
 
@@ -208,6 +208,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       console.log("apps are not refreshed")
       return;
     }
+    this.emptyStack();
     this.pageName = "main_menu";
     this.restService.getDeviceApps(device_id).subscribe((response) => {
       // apps
@@ -772,6 +773,8 @@ export class ConnectAdminDevicesComponent implements OnInit {
     this.redoStackedControls = [];
     this.stackedApps.push(this.copyObject(this.appList));
     this.stackedControls.push(this.copyObject(this.deviceControls));
+    console.log("clearstack()");
+    console.log(this.stackedApps);
   }
   emptyStack() {
     this.stackedApps = [];
@@ -788,10 +791,12 @@ export class ConnectAdminDevicesComponent implements OnInit {
     return retApps;
   }
   getAppsChanged(e) {
-    if(this.stackedApps.length){
+    console.log(this.stackedApps);
+    if(this.stackedApps.length > 1){
+      alert("hello");  
       this.changedApps = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
     }
-    if(this.changedControls){
+    if(this.stackedControls.length >1){
       this.changedControls = this.stackedControls[this.stackedControls.length -1];
     }
   }
