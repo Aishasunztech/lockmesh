@@ -139,7 +139,10 @@ export class ConnectAdminDevicesComponent implements OnInit {
           hotspot_status:false
         };
       }else{
-        this.deviceControls = response.controls;
+        
+        this.deviceControls = this.copyObject(response.controls);
+        console.log(response.controls);
+        
       }
       this.stackedControls.push(this.copyObject(this.deviceControls));
       console.log(this.stackedControls);
