@@ -309,13 +309,14 @@ body {
 .apps_card{
     height: 100%;
     padding-bottom: 0px;
+    margin-bottom: -5px;
 }
 .apps_grid{
     padding-bottom: 15px;
     height: auto;
     margin: 0;
     border-radius: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 .apps_header{
     background: #999;
@@ -571,7 +572,7 @@ input:checked + .slider:before {
 }
 .btn-refresh {
     font-weight: 600;
-    font-size: .8571em;
+    font-size: 14px;
     line-height: 1.35em;
     text-transform: uppercase;
     border: none;
@@ -579,11 +580,10 @@ input:checked + .slider:before {
     cursor: pointer;
     color: #fff;
     transition: all .15s linear;
-    margin: 0;
+    margin: 0 0 15px 0;
     border-radius: 0;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
     background-color: #9cd514;
+    width: 100%;
 }
 .btn-refresh:hover , .btn-refresh:active  {
     background-color: #91ca08 !important;
