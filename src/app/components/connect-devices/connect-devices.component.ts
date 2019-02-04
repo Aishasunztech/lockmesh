@@ -514,7 +514,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
   }
 
-  loadHistory(event) {
+  loadHistory(historyId,event) {
     Swal({
       text: 'Do you really want to override settings?',
       showCancelButton: true,
@@ -533,7 +533,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
       this.pageName = "apps_list";
       this.clearDropDown('.load_history');
 
-      let profileId = event.target.value;
+      let profileId = historyId;
       console.log(this.mainProfiles);
 
       this.deviceHistories.forEach(elem => {
@@ -557,6 +557,90 @@ export class ConnectAdminDevicesComponent implements OnInit {
 
   }
 
+  collapse(historyId,e){
+   console.log(historyId);
+    var clsName=e.target.attributes.class.nodeValue;
+    console.log(clsName);
+    
+    var elem=$(e.target);
+    console.log(elem);
+
+    let history : any;
+    this.deviceHistories.forEach( ( el ) =>{
+      if(el.id == historyId){
+        console.log(el);
+        history = el;
+        return;
+      }
+    });
+    let apps = JSON.parse(history.app_list);
+    let controls = JSON.parse(history.controls);
+
+    var headString = '<div class="row">'+
+                        '<div class="col-sm-12">'+
+                          '<table id="classTable" class="table table-striped table-bordered responsive" cellspacing="0">'+
+                            '<thead>'+
+                              '<th scope="col text-center" style="text-align:center;">Icon</th>'+
+                              '<th scope="col text-center" style="text-align:center;">App Name</th>'+
+                              '<th scope="col text-center" style="text-align:center;">Guest</th>'+
+                              '<th scope="col text-center" style="text-align:center;">Encrypted</th>'+
+                              '<th scope="col text-center" style="text-align:center;">Enable</th>'+
+                            '</thead>'+
+                            '<tbody>';
+      var appsString:string='';
+      apps.forEach((app)=>{
+        appsString +='<tr>' +
+                        '<td> <img src="' + this.baseUrl + '/users/getFile/' + app.icon +'" alt="" style="width: 30px;height: 30px;" /></td>'+
+                        '<td data-table-header="">'+ app.label +'</td>'+
+                        '<td data-table-header="">'+ (app.guest == 1 ? 'On' : 'Off') +'</td>'+
+                        '<td data-table-header="" >'+ (app.encrypted == 1 ? 'On' : 'Off') +'</td>'+
+                        '<td data-table-header="" >'+ (app.enable == 1 ? 'On' : 'Off') +'</td>'+
+                      '</tr>';
+      });
+      
+      var controlsString:string;
+      // controls.forEach((control)=>{
+      //   // controlsString += '<tr'+
+      //   //                     '<td><img src="{{baseUrl}}/users/getFile/icon_Settings.png" style="width: 30px;height: 30px;"/></td>'+
+      //   //                     '<td>Call</td>'+
+      //   //                     '<td></td>'+
+      //   //                     '<td></td>'+
+      //   //                     '<td [className]="changedControls.call_status==true ?\'green\':\'red\'">{{(changedControls.call_status==true)?\'On\':\'Off\'}}</td>'+
+      //   //                     '</tr>'+
+      // });
+                      
+      var footString=     '</tbody>'+
+                        '</table>'+
+                        '</div>'+
+                    '</div>';
+    if(clsName == "fa fa-plus"){
+      console.log("expanding data");
+      elem.attr('class','fa fa-times');
+      elem.parent().attr('class','unexpand rounded');
+
+      $(document).find('.detailed_row_' + historyId).children('td').html(headString + appsString + footString);
+      $(document).find('.detailed_row_' + historyId).show();
+    }else if(clsName == "expand rounded"){
+      elem.attr('class','unexpand rounded');
+      elem.children().attr('class', 'fa fa-times');
+
+      $(document).find('.detailed_row_'+ historyId).children('td').html(headString + appsString + footString);
+      $(document).find('.detailed_row_'+ historyId).show();
+    }else if(clsName == "unexpand rounded"){
+      
+      var tr=elem.parent('.btnFull').parent();
+      $(document).find('.detailed_row_'+historyId).hide();
+
+      elem.attr('class','expand rounded');
+      elem.children().attr('class', 'fa fa-plus');
+    }else if(clsName == "fa fa-times"){
+      var tr=elem.parent('.btnFull').parent();
+      $(document).find('.detailed_row_' + historyId).hide();
+      elem.attr('class','fa fa-plus');
+      elem.parent().attr('class','expand rounded');
+    }
+
+  }
   ngOnChanges() {
     this.allChecked();
   }

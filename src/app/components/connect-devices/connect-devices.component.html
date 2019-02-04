@@ -537,7 +537,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
-                                <a href="javasacript:void(0)" class="action_btn">
+                                <!-- <a href="javasacript:void(0)" class="action_btn">
                                     <div class="select">
                                         <select name="load_history" id="slct" class="load_history" (change)="loadHistory($event)">
                                             <option value="">Load History</option>
@@ -546,6 +546,10 @@
                                             </option>
                                         </select>
                                     </div>
+                                </a> -->
+                                <a href="javasacript:void(0)" class="action_btn" data-toggle="modal" data-target="#loadhistory">
+                                    <span class="btn purple">Load History
+                                    <span class="fa fa-pencil-square-o icon_purple"></span></span>
                                 </a>
                             </div>
                             <div class="col-sm-6">
@@ -635,6 +639,7 @@
                 </div>
             </div>
             
+            <!-- show changed applications after applied -->
             <div id="changedapps" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="classInfo"
                 aria-hidden="true">
                 <div class="modal-dialog modal-md" >
@@ -719,6 +724,60 @@
                 </div>
             </div>
             
+            <!-- device history -->
+
+            <div id="loadhistory" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="classInfo"
+                aria-hidden="true">
+                <div class="modal-dialog modal-md" >
+                    <div data-spy="scroll" class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                ×
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table id="classTable" class="table table-striped table-bordered responsive" cellspacing="0">
+                                        <thead>
+                                            <!-- <th scope="col text-center" style="text-align:center;">Icon</th> -->
+                                            <th></th>
+                                            <th scope="col text-center" style="text-align:center;">History Date</th>
+                                            
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let profile of deviceHistories ; let i = index;">
+                                                <tr  class="row_{{profile.id}}">
+                                                    <td class="text-center btnFull" id="plus">
+                                                        <a href="javascrtip:void(0)" class="expand rounded" (click)="collapse(profile.id,$event);">
+                                                            <span class="fa fa-plus" ></span>
+                                                        </a>
+        
+                                                    </td>
+                                                    <td (click)="loadHistory(profile.id,$event)" data-dismiss="modal">{{profile.created_at | date:'MM/dd H:m'}}</td>
+                                                    
+                                                    <!-- <td> <img src="{{baseUrl}}/users/getFile/{{app.icon}}" alt="" style="width: 30px;height: 30px;" /></td> -->
+                                                    <!-- <td data-table-header="DEALER ID">{{app.label}}</td> -->
+                                                </tr>
+                                                <tr style="display:none;" class="detailed_row_{{profile.id}}">
+                                                    <td colspan="2" style="text-align:left!important;padding-left:50px;">hello</td>
+                                                </tr>
+                                            </ng-container>
+                                            
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- edit/update device form  -->
             <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true" style="top:-50px">
                 <div class="modal-dialog">
                     <div class="modal-content">

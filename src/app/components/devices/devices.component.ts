@@ -265,6 +265,7 @@ export class DevicesComponent implements OnInit {
   }
 
   collapse(device,e){
+    console.log(device)
     var clsName=e.target.attributes.class.nodeValue;
     var elem=$(e.target);
     var dropdown=this.dropdownList;
