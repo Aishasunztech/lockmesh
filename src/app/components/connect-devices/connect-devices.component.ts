@@ -877,7 +877,6 @@ export class ConnectAdminDevicesComponent implements OnInit {
   getAppsChanged(e) {
     console.log(this.stackedApps);
     if(this.stackedApps.length > 1){
-      alert("hello");  
       this.changedApps = this.getChangedApps(this.stackedApps[this.stackedApps.length - 1]);
     }
     if(this.stackedControls.length >1){

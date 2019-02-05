@@ -48,6 +48,7 @@ export class DevicesComponent implements OnInit {
     // dealer_id: false,
     model: false,
     imei: false,
+    sim_id: false,
     simno: false,
     online: false,
     serial_number: false,
@@ -67,6 +68,7 @@ export class DevicesComponent implements OnInit {
     email: '',
     client_id: '',
     dealer_id: '',
+    sim_id:'',
     model: '',
     link_code: '',
     imei: '',
@@ -126,7 +128,8 @@ export class DevicesComponent implements OnInit {
      {'id': 12, 'itemName': 'Simno'},
      {'id': 13, 'itemName': 'online'},
      {'id': 14, 'itemName': 'serial_number'},
-     {'id': 15, 'itemName': 'Mac_address'}
+     {'id': 15, 'itemName': 'Mac_address'},
+     {'id':19, 'itemName': 'sim_id'}
    ];
 
     if(this.userType=="admin"){
@@ -139,8 +142,8 @@ export class DevicesComponent implements OnInit {
         {'id': 16, 'itemName': 's_dealer_name'},
         {'id': 18, 'itemName': 's_dealer'}
       );
-      this.dropdownList.s_dealer= false;
-      this.dropdownList.s_dealer_name= false;
+      this.state.s_dealer= false;
+      this.state.s_dealer_name= false;
     }
 
     this.spinnerService.show();
@@ -257,6 +260,8 @@ export class DevicesComponent implements OnInit {
       this.state.dealer_id = true;
     } else if (item.itemName === 's_dealer') {
       this.state.s_dealer = true;
+    }else if (item.itemName === 'sim_id'){
+      this.state.sim_id=true;
     }
     // update selected items for dealer
     if (initVal == null) {
@@ -324,6 +329,7 @@ export class DevicesComponent implements OnInit {
   }
 
   showItems (itemName) {
+
   }
 
   OnItemDeSelect(item: any) {
@@ -363,6 +369,8 @@ export class DevicesComponent implements OnInit {
       this.state.dealer_id = false;
     } else if (item.itemName === 's_dealer') {
       this.state.s_dealer = false;
+    }else if(item.itemName == 'sim_id'){
+      this.state.sim_id=false;
     }
     this.restService.postAdminSelectedItems(this.selectedItems);
   }
@@ -383,6 +391,8 @@ export class DevicesComponent implements OnInit {
         this.state.dealer_name = true;
       } else if (item.itemName === 'IMEI') {
         this.state.imei = true;
+      } else if(item.itemName === 'sim_id'){
+        this.state.sim_id = true;
       } else if (item.itemName === 'Simno') {
         this.state.simno = true;
       } else if (item.itemName === 'Status') {
@@ -437,6 +447,7 @@ export class DevicesComponent implements OnInit {
    this.state.s_dealer_name = false;
    this.state.dealer_id = false;
    this.state.s_dealer = false;
+   this.state.sim_id = false;
    setTimeout(() => {
      console.log(this.state);
    }, 1000);
@@ -490,6 +501,9 @@ export class DevicesComponent implements OnInit {
       }
       if (ele.status == null || ele.status === '' ) {
         ele.status = 'null';
+      }
+      if (ele.sim_id == null || ele.sim_id === '' ) {
+        ele.sim_id = 'null';
       }
       if (ele.device_id == null || ele.device_id === '' ) {
         ele.device_id = 'null';
@@ -824,6 +838,8 @@ export class DevicesComponent implements OnInit {
       }else if(name=="dealer_pin" && ele.link_code!=null && ele.link_code.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }else if(name=="model" && ele.model!=null && ele.model.toUpperCase().includes(value.toUpperCase())){
+        this.allDevice.push(ele);
+      }else if(name=="sim_id" && ele.sim_id!=null && ele.sim_id.toUpperCase().includes(value.toUpperCase())){
         this.allDevice.push(ele);
       }
 
