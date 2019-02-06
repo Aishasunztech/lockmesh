@@ -63,10 +63,13 @@ export class ACLComponent implements OnInit {
               this.router.navigate(['/invalid_page/denied']);
             }
 
-            setTimeout(() => {
-            }, 1000);
             this.userType = window.localStorage.getItem('type').replace(/['"]+/g, '');
 
+            let url = this.router.url;
+            if(url=="/"){
+            this.router.navigate(['/devices']);
+            }
+            
             this.spinnerService.hide();
         }
     }

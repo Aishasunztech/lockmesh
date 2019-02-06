@@ -7,10 +7,13 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { LOCAL_STORAGE, WebStorageService } from 'angular-webstorage-service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Common } from '../../entity/common';
-// import * as io from "socket.io-client";
-
+import * as enLocale from 'date-fns/locale/en';
+import { DatepickerOptions } from 'ng2-datepicker';
 const today = new Date();
+
+// import * as io from "socket.io-client";
 // tslint:disable-next-line:max-line-length
+
 const timest = (today.getHours() < 10 ? '0' + today.getHours() : today.getHours()) + ':' + (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes());
 const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + timest;
 
@@ -38,7 +41,25 @@ export class ConnectAdminDevicesComponent implements OnInit {
     simno: '',
     start_date: '',
     status: '',
-    is_sync: 0
+    is_sync: 0,
+    dealer_id: 0,
+    dealer_name: '',
+    link_code: 0,
+
+  };
+  options: DatepickerOptions = {
+    displayFormat: 'YYYY-MM-DD',
+    barTitleFormat: 'YYYY MMMM',
+    dayNamesFormat: 'dd',
+    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
+    locale: enLocale,
+    minDate: new Date(date), // Minimal selectable date
+    barTitleIfEmpty: 'Click to select a date',
+    placeholder: 'Click to select a date', // HTML input placeholder attribute (default: '')
+    addClass: 'form-control', // Optional, value to pass on to [ngClass] on the input field
+    addStyle: {}, // Optional, value to pass to [ngStyle] on the input field
+    fieldId: 'my-date-picker', // ID to assign to the input field. Defaults to datepicker-<counter>
+    useEmptyBarTitle: false, // Defaults to true. If set to false then barTitleIfEmpty will be disregarded and a date will always be shown
   };
   isAdmin = false;
   userType: string;
@@ -176,7 +197,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
   }
 
   // refresh button
-  refresh(device_id, check_button) {
+  refresh(device_id, check_button=null) {
     console.log("refresh click");
     device_id = this.route.snapshot.paramMap.get('device_id');
     // this.spinnerService.show();

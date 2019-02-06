@@ -92,6 +92,38 @@ export class SdealerComponent implements OnInit {
       }
     }
   }
+
+  dealerFilter(elem){
+    const list1 = this.allDemoSDealers;
+    this.allSDelears = [];
+    //var name = elem.target.name;
+    var value = elem.target.value;
+    
+    if(value == "Suspended"){
+      list1.forEach(ele => {
+        if (ele.account_status!= null && ele.account_status.toString().toUpperCase().includes(value.toUpperCase())) {
+          this.allSDelears.push(ele);
+        }
+      });
+    }else if(value == "Unliked/Deleted"){
+      list1.forEach(ele => {
+        if (ele.unlink_status == 1) {
+          this.allSDelears.push(ele);
+        }
+      });
+    }else if(value =="Active"){
+      list1.forEach(ele => {
+        if (ele.unlink_status !=1 && ele.account_status!='suspended') {
+          this.allSDelears.push(ele);
+        }
+      });
+    }else{
+      list1.forEach(ele => {
+          this.allSDelears.push(ele);
+      });
+    }
+  }
+
   updateSubDealer() {
     if (this.data.email === '' || this.data.name === '' ||  this.data.email === 'null' || this.data.name === 'null' ) {
       Swal({

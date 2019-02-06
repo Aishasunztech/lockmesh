@@ -98,7 +98,7 @@
                                     <select class="form-control inputs on-small-margin" placeholder="Device" name="display_device" (input)="deviceFilter($event)">
                                         <option value="">SHOW DEVICES</option>
                                         <option>Active</option>
-                                        <option>Unlinked</option>
+                                        <option>Unliked/Deleted</option>
                                         <option>Expired</option>
                                         <option>Suspended</option>
                                     </select>
@@ -273,7 +273,7 @@
                                         <th   scope="col" class="headings" nowrap *ngIf="state.imei == true" (click)="sort('imei')">IMEI
                                             <span class="fa fa-sort"></span>
                                         </th>
-                                        <th   scope="col" class="headings" nowrap *ngIf="state.sim_id == true" (click)="sort('sim_id')">SIM
+                                        <th   scope="col" class="headings" nowrap *ngIf="state.sim_id == true" (click)="sort('sim_id')">SIM ID
                                             <span class="fa fa-sort"></span>
                                         </th>
                                         <th   scope="col" class="headings" nowrap *ngIf="state.simno == true" (click)="sort('simno')">SIM

@@ -93,6 +93,36 @@ export class DealerComponent implements OnInit {
     }
   }
 
+  dealerFilter(elem){
+    const list1 = this.allDemoDealers;
+    this.allDelears = [];
+    //var name = elem.target.name;
+    var value = elem.target.value;
+    
+    if(value == "Suspended"){
+      list1.forEach(ele => {
+        if (ele.account_status!= null && ele.account_status.toString().toUpperCase().includes(value.toUpperCase())) {
+          this.allDelears.push(ele);
+        }
+      });
+    }else if(value == "Unliked/Deleted"){
+      list1.forEach(ele => {
+        if (ele.unlink_status == 1) {
+          this.allDelears.push(ele);
+        }
+      });
+    }else if(value =="Active"){
+      list1.forEach(ele => {
+        if (ele.unlink_status !=1 && ele.account_status!='suspended') {
+          this.allDelears.push(ele);
+        }
+      });
+    }else{
+      list1.forEach(ele => {
+          this.allDelears.push(ele);
+      });
+    }
+  }
   // form for password reset
   passEditForm(dealer) {
     console.log(dealer);

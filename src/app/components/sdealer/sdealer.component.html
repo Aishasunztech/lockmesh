@@ -106,7 +106,15 @@
                     <div class="card-header" style="padding: 15px 0">
                       <!-- <h4 class="card-title col-md-12 text-center">All Devices</h4> -->
                       <div class="row" style="margin: 0">
-                        <div class="col-md-6 no-small-col"></div>
+                        <div class="col-md-3 no-small-col"></div>
+                        <div class="col-md-3" >
+                            <select class="form-control inputs on-small-margin" placeholder="DEALERS" name="display_dealers" (input)="dealerFilter($event)">
+                                <option value="">SHOW SDEALERS</option>
+                                <option>Active</option>
+                                <option>Unliked/Deleted</option>
+                                <option>Suspended</option>
+                            </select>
+                        </div>
                         <div class="col-md-3  search-btn" >
                           <input class="form-control inputs on-small-margin" type="text" placeholder="SEARCH" (input)="searchSDealer($event.target.value)">
                             <span class="fa fa-search" ></span>

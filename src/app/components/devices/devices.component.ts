@@ -858,9 +858,15 @@ export class DevicesComponent implements OnInit {
           this.allDevice.push(ele);
         }
       });
-    }else if(value == "Unlinked"){
+    }else if(value == "Unliked/Deleted"){
       list.forEach(ele => {
         if (ele.unlink_status == 1) {
+          this.allDevice.push(ele);
+        }
+      });
+    }else if(value =="Active"){
+      list.forEach(ele => {
+        if (ele.status=="active" && ele.unlink_status !=1 && ele.account_status!='suspended') {
           this.allDevice.push(ele);
         }
       });

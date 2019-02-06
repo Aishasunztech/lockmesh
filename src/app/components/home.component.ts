@@ -27,6 +27,9 @@ export class HomeComponent implements OnInit{
   }
 
   ngOnInit() {
-    // this.router.navigate(['/devices']);
+    let url = this.router.url;
+    if(url=="/"){
+      this.router.navigate(['/devices']);
+    }
   }
 }
