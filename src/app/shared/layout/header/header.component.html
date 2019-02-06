@@ -2,37 +2,30 @@
 <div class="wrap-all-nav">
     <!--nav satu-->
     <nav class="navbar navbar-default">
-            <div class="col-xs-6 col-sm-2 col-md-1">
-                <a class="navbar-brand" href="#" style="color:black!important;">
-                    <!-- <img src="/assets/images/bg.jpg" class="img-responsive" style="height: 70px; width: 70px;"> -->
-                    Your Logo
-                </a>
-            </div>
-            <div class="col-sm-6 col-md-4 no-padding nd-xs">
-                <span class="badge badge-default pull-right custom-badge" >LockMesh_v1.03</span>
-
-            </div>
-
-            <div class="col-sm-6 col-md-6 hidden-xs no-padding">
-
-                <div class="input-group stylish-input-group pull-right">
-
-                    <div class="wcontrol" style="position: relative;">
-                      <input type="text" class="form-control top-search" style="border: 1px solid #ccc; border-radius: 5px;" placeholder="SEARCH" (input)="searchFilter($event)">
-                      <span _ngcontent-c2="" class="fa fa-search" style="width: unset;position: absolute;right: 5px;top: 0;bottom: 0;display: flex;align-items: center;color: #66615b;font-size: 11px;"></span>
-                    </div>
-                    <div class="btn-group xnds" style="margin-left: 0px;">
-                      <button *ngIf="router.url === '/devices'" class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 0; width: 40px; height: 40px; margin:0 0 0 10px;"><i class="fa fa-bell-o"></i>
-                        <div class="notification" *ngIf="newRequest > 0">{{newRequest}}</div>
-                      </button>
-                      <button  class="btn btn-primary rounded-circle btn-lg nav-small-button logout" (click)="onLogout()" style="background: #4e0d6f;color: #ffa500;padding: 0; width: 40px; height: 40px; margin: 0 0 0 10px;"><i class="fa fa-power-off"></i></button>
-                    </div>
-
+        <div class="col-xs-6 col-sm-2 col-md-2">
+            <a class="navbar-brand" href="#" style="color:black!important;">
+                <!-- <img src="/assets/images/bg.jpg" class="img-responsive" style="height: 70px; width: 70px;"> -->
+                Your Logo
+            </a>
+        </div>
+        <div class="col-sm-6 col-md-6  nd-xs text-center">
+            <span class="badge badge-default  custom-badge" >LockMesh_v3.03</span>
+        </div>
+        <div class="col-sm-6 col-md-4" style="padding-right: 0px;">
+            <div class="input-group stylish-input-group pull-right">
+                <div class="wcontrol" style="position: relative;">
+                    <input type="text" class="form-control top-search" placeholder="Search" (input)="searchFilter($event)">
+                    <span _ngcontent-c2="" class="fa fa-search" style="width: unset;position: absolute;right: 5px;top: 0;bottom: 0;display: flex;align-items: center;color: #66615b;font-size: 15px;"></span>
+                </div>
+                <div class="btn-group xnds" style="position: absolute;right: 20px;">
+                    <button *ngIf="router.url === '/devices'" class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 0; width: 30px; height: 30px; margin:0 0 0 10px;"><i class="fa fa-bell-o"></i>
+                    <div class="notification" *ngIf="newRequest > 0">{{newRequest}}</div>
+                    </button>
+                    <button  class="btn btn-primary rounded-circle btn-lg nav-small-button logout" (click)="onLogout()" style="background: #4e0d6f;color: #ffa500;padding: 0; width: 30px; height: 30px; margin: 0 0 0 15px;"><i class="fa fa-power-off"></i></button>
                 </div>
             </div>
-
+        </div>  
     </nav>
-
     <!--end nav dua-->
 </div>
     <!-- end navbar -->

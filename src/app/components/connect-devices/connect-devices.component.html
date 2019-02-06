@@ -45,26 +45,26 @@
     <!-- End Navbar -->
     <div class="content ">
         <div class="row">
-            <div class="col-lg-4 no-padding-all">
+            <div class="col-lg-4" style="padding: 0;">
                 <form class="form-horizontal" id="formData" #deviceData="ngForm" (ngSubmit)="refresh('device_id')">
                     <div class="card ">
                         <!-- <div class="card-header text-center" style="width: 100%; height: 30%;">
                             <h4 class="card-title" style="font-size: 18px;">ADD New Device</h4>
                             <hr>
                         </div> -->
-                        <div class="card-body" style="padding: 10px;">
+                        <div class="card-body" style="padding: 10px 0px 0;">
                             <div class="">
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Name:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Name:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive">
                                         <div class="form-group text-left-force">
                                             {{device_data.name}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">PGP Email:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">PGP Email:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.email}}
                                         </div>
@@ -72,8 +72,8 @@
                                 </div>
 
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">client Id:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">client Id:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.client_id}}
                                         </div>
@@ -81,8 +81,8 @@
                                 </div>
                                 
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Dealer Id:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Dealer Id:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{ device_data.dealer_id }}
                                         </div>
@@ -90,8 +90,8 @@
                                 </div>
                                 
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Dealer Name:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Dealer Name:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{ device_data.dealer_name }}
                                         </div>
@@ -99,8 +99,8 @@
                                 </div>
 
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Dealer Pin:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Dealer Pin:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.link_code}}
                                         </div>
@@ -108,8 +108,8 @@
                                 </div>
                                 
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Status</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Status</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force" style="text-transform:capitalize; text-align: left;" [className]="(device_data.account_status=='suspended' || device_data.status=='expired') ? 'form-group red':'form-group'">
                                             {{device_data.account_status == 'suspended' ? 'Suspended' : device_data.status}}
                                         </div>
@@ -117,8 +117,8 @@
                                 </div>
 
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Device Id:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Device Id:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.device_id}}
                                         </div>
@@ -127,48 +127,48 @@
                                 
                                 
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Model:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Model:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.model}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">IMEI:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">IMEI:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive">
                                         <div class="form-group  text-left-force">
                                             {{device_data.imei}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Mac:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Mac:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.mac_address}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">SIM:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">SIM:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.simno}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">IP Address:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">IP Address:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.ip_address}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">S-Dealer:</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">S-Dealer:</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.s_dealer_name}}
                                         </div>
@@ -176,16 +176,16 @@
                                 </div>
                                 
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Start Date</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Start Date</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force" >
                                             {{device_data.start_date | date:"MM-dd-yyyy 'at' h:mma"}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row col_head">
-                                    <label class="col-sm-4 col-form-label left_headed col-width-thirtyfive text-left-force">Expiry Date</label>
-                                    <div class="col-sm-7 col-width-sixtyfive ">
+                                    <label class="col-sm-4 col-form-label col-width-thirtyfive text-left-force">Expiry Date</label>
+                                    <div class="col-sm-8 col-width-sixtyfive ">
                                         <div class="form-group text-left-force">
                                             {{device_data.expiry_date | date:"MM-dd-yyyy 'at' h:mma"}}
                                         </div>
@@ -467,15 +467,15 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
-                                    <span class="btn purple">Push
-                                    <span class="fa fa-arrow-up icon_purple"></span>
+                                    <span class="btn purple purple_dis">Push
+                                    <span class="fa fa-arrow-up icon_purple icon_purple_dis"></span>
                                     </span>
                                 </a>
                             </div>
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
-                                    <span class="btn purple">Pull
-                                    <span class="fa fa-arrow-down icon_purple"></span></span>
+                                    <span class="btn purple purple_dis">Pull
+                                    <span class="fa fa-arrow-down icon_purple icon_purple_dis"></span></span>
                                 </a>
                             </div>
                         </div>
@@ -530,7 +530,7 @@
                                         <span class="fa fa-floppy-o icon_purple"></span></span>
                                 </a>
                                 <a *ngIf="userType=='sdealer'" href="javasacript:void(0)" class="action_btn">
-                                    <span class="btn purple">N/A
+                                    <span class="btn purple ">N/A
                                         <span class="fa fa-times icon_purple"></span></span>
                                 </a>
                             </div>
@@ -576,28 +576,28 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
-                                    <span class="btn purple">N/A
-                                    <span class="fa fa-times icon_purple"></span></span>
+                                    <span class="btn purple purple_dis">N/A
+                                    <span class="fa fa-times icon_purple icon_purple_dis"></span></span>
                                 </a>
                             </div>
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
-                                    <span class="btn purple">N/A
-                                    <span class="fa fa-times icon_purple"></span></span>
+                                    <span class="btn purple purple_dis">N/A
+                                    <span class="fa fa-times icon_purple icon_purple_dis"></span></span>
                                 </a>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn">
-                                    <span class="btn purple">N/A
-                                    <span class="fa fa-times icon_purple"></span></span>
+                                    <span class="btn purple purple_dis">N/A
+                                    <span class="fa fa-times icon_purple icon_purple_dis"></span></span>
                                 </a>
                             </div>
                             <div class="col-sm-6">
                                 <a href="javasacript:void(0)" class="action_btn" >
-                                    <span class="btn purple">N/A
-                                    <span class="fa fa-times icon_purple"></span></span>
+                                    <span class="btn purple purple_dis">N/A
+                                    <span class="fa fa-times icon_purple icon_purple_dis"></span></span>
                                 </a>
                             </div>
                         </div>

@@ -1,4 +1,5 @@
-
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,400i,700');
+@import url('https://fonts.googleapis.com/css?family=Lato:300,300i,400,700,700i,900');
 body {
   font-family: Montserrat, Helvetica Neue, Arial, sans-serif !important;
 }
@@ -50,23 +51,19 @@ body {
     overflow: hidden !important;
     padding-bottom: 7px;
 }
-
-.form-group {
-    margin-top: 8px;
-}
-
 .scrollbar {
     margin-top: 7px;
 }
-.left_headed{
-    color:orange;
-}
-.col_head div div{
+
+/*.col_head div div{
     color: #434373;
     text-align: center;
-}
+}*/
 .phone_actions_container{
     border-top: 1px solid #f5efef;
+    background: #fff;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 .phone_actions{
@@ -110,7 +107,6 @@ body {
     margin-left: 0;
     border-collapse: separate;
     border-spacing: 4px;
-
 }
 
 .action_table tr td{
@@ -120,7 +116,7 @@ body {
 }
 .action_table select{
     width: 90%;
-    margin: 20px auto;
+    margin: 15px auto 5px;
 }
 
 .action_table button{
@@ -145,6 +141,11 @@ body {
 .purple:active {
       height: 38px;
 }
+.action_table .purple_dis {
+    background-color: #6f6f6f;
+    border-color: #adadad;
+      cursor: not-allowed !important;
+}
 .icon_purple {
     color: white;
     line-height: 40px;
@@ -158,6 +159,9 @@ body {
     font-size: 15px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
+}
+.icon_purple_dis {
+      background: #6f6f6f;
 }
 .save_profile {
     background: #fff;
@@ -254,10 +258,16 @@ body {
 .action_table .purple:hover{
     background: #1e0d51 !important;
 }
-
 .action_table .purple:active,
 .action_table .purple:focus{
     background:#1e0d51!important;
+}
+.action_table .purple_dis:hover{
+    background: #6f6f6f !important;
+}
+.action_table .purple_dis:active,
+.action_table .purple_dis:focus{
+    background:#6f6f6f!important;
 }
 .action_table  tbody td{
     background: #4e0d6f;
@@ -265,9 +275,6 @@ body {
 
 .action_table tfoot td{
     padding: 2px;
-}
-.left_headed{
-    text-align: left;
 }
 .btn_suspend {
   margin: 15px 0 0;
@@ -295,19 +302,29 @@ body {
     background-color: #128fa2 !important;
 }
 .btn_power {
-  margin: 15px 0 15px;
-  font-size: 14px;
-  background-color: #e26b6b;
-  cursor: not-allowed !important;
+    margin: 15px 0 15px;
+    font-size: 14px;
+    background-color: #6f6f6f;
+    border-color: #adadad;
+    cursor: not-allowed !important;
 }
 .btn_power:hover,
 .btn_power:focus,
 .btn_power:active {
-    background-color: #d89999 !important;
+    background-color: #8a8a8a !important;
 }
-.col_head[_ngcontent-c2] div[_ngcontent-c2] div[_ngcontent-c2] {
+/*.col_head[_ngcontent-c2] div[_ngcontent-c2] div[_ngcontent-c2] {
+
+}*/
+.col_head .form-group {
+    font-size: 13px;
+    font-family: 'Lato', sans-serif;
     color: #434373;
     text-align: left;
+    margin-top: 2px;
+}
+.col_head .col-sm-8 {
+  padding-left: 0; 
 }
 .navbar.navbar-absolute {
     position: absolute;
@@ -327,12 +344,13 @@ body {
     z-index: 10000; 
 } */
 .apps_card{
-    height: 100%;
+    height: auto;
     padding-bottom: 0px;
     margin-bottom: -5px;
+    background: #d4d4d4;
 }
 .apps_grid{
-    padding-bottom: 15px;
+    padding-bottom: 25px;
     height: auto;
     margin: 0;
     border-radius: 12px;
@@ -470,7 +488,7 @@ body {
 }
 .app_btns {
     margin: 0;
-    padding: 0 15px;
+    padding: 0 15px 0 0;
 }
 /*----- Mobile css ------*/
 .main-frame{
@@ -495,7 +513,7 @@ body {
     position:relative;
     z-index:2;
     background: #000;
-    margin: 15px 15px 5px;
+    margin: 15px 15px 10px;
   }
 .second-frame img {
     border-radius: 0;
@@ -539,8 +557,8 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 .background-card {
-    min-height: 434px;
-    max-height: 434px;
+    min-height: 400px;
+    max-height: 400px;
     background: #303030;
     overflow: overlay;
 }
@@ -805,20 +823,16 @@ input[type=number]::-webkit-outer-spin-button {
     }
     */
     .main-panel>.content {
-        margin: 30px 0 0 0 !important;
+        margin: 15px 0 0 0 !important;
     }
    
-}
-
-.text-left-force {
-    text-align: left!important;
 }
 
 @media screen and (max-width: 768px) {
     .main-panel .content {
         padding-left: 15px;
         padding-right: 15px;
-        margin: 30px 0 0 0 !important;
+        margin: 50px 0 0 0 !important;
     }
     .text-left-force {
         text-align: left!important;

@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,400i,700');
 body {
     color: #fff !important;
 
@@ -143,16 +143,20 @@ ul.lefttNav li>a:hover{
     overflow: hidden;
 }
 
-.card-body label.col-sm-3 {
-    font-size: 14px;
-    margin-top: -3px;
-
+.card-body label.col-sm-4 {
+    font-size: 13px;
+    margin-bottom: 0px;
+    color: #e89f18;
+    text-align: left!important;
 }
 
 .swal2-icon.swal2-info,
 .swal2-icon.swal2-warning {
     font-size: 15px;
     line-height: 71px;
+}
+.text-center {
+  text-align: center !important;
 }
 
 .input-group-btn[_ngcontent-c1]:not(:first-child):not(:last-child),
@@ -414,18 +418,18 @@ c-icon, c-icon svg{
 /*}*/
 .main-panel>.content {
   padding: 0;
-  margin: 20px;
+  margin: 40px 20px;
 
 }
 
 .top-search {
-  font-size: 11px !important;
-  height: 40px !important;
-  text-transform: capitalize ;
+    font-size: 12px !important;
+    height: 30px !important;
+    text-transform: capitalize;
 }
 
 .custom-badge {
-  margin: 10px 0 0 0;
+  margin: 0;
 }
 
 .perfect-scrollbar-on .main-panel, .perfect-scrollbar-on .sidebar {
@@ -490,13 +494,13 @@ select.form-control {
     display: none;
   }
   .wrap-all-nav{
-    min-height: 104px;
+    min-height: 50px;
   }
   .nav-small-button {
     margin-right: 2px;
   }
   .top-search {
-    margin-left: 15px;
+    margin-left: 0;
   }
 
   .on-small-margin {
@@ -559,4 +563,7 @@ select.form-control {
 }
 .btn.active, .btn.active:focus, .btn.active:hover, .btn:active, .btn:active:focus, .btn:active:hover, .btn:focus, .btn:hover, .navbar .navbar-nav>a.btn.active, .navbar .navbar-nav>a.btn.active:focus, .navbar .navbar-nav>a.btn.active:hover, .navbar .navbar-nav>a.btn:active, .navbar .navbar-nav>a.btn:active:focus, .navbar .navbar-nav>a.btn:active:hover, .navbar .navbar-nav>a.btn:focus, .navbar .navbar-nav>a.btn:hover, .show>.btn.dropdown-toggle, .show>.btn.dropdown-toggle:focus, .show>.btn.dropdown-toggle:hover, .show>.navbar .navbar-nav>a.btn.dropdown-toggle, .show>.navbar .navbar-nav>a.btn.dropdown-toggle:focus, .show>.navbar .navbar-nav>a.btn.dropdown-toggle:hover {
     background-color: #00000000;
+}
+.no-padding {
+  padding: 0 !important;
 }
