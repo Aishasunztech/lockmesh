@@ -61,8 +61,8 @@
                     <p>DEVICES</p>
                 </a>
             </li>
-            <li class="xyz">
-                <a routerLinkActive="active">
+            <li class="xyz" *ngIf="isAdmin==true">
+                <a routerLink="/account" routerLinkActive="active">
                     <i class="nc-icon nc-badge" style="font-size: 12px;"></i>
                     <p> Account </p>
                 </a>
