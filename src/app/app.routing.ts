@@ -15,6 +15,7 @@ import { CreateSdealerComponent } from "./components/create-sdealer/create-sdeal
 import { DealerComponent } from "./components/dealer/dealer.component";
 import { DevicesComponent } from './components/devices/devices.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { AccountComponent } from './components/account/account.component';
 import { ProfileListComponent } from './components/profile-list/profile-list.component';
 
 import { SdealerComponent } from './components/sdealer/sdealer.component';
@@ -159,6 +160,13 @@ export const routes: Routes = [
                 component: SettingsComponent,
                 data: {
                     componentName: "SettingsComponent"
+                }
+            },
+            {
+                path: 'account',
+                component: AccountComponent,
+                data: {
+                    componentName: "AccountComponent"
                 }
             },
             {

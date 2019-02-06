@@ -6,7 +6,7 @@ import { StorageServiceModule } from 'angular-webstorage-service';
 import { Ng2OrderModule } from 'ng2-order-pipe';
 import { NgDatepickerModule } from 'ng2-datepicker';
 import { UiSwitchModule } from 'ngx-toggle-switch';
-
+import { AccountComponent } from './account/account.component';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './../shared/layout/header/header.component';
@@ -86,7 +86,8 @@ import { ACLComponent } from './acl/acl.component';
         UploadApkComponent,
         ViewApkComponent,
         ProfileListComponent,
-        ACLComponent
+        ACLComponent,
+        AccountComponent
     ], 
     providers: [
         Common,
