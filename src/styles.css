@@ -175,15 +175,7 @@ div#datatable_filter {
   display: inherit;
   color: #252422;
 }
-.selected-list .c-btn {
-    background: white !important;
-    padding: 7px !important;
-    border: 1px solid #ccc;
-    margin: 0px 0 15px 0;
-}
-
-.btn,
-.navbar .navbar-nav>a.bld {
+.btn, .navbar .navbar-nav>a.bld {
     margin: 0px 18px;
     padding: 10px 20px;
 }
@@ -343,9 +335,13 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
 /*****C-list styles****/
 
 .selected-list .c-btn {
-    height: 40px;
+    height: 30px;
     margin: 0;
     border-radius: 4px;
+    background: white !important;
+    padding: 2px !important;
+    border: 1px solid #ccc;
+    margin: 0;
 }
 
 .selected-list .c-list {
@@ -472,8 +468,9 @@ c-icon, c-icon svg{
   padding: 0 !important;
 }
 select.form-control {
-  height: 40px!important;
+  height: 30px !important;
   font-size: 11px!important;
+  padding: 6px !important;
 }
 .ms-drop input[type="checkbox"] {
   vertical-align: middle;
@@ -488,6 +485,17 @@ select.form-control {
 .card-body .cardHig {
   overflow-y: hidden;
   overflow-x: scroll;
+}
+.fa-search {
+    right: 25px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    color: #66615b;
+    font-size: 15px;
+    line-height: 30px;
 }
 @media screen and (max-width: 768px){
   .nd-xs {

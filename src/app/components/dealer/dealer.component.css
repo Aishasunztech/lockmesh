@@ -1,19 +1,15 @@
 /* dealer.component.css */
 .form-control {
-    padding: 11px;
+    padding: 10px;
     font-size: 11px;
+    height: 30px;
 }
-.fa-search {
-    position: absolute;top:10px;
-    right:30px;
-}.table {
+.table {
      width: 167%;
      max-width: 141%;
      margin-bottom: 1rem;
      background-color: transparent;
  }
-
-
 .table>thead>tr>th {
     padding:0 0;
     vertical-align: middle;

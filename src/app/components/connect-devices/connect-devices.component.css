@@ -102,13 +102,6 @@ body {
     margin-top: 3px;
     margin-bottom: 0;
 }
-
-.action_table{
-    margin-left: 0;
-    border-collapse: separate;
-    border-spacing: 4px;
-}
-
 .action_table tr td{
     border-top: unset;
     padding: 0px;
@@ -128,8 +121,8 @@ body {
 .action_table .purple{
     background: #301967;
     width: 100% !important;
-    height: 40px;
-    line-height: 40px;
+    height: 38px;
+    line-height: 38px;
     margin-top: 10px;
     padding: 0px;
     margin: 10px 0 0 0;
@@ -148,7 +141,7 @@ body {
 }
 .icon_purple {
     color: white;
-    line-height: 40px;
+    line-height: 38px;
     text-align: center;
     margin: 0px;
     width: 30%;
@@ -166,8 +159,8 @@ body {
 .save_profile {
     background: #fff;
     width: 70% !important;
-    height: 40px;
-    line-height: 40px;
+    height: 38px;
+    line-height: 38px;
     margin-top: 10px;
     padding: 0px;
     margin: 10px 0 0 0 !important;
@@ -192,8 +185,8 @@ body {
     background-image: none;
     background: #301967;
     width: 100% !important;
-    height: 44px;
-    line-height: 44px;
+    height: 38px;
+    line-height: 38px;
     cursor: pointer;
     margin: 0;
     padding: 0 0 0 1em;
@@ -213,8 +206,8 @@ body {
     position: relative;
     display: block;
     width: 100%;
-    height: 40px;
-    line-height: 3;
+    height: 38px;
+    line-height: 38px;
     background: #2c3e50;
     overflow: hidden;
     border-radius: 3px;
@@ -250,10 +243,12 @@ body {
   transition: .25s all ease;
 }
 .action_table {
+    margin-left: 0;
     overflow: unset;
     width: 100%!important;
     border-collapse:separate;
     border-spacing: 4px;
+    margin-top: 5px;
 }
 .action_table .purple:hover{
     background: #1e0d51 !important;
@@ -502,16 +497,16 @@ body {
     height: 550px;
   }
 .second-frame{
-    height:auto;
+    height: auto;
     width: auto;
-    border:solid 20px #000;
-    border-radius:40px;
-    border-bottom:solid 10px #000;
-    border-top:solid 60px #000;
-    margin-left:auto;
-    margin-right:auto;
-    position:relative;
-    z-index:2;
+    border: solid 20px #000;
+    border-radius: 40px;
+    border-bottom: solid 15px #000;
+    border-top: solid 40px #000;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 2;
     background: #000;
     margin: 15px 15px 10px;
   }
