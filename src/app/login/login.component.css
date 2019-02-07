@@ -10,3 +10,6 @@ body[_ngcontent-c1] {
 .input-group[_ngcontent-c1] .form-control[_ngcontent-c1]:not(:first-child):not(:last-child) {
     width: 90%;
 }
+.card-login {
+    padding: 0 15px;
+}

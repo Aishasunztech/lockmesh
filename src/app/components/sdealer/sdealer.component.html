@@ -103,189 +103,186 @@
             <div class="row" style="margin: 0 -15px">
                 <div class="col-md-12">
                   <div class="card" style="border-radius:unset;margin-top: 13px;">
-                    <div class="card-header" style="padding: 15px 0">
+                    <div class="card-header" style="padding:10px 0">
                       <!-- <h4 class="card-title col-md-12 text-center">All Devices</h4> -->
                       <div class="row" style="margin: 0">
-                        <div class="col-md-3 no-small-col"></div>
-                        <div class="col-md-3" >
+                        <div class="col-md-3" style="padding: 0 0 0 15px">
+                            <select class="form-control inputs on-small-margin" placeholder="Dealers" name="display_dealers" (input)="dealerFilter($event)">
+                                <option value="">Display</option>
+                                <option>#1</option>
+                                <option>#2</option>
+                                <option>#3</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" style="padding: 0 0 0 15px">
                             <select class="form-control inputs on-small-margin" placeholder="DEALERS" name="display_dealers" (input)="dealerFilter($event)">
-                                <option value="">SHOW SDEALERS</option>
+                                <option value="">Show S-dealers</option>
                                 <option>Active</option>
                                 <option>Unliked/Deleted</option>
                                 <option>Suspended</option>
                             </select>
                         </div>
-                        <div class="col-md-3  search-btn" >
-                          <input class="form-control inputs on-small-margin" type="text" placeholder="SEARCH" (input)="searchSDealer($event.target.value)">
+                        <div class="col-md-2 search-btn" style="padding: 0 0 0 15px;">
+                          <input class="form-control inputs on-small-margin" type="text" placeholder="Search" (input)="searchSDealer($event.target.value)">
                             <span class="fa fa-search" ></span>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2" style="padding: 0 0 0 15px">
                           <!-- <a class="mbTop" routerLink="/black-list-devices"><button
                                   class="btn btn-dange bld">Black List Devices</button></a> -->
-                          <select class="form-control inputs on-small-margin" name="paging" (input)="paging($event)">
+                          <select class="form-control inputs on-small-margin" name="paging" (input)="paging($event)" style="padding: 0 0 0 10px;">
                             <option>10</option>
                             <option>20</option>
                             <option>30</option>
                           </select>
                         </div>
+                        <div class="col-md-2">
+                            <a routerLink="/create-sdealer" class="">
+                                <button class="btn btn-success">Add S-Dealer</button>
+                            </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                  <div class="card">
-                        <div class="card" style="box-shadow:none;">
-                            <div class="card-header">
-                                <div class="row">
-
-                                    <div class="">
-                                        <a routerLink="/create-sdealer">
-                                            <button class="btn btn-success" style="margin: 0">ADD S-Dealer</button></a>
-                                    </div>
-                                </div>
-
-                                <div class="clearfix"></div>
-                                <br>
-
+                    <div class="card" style="box-shadow:none;">
+                        <!-- <div class="card-header">
+                        </div> -->
+                        <div class="card-body cardHig">
+                            <div class="toolbar">
+                                <!--  Here you can write extra buttons/actions for the toolbar  -->
                             </div>
-                            <div class="card-body cardHig" style="overflow-y: hidden; overflow-x: scroll">
-                                <div class="toolbar">
-                                    <!--  Here you can write extra buttons/actions for the toolbar  -->
-                                </div>
-                                <table id="datatable" class="table table-bordered  responsive" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr style="background: #f4f4f4">
-                                            <th scope="col" class="disabled-sorting">Account</th>
-                                            <th scope="col" class="disabled-sorting">Action</th>
-                                            <th scope="col" nowrap (click)="sort('dealer_name')">Name <span class="fa fa-sort"></span></th>
-                                            <th scope="col" nowrap (click)="sort('dealer_email')">Email <span class="fa fa-sort"></span></th>
-                                            <th scope="col" nowrap (click)="sort('link_code')">Dealer PIN <span class="fa fa-sort"></span></th>
-                                            <th scope="col" nowrap (click)="sort('parent_dealer')">Parent Dealer <span class="fa fa-sort"></span></th>
-                                            <th scope="col" (click)="sort('connected_devices')">Connected<br>Devices <span class="fa fa-sort"></span>
-                                            </th>
-                                            <th scope="col">Tokens <span class="fa fa-sort"></span></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let dealer of allSDelears  | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p }; let i = index;">
+                            <table id="datatable" class="table table-bordered table-striped responsive" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr style="background: #dadada;">
+                                        <th scope="col" class="disabled-sorting">Account</th>
+                                        <th scope="col" class="disabled-sorting">Action</th>
+                                        <th scope="col" nowrap (click)="sort('dealer_name')">Name <span class="fa fa-sort"></span></th>
+                                        <th scope="col" nowrap (click)="sort('dealer_email')">Email <span class="fa fa-sort"></span></th>
+                                        <th scope="col" nowrap (click)="sort('link_code')">Dealer PIN <span class="fa fa-sort"></span></th>
+                                        <th scope="col" nowrap (click)="sort('parent_dealer')">Parent Dealer <span class="fa fa-sort"></span></th>
+                                        <th scope="col" (click)="sort('connected_devices')">Connected<br>Devices <span class="fa fa-sort"></span>
+                                        </th>
+                                        <th scope="col">Tokens <span class="fa fa-sort"></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let dealer of allSDelears  | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p }; let i = index;">
 
-                                            <td data-table-header="ACCOUNT" class="text-center btnFull">
-                                                <div class="btn-group">
-                                                <a href="javascript:void(0)" (click)="showEditForm(dealer)" data-toggle="modal" data-target="#edit"><button
-                                                            class="btn btn-sm edit" >Edit</button></a>
-                                                <a href="javascript:void(0)" *ngIf="(dealer.account_status==null || dealer.account_status=='')" (click)="suspendForm(dealer.dealer_id);"><button
-                                                            class="btn btn-sm suspend">Suspend</button></a>
-                                                <a href="javascript:void(0)" *ngIf=" dealer.account_status=='suspended' " (click)="activateForm(dealer.dealer_id);"><button
-                                                            class="btn btn-sm suspend">Activate</button></a>
-                                                <a href="javascript:void(0)"><button
-                                                            class="btn btn-sm delete"  *ngIf=" dealer.unlink_status== 0 " (click)="unlinkSdealerUser(dealer.dealer_id)">Delete</button></a>
-                                                <a href="javascript:void(0)"><button
-                                                        class="btn btn-sm delete"  *ngIf=" dealer.unlink_status== 1 " (click)="undoUser(dealer.dealer_id)">Undo</button></a></div>
-                                            </td>
-                                            <td data-table-header="ACTION" class="text-center btnFull">
-                                                <div class="btn-group">
-                                                <a href="javascript:void(0)" (click)="passEditForm(dealer);" data-toggle="modal" data-target="#passedit"><button
-                                                                class="btn btn-sm reset">Reset Password</button></a>
-                                                <a><button
-                                                        class="btn btn-sm connect" >Connect</button></a></div>
-                                            </td>
-                                            <td data-table-header="NAME" >{{ dealer.dealer_name }}</td>
-                                            <td data-table-header="EMAIL" >{{ dealer.dealer_email }}</td>
-                                            <td data-table-header="DEALER PIN">{{ dealer.link_code }}</td>
-                                            <td data-table-header="PARENT DEALER">{{ dealer.parent_dealer }}</td>
-                                            <td data-table-header="CONNECTED DEVICES">{{ dealer.connected_devices[0].total }}</td>
+                                        <td data-table-header="ACCOUNT" class="text-center btnFull">
+                                            <div class="btn-group">
+                                            <a href="javascript:void(0)" (click)="showEditForm(dealer)" data-toggle="modal" data-target="#edit"><button
+                                                        class="btn btn-sm edit" >Edit</button></a>
+                                            <a href="javascript:void(0)" *ngIf="(dealer.account_status==null || dealer.account_status=='')" (click)="suspendForm(dealer.dealer_id);"><button
+                                                        class="btn btn-sm suspend">Suspend</button></a>
+                                            <a href="javascript:void(0)" *ngIf=" dealer.account_status=='suspended' " (click)="activateForm(dealer.dealer_id);"><button
+                                                        class="btn btn-sm suspend">Activate</button></a>
+                                            <a href="javascript:void(0)"><button
+                                                        class="btn btn-sm delete"  *ngIf=" dealer.unlink_status== 0 " (click)="unlinkSdealerUser(dealer.dealer_id)">Delete</button></a>
+                                            <a href="javascript:void(0)"><button
+                                                    class="btn btn-sm delete"  *ngIf=" dealer.unlink_status== 1 " (click)="undoUser(dealer.dealer_id)">Undo</button></a></div>
+                                        </td>
+                                        <td data-table-header="ACTION" class="text-center btnFull">
+                                            <div class="btn-group">
+                                            <a href="javascript:void(0)" (click)="passEditForm(dealer);" data-toggle="modal" data-target="#passedit"><button
+                                                            class="btn btn-sm reset">Reset Password</button></a>
+                                            <a><button
+                                                    class="btn btn-sm connect" >Connect</button></a></div>
+                                        </td>
+                                        <td data-table-header="NAME" >{{ dealer.dealer_name }}</td>
+                                        <td data-table-header="EMAIL" >{{ dealer.dealer_email }}</td>
+                                        <td data-table-header="DEALER PIN">{{ dealer.link_code }}</td>
+                                        <td data-table-header="PARENT DEALER">{{ dealer.parent_dealer }}</td>
+                                        <td data-table-header="CONNECTED DEVICES">{{ dealer.connected_devices[0].total }}</td>
 
-                                            <td data-table-header="TOKENS" id="tokens">{{ dealer.tokens }}</td>
-                                        </tr>
+                                        <td data-table-header="TOKENS" id="tokens">{{ dealer.tokens }}</td>
+                                    </tr>
 
-                                    </tbody>
-                                </table>
-                                <div class="row text-center" style="display: block;">
-                                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
-                                </div>
-                                <div class="modal fade" id="passedit" tabindex="-1" role="dialog" aria-labelledby="passedit" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <span class="close" id="from" onclick="removepassClass()">&times;</span>
-                                                <h5 class="modal-title custom_align">Reset Password</h5>
-
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="formData" #deviceData="ngForm" method="" (ngSubmit)="updatePassSubDealer()" ngNativeValidate>
-                                                    <p> (*)- Mandotory fields</p>
-                                                    <div class="form-group">
-                                                        <label>Email *</label>
-                                                        <input type="email" class="form-control" name="email" [(ngModel)]="data.email" required disabled>
-                                                        <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label>New Password</label>
-                                                        <input type="password" id="myInput" class="form-control" name="password" [(ngModel)]="data.newpwd">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <label class="form-check-label">
-                                                        <input class="form-check-input" type="checkbox" onclick="myFunction()">
-                                                        <span class="form-check-sign"></span>
-                                                        Show Password
-                                                    </label>
-                                                        </div>
-                                                    </div>
-                                                    <br>
-                                                    <button type="submit" class="btn btn-primary">UPDATE</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <!-- /.modal-content -->
-                                    </div>
-                                    <!-- /.modal-dialog -->
-                                </div>
-                                <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <span class="close" id="from" onclick="removeClass()">&times;</span>
-                                                <h5 class="modal-title custom_align">Edit Your Detail</h5>
-
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="formbgg" #deviceData="ngForm" method="" (ngSubmit)="updateSubDealer()" ngNativeValidate>
-                                                    <p> (*)- Mandotory fields</p>
-                                                    <div class="form-group">
-                                                        <label>Name *</label>
-                                                        <input type="text" class="form-control" required="" name="name" [(ngModel)]="data.name">
-                                                        <font class="errortext" color="red" *ngIf="!deviceData.form.controls.name?.valid && deviceData.form.controls.name?.touched">Please Enter Your Name</font>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Email *</label>
-                                                        <input type="email" class="form-control" name="email" [(ngModel)]="data.email" required>
-                                                        <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Dealer Pin</label>
-                                                        <input type="text" class="form-control" required="" name="link_code" [(ngModel)]="data.link_code" disabled>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Connected Devices</label>
-                                                        <input type="text" class="form-control" required="" name="connected_devices" [(ngModel)]="data.connected_devices" disabled>
-                                                    </div>
-
-                                                    <br>
-                                                    <button type="submit" class="btn btn-primary">UPDATE</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <!-- /.modal-content -->
-                                    </div>
-                                    <!-- /.modal-dialog -->
-                                </div>
+                                </tbody>
+                            </table>
+                            <div class="row text-center" style="display: block;">
+                                <pagination-controls (pageChange)="p = $event"></pagination-controls>
                             </div>
-                            <!-- end content-->
+                            <div class="modal fade" id="passedit" tabindex="-1" role="dialog" aria-labelledby="passedit" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <span class="close" id="from" onclick="removepassClass()">&times;</span>
+                                            <h5 class="modal-title custom_align">Reset Password</h5>
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="formData" #deviceData="ngForm" method="" (ngSubmit)="updatePassSubDealer()" ngNativeValidate>
+                                                <p> (*)- Mandotory fields</p>
+                                                <div class="form-group">
+                                                    <label>Email *</label>
+                                                    <input type="email" class="form-control" name="email" [(ngModel)]="data.email" required disabled>
+                                                    <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>New Password</label>
+                                                    <input type="password" id="myInput" class="form-control" name="password" [(ngModel)]="data.newpwd">
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label">
+                                                    <input class="form-check-input" type="checkbox" onclick="myFunction()">
+                                                    <span class="form-check-sign"></span>
+                                                    Show Password
+                                                </label>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <button type="submit" class="btn btn-primary">UPDATE</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <span class="close" id="from" onclick="removeClass()">&times;</span>
+                                            <h5 class="modal-title custom_align">Edit Your Detail</h5>
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="formbgg" #deviceData="ngForm" method="" (ngSubmit)="updateSubDealer()" ngNativeValidate>
+                                                <p> (*)- Mandotory fields</p>
+                                                <div class="form-group">
+                                                    <label>Name *</label>
+                                                    <input type="text" class="form-control" required="" name="name" [(ngModel)]="data.name">
+                                                    <font class="errortext" color="red" *ngIf="!deviceData.form.controls.name?.valid && deviceData.form.controls.name?.touched">Please Enter Your Name</font>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email *</label>
+                                                    <input type="email" class="form-control" name="email" [(ngModel)]="data.email" required>
+                                                    <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Dealer Pin</label>
+                                                    <input type="text" class="form-control" required="" name="link_code" [(ngModel)]="data.link_code" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Connected Devices</label>
+                                                    <input type="text" class="form-control" required="" name="connected_devices" [(ngModel)]="data.connected_devices" disabled>
+                                                </div>
+
+                                                <br>
+                                                <button type="submit" class="btn btn-primary">UPDATE</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
                         </div>
-                        <!--  end card  -->
+                        <!-- end content-->
                     </div>
-                    <!-- end col-md-12 -->
+                    <!--  end card  -->
                 </div>
                 <!-- end row -->
             </div>

@@ -18,7 +18,7 @@
 
     thead>tr>th {
         cursor: pointer;
-        min-width: 120px;
+        min-width: 100px;
         border: 1px solid #eae6e6;
     }
 
@@ -59,11 +59,12 @@
       width: 80px;
       margin: 2px 2px;
     }
+    .btnFull .headings{
+        padding: 8px 0 7px;
+        font-size: 10px;
+    }
   td a:hover{
     text-decoration: none;
-  }
-  .headings{
-    background: rgba(244,244,244,1);
   }
   table thead tr th input{
     font-family:Arial, FontAwesome;
@@ -220,3 +221,7 @@
         overflow-y: scroll;
         padding: 0 !important;
     }
+.main-panel>.content {
+    padding: 0;
+    margin: 15px;
+}

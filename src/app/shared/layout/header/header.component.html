@@ -44,7 +44,7 @@
             </div>
             <div class="info">
                 <a data-toggle="collapse" routerLink="#collapseExample" class="collapsed">
-                    <span class="view" style="font-size: 12px;">
+                    <span class="view" >
                         {{profile.dealer_name}}
                     </span>
                 </a>
@@ -57,38 +57,38 @@
         <ul id="menu" class="lefttNav">
             <li class="xyz">
                 <a routerLink="/devices" routerLinkActive="active">
-                    <i class="nc-icon nc-mobile" style="font-size: 12px;"></i>
+                    <i class="nc-icon nc-mobile"></i>
                     <p>DEVICES</p>
                 </a>
             </li>
             <li class="xyz" *ngIf="isAdmin==true">
                 <a routerLink="/account" routerLinkActive="active">
-                    <i class="nc-icon nc-badge" style="font-size: 12px;"></i>
+                    <i class="nc-icon nc-badge"></i>
                     <p> Account </p>
                 </a>
             </li>
             <li class="xyz" *ngIf="isAdmin==true">
                 <a routerLink="/dealer" routerLinkActive="active" class="submenu">
 
-                    <i class="fa fa-users" style="font-size: 12px;"></i>
+                    <i class="fa fa-users"></i>
                     <span class="sidebar-normal"><p>Dealers</p></span>
                 </a>
             </li>
             <li class="xyz" *ngIf="(userType=='admin' || userType=='dealer')">
                 <a routerLink="/sdealer" routerLinkActive="active" class="submenu">
-                    <i class="fa fa-users" style="font-size: 12px;"></i>
+                    <i class="fa fa-users"></i>
                     <span class="sidebar-normal"><p>S-Dealer</p></span>
                 </a>
             </li>
             <!-- <li class="xyz">
                 <a routerLinkActive="active" class="submenu">
-                    <i class="fa fa-users" style="font-size: 12px;"></i>
+                    <i class="fa fa-users"></i>
                     <span class="sidebar-normal"><p>Client</p></span>
                 </a>
             </li> -->
             <!-- <li class="xyz">
                 <a routerLinkActive="active" routerLink="/profiles-list/profile" class="submenu">
-                    <i class="fa fa-tasks" style="font-size: 12px;"></i>
+                    <i class="fa fa-tasks"></i>
                     <span class="sidebar-normal">
                         <p>Profiles</p>
                     </span>
@@ -96,7 +96,7 @@
             </li>
             <li class="xyz">
                 <a routerLinkActive="active" routerLink="/profiles-list/policy" class="submenu">
-                    <i class="fa fa-tasks" style="font-size: 12px;"></i>
+                    <i class="fa fa-tasks"></i>
                     <span class="sidebar-normal">
                         <p>Policy</p>
                     </span>
@@ -104,19 +104,19 @@
             </li> -->
             <li class="xyz">
                 <a routerLink="/profile" routerLinkActive="active">
-                    <i class="fa fa-user" style="font-size: 12px;"></i>
+                    <i class="fa fa-user"></i>
                     <p>My Profile</p>
                 </a>
             </li>
             <li class="xyz" *ngIf="isAdmin==true">
                 <a routerLinkActive="active" routerLink="/view-apk">
-                    <i class="nc-icon nc-settings" style="font-size: 12px;"></i>
+                    <i class="nc-icon nc-settings"></i>
                     <p>App</p>
                 </a>
             </li>
             <!-- <li class="xyz">
                 <a routerLinkActive="active">
-                    <i class="nc-icon nc-settings" style="font-size: 12px;"></i>
+                    <i class="nc-icon nc-settings"></i>
                     <p>Settings</p>
                 </a>
             </li> -->
