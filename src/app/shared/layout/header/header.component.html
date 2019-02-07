@@ -150,7 +150,7 @@
                         <ng-container *ngIf="device.device_status==0 && device.dealer_id!=0 && device.unlink_status==0">
                             <td data-table-header="ACTION" class="text-left btnFull">
                                 <div class="btn-group">
-                                    <a class="acceptbut" onclick="closeModal()" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                    <a class="acceptbut" onclick="closeModal()" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#editDeviceForm">
                                         <button class="btn btn-success btn-sm" >Accept</button>
                                     </a>
 
@@ -181,7 +181,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true" style="top:-50px">
+<div class="modal fade" id="editDeviceForm" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true" style="top:-50px">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
