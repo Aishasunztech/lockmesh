@@ -315,7 +315,7 @@
                                 </thead>
                                 <tbody >
                                     <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: {id: 'datatable', itemsPerPage: perPage, currentPage: p } ; let i = index;">
-                                        <tr class="row_{{device.device_id}}" *ngIf="device.device_status!=0 || (device.unlink_status==1 && (device.name!=null || device.name!='') && (device.email!=null || device.email!=''))">
+                                        <tr class="row_{{device.device_id}}" *ngIf="device.device_status!=0 || (device.unlink_status==1 && (device.name!=null || device.name!='null' || device.name!='' || device.email!=null || device.email!='null' || device.email!=''))">
                                             <!-- blank -->
                                             <td class="text-center btnFull" id="plus">
                                                 <a href="javascrtip:void(0)" class="expand rounded" (click)="collapse(device,$event);">
@@ -374,7 +374,7 @@
                                                 <span *ngIf="device.link_code != 'null';else showBlank">{{ device.link_code }}</span>
                                             </td>
                                             <td data-table-header="IMEI"  *ngIf="state.imei == true">
-                                                <span *ngIf="device.dealer_name != 'null';else showBlank">{{ device.imei }}</span>
+                                                <span *ngIf="device.imei != 'null';else showBlank">{{ device.imei }}</span>
                                             </td>
                                             <td data-table-header="SIM ID"  *ngIf="state.sim_id == true">
                                                 <span *ngIf="device.sim_id != 'null';else showBlank">{{ device.sim_id}}</span>
