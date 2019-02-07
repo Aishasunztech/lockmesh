@@ -18,8 +18,8 @@
                     <i _ngcontent-c2="" class="fa fa-search"></i>
                 </div>
                 <div class="btn-group xnds" style="position: absolute;right: 20px;">
-                    <button *ngIf="router.url === '/devices'" class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 0; width: 30px; height: 30px; margin:0 0 0 10px;"><i class="fa fa-bell-o"></i>
-                    <div class="notification" *ngIf="newRequest > 0">{{newRequest}}</div>
+                    <button class="btn btn-outline-default rounded-circle btn-lg notify_button" data-toggle="modal" data-target="#newrequestmodel" style="padding: 0; width: 30px; height: 30px; margin:0 0 0 10px;" (click)="refreshRequest($event)"><i class="fa fa-bell-o"></i>
+                        <div class="notification" *ngIf="newRequest > 0">{{newRequest}}</div>
                     </button>
                     <button  class="btn btn-primary rounded-circle btn-lg nav-small-button logout" (click)="onLogout()" style="background: #4e0d6f;color: #ffa500;padding: 0; width: 30px; height: 30px; margin: 0 0 0 15px;"><i class="fa fa-power-off"></i></button>
                 </div>
@@ -121,5 +121,62 @@
                 </a>
             </li> -->
         </ul>
+    </div>
+</div>
+<div  id="newrequestmodel" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true" >
+    <div  class="modal-dialog modal-lg" style="max-width: 1285px;">
+        <div data-spy="scroll" class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <table id="classTable" class="table table-striped table-bordered responsive" cellspacing="0">
+                    <thead>
+                    <th scope="col">ACTION</th>
+                    <th scope="col">DEALER ID</th>
+                    <th scope="col">DEALER PIN</th>
+                    <th scope="col">S-DEALER</th>
+                    <th scope="col">DEVICE ID</th>
+                    <th scope="col">IMEI</th>
+                    <th scope="col">SIM</th>
+                    <th scope="col">Online</th>
+
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let device of allDevice | orderBy: key : reverse ; let i = index;">
+                        <ng-container *ngIf="device.device_status==0 && device.dealer_id!=0 && device.unlink_status==0">
+                            <td data-table-header="ACTION" class="text-left btnFull">
+                                <div class="btn-group">
+                                    <a class="acceptbut" onclick="closeModal()" href="javascript:void(0)" *ngIf="device.device_status==0" (click)="showEditForm(device);" data-toggle="modal" data-target="#edit">
+                                        <button class="btn btn-success btn-sm" >Accept</button>
+                                    </a>
+
+                                    <a href="javascript:void(0)" *ngIf="device.device_status==0" (click)="deleteUserDetails(device.device_id)">
+                                        <button class="btn btn-warning btn-sm">Decline</button>
+                                    </a>
+                                </div>
+                            </td>
+                            <td data-table-header="DEALER ID">{{device.dealer_id}}</td>
+                            <td data-table-header="DEALER PIN">{{device.link_code}}</td>
+                            <td data-table-header="S-DEALER">{{device.dealer_name}}</td>
+                            <td data-table-header="DEVICE ID">{{device.device_id}}</td>
+                            <td data-table-header="IMEI">{{device.imei}}</td>
+                            <td data-table-header="SIM">{{device.simno}}</td>
+                            <td data-table-header="ONLINE">{{device.online}}</td>
+
+                        </ng-container>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">
+                  Close
+                </button> -->
+            </div>
+        </div>
     </div>
 </div>

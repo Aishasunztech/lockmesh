@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
     link_code: '',
     tokens: '',
   };
+  allDevice: any;
   componentName : string;
   isComponentAllowed = false;
   isAdmin=false;
@@ -79,6 +80,7 @@ export class HeaderComponent implements OnInit {
 
   async allDeviceView() {
     const response = await this.restService.getUserDevice(Headers).toPromise();
+    this.allDevice = response.data;
 
     response.data.forEach( search => {
       if (search.device_status == 0 && search.dealer_id != 0 && search.unlink_status == 0){
@@ -95,7 +97,9 @@ export class HeaderComponent implements OnInit {
     console.log(response1);
     this.isAdmin = response1.isAdmin;
   }
-
+  async refreshRequest(e){
+    await this.allDeviceView();
+  }
   searchFilter(e){
     this.searchFilterValue = e.target.value;
     // this.globalSearch.emit(this.searchFilterValue);
