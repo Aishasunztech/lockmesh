@@ -15,6 +15,7 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
   styleUrls: ['./dealer.component.css']
 })
 export class DealerComponent implements OnInit {
+  @ViewChild('deviceData') projectForm: NgForm;
   private resp: any = null;
   // sorting
   key = 'dealer_name'; // set default
@@ -35,9 +36,14 @@ export class DealerComponent implements OnInit {
     tokens: '',
   };
 
-  constructor(private restService: RestService, private router: Router, @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
-   private spinnerService: Ng4LoadingSpinnerService)  { }
-  @ViewChild('deviceData') projectForm: NgForm;
+  constructor(
+    private restService: RestService, 
+    private router: Router, 
+    @Inject(LOCAL_STORAGE) private storage: WebStorageService ,
+   private spinnerService: Ng4LoadingSpinnerService)  {
+
+   }
+  
 
   async  ngOnInit() {
     await  this.spinnerService.show();

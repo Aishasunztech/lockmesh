@@ -315,7 +315,7 @@
                                 </thead>
                                 <tbody >
                                     <ng-container *ngFor="let device of allDevice | orderBy: key : reverse | paginate: {id: 'datatable', itemsPerPage: perPage, currentPage: p } ; let i = index;">
-                                        <tr class="row_{{device.device_id}}" *ngIf="device.device_status!=0 || device.unlink_status==1">
+                                        <tr class="row_{{device.device_id}}" *ngIf="device.device_status!=0 || (device.unlink_status==1 && (device.name!=null || device.name!='') && (device.email!=null || device.email!=''))">
                                             <!-- blank -->
                                             <td class="text-center btnFull" id="plus">
                                                 <a href="javascrtip:void(0)" class="expand rounded" (click)="collapse(device,$event);">

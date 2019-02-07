@@ -167,39 +167,39 @@
                                             <tr class="text-center btnFull" style="background: #f4f4f4">
                                             <th scope="col" class="disabled-sorting">Account</th>
                                             <th scope="col" class="disabled-sorting">Action</th>
-                                            <th scope="col" nowrap (click)="sort('dealer_name');">Name <span class="fa fa-sort"></span></th>
+                                            <th scope="col" (click)="sort('dealer_name');">Name <span class="fa fa-sort"></span></th>
                                             <th scope="col" (click)="sort('dealer_email')">Email<span class="fa fa-sort"></span></th>
-                                            <th scope="col"  (click)="sort('dealer_id')">Dealer Id<span class="fa fa-sort"></span></th>
-                                            <th scope="col"  (click)="sort('link_code')">Dealer PIN<span class="fa fa-sort"></span></th>
-                                            <th scope="col"  (click)="sort('connected_devices')">Connected<br>Devices
+                                            <th scope="col" (click)="sort('dealer_id')">Dealer Id<span class="fa fa-sort"></span></th>
+                                            <th scope="col" (click)="sort('link_code')">Dealer PIN<span class="fa fa-sort"></span></th>
+                                            <th scope="col" (click)="sort('connected_devices')">Connected<br>Devices
                                                 <span class="fa fa-sort"></span>
                                             </th>
                                             <th scope="col" >Tokens<span class="fa fa-sort"></span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let dealer of allDelears | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p }; let i = index;">
+                                        <tr *ngFor="let dealer of allDelears | orderBy:key:reverse | paginate: { itemsPerPage: perPage, currentPage: p }; let i = index;">
                                             <td data-table-header="ACCOUNT"  class="text-center btnFull">
                                                 <div class="btn-group">
                                                 <a href="javascript:void(0)" (click)="showEditForm(dealer);" data-toggle="modal" data-target="#edit"><button
-                                                            class="btn btn-sm edit" >Edit</button></a>
+                                                        class="btn btn-sm edit" >Edit</button></a>
                                                 <a href="javascript:void(0)" *ngIf="(dealer.account_status==null || dealer.account_status=='')" (click)="suspendForm(dealer.dealer_id);"><button
-                                                            class="btn btn-sm suspend">Suspend</button></a>
+                                                        class="btn btn-sm suspend">Suspend</button></a>
                                                 <a href="javascript:void(0)" *ngIf=" dealer.account_status=='suspended'" (click)="activatedealerForm(dealer.dealer_id);"><button
-                                                            class="btn btn-sm connect">Activate</button></a>
+                                                        class="btn btn-sm connect">Activate</button></a>
                                                 <a href="javascript:void(0)"><button
                                                         class="btn btn-sm delete"  *ngIf="dealer.unlink_status=='0'" (click)="unlinkdealerUser(dealer.dealer_id)">Delete</button></a>
                                                 <a href="javascript:void(0)"><button
-                                                             class="btn btn-sm delete"  *ngIf="dealer.unlink_status=='1'" (click)="undoUser(dealer.dealer_id)">Undo</button></a></div>
+                                                        class="btn btn-sm delete"  *ngIf="dealer.unlink_status=='1'" (click)="undoUser(dealer.dealer_id)">Undo</button></a></div>
                                             </td>
                                             <td data-table-header="ACTION"  class="text-center btnFull">
                                                 <div class="btn-group">
                                                 <a href="javascript:void(0)" (click)="passEditForm(dealer);" data-toggle="modal" data-target="#passedit"><button
-                                                             class="btn btn-sm ResetPp reset">RESET PASS</button></a>
+                                                        class="btn btn-sm ResetPp reset">RESET PASS</button></a>
                                                 <a><button
                                                         class="btn btn-sm connect" >Connect</button></a></div>
                                             </td>
-                                            <td data-table-header="NAME" >{{ dealer.dealer_name }}</td>
+                                            <td data-table-header="DEALER NAME" >{{ dealer.dealer_name }}</td>
                                             <td data-table-header="EMAIL" >{{ dealer.dealer_email }}</td>
                                             <td data-table-header="DEALER ID" >{{ dealer.dealer_id }}</td>
                                             <td data-table-header="DEALER PIN">{{ dealer.link_code }}</td>
