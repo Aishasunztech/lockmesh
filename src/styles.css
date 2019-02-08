@@ -82,11 +82,12 @@ a.submenu {
 .cardHig {
     height: auto;
     max-height: initial ;
+    box-shadow: 0 0px 11px -1px rgba(0, 0, 0, .15);
 }
 
 ul.lefttNav p {
     margin: 0;
-    line-height: 30px;
+    line-height: 35px;
     position: relative;
     display: block;
     height: auto;
@@ -99,11 +100,11 @@ ul.lefttNav p {
 }
 
 ul.lefttNav a i {
-    font-size: 24px;
+    font-size: 18px;
     float: left;
     margin-right: 0;
     line-height: 30px;
-    width: 34px;
+    width: 20px;
     text-align: center;
     color: white;
     position: relative;
@@ -112,7 +113,7 @@ ul.lefttNav a i:hover {
   opacity: 1;
 }
 ul.lefttNav li>a {
-    margin: 10px 15px 0;
+    margin: 5px 0;
     color: #fff;
     display: block;
     text-decoration: none;
@@ -120,20 +121,18 @@ ul.lefttNav li>a {
     text-transform: uppercase;
     cursor: pointer;
     font-size: 12px;
-    padding: 0px 8px;
+    padding: 5px 30px;
     line-height: 30px;
     opacity: .7;
-}
-
-.active[_ngcontent-c3] {
-  background: orange;
-  opacity: 1;
-
 }
 ul.lefttNav li>a:hover{
   opacity: 1;
 }
-
+.active {
+    background: orange;
+    opacity: 1 !important;
+    border-left: 5px solid #fff;
+}
 * {
     outline: none !important;
 }
@@ -155,10 +154,6 @@ ul.lefttNav li>a:hover{
     font-size: 15px;
     line-height: 71px;
 }
-.text-center {
-  text-align: center !important;
-}
-
 .input-group-btn[_ngcontent-c1]:not(:first-child):not(:last-child),
 .input-group[_ngcontent-c1] .form-control[_ngcontent-c1]:not(:first-child):not(:last-child) {
     width: 90%;
@@ -272,8 +267,9 @@ ul.popopWinbtn li button {
 }
 
 .pure-checkbox input[type="checkbox"]+label {
-    font-weight: 400;
+    font-weight: 500 !important;
     color: black;
+
 }
 
 table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before,
@@ -300,17 +296,12 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
 .table>thead>tr>td,
 .table>thead>tr>th {
     padding: 4px 4px;
-    /* padding: unset; */
     font-size: 11px;
     vertical-align: middle;
     text-align: center !important;
-    /* font-size: 10px; */
 }
 .table>thead>tr>th {
     /* text-align: left !important; */
-}
-.text-center {
-    text-align: center !important;
 }
 .ngx-datepicker-position-bottom-right {
     top: -230px!important;
@@ -414,7 +405,7 @@ c-icon, c-icon svg{
 /*}*/
 .main-panel>.content {
   padding: 0;
-  margin: 40px 20px;
+  margin: 0 15px;
 
 }
 
@@ -448,29 +439,29 @@ c-icon, c-icon svg{
   background-color:#f3f2ee !important;
   padding-right: 0 !important;
 }
-
 .cs-card {
     border-radius: 12px;
     padding:0;
     background: #fff;
 }
-
 .cs-table {
   padding: 0;
   margin: 0;
-}
-.cs-table .form-control{
-    
 }
 .modal-open .modal {
   overflow-x: hidden;
   overflow-y: scroll;
   padding: 0 !important;
 }
-select.form-control {
+.form-control {
   height: 30px !important;
   font-size: 11px!important;
   padding: 6px !important;
+}
+.card-login .form-control {
+    height: 38px !important;
+    font-size: 16px!important;
+    padding: 10px !important;
 }
 .ms-drop input[type="checkbox"] {
   vertical-align: middle;
@@ -481,13 +472,15 @@ select.form-control {
   line-height: 15px;
 
 }
-
+.modal-header .close {
+    padding: 16px;
+}
 .card-body .cardHig {
   overflow-y: hidden;
   overflow-x: scroll;
 }
 .fa-search {
-    right: 25px;
+    right: 15px;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -497,6 +490,7 @@ select.form-control {
     font-size: 15px;
     line-height: 30px;
 }
+
 @media screen and (max-width: 768px){
   .nd-xs {
     display: none;
@@ -513,6 +507,11 @@ select.form-control {
 
   .on-small-margin {
     margin-bottom: 15px;
+  }
+  .main-panel>.content {
+    padding: 0;
+    margin: 40px 15px;
+
   }
 
 }
@@ -571,6 +570,18 @@ select.form-control {
 }
 .btn.active, .btn.active:focus, .btn.active:hover, .btn:active, .btn:active:focus, .btn:active:hover, .btn:focus, .btn:hover, .navbar .navbar-nav>a.btn.active, .navbar .navbar-nav>a.btn.active:focus, .navbar .navbar-nav>a.btn.active:hover, .navbar .navbar-nav>a.btn:active, .navbar .navbar-nav>a.btn:active:focus, .navbar .navbar-nav>a.btn:active:hover, .navbar .navbar-nav>a.btn:focus, .navbar .navbar-nav>a.btn:hover, .show>.btn.dropdown-toggle, .show>.btn.dropdown-toggle:focus, .show>.btn.dropdown-toggle:hover, .show>.navbar .navbar-nav>a.btn.dropdown-toggle, .show>.navbar .navbar-nav>a.btn.dropdown-toggle:focus, .show>.navbar .navbar-nav>a.btn.dropdown-toggle:hover {
     background-color: #00000000;
+}
+.no-padding {
+  padding: 0 !important;
+}
+.text-left {
+  text-align: left !important;
+}
+.text-right {
+  text-align: right !important;
+}
+.text-center {
+  text-align: center !important;
 }
 .no-padding {
   padding: 0 !important;

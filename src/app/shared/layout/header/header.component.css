@@ -52,10 +52,6 @@
 .col_head{
 	border-bottom: 1px solid gray;
 }
-
-.active{
-	background: orange;
-}
 .notify_button:focus{
   background: gray!important;
 }

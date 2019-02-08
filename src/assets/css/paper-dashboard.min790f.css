@@ -10745,7 +10745,7 @@ img {
 
 .modal-header {
     border-bottom: 1px solid #ddd;
-    padding: 20px;
+    padding: 10px 15px;
     text-align: center;
     display: block!important
 }
@@ -10795,7 +10795,7 @@ img {
 }
 
 .modal-body {
-    padding: 20px 50px;
+    padding: 5px 50px 20px;
     color: #000
 }
 
@@ -11752,7 +11752,7 @@ img {
 }
 
 .card {
-    border-radius: 12px;
+    border-radius: 0px;
     box-shadow: 0 6px 10px -4px rgba(0, 0, 0, .15);
     background-color: #fff;
     color: #252422;
@@ -11763,9 +11763,8 @@ img {
 }
 
 .card .card-body {
-    padding: 0px 15px 10px
+    padding: 0px 0px 10px;
 }
-
 .card .card-body.table-full-width {
     padding-left: 0;
     padding-right: 0
