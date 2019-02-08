@@ -155,8 +155,6 @@ export class RestService {
   // dealer profile
   profilelist() {
     this.setHeaders(this.sessionLogin('token'));
-    /*this.response = this.http.get(this.baseUrl + '/users/getinfo/' + this.sessionLogin('id') + '/dealer',
-     {headers: { 'authorization': this.sessionLogin('token')} });*/
     this.response = this.http.get(this.baseUrl + '/users/getinfo', this.oHeaders);
     this.authtoken(this.response);
     return this.response;
@@ -495,8 +493,7 @@ export class RestService {
   // Undo For Dealer and Sub dealer
   undoUser(id) {
     this.token = this.sessionLogin('token');
-    const header = new HttpHeaders();
-    header.append('authorization', this.sessionLogin('token'));
+    this.setHeaders(this.sessionLogin('token'));
     this.response = this.http.post(this.baseUrl + '/users/dealer/undo', {dealerId: id}, this.oHeaders );
     this.authtoken(this.response);
     return this.response;
@@ -508,40 +505,20 @@ export class RestService {
 
   // Dropdown Api
   getAdminSelectedItems(headers) {
-    // console.log(this.baseUrl);
-    // this.token = this.sessionLogin('token');
-    // const header = new HttpHeaders();
-    //
-    // header.append('authorization', this.sessionLogin('token'));
-    // this.response = this.http.get(this.baseUrl + '/users/admin/gtdropdown', {headers: { 'authorization': this.sessionLogin('token')} });
-    // this.authtoken(this.response);
-    // return this.response;
-
+   
     console.log(this.baseUrl);
+    this.setHeaders(this.sessionLogin('token'));
     const dealer_id = this.sessionLogin('id');
-    // tslint:disable-next-line:max-line-length
     this.response = this.http.get(this.baseUrl + '/users/dealer/gtdropdown/' + dealer_id, this.oHeaders);
     this.authtoken(this.response);
     return this.response;
   }
 
   postAdminSelectedItems(selectedItems) {
-    //  const items = JSON.stringify(selectedItems);
-    //  console.log('selectedItems:- ' + items);
-    //  console.log(this.baseUrl);
-    //  this.token = this.sessionLogin('token');
-    //  const header = new HttpHeaders();
-    //  header.append('authorization', this.sessionLogin('token'));
-    //  this.http.post(this.baseUrl + '/users/admin/dropdown', {selected_items: items}, {
-    //    headers: { 'authorization': this.sessionLogin('token')}
-    //  }).subscribe(tradeBotInfo => {
-    // });
-    const items = JSON.stringify(selectedItems);
-    console.log(this.baseUrl);
-    this.setHeaders(this.sessionLogin('token'));
     
+    const items = JSON.stringify(selectedItems);
+    this.setHeaders(this.sessionLogin('token'));
     const dealer_id = this.sessionLogin('id');
-
     this.http.post(this.baseUrl + '/users/dealer/dropdown', {dealer_id: dealer_id, selected_items: items}, this.oHeaders).subscribe(tradeBotInfo => {
       console.log(tradeBotInfo);
     });
@@ -549,8 +526,8 @@ export class RestService {
 
   // Dealer and sdealers items apis
   getDealerSelectedItems(headers) {
-    console.log(this.baseUrl);
     const dealer_id = this.sessionLogin('id');
+    this.setHeaders(this.sessionLogin('token'));
     // tslint:disable-next-line:max-line-length
     this.response = this.http.get(this.baseUrl + '/users/dealer/gtdropdown/' + dealer_id, this.oHeaders);
     this.authtoken(this.response);
@@ -558,14 +535,13 @@ export class RestService {
   }
 
   postDealerSelectedItems(selectedItems) {
+    this.setHeaders(this.sessionLogin('token'));
+    
     const items = JSON.stringify(selectedItems);
     this.token = this.sessionLogin('token');
-    const header = new HttpHeaders();
     const dealer_id = this.sessionLogin('id');
-
-    header.append('authorization', this.sessionLogin('token'));
     this.http.post(this.baseUrl + '/users/dealer/dropdown', {dealer_id: dealer_id, selected_items: items}, this.oHeaders ).subscribe(tradeBotInfo => {
-      console.log(tradeBotInfo);
+      this.authtoken(tradeBotInfo);
     });
   }
 
@@ -600,14 +576,14 @@ export class RestService {
       name: name,
       dealer_id: dealer_id
     }, this.oHeaders).subscribe(resp => {
-
+      this.authtoken(resp);
     });
   }
 
   deleteProfile(profileId){
     this.setHeaders(this.sessionLogin('token'));
     this.http.delete(this.baseUrl + '/users/delete_profile/' + profileId, this.oHeaders).subscribe(resp => {
-
+      this.authtoken(resp);
     });
   }
 }
