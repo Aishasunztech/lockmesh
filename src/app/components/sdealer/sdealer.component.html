@@ -169,20 +169,20 @@
                                         <td data-table-header="ACCOUNT" class="text-center btnFull">
                                             <div class="btn-group">
                                             <a href="javascript:void(0)" (click)="showEditForm(dealer)" data-toggle="modal" data-target="#edit"><button
-                                                        class="btn btn-sm edit" >Edit</button></a>
+                                                    class="btn btn-sm edit" >Edit</button></a>
                                             <a href="javascript:void(0)" *ngIf="(dealer.account_status==null || dealer.account_status=='')" (click)="suspendForm(dealer.dealer_id);"><button
-                                                        class="btn btn-sm suspend">Suspend</button></a>
+                                                    class="btn btn-sm suspend">Suspend</button></a>
                                             <a href="javascript:void(0)" *ngIf=" dealer.account_status=='suspended' " (click)="activateForm(dealer.dealer_id);"><button
-                                                        class="btn btn-sm suspend">Activate</button></a>
+                                                    class="btn btn-sm suspend">Activate</button></a>
                                             <a href="javascript:void(0)"><button
-                                                        class="btn btn-sm delete"  *ngIf=" dealer.unlink_status== 0 " (click)="unlinkSdealerUser(dealer.dealer_id)">Delete</button></a>
+                                                    class="btn btn-sm delete"  *ngIf=" dealer.unlink_status== 0 " (click)="unlinkSdealerUser(dealer.dealer_id)">Delete</button></a>
                                             <a href="javascript:void(0)"><button
                                                     class="btn btn-sm delete"  *ngIf=" dealer.unlink_status== 1 " (click)="undoUser(dealer.dealer_id)">Undo</button></a></div>
                                         </td>
                                         <td data-table-header="ACTION" class="text-center btnFull">
                                             <div class="btn-group">
                                             <a href="javascript:void(0)" (click)="passEditForm(dealer);" data-toggle="modal" data-target="#passedit"><button
-                                                            class="btn btn-sm reset">Reset Password</button></a>
+                                                    class="btn btn-sm reset">RESET PASS</button></a>
                                             <a><button
                                                     class="btn btn-sm connect" >Connect</button></a></div>
                                         </td>

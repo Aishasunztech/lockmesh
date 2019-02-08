@@ -26,7 +26,11 @@ export class ProfileComponent implements OnInit {
 
   profilelist() {
     this.restService.profilelist().subscribe((response) => {
-      this.profile = response;
+      console.log(response);
+      this.profile.dealer_id = response.dealer_id;
+      this.profile.dealer_name = response.dealer_name;
+      this.profile.dealer_email = response.dealer_email;
+      
         console.log(this.profile);
     });
   }

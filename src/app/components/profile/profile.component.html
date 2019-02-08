@@ -149,7 +149,7 @@
                 <form id="test" #deviceData="ngForm" method="" (ngSubmit)="test()">
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" class="form-control" name="name" [(ngModel)]="data.name" placeholder="Enter your Name">
+                        <input type="text" class="form-control" name="name"  placeholder="Enter your Name">
                         <font class="errortext" color="red" *ngIf="!deviceData.form.controls.name?.valid && deviceData.form.controls.name?.touched">Please Enter Your Name</font>
                     </div>
                     <!-- <div class="form-group">
@@ -158,7 +158,7 @@
                     </div> -->
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" class="form-control" required name="email" [(ngModel)]="data.email" placeholder="Enter your Email">
+                        <input type="email" class="form-control" required name="email"  placeholder="Enter your Email">
                         <font class="errortext" color="red" *ngIf="!deviceData.form.controls.email?.valid && deviceData.form.controls.email?.touched">Please Enter Your Email</font>
                     </div>
                     
@@ -185,12 +185,12 @@
                 <form id="test" #deviceData="ngForm" method="" (ngSubmit)="test()">
                     <div class="form-group">
                         <label>Pasword</label>
-                        <input type="text" class="form-control" name="name" [(ngModel)]="data.name" placeholder="Enter your Password">
+                        <input type="text" class="form-control" name="name"  placeholder="Enter your Password">
                         <font class="errortext" color="red" *ngIf="!deviceData.form.controls.name?.valid && deviceData.form.controls.name?.touched">Please Enter Your Password</font>
                     </div>
                     <div class="form-group">
                         <label>Confirm Password</label>
-                        <input type="text" class="form-control" name="link_code" [(ngModel)]="data.link_code"  placeholder="Enter your Password again">
+                        <input type="text" class="form-control" name="link_code"  placeholder="Enter your Password again">
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
