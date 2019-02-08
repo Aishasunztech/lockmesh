@@ -537,15 +537,15 @@ export class DevicesComponent implements OnInit {
     // });
   }
 
-  showEditForm(dealer) {
+  showEditForm(device) {
       $.noConflict();
       // closeModal('#newrequestmodel');
 
-      this.data = dealer;
+      this.data = device;
       if (this.data.start_date === 'null' || this.data.start_date === null || this.data.start_date === '') {
         this.data.start_date = date;
       } else {
-         this.data.start_date = dealer.start_date.split('T')[0];
+         this.data.start_date = device.start_date.split('T')[0];
       }
       if (this.data.expiry_date === 'null' || this.data.expiry_date.includes('NaN-NaN-NaN')) {
         this.data.expiry_date = '';
@@ -576,7 +576,57 @@ export class DevicesComponent implements OnInit {
           this.data.model = '';
         }
       }
+      this.globalSearch.editDevice(this.data);
   }
+
+  // updateAdmin() {
+  //   if (this.data.email === '' || this.data.name === '' || this.data.email === 'null' || this.data.name === 'null' || this.data.expiry_date ==='' || this.data.expiry_date === 'null') {
+  //     Swal({
+  //      text: 'Please provide Name, Email and Expiry Date ',
+  //      type: 'error',
+  //       customClass: 'swal-height'
+  //        }).then(okay => {
+  //          return;
+  //       });
+  //   } else {
+  //    // console.log(this.data);
+  //     const extdate = new Date(this.data.expiry_date);
+  //     // tslint:disable-next-line:max-line-length
+  //     this.data.expiry_date = extdate.getFullYear() + '-' + this.getdate(extdate.getMonth() + 1) + '-' + this.getdate(extdate.getDate()) + ' ' + timest;
+  //     console.log(this.data);
+  //     if (this.data.expiry_date.trim() === null || this.data.expiry_date.trim() === ''
+  //      || this.data.expiry_date.trim() === 'NaN-NaN-NaN Invalid' || this.data.expiry_date.split(' ')[0] === '1970-1-1') {
+  //       console.log(this.data.expiry_date);
+  //       this.data.expiry_date = '';
+  //     }
+  //     console.log(this.data.expiry_date);
+  //     if (this.data.expiry_date.includes('NaN-NaN-NaN')) {
+  //       this.data.expiry_date = '';
+  //       console.log(this.data.expiry_date);
+  //     }
+  //     this.data.s_dealer = '';
+  //     this.spinnerService.show();
+  //     this.data.name = this.capitalize(this.data.name);
+  //     this.restService.updateAdminDetails(this.data).subscribe((response) => {
+  //       this.restService.authtoken(response);
+  //       this.resp = response;
+  //       if (this.resp.status === true) {
+  //         this.spinnerService.hide();
+  //         Swal({
+  //         text: 'You have successfully Update details',
+  //         type: 'success',
+  //           customClass: 'swal-height'
+  //           }).then(okay => {
+  //           if (okay) {
+  //             location.reload(true);
+  //             }
+  //           });
+  //        //   this.spinnerService.hide();
+  //       }
+  //     });
+  //     $('input.ng-invalid, select.ng-invalid, textarea.ng-invalid,checkbox.ng-invalid, file.ng-invalid').addClass('ng-touched');
+  //   }
+  // }
 
   // update password
   updatePassDealer() {
@@ -596,54 +646,7 @@ export class DevicesComponent implements OnInit {
     return dd;
   }
 
-  updateAdmin() {
-    if (this.data.email === '' || this.data.name === '' || this.data.email === 'null' || this.data.name === 'null' || this.data.expiry_date ==='' || this.data.expiry_date === 'null') {
-      Swal({
-       text: 'Please provide Name, Email and Expiry Date ',
-       type: 'error',
-        customClass: 'swal-height'
-         }).then(okay => {
-           return;
-        });
-    } else {
-     // console.log(this.data);
-      const extdate = new Date(this.data.expiry_date);
-      // tslint:disable-next-line:max-line-length
-      this.data.expiry_date = extdate.getFullYear() + '-' + this.getdate(extdate.getMonth() + 1) + '-' + this.getdate(extdate.getDate()) + ' ' + timest;
-      console.log(this.data);
-      if (this.data.expiry_date.trim() === null || this.data.expiry_date.trim() === ''
-       || this.data.expiry_date.trim() === 'NaN-NaN-NaN Invalid' || this.data.expiry_date.split(' ')[0] === '1970-1-1') {
-        console.log(this.data.expiry_date);
-        this.data.expiry_date = '';
-      }
-      console.log(this.data.expiry_date);
-      if (this.data.expiry_date.includes('NaN-NaN-NaN')) {
-        this.data.expiry_date = '';
-        console.log(this.data.expiry_date);
-      }
-      this.data.s_dealer = '';
-      this.spinnerService.show();
-      this.data.name = this.capitalize(this.data.name);
-      this.restService.updateAdminDetails(this.data).subscribe((response) => {
-        this.restService.authtoken(response);
-        this.resp = response;
-        if (this.resp.status === true) {
-          this.spinnerService.hide();
-          Swal({
-          text: 'You have successfully Update details',
-          type: 'success',
-            customClass: 'swal-height'
-            }).then(okay => {
-            if (okay) {
-              location.reload(true);
-              }
-            });
-         //   this.spinnerService.hide();
-        }
-      });
-      $('input.ng-invalid, select.ng-invalid, textarea.ng-invalid,checkbox.ng-invalid, file.ng-invalid').addClass('ng-touched');
-    }
-  }
+  
 
   // suspend dealer-device
   suspendForm(device_id) {

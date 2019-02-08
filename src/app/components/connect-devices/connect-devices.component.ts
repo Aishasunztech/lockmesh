@@ -38,6 +38,7 @@ export class ConnectAdminDevicesComponent implements OnInit {
     name: '',
     s_dealer_name: '',
     serial_number: '',
+    sim_id:'',
     simno: '',
     start_date: '',
     status: '',

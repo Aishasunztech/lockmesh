@@ -166,7 +166,6 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let dealer of allSDelears  | orderBy: key : reverse | paginate: { itemsPerPage: perPage, currentPage: p }; let i = index;">
-
                                         <td data-table-header="ACCOUNT" class="text-center btnFull">
                                             <div class="btn-group">
                                             <a href="javascript:void(0)" (click)="showEditForm(dealer)" data-toggle="modal" data-target="#edit"><button
@@ -192,7 +191,6 @@
                                         <td data-table-header="DEALER PIN">{{ dealer.link_code }}</td>
                                         <td data-table-header="PARENT DEALER">{{ dealer.parent_dealer }}</td>
                                         <td data-table-header="CONNECTED DEVICES">{{ dealer.connected_devices[0].total }}</td>
-
                                         <td data-table-header="TOKENS" id="tokens">{{ dealer.tokens }}</td>
                                     </tr>
 
