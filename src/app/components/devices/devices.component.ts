@@ -5,15 +5,13 @@ import Swal from 'sweetalert2';
 import { NgForm } from '@angular/forms';
 import {LOCAL_STORAGE, WebStorageService} from 'angular-webstorage-service';
 import {Router} from '@angular/router';
-import * as enLocale from 'date-fns/locale/en';
 import * as $ from 'jquery';
 
-import { DatepickerOptions } from 'ng2-datepicker';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { element } from '@angular/core/src/render3/instructions';
 
 const today = new Date();
-// tslint:disable-next-line:max-line-length
+
 const timest = (today.getHours() < 10 ? '0' + today.getHours() : today.getHours()) + ':' + (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes());
 const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + timest;
 @Component({
@@ -44,6 +42,7 @@ export class DevicesComponent implements OnInit {
   state: any = {
     name: false,
     email: false,
+    pgp_email:false,
     client_id: false,
     // dealer_id: false,
     model: false,
@@ -79,21 +78,6 @@ export class DevicesComponent implements OnInit {
     mac_address: '',
     device_id: ''
    };
-
-  options: DatepickerOptions = {
-    displayFormat: 'YYYY-MM-DD',
-    barTitleFormat: 'YYYY MMMM',
-    dayNamesFormat: 'dd',
-    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
-    locale: enLocale,
-    minDate: new Date(date), // Minimal selectable date
-    barTitleIfEmpty: 'Click to select a date',
-    placeholder: 'Click to select a date', // HTML input placeholder attribute (default: '')
-    addClass: 'form-control', // Optional, value to pass on to [ngClass] on the input field
-    addStyle: {}, // Optional, value to pass to [ngStyle] on the input field
-    fieldId: 'my-date-picker', // ID to assign to the input field. Defaults to datepicker-<counter>
-    useEmptyBarTitle: false, // Defaults to true. If set to false then barTitleIfEmpty will be disregarded and a date will always be shown
-  };
 
   constructor(
     private restService: RestService,

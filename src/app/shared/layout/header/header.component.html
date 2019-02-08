@@ -146,7 +146,7 @@
 
                     </thead>
                     <tbody>
-                    <tr *ngFor="let device of allDevice | orderBy: key : reverse ; let i = index;">
+                    <tr *ngFor="let device of allDevice; let i = index;">
                         <ng-container *ngIf="device.device_status==0 && device.dealer_id!=0 && device.unlink_status==0">
                             <td data-table-header="ACTION" class="text-left btnFull">
                                 <div class="btn-group">

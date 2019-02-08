@@ -8,7 +8,8 @@ import { RestService } from '../../../services/rest.service';
 import { GlobalSearchService } from '../../../services/global-search.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import * as $ from 'jquery';
-
+import { DatepickerOptions } from 'ng2-datepicker';
+import * as enLocale from 'date-fns/locale/en';
 
 const today = new Date();
 // tslint:disable-next-line:max-line-length
@@ -52,6 +53,20 @@ export class HeaderComponent implements OnInit {
     mac_address: '',
     device_id: ''
    };
+   options: DatepickerOptions = {
+    displayFormat: 'YYYY-MM-DD',
+    barTitleFormat: 'YYYY MMMM',
+    dayNamesFormat: 'dd',
+    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
+    locale: enLocale,
+    minDate: new Date(date), // Minimal selectable date
+    barTitleIfEmpty: 'Click to select a date',
+    placeholder: 'Click to select a date', // HTML input placeholder attribute (default: '')
+    addClass: 'form-control', // Optional, value to pass on to [ngClass] on the input field
+    addStyle: {}, // Optional, value to pass to [ngStyle] on the input field
+    fieldId: 'my-date-picker', // ID to assign to the input field. Defaults to datepicker-<counter>
+    useEmptyBarTitle: false, // Defaults to true. If set to false then barTitleIfEmpty will be disregarded and a date will always be shown
+  };
   constructor(
     private restService: RestService,
     private route: ActivatedRoute,
