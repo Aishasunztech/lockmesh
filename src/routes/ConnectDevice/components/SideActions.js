@@ -155,7 +155,7 @@ class SideActions extends Component {
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button disabled={this.state.disabled}
+                                <Button disabled={this.props.device.unlink_status ? true: this.state.disabled}
                                     onClick={()=>showConfirm(this.props.device.device_id,this.props.unlinkDevice,this)} 
                                     style={{ width: "100%", backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
 
@@ -262,16 +262,21 @@ var mapStateToProps = ( {device_details}) => {
     };
 }
 
+
 export default connect(mapStateToProps, mapDispatchToProps)(SideActions);
 function showConfirm(id, action,_this) {
     confirm({
-        title: 'Do you want to Unlink this Device ? '+id,
+        title: 'Do you want to Unlink this Device  '+id,
         onOk() {
             _this.setState({disabled:true})
+            console.log('go back func', _this.props);
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
                  action(id);
-                message.success('Action Done Susscefully ');
+                
+                 _this.props.history.goBack();
+                 _this.props.getDevicesList();
+              //  message.success('Action Done Susscefully ');
 
             }).catch(() => console.log('Oops errors!'));
         },

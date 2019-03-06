@@ -3,10 +3,10 @@ import { connect } from "react-redux";
 import { Select } from "antd";
 import Highlighter from 'react-highlight-words';
 import { Input, Button, Icon } from "antd";
-import { 
-    getDevicesList, 
-    suspendDevice, 
-    activateDevice, 
+import {
+    getDevicesList,
+    suspendDevice,
+    activateDevice,
     editDevice
 } from "../../appRedux/actions/Devices";
 import { getDropdown, postDropdown } from '../../appRedux/actions/Common';
@@ -19,361 +19,490 @@ import ShowMsg from './components/ShowMsg';
 import { getStatus, componentSearch } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 
-
 var coppyDevices = [];
 var status = true;
-
 
 class Devices extends Component {
     constructor(props) {
         super(props);
         const columns = [
             {
-                title: 'ACTIONS',
+                // title: 'ACTIONS',
                 dataIndex: 'action',
                 align: 'center',
                 className: 'row',
                 width: 800,
             },
             {
-                title: 'DEVICE ID',
-                dataIndex: 'device_id',
-                align: "center",
-                className: '',
-                ...this.getColumnSearchProps('device_id'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.device_id.length;
-                // },
-                sorter: (a, b) => {return a.device_id.localeCompare(b.device_id)},
+                title: (<Input name="device_id" key="device_id" id="device_id" className="search_heading"></Input>),
+                children: 
+                [ 
+                    {
+                        title: 'DEVICE ID',
+                        dataIndex: 'device_id',
+                        align: "center",
+                        className: '',
+                        ...this.getColumnSearchProps('device_id'),
 
-                sortDirections: ['ascend', 'descend'],
+                        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
 
-            },
-            {
-                title: 'DEVICE NAME',
-                dataIndex: 'name',
-                align: "center",
-                className: '',
-                ...this.getColumnSearchProps('name'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.name.length;
-                // },
-                sorter: (a, b) => {return a.name.localeCompare(b.name)},                
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: 'ACCOUNT EMAIL',
-                dataIndex: 'account_email',
-                align: "center",
-                className: '',
-                ...this.getColumnSearchProps('account_email'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.account_email.length;
-                // },
-                sorter: (a, b) => {return a.account_email.localeCompare(b.account_email)},
-                
-                sortDirections: ['ascend', 'descend'],
+                        sortDirections: ['ascend', 'descend'],
 
+                    }
+                ]
             },
             {
-                title: 'PGP EMAIL',
-                align: "center",
-                dataIndex: 'pgp_email',
-                className: '',
-                ...this.getColumnSearchProps('pgp_email'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.pgp_email.length;
-                // },
-                sorter: (a, b) => {return a.pgp_email.localeCompare(b.pgp_email)},
-                sortDirections: ['ascend', 'descend'],
+                title: (<Input name="name" key="name" id="name" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'DEVICE NAME',
+                            dataIndex: 'name',
+                            align: "center",
+                            className: '',
+                            ...this.getColumnSearchProps('name'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.name.length;
+                            // },
+                            sorter: (a, b) => { return a.name.localeCompare(b.name) },
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'CHAT ID',
-                align: "center",
-                dataIndex: 'chat_id',
-                className: '',
-                ...this.getColumnSearchProps('chat_id'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.chat_id.length;
-                // },
-                sorter: (a, b) => {return a.chat_id.localeCompare(b.chat_id)},
-                
-                sortDirections: ['ascend', 'descend'],
+                title: (<Input name="account_email" key="account_email" id="account_email" className="search_heading"></Input>),
+                children: 
+                [
+                    {
+                        title: 'ACCOUNT EMAIL',
+                        dataIndex: 'account_email',
+                        align: "center",
+                        className: '',
+                        ...this.getColumnSearchProps('account_email'),
+                        // sorter: (a, b) => {
+                        //     console.log(a);
+                        //     // console.log(b);
+                        //     return a.account_email.length;
+                        // },
+                        sorter: (a, b) => { return a.account_email.localeCompare(b.account_email) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: 'CLIENT ID',
-                align: "center",
-                dataIndex: 'client_id',
-                className: '',
-                ...this.getColumnSearchProps('client_id'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.client_id.length;
-                // },
-                sorter: (a, b) => {return a.client_id.localeCompare(b.client_id)},
-                sortDirections: ['ascend', 'descend'],
+                title: (<Input name="pgp_email" key="pgp_email" id="pgp_email" className="search_heading" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'PGP EMAIL',
+                            align: "center",
+                            dataIndex: 'pgp_email',
+                            className: '',
+                            ...this.getColumnSearchProps('pgp_email'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.pgp_email.length;
+                            // },
+                            sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'DEALER ID',
-                align: "center",
-                dataIndex: 'dealer_id',
-                className: '',
-                ...this.getColumnSearchProps('dealer_id'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.dealer_id.length;
-                // },
-                sorter: (a, b) => {return a.dealer_id.localeCompare(b.dealer_id)},                
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: 'DEALER PIN',
-                align: "center",
-                dataIndex: 'dealer_pin',
-                className: '',
-                ...this.getColumnSearchProps('dealer_pin'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.dealer_pin.length ? a.dealer_pin.length : 0;
-                // },
-                sorter: (a, b) => {return a.dealer_pin.localeCompare(b.dealer_pin)},                
+                title: (<Input name="chat_id" key="chat_id" id="chat_id" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'CHAT ID',
+                            align: "center",
+                            dataIndex: 'chat_id',
+                            className: '',
+                            ...this.getColumnSearchProps('chat_id'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.chat_id.length;
+                            // },
+                            sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'MAC ADDRESS',
-                align: "center",
-                dataIndex: 'mac_address',
-                className: '',
-                ...this.getColumnSearchProps('mac_address'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.mac_address.length;
-                // },
-                sorter: (a, b) => {return a.mac_address.localeCompare(b.mac_address)},                
+                title: (<Input name="client_id" key="client_id" id="client_id" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'CLIENT ID',
+                            align: "center",
+                            dataIndex: 'client_id',
+                            className: '',
+                            ...this.getColumnSearchProps('client_id'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.client_id.length;
+                            // },
+                            sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
+            },
+            {
+                title: (<Input name="dealer_id" key="dealer_id" id="dealer_id" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'DEALER ID',
+                            align: "center",
+                            dataIndex: 'dealer_id',
+                            className: '',
+                            ...this.getColumnSearchProps('dealer_id'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.dealer_id.length;
+                            // },
+                            sorter: (a, b) => { return a.dealer_id.localeCompare(b.dealer_id) },
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
+            },
+            {
+                title: (<Input name="dealer_pin" key="dealer_pin" id="dealer_pin" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'DEALER PIN',
+                            align: "center",
+                            dataIndex: 'dealer_pin',
+                            className: '',
+                            ...this.getColumnSearchProps('dealer_pin'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.dealer_pin.length ? a.dealer_pin.length : 0;
+                            // },
+                            sorter: (a, b) => { return a.dealer_pin.localeCompare(b.dealer_pin) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'SIM ID',
-                align: "center",
-                dataIndex: 'sim_id',
-                className: '',
-                ...this.getColumnSearchProps('sim_id'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.sim_id.length;
-                // },
-                sorter: (a, b) => {return a.sim_id.localeCompare(b.sim_id)},
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: 'IMEI 1',
-                align: "center",
-                dataIndex: 'imei_1',
-                className: '',
-                ...this.getColumnSearchProps('imei_1'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.imei_1.length;
-                // },
-                sorter: (a, b) => {return a.imei_1.localeCompare(b.imei_1)},
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: 'SIM 1',
-                align: "center",
-                dataIndex: 'sim_1',
-                className: '',
-                ...this.getColumnSearchProps('sim_1'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.imei_1.length;
-                // },
-                sorter: (a, b) => {return a.sim_1.localeCompare(b.sim_1)},
+                title: (<Input name="mac_address" key="mac_address" id="mac_address" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'MAC ADDRESS',
+                            align: "center",
+                            dataIndex: 'mac_address',
+                            className: '',
+                            ...this.getColumnSearchProps('mac_address'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.mac_address.length;
+                            // },
+                            sorter: (a, b) => { return a.mac_address.localeCompare(b.mac_address) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'IMEI 2',
-                align: "center",
-                dataIndex: 'imei_2',
-                className: '',
-                ...this.getColumnSearchProps('imei_2'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.imei_2.length;
-                // },
-                sorter: (a, b) => {return a.imei_2.localeCompare(b.imei_2)},
+                title: (<Input name="sim_id" key="sim_id" id="sim_id" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'SIM ID',
+                            align: "center",
+                            dataIndex: 'sim_id',
+                            className: '',
+                            ...this.getColumnSearchProps('sim_id'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.sim_id.length;
+                            // },
+                            sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
+            },
+            {
+                title: (<Input name="imei_1" key="imei_1" id="imei_1" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'IMEI 1',
+                            align: "center",
+                            dataIndex: 'imei_1',
+                            className: '',
+                            ...this.getColumnSearchProps('imei_1'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.imei_1.length;
+                            // },
+                            sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
+            },
+            {
+                title: (<Input name="sim_1" key="sim_1" id="sim_1" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'SIM 1',
+                            align: "center",
+                            dataIndex: 'sim_1',
+                            className: '',
+                            ...this.getColumnSearchProps('sim_1'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.imei_1.length;
+                            // },
+                            sorter: (a, b) => { return a.sim_1.localeCompare(b.sim_1) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'SIM 2',
-                align: "center",
-                dataIndex: 'sim_2',
-                className: '',
-                ...this.getColumnSearchProps('sim_2'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.sim_2.length;
-                // },
-                sorter: (a, b) => {return a.sim_2.localeCompare(b.sim_2)},
+                title: (<Input name="imei_2" key="imei_2" id="imei_2" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'IMEI 2',
+                            align: "center",
+                            dataIndex: 'imei_2',
+                            className: '',
+                            ...this.getColumnSearchProps('imei_2'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.imei_2.length;
+                            // },
+                            sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'SERIAL NUMBER',
-                align: "center",
-                dataIndex: 'serial_number',
-                className: '',
-                ...this.getColumnSearchProps('serial_number'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.serial_number.length;
-                // },
-                sorter: (a, b) => {return a.serial_number.localeCompare(b.serial_number)},
+                title: (<Input name="sim_2" key="sim_2" id="sim_2" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'SIM 2',
+                            align: "center",
+                            dataIndex: 'sim_2',
+                            className: '',
+                            ...this.getColumnSearchProps('sim_2'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.sim_2.length;
+                            // },
+                            sorter: (a, b) => { return a.sim_2.localeCompare(b.sim_2) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'STATUS',
-                align: "center",
-                dataIndex: 'status',
-                className: '',
-                ...this.getColumnSearchProps('status'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.status.length;
-                // },
-                sorter: (a, b) => {return a.status.localeCompare(b.status)},
+                title: (<Input name="serial_number" key="serial_number" id="serial_number" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'SERIAL NUMBER',
+                            align: "center",
+                            dataIndex: 'serial_number',
+                            className: '',
+                            ...this.getColumnSearchProps('serial_number'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.serial_number.length;
+                            // },
+                            sorter: (a, b) => { return a.serial_number.localeCompare(b.serial_number) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'MODEL',
-                align: "center",
-                dataIndex: 'model',
-                className: '',
-                ...this.getColumnSearchProps('model'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.model.length;
-                // },
-                sorter: (a, b) => {return a.model.localeCompare(b.model)},
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: 'START DATE',
-                align: "center",
-                dataIndex: 'start_date',
-                className: '',
-                ...this.getColumnSearchProps('start_date'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.start_date.length;
-                // },
-                sorter: (a, b) => {return a.start_date.localeCompare(b.start_date)},
+                title: (<Input name="status" key="status" id="status" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'STATUS',
+                            align: "center",
+                            dataIndex: 'status',
+                            className: '',
+                            ...this.getColumnSearchProps('status'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.status.length;
+                            // },
+                            sorter: (a, b) => { return a.status.localeCompare(b.status) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'EXPIRY DATE',
-                align: "center",
-                dataIndex: 'expiry_date',
-                className: '',
-                ...this.getColumnSearchProps('expiry_date'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.expiry_date.length;
-                // },
-                sorter: (a, b) => {return a.expiry_date.localeCompare(b.expiry_date)},
-
-                sortDirections: ['ascend', 'descend'],
+                title: (<Input name="model" key="model" id="model" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'MODEL',
+                            align: "center",
+                            dataIndex: 'model',
+                            className: '',
+                            ...this.getColumnSearchProps('model'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.model.length;
+                            // },
+                            sorter: (a, b) => { return a.model.localeCompare(b.model) },
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'DEALER NAME',
-                align: "center",
-                dataIndex: 'dealer_name',
-                className: '',
-                ...this.getColumnSearchProps('dealer_name'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.dealer_name.length;
-                // },
-                sorter: (a, b) => {return a.dealer_name.localeCompare(b.dealer_name)},
+                title: (<Input name="start_date" key="start_date" id="start_date" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'START DATE',
+                            align: "center",
+                            dataIndex: 'start_date',
+                            className: '',
+                            ...this.getColumnSearchProps('start_date'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.start_date.length;
+                            // },
+                            sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'ONLINE',
-                align: "center",
-                dataIndex: 'online',
-                className: '',
-                ...this.getColumnSearchProps('online'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.online.length;
-                // },
-                sorter: (a, b) => {return a.online.localeCompare(b.online)},
+                title: (<Input name="expiry_date" key="expiry_date" id="expiry_date" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'EXPIRY DATE',
+                            align: "center",
+                            dataIndex: 'expiry_date',
+                            className: '',
+                            ...this.getColumnSearchProps('expiry_date'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.expiry_date.length;
+                            // },
+                            sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'S DEALER',
-                align: "center",
-                dataIndex: 's_dealer',
-                className: '',
-                ...this.getColumnSearchProps('s_dealer'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.s_dealer.length;
-                // },
-                sorter: (a, b) => {return a.s_dealer.localeCompare(b.s_dealer)},
+                title: (<Input name="dealer_name" key="dealer_name" id="dealer_name" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'DEALER NAME',
+                            align: "center",
+                            dataIndex: 'dealer_name',
+                            className: '',
+                            ...this.getColumnSearchProps('dealer_name'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.dealer_name.length;
+                            // },
+                            sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             },
             {
-                title: 'S DEALER NAME',
-                align: "center",
-                dataIndex: 's_dealer_name',
-                className: '',
-                ...this.getColumnSearchProps('s_dealer_name'),
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.s_dealer_name.length;
-                // },
-                sorter: (a, b) => {return a.s_dealer_name.localeCompare(b.s_dealer_name)},
+                title: (<Input name="online" key="online" id="online" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'ONLINE',
+                            align: "center",
+                            dataIndex: 'online',
+                            className: '',
+                            ...this.getColumnSearchProps('online'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.online.length;
+                            // },
+                            sorter: (a, b) => { return a.online.localeCompare(b.online) },
 
-                sortDirections: ['ascend', 'descend'],
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
+            },
+            {
+                title: (<Input name="s_dealer" key="s_dealer" id="s_dealer" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'S DEALER',
+                            align: "center",
+                            dataIndex: 's_dealer',
+                            className: '',
+                            ...this.getColumnSearchProps('s_dealer'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.s_dealer.length;
+                            // },
+                            sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
+            },
+            {
+                title: (<Input name="s_dealer_name" key="s_dealer_name" id="s_dealer_name" className="search_heading"></Input>),
+                children:
+                    [
+                        {
+                            title: 'S DEALER NAME',
+                            align: "center",
+                            dataIndex: 's_dealer_name',
+                            className: '',
+                            ...this.getColumnSearchProps('s_dealer_name'),
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.s_dealer_name.length;
+                            // },
+                            sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
+
+                            sortDirections: ['ascend', 'descend'],
+                        }
+                    ]
             }
         ];
         this.state = {
@@ -463,7 +592,7 @@ class Devices extends Component {
 
 
     handleCheckChange(values) {
-        
+
         let dumydata = this.state.columns;
         if (values.length) {
             this.state.columns.map((column, index) => {
@@ -497,11 +626,12 @@ class Devices extends Component {
         // this.props.suspendDevice(device_id);
     }
     componentDidUpdate(prevProps) {
+        console.log('updated');
         if (this.props !== prevProps) {
             this.setState({
                 devices: this.props.devices,
                 columns: this.state.columns,
-            
+
             })
         }
     }
@@ -574,42 +704,44 @@ class Devices extends Component {
         return (
             <div>
                 {
-                    this.props.isloading ? <CircularProgress />:
-                    <div>
-                
-                <AppFilter
-                    handleFilterOptions={this.handleFilterOptions}
-                    selectedOptions = {this.props.selectedOptions}
-                    searchPlaceholder="Search Device"
-                    defaultPagingValue="10"
-                    addButtonText="Add Device"
-                    options={this.props.options}
-                    isAddButton={false}
-                    handleCheckChange={this.handleCheckChange}
-                    handlePagination={this.handlePagination}
-                    handleComponentSearch={this.handleComponentSearch}
-                />
+                    this.props.isloading ? <CircularProgress /> :
+                        <div>
 
-                <DevicesList
-                    devices={this.state.devices}
-                    suspendDevice={this.props.suspendDevice}
-                    activateDevice={this.props.activateDevice}
-                    columns={this.state.columns}
-                    ref="devcieList"
-                    editDevice={this.props.editDevice}
-                />
+                            <AppFilter
+                                handleFilterOptions={this.handleFilterOptions}
+                                selectedOptions={this.props.selectedOptions}
+                                searchPlaceholder="Search Device"
+                                defaultPagingValue="10"
+                                addButtonText="Add Device"
+                                options={this.props.options}
+                                isAddButton={true}
+                                toLink="add-device"
+                                handleCheckChange={this.handleCheckChange}
+                                handlePagination={this.handlePagination}
+                                handleComponentSearch={this.handleComponentSearch}
+                            />
 
-                <ShowMsg
-                    msg={this.props.msg}
-                    showMsg={this.props.showMsg}
-                />
-                </div>
+                            <DevicesList
+                                devices={this.state.devices}
+                                suspendDevice={this.props.suspendDevice}
+                                activateDevice={this.props.activateDevice}
+                                columns={this.state.columns}
+                                ref="devcieList"
+                                editDevice={this.props.editDevice}
+                            />
+
+                            <ShowMsg
+                                msg={this.props.msg}
+                                showMsg={this.props.showMsg}
+                            />
+                        </div>
 
                 }
             </div>
         );
 
     }
+
     getColumnSearchProps = (dataIndex) => ({
 
         filterDropdown: ({

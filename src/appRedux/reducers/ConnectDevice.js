@@ -23,7 +23,9 @@ import {
     POLICY,
     PROFILE,
     ACTIVATE_DEVICE2,
-    SUSPEND_DEVICE2
+    SUSPEND_DEVICE2,
+    HANDLE_CHECK_APP,
+    HANDLE_CHECK_ALL
 } from "constants/ActionTypes";
 import { message } from 'antd';
 
@@ -40,9 +42,14 @@ const initialState = {
     syncStatus: false,
     device: {},
 
+    checked_app_id: {},
     app_list: [],
     undoApps: [],
     redoApps: [],
+
+    guestAll: false,
+    encryptedAll: false,
+    enableAll: false,
 
     applyBtn: true,
     undoBtn: true,
@@ -94,7 +101,7 @@ export default (state = initialState, action) => {
                 pageName: action.payload
             }
         }
-        case GET_DEVICE_DETAILS:
+        case GET_DEVICE_DETAILS: {
             // console.log('all states from reducer ', action.payload);
 
             // console.log({
@@ -110,31 +117,69 @@ export default (state = initialState, action) => {
                 isloading: true,
                 device: action.payload,
             }
-
-        case SUSPEND_DEVICE2: {
+            break;
+        }
+        case SUSPEND_DEVICE2:
             // console.log('reducer suspend')
             if (action.response.status) {
 
                 state.device.account_status = 'suspended';
 
                 message.success(action.response.msg);
-            }
-            else {
+            } else {
                 message.error(action.response.msg);
 
             }
+             let device = state.device;
 
             // console.log('action done ', state.device)
             return {
                 ...state,
-            
-                isloading: false
+                isloading: false,
             }
-        }
+
+             break;
+       
+
         case GET_DEVICE_APPS:
+        {
             // console.log(GET_DEVICE_APPS);
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
+            let applications = action.payload;
+            let guestCount = 0;
+            let encryptedCount = 0;
+            let enableCount = 0;
 
+            let guestAll = false;
+            let encryptedAll = false;
+            let enableAll = false;
+
+            applications.forEach(app => {
+                if (app.guest === true || app.guest === 1) {
+                    guestCount = guestCount + 1;
+                }
+
+                if (app.encrypted === true || app.encrypted === 1) {
+                    encryptedCount = encryptedCount + 1;
+                }
+                
+                if (app.enable === true || app.enable === 1) {
+                    enableCount = enableCount + 1;
+                }
+
+            })
+
+            if(guestCount === applications.length){
+                guestAll = true;
+            }
+
+            if(encryptedCount === applications.length){
+                encryptedAll = true;
+            }
+
+            if(enableCount === applications.length){
+                enableAll = true;
+            }
             // console.log({
             //     ...state,
             //     isloading: true,
@@ -143,10 +188,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: true,
-                app_list: action.payload
+                app_list: action.payload,
+                guestAll: guestAll,
+                encryptedAll: encryptedAll,
+                enableAll: enableAll
             }
-
-        case GET_PROFILES:
+            break;
+        }
+        case GET_PROFILES:{
             // console.log(GET_PROFILES);
             // console.log({
             //     ...state,
@@ -158,6 +207,7 @@ export default (state = initialState, action) => {
                 isloading: true,
                 profiles: action.payload
             }
+        }
         case GET_DEVICE_HISTORIES: {
 
             // console.log(GET_PROFILES);
@@ -211,10 +261,11 @@ export default (state = initialState, action) => {
         case LOAD_PROFILE: {
             // console.log(LOAD_PROFILE);
             state.undoApps.push(action.payload);
-
+            let check=handleCheckedAll(action.payload);
             return {
                 ...state,
-                app_list: action.payload
+                app_list: action.payload,
+                ...check
             }
         }
         case SETTINGS_APPLIED: {
@@ -244,12 +295,6 @@ export default (state = initialState, action) => {
             }
         }
         case END_LOADING: {
-            // console.log(END_LOADING);
-
-            // console.log({
-            //     ...state,
-            //     isLoading: false
-            // });
 
             return {
                 ...state,
@@ -268,7 +313,7 @@ export default (state = initialState, action) => {
 
         case ACTIVATE_DEVICE2: {
 
-          //  console.log(state.device, 'active device done', action.payload.device);
+            //  console.log(state.device, 'active device done', action.payload.device);
             if (action.response.status) {
 
                 state.device.account_status = '';
@@ -283,12 +328,19 @@ export default (state = initialState, action) => {
             // console.log('action done ', state.device)
             return {
                 ...state,
-          
+                device:state.device,
                 isloading: true
             }
         }
 
         case UNLINK_DEVICE: {
+            if(action.response.status)
+            {
+                message.success(action.response.msg)
+            }
+            else{
+                message.error(action.response.msg)
+            }
             // console.log('unlink called');
             return {
                 ...state,
@@ -355,8 +407,124 @@ export default (state = initialState, action) => {
                 saveProfileType: action.payload.profileType
             }
         }
+        case HANDLE_CHECK_APP: {
+            let changedApps = state.app_list;
+            let applications = state.app_list;
+            changedApps.forEach(app => {
+                if (app.app_id === action.payload.app_id) {
+                    app[action.payload.key] = action.payload.value;
+                }
+            });
+            state.undoApps.push(changedApps);
+
+            let guestCount = 0;
+            let encryptedCount = 0;
+            let enableCount = 0;
+
+            let guestAll = false;
+            let encryptedAll = false;
+            let enableAll = false;
+
+            applications.forEach(app => {
+                if (app.guest === true || app.guest === 1) {
+                    guestCount = guestCount + 1;
+                }
+
+                if (app.encrypted === true || app.encrypted === 1) {
+                    encryptedCount = encryptedCount + 1;
+                }
+                
+                if (app.enable === true || app.enable === 1) {
+                    enableCount = enableCount + 1;
+                }
+
+            })
+
+            if(guestCount === applications.length){
+                guestAll = true;
+            }
+
+            if(encryptedCount === applications.length){
+                encryptedAll = true;
+            }
+
+            if(enableCount === applications.length){
+                enableAll = true;
+            }
+
+            return {
+                ...state,
+                app_list: changedApps,
+                checked_app_id: {
+                    id: action.payload.app_id,
+                    key: action.payload.key,
+                    value: action.payload.value
+                },
+                guestAll: guestAll,
+                encryptedAll: encryptedAll,
+                enableAll: enableAll
+            }
+        }
+        case HANDLE_CHECK_ALL: {
+            let applications = state.app_list;
+            applications.forEach(app => {
+                app[action.payload.key] = action.payload.value;
+            })
+            state[action.payload.keyAll] = action.payload.value;
+            state.undoApps.push(applications);
+            return {
+                ...state,
+                app_list: applications,
+                checked_app_id: {
+                    key:action.payload.key,
+                    value: action.payload.value
+                }
+            }
+        }
         default:
             return state;
 
+    }
+}
+
+function handleCheckedAll(applications){
+    let guestCount = 0;
+    let encryptedCount = 0;
+    let enableCount = 0;
+
+    let guestAll = false;
+    let encryptedAll = false;
+    let enableAll = false;
+
+    applications.forEach(app => {
+        if (app.guest === true || app.guest === 1) {
+            guestCount = guestCount + 1;
+        }
+
+        if (app.encrypted === true || app.encrypted === 1) {
+            encryptedCount = encryptedCount + 1;
+        }
+        
+        if (app.enable === true || app.enable === 1) {
+            enableCount = enableCount + 1;
+        }
+
+    })
+
+    if(guestCount === applications.length){
+        guestAll = true;
+    }
+
+    if(encryptedCount === applications.length){
+        encryptedAll = true;
+    }
+
+    if(enableCount === applications.length){
+        enableAll = true;
+    }
+    return {
+        guestAll: guestAll,
+        encryptedAll: encryptedAll,
+        enableAll: enableAll
     }
 }

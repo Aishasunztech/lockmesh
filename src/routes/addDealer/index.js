@@ -24,8 +24,8 @@ class AddDealer extends Component {
                
                 this.props.addDealer(values);
                // message.success('Action done Successfylly');
-               this.props.getDealerList('sdealer'); 
              this.props.history.goBack();
+             this.props.getDealerList(window.location.pathname.split("/").pop()); 
            
             }
         });

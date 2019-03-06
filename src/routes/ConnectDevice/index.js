@@ -23,7 +23,8 @@ import {
     changePage,
     activateDevice2,
     suspendDevice2
-} from "../../appRedux/actions/ConnectDevice"
+} from "../../appRedux/actions/ConnectDevice";
+import {getDevicesList} from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
 import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
@@ -81,16 +82,16 @@ class ConnectDevice extends Component {
     }
     onBackHandler = () => {
         this.props.changePage("main_menu");
-        
+
     }
     componentDidMount() {
         this.props.startLoading();
-        
+
         this.setState({
             pageName: this.props.pageName,
             device_id: this.props.match.params.device_id
         });
-        
+
         const device_id = this.props.match.params.device_id;
         if (device_id !== '') {
 
@@ -109,11 +110,11 @@ class ConnectDevice extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
-            
+
             this.setState({
                 pageName: nextProps.pageName
             });
-            
+
             // nextProps.showMessage(false);
 
             // this.setState({
@@ -156,7 +157,11 @@ class ConnectDevice extends Component {
             );
         } else if (this.state.pageName === "apps" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (
-                <AppList app_list={this.props.app_list} pushApps={this.props.pushApps} undoApps={this.props.undoApps} />
+                <AppList
+                    app_list={this.props.app_list}
+                    // pushApps={this.props.pushApps}
+                    undoApps={this.props.undoApps}
+                />
             );
         } else if (this.state.pageName === "guest_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.state.pageName} />);
@@ -172,19 +177,19 @@ class ConnectDevice extends Component {
             return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>);
         }
     }
-    
+
     applyActionButton = () => {
         this.props.applySetting(this.props.app_list,
             {
-               adminPwd: this.props.adminPwd,
-               guestPwd: this.props.guestPwd,
-               encryptedPwd: this.props.encryptedPwd,
-               duressPwd: this.props.duressPwd,
-            } 
-            ,this.state.device_id);
+                adminPwd: this.props.adminPwd,
+                guestPwd: this.props.guestPwd,
+                encryptedPwd: this.props.encryptedPwd,
+                duressPwd: this.props.duressPwd,
+            }
+            , this.state.device_id);
         // 
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.onBackHandler();
     }
     refreshDevice = (deviceId) => {
@@ -194,9 +199,7 @@ class ConnectDevice extends Component {
         this.props.getDeviceApps(deviceId);
         this.props.getProfiles();
         this.props.getDeviceHistories(deviceId);
-        this.setState({
-            pageName: "main_menu"
-        })
+        this.onBackHandler();
         setTimeout(() => {
             this.props.endLoading();
         }, 2000);
@@ -210,7 +213,7 @@ class ConnectDevice extends Component {
                         <CircularProgress />
                     </div> : null}
 
-                {this.props.showMessage===true ?
+                {this.props.showMessage === true ?
                     (this.props.messageType === "error") ?
                         message.error(this.props.messageText) :
                         (this.props.messageType === "success") ?
@@ -252,14 +255,18 @@ class ConnectDevice extends Component {
                     </Col>
                     <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
                         {/*  */}
-                        <SideActions 
+                        <SideActions
                             device={this.props.device_details}
                             profiles={this.props.profiles}
+
                             histories={this.props.histories} 
                             activateDevice={this.props.activateDevice2} 
                             suspendDevice = {this.props.suspendDevice2}
                             editDevice = {this.props.editDevice}
                             unlinkDevice = {this.props.unlinkDevice}
+                            history={this.props.history}
+                            getDevicesList={this.props.getDevicesList}    
+
                         />
 
                     </Col>
@@ -284,9 +291,12 @@ function mapDispatchToProps(dispatch) {
         redoApplications: redoApps,
         applySetting: applySetting,
         changePage: changePage,
-        suspendDevice2:suspendDevice2,
-        activateDevice2:activateDevice2,
+        suspendDevice2: suspendDevice2,
+        activateDevice2: activateDevice2,
         editDevice: editDevice,
+        getDevicesList:getDevicesList,
+
+
         // showMessage: showMessage,
         unlinkDevice: unlinkDevice,
 
@@ -315,9 +325,9 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     //     duressCPwd: device_details.duressCPwd,
     //     adminPwd: device_details.adminPwd,
     //     adminCPwd: device_details.adminCPwd,
-        
+
     //  });
-    
+
     // console.log("device_details", device_details.device);
     return {
         routing: routing,

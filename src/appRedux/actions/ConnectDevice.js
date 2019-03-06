@@ -19,11 +19,11 @@ import {
     SAVE_PROFILE,
     ACTIVATE_DEVICE2,
     SUSPEND_DEVICE2,
-    HANDLE_CHECK_APP
+    HANDLE_CHECK_APP,
+    HANDLE_CHECK_ALL
 } from "constants/ActionTypes"
 
 import RestService from '../services/RestServices';
-
 
 // action creaters 
 
@@ -128,8 +128,6 @@ export function suspendDevice2(device) {
 
             if (RestService.checkAuth(response.data)) {
                 // console.log('reslut', response);
-                
-               
                     // console.log('conect device', device);
                     // console.log('done status');
                     dispatch({
@@ -156,9 +154,11 @@ export function suspendDevice2(device) {
 export function unlinkDevice(deviceId) {
     return (dispatch) => {
         RestService.unlinkDevice(deviceId).then((response) => {
+            console.log('response to unlink device', response);
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
+                        response:response.data,
                         type: UNLINK_DEVICE,
                         payload: response.data.profiles
                     })
@@ -322,11 +322,29 @@ export function showMessage(show, message, type) {
 }
 
 export function handleCheckApp(e, key, app_id) {
-
+    return (dispatch) =>{
+        dispatch({
+            type: HANDLE_CHECK_APP,
+            payload: {
+                value: e,
+                key: key,
+                app_id: app_id
+            }
+        })
+    }
 }
 
-export function handleCheckAll() {
-
+export function handleCheckAll(keyAll, key, value) {
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_ALL,
+            payload: {
+                keyAll: keyAll,
+                key: key,
+                value: value
+            }
+        })
+    }
 }
 
 

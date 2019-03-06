@@ -19,8 +19,10 @@ class editDealer extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                console.log('form', values);
                 this.props.editDeviceFunc(values);
                 this.props.hideModal();
+                this.handleReset();
                 // console.log('Received values of form: ', values);
             }
         });
@@ -34,12 +36,40 @@ class editDealer extends Component {
             // nextProps.getSimIDs();
         }
     }
+
+
+    handleReset = () => {
+        this.props.form.resetFields();
+      }
+
+      get_current_date = () => {
+
+        let day = new Date().getDay(); //Current Date
+        let month = new Date().getMonth() + 1; //Current Month
+        let year = new Date().getFullYear();
+
+        if(day < 10)
+        {
+            day = '0'  + day;
+        }
+           
+        if(month < 10)
+        {
+            month = '0' + month;
+        }
+
+       var current_date = year +'/'+ month + '/' +day;
+      // console.log('date', current_date);
+       return current_date;
+      }
+
     handleCancel = () => {
         this.setState({ visible: false });
     }
 
     render() {
-        // console.log('props of coming', this.props.device);
+         console.log('props of coming', this.props.device);
+       //  alert(this.props.device.device_id);
         const { visible, loading } = this.state;
 
         return (
@@ -57,6 +87,15 @@ class editDealer extends Component {
                     })(
 
                         <Input disabled />
+                    )}
+                </Form.Item>
+                <Form.Item
+                >
+                    {this.props.form.getFieldDecorator('dealer_id', {
+                        initialValue: this.props.device.dealer_id,
+                    })(
+
+                        <Input type='hidden' disabled />
                     )}
                 </Form.Item>
                 <Form.Item
@@ -150,8 +189,8 @@ class editDealer extends Component {
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                             <Select.Option value="">Select Sim ID</Select.Option>
-                            {this.props.sim_ids.map(sim_id =>{
-                                return (<Select.Option value={sim_id.id}>{sim_id.sim_id}</Select.Option>)
+                            {this.props.sim_ids.map((sim_id,index) =>{
+                                return (<Select.Option key={index} value={sim_id.id}>{sim_id.sim_id}</Select.Option>)
                             })}
                         </Select>,
                     )}
@@ -172,9 +211,12 @@ class editDealer extends Component {
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
+                 {this.props.form.getFieldDecorator('start_date', {
+                        initialValue: this.props.device.start_date ? this.props.device.start_date : this.get_current_date(),
+                    })(
 
-                    <Input value={this.props.device.start_date} disabled />
-
+                    <Input disabled />
+                    )}
                 </Form.Item>
                 <Form.Item
                     label="Expiry Date "

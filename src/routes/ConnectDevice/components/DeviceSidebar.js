@@ -135,6 +135,7 @@ export default class DeviceSidebar extends Component {
                 className:"device_info",
                 width: 100,
             }, {
+                key:0,
                 title: (<span >{device_details.device_id}<a href="#" className="ref-btn" onClick={()=>{
                     this.props.refreshDevice(device_details.device_id)
                 }}><Icon type="sync" spin className="loading_icon"/> <Icon type="reload" /> Refresh</a></span>),

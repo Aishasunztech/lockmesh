@@ -25,27 +25,6 @@ export default class editDealer extends Component {
             device: device,
             visible: true,
             func: func,
-            // visible: true,
-            // sim_id: device.sim_id,
-            // chat_id: device.chat_id,
-            // pgp_email: device.pgp_email,
-            // device_id: device.device_id,
-            // s_dealer: device.s_dealer,
-            // s_dealer_name: device.s_dealer_name,
-            // expiry_date: device.expiry_date,
-            // start_date: device.start_date,
-            // email: device.email,
-            // name: device.name,
-            // model: device.model,
-            // sttatus: device.status,
-            // imei: device.imei,
-            // imei2: device.imei2,
-            // simno: device.simno,
-            // simno2: device.simno2,
-            // online: device.online,
-            // link_code: device.link_code,
-            // client_id: device.client_id,
-
 
         });
 

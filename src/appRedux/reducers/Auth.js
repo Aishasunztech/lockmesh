@@ -102,16 +102,24 @@ export default (state = INIT_STATE, action) => {
         message.success(action.response.msg);
         state.authUser.firstName = action.response.data.first_Name;
         state.authUser.lastName = action.response.data.Last_Name;
+        localStorage.setItem('firstName', action.response.data.first_Name);
+        localStorage.setItem('lastName', action.response.data.Last_Name);
 
         // console.log('user detail',action.response);
         // console.log('user state',state.authUser);
 
       }
+      else{
+        message.error(action.response.msg);
+      }
       return{
+        ...state,
+       
         loader: false,
-       ...state,
+       
       }
     }
+    break;
 
     case INVALID_TOKEN: {
       RestService.authLogOut();

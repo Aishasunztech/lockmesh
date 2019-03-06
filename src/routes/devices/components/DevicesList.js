@@ -26,6 +26,7 @@ export default class DevicesList extends Component {
     // renderList
     renderList(list) {
 
+
         return list.map((device) => {
 
              const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
@@ -36,7 +37,8 @@ export default class DevicesList extends Component {
             var text = "EDIT";
             // var icon = "edit";
             
-            if (status === 'new-device') {
+            if ((status === 'new-device') || (device.unlink_status === 1)) {
+                console.log('device name', device.name, 'status', device.unlink_status)
                 style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
                 text = "ADD";
                 // icon = 'add'
@@ -111,7 +113,7 @@ export default class DevicesList extends Component {
         const { activateDevice, suspendDevice } = this.props;
 
         return (
-            <div id="style-9">
+            <div className="dev_table">
                 <ActivateDevcie ref="activate"
                     activateDevice={activateDevice} />
                 <SuspendDevice ref="suspend"

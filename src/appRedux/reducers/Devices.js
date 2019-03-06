@@ -108,10 +108,15 @@ export default (state = initialState, action) => {
             }
 
             return {
-                // ...state,
+                ...state,
                 devices: [...state.devices],
-               // selectedOptions: [...state.selectedOptions],
+               selectedOptions: [...state.selectedOptions],
                 options: state.options,
+                isloading: false,
+                msg: state.msg,
+                showMsg: "hello",
+               // options: state.options,
+               // devices: action.payload,
             }
 
             break;

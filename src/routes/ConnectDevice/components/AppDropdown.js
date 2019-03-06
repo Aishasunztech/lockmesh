@@ -23,13 +23,16 @@ export default class AppDropdown extends Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        // console.log("componentWillReceiveProps");
-        // console.log(nextProps);
-        this.setState({
-            guestAll: nextProps.guestAll,
-            encryptedAll: nextProps.encryptedAll,
-            enableAll: nextProps.enableAll,
-        })
+        // if(this.props !== nextProps){
+            // alert("hello");
+            // console.log("appdropdown nextprops", nextProps);
+            // this.state[this.checked_app_id.key] = this.checked_app_id.value;
+            this.setState({
+                guestAll: nextProps.guestAll,
+                encryptedAll: nextProps.encryptedAll,
+                enableAll: nextProps.enableAll,
+            })
+        // }
     }
     handleCheckedAll = (e,key) => {
         // console.log("hello world");
@@ -39,13 +42,13 @@ export default class AppDropdown extends Component {
     renderDropdown() {
         return (
             <div className="applist_menu">
-                <Checkbox defaultChecked={this.state.guestAll ? true : false} onChange={(e) => {
+                <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "guestAll");
                 }}>Turn on Guests All</Checkbox><br></br>
-                <Checkbox defaultChecked={this.state.encryptedAll ? true : false} onChange={(e) => {
+                <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "encryptedAll");
                 }}>Turn On Encrypted All</Checkbox><br></br>
-                <Checkbox defaultChecked={this.state.enableAll ? true : false} onChange={(e) => {
+                <Checkbox checked={this.state.enableAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "enableAll");
                 }}>Enable All</Checkbox>
             </div>

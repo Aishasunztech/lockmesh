@@ -1,12 +1,5 @@
 import {all, call, fork, put, takeEvery} from "redux-saga/effects";
 
-// import {
-//   auth,
-//   facebookAuthProvider,
-//   githubAuthProvider,
-//   googleAuthProvider,
-//   twitterAuthProvider
-// } from "../../firebase/firebase";
 
 // import {
 //   SIGNIN_FACEBOOK_USER,
