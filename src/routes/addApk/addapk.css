@@ -1,0 +1,7 @@
+.upload_file  .ant-row{
+    display: unset;
+}
+
+.ant-upload.ant-upload-drag p.ant-upload-drag-icon .anticon {
+    font-size: 36px !important;
+}

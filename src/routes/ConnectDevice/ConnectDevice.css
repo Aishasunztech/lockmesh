@@ -1,0 +1,206 @@
+.deviceImg {
+    width: 311px;
+    margin: 0 auto;
+    height: 533px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top center;
+    border-radius: 26px;
+    position: relative;
+    border: 2px solid #000;
+}
+.deviceImg .not_syn_txt {
+    position: absolute;
+    top: 45%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+
+}
+.nav_btn_grp {
+    position: absolute;
+    bottom: 3px;
+    width: 100%;
+}
+.nav_btn {
+    margin-top: 0 !important;
+    width: 33%;
+    background-color: transparent !important;
+    border: none !important;
+    margin: 0;
+}
+.nav_btn:active {
+    color: #c8c8c8;
+    background-color: #fff;
+}
+.ant-table-tbody > tr > td {
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 8px !important;
+    font-weight: 300;
+}
+.deviceImg .ant-table-scroll { 
+    width: 295px;
+    margin: 23px auto 0;
+    border-radius: 0px;
+}
+.ant-table-small {
+    border: 1px solid transparent !important;
+    border-radius: 6px;
+}
+.deviceImg .ant-table-scroll th {       
+    /* border-top-left-radius: 6px; */
+    font-size: 12px;
+    text-align: center !important;
+    white-space: nowrap;
+    height: 45px;
+    padding: 0 8px !important;
+}
+.action_btn {
+    height: 30px;
+    margin-top: 16px !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    width: 25%; 
+    padding: 0;
+    line-height: 20px;
+}
+.deviceImg .ant-table-thead > tr > th {
+    padding: 0 5px 0 3px !important;
+    font-size: 13px;
+    width: 60%;
+}
+th.device_info {
+    font-size: 13px;
+    padding: 0 4px !important;
+}
+.left_bar .ant-table-tbody > tr > td {
+    text-align: left;
+    padding: 8px 4px 8px 16px !important;
+}
+.action_group .ant-btn-group {
+    display: block
+}
+.ant-list {
+    font-size: 13px;
+}
+.ant-switch-small {
+    vertical-align: bottom;
+}
+.deviceImg .ant-spin-container {
+    width: 300px;
+    margin: 0px auto;
+    padding:0;
+}
+.deviceImg .dev_main_menu {
+    padding-top: 56px;
+}
+.deviceImg .ant-list-item {
+    padding: 16px 16px;
+    font-size: 14px;
+}
+.deviceImg .ant-list-item:last-child {
+    border-bottom: 1px solid #e8e8e8 !important;
+}
+.line_break {  
+    width: 60px;
+    margin: 0 auto;
+    word-break: break-word;
+}
+.deviceImg .ant-form {
+    width: 200px;
+    margin: 0 auto;
+    text-align: center;
+}
+.deviceImg .ant-input-affix-wrapper {
+    margin-bottom: 15px;
+}
+.deviceImg .ant-input {
+    color: #038fde;
+    background-color: #fff;
+    background-image: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid;
+    border-color: #ccc !important;
+    text-align: center;
+    margin-bottom: 16px;
+    height: 26px;
+}
+.deviceImg .ant-input:focus {
+    border-color: #038fde !important;
+    box-shadow: 0 0 0 2px rgba(23, 23, 23, 0);
+}
+.deviceImg .ant-form-item-control-wrapper {
+    margin-top: 70px;
+}
+.left_bar .ant-card-body {
+    padding:0 !important;
+}
+.right_bar .ant-card-body {
+    padding:16px 16px 0 !important;
+}
+.apklist_table .ant-table-thead > tr > th {
+    text-align: center;
+    font-size: 13px;
+    padding:12px 8px ;
+}
+.device_value {
+    text-align: left !important ;
+}
+.ref-btn {
+    display: inline-flex;
+    float: right;
+}
+.ref-btn .anticon  {
+margin-right: 3px;
+}
+.ref-btn .loading_icon {
+    display: none;
+}
+.device_info{ 
+    text-align: right !important;
+}
+.device_value {
+    font-size: 13px;
+}
+.deviceImg .dev_main_menu  .ant-spin-container{
+    width: 295px !important ;
+}
+/*---- Apk List Css----*/
+.ant-table-filter-dropdown .ant-btn{
+    margin-bottom: 0;
+}
+.change_pass .ant-btn,
+.change_email .ant-btn {
+    padding: 0;
+}
+.profile_table .ant-table-tbody > tr > td {
+    font-size: 15px;
+    text-align: center;
+    padding: 10px 16px !important;
+    font-weight: 400;
+}
+.ant-btn > .anticon + span, .ant-btn > span + .anticon {
+    margin-left: 4px;
+    font-size: 12px;
+}
+.mb-0 {
+    margin-bottom: 0 !important ;
+}
+
+/*----------Sidebar page----------*/
+.side_bar_main .gx-mr-3 {
+    margin-right: 15px !important;
+}
+.side_bar_main.gx-mb-4 {
+    margin-bottom: 0px !important; 
+}
+.notification_icn {
+    font-size: 22px;
+    margin-left: 50px;
+}
+.submitButton {
+    text-align: center;
+}

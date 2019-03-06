@@ -1,0 +1,7 @@
+.devices table th{
+    white-space: nowrap!important;
+    font-size: 13px;
+}
+.devices table td{
+    white-space: nowrap!important;
+}
