@@ -82,7 +82,6 @@ export default class ListApk extends Component {
 
 
     renderList(list) {
-        console.log('list of dealers', list);
         data = [];
         list.map((dealer) => {
             const dealer_status = (dealer.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";

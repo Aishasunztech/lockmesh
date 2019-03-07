@@ -1,37 +1,59 @@
-.devices table th{
-    white-space: nowrap!important;
+.devices table th {
+    white-space: nowrap !important;
 }
-.devices table td{
-    white-space: nowrap!important;
+
+.devices table td {
+    white-space: nowrap !important;
 }
+
 .ant-btn-sm {
     line-height: 20px !important;
     font-size: 10px;
 }
+
 /* .ant-dropdown.ant-dropdown-placement-bottomRight {
     left: 169px !important;
     top: 12px !important;
 } */
+
 .edit_ftr_btn {
     text-align: right;
     border-top: 1px solid #e8e8e8;
     padding-top: 10px;
     margin-bottom: 0px !important;
-    margin-top: 24px; 
+    margin-top: 24px;
 }
+
 .edit_ftr_btn button {
     margin-bottom: 0;
     margin-left: 8px;
 }
+
 .edit_form .ant-modal-body {
     padding: 16px 16px 10px;
 }
-.search_heading {
+
+.search_heading input {
     height: 26px;
     font-size: 12px;
     font-weight: 300;
     padding: 5px;
+    padding-right: 18px !important;
 }
+
+.search_heading i {
+    font-size: 11px;
+    color: #b2b2b2;
+}
+
+.search_heading {
+    margin-bottom: 0;
+}
+
+.search_heading .ant-input-suffix {
+    right: 6px;
+}
+
 .dev_table th {
     padding: 8px 8px !important;
 }

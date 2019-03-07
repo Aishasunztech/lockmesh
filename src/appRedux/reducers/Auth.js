@@ -33,7 +33,8 @@ const INIT_STATE = {
     lastName: localStorage.getItem("lastName"),
     name: localStorage.getItem("name"),
     token: localStorage.getItem("token"),
-    type: localStorage.getItem("type")
+    type: localStorage.getItem("type"),
+    dealer_pin: localStorage.getItem("dealer_pin")
   },
 };
 
@@ -97,8 +98,7 @@ export default (state = INIT_STATE, action) => {
     }
 
     case UPDATE_PROFILE: {
-      if(action.response.status)
-      {
+      if (action.response.status) {
         message.success(action.response.msg);
         state.authUser.firstName = action.response.data.first_Name;
         state.authUser.lastName = action.response.data.Last_Name;
@@ -109,17 +109,17 @@ export default (state = INIT_STATE, action) => {
         // console.log('user state',state.authUser);
 
       }
-      else{
+      else {
         message.error(action.response.msg);
       }
-      return{
+      return {
         ...state,
-       
+
         loader: false,
-       
+
       }
     }
-    break;
+      break;
 
     case INVALID_TOKEN: {
       RestService.authLogOut();

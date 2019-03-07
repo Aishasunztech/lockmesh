@@ -75,7 +75,7 @@ class Account extends Component {
                         </Col>
                         <Col span={6}>
                             <a href={`${BASE_URL}users/getFile/import_sim_ids.xlsx`}>
-                                <button style={{ width: "100%" }} className="btn btn-sm btn-default">Download Sample SIM IDs</button>
+                                <button style={{ width: "100%",marginBottom:"0" }} className="btn btn-sm btn-default">Download Sample SIM IDs</button>
                             </a>
                         </Col>
 

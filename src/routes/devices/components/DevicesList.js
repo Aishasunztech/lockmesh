@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Button, Card} from "antd";
+import { Table, Button, Card } from "antd";
 import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
@@ -29,14 +29,14 @@ export default class DevicesList extends Component {
 
         return list.map((device) => {
 
-             const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
-           // const device_status =  "SUSPEND";
+            const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
+            // const device_status =  "SUSPEND";
             const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
             var status = getStatus(device.status, device.account_status, device.unlink_status, device.device_status);
             var style = { margin: '0', width: '60px' }
             var text = "EDIT";
             // var icon = "edit";
-            
+
             if ((status === 'new-device') || (device.unlink_status === 1)) {
                 console.log('device name', device.name, 'status', device.unlink_status)
                 style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
@@ -127,7 +127,10 @@ export default class DevicesList extends Component {
                         dataSource={this.renderList(this.props.devices)}
                         pagination={{ pageSize: this.state.pagination, size: "midddle" }}
                         rowKey="device_list"
-                        scroll={{ x: 500 }}
+                        scroll={{ 
+                            x: 500, 
+                            // y: 600 
+                        }}
 
                     />
                 </Card>

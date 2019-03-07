@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import Picky from 'react-picky';
 import styles from './addapk.css';
+import { Link } from 'react-router-dom';
 import 'react-picky/dist/picky.css';
 import { bindActionCreators } from "redux";
 import { BASE_URL } from "../../constants/Application";
@@ -39,7 +40,10 @@ class AddApk extends Component {
 
                         <Card style={{ borderRadius: 15, width: '100%', margin: 30, }}>
                             <div >
-                                <h1>Upload APK</h1>
+                                <h1 style={{ float: "left", marginTop: "5px" }}>Upload APK</h1>
+                                <Link to="/apk-list">
+                                    <Button type="primary" style={{ float: "right", marginBottom: "16px" }}>Back</Button>
+                                </Link>
                                 <Divider />
                                 <div style={{ justifyContent: 'center' }} >
                                     <WrappedNormalApkForm addApk={this.props.addApk} />
@@ -145,7 +149,7 @@ class AddApkForm extends Component {
             disabled: disableApk,
             onChange(info) {
                 const status = info.file.status;
-             
+
                 if (status !== 'uploading') {
                     // console.log('uploading');
                     // console.log(info.file, info.fileList);
@@ -153,16 +157,16 @@ class AddApkForm extends Component {
                 if (status === 'done') {
 
                     if (info.file.response !== 'Error while Uploading') {
-                      
+
                         disableApk = true;
-                       
+
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
-                           // console.log('apk name', apk);
+                            // console.log('apk name', apk);
                         }
                         message.success('file added Successfully ');
                     }
-                    else{
+                    else {
                         message.error('Error While Uploading');
                         disableApk = false;
                     }
@@ -243,7 +247,7 @@ class AddApkForm extends Component {
                 </Row>
 
                 <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
-                    <Button className='submitButton' type="primary" htmlType="submit" >Update</Button>
+                    <Button className='submitButton' type="default" htmlType="submit" >Upload</Button>
                 </div>
 
             </Form>

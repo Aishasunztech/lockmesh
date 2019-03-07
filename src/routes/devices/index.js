@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Select } from "antd";
 import Highlighter from 'react-highlight-words';
-import { Input, Button, Icon } from "antd";
+import { Input, Button, Icon, Select } from "antd";
 import {
     getDevicesList,
     suspendDevice,
@@ -18,6 +17,7 @@ import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
 import { getStatus, componentSearch } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
+import { stat } from "fs";
 
 var coppyDevices = [];
 var status = true;
@@ -34,475 +34,631 @@ class Devices extends Component {
                 width: 800,
             },
             {
-                title: (<Input name="device_id" key="device_id" id="device_id" className="search_heading"></Input>),
-                children: 
-                [ 
+                title: (
+                    <Input.Search
+                        name="device_id"
+                        key="device_id"
+                        id="device_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Device ID"
+                    />
+                ),
+                dataIndex: 'device_id',
+                className: '',
+                children: [
                     {
                         title: 'DEVICE ID',
-                        dataIndex: 'device_id',
                         align: "center",
+                        dataIndex: 'device_id',
+                        key: "device_id",
                         className: '',
-                        ...this.getColumnSearchProps('device_id'),
-
+                        // ...this.getColumnSearchProps('device_id'),
                         sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+                    }
+                ],
 
+                sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="name"
+                        key="name"
+                        id="name"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Device Name"
+
+                    />
+                ),
+                className: '',
+                dataIndex: 'name',
+                children: [
+                    {
+                        align: "center",
+                        title: 'DEVICE NAME',
+                        dataIndex: 'name',
+                        key: 'name',
+                        className: '',
+                        // ...this.getColumnSearchProps('name'),
+                        sorter: (a, b) => { return a.name.localeCompare(b.name) },
                         sortDirections: ['ascend', 'descend'],
-
                     }
                 ]
             },
             {
-                title: (<Input name="name" key="name" id="name" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'DEVICE NAME',
-                            dataIndex: 'name',
-                            align: "center",
-                            className: '',
-                            ...this.getColumnSearchProps('name'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.name.length;
-                            // },
-                            sorter: (a, b) => { return a.name.localeCompare(b.name) },
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="account_email" key="account_email" id="account_email" className="search_heading"></Input>),
-                children: 
-                [
+                title: (
+                    <Input.Search
+                        name="email"
+                        key="account_email"
+                        id="account_email"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Account Email"
+                    />
+                ),
+                dataIndex: 'account_email',
+                className: '',
+                children: [
                     {
                         title: 'ACCOUNT EMAIL',
-                        dataIndex: 'account_email',
                         align: "center",
+                        dataIndex: 'account_email',
+                        key: 'account_email',
                         className: '',
-                        ...this.getColumnSearchProps('account_email'),
-                        // sorter: (a, b) => {
-                        //     console.log(a);
-                        //     // console.log(b);
-                        //     return a.account_email.length;
-                        // },
+                        // ...this.getColumnSearchProps('account_email'),
                         sorter: (a, b) => { return a.account_email.localeCompare(b.account_email) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
             },
             {
-                title: (<Input name="pgp_email" key="pgp_email" id="pgp_email" className="search_heading" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'PGP EMAIL',
-                            align: "center",
-                            dataIndex: 'pgp_email',
-                            className: '',
-                            ...this.getColumnSearchProps('pgp_email'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.pgp_email.length;
-                            // },
-                            sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                title: (
+                    <Input.Search
+                        name="pgp_email"
+                        key="pgp_email"
+                        id="pgp_email"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="PGP Email"
+                    />
+                ),
+                dataIndex: 'pgp_email',
+                className: '',
+                children: [
+                    {
+                        title: 'PGP EMAIL',
+                        align: "center",
+                        dataIndex: 'pgp_email',
+                        className: '',
+                        // ...this.getColumnSearchProps('pgp_email'),
+                        sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="chat_id" key="chat_id" id="chat_id" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'CHAT ID',
-                            align: "center",
-                            dataIndex: 'chat_id',
-                            className: '',
-                            ...this.getColumnSearchProps('chat_id'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.chat_id.length;
-                            // },
-                            sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
+                title: (
+                    <Input.Search
+                        name="chat_id"
+                        key="chat_id"
+                        id="chat_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Chat ID"
+                    />
+                ),
+                dataIndex: 'chat_id',
+                className: '',
+                children: [
+                    {
+                        title: 'CHAT ID',
+                        align: "center",
+                        dataIndex: 'chat_id',
+                        key: 'chat_id',
+                        className: '',
+                        // ...this.getColumnSearchProps('chat_id'),
+                        sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="client_id" key="client_id" id="client_id" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'CLIENT ID',
-                            align: "center",
-                            dataIndex: 'client_id',
-                            className: '',
-                            ...this.getColumnSearchProps('client_id'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.client_id.length;
-                            // },
-                            sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                title: (
+                    <Input.Search
+                        name="client_id"
+                        key="client_id"
+                        id="client_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Client ID"
+                    />
+                ),
+                dataIndex: 'client_id',
+                className: '',
+                children: [
+                    {
+                        title: 'CLIENT ID',
+                        align: "center",
+                        dataIndex: 'client_id',
+                        key: 'client_id',
+                        className: '',
+                        // ...this.getColumnSearchProps('client_id'),
+                        sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="dealer_id" key="dealer_id" id="dealer_id" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'DEALER ID',
-                            align: "center",
-                            dataIndex: 'dealer_id',
-                            className: '',
-                            ...this.getColumnSearchProps('dealer_id'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.dealer_id.length;
-                            // },
-                            sorter: (a, b) => { return a.dealer_id.localeCompare(b.dealer_id) },
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                title: (
+                    <Input.Search
+                        name="dealer_id"
+                        key="dealer_id"
+                        id="dealer_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Dealer ID"
+                    />
+                ),
+                dataIndex: 'dealer_id',
+                className: '',
+                children: [
+                    {
+                        title: 'DEALER ID',
+                        align: "center",
+                        dataIndex: 'dealer_id',
+                        className: '',
+                        // ...this.getColumnSearchProps('dealer_id'),
+                        sorter: (a, b) => { return a.dealer_id.localeCompare(b.dealer_id) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="dealer_pin" key="dealer_pin" id="dealer_pin" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'DEALER PIN',
-                            align: "center",
-                            dataIndex: 'dealer_pin',
-                            className: '',
-                            ...this.getColumnSearchProps('dealer_pin'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.dealer_pin.length ? a.dealer_pin.length : 0;
-                            // },
-                            sorter: (a, b) => { return a.dealer_pin.localeCompare(b.dealer_pin) },
+                title: (
+                    <Input.Search
+                        name="link_code"
+                        key="link_code"
+                        id="link_code"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Dealer Pin"
+                    />
+                ),
+                dataIndex: 'dealer_pin',
+                className: '',
+                children: [
+                    {
+                        title: 'DEALER PIN',
+                        align: "center",
+                        dataIndex: 'dealer_pin',
+                        key: 'dealer_pin',
+                        className: '',
+                        // ...this.getColumnSearchProps('dealer_pin'),
+                        sorter: (a, b) => { return a.dealer_pin.localeCompare(b.dealer_pin) },
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="mac_address" key="mac_address" id="mac_address" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'MAC ADDRESS',
-                            align: "center",
-                            dataIndex: 'mac_address',
-                            className: '',
-                            ...this.getColumnSearchProps('mac_address'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.mac_address.length;
-                            // },
-                            sorter: (a, b) => { return a.mac_address.localeCompare(b.mac_address) },
+                title: (
+                    <Input.Search
+                        name="mac_address"
+                        key="mac_address"
+                        id="mac_address"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Mac Address"
+                    />
+                ),
+                dataIndex: 'mac_address',
+                className: '',
+                children: [
+                    {
+                        title: 'MAC ADDRESS',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'mac_address',
+                        key: 'mac_address',
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="sim_id" key="sim_id" id="sim_id" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'SIM ID',
-                            align: "center",
-                            dataIndex: 'sim_id',
-                            className: '',
-                            ...this.getColumnSearchProps('sim_id'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.sim_id.length;
-                            // },
-                            sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="imei_1" key="imei_1" id="imei_1" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'IMEI 1',
-                            align: "center",
-                            dataIndex: 'imei_1',
-                            className: '',
-                            ...this.getColumnSearchProps('imei_1'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.imei_1.length;
-                            // },
-                            sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="sim_1" key="sim_1" id="sim_1" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'SIM 1',
-                            align: "center",
-                            dataIndex: 'sim_1',
-                            className: '',
-                            ...this.getColumnSearchProps('sim_1'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.imei_1.length;
-                            // },
-                            sorter: (a, b) => { return a.sim_1.localeCompare(b.sim_1) },
+                        // ...this.getColumnSearchProps('mac_address'),
+                        sorter: (a, b) => { return a.mac_address.localeCompare(b.mac_address) },
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="imei_2" key="imei_2" id="imei_2" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'IMEI 2',
-                            align: "center",
-                            dataIndex: 'imei_2',
-                            className: '',
-                            ...this.getColumnSearchProps('imei_2'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.imei_2.length;
-                            // },
-                            sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
+                title: (
+                    <Input.Search
+                        name="sim_id"
+                        key="sim_id"
+                        id="sim_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Sim ID"
+                    />
+                ),
+                dataIndex: 'sim_id',
+                className: '',
+                children: [
+                    {
+                        title: 'SIM ID',
+                        align: "center",
+                        dataIndex: 'sim_id',
+                        key: 'sim_id',
+                        className: '',
+                        // ...this.getColumnSearchProps('sim_id'),
+                        sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="imei"
+                        key="imei"
+                        id="imei"
+                        className="search_heading"
+                        placeholder="IMEI 1"
+                        onKeyUp={this.handleSearch}
+                    />
+                ),
+                dataIndex: 'imei_1',
+                className: '',
+                children: [
+                    {
+                        title: 'IMEI 1',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'imei_1',
+                        key: 'imei_1',
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                        // ...this.getColumnSearchProps('imei_1'),
+                        sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="sim_2" key="sim_2" id="sim_2" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'SIM 2',
-                            align: "center",
-                            dataIndex: 'sim_2',
-                            className: '',
-                            ...this.getColumnSearchProps('sim_2'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.sim_2.length;
-                            // },
-                            sorter: (a, b) => { return a.sim_2.localeCompare(b.sim_2) },
+                title: (
+                    <Input.Search
+                        name="simno"
+                        key="simno"
+                        id="simno"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Sim 1"
+                    />
+                ),
+                className: '',
+                dataIndex: 'sim_1',
+                children: [
+                    {
+                        align: "center",
+                        title: 'SIM 1',
+                        className: '',
+                        dataIndex: 'sim_1',
+                        key: 'sim_1',
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="serial_number" key="serial_number" id="serial_number" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'SERIAL NUMBER',
-                            align: "center",
-                            dataIndex: 'serial_number',
-                            className: '',
-                            ...this.getColumnSearchProps('serial_number'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.serial_number.length;
-                            // },
-                            sorter: (a, b) => { return a.serial_number.localeCompare(b.serial_number) },
+                        // ...this.getColumnSearchProps('sim_1'),
+                        sorter: (a, b) => { return a.sim_1.localeCompare(b.sim_1) },
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="status" key="status" id="status" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'STATUS',
-                            align: "center",
-                            dataIndex: 'status',
-                            className: '',
-                            ...this.getColumnSearchProps('status'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.status.length;
-                            // },
-                            sorter: (a, b) => { return a.status.localeCompare(b.status) },
+                title: (
+                    <Input.Search
+                        name="imei2"
+                        key="imei2"
+                        id="imei2"
+                        className="search_heading"
+                        placeholder="IMEI 2"
+                        onKeyUp={this.handleSearch}
+                    />
+                ),
+                dataIndex: 'imei_2',
+                className: '',
+                children: [
+                    {
+                        title: 'IMEI 2',
+                        align: "center",
+                        dataIndex: 'imei_2',
+                        key: 'imei_2',
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="model" key="model" id="model" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'MODEL',
-                            align: "center",
-                            dataIndex: 'model',
-                            className: '',
-                            ...this.getColumnSearchProps('model'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.model.length;
-                            // },
-                            sorter: (a, b) => { return a.model.localeCompare(b.model) },
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="start_date" key="start_date" id="start_date" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'START DATE',
-                            align: "center",
-                            dataIndex: 'start_date',
-                            className: '',
-                            ...this.getColumnSearchProps('start_date'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.start_date.length;
-                            // },
-                            sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+                        className: '',
+                        // ...this.getColumnSearchProps('imei_2'),
+                        sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="expiry_date" key="expiry_date" id="expiry_date" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'EXPIRY DATE',
-                            align: "center",
-                            dataIndex: 'expiry_date',
-                            className: '',
-                            ...this.getColumnSearchProps('expiry_date'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.expiry_date.length;
-                            // },
-                            sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+                title: (
+                    <Input.Search
+                        name="simno2"
+                        key="simno2"
+                        id="simno2"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Sim 2"
+                    />
+                ),
+                dataIndex: 'sim_2',
+                className: '',
+                children: [
+                    {
+                        title: 'SIM 2',
+                        align: "center",
+                        dataIndex: 'sim_2',
+                        key: 'sim_2',
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="dealer_name" key="dealer_name" id="dealer_name" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'DEALER NAME',
-                            align: "center",
-                            dataIndex: 'dealer_name',
-                            className: '',
-                            ...this.getColumnSearchProps('dealer_name'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.dealer_name.length;
-                            // },
-                            sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+                        className: '',
+                        // ...this.getColumnSearchProps('sim_2'),
+                        sorter: (a, b) => { return a.sim_2.localeCompare(b.sim_2) },
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
-                title: (<Input name="online" key="online" id="online" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'ONLINE',
-                            align: "center",
-                            dataIndex: 'online',
-                            className: '',
-                            ...this.getColumnSearchProps('online'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.online.length;
-                            // },
-                            sorter: (a, b) => { return a.online.localeCompare(b.online) },
+                title: (
+                    <Input.Search
+                        name="serial_number"
+                        key="serial_number"
+                        id="serial_number"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Serial Number"
+                    />
+                ),
+                dataIndex: 'serial_number',
+                className: '',
+                children: [
+                    {
+                        title: 'SERIAL NUMBER',
+                        align: "center",
+                        dataIndex: 'serial_number',
+                        key: 'serial_number',
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="s_dealer" key="s_dealer" id="s_dealer" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'S DEALER',
-                            align: "center",
-                            dataIndex: 's_dealer',
-                            className: '',
-                            ...this.getColumnSearchProps('s_dealer'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.s_dealer.length;
-                            // },
-                            sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
-            },
-            {
-                title: (<Input name="s_dealer_name" key="s_dealer_name" id="s_dealer_name" className="search_heading"></Input>),
-                children:
-                    [
-                        {
-                            title: 'S DEALER NAME',
-                            align: "center",
-                            dataIndex: 's_dealer_name',
-                            className: '',
-                            ...this.getColumnSearchProps('s_dealer_name'),
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.s_dealer_name.length;
-                            // },
-                            sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
+                        className: '',
+                        // ...this.getColumnSearchProps('serial_number'),
+                        sorter: (a, b) => { return a.serial_number.localeCompare(b.serial_number) },
 
-                            sortDirections: ['ascend', 'descend'],
-                        }
-                    ]
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="status"
+                        key="status"
+                        id="status"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Status"
+                    />
+                ),
+                dataIndex: 'status',
+                className: '',
+                children: [
+                    {
+                        title: 'STATUS',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'status',
+                        key: 'status',
+
+                        // ...this.getColumnSearchProps('status'),
+                        sorter: (a, b) => { return a.status.localeCompare(b.status) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="model"
+                        key="model"
+                        id="model"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Model"
+                    />
+                ),
+                dataIndex: 'model',
+                className: '',
+                children: [
+                    {
+                        title: 'MODEL',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'model',
+                        key: 'model',
+
+                        // ...this.getColumnSearchProps('model'),
+                        sorter: (a, b) => { return a.model.localeCompare(b.model) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="start_date"
+                        key="start_date"
+                        id="start_date"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Start Date"
+                    />
+                ),
+                dataIndex: 'start_date',
+                className: '',
+                children: [
+                    {
+                        title: 'START DATE',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'start_date',
+                        key: 'start_date',
+
+                        // ...this.getColumnSearchProps('start_date'),
+                        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="expiry_date"
+                        key="expiry_date"
+                        id="expiry_date"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Expiry Date"
+                    />
+                ),
+                dataIndex: 'expiry_date',
+                className: '',
+                children: [
+                    {
+                        title: 'EXPIRY DATE',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'expiry_date',
+                        key: 'expiry_date',
+
+                        // ...this.getColumnSearchProps('expiry_date'),
+                        sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="dealer_name"
+                        key="dealer_name"
+                        id="dealer_name"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Dealer Name"
+                    />
+                ),
+                dataIndex: 'dealer_name',
+                className: '',
+                children: [
+                    {
+                        title: 'DEALER NAME',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'dealer_name',
+                        key: 'dealer_name',
+
+                        // ...this.getColumnSearchProps('dealer_name'),
+                        sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="online"
+                        key="online"
+                        id="online"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="Online"
+                    />
+                ),
+                dataIndex: 'online',
+                className: '',
+                children: [
+                    {
+                        title: 'ONLINE',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'online',
+                        key: 'online',
+
+                        // ...this.getColumnSearchProps('online'),
+                        sorter: (a, b) => { return a.online.localeCompare(b.online) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="s_dealer"
+                        key="s_dealer"
+                        id="s_dealer"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="S Dealer"
+                    />
+                ),
+                dataIndex: 's_dealer',
+                className: '',
+                children: [
+                    {
+                        title: 'S DEALER',
+                        align: "center",
+                        className: '',
+                        dataIndex: 's_dealer',
+                        key: 's_dealer',
+
+                        // ...this.getColumnSearchProps('s_dealer'),
+
+                        sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="s_dealer_name"
+                        key="s_dealer_name"
+                        id="s_dealer_name"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        placeholder="S Dealer Name"
+                    />
+                ),
+                dataIndex: 's_dealer_name',
+                className: '',
+                children: [
+                    {
+                        title: 'S DEALER NAME',
+                        align: "center",
+                        className: '',
+                        dataIndex: 's_dealer_name',
+                        key: 's_dealer_name',
+
+                        // ...this.getColumnSearchProps('s_dealer_name'),
+
+                        sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             }
         ];
         this.state = {
@@ -510,6 +666,7 @@ class Devices extends Component {
             searchText: '',
             devices: [],
         }
+        this.copyDevices = [];
 
         this.handleCheckChange = this.handleCheckChange.bind(this)
         // this.filterDevices = this.filterDevices.bind(this);
@@ -584,8 +741,10 @@ class Devices extends Component {
 
     updateColumn(column, type) {
         if (type === 'hide') {
+            column.children[0].className = 'hide';
             return { ...column, className: 'hide' };
         } else if (type === 'show') {
+            column.children[0].className = '';
             return { ...column, className: '' };
         }
     }
@@ -594,17 +753,35 @@ class Devices extends Component {
     handleCheckChange(values) {
 
         let dumydata = this.state.columns;
+
+
+        console.log("dumyData", dumydata);
         if (values.length) {
             this.state.columns.map((column, index) => {
+                console.log("column", column);
+                console.log("index", index);
+
+
                 if (dumydata[index].className !== 'row') {
                     dumydata[index].className = 'hide';
+                    dumydata[index].children[0].className = 'hide';
+                    // dumydata[]
                 }
+
                 values.map((value) => {
-                    if (column.title === value) {
-                        dumydata[index].className = '';
+                    console.log("valueis", value);
+                    console.log("column", column)
+                    if (column.className !== 'row') {
+                        if (column.children[0].title === value) {
+                            dumydata[index].className = '';
+                            dumydata[index].children[0].className = '';
+                        }
                     }
+
                 });
             });
+            console.log("dumy data again", dumydata);
+
             this.setState({ columns: dumydata });
         } else {
 
@@ -612,6 +789,7 @@ class Devices extends Component {
                 if (column.className === 'row') {
                     return column;
                 } else {
+                    column.children[0].className = 'hide';
                     return ({ ...column, className: 'hide' })
                 }
             });
@@ -626,6 +804,7 @@ class Devices extends Component {
         // this.props.suspendDevice(device_id);
     }
     componentDidUpdate(prevProps) {
+
         console.log('updated');
         if (this.props !== prevProps) {
             this.setState({
@@ -633,6 +812,7 @@ class Devices extends Component {
                 columns: this.state.columns,
 
             })
+            // this.copyDevices = this.props.devices;
         }
     }
     handlePagination = (value) => {
@@ -744,52 +924,52 @@ class Devices extends Component {
 
     getColumnSearchProps = (dataIndex) => ({
 
-        filterDropdown: ({
-            setSelectedKeys, selectedKeys, confirm, clearFilters,
-        }) => (
-                <div style={{ padding: 8 }}>
-                    <Input
-                        ref={node => { this.searchInput = node; }}
-                        placeholder={`Search ${dataIndex}`}
-                        value={selectedKeys[0]}
-                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                        onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-                        style={{ width: 188, marginBottom: 8, display: 'block' }}
-                    />
-                    <Button
-                        type="primary"
-                        onClick={() => this.handleSearch(selectedKeys, confirm)}
-                        icon="search"
-                        size="small"
-                        style={{ width: 90, marginRight: 8 }}
-                    >
-                        Search
-            </Button>
-                    <Button
-                        onClick={() => this.handleReset(clearFilters)}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Reset
-            </Button>
-                </div>
-            ),
-        filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-                setTimeout(() => this.searchInput.select());
-            }
-        },
-        render: (text) => (
+        // filterDropdown: ({
+        //     setSelectedKeys, selectedKeys, confirm, clearFilters,
+        // }) => (
+        //         <div style={{ padding: 8 }}>
+        //             <Input
+        //                 ref={node => { this.searchInput = node; }}
+        //                 placeholder={`Search ${dataIndex}`}
+        //                 value={selectedKeys[0]}
+        //                 onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+        //                 onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+        //                 style={{ width: 188, marginBottom: 8, display: 'block' }}
+        //             />
+        //             <Button
+        //                 type="primary"
+        //                 onClick={() => this.handleSearch(selectedKeys, confirm)}
+        //                 icon="search"
+        //                 size="small"
+        //                 style={{ width: 90, marginRight: 8 }}
+        //             >
+        //                 Search
+        //     </Button>
+        //             <Button
+        //                 onClick={() => this.handleReset(clearFilters)}
+        //                 size="small"
+        //                 style={{ width: 90 }}
+        //             >
+        //                 Reset
+        //     </Button>
+        //         </div>
+        //     ),
+        // filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+        // onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+        // onFilterDropdownVisibleChange: (visible) => {
+        //     if (visible) {
+        //         setTimeout(() => this.searchInput.select());
+        //     }
+        // },
+        // render: (text) => (
 
-            <Highlighter
-                highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                searchWords={[this.state.searchText]}
-                autoEscape
-                textToHighlight={text.toString()}
-            />
-        ),
+        //     <Highlighter
+        //         highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+        //         searchWords={[this.state.searchText]}
+        //         autoEscape
+        //         textToHighlight={text.toString()}
+        //     />
+        // ),
 
 
     })
@@ -799,15 +979,55 @@ class Devices extends Component {
     // }
 
 
-    handleSearch = (selectedKeys, confirm) => {
-        confirm();
-        this.setState({ searchText: selectedKeys[0] });
+    handleSearch = (e) => {
+
+        let demoDevices = [];
+        if (status) {
+            coppyDevices = this.state.devices;
+            status = false;
+        }
+        console.log("devices", coppyDevices);
+
+        if (e.target.value.length) {
+            console.log("keyname", e.target.name);
+            console.log("value", e.target.value);
+            console.log(this.state.devices);
+            coppyDevices.forEach((device) => {
+                console.log("device", device);
+                
+                if(device[e.target.name] !== undefined){
+                    if ((typeof device[e.target.name]) === 'string') {
+                        // console.log("lsdjfls", device[e.target.name])
+                        if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+                            demoDevices.push(device);
+                        }
+                    } else if(device[e.target.name]!=null) {
+                        // console.log("else lsdjfls", device[e.target.name])
+                        if(device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())){
+                            demoDevices.push(device);
+                        }
+                    } else {
+                        // demoDevices.push(device);
+                    }
+                } else {
+                    demoDevices.push(device);
+                }
+            });
+            // console.log("searched value", demoDevices);
+            this.setState({
+                devices: demoDevices
+            })
+        } else {
+            this.setState({
+                devices: coppyDevices
+            })
+        }
     }
 
-    handleReset = (clearFilters) => {
-        clearFilters();
-        this.setState({ searchText: '' });
-    }
+    // handleReset = (clearFilters) => {
+    //     clearFilters();
+    //     this.setState({ searchText: '' });
+    // }
 
 }
 

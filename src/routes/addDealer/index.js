@@ -1,9 +1,8 @@
-
-
 import React, { Component } from 'react';
 import { Row, Card, Button, Divider, Form, Input, Select } from 'antd';
 // import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
+import { Link } from 'react-router-dom';
 import { getDealerList, addDealer } from "../../appRedux/actions/Dealers";
 
 const FormItem = Form.Item;
@@ -76,10 +75,9 @@ class AddDealer extends Component {
 
                         <Card style={{ borderRadius: 15, width: '100%', margin: 30, }}>
                             <div>
-                                <h1>Add {dealer_type}</h1>
-                                <Divider />
-
-            
+                                <h1 style={{float:"left", marginTop:"5px"}}>Add {dealer_type}</h1>
+                                <Link to="/dealer/dealer"><Button type="primary" style={{float:"right", marginBottom:"16px"}}>Back</Button></Link>
+                                <Divider />            
                                 <Form style={{ marginTop: 50 }} >
                                     {
                                         ((dealer_type !== 'dealer') && (dealer_type === 'sdealer') && (localStorage.getItem('type') === 'admin' )) ?
