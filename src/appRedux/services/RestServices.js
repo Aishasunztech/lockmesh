@@ -24,6 +24,7 @@ const RestService = {
         localStorage.removeItem('firstName');
         localStorage.removeItem('lastName');
         localStorage.removeItem('token');
+        localStorage.removeItem('dealer_pin');
         // this.router.navigate(['/login']);
     },
 
@@ -36,12 +37,27 @@ const RestService = {
         localStorage.setItem('lastName', data.user.lastName);
         localStorage.setItem('connected_dealer', data.user.connected_dealer);
         localStorage.setItem('type', data.user.user_type);
+        localStorage.setItem('dealer_pin', data.user.link_code);
+    },
+    setUserData: (data) =>{
+        // console.log("hello12312", data);
+        localStorage.setItem('email', data.user.email);
+        localStorage.setItem('id', data.user.id);
+        // // localStorage.setItem('token', data.token);
+        localStorage.setItem('name', data.user.dealer_name);
+        localStorage.setItem('firstName', data.user.firstName);
+        localStorage.setItem('lastName', data.user.lastName);
+        localStorage.setItem('connected_dealer', data.user.connected_dealer);
+        localStorage.setItem('type', data.user.user_type);
+        localStorage.setItem('dealer_pin', data.user.link_code);
+
     },
     // checkAuth
     checkAuth: (response) => {
-        if (response.success === false) {
+        if (response.success === false ) {
             return false;
         } else {
+    
             return true;
         }
     },
@@ -51,7 +67,9 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check_component' , {ComponentUri:ComponentUri}, RestService.getHeader());
        
     },
-
+    getUser: () => {
+        return axios.get(BASE_URL + 'users/get_user', RestService.getHeader());
+    },
     // isAdmin
     isAdmin: () => {
         // var self = this;
@@ -60,7 +78,9 @@ const RestService = {
         // this.response= this.http.get(this.baseUrl + '/users/check_admin',this.oHeaders);
         // return this.response;
     },
-
+    transferDeviceProfile: (device_id) => {
+        return axios.post(BASE_URL + 'users/transfer/device_profile', {device_id: device_id}, RestService.getHeader());
+    },
     // getuserType
     getUserType: () => {
 
@@ -83,8 +103,22 @@ const RestService = {
         )
 
     },
+
+     // getNewDevices
+     NewDeviceList: () => {
+        return axios.get(BASE_URL + 'users/new/devices',
+            RestService.getHeader()
+        )
+
+    },
     getSimIDs: () =>{
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
+    },
+    getChatIDs: () => {
+        return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
+    },
+    getPGPEmails: () =>{
+        return axios.get(BASE_URL+ 'users/get_pgp_emails', RestService.getHeader());
     },
     DealerList: (dealer) => {
         return axios.get(BASE_URL + 'users/dealers/' + dealer,
@@ -307,20 +341,10 @@ const RestService = {
         )
     },
 
-    deleteDevice: (device_id) => {
-        // console.log(this.baseUrl);
-        // this.setHeaders(this.sessionLogin('token'));
-        // this.response = this.http.delete(this.baseUrl + '/users/delete/' + device_id, this.oHeaders).subscribe(response => {
-        // //   console.log(response);
-        //    this.authtoken(this.response);
-        //    Swal({
-        //     text: this.response.msg,
-        //     type: 'warning'
-        //    }).then(okay => {
-        //     location.reload(true);
-        //   });
-        //   return this.response;
-        // });
+    rejectDevice: (device_id) => {
+        
+        return axios.delete(BASE_URL + 'users/delete/' + device_id, RestService.getHeader());
+        
     },
 
     // Undo For Dealer and Sub dealer
@@ -336,33 +360,27 @@ const RestService = {
         // this.authtoken(this.response);
         // return this.response;
     },
-
+    addDevice: (device) => {
+        return axios.put(BASE_URL + 'users/new/device', device, RestService.getHeader());
+       
+    },
+    preActiveDevice: (device) =>{
+        return axios.post(BASE_URL + 'users/create/device_profile', device, RestService.getHeader());
+    },
     // addDealer
     addDealer: (dealer) => {
         return axios.post(BASE_URL + 'users/add/dealer', dealer, RestService.getHeader() )
 
-        // console.log(dealer);
-        // console.log(this.baseUrl);
-        // this.setHeaders(this.sessionLogin('token'));
-        // // dealer.dealerId = this.sessionLogin('id');
-        // this.response = this.http.post(this.baseUrl + '/users/add/dealer', dealer, this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
     },
 
-    addDevice: (devices) => {
-        // console.log(devices);
-        // console.log(this.baseUrl);
-        // this.setHeaders(this.sessionLogin('token'));
-        // this.response = this.http.post(this.baseUrl + '/users/new/devices', devices,  this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
-    },
     addAPK: (formData) => {
         return axios.post(BASE_URL + 'users/upload', formData, RestService.getHeader());
     },
-    importCSV: (formData) =>{
-        return axios.post(BASE_URL + 'users/import/sim_ids', formData, RestService.getHeader());
+    importCSV: (formData, fieldName) =>{
+        return axios.post(BASE_URL + 'users/import/' + fieldName, formData, RestService.getHeader());
+    },
+    exportCSV: (fieldName)=>{
+        return axios.get(BASE_URL + 'users/export/' + fieldName, RestService.getHeader());
     },
     // Dealer and sdealers items apis
     getSelectedItems(pageName) {
@@ -443,10 +461,12 @@ const RestService = {
         // }
     },
 
-    invalidPage() {
+    invalidPage: () =>{
 
     },
-
+    getFile: (filename) => {
+        window.location = BASE_URL + 'users/getFile/' + filename;
+    },
     errorHandler(error) {
         // return error;
     }

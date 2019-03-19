@@ -24,7 +24,7 @@ export const INVALID_TOKEN = 'INVALID_TOKEN';
 export const COMPONENT_ALLOWED = 'COMPONENT_ALLOWED';
 export const INVALID_RESPONSE = 'INVALID_RESPONSE';
 export const ACCESS_DENIED = 'ACCESS_DENIED';
-
+export const GET_USER = 'GET_USER';
 
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
@@ -34,6 +34,10 @@ export const CONNECT_DEVICE = "CONNECT_DEVICE";
 export const EDIT_DEVICE = 'EDIT_DEVICE';
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
 export const ADD_DEVICE = 'ADD_DEVICE';
+export const REJECT_DEVICE = 'REJECT_DEVICE';
+export const NEW_DEVICES_LIST = 'NEW_DEVICES_LIST';
+export const PRE_ACTIVATE_DEVICE = 'PRE_ACTIVATE_DEVICE';
+
 
 //Dealer const
 export const DEALERS_LIST = 'DEALERS_LIST';
@@ -96,4 +100,7 @@ export const UNLINK_DEVICE = 'UNLINK_DEVICE';
 export const LOADING = 'LOADING';
 export const IMPORT_CSV = 'IMPORT_CSV';
 export const GET_SIM_IDS = 'GET_SIM_IDS';
+export const GET_CHAT_IDS = 'GET_CHAT_IDS';
+export const GET_PGP_EMAILS = 'GET_PGP_EMAILS';
+
 

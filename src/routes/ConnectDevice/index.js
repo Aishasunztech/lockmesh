@@ -42,11 +42,11 @@ class ConnectDevice extends Component {
         this.state = {
             device_id: '',
             pageName: "main_menu",
-            apply: true,
-            undo: true,
-            redo: true,
-            clear: false,
-            syncStatus: false
+            // apply: true,
+            // undo: true,
+            // redo: true,
+            // clear: false,
+            // syncStatus: false
         }
         // console.log("hello every body", this.props);
         this.mainMenu = [
@@ -99,9 +99,9 @@ class ConnectDevice extends Component {
             this.props.getDeviceApps(device_id);
             this.props.getProfiles();
             this.props.getDeviceHistories(device_id);
-            this.setState({
-                syncStatus: this.props.device_details.is_sync
-            })
+            // this.setState({
+            //     syncStatus: this.props.device_details.is_sync
+            // })
         }
         // this.props.endLoading();
         setTimeout(() => {
@@ -109,11 +109,12 @@ class ConnectDevice extends Component {
         }, 2000);
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props !== nextProps) {
-
-            this.setState({
-                pageName: nextProps.pageName
-            });
+        if (this.props.pathName !== nextProps.pathName) {
+            // alert("hello");
+            // alert("hello");
+            // this.setState({
+            //     pageName: nextProps.pageName
+            // });
 
             // nextProps.showMessage(false);
 
@@ -139,7 +140,7 @@ class ConnectDevice extends Component {
     }
 
     renderScreen = () => {
-        if (this.state.pageName === "main_menu" && (this.props.device_details.is_sync === 1 || this.props.device_details.is_sync === true)) {
+        if (this.props.pageName === "main_menu" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (
                 <List
                     className="dev_main_menu"
@@ -155,7 +156,7 @@ class ConnectDevice extends Component {
                     }}
                 />
             );
-        } else if (this.state.pageName === "apps" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === "apps" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (
                 <AppList
                     app_list={this.props.app_list}
@@ -163,18 +164,20 @@ class ConnectDevice extends Component {
                     undoApps={this.props.undoApps}
                 />
             );
-        } else if (this.state.pageName === "guest_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === "guest_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.state.pageName} />);
-        } else if (this.state.pageName === "encrypted_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === "encrypted_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.state.pageName} />);
-        } else if (this.state.pageName === "duress_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === "duress_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.state.pageName} />);
-        } else if (this.state.pageName === "admin_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === "admin_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.state.pageName} />);
-        } else if (this.state.pageName === "settings" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === "settings" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.state.pageName} />);
-        } else {
-            return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>);
+        } else if(this.props.pageName === "not_available"){
+            return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
+        }else {
+            return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
         }
     }
 
@@ -242,10 +245,10 @@ class ConnectDevice extends Component {
 
                             </div>
                             <DeviceActions
-                                apply={this.state.apply}
-                                undo={this.state.undo}
-                                redo={this.state.redo}
-                                clear={this.state.clear}
+                                // apply={this.state.apply}
+                                // undo={this.state.undo}
+                                // redo={this.state.redo}
+                                // clear={this.state.clear}
                                 app_list={this.props.app_list}
                                 undoApplications={this.props.undoApplications}
                                 redoApplications={this.props.redoApplications}
@@ -265,7 +268,8 @@ class ConnectDevice extends Component {
                             editDevice = {this.props.editDevice}
                             unlinkDevice = {this.props.unlinkDevice}
                             history={this.props.history}
-                            getDevicesList={this.props.getDevicesList}    
+                            getDevicesList={this.props.getDevicesList} 
+                            refreshDevice={this.refreshDevice}   
 
                         />
 
@@ -305,32 +309,9 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
     // console.log("connect device state");
-    // console.log({ 
-    //     device_details: device_details.device,
-    //     app_list: device_details.app_list,
-    //     undoApps: device_details.undoApps,
-    //     profiles: device_details.profiles,
-    //     histories: device_details.device_histories,
-    //     isLoading: device_details.isLoading,
-    //     showMessage: device_details.showMessage,
-    //     messageType: device_details.messageType,
-    //     messageText: device_details.messageText,
-    //     pageName: device_details.pageName,
-    //     isSync: device_details.device.is_sync,
-    //     guestPwd: device_details.guestPwd,
-    //     guestCPwd: device_details.guestCPwd,
-    //     encryptedPwd: device_details.encryptedPwd,
-    //     encryptedCPwd: device_details.encryptedCPwd,
-    //     duressPwd: device_details.duressPwd,
-    //     duressCPwd: device_details.duressCPwd,
-    //     adminPwd: device_details.adminPwd,
-    //     adminCPwd: device_details.adminCPwd,
-
-    //  });
-
-    // console.log("device_details", device_details.device);
     return {
         routing: routing,
+        pathName: routing.location.pathname,
         device_details: device_details.device,
         app_list: device_details.app_list,
         undoApps: device_details.undoApps,
@@ -350,6 +331,7 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
         duressCPwd: device_details.duressCPwd,
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
+        status: device_details.status
     };
 }
 

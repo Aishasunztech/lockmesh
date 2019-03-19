@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Input, Modal, Select, } from "antd";
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown } from '../../appRedux/actions/Common';
+// import {getDevicesList} from '../../appRedux/actions/Devices';
 import AppFilter from '../../components/AppFilter';
 import EditDealer from './components/editDealer';
 import CircularProgress from "components/CircularProgress/index";
@@ -43,6 +44,7 @@ class Dealers extends Component {
                     key="dealer_id"
                     id="dealer_id"
                     className="search_heading"
+                    autoComplete="new-password"
                     placeholder="Device ID"
                     onKeyUp={this.handleSearch}
 
@@ -76,6 +78,7 @@ class Dealers extends Component {
                     key="dealer_name"
                     id="dealer_name"
                     className="search_heading"
+                    autoComplete="new-password"
                     placeholder="Dealer Name"
                     onKeyUp={this.handleSearch}
 
@@ -108,6 +111,7 @@ class Dealers extends Component {
                     key="dealer_email"
                     id="dealer_email"
                     className="search_heading"
+                    autoComplete="new-password"
                     placeholder="Dealer Email"
                     onKeyUp={this.handleSearch}
 
@@ -140,6 +144,7 @@ class Dealers extends Component {
                     key="link_code"
                     id="link_code"
                     className="search_heading"
+                    autoComplete="new-password"
                     placeholder="Dealer Pin"
                     onKeyUp={this.handleSearch}
 
@@ -172,6 +177,7 @@ class Dealers extends Component {
                     key="connected_devices"
                     id="connected_devices"
                     className="search_heading"
+                    autoComplete="new-password"
                     placeholder="Connected Devices"
                     onKeyUp={this.handleSearch}
 
@@ -204,6 +210,7 @@ class Dealers extends Component {
                     key="dealer_token"
                     id="dealer_token"
                     className="search_heading"
+                    autoComplete="new-password"
                     placeholder="Tokens"
                     onKeyUp={this.handleSearch}
 
@@ -296,11 +303,11 @@ class Dealers extends Component {
     handleCheckChange = (values) => {
 
         let dumydata = this.state.columns;
-        // console.log('values', values)
+        //  console.log('values', values)
         if (values.length) {
             this.state.columns.map((column, index) => {
-                console.log("column", column);
-                console.log("index", index);
+                // console.log("column", column);
+                // console.log("index", index);
 
 
                 if (dumydata[index].className !== 'row') {
@@ -310,8 +317,8 @@ class Dealers extends Component {
                 }
 
                 values.map((value) => {
-                    console.log("valueis", value);
-                    console.log("column", column)
+                    // console.log("valueis", value);
+                    // console.log("column", column)
                     if (column.className !== 'row') {
                         if (column.children[0].title === value) {
                             dumydata[index].className = '';
@@ -321,7 +328,7 @@ class Dealers extends Component {
 
                 });
             });
-            console.log("dumy data again", dumydata);
+            // console.log("dumy data again", dumydata);
 
             this.setState({ columns: dumydata });
         } else {
@@ -360,19 +367,28 @@ class Dealers extends Component {
             </Select>
         );
     }
+    
 
 
     componentWillMount() {
         //  alert('will mount ');
+       
+    }
+
+
+    componentDidMount(){
         const dealer_type = window.location.pathname.split("/").pop();
         // console.log('device type', dealer_type);
         this.props.getDealerList(dealer_type);
-        this.setState({
-            //  devices: this.props.devices,
-            dealer_type: dealer_type
-        })
-        //    console.log('did mount',this.props.getDropdown(dealer_type));
+       // this.props.getDevicesList();
         this.props.getDropdown(dealer_type);
+        
+        // this.setState({
+        //     //  devices: this.props.devices,
+        //     dealer_type: dealer_type
+        // })
+        //    console.log('did mount',this.props.getDropdown(dealer_type));
+      
     }
 
     testfunc = () => {
@@ -383,17 +399,24 @@ class Dealers extends Component {
     componentWillReceiveProps(nextProps) {
         // alert("componentWillReceiveProps");
         const dealer_type = nextProps.match.params.dealer_type;
-        //  console.log('device type recieved', dealer_type);
+        //   console.log('device type recieved', dealer_type);
+        
         if (this.state.dealer_type !== dealer_type) {
             this.props.getDealerList(dealer_type);
+           // this.props.getDevicesList();
             this.setState({
-                dealer_type: dealer_type
+                dealer_type: dealer_type,
+                dealers:this.props.dealers,
             })
             this.props.getDropdown(dealer_type);
+            this.handleCheckChange(this.props.selectedOptions)
+          
         }
     }
 
     handleComponentSearch = (value) => {
+
+        console.log('searched keyword', value);
 
         try {
             if (value.length) {
@@ -402,7 +425,7 @@ class Dealers extends Component {
                     status = false;
                 }
                 let founddealers = componentSearch(coppydealers, value);
-                // console.log("sghuirguheg", founddealers);
+                 console.log("found dealers", founddealers);
                 if (founddealers.length) {
                     this.setState({
                         dealers: founddealers,
@@ -424,55 +447,32 @@ class Dealers extends Component {
     }
 
 
-    // renderList() {
-    //     data = [];
-    //     this.state.dealers.map((dealer) => {
-    //         const dealer_status = (dealer.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
-    //         const button_type = (dealer_status === "ACTIVATE") ? "dashed" : "danger";
-    //         const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
-    //         data.push({
-    //             'row_key': dealer.dealer_id,
-    //             'accounts': <span>
-    //                 <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', width: '60px' }}
-    //                     onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
-    //                     {(dealer.account_status === '') ? <div>{dealer_status}</div> : <div> {dealer_status}</div>}
-    //                 </Button>
-    //                 <Button type="primary" style={{ margin: '0 8px 0 0' }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>EDIT</Button>
-    //                 <Button type={undo_button_type} size='small' style={{ margin: '0', width: '60px' }}
-    //                     onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
-    //                     {(dealer.unlink_status === 0) ? <div> DELETE</div> : <div> UNDO</div>}
-
-    //                 </Button>
-    //             </span>,
-    //             'actions': <Button type="primary" style={{ margin: '0' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >RESET PASS</Button>,
-    //             'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-    //             'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-    //             'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-    //             'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-    //             'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-    //             'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-    //             'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-    //             'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
-
-    //         })
-    //     });
-
-
-
-    //     return (data);
-    // }
-
-
     componentDidUpdate(prevProps) {
-        console.log('updated');
+        // console.log('updated', this.props.selectedOptions);
         
         if (this.props !== prevProps) {
             // alert("componentDidUpdate");
+          
             this.setState({
-                dealers: this.props.dealers
+                dealers: this.props.dealers,
+                columns: this.state.columns,
             })
+            
+             if(this.props.selectedOptions !== prevProps.selectedOptions)
+             {
+                this.handleCheckChange(this.props.selectedOptions)
+             }
+            // const dealer_type = window.location.pathname.split("/").pop();
+            //  if(this.state.dealer_type !== dealer_type)
+            //  {
+            //      this.props.getDropdown(dealer_type);
+            //  }
         }
+        
     }
+
+
+
 
     handlePagination = (value) => {
         this.refs.dealerList.handlePagination(value);
@@ -482,11 +482,12 @@ class Dealers extends Component {
     render() {
 
         // console.log('columns r',this.state.columns.length);
-        //  alert('render');
-
-        if ((this.state.dealer_type !== 'dealer') && (this.state.columns.length <= 8) && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null)) {
+        // alert('render');
+        //  console.log('render check', this.state.dealer_type, 'columns', this.state.options.length, 'option', this.state.columns)
+       // alert('render');
+        if ((window.location.pathname.split("/").pop() !== 'dealer') && (this.state.options.length <= 6) && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null)) {
             //  alert('if sdealer')
-
+            // console.log('sdealer came')
             this.state.columns.push(
                 {
                     title: (
@@ -495,6 +496,7 @@ class Dealers extends Component {
                             key="parent_dealer"
                             id="parent_dealer"
                             className="search_heading"
+                            autoComplete="new-password"
                             placeholder="Parent Dealer"
                         />
                     ),
@@ -523,6 +525,7 @@ class Dealers extends Component {
                             key="parent_dealer_id"
                             id="parent_dealer_id"
                             className="search_heading"
+                            autoComplete="new-password"
                             placeholder="Parent Dealer ID"
                         />
                     ),
@@ -534,11 +537,6 @@ class Dealers extends Component {
                             dataIndex: 'parent_dealer_id',
                             key: 'parent_dealer_id',
                             className: '',
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.parent_dealer_id.length;
-                            // },
                             sorter: (a, b) => { return a.parent_dealer_id.localeCompare(b.parent_dealer_id) },
 
                         }
@@ -549,7 +547,7 @@ class Dealers extends Component {
             this.state.options.push('PARENT DEALER', 'PARENT DEALER ID');
 
         }
-        else if ((this.state.dealer_type === 'dealer') && (this.state.columns.length > 8)) {
+        else if ((window.location.pathname.split("/").pop() === 'dealer') && (this.state.columns.length > 8)) {
 
             this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER ID');
             this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER');
@@ -588,14 +586,14 @@ class Dealers extends Component {
                             />
                             <DealerList
                                 columns={this.state.columns}
-                                dealersList={this.props.dealers}
+                                dealersList={this.state.dealers}
                                 suspendDealer={this.props.suspendDealer}
                                 activateDealer={this.props.activateDealer}
                                 deleteDealer={this.props.deleteDealer}
                                 undoDealer={this.props.undoDealer}
                                 editDealer={this.props.editDealer}
                                 getDealerList={this.props.getDealerList}
-
+                                updatePassword= {this.props.updatePassword}
                                 ref='dealerList'
 
                             />
@@ -657,7 +655,7 @@ class Dealers extends Component {
             })
         } else {
             this.setState({
-                dealer: coppydealers
+                dealers: coppydealers
             })
         }
     }
@@ -677,7 +675,7 @@ var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
     // console.log(state.dealers.isloading);
     // console.log('state.dealer', state.dealers);
-    //  console.log("selected options Dealer", state.dealers.selectedOptions);
+    //  console.log("selected options Dealer", state);
     return {
         isloading: state.dealers.isloading,
         dealers: state.dealers.dealers,

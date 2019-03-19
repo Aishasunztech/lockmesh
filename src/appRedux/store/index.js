@@ -1,4 +1,8 @@
-import {applyMiddleware, compose, createStore} from "redux";
+import {
+  applyMiddleware, 
+  compose, 
+  createStore
+} from "redux";
 import reducers from "../reducers/index";
 import {routerMiddleware} from "react-router-redux";
 import createHistory from "history/createBrowserHistory";
@@ -19,9 +23,10 @@ const middlewares = [ routeMiddleware, ReduxThunk];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default function configureStore(initialState) {
+  // console.log("initial state store", initialState);
   const store = createStore(reducers, initialState,
     composeEnhancers(applyMiddleware(...middlewares)));
-
+  // console.log("my store", store);
   // sagaMiddleware.run(rootSaga);
 
   if (module.hot) {

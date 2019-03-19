@@ -19,20 +19,22 @@
 .edit_ftr_btn {
     text-align: right;
     border-top: 1px solid #e8e8e8;
-    padding-top: 10px;
+    padding-top: 13px;
     margin-bottom: 0px !important;
     margin-top: 24px;
 }
 
 .edit_ftr_btn button {
     margin-bottom: 0;
-    margin-left: 8px;
+    margin-left: 1px;
 }
 
 .edit_form .ant-modal-body {
-    padding: 16px 16px 10px;
+    padding: 16px 16px 16px;
 }
-
+.prof_f_b .ant-modal-body {
+    padding: 16px 16px;
+}
 .search_heading input {
     height: 26px;
     font-size: 12px;
@@ -49,11 +51,28 @@
 .search_heading {
     margin-bottom: 0;
 }
-
 .search_heading .ant-input-suffix {
     right: 6px;
 }
-
+.ant-table-row-expand-icon {
+    width: 20px;
+    height: 20px;
+    line-height: 16px;
+    font-size: 20px;
+}
 .dev_table th {
     padding: 8px 8px !important;
+}
+.expand_table .bold {
+    font-weight: 500 !important
+}
+.ant-modal {
+    top: 24px;
+}
+.gx-sidebar-content .fa-mobile {
+    font-size: 30px;
+    vertical-align: text-bottom;
+    margin-left: 4px;
+    margin-right: 8px;
+    line-height: 25px;
 }

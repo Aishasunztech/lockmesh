@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, message } from 'antd';
 import EditForm from './editForm';
 let editDevice;
-export default class editDealer extends Component {
+export default class EditDealer extends Component {
 
     constructor(props) {
         super(props);
@@ -71,7 +71,8 @@ export default class editDealer extends Component {
                         device={this.state.device} 
                         hideModal={this.handleCancel} 
                         editDeviceFunc={this.state.func}
-                        handleCancel={this.handleCancel} />
+                        handleCancel={this.handleCancel} 
+                    />
 
                 </Modal>
             </div>

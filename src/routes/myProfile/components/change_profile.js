@@ -47,6 +47,8 @@ export default class ChangeProfile extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={false}
+                    cancelText="Cancel"
+                    className="prof_f_b"
                 >
 
                 <EditFormCreate 
@@ -128,7 +130,7 @@ class EditForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                 <Button key="back" type="button" onClick={this.props.handleCancel}>Return</Button>
+                 <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button>
                     <Button type="primary" htmlType="submit">Submit</Button>
                 </Form.Item>
 

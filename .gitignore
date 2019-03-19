@@ -8,3 +8,4 @@ npm-debug.log
 build/
 src/constants/Application.js
 .editoryconfig
+.vscode

@@ -140,7 +140,7 @@ export default class ListApk extends Component {
 
 function showConfirm(id, action, btn_title) {
     confirm({
-        title: 'Do you want to ' + btn_title + ' this ' + window.location.pathname.split("/").pop() + ' ?',
+        title: 'Do you want to ' + btn_title + ' of this ' + window.location.pathname.split("/").pop() + ' ?',
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);

@@ -207,6 +207,7 @@
   "button.yes": "Yes",
   "button.no": "No",
   "extraPages.404Msg": "Oops, an error has occurred. Page not found!",
+  "extraPages.403Msg": "Access Denied!",
   "extraPages.500Msg": "Sorry, server goes wrong",
   "extraPages.goHome": "Go to Home",
   "extension.sweetAlerts": "Sweet Alerts",

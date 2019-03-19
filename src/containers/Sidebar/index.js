@@ -30,7 +30,7 @@ export class Sidebar extends Component {
 
   render() {
     const {themeType, navCollapsed, width, navStyle} = this.props;
-
+    
     let drawerStyle = "gx-collapsed-sidebar";
 
     if (navStyle === NAV_STYLE_FIXED) {
@@ -63,17 +63,18 @@ export class Sidebar extends Component {
               closable={false}
               onClose={this.onToggleCollapsedNav.bind(this)}
               visible={navCollapsed}>
-              <SidebarContent/>
+              <SidebarContent authUser={this.props.authUser} />
             </Drawer> :
-            <SidebarContent/>
+            <SidebarContent authUser={this.props.authUser} />
         }
       </Sider>
     );
   }
 }
 
-const mapStateToProps = ({settings}) => {
+const mapStateToProps = ({settings, auth}) => {
   const {themeType, navStyle, navCollapsed, width, locale} = settings;
-  return {themeType, navStyle, navCollapsed, width, locale}
+  const {authUser} = auth;
+  return {themeType, navStyle, navCollapsed, width, locale, authUser}
 };
 export default connect(mapStateToProps, {toggleCollapsedSideNav, updateWindowWidth})(Sidebar);

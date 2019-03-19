@@ -96,7 +96,7 @@ export default class ChangePassword extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={[
-                        <Button key="back" onClick={this.handleCancel}>Return</Button>,
+                        <Button key="back" onClick={this.handleCancel}>Cancel</Button>,
                         <Button key="submit" type="primary" loading={loading} onClick={this.handleSubmit}>
                             Submit
                         </Button>,
@@ -111,7 +111,7 @@ export default class ChangePassword extends Component {
                             wrapperCol={{ span: 12 }}
                         >
 
-                            <Input type='password' value={this.state.curntpwd} onChange={(event) => this.setState({ curntpwd: event.target.value })} placeholder="Enter Current Password" />
+                            <Input type='password' autoComplete="new-password" value={this.state.curntpwd} onChange={(event) => this.setState({ curntpwd: event.target.value })} placeholder="Enter Current Password" />
 
                         </Form.Item>
 
@@ -123,7 +123,7 @@ export default class ChangePassword extends Component {
                             help={this.state.help}
 
                         >
-                            <Input type='password' placeholder="Enter New Password" value={this.state.newPassword} onChange={(event) => this.setState({ newPassword: event.target.value })} />
+                            <Input type='password' autoComplete="new-password" placeholder="Enter New Password" value={this.state.newPassword} onChange={(event) => this.setState({ newPassword: event.target.value })} />
 
                         </Form.Item>
 
@@ -135,7 +135,7 @@ export default class ChangePassword extends Component {
                             help={this.state.help}
 
                         >
-                            <Input type='password' placeholder="Confirm New Password" value={this.state.confirmPassword} onChange={(event) => this.setState({ confirmPassword: event.target.value })} />
+                            <Input type='password' autoComplete="new-password" placeholder="Confirm New Password" value={this.state.confirmPassword} onChange={(event) => this.setState({ confirmPassword: event.target.value })} />
 
                         </Form.Item>
 

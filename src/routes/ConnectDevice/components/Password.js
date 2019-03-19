@@ -83,7 +83,7 @@ class Password extends Component {
     }
     render() {
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form" autoComplete="off">
+            <Form onSubmit={this.handleSubmit} className="login-form" autoComplete="new-password">
                 <Form.Item {...this.formItemLayout}>
                     {
                         this.props.form.getFieldDecorator('pwd', {

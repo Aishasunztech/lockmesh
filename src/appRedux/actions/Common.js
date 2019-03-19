@@ -1,11 +1,40 @@
 import {
     GET_DROPDOWN,
     POST_DROPDOWN,
-    INVALID_TOKEN
+    INVALID_TOKEN,
+    NEW_DEVICES_LIST
 } from "constants/ActionTypes"
 // import AuthFailed from './Auth';
 
 import RestService from '../services/RestServices';
+
+export function getNewDevicesList() {
+
+    return (dispatch) => {
+    
+        RestService.NewDeviceList().then((response) => {
+             console.log("data form server");
+             console.log(response.data);
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    dispatch({
+                        type: NEW_DEVICES_LIST,
+                        payload: response.data.data,
+                        response: response.data,
+    
+                    });
+                }
+               
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+
+    };
+
+}
 
 export function getDropdown(pageName) {
     

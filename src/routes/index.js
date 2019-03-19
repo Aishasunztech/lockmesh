@@ -25,7 +25,7 @@ const App = ({match}) => {
       <Route exact path={`${match.url}connect-device/:device_id`} component={ConnectDevice}/>
       <Route path={`${match.url}apk-list`} component={Apk}/>
       <Route path={`${match.url}upload-apk`} component={AddApk}/>
-      <Route path={`${match.url}invalid-page`} component={InvalidPage}/>
+      <Route path={`${match.url}invalid_page`} component={InvalidPage}/>
       <Route path="*" component={FourOFour} />
     </Switch>
   </div>)

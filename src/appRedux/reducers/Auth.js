@@ -10,7 +10,8 @@ import {
   INVALID_TOKEN,
   COMPONENT_ALLOWED,
   ACCESS_DENIED,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  GET_USER
 } from "constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
@@ -22,7 +23,7 @@ const INIT_STATE = {
   showMessage: false,
   initURL: '',
 
-  isAllowed: false,
+  isAllowed: true,
 
   authUser: {
     id: localStorage.getItem('id'),
@@ -55,6 +56,22 @@ export default (state = INIT_STATE, action) => {
         ...state,
         loader: false,
         authUser: action.payload
+      }
+    }
+    case GET_USER: {
+      return {
+        ...state,
+        authUser:{
+          id: action.payload.id,
+          connected_dealer: action.payload.connected_dealer,
+          email: action.payload.email,
+          dealerId: action.payload.dealerId,
+          firstName: action.payload.firstName,
+          lastName: action.payload.lastName,
+          name: action.payload.name,
+          type: action.payload.type,
+          dealer_pin: action.payload.dealer_pin
+        }
       }
     }
     case LOGIN_FAILED: {

@@ -1,7 +1,7 @@
 import {
     APK_LIST,
     INVALID_TOKEN,
-     ADD_APK,
+    ADD_APK,
     UNLINK_APK,
     // EDIT_APK,
     LOADING,
@@ -10,19 +10,25 @@ import {
 
 import RestService from '../services/RestServices';
 
-export function importCSV(formData) {
+export function importCSV(formData, fieldName) {
     return (dispatch) => {
         // dispatch({
         //     type: LOADING,
         //     isloading: true
         // });
-        RestService.importCSV(formData).then((response) => {
-            if(RestService.checkAuth(response.data)){
+        RestService.importCSV(formData, fieldName).then((response) => {
+            if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: IMPORT_CSV,
-                    payload: response.data
+                    payload: response.data,
+                    showMsg: true,
                 })
-            }else{
+                dispatch({
+                    type: IMPORT_CSV,
+                    payload: response.data,
+                    showMsg: false,
+                })
+            } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
@@ -52,4 +58,20 @@ export function importCSV(formData) {
         //     });
 
     };
+}
+
+export function exportCSV(fieldName) {
+    return (dispatch) => {
+        RestService.exportCSV(fieldName).then((response)=>{
+            if(RestService.checkAuth(response.data)){
+                if(response.data.status === true){
+                    RestService.getFile(response.data.path);
+                }
+            } else {
+                dispatch({
+                    type : INVALID_TOKEN
+                })
+            }
+        })
+    }
 }

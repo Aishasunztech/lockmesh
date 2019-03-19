@@ -3,9 +3,8 @@ import {
 } from "constants/ActionTypes";
 
 const initialState = {
-    isloading: false,
-    apk_list: [],
-    selectedOptions: [],
+    msg: "",
+    showMsg: false,
 };
 
 export default (state = initialState, action) => {
@@ -14,10 +13,10 @@ export default (state = initialState, action) => {
 
         case IMPORT_CSV:
             return {
-                ...state
+                msg: action.payload.msg,
+                showMsg: action.showMsg,
             }
         default:
             return state;
-
     }
 }

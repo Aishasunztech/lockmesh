@@ -32,7 +32,7 @@ class Profile extends Component {
             {
                 key: 3,
                 name: 'Dealer Pin',
-                value: (this.props.profile.link_code)? this.props.profile.link_code:'N/A',
+                value: (this.props.profile.dealer_pin)? this.props.profile.dealer_pin:'N/A',
             }
         ];
 
@@ -122,7 +122,7 @@ class Profile extends Component {
 
 var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
-    console.log(state.auth.authUser);
+    // console.log(state.auth.authUser);
 
     return {
         isloading: state.isloading,

@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import { Modal, Button, Form, Input, message} from 'antd';
+import { Modal, Button, Form, Input, message } from 'antd';
 let func;
 export default class editDealer extends Component {
-   
+
     constructor(props) {
         super(props);
         this.state = {
             visible: false,
         }
     }
-      
 
-    showModal = (dealer,edit_func) => {
-       func = edit_func
+
+    showModal = (dealer, edit_func) => {
+        func = edit_func
         this.setState({
             visible: true,
             dealer_id: dealer.dealer_id,
@@ -23,32 +23,32 @@ export default class editDealer extends Component {
     }
 
     handleSubmit = (e) => {
-        let formData = {'dealer_id':this.state.dealer_id,'name':this.state.dealer_name,'email':this.state.dealer_email}
+        let formData = { 'dealer_id': this.state.dealer_id, 'name': this.state.dealer_name, 'email': this.state.dealer_email }
         e.preventDefault();
 
         let chcek = /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/;
         if ((this.state.dealer_name === '') || (chcek.test(this.state.dealer_email) == false)) {
             message.error('Invalid data');
         }
-       
-        else{
-    
+
+        else {
+
             func(formData);
             this.handleCancel();
-        }  
+        }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         // console.log("editdealer", this.props);
     }
-    
+
     handleCancel = () => {
         this.setState({ visible: false });
     }
 
     render() {
         const { visible, loading } = this.state;
-       
+
         return (
             <div>
                 <Modal
@@ -57,7 +57,7 @@ export default class editDealer extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={[
-                        <Button key="back" onClick={this.handleCancel}>Return</Button>,
+                        <Button key="back" onClick={this.handleCancel}>Cancel</Button>,
                         <Button key="submit" type="primary" loading={loading} onClick={this.handleSubmit}>
                             Submit
                         </Button>,
@@ -73,9 +73,8 @@ export default class editDealer extends Component {
                             validateStatus={this.state.status}
                             help={this.state.help}
                         >
-                       
-                                <Input type='text' value={this.state.dealer_name} onChange={(event) => this.setState({ dealer_name: event.target.value })} />
-                      
+                            <Input autoComplete="new-password" type='text' value={this.state.dealer_name} onChange={(event) => this.setState({ dealer_name: event.target.value })} />
+
                         </Form.Item>
                         <Form.Item
                             label="Account Email* "
@@ -84,7 +83,7 @@ export default class editDealer extends Component {
                             validateStatus={this.state.status}
                             help={this.state.help}
                         >
-                            <Input type='email' value={this.state.dealer_email} onChange={(event) => this.setState({ dealer_email: event.target.value })} />
+                            <Input type='email' autoComplete="new-password" value={this.state.dealer_email} onChange={(event) => this.setState({ dealer_email: event.target.value })} />
 
                         </Form.Item>
                         <Form.Item

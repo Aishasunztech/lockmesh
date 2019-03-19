@@ -7,7 +7,8 @@ import {
     showHistoryModal, 
     showSaveProfileModal, 
     saveProfile,
-    hanldeProfileInput
+    hanldeProfileInput,
+    transferDeviceProfile
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { Card, Row, Col, Button, message, Icon, Modal, Input } from "antd";
@@ -106,6 +107,9 @@ class SideActions extends Component {
         }
         this.showSaveProfileModal(false)
     }
+    transferDeviceProfile = (device_id) => {
+        this.props.transferDeviceProfile(device_id);
+    }
     render() {
         //  console.log('device', this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
@@ -117,28 +121,28 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12}
                                 className="gutter-row" justify="center" >
-                                <Button type="default" disabled style={{ width: "100%" }} ><Icon type='upload' /> Push</Button>
-                                <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="cloud-download" />Load Policy</Button>
+                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} ><Icon type='upload' /> Push</Button>
+                                <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
 
-                                <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="cloud-download" />Load Profile</Button>
+                                <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
 
-                                <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="cloud-download" />Load History</Button>
-                                <Button type="default" disabled style={{ width: "100%" }} >Disable N/A</Button>
-                                <Button type="default" disabled style={{ width: "100%" }} >N/A</Button>
-                                <Button type="default" disabled style={{ width: "100%" }} >N/A</Button>
-                                <Button type="default" disabled style={{ width: "100%" }} >N/A</Button>
-                                <Button type="default" disabled style={{ width: "100%" }} >N/A</Button>
+                                <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
+                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >Disable N/A</Button>
+                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default" disabled onClick={() => { this.transferDeviceProfile(this.props.device_id)}} style={{ width: "100%", marginBottom: 15,backgroundColor: '#00336C', color: '#fff'}} >Transfer</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button type="default " disabled style={{ width: "100%" }} > <Icon type='download' /> Pull</Button>
-                                {(localStorage.getItem("type")==="admin" || localStorage.getItem("type")==="sdealer")?<Button type="primary "  style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} > <Icon type="save" /> Save Profile</Button>:null}
-                                {(localStorage.getItem("type")==="admin")?<Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" /> Save Policy</Button>:null}
-                                <Button type="default " disabled style={{ width: "100%" }} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%" }} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%" }} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%" }} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%" }} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%" }} >N/A</Button>
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} > <Icon type='download' /> Pull</Button>
+                                {(localStorage.getItem("type")==="admin" || localStorage.getItem("type")==="dealer")?<Button type="primary "  style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} > <Icon type="save" style={{fontSize:"14px" }} /> Save Profile</Button>:null}
+                                {(localStorage.getItem("type")==="admin")?<Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{fontSize:"14px" }} /> Save Policy</Button>:null}
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
 
                             </Col>
 
@@ -149,20 +153,19 @@ class SideActions extends Component {
                             <Col span={12} className="gutter-row" justify="center" >
 
                                 <Button type={button_type}
-                                    onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device)}
-                                    style={{ width: "100%", fontSize: "12px" }} >
+                                    onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
+                                    style={{ width: "100%", marginBottom: 15, fontSize: "12px" }} >
 
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
                                 <Button disabled={this.props.device.unlink_status ? true: this.state.disabled}
                                     onClick={()=>showConfirm(this.props.device.device_id,this.props.unlinkDevice,this)} 
-                                    style={{ width: "100%", backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
-
+                                    style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button  onClick={()=>this.refs.edit_device.showModal(this.props.device,this.props.editDevice)} style={{ width: "100%", backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
-                                <Button disabled type="default"  style={{ width: "100%" }} >Power(N/A)</Button>
+                                <Button  onClick={()=>this.refs.edit_device.showModal(this.props.device,this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
+                                <Button disabled type="default"  style={{ width: "100%", marginBottom: 15}} >Power(N/A)</Button>
                             </Col>
                         </Row>
                     </Card>
@@ -203,7 +206,11 @@ class SideActions extends Component {
                 />
 
                 <SuspendDevice ref="suspend"
-                    suspendDevice={this.props.suspendDevice} />
+                   suspendDevice={this.props.suspendDevice}
+                   go_back={ this.props.history.goBack}
+                   getDevice = {this.props.getDevicesList}
+                    
+                />
 
                 <EditDevice ref='edit_device' />
 
@@ -212,16 +219,15 @@ class SideActions extends Component {
         )
     }
     activateDevice
-    handleSuspendDevice = (device) => {
+    handleSuspendDevice = (device,_this) => {
         this.refs.suspend.handleSuspendDevice(device);
+        
     }
 
     handleActivateDevice = (device) => {
-        this.refs.activate.handleActivateDevice(device);
+        this.refs.activate.handleActivateDevice(device, this.props.refreshDevice);
+
     }
-
-    
-
 }
 
 function mapDispatchToProps(dispatch) {
@@ -229,20 +235,12 @@ function mapDispatchToProps(dispatch) {
         showHistoryModal: showHistoryModal,
         showSaveProfileModal: showSaveProfileModal,
         saveProfile: saveProfile,
-        hanldeProfileInput: hanldeProfileInput
+        hanldeProfileInput: hanldeProfileInput,
+        transferDeviceProfile: transferDeviceProfile
     }, dispatch);
 }
 var mapStateToProps = ( {device_details}) => {
-    // console.log("sideActions");
-    // console.log({
-    //     historyModal: device_details.historyModal,
-    //     saveProfileModal: device_details.saveProfileModal,
-    //     historyType: device_details.historyType,
-    //     saveProfileType: device_details.saveProfileType,
-    //     profileName: device_details.profileName,
-    //     policyName: device_details.policyName,
-    //     app_list: device_details.app_list
-    // });
+   
     return {
         historyModal: device_details.historyModal,
         saveProfileModal: device_details.saveProfileModal,
@@ -259,6 +257,7 @@ var mapStateToProps = ( {device_details}) => {
         duressCPwd: device_details.duressCPwd,
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
+        device_id: device_details.device.device_id
     };
 }
 
@@ -269,7 +268,7 @@ function showConfirm(id, action,_this) {
         title: 'Do you want to Unlink this Device  '+id,
         onOk() {
             _this.setState({disabled:true})
-            console.log('go back func', _this.props);
+            // console.log('go back func', _this.props);
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
                  action(id);

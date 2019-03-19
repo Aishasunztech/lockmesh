@@ -12,7 +12,7 @@ export default class ActivateDevice extends Component {
         this.confirm = Modal.confirm
     }
 
-    handleActivateDevice = (device) => {
+    handleActivateDevice = (device, refresh) => {
 
         this.confirm({
             title: 'Are you sure, you want to activate the device?',
@@ -20,6 +20,11 @@ export default class ActivateDevice extends Component {
             onOk: () => {
                 
                 this.props.activateDevice(device);
+                if(window.location.pathname.split("/").pop() !== 'devices')
+                {
+                    refresh(device.device_id);
+                   // console.log('activate device check', device);
+                } 
             },
             onCancel() { },
         });

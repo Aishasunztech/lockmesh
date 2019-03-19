@@ -6,9 +6,11 @@ import Highlighter from 'react-highlight-words';
 // import {Route, Switch} from "react-router-dom";
 // import Apk from "../../containers/ApkList"
 import CircularProgress from "components/CircularProgress/index";
+//import {getDevicesList} from '../../appRedux/actions/Devices';
 
 import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
 import { getDropdown, postDropdown } from '../../appRedux/actions/Common';
+// import {getDeviceList} from 
 
 import AppFilter from "../../components/AppFilter";
 
@@ -54,7 +56,7 @@ class Apk extends React.Component {
                     //     // alert(self);
                     //     self.sortOrder(direction);
                     // },
-                    sorter: (a, b) => {return a.apk_name.localeCompare(b.apk_name)},
+                    sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
                     // renderColumnSorter:(<h1>hello</h1>),
                     // sorter: true,
                     sortDirections: ['ascend', 'descend'],
@@ -75,28 +77,28 @@ class Apk extends React.Component {
         this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
         this.handleStatusChange = this.handleStatusChange.bind(this);
         this.tableChangeHandler = this.tableChangeHandler.bind(this);
-        
+
 
     }
-    sortOrder = (direction) =>{
-        console.log("hello");
-        let apk_list= this.state.apk_list;
+    sortOrder = (direction) => {
+       // console.log("hello");
+        let apk_list = this.state.apk_list;
         if (direction === "ascend") {
-        //   console.log("before",apk_list);
-            apk_list = apk_list.sort((a,b) => (a.apk_name > b.apk_name) ? 1 : ((b.apk_name > a.apk_name) ? -1 : 0));
-        //   console.log("after",apk_list);
-        //   return (a.apk_name > b.apk_name) ? 1 : ((b.apk_name > a.apk_name) ? -1 : 0);
+            //   console.log("before",apk_list);
+            apk_list = apk_list.sort((a, b) => (a.apk_name > b.apk_name) ? 1 : ((b.apk_name > a.apk_name) ? -1 : 0));
+            //   console.log("after",apk_list);
+            //   return (a.apk_name > b.apk_name) ? 1 : ((b.apk_name > a.apk_name) ? -1 : 0);
         } else if (direction === "descend") {
             // return (a.apk_name > b.apk_name) ? -1 : ((b.apk_name > a.apk_name) ? 1 : 0);
-            
+
             // console.log("before",apk_list);
-            apk_list = apk_list.sort((a,b) => {
-                var nameA=a.apk_name.toLowerCase(), nameB=b.apk_name.toLowerCase()
+            apk_list = apk_list.sort((a, b) => {
+                var nameA = a.apk_name.toLowerCase(), nameB = b.apk_name.toLowerCase()
                 if (nameA < nameB) //sort string ascending
-                    return 1 
+                    return 1
                 if (nameA > nameB)
                     return -1
-                return 0 
+                return 0
             });
 
             // if(a.apk_name < b.apk_name){
@@ -112,7 +114,7 @@ class Apk extends React.Component {
         }
         // return apk_list;
         this.state.apk_list = apk_list;
-        console.log("state update", this.state.apk_list);
+       // console.log("state update", this.state.apk_list);
 
     }
     // delete
@@ -140,17 +142,17 @@ class Apk extends React.Component {
     componentWillReceiveProps(nextProps) {
         //  console.log('will recive props');
 
-        if (this.props.apk_list !== nextProps.apk_list){
+        if (this.props.apk_list !== nextProps.apk_list) {
             this.setState({
                 apk_list: nextProps.apk_list,
             })
-        }      
+        }
     }
 
     handleCheckChange = (values) => {
         let dumydata = this.state.columns;
 
-        console.log('values', values);
+        // console.log('values', values);
         // console.log('values', values)
         if (values.length) {
             this.state.columns.map((column, index) => {
@@ -237,7 +239,8 @@ class Apk extends React.Component {
     componentWillMount() {
         // alert("componentWillMount");
         this.props.getApkList();
-        console.log('apk did mount', this.props.getDropdown('apk'));
+       // this.props.getDevicesList();
+      //  console.log('apk did mount', this.props.getDropdown('apk'));
         this.props.getDropdown('apk');
     }
     componentDidMount() {
@@ -279,7 +282,7 @@ class Apk extends React.Component {
                                 searchPlaceholder="Search APK"
                                 defaultPagingValue="10"
                                 addButtonText="Upload APK"
-                                isAddButton={true}
+                                isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue="10"
                                 options={this.props.options}
                                 toLink="/upload-apk"
@@ -290,16 +293,16 @@ class Apk extends React.Component {
                             />
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <div className="col-sm-8"></div>
-                                    <div className="col-sm-2">
+                                    <div className="col-sm-5"></div>
+                                    <div className="col-sm-2" style={{ padding: "0" }}>
+                                        <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.42.apk">
+                                            <button style={{ width: "100%", marginBottom:"16px" }} className="btn btn-sm btn-default">Download Screenlocker</button>
+                                        </a>
+                                    </div>
+                                    <div className="col-sm-5">
                                         {/* <a  href="http://api.lockmesh.com/users/getFile/apk-MDM-v2.23.apk">
                                             <button style={{width:"100%"}} className="btn btn-sm btn-default">Download MDM</button>
                                         </a> */}
-                                    </div>
-                                    <div className="col-sm-2" style={{ padding: "0" }}>
-                                        <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.36.apk">
-                                            <button style={{ width: "100%" }} className="btn btn-sm btn-default">Download Screenlocker</button>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -390,17 +393,18 @@ class Apk extends React.Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list }) => {
+const mapStateToProps = ({ apk_list, auth }) => {
     // console.log("mapStateToProps apk");
     // console.log(apk_list);
-    // console.log("apk_list", apk_list);
+    // console.log("apk_list", auth);
     // console.log("apk_list", apk_list.selectedOptions);
-    console.log("selected options apk", apk_list.selectedOptions);
+    // console.log("selected options apk", apk_list.selectedOptions);
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
         options: apk_list.options,
-        selectedOptions: apk_list.selectedOptions
+        selectedOptions: apk_list.selectedOptions,
+        user: auth.authUser
     };
 }
 
@@ -411,7 +415,8 @@ function mapDispatchToProps(dispatch) {
         deleteApk: deleteApk,
         editApk: editApk,
         getDropdown: getDropdown,
-        postDropdown: postDropdown
+        postDropdown: postDropdown,
+      //  getDevicesList: getDevicesList
     }, dispatch);
 }
 

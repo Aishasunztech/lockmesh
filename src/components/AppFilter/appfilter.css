@@ -18,7 +18,7 @@
      padding: 16px 16px !important;
  }
 
- .ant-btn.ant-btn-primary {
+ .ant-btn,.ant-btn-primary {
      margin-bottom: 0;
  }
 

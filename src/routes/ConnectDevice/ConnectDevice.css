@@ -183,7 +183,7 @@ margin-right: 3px;
     font-weight: 400;
 }
 .ant-btn > .anticon + span, .ant-btn > span + .anticon {
-    margin-left: 4px;
+    margin-left: 8px;
     font-size: 12px;
 }
 .mb-0 {
@@ -197,9 +197,29 @@ margin-right: 3px;
 .side_bar_main.gx-mb-4 {
     margin-bottom: 0px !important; 
 }
-.notification_icn {
-    font-size: 22px;
-    margin-left: 50px;
+.side_bar_main .head-example {
+    position: fixed;
+    left: 190px;
+    top: 70px;
+    font-size: 26px;
+}
+.side_bar_main .ant-badge-count {
+    position: absolute;
+    left: 10px;
+    top: -20px;
+}
+.side_bar_main .ant-badge-count {
+    height: 15px;
+    border-radius:50%;
+    min-width: 15px;
+    line-height: 15px;
+    padding: 0;
+    font-size: 10px;
+    -webkit-transform: translate(30%, -30%);
+    transform: translate(30%, -30%);
+}
+.side_bar_main .ant-badge-count {
+    background: #038fdd;
 }
 .submitButton {
     text-align: center;

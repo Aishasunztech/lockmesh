@@ -6,7 +6,7 @@ import {
   SHOW_MESSAGE,
   LOGIN_USER_SUCCESS,
   LOGIN_FAILED,
-  // LOGOUT_USER,
+  GET_USER,
   LOGOUT_USER_SUCCESS,
   COMPONENT_ALLOWED,
   INVALID_TOKEN,
@@ -17,12 +17,13 @@ import {
 
 import RestService from '../services/RestServices';
 
+
 export const loginUser = (user) => {
-  
+
   return (dispatch) => {
-    
-    RestService.login(user).then((resp)=>{
-      if(resp.data.status===false){
+
+    RestService.login(user).then((resp) => {
+      if (resp.data.status === false) {
         dispatch({
           type: LOGIN_FAILED,
           payload: {
@@ -30,7 +31,7 @@ export const loginUser = (user) => {
             status: resp.data.status
           }
         });
-      }else{
+      } else {
         let payload = {
           id: resp.data.user.id,
           connected_dealer: resp.data.user.connected_dealer,
@@ -40,64 +41,106 @@ export const loginUser = (user) => {
           lastName: resp.data.user.lastName,
           name: resp.data.user.dealer_name,
           token: resp.data.token,
-          type: resp.data.user.user_type
+          type: resp.data.user.user_type,
+          dealer_pin: resp.data.user.link_code
         }
         RestService.authLogIn(resp.data)
         dispatch({
           type: LOGIN_USER_SUCCESS,
           payload: payload
         });
-      }  
+      }
     });
   }
 };
 
-export const checkComponent = (componentUri) =>{
+export const checkComponent = (componentUri) => {
   return (dispatch) => {
     // alert("hello");
-    RestService.checkComponent(componentUri).then((resp)=>{
-      if(RestService.checkAuth(resp)){
-        if(resp.data.status===true){
+    RestService.checkComponent(componentUri).then((resp) => {
+      if (RestService.checkAuth(resp.data)) {
+        if (resp.data.status === true) {
           dispatch({
             type: COMPONENT_ALLOWED,
             payload: resp.data.ComponentAllowed
           });
-          
-        }else{
+
+        } else {
           dispatch({
             type: INVALID_RESPONSE
           });
         }
-      }else{
+      } else {
         dispatch({
           type: INVALID_TOKEN
         });
-      }  
+      }
     });
   }
 };
+export const getUser = () => {
+  return (dispatch) => {
+    RestService.getUser().then((resp) => {
+      if (RestService.checkAuth(resp.data)) {
+        if (resp.data.status === false) {
+          dispatch({
+            type: LOGIN_FAILED,
+            payload: {
+              msg: resp.data.msg,
+              status: resp.data.status
+            }
+          });
+        } else {
+        
+          let payload = {
+            id: resp.data.user.id,
+            connected_dealer: resp.data.user.connected_dealer,
+            email: resp.data.user.email,
+            dealerId: resp.data.user.id,
+            firstName: resp.data.user.firstName,
+            lastName: resp.data.user.lastName,
+            name: resp.data.user.dealer_name,
+            // token: resp.data.token,
+            type: resp.data.user.user_type,
+            dealer_pin: resp.data.user.link_code
+          }
+          RestService.setUserData(resp.data);
+          // console.log(payload);
 
-export const updateUserProfile = (fromData) =>{
+          dispatch({
+            type: GET_USER,
+            payload: payload
+          })
+        }
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        })
+      }
+    });
+  }
+}
+export const updateUserProfile = (fromData) => {
   return (dispatch) => {
     // alert("hello");
-    RestService.updateUserProfile(fromData).then((resp)=>{
-      if(RestService.checkAuth(resp)){
-        if(resp.data.status===true){
+    RestService.updateUserProfile(fromData).then((resp) => {
+      if (RestService.checkAuth(resp.data)) {
+        if (resp.data.status === true) {
           dispatch({
             type: UPDATE_PROFILE,
             response: resp.data
           });
-          
-        }else{
+
+        } else {
           dispatch({
             type: INVALID_RESPONSE
           });
         }
-      }else{
+      } else {
         dispatch({
           type: INVALID_TOKEN
         });
-      }  
+      }
     });
   }
 };

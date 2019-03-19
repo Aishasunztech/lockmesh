@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Layout, Menu, message, Select } from 'antd';
+import { Layout, Menu, message, Select } from 'antd';
 import { connect } from "react-redux";
 import CustomScrollbars from "util/CustomScrollbars";
 
@@ -92,9 +92,8 @@ class HorizontalDefault extends Component {
 
               </div>
               <Link to="/" className="gx-d-block gx-d-lg-none gx-pointer gx-w-logo">
-                <img alt="" src={require("assets/images/w-logo.png")} /></Link>
-              <Link to="/" className="gx-d-none gx-d-lg-block gx-pointer gx-mr-xs-5 gx-logo">
-                <img alt="" src={require("assets/images/logo-white.png")} /></Link>
+                {null}</Link>
+              <Link to="/" className="gx-d-none gx-d-lg-block gx-pointer gx-mr-xs-5 gx-logo">{null}</Link>
               <div className="gx-header-search gx-d-none gx-d-lg-flex">
                 <SearchBox styleName="gx-lt-icon-search-bar-lg"
                   placeholder="Search in app..."

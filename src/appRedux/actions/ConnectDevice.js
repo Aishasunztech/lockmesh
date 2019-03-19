@@ -154,7 +154,7 @@ export function suspendDevice2(device) {
 export function unlinkDevice(deviceId) {
     return (dispatch) => {
         RestService.unlinkDevice(deviceId).then((response) => {
-            console.log('response to unlink device', response);
+            // console.log('response to unlink device', response);
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
@@ -448,4 +448,19 @@ export function saveProfile(app_list, passwords = null, profileType, profileName
 
     }
 
+}
+
+export const transferDeviceProfile =(device_id) =>{
+    // alert(device_id);
+    return (dispatch) => {
+        RestService.transferDeviceProfile(device_id).then((response) => {
+            if (RestService.checkAuth(response.data)){
+            
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
 }

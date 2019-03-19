@@ -74,7 +74,7 @@ class Customizer extends Component {
   handleColorChange = (varname, color) => {
     const {vars} = this.state;
     if (varname) vars[varname] = color;
-    console.log("vars: ", vars)
+    // console.log("vars: ", vars)
     window.less
       .modifyVars(vars)
       .then(() => {
@@ -187,9 +187,9 @@ class Customizer extends Component {
 
       {this.getNavStyles(navStyle)}
 
-      <h6 className="gx-mb-3 gx-text-uppercase">Layout</h6>
+      {/* <h6 className="gx-mb-3 gx-text-uppercase">Layout</h6>
 
-      {this.getLayoutsTypes(layoutType)}
+      {this.getLayoutsTypes(layoutType)} */}
     </CustomScrollbars>
   };
   handleThemeColor = (primaryColor, secondaryColor, navDarkTextColor, navDarkBg) => {
@@ -331,13 +331,13 @@ class Customizer extends Component {
         <img src={require('assets/images/layouts/vertical no header.png')} alt='vertical no header'/>
         </span>
       </li>
-      <li>
+      {/* <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_DEFAULT_HORIZONTAL)}
               className={`gx-pointer ${navStyle === NAV_STYLE_DEFAULT_HORIZONTAL && 'active'}`}>
         <img src={require('assets/images/layouts/default horizontal.png')} alt='default horizontal'/>
         </span>
-      </li>
-      <li>
+      </li> */}
+      {/* <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_DARK_HORIZONTAL)}
               className={`gx-pointer ${navStyle === NAV_STYLE_DARK_HORIZONTAL && 'active'}`}>
         <img src={require('assets/images/layouts/dark horizontal.png')} alt='dark horizontal'/>
@@ -361,7 +361,7 @@ class Customizer extends Component {
               className={`gx-pointer ${navStyle === NAV_STYLE_ABOVE_HEADER && 'active'}`}>
         <img src={require('assets/images/layouts/top to header.png')} alt='top to header'/>
         </span>
-      </li>
+      </li> */}
     </ul>
   };
 

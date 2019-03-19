@@ -1,8 +1,8 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
-import {Link} from "react-router-dom";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-import {onNavStyleChange, toggleCollapsedSideNav} from "appRedux/actions/Setting";
+import { onNavStyleChange, toggleCollapsedSideNav } from "appRedux/actions/Setting";
 import {
   NAV_STYLE_DRAWER,
   NAV_STYLE_FIXED,
@@ -18,9 +18,9 @@ class SidebarLogo extends Component {
   render() {
     // console.log("this.props");
     // console.log(this.props);
-    
-    const {width, themeType, navCollapsed} = this.props;
-    let {navStyle} = this.props;
+
+    const { width, themeType, navCollapsed } = this.props;
+    let { navStyle } = this.props;
     if (width < TAB_SIZE && navStyle === NAV_STYLE_FIXED) {
       navStyle = NAV_STYLE_DRAWER;
     }
@@ -47,10 +47,10 @@ class SidebarLogo extends Component {
 
         <Link to="/" className="gx-site-logo">
           {navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR && width >= TAB_SIZE ?
-            <img alt="" src={require("assets/images/w-logo.png")}/> :
+            <p className="mb-0" style={{ fontSize: 18 }}>LockMesh</p> :
             themeType === THEME_TYPE_LITE ?
-              <img alt="" src={require("assets/images/logo-white.png")}/> :
-              <p className="mb-0" style={{fontSize:18}}>LockMesh</p>}
+              <p className="mb-0" style={{ fontSize: 18 }}>LockMesh</p>  :
+              <p className="mb-0" style={{ fontSize: 18 }}>LockMesh</p>}
 
         </Link>
 
@@ -59,9 +59,9 @@ class SidebarLogo extends Component {
   }
 }
 
-const mapStateToProps = ({settings}) => {
-  const {navStyle, themeType, width, navCollapsed} = settings;
-  return {navStyle, themeType, width, navCollapsed}
+const mapStateToProps = ({ settings }) => {
+  const { navStyle, themeType, width, navCollapsed } = settings;
+  return { navStyle, themeType, width, navCollapsed }
 };
 
 export default connect(mapStateToProps, {

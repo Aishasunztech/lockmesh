@@ -4,9 +4,9 @@ import { bindActionCreators } from "redux";
 
 import { Button, Form, Input, Select } from 'antd';
 
-import { getSimIDs } from "../../../appRedux/actions/Devices";
+import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 
-class editDealer extends Component {
+class EditDevice extends Component {
 
     constructor(props) {
         super(props);
@@ -30,6 +30,8 @@ class editDealer extends Component {
     }
     componentDidMount() {
         this.props.getSimIDs();
+        this.props.getChatIDs();
+        this.props.getPGPEmails();
     }
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
@@ -74,7 +76,7 @@ class editDealer extends Component {
 
         return (
 
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                 <p>(*)- Required Fields</p>
 
                 <Form.Item
@@ -95,7 +97,7 @@ class editDealer extends Component {
                         initialValue: this.props.device.dealer_id,
                     })(
 
-                        <Input type='hidden' disabled />
+                        <Input type='hidden' disabled/>
                     )}
                 </Form.Item>
                 <Form.Item
@@ -110,10 +112,11 @@ class editDealer extends Component {
                             required: true, message: 'Device Name is Required !',
                         }],
                     })(
-                        <Input />
+                        <Input autoComplete="new-password"/>
                     )}
                 </Form.Item>
                 <Form.Item
+                    
                     label="Account Email "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
@@ -126,7 +129,38 @@ class editDealer extends Component {
                             required: true, message: 'Account Email is Required !',
                         }],
                     })(
-                        <Input />
+                        <Input autoComplete="new-password" />
+                    )}
+                </Form.Item>
+                
+                <Form.Item
+                    label="PGP Email "
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 14 }}
+                >
+                    {this.props.form.getFieldDecorator('pgp_email', {
+                        initialValue: this.props.device.pgp_email,
+                        rules: [{
+                            type: 'email', message: 'The input is not valid E-mail!',
+                        }, {
+                            required: true, message: 'PGP Email is Required !',
+                        }],
+                    })(
+                        <Select
+                            showSearch
+                            placeholder="Select PGP Emails"
+                            optionFilterProp="children"
+                            // onChange={handleChange}
+                            // onFocus={handleFocus}
+                            // onBlur={handleBlur}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                            <Select.Option value="">Select PGP Email</Select.Option>
+                            {this.props.pgp_emails.map((pgp_email) =>{
+                                return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
+                            })}
+                        </Select>
+                        // <Input disabled />
                     )}
                 </Form.Item>
                 <Form.Item
@@ -142,23 +176,6 @@ class editDealer extends Component {
                     )}
                 </Form.Item>
                 <Form.Item
-                    label="PGP Email "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('pgp_email', {
-                        initialValue: this.props.device.pgp_email,
-                        rules: [{
-                            type: 'email', message: 'The input is not valid E-mail!',
-                        }, {
-                            required: true, message: 'PGP Email is Required !',
-                        }],
-                    })(
-
-                        <Input />
-                    )}
-                </Form.Item>
-                <Form.Item
                     label="Chat ID"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
@@ -166,7 +183,21 @@ class editDealer extends Component {
                     {this.props.form.getFieldDecorator('chat_id', {
                         initialValue: this.props.device.chat_id,
                     })(
-                        <Input />
+                        // <Input />
+                        <Select
+                            showSearch
+                            placeholder="Select Chat ID"
+                            optionFilterProp="children"
+                            // onChange={handleChange}
+                            // onFocus={handleFocus}
+                            // onBlur={handleBlur}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                            <Select.Option value="">Select Chat ID</Select.Option>
+                            {this.props.chat_ids.map((chat_id,index) =>{
+                                return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
+                            })}
+                        </Select>
                     )}
                 </Form.Item>
 
@@ -180,8 +211,7 @@ class editDealer extends Component {
                     })(
                         <Select
                             showSearch
-                            style={{ width: 200 }}
-                            placeholder="Select a person"
+                            placeholder="Select Sim ID"
                             optionFilterProp="children"
                             // onChange={handleChange}
                             // onFocus={handleFocus}
@@ -212,7 +242,7 @@ class editDealer extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                  {this.props.form.getFieldDecorator('start_date', {
-                        initialValue: this.props.device.start_date ? this.props.device.start_date : this.get_current_date(),
+                        initialValue: this.props.device.start_date
                     })(
 
                     <Input disabled />
@@ -293,7 +323,7 @@ class editDealer extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <Button key="back" type="button" onClick={this.props.handleCancel}>Return</Button>
+                    <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button>
                     <Button type="primary" htmlType="submit">Submit</Button>
                 </Form.Item>
 
@@ -304,14 +334,16 @@ class editDealer extends Component {
     }
 }
 
-const WrappedEditDeviceForm = Form.create({ name: 'register' })(editDealer);
+const WrappedEditDeviceForm = Form.create({ name: 'register' })(EditDevice);
 // export default WrappedRegistrationForm;
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         // getDeviceDetails: getDeviceDetails,
         // importCSV: importCSV
-        getSimIDs: getSimIDs
+        getSimIDs: getSimIDs,
+        getChatIDs: getChatIDs, 
+        getPGPEmails: getPGPEmails
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices }) => {
@@ -319,7 +351,9 @@ var mapStateToProps = ({ routing, devices }) => {
 
     return {
         routing: routing,
-        sim_ids: devices.sim_ids
+        sim_ids: devices.sim_ids,
+        chat_ids: devices.chat_ids,
+        pgp_emails: devices.pgp_emails
     };
 }
 

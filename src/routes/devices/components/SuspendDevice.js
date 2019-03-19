@@ -14,10 +14,14 @@ export default class SuspendDevice extends Component {
         this.confirm({
             title: title,
             content: '',
-            onOk: () => {
-                
+            onOk: (() => {
                 this.props.suspendDevice(device);
-            },
+                if(window.location.pathname.split("/").pop() !== 'devices')
+                {
+                    this.props.go_back();
+                    this.props.getDevice();
+                } 
+            }),
             onCancel() { },
         });
     }

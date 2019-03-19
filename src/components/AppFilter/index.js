@@ -17,27 +17,29 @@ export default class AppFilter extends Component {
 
     componentDidMount() {
         //  console.log("componentDidMount selectedOptions appfilter", this.props.selectedOptions);
-        
+
         this.setState({
             selectedDisplayValues: this.props.selectedOptions
         });
 
         //this.setDropdowns(this.props.selectedOptions);
-       // alert('did mount ', )
-       // this.setDropdowns(this.props.selectedOptions);
+        // alert('did mount ', )
+        // this.setDropdowns(this.props.selectedOptions);
         // console.log("componentDidMount12", this.state.selectedDisplayValues);
         // this.props.handleCheckChange(this.props.selectedOptions);
     }
 
-    componentWillReceiveProps(nextProps){
-        if(this.props.selectedOptions!==nextProps.selectedOptions){
-           //  console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
+    componentWillReceiveProps(nextProps) {
+        // console.log(nextProps.selectedOptions, 'component will recieve props', this.props.selectedOptions);
+
+        if (this.props.selectedOptions !== nextProps.selectedOptions) {
+            //  console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
             // console.log("componentWillReceiveProps", this.state.selectedDisplayValues);
-           // alert('recive props', nextProps.selectedOptions);
+            // alert('recive props', nextProps.selectedOptions);
             // console.log(' recive props set dropdwon', nextProps);
             this.setDropdowns(nextProps.selectedOptions);
-           
-           //  this.props.handleCheckChange();
+
+            //  this.props.handleCheckChange();
         }
     }
 
@@ -48,7 +50,7 @@ export default class AppFilter extends Component {
         });
         // console.log('values:',this.state.selectedDisplayValues);
         this.props.handleCheckChange(values);
-      //  alert('set dropdwon');
+        //  alert('set dropdwon');
         // console.log('set dropdwon');
     }
     handlePagination(value) {
@@ -71,7 +73,7 @@ export default class AppFilter extends Component {
 
         const Search = Input.Search;
 
-      //  console.log('render ...', this.props.selectedOptions);
+        //  console.log('render ...', this.props.selectedOptions);
 
         return (
             // className="gutter-example"
@@ -152,6 +154,7 @@ export default class AppFilter extends Component {
                     <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             <Search
+                                
                                 placeholder={this.props.searchPlaceholder}
                                 onChange={e => this.handleComponentSearch(e.target.value)}
                                 style={{ width: '100%' }}
@@ -166,19 +169,45 @@ export default class AppFilter extends Component {
                                 onChange={value => this.handlePagination(value)}
                             >
                                 <Select.Option selected value="10">10</Select.Option>
-
                                 <Select.Option value="20">20</Select.Option>
                                 <Select.Option value="30">30</Select.Option>
                                 <Select.Option value="50">50</Select.Option>
                                 <Select.Option value="100">100</Select.Option>
-
                             </Select>
                         </div>
                     </Col>
-
                     <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
                         <div className="gutter-box">
-                            {(this.props.isAddButton === true) ? <Button type="primary" style={{ width: '100%' }}><Link to={this.props.toLink}>{this.props.addButtonText}</Link></Button> : null}
+                            {
+                                (this.props.isAddButton === true) ?
+                                    (this.props.toLink!==undefined && this.props.toLink!=='' && this.props.toLink !== null)?
+                                    <Button 
+                                        type="primary" 
+                                        disabled={(this.props.disableAddButton==true)?true:false} 
+                                        style={{ width: '100%' }}
+                                    >
+                                        <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
+                                    </Button>
+                                :
+                                (this.props.AddDeviceModal)?
+                                    <Button 
+                                        type="primary" 
+                                        disabled={(this.props.disableAddButton==true)?true:false} 
+                                        style={{ width: '100%' }}
+                                        onClick = {()=>this.props.handleDeviceModal(true)}
+                                    >
+                                        {this.props.addButtonText}
+                                    </Button>
+                                :
+                                <Button 
+                                        type="primary" 
+                                        disabled={(this.props.disableAddButton==true)?true:false} 
+                                        style={{ width: '100%' }}
+                                    >
+                                    {this.props.addButtonText}
+                                </Button>
+                                : null
+                            }
                         </div>
                     </Col>
 

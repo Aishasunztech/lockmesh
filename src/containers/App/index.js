@@ -1,17 +1,17 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import URLSearchParams from 'url-search-params'
-import {Redirect, Route, Switch} from "react-router-dom";
-import {LocaleProvider} from "antd";
-import {IntlProvider} from "react-intl";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { LocaleProvider } from "antd";
+import { IntlProvider } from "react-intl";
 
 import AppLocale from "lngProvider";
 import MainApp from "./MainApp";
 
 import Login from "../Login";
 // import SignUp from "../SignUp";
-import {setInitUrl} from "appRedux/actions/Auth";
-import {onLayoutTypeChange, onNavStyleChange, setThemeType} from "appRedux/actions/Setting";
+import { setInitUrl } from "appRedux/actions/Auth";
+import { onLayoutTypeChange, onNavStyleChange, setThemeType } from "appRedux/actions/Setting";
 
 import { checkComponent } from "../../appRedux/actions/Auth";
 
@@ -32,7 +32,7 @@ import RestrictedRoute from "./RestrictedRoute";
 //   console.log("component", Component);
 //   console.log("AuthUser", authUser);
 //   console.log("rest", rest);
-  
+
 //   return (<Route {...rest} render={
 //     (props) => {
 //       if(authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null){
@@ -99,24 +99,24 @@ class App extends Component {
 
   render() {
     // console.log("app container index.js");
-    
-    // console.log(this.props);
 
-    const {match, location, layoutType, navStyle, locale, authUser, initURL} = this.props;
+    // console.log("app component sdfa",this.props);
+
+    const { match, location, layoutType, navStyle, locale, authUser, initURL } = this.props;
 
     // console.log(location.pathname);
 
     if (location.pathname === '/') {
       if (authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null) {
-        return ( <Redirect to={'/login'}/> );
+        return (<Redirect to={'/login'} />);
       } else if (initURL === '' || initURL === '/' || initURL === '/login') {
-        return ( <Redirect to={'/devices'}/> );
+        return (<Redirect to={'/devices'} />);
       } else {
-        return ( <Redirect to={initURL}/> );
+        return (<Redirect to={initURL} />);
       }
     }
 
-    
+
     this.setLayoutType(layoutType);
 
     this.setNavStyle(navStyle);
@@ -135,12 +135,18 @@ class App extends Component {
           messages={currentAppLocale.messages}>
 
           <Switch>
-            <Route exact path='/login' component={Login}/>
-{/*             
+            <Route exact path='/login' component={Login} />
+            {/*             
             {
               (this.props.isAllowed)? */}
-              <RestrictedRoute isAllowed={this.props.isAllowed} checkComponent={this.props.checkComponent} path={`${match.url}`} authUser={authUser} component={MainApp}/>
-              {/* :
+            <RestrictedRoute
+              // isAllowed={this.props.isAllowed}
+              // checkComponent={this.props.checkComponent}
+              path={`${match.url}`}
+              // authUser={authUser}
+              component={MainApp}
+            />
+            {/* :
               null
               // <Redirect to={{ pathname: '/invalid_page', state: { from: this.props.location } }} />
             } */}
@@ -151,9 +157,9 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({settings, auth}) => {
-  const {locale, navStyle, layoutType} = settings;
-  const {authUser, initURL, isAllowed} = auth;
-  return {locale, navStyle, layoutType, authUser, initURL, isAllowed}
+const mapStateToProps = ({ settings, auth }) => {
+  const { locale, navStyle, layoutType } = settings;
+  const { authUser, initURL, isAllowed } = auth;
+  return { locale, navStyle, layoutType, authUser, initURL, isAllowed }
 };
-export default connect(mapStateToProps, {setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent})(App);
+export default connect(mapStateToProps, { setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent })(App);

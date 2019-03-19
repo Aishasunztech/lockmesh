@@ -76,7 +76,7 @@ class AddDealer extends Component {
                         <Card style={{ borderRadius: 15, width: '100%', margin: 30, }}>
                             <div>
                                 <h1 style={{float:"left", marginTop:"5px"}}>Add {dealer_type}</h1>
-                                <Link to="/dealer/dealer"><Button type="primary" style={{float:"right", marginBottom:"16px"}}>Back</Button></Link>
+                                <Link to={`/dealer/${window.location.pathname.split("/").pop()}`} ><Button type="primary" style={{float:"right", marginBottom:"16px"}}>Back</Button></Link>
                                 <Divider />            
                                 <Form style={{ marginTop: 50 }} >
                                     {

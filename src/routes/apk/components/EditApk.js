@@ -54,7 +54,7 @@ export default class EditApk extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={[
-                        <Button key="back" onClick={this.handleCancel}>Return</Button>,
+                        <Button key="back" onClick={this.handleCancel}>Cancel</Button>,
                        
                     ]}
                 >
