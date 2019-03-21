@@ -1,7 +1,7 @@
 import {
     APK_LIST,
     INVALID_TOKEN,
-     ADD_APK,
+    ADD_APK,
     UNLINK_APK,
     // EDIT_APK,
     LOADING,
@@ -104,7 +104,7 @@ export function addApk(formData) {
 
                 dispatch({
                     type: ADD_APK,
-                    response:response.data,
+                    response: response.data,
 
                     payload: ''
                 });
@@ -127,7 +127,7 @@ export function editApk(formData) {
 
                 dispatch({
                     type: "EDIT_APK",
-                    response:response.data,
+                    response: response.data,
                     payload: formData
                 });
 

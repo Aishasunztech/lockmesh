@@ -140,8 +140,7 @@ class App extends Component {
             {
               (this.props.isAllowed)? */}
             <RestrictedRoute
-              // isAllowed={this.props.isAllowed}
-              // checkComponent={this.props.checkComponent}
+              authUser={authUser}
               path={`${match.url}`}
               // authUser={authUser}
               component={MainApp}

@@ -12,6 +12,8 @@ import {
     GET_PGP_EMAILS,
     REJECT_DEVICE,
     NEW_DEVICES_LIST,
+    POST_PAGINATION,
+    GET_PAGINATION,
     PRE_ACTIVATE_DEVICE
 } from "../../constants/ActionTypes";
 import { message } from 'antd';
@@ -27,7 +29,7 @@ const initialState = {
     sim_ids: [],
     chat_ids: [],
     pgp_emails: [],
-    options: ["DEVICE ID", "DEVICE NAME", "ACCOUNT EMAIL","ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "STATUS", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "ONLINE", "S-DEALER", "S-DEALER NAME"],
+    options: ["DEVICE ID", "STATUS", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "ONLINE", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
 };
 
@@ -55,8 +57,8 @@ export default (state = initialState, action) => {
                 devices: action.payload,
             }
 
-            case NEW_DEVICES_LIST:
-            console.log('reducer new device', action.payload);
+        case NEW_DEVICES_LIST:
+            // console.log('reducer new device', action.payload);
             return {
                 ...state,
                 isloading: false,
@@ -140,13 +142,13 @@ export default (state = initialState, action) => {
 
             break;
 
-            case PRE_ACTIVATE_DEVICE:
+        case PRE_ACTIVATE_DEVICE:
 
             if (action.response.status) {
-                console.log('pre activated device' ,action.response.data.data[0])
+                console.log('pre activated device', action.response.data.data[0])
                 state.devices.push(action.response.data.data[0])
                 message.success(action.response.data.msg);
-               // message.success('done');
+                // message.success('done');
             }
             else {
                 message.error(action.response.msg)
@@ -181,8 +183,24 @@ export default (state = initialState, action) => {
                 selectedOptions: action.payload
             }
         }
+        case GET_PAGINATION: {
+            // console.log(GET_DROPDOWN);
+            // console.log({
+            //     ...state,
+            //     selectedOptions: action.payload
+            // });
+            return {
+                ...state,
+                DisplayPages: action.payload
+            }
+        }
+
 
         case POST_DROPDOWN: {
+            return state
+        }
+
+        case POST_PAGINATION: {
             return state
         }
         case GET_SIM_IDS: {

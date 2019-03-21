@@ -39,7 +39,7 @@ const RestService = {
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
     },
-    setUserData: (data) =>{
+    setUserData: (data) => {
         // console.log("hello12312", data);
         localStorage.setItem('email', data.user.email);
         localStorage.setItem('id', data.user.id);
@@ -54,18 +54,17 @@ const RestService = {
     },
     // checkAuth
     checkAuth: (response) => {
-        if (response.success === false ) {
+        if (response.success === false) {
             return false;
         } else {
-    
             return true;
         }
     },
 
     // Component Allowed
     checkComponent: (ComponentUri) => {
-        return axios.post(BASE_URL + 'users/check_component' , {ComponentUri:ComponentUri}, RestService.getHeader());
-       
+        return axios.post(BASE_URL + 'users/check_component', { ComponentUri: ComponentUri }, RestService.getHeader());
+
     },
     getUser: () => {
         return axios.get(BASE_URL + 'users/get_user', RestService.getHeader());
@@ -104,21 +103,21 @@ const RestService = {
 
     },
 
-     // getNewDevices
-     NewDeviceList: () => {
+    // getNewDevices
+    NewDeviceList: () => {
         return axios.get(BASE_URL + 'users/new/devices',
             RestService.getHeader()
         )
 
     },
-    getSimIDs: () =>{
+    getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
     },
     getChatIDs: () => {
         return axios.get(BASE_URL + 'users/get_chat_ids', RestService.getHeader());
     },
-    getPGPEmails: () =>{
-        return axios.get(BASE_URL+ 'users/get_pgp_emails', RestService.getHeader());
+    getPGPEmails: () => {
+        return axios.get(BASE_URL + 'users/get_pgp_emails', RestService.getHeader());
     },
     DealerList: (dealer) => {
         return axios.get(BASE_URL + 'users/dealers/' + dealer,
@@ -182,7 +181,7 @@ const RestService = {
 
     // for dealer reset password(admin dashboard)
     updatePassword: (dealer) => {
-        
+
         return axios.post(BASE_URL + 'users/resetpwd', dealer, RestService.getHeader());
 
         // let payload = {
@@ -224,11 +223,11 @@ const RestService = {
     },
 
     updateUserProfile: (formData) => {
-        return axios.put(BASE_URL + 'users/updateProfile/'+formData, formData, RestService.getHeader());
+        return axios.put(BASE_URL + 'users/updateProfile/' + formData, formData, RestService.getHeader());
 
     },
 
-    getDeviceProfiles: (deviceId="") => {
+    getDeviceProfiles: (deviceId = "") => {
         return axios.post(BASE_URL + 'users/get_profiles', {
             device_id: deviceId
         }, RestService.getHeader());
@@ -264,13 +263,13 @@ const RestService = {
 
     // unlink Dealer.
     unlinkDealer: (dealer_id) => {
-        return axios.post(BASE_URL + 'users/dealer/delete', {dealer_id} , RestService.getHeader());
+        return axios.post(BASE_URL + 'users/dealer/delete', { dealer_id }, RestService.getHeader());
     },
 
     // unlink Device
     unlinkDevice: (id) => {
 
-        return axios.post(BASE_URL + 'users/unlink/'+id, {id} , RestService.getHeader());
+        return axios.post(BASE_URL + 'users/unlink/' + id, { id }, RestService.getHeader());
 
         // this.spinnerService.show();
         // this.setHeaders(this.sessionLogin('token'));
@@ -322,15 +321,15 @@ const RestService = {
 
     // suspend dealer account
     suspendDealer: (dealer_id) => {
-        return axios.post(BASE_URL + 'users/dealer/suspend/',{dealer_id},
-        RestService.getHeader()
+        return axios.post(BASE_URL + 'users/dealer/suspend/', { dealer_id },
+            RestService.getHeader()
         )
-       
+
     },
 
     activateDealer: (dealer_id) => {
-        return axios.post(BASE_URL + 'users/dealer/activate/',{dealer_id},
-        RestService.getHeader()
+        return axios.post(BASE_URL + 'users/dealer/activate/', { dealer_id },
+            RestService.getHeader()
         )
     },
 
@@ -342,14 +341,14 @@ const RestService = {
     },
 
     rejectDevice: (device_id) => {
-        
+
         return axios.delete(BASE_URL + 'users/delete/' + device_id, RestService.getHeader());
-        
+
     },
 
     // Undo For Dealer and Sub dealer
     undoDealer(dealer_id) {
-        return axios.post(BASE_URL + 'users/dealer/undo', {dealer_id}, RestService.getHeader() )
+        return axios.post(BASE_URL + 'users/dealer/undo', { dealer_id }, RestService.getHeader())
     },
 
     // Undo For Dealer and Sub dealer
@@ -362,74 +361,75 @@ const RestService = {
     },
     addDevice: (device) => {
         return axios.put(BASE_URL + 'users/new/device', device, RestService.getHeader());
-       
+
     },
-    preActiveDevice: (device) =>{
+    preActiveDevice: (device) => {
         return axios.post(BASE_URL + 'users/create/device_profile', device, RestService.getHeader());
     },
     // addDealer
     addDealer: (dealer) => {
-        return axios.post(BASE_URL + 'users/add/dealer', dealer, RestService.getHeader() )
+        return axios.post(BASE_URL + 'users/add/dealer', dealer, RestService.getHeader())
 
     },
 
     addAPK: (formData) => {
         return axios.post(BASE_URL + 'users/upload', formData, RestService.getHeader());
     },
-    importCSV: (formData, fieldName) =>{
+    importCSV: (formData, fieldName) => {
         return axios.post(BASE_URL + 'users/import/' + fieldName, formData, RestService.getHeader());
     },
-    exportCSV: (fieldName)=>{
+    exportCSV: (fieldName) => {
         return axios.get(BASE_URL + 'users/export/' + fieldName, RestService.getHeader());
     },
     // Dealer and sdealers items apis
     getSelectedItems(pageName) {
         // console.log('page name', pageName);
-        return axios.get(BASE_URL + 'users/dealer/gtdropdown/' + pageName, RestService.getHeader() );
+        return axios.get(BASE_URL + 'users/dealer/gtdropdown/' + pageName, RestService.getHeader());
         // this.authtoken(this.response);
         // return this.response;
     },
 
+
     // postSelectedItem
     postSelectedItems: (selectedItems, pageName) => {
-        
+
         const items = JSON.stringify(selectedItems);
-        return axios.post(BASE_URL + 'users/dealer/dropdown', { selected_items: items, pageName: pageName}, RestService.getHeader() );
-        
+        return axios.post(BASE_URL + 'users/dealer/dropdown', { selected_items: items, pageName: pageName }, RestService.getHeader());
+
     },
 
     // applySettings
-    applySettings: (device_setting, device_id=null, type = "history", name = null, dealer_id = 0) => {
+    applySettings: (device_setting, device_id = null, type = "history", name = null, dealer_id = 0) => {
         // console.log(device_setting);
-        if(device_setting.app_list !== undefined){ 
-          device_setting.app_list.forEach((elem)=>{
-            elem.packageName = elem.uniqueName.replace(elem.label,'');
-            if(elem.guest){
-              elem.guest=true;
-            }else{
-              elem.guest = false;
-            }
-            if(elem.encrypted){
-              elem.encrypted=true;
-            }else{
-              elem.encrypted = false;
-            }
-            if(elem.enable){
-              elem.enable=true;
-            }else{
-              elem.enable = false;
-            }
-            delete elem.device_id;
-            delete elem.isChanged;
-          });
+        if (device_setting.app_list !== undefined) {
+            device_setting.app_list.forEach((elem) => {
+                elem.packageName = elem.uniqueName.replace(elem.label, '');
+                if (elem.guest) {
+                    elem.guest = true;
+                } else {
+                    elem.guest = false;
+                }
+                if (elem.encrypted) {
+                    elem.encrypted = true;
+                } else {
+                    elem.encrypted = false;
+                }
+                if (elem.enable) {
+                    elem.enable = true;
+                } else {
+                    elem.enable = false;
+                }
+                delete elem.device_id;
+                delete elem.isChanged;
+            });
         }
         return axios.post(BASE_URL + 'users/apply_settings/' + device_id, {
             device_setting,
-          type: type,
-          name: name,
-          dealer_id: dealer_id
+            type: type,
+            name: name,
+            dealer_id: dealer_id
         }, RestService.getHeader());
-    
+
     },
 
     deleteProfile: (profileId) => {
@@ -461,16 +461,21 @@ const RestService = {
         // }
     },
 
-    invalidPage: () =>{
+    invalidPage: () => {
 
     },
     getFile: (filename) => {
         window.location = BASE_URL + 'users/getFile/' + filename;
     },
-    errorHandler(error) {
-        // return error;
-    }
-
+    postPagenation: (selectedValue, pageName) => {
+        return axios.post(BASE_URL + 'users/dealer/postPagination', { selectedValue: selectedValue, pageName: pageName }, RestService.getHeader())
+    },
+    getPagination(pageName) {
+        // console.log('page name', pageName);
+        return axios.get(BASE_URL + 'users/dealer/getPagination/' + pageName, RestService.getHeader());
+        // this.authtoken(this.response);
+        // return this.response;
+    },
 
 }
 

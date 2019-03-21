@@ -15,7 +15,7 @@ import {
 } from "../../constants/ThemeSetting";
 import IntlMessages from "../../util/IntlMessages";
 import { connect } from "react-redux";
-import {rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
+import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
 // import MenuItems from "../MenuItems";
 
 const SubMenu = Menu.SubMenu;
@@ -43,15 +43,15 @@ class SidebarContent extends Component {
     return "";
   };
 
-  componentDidMount(){
-    console.log('did mount of content', this.props.devices)
+  componentDidMount() {
+    // console.log('did mount of content', this.props.devices)
     this.props.getDevicesList();
   }
 
 
   render() {
     const { themeType, navStyle, pathname, authUser } = this.props;
-    
+
     const selectedKeys = pathname.substr(1);
     const defaultOpenKeys = selectedKeys.split('/')[1];
     return (
@@ -59,10 +59,10 @@ class SidebarContent extends Component {
         <SidebarLogo />
         <div className="gx-sidebar-content ">
           <div className={`gx-sidebar-notifications ${this.getNoHeaderClass(navStyle)} `}>
-            <UserProfile 
-              devices = {this.props.devices}
-              addDevice = {this.props.addDevice}
-              rejectDevice = {this.props.rejectDevice}
+            <UserProfile
+              devices={this.props.devices}
+              addDevice={this.props.addDevice}
+              rejectDevice={this.props.rejectDevice}
             />
             {/* <AppsNavigation/> */}
           </div>
@@ -106,16 +106,16 @@ class SidebarContent extends Component {
 SidebarContent.propTypes = {};
 const mapStateToProps = ({ settings, devices, device3 }) => {
   const { navStyle, themeType, locale, pathname } = settings;
-  let deviceList =[];
+  let deviceList = [];
   //  console.log("testing testing",devices);
   //  console.log("testing 2testing",settings);
-  devices.devices.map(device =>{
-    if((device.device_status === 0 || device.device_status === '0') && (device.unlink_status === 0 || device.unlink_status === '0')){
+  devices.devices.map(device => {
+    if ((device.device_status === 0 || device.device_status === '0') && (device.unlink_status === 0 || device.unlink_status === '0')) {
       deviceList.push(device);
     }
   });
   // console.log("sidebar", deviceList.length);
-  return { navStyle, themeType, locale, pathname, devices:deviceList }
+  return { navStyle, themeType, locale, pathname, devices: deviceList }
 };
-export default connect(mapStateToProps, {rejectDevice, addDevice, getDevicesList})(SidebarContent);
+export default connect(mapStateToProps, { rejectDevice, addDevice, getDevicesList })(SidebarContent);
 

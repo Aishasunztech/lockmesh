@@ -20,9 +20,9 @@ class Profile extends Component {
             {
                 key: 2,
                 name: 'Dealer Name',
-                value: (this.props.profile.firstName !==  '' && this.props.profile.firstName !== null && this.props.profile.firstName !== "null") ? (this.props.profile.firstName + ' ' + this.props.profile.lastName): this.props.profile.name,
+                value: (this.props.profile.firstName !== '' && this.props.profile.firstName !== null && this.props.profile.firstName !== "null") ? (this.props.profile.firstName + ' ' + this.props.profile.lastName) : this.props.profile.name,
 
-            }, 
+            },
             {
                 key: 3,
                 name: 'Login Email',
@@ -30,9 +30,9 @@ class Profile extends Component {
             },
 
             {
-                key: 3,
+                key: 4,
                 name: 'Dealer Pin',
-                value: (this.props.profile.dealer_pin)? this.props.profile.dealer_pin:'N/A',
+                value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
             }
         ];
 

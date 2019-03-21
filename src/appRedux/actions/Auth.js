@@ -55,9 +55,11 @@ export const loginUser = (user) => {
 };
 
 export const checkComponent = (componentUri) => {
+  console.log("KSDJ")
   return (dispatch) => {
     // alert("hello");
     RestService.checkComponent(componentUri).then((resp) => {
+      
       if (RestService.checkAuth(resp.data)) {
         if (resp.data.status === true) {
           dispatch({
@@ -91,7 +93,7 @@ export const getUser = () => {
             }
           });
         } else {
-        
+
           let payload = {
             id: resp.data.user.id,
             connected_dealer: resp.data.user.connected_dealer,

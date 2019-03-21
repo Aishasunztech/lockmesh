@@ -455,7 +455,22 @@ export const transferDeviceProfile =(device_id) =>{
     return (dispatch) => {
         RestService.transferDeviceProfile(device_id).then((response) => {
             if (RestService.checkAuth(response.data)){
-            
+                dispatch({
+                    type: SHOW_MESSAGE,
+                    payload: {
+                        showMessage: true,
+                        messageType:  response.data.status ? 'success' : 'error',
+                        messageText: response.data.data.msg
+                    }
+                })
+                dispatch({
+                    type: SHOW_MESSAGE,
+                    payload: {
+                        showMessage: false,
+                        messageType:  response.data.status ? 'success' : 'error',
+                        messageText: response.data.data.msg
+                    }
+                })
             } else {
                 dispatch({
                     type: INVALID_TOKEN

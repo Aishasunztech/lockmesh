@@ -7,11 +7,10 @@ import EditApk from './EditApk';
 export default class ListApk extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             searchText: '',
             columns: [],
-            pagination: 10,
+            pagination: this.props.pagination,
 
         };
         this.renderList = this.renderList.bind(this);
@@ -20,9 +19,11 @@ export default class ListApk extends Component {
     handlePagination = (value) => {
 
         var x = Number(value)
+        // console.log(value)
         this.setState({
             pagination: x,
         });
+
     }
 
     componentDidMount() {
@@ -88,7 +89,7 @@ export default class ListApk extends Component {
                     <div>
                         <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
                             onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
-                        <Button type="danger" size="small" style={{ margin: '0px',width:'60px' }} onClick={(e) => {
+                        <Button type="danger" size="small" style={{ margin: '0px', width: '60px' }} onClick={(e) => {
                             this.props.handleConfirmDelete(app.apk_id);
                         }}>DELETE</Button>
                     </div>
@@ -114,7 +115,7 @@ export default class ListApk extends Component {
                     bordered
                     columns={this.state.columns}
                     dataSource={this.renderList(this.props.apk_list)}
-                    pagination={{ pageSize: this.state.pagination }}
+                    pagination={{ pageSize: Number(this.state.pagination) }}
                     onChange={this.props.tableChangeHandler()}
                     scroll={{ x: 500 }}
                     rowKey="apk_id"

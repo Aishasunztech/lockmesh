@@ -89,10 +89,10 @@ class ConnectDevice extends Component {
 
         this.setState({
             pageName: this.props.pageName,
-            device_id: this.props.match.params.device_id
+            device_id: atob(this.props.match.params.device_id)
         });
 
-        const device_id = this.props.match.params.device_id;
+        const device_id = atob(this.props.match.params.device_id);
         if (device_id !== '') {
 
             this.props.getDeviceDetails(device_id);

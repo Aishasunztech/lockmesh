@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 import { Input, Modal, Select, } from "antd";
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
-import { getDropdown, postDropdown } from '../../appRedux/actions/Common';
+import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 // import {getDevicesList} from '../../appRedux/actions/Devices';
 import AppFilter from '../../components/AppFilter';
 import EditDealer from './components/editDealer';
@@ -63,7 +63,7 @@ class Dealers extends Component {
                     //     // console.log(b);
                     //     return a.dealer_id.length;
                     // },
-                    
+
                     sorter: (a, b) => a.dealer_id - b.dealer_id,
                     align: 'center',
                     sortDirections: ['ascend', 'descend'],
@@ -367,28 +367,29 @@ class Dealers extends Component {
             </Select>
         );
     }
-    
+
 
 
     componentWillMount() {
         //  alert('will mount ');
-       
+
     }
 
 
-    componentDidMount(){
+    componentDidMount() {
         const dealer_type = window.location.pathname.split("/").pop();
         // console.log('device type', dealer_type);
         this.props.getDealerList(dealer_type);
-       // this.props.getDevicesList();
+        // this.props.getDevicesList();
         this.props.getDropdown(dealer_type);
-        
+        this.props.getPagination(dealer_type);
+
         // this.setState({
         //     //  devices: this.props.devices,
         //     dealer_type: dealer_type
         // })
         //    console.log('did mount',this.props.getDropdown(dealer_type));
-      
+
     }
 
     testfunc = () => {
@@ -400,17 +401,17 @@ class Dealers extends Component {
         // alert("componentWillReceiveProps");
         const dealer_type = nextProps.match.params.dealer_type;
         //   console.log('device type recieved', dealer_type);
-        
+
         if (this.state.dealer_type !== dealer_type) {
             this.props.getDealerList(dealer_type);
-           // this.props.getDevicesList();
+            // this.props.getDevicesList();
             this.setState({
                 dealer_type: dealer_type,
-                dealers:this.props.dealers,
+                dealers: this.props.dealers,
             })
             this.props.getDropdown(dealer_type);
             this.handleCheckChange(this.props.selectedOptions)
-          
+
         }
     }
 
@@ -425,7 +426,7 @@ class Dealers extends Component {
                     status = false;
                 }
                 let founddealers = componentSearch(coppydealers, value);
-                 console.log("found dealers", founddealers);
+                console.log("found dealers", founddealers);
                 if (founddealers.length) {
                     this.setState({
                         dealers: founddealers,
@@ -449,26 +450,25 @@ class Dealers extends Component {
 
     componentDidUpdate(prevProps) {
         // console.log('updated', this.props.selectedOptions);
-        
+
         if (this.props !== prevProps) {
             // alert("componentDidUpdate");
-          
+
             this.setState({
                 dealers: this.props.dealers,
                 columns: this.state.columns,
             })
-            
-             if(this.props.selectedOptions !== prevProps.selectedOptions)
-             {
+
+            if (this.props.selectedOptions !== prevProps.selectedOptions) {
                 this.handleCheckChange(this.props.selectedOptions)
-             }
+            }
             // const dealer_type = window.location.pathname.split("/").pop();
             //  if(this.state.dealer_type !== dealer_type)
             //  {
             //      this.props.getDropdown(dealer_type);
             //  }
         }
-        
+
     }
 
 
@@ -476,6 +476,7 @@ class Dealers extends Component {
 
     handlePagination = (value) => {
         this.refs.dealerList.handlePagination(value);
+        this.props.postPagination(value, this.state.dealer_type);
     }
 
 
@@ -484,7 +485,7 @@ class Dealers extends Component {
         // console.log('columns r',this.state.columns.length);
         // alert('render');
         //  console.log('render check', this.state.dealer_type, 'columns', this.state.options.length, 'option', this.state.columns)
-       // alert('render');
+        // alert('render');
         if ((window.location.pathname.split("/").pop() !== 'dealer') && (this.state.options.length <= 6) && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null)) {
             //  alert('if sdealer')
             // console.log('sdealer came')
@@ -566,7 +567,7 @@ class Dealers extends Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search Dealer"
-                                defaultPagingValue="10"
+                                defaultPagingValue={this.props.DisplayPages}
                                 addButtonText={"Add " + this.state.dealer_type}
                                 selectedOptions={this.props.selectedOptions}
                                 options={this.state.options}
@@ -592,8 +593,9 @@ class Dealers extends Component {
                                 deleteDealer={this.props.deleteDealer}
                                 undoDealer={this.props.undoDealer}
                                 editDealer={this.props.editDealer}
+                                pagination={this.props.DisplayPages}
                                 getDealerList={this.props.getDealerList}
-                                updatePassword= {this.props.updatePassword}
+                                updatePassword={this.props.updatePassword}
                                 ref='dealerList'
 
                             />
@@ -682,6 +684,7 @@ var mapStateToProps = (state) => {
         options: state.dealers.options,
         suspended: state.dealers.suspended,
         selectedOptions: state.dealers.selectedOptions,
+        DisplayPages: state.dealers.DisplayPages,
         action: state.action
     };
 }
@@ -707,4 +710,4 @@ var mapStateToProps = (state) => {
 // }
 
 
-export default connect(mapStateToProps, { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer, getDropdown, postDropdown })(Dealers)
+export default connect(mapStateToProps, { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer, getDropdown, postDropdown, postPagination, getPagination })(Dealers)

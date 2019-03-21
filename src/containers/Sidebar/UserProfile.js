@@ -15,7 +15,7 @@ class UserProfile extends Component {
     // alert('its working');
   }
   componentDidMount() {
-    console.log('get new device', this.props.getNewDevicesList())
+    // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
     let token = "token=" + localStorage.getItem('token') + "&isWeb=true";
     // console.log("this token", token);
@@ -43,11 +43,7 @@ class UserProfile extends Component {
             className="gx-size-40 gx-pointer gx-mr-3" alt="" />
           <span className="gx-avatar-name">{(localStorage.getItem('name') === '' || localStorage.getItem('name') === null || localStorage.getItem('name') === undefined) ? localStorage.getItem('dealerName') : localStorage.getItem('name')}<i
             className="icon icon-chevron-down gx-fs-xxs gx-ml-2" />
-            <a className="head-example">
-              <Badge count={this.props.devices.length}>
-                <Icon className="notification_icn head-example" type="bell" onClick={() => this.showNotification()} />
-              </Badge>
-            </a>
+
           </span>
         </Popover>
 
@@ -58,6 +54,17 @@ class UserProfile extends Component {
           rejectDevice={this.props.rejectDevice}
 
         />
+        <ul className="gx-app-nav bell_icon">
+          {/* <li><i className="icon icon-search-new" /></li> */}
+          {/* <li><i className="icon icon-chat-new" /></li> */}
+          <li>
+            <a className="head-example">
+              <Badge count={this.props.devices.length}>
+                <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
+              </Badge>
+            </a>
+          </li>
+        </ul>
       </div>
 
     )
@@ -66,7 +73,7 @@ class UserProfile extends Component {
 }
 
 var mapStateToProps = ({ devices }) => {
-  console.log('devices new', devices.newDevices);
+  // console.log('devices new', devices.newDevices);
   return {
     devices: devices.newDevices,
 

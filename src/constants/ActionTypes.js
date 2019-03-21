@@ -104,3 +104,7 @@ export const GET_CHAT_IDS = 'GET_CHAT_IDS';
 export const GET_PGP_EMAILS = 'GET_PGP_EMAILS';
 
 
+export const POST_PAGINATION = 'POST_PAGINATION';
+export const GET_PAGINATION = 'GET_PAGINATION'
+
+

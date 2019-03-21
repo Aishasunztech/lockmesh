@@ -4,22 +4,30 @@ import { Card, Button, Row, Col, Select, Input, Checkbox, Icon } from "antd";
 import styles from "./appfilter.css";
 import Picky from 'react-picky';
 import 'react-picky/dist/picky.css';
-import { Link } from 'react-router-dom';
+import { withRouter, Redirect, Link } from 'react-router-dom';
 
-export default class AppFilter extends Component {
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+    checkComponent,
+    getUser
+} from "../../appRedux/actions/Auth";
+
+
+class AppFilter extends Component {
     constructor(props) {
         super(props);
         // console.log('appfilter constructor', this.props.selectedOptions);
         this.state = {
             selectedDisplayValues: [],
+            DisplayPages: this.props.defaultPagingValue,
         }
     }
 
     componentDidMount() {
         //  console.log("componentDidMount selectedOptions appfilter", this.props.selectedOptions);
-
         this.setState({
-            selectedDisplayValues: this.props.selectedOptions
+            selectedDisplayValues: this.props.selectedOptions,
         });
 
         //this.setDropdowns(this.props.selectedOptions);
@@ -31,7 +39,10 @@ export default class AppFilter extends Component {
 
     componentWillReceiveProps(nextProps) {
         // console.log(nextProps.selectedOptions, 'component will recieve props', this.props.selectedOptions);
-
+        if (this.props.defaultPagingValue !== nextProps.defaultPagingValue) {
+            // console.log("Will Recieve Props", nextProps.defaultPagingValue, this.props.defaultPagingValue);
+            this.setPagination(nextProps.defaultPagingValue)
+        }
         if (this.props.selectedOptions !== nextProps.selectedOptions) {
             //  console.log(nextProps.selectedOptions, "componentWillReceiveProps selectedOptions", this.props.selectedOptions);
             // console.log("componentWillReceiveProps", this.state.selectedDisplayValues);
@@ -53,14 +64,26 @@ export default class AppFilter extends Component {
         //  alert('set dropdwon');
         // console.log('set dropdwon');
     }
+    setPagination(value) {
+        // console.log("Set State", value);
+        this.setState({
+            DisplayPages: value
+        })
+        this.props.handlePagination(value);
+    }
+
     handlePagination(value) {
+        //  alert(value);
+        this.setState({ DisplayPages: value })
         this.props.handlePagination(value);
     }
 
     handleComponentSearch = (value) => {
         this.props.handleComponentSearch(value);
     }
+
     render() {
+        // console.log(" Current State", this.state.DisplayPages)
         let fullScreenClass1 = "";
         let fullScreenClass2 = "";
         if (this.props.isAddButton === false) {
@@ -72,7 +95,6 @@ export default class AppFilter extends Component {
         }
 
         const Search = Input.Search;
-
         //  console.log('render ...', this.props.selectedOptions);
 
         return (
@@ -154,7 +176,7 @@ export default class AppFilter extends Component {
                     <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             <Search
-                                
+
                                 placeholder={this.props.searchPlaceholder}
                                 onChange={e => this.handleComponentSearch(e.target.value)}
                                 style={{ width: '100%' }}
@@ -164,11 +186,13 @@ export default class AppFilter extends Component {
                     <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             <Select
-                                defaultValue={this.props.defaultPagingValue}
+                                value={this.state.DisplayPages}
+                                //  defaultValue={this.state.DisplayPages}
                                 style={{ width: '100%' }}
+                                // onSelect={value => this.setState({DisplayPages:value})}
                                 onChange={value => this.handlePagination(value)}
                             >
-                                <Select.Option selected value="10">10</Select.Option>
+                                <Select.Option value="10" >10</Select.Option>
                                 <Select.Option value="20">20</Select.Option>
                                 <Select.Option value="30">30</Select.Option>
                                 <Select.Option value="50">50</Select.Option>
@@ -180,33 +204,33 @@ export default class AppFilter extends Component {
                         <div className="gutter-box">
                             {
                                 (this.props.isAddButton === true) ?
-                                    (this.props.toLink!==undefined && this.props.toLink!=='' && this.props.toLink !== null)?
-                                    <Button 
-                                        type="primary" 
-                                        disabled={(this.props.disableAddButton==true)?true:false} 
-                                        style={{ width: '100%' }}
-                                    >
-                                        <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
-                                    </Button>
-                                :
-                                (this.props.AddDeviceModal)?
-                                    <Button 
-                                        type="primary" 
-                                        disabled={(this.props.disableAddButton==true)?true:false} 
-                                        style={{ width: '100%' }}
-                                        onClick = {()=>this.props.handleDeviceModal(true)}
-                                    >
-                                        {this.props.addButtonText}
-                                    </Button>
-                                :
-                                <Button 
-                                        type="primary" 
-                                        disabled={(this.props.disableAddButton==true)?true:false} 
-                                        style={{ width: '100%' }}
-                                    >
-                                    {this.props.addButtonText}
-                                </Button>
-                                : null
+                                    (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
+                                        <Button
+                                            type="primary"
+                                            disabled={(this.props.disableAddButton == true) ? true : false}
+                                            style={{ width: '100%' }}
+                                        >
+                                            <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
+                                        </Button>
+                                        :
+                                        (this.props.AddDeviceModal) ?
+                                            <Button
+                                                type="primary"
+                                                disabled={(this.props.disableAddButton == true) ? true : false}
+                                                style={{ width: '100%' }}
+                                                onClick={() => this.props.handleDeviceModal(true)}
+                                            >
+                                                {this.props.addButtonText}
+                                            </Button>
+                                            :
+                                            <Button
+                                                type="primary"
+                                                disabled={(this.props.disableAddButton == true) ? true : false}
+                                                style={{ width: '100%' }}
+                                            >
+                                                {this.props.addButtonText}
+                                            </Button>
+                                    : null
                             }
                         </div>
                     </Col>
@@ -216,3 +240,24 @@ export default class AppFilter extends Component {
         )
     }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        checkComponent: checkComponent,
+        getUser: getUser
+    }, dispatch);
+}
+var mapStateToProps = ({ routing, auth }, otherProps) => {
+    // console.log("restricted route", routing);
+    // console.log("restricted auth", auth);
+    // console.log("restricted other", otherProps);
+    return {
+        // routing: routing,
+        pathname: routing.location.pathname,
+        authUser: auth.authUser,
+        isAllowed: auth.isAllowed
+    };
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AppFilter));
+

@@ -9,7 +9,8 @@ import {
     ADD_DEALER,
     LOADING,
     GET_DROPDOWN,
-    POST_DROPDOWN
+    POST_DROPDOWN,
+    GET_PAGINATION
 } from "constants/ActionTypes";
 import { message } from 'antd';
 
@@ -151,7 +152,7 @@ export default (state = initialState, action) => {
         case EDIT_DEALER:
 
             if (action.response.status) {
-              
+
                 let objIndex4 = state.dealers.findIndex((obj => obj.dealer_id === action.payload.formData.dealer_id));
                 if (objIndex4 !== undefined) {
                     state.dealers[objIndex4].dealer_name = action.payload.formData.name;
@@ -197,7 +198,7 @@ export default (state = initialState, action) => {
 
             }
             break;
-        case GET_DROPDOWN:{
+        case GET_DROPDOWN: {
             // console.log(GET_DROPDOWN);
             // console.log({
             //     ...state,
@@ -206,6 +207,18 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 selectedOptions: action.payload
+            }
+        }
+
+        case GET_PAGINATION: {
+            // console.log(GET_DROPDOWN);
+            // console.log({
+            //     ...state,
+            //     selectedOptions: action.payload
+            // });
+            return {
+                ...state,
+                DisplayPages: action.payload
             }
         }
 

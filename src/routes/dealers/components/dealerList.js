@@ -5,16 +5,16 @@ import EditDealer from './editDealer';
 
 import EditApk from './editDealer';
 
-let data=[];
+let data = [];
 const confirm = Modal.confirm;
-export default class ListApk extends Component {
+export default class DealerList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             searchText: '',
             columns: [],
-            pagination: 10,
+            pagination: this.props.pagination,
 
         };
         this.renderList = this.renderList.bind(this);
@@ -23,9 +23,11 @@ export default class ListApk extends Component {
     handlePagination = (value) => {
 
         var x = Number(value)
+        // console.log(value)
         this.setState({
             pagination: x,
         });
+
     }
 
     componentDidUpdate(prevProps) {
@@ -41,24 +43,24 @@ export default class ListApk extends Component {
 
         let dumydata = this.state.columns;
         // console.log('values', values)
-        try{
+        try {
             if (values.length) {
                 this.state.columns.map((column, index) => {
-    
+
                     if (dumydata[index].className !== 'row') {
                         dumydata[index].className = 'hide';
                     }
-    
+
                     values.map((value) => {
                         if (column.title === value) {
                             dumydata[index].className = '';
                         }
                     });
-    
+
                 });
-    
+
                 this.setState({ columns: dumydata });
-    
+
             } else {
                 const newState = this.state.columns.map((column) => {
                     if (column.className === 'row') {
@@ -67,7 +69,7 @@ export default class ListApk extends Component {
                         return ({ ...column, className: 'hide' })
                     }
                 });
-    
+
                 this.setState({
                     columns: newState,
                 });
@@ -75,8 +77,8 @@ export default class ListApk extends Component {
         } catch (error) {
             alert(error, 'errro');
         }
-       
-        
+
+
         this.props.postDropdown(values, this.state.dealer_type);
     }
 
@@ -129,9 +131,9 @@ export default class ListApk extends Component {
                     columns={this.state.columns}
                     rowKey='row_key'
                     align='center' dataSource={this.renderList(this.props.dealersList)}
-                    pagination={{ pageSize: this.state.pagination, size: "midddle" }}
+                    pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
                 />
-                    <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
+                <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
 
             </Card>
         )

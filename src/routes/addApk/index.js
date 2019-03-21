@@ -12,7 +12,7 @@ import { addApk, } from "../../appRedux/actions/Apk";
 import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message } from 'antd';
 
 // import asyncComponent from "util/asyncComponent";
-let token = localStorage.getItem('token');
+let token = sessionStorage.getItem('token');
 let logo = '';
 let apk = '';
 let form_data = '';

@@ -108,7 +108,22 @@ class SideActions extends Component {
         this.showSaveProfileModal(false)
     }
     transferDeviceProfile = (device_id) => {
-        this.props.transferDeviceProfile(device_id);
+        let _this = this;
+        confirm({
+            content: (
+              <h2>
+                Are You Sure, You want to Transfer this Device 
+            </h2>
+            ),
+            onOk() {
+              console.log('OK');
+             _this.props.transferDeviceProfile(device_id);
+            },
+            onCancel() {
+              console.log('Cancel');
+            },
+          });
+        
     }
     render() {
         //  console.log('device', this.props.device);
@@ -131,7 +146,7 @@ class SideActions extends Component {
                                 <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
-                                <Button type="default" disabled onClick={() => { this.transferDeviceProfile(this.props.device_id)}} style={{ width: "100%", marginBottom: 15,backgroundColor: '#00336C', color: '#fff'}} >Transfer</Button>
+                                <Button type="default" onClick={() => { this.transferDeviceProfile(this.props.device_id)}} style={{ width: "100%", marginBottom: 15,backgroundColor: '#00336C', color: '#fff'}} >Transfer</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} > <Icon type='download' /> Pull</Button>

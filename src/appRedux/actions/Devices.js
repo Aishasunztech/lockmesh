@@ -49,13 +49,14 @@ export function getDevicesList() {
 }
 export function editDevice(formData) {
     return (dispatch) => {
-        // console.log(formData);
+         console.log('edit form data ',formData);
         RestService.updateDeviceDetails(formData).then((response) => {
             // console.log("data form server");
-            // console.log(response.data);
+             console.log('respomse from edit device',response.data);
             if (RestService.checkAuth(response.data)) {
 
                 if (response.data.status) {
+                    console.log('dispactch called')
                     dispatch({
                         type: EDIT_DEVICE,
                         response: response.data,

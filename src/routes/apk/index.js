@@ -9,7 +9,7 @@ import CircularProgress from "components/CircularProgress/index";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 
 import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
-import { getDropdown, postDropdown } from '../../appRedux/actions/Common';
+import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 // import {getDeviceList} from 
 
 import AppFilter from "../../components/AppFilter";
@@ -81,7 +81,7 @@ class Apk extends React.Component {
 
     }
     sortOrder = (direction) => {
-       // console.log("hello");
+        // console.log("hello");
         let apk_list = this.state.apk_list;
         if (direction === "ascend") {
             //   console.log("before",apk_list);
@@ -114,7 +114,7 @@ class Apk extends React.Component {
         }
         // return apk_list;
         this.state.apk_list = apk_list;
-       // console.log("state update", this.state.apk_list);
+        // console.log("state update", this.state.apk_list);
 
     }
     // delete
@@ -191,6 +191,8 @@ class Apk extends React.Component {
 
     handlePagination = (value) => {
         this.refs.listApk.handlePagination(value);
+        this.props.postPagination(value, 'apk');
+        console.log()
     }
     handleComponentSearch = (value) => {
         try {
@@ -239,9 +241,10 @@ class Apk extends React.Component {
     componentWillMount() {
         // alert("componentWillMount");
         this.props.getApkList();
-       // this.props.getDevicesList();
-      //  console.log('apk did mount', this.props.getDropdown('apk'));
+        // this.props.getDevicesList();
+        //  console.log('apk did mount', this.props.getDropdown('apk'));
         this.props.getDropdown('apk');
+        this.props.getPagination('apk')
     }
     componentDidMount() {
         // alert("hello213");
@@ -280,10 +283,9 @@ class Apk extends React.Component {
 
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search APK"
-                                defaultPagingValue="10"
                                 addButtonText="Upload APK"
                                 isAddButton={this.props.user.type === 'admin'}
-                                defaultPagingValue="10"
+                                defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
                                 toLink="/upload-apk"
                                 selectedOptions={this.props.selectedOptions}
@@ -296,7 +298,7 @@ class Apk extends React.Component {
                                     <div className="col-sm-5"></div>
                                     <div className="col-sm-2" style={{ padding: "0" }}>
                                         <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.42.apk">
-                                            <button style={{ width: "100%", marginBottom:"16px" }} className="btn btn-sm btn-default">Download Screenlocker</button>
+                                            <button style={{ width: "100%", marginBottom: "16px" }} className="btn btn-sm btn-default">Download Screenlocker</button>
                                         </a>
                                     </div>
                                     <div className="col-sm-5">
@@ -307,6 +309,7 @@ class Apk extends React.Component {
                                 </div>
                             </div>
                             <ListApk
+
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
                                 tableChangeHandler={this.tableChangeHandler}
@@ -314,7 +317,7 @@ class Apk extends React.Component {
                                 editApk={this.props.editApk}
                                 columns={this.state.columns}
                                 getApkList={this.props.getApkList}
-
+                                pagination={this.props.DisplayPages}
                                 ref="listApk"
                             />
                         </div>}
@@ -398,12 +401,13 @@ const mapStateToProps = ({ apk_list, auth }) => {
     // console.log(apk_list);
     // console.log("apk_list", auth);
     // console.log("apk_list", apk_list.selectedOptions);
-    // console.log("selected options apk", apk_list.selectedOptions);
+    // console.log("APK LIST", apk_list.DisplayPages)
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
         options: apk_list.options,
         selectedOptions: apk_list.selectedOptions,
+        DisplayPages: apk_list.DisplayPages,
         user: auth.authUser
     };
 }
@@ -416,7 +420,9 @@ function mapDispatchToProps(dispatch) {
         editApk: editApk,
         getDropdown: getDropdown,
         postDropdown: postDropdown,
-      //  getDevicesList: getDevicesList
+        postPagination: postPagination,
+        getPagination: getPagination
+        //  getDevicesList: getDevicesList
     }, dispatch);
 }
 

@@ -246,10 +246,10 @@ class Account extends Component {
                     }
                     />:null}
                 </Modal>
-                <Row>
-                    <div className="col-md-6 ac_card">
+                <Row> 
+                    <div className="col-md-4 ac_card">
                         <Card
-                            title="Import"
+                            title="Manage Data"
                             extra={<a href="#"></a>}
                             style={{}}
                         >
@@ -263,7 +263,7 @@ class Account extends Component {
                                     this.showImportModal(true, "pgp_emails", "PGP Emails")
                                 }}>Import</Button>
                                 <a href={`${BASE_URL}users/getFile/import_pgp_emails.xlsx`}>
-                                    <Button size='small' className="pull-right imp_btn" type="dashed">Download</Button>
+                                    <Button size='small' className="pull-right imp_btn" type="dashed">Sample</Button>
                                 </a>
 
                             </div>
@@ -277,29 +277,29 @@ class Account extends Component {
                                     this.showImportModal(true, "chat_ids", "Chat IDs")
                                 }}>Import</Button>
                                 <a href={`${BASE_URL}users/getFile/import_chat_ids.xlsx`}>
-                                    <Button size='small' className="pull-right imp_btn" type="dashed" >Download</Button>
+                                    <Button size='small' className="pull-right imp_btn" type="dashed" >Sample</Button>
                                 </a>
 
                             </div>
                             <div className="inline_b">
                                 <span className="headings">SIM IDs</span>
-                                <Button onClick={()=>{ this.showViewmodal(true,'sim_ids','Sim IDs')}} size='small' className="pull-right exp_btn">View</Button>
-                                <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                <Button onClick={()=>{ this.showViewmodal(true,'sim_ids','Sim IDs')}} size='small' className="pull-right exp_btn mb-0">View</Button>
+                                <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
                                     this.exportCSV('sim_ids');
                                 }} >Export</Button>
-                                <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
                                     this.showImportModal(true, "sim_ids", "Sim IDs")
                                 }}>Import</Button>
                                 
                                 <a href={`${BASE_URL}users/getFile/import_sim_ids.xlsx`}>
-                                    <Button size='small' className="pull-right imp_btn" type="dashed">Download</Button>
+                                    <Button size='small' className="pull-right imp_btn mb-0" type="dashed">Sample</Button>
                                 </a>
 
                             </div>
                         </Card>
                     </div>
                    
-                    <div className="col-md-3 ac_card p-0">
+                    {/* <div className="col-md-4 ac_card p-0">
                         <Card
                             title=""
                             >
@@ -314,7 +314,7 @@ class Account extends Component {
                         </Card>
                     </div>
 
-                    <div className="col-md-3 ac_card">
+                    <div className="col-md-4 ac_card">
                         <Card
                             title=""
                             >
@@ -328,7 +328,7 @@ class Account extends Component {
                             </div>
                         </Card>
                    
-                        {/* <Card
+                        <Card
                             title="Dummy Data"
                             extra={<a href="#"></a>}
                             style={{}}
@@ -348,8 +348,8 @@ class Account extends Component {
                                 <Button size='small' className="pull-right exp_btn">Button2</Button>
                                 <Button size='small' className="pull-right imp_btn">Button1</Button>
                             </div> 
-                        </Card>*/}
-                    </div>
+                        </Card>
+                    </div> */}
 
                 </Row>
 

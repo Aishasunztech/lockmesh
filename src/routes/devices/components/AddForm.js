@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { Button, Form, Input, Select } from 'antd';
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
+import { getProfiles} from "../../../appRedux/actions/ConnectDevice";
 
-class EditDevice extends Component {
+class AddDevice extends Component {
 
     constructor(props) {
         super(props);
@@ -16,12 +17,11 @@ class EditDevice extends Component {
     }
 
     handleSubmit = (e) => {
-       // alert('submit', this.props.editDeviceFunc);
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log('form', values);
-                this.props.editDeviceFunc(values);
+                this.props.AddDeviceHandler(values);
                 this.props.hideModal();
                 this.handleReset();
                 // console.log('Received values of form: ', values);
@@ -33,6 +33,7 @@ class EditDevice extends Component {
         this.props.getSimIDs();
         this.props.getChatIDs();
         this.props.getPGPEmails();
+        this.props.getProfiles();
     }
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
@@ -43,28 +44,8 @@ class EditDevice extends Component {
 
     handleReset = () => {
         this.props.form.resetFields();
-      }
+    }
 
-      get_current_date = () => {
-
-        let day = new Date().getDay(); //Current Date
-        let month = new Date().getMonth() + 1; //Current Month
-        let year = new Date().getFullYear();
-
-        if(day < 10)
-        {
-            day = '0'  + day;
-        }
-           
-        if(month < 10)
-        {
-            month = '0' + month;
-        }
-
-       var current_date = year +'/'+ month + '/' +day;
-      // console.log('date', current_date);
-       return current_date;
-      }
 
     handleCancel = () => {
         this.setState({ visible: false });
@@ -75,7 +56,7 @@ class EditDevice extends Component {
     }
 
     render() {
-         console.log('props of coming', this.props.device);
+          console.log('props of coming', this.props.device);
        //  alert(this.props.device.device_id);
         const { visible, loading } = this.state;
 
@@ -90,7 +71,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('device_id', {
-                        initialValue: this.props.device.device_id,
+                    initialValue: this.props.new ? "" : this.props.device.device_id,
                     })(
 
                         <Input disabled />
@@ -99,7 +80,16 @@ class EditDevice extends Component {
                 <Form.Item
                 >
                     {this.props.form.getFieldDecorator('dealer_id', {
-                        initialValue: this.props.device.dealer_id,
+                    initialValue: this.props.new ? "" : this.props.device.dealer_id,
+                    })(
+
+                        <Input type='hidden' disabled/>
+                    )}
+                </Form.Item>
+                <Form.Item
+                >
+                    {this.props.form.getFieldDecorator('connected_dealer', {
+                    initialValue: this.props.new ? "" : this.props.device.connected_dealer,
                     })(
 
                         <Input type='hidden' disabled/>
@@ -111,7 +101,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('name', {
-                        initialValue: this.props.device.name,
+                    initialValue: this.props.new ? "" : this.props.device.name,
                         rules: [{
 
                             required: true, message: 'Device Name is Required !',
@@ -127,14 +117,14 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('email', {
-                        initialValue: this.props.device.email,
+                    initialValue: this.props.new ? "" : this.props.device.email,
                         rules: [{
                             type: 'email', message: 'The input is not valid E-mail!',
                         }, {
                             required: true, message: 'Account Email is Required !',
                         }],
                     })(
-                        <Input autoComplete="new-password" />
+                        <Input autoComplete="new-password"/>
                     )}
                 </Form.Item>
                 
@@ -144,7 +134,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('pgp_email', {
-                        initialValue: this.props.device.pgp_email,
+                    initialValue: this.props.new ? "" : this.props.device.pgp_email,
                         rules: [{
                             type: 'email', message: 'The input is not valid E-mail!',
                         }, {
@@ -158,6 +148,7 @@ class EditDevice extends Component {
                             // onChange={handleChange}
                             // onFocus={handleFocus}
                             // onBlur={handleBlur}
+                            autoComplete="new-password"
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                             <Select.Option value="">Select PGP Email</Select.Option>
@@ -165,28 +156,17 @@ class EditDevice extends Component {
                                 return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                             })}
                         </Select>
-                        // <Input disabled />
+                        // <Input />
                     )}
                 </Form.Item>
-                <Form.Item
-                    label="Client ID "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('client_id', {
-
-                        initialValue: this.props.device.client_id,
-                    })(
-                        <Input />
-                    )}
-                </Form.Item>
+                
                 <Form.Item
                     label="Chat ID"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('chat_id', {
-                        initialValue: this.props.device.chat_id,
+                    initialValue: this.props.new ? "" : this.props.device.chat_id,
                     })(
                         // <Input />
                         <Select
@@ -205,6 +185,18 @@ class EditDevice extends Component {
                         </Select>
                     )}
                 </Form.Item>
+                <Form.Item
+                    label="Client ID "
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 14 }}
+                >
+                    {this.props.form.getFieldDecorator('client_id', {
+                        initialValue: this.props.new ? "" : this.props.device.client_id,
+                    
+                    })(
+                        <Input />
+                    )}
+                </Form.Item>
 
                 <Form.Item
                     label="Sim ID "
@@ -212,7 +204,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('sim_id', {
-                        initialValue: this.props.device.sim_id,
+                    initialValue: this.props.new ? "" : this.props.device.sim_id,
                     })(
                         <Select
                             showSearch
@@ -230,13 +222,39 @@ class EditDevice extends Component {
                         </Select>,
                     )}
                 </Form.Item>
+
+                <Form.Item
+                    label="Policy "
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 14 }}
+                >
+                    {this.props.form.getFieldDecorator('policy_id', {
+                    initialValue: '',
+                    })(
+                        <Select
+                            showSearch
+                            placeholder="Select Policy"
+                            optionFilterProp="children"
+                            // onChange={handleChange}
+                            // onFocus={handleFocus}
+                            // onBlur={handleBlur}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                        >
+                            <Select.Option value="">Select Policy</Select.Option>
+                            {this.props.policies.map((policy,index) =>{
+                                return (<Select.Option key={index} value={policy.id}>{policy.name}</Select.Option>)
+                            })}
+                        </Select>,
+                    )}
+                </Form.Item>
+
                 <Form.Item
                     label="Model"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('model', {
-                        initialValue: this.props.device.model,
+                    initialValue: this.props.new ? "" : this.props.device.model,
                     })(
                         <Input />
                     )}
@@ -247,7 +265,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                  {this.props.form.getFieldDecorator('start_date', {
-                        initialValue: (this.props.device.start_date)? this.props.device.start_date : this.createdDate() 
+                    initialValue: this.props.new ? this.createdDate() : this.props.device.start_date,
                     })(
 
                     <Input disabled />
@@ -259,7 +277,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('expiry_date', {
-
+                            initialValue: this.props.new ? "" : this.props.device.expiry_date,
                         rules: [{
                             required: true, message: 'Expiry Date is Required !',
                         }],
@@ -277,51 +295,58 @@ class EditDevice extends Component {
                     )}
 
                 </Form.Item>
+                {(this.props.preActive===false)?
+                    (<Fragment>
+                        <Form.Item
+                            label="Dealer Pin "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            <Input value={ this.props.new ? '' : this.props.device.link_code} disabled />
 
-                <Form.Item
-                    label="Dealer Pin "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    <Input value={this.props.device.link_code} disabled />
+                        </Form.Item>
 
-                </Form.Item>
+                        <Form.Item
+                            label="IMEI 1 "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
 
-                <Form.Item
-                    label="IMEI 1 "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
+                            <Input type='text' value={ this.props.new ? '' : this.props.device.imei} disabled />
 
-                    <Input type='text' value={this.props.device.imei} disabled />
+                        </Form.Item>
+                        <Form.Item
+                            label="SIM 1 "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            <Input value={ this.props.new ? '' : this.props.device.simno} disabled />
 
-                </Form.Item>
-                <Form.Item
-                    label="SIM 1 "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    <Input value={this.props.device.simno} disabled />
+                        </Form.Item>
+                        <Form.Item
+                            label="IMEI 2 "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
 
-                </Form.Item>
-                <Form.Item
-                    label="IMEI 2 "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
+                            <Input value={ this.props.new ? '' : this.props.device.imei2} disabled />
 
-                    <Input value={this.props.device.imei2} disabled />
+                        </Form.Item>
+                        <Form.Item
+                            label="SIM 2 "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            <Input value={ this.props.new ? '' : this.props.device.simno2} disabled />
 
-                </Form.Item>
-                <Form.Item
-                    label="SIM 2 "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    <Input value={this.props.device.simno2} disabled />
+                        </Form.Item>
 
-                </Form.Item>
-
+                        
+                    </Fragment>
+                    )
+                    :
+                    null}
+                
                 <Form.Item className="edit_ftr_btn"
                     wrapperCol={{
                         xs: { span: 24, offset: 0 },
@@ -331,7 +356,6 @@ class EditDevice extends Component {
                     <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button>
                     <Button type="primary" htmlType="submit">Submit</Button>
                 </Form.Item>
-
             </Form>
 
         )
@@ -339,7 +363,7 @@ class EditDevice extends Component {
     }
 }
 
-const WrappedEditDeviceForm = Form.create({ name: 'register' })(EditDevice);
+const WrappedAddDeviceForm = Form.create({ name: 'register' })(AddDevice);
 // export default WrappedRegistrationForm;
 
 function mapDispatchToProps(dispatch) {
@@ -348,18 +372,20 @@ function mapDispatchToProps(dispatch) {
         // importCSV: importCSV
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs, 
-        getPGPEmails: getPGPEmails
+        getPGPEmails: getPGPEmails,
+        getProfiles: getProfiles
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices }) => {
-    // console.log("sdfsaf", devices);
-
+var mapStateToProps = ({ routing, devices, device_details }) => {
+     console.log("sdfsaf", device_details.profiles,);
     return {
         routing: routing,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
-        pgp_emails: devices.pgp_emails
+        pgp_emails: devices.pgp_emails,
+        policies: device_details.profiles
+        
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedEditDeviceForm);
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedAddDeviceForm);

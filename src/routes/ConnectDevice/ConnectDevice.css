@@ -197,16 +197,13 @@ margin-right: 3px;
 .side_bar_main.gx-mb-4 {
     margin-bottom: 0px !important; 
 }
-.side_bar_main .head-example {
-    position: fixed;
-    left: 190px;
-    top: 70px;
+.side_bar_main .notification_icn {
     font-size: 26px;
 }
 .side_bar_main .ant-badge-count {
     position: absolute;
     left: 10px;
-    top: -20px;
+    top: 0px;
 }
 .side_bar_main .ant-badge-count {
     height: 15px;
@@ -220,6 +217,17 @@ margin-right: 3px;
 }
 .side_bar_main .ant-badge-count {
     background: #038fdd;
+}
+.side_bar_main .gx-avatar-name {
+    padding-right: 25px;
+}
+.bell_icon li {
+    padding: 0;
+    position: absolute;
+    right: 25px;
+}
+.bell_icon .ant-badge {
+    margin-bottom: 0px;
 }
 .submitButton {
     text-align: center;

@@ -11,7 +11,7 @@ import {
     addDevice,
     preActiveDevice
 } from "../../appRedux/actions/Devices";
-import { getDropdown, postDropdown } from '../../appRedux/actions/Common';
+import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 
 import { bindActionCreators } from "redux";
 import AppFilter from '../../components/AppFilter';
@@ -64,6 +64,35 @@ class Devices extends Component {
                 ],
 
                 sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="status"
+                        key="status"
+                        id="status"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Status"
+                    />
+                ),
+                dataIndex: 'status',
+                className: '',
+                children: [
+                    {
+                        title: 'STATUS',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'status',
+                        key: 'status',
+
+                        // ...this.getColumnSearchProps('status'),
+                        sorter: (a, b) => { return a.status.localeCompare(b.status) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
                 title: (
@@ -481,35 +510,7 @@ class Devices extends Component {
                     }
                 ]
             },
-            {
-                title: (
-                    <Input.Search
-                        name="status"
-                        key="status"
-                        id="status"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="Status"
-                    />
-                ),
-                dataIndex: 'status',
-                className: '',
-                children: [
-                    {
-                        title: 'STATUS',
-                        align: "center",
-                        className: '',
-                        dataIndex: 'status',
-                        key: 'status',
-
-                        // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.status.localeCompare(b.status) },
-
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
+           
             {
                 title: (
                     <Input.Search
@@ -718,7 +719,8 @@ class Devices extends Component {
             columns: columns,
             searchText: '',
             devices: [],
-        }
+            tabselect:'1'
+        }   
         this.copyDevices = [];
 
         this.handleCheckChange = this.handleCheckChange.bind(this)
@@ -732,7 +734,7 @@ class Devices extends Component {
         let dumyDevices = [];
 
         devices.filter(function (device) {
-            let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status,device.activation_status);
+            let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
             if (deviceStatus === type) {
                 dumyDevices.push(device);
             }
@@ -742,58 +744,137 @@ class Devices extends Component {
     }
 
     handleChange(value) {
-        let type = value.toLowerCase();
-        switch (type) {
+        // alert('value');
+        // alert(value);
+        // let type = value.toLowerCase();
+        switch (value) {
             case 'active':
                 this.setState({
                     devices: this.filterList('active', this.props.devices),
-                    column: this.columns
+                    column: this.columns,
+                    tabselect:'4'
                 })
 
                 break;
             case 'suspended':
                 this.setState({
                     devices: this.filterList('suspended', this.props.devices),
-                    column: this.columns
+                    column: this.columns,
+                    tabselect:'7'
                 })
                 break;
             case 'expired':
                 this.setState({
                     devices: this.filterList('expired', this.props.devices),
-                    column: this.columns
+                    column: this.columns,
+                    tabselect:'6'
                 })
                 break;
             case 'all':
                 this.setState({
                     devices: this.props.devices,
-                    column: this.columns
+                    column: this.columns,
+                    tabselect: '1'
                 })
                 break;
             case "unlinked":
                 this.setState({
                     devices: this.filterList('unlinked', this.props.devices),
-                    column: this.columns
+                    column: this.columns,
+                    tabselect: '5'
                 })
                 break;
-            case "new-device":
+            case "pending activation":
                 this.setState({
-                    devices: this.filterList('new-device', this.props.devices),
+                    devices: this.filterList('pending activation', this.props.devices),
                     column: this.columns,
+                    tabselect: '2'
                 })
                 break;
-            case "pre-active":
+            case "pre-activated":
                 this.setState({
-                    devices: this.filterList('pre-active', this.props.devices),
+                    devices: this.filterList('pre-activated', this.props.devices),
                     column: this.columns,
+                    tabselect: '3'
                 })
                 break;
             default:
                 this.setState({
                     devices: this.props.devices,
-                    column: this.columns
+                    column: this.columns,
+                    tabselect: '1'
                 })
                 break;
         }
+
+    }
+    handleChangetab = (value) => {
+        // alert('value');
+        // alert(value);
+        
+       // console.log('selsect', this.props.selectedOptions)
+      // let type = value.toLowerCase();
+        switch (value) {
+            case '4':
+                this.setState({
+                    devices: this.filterList('active', this.props.devices),
+                    column: this.state.columns,
+                    tabselect: '4'
+                })
+
+                break;
+            case '7':
+                this.setState({
+                    devices: this.filterList('suspended', this.props.devices),
+                    column: this.state.columns,
+                    tabselect: '7'
+                })
+                break;
+            case '6':
+                this.setState({
+                    devices: this.filterList('expired', this.props.devices),
+                    column: this.state.columns,
+                    tabselect: '6'
+                })
+                break;
+            case '1':
+                this.setState({
+                    devices: this.props.devices,
+                    column: this.state.columns,
+                    tabselect: '1'
+                })
+                break;
+            case "5":
+                this.setState({
+                    devices: this.filterList('unlinked', this.props.devices),
+                    column: this.state.columns,
+                    tabselect: '5'
+                })
+                break;
+            case "2":
+                this.setState({
+                    devices: this.filterList('pending activation', this.props.devices),
+                    column: this.state.columns,
+                    tabselect: '2'
+                })
+                break;
+            case "3":
+                this.setState({
+                    devices: this.filterList('pre-activated', this.props.devices),
+                    column: this.state.columns,
+                    tabselect: '3'
+                })
+                break;
+            default:
+                this.setState({
+                    devices: this.props.devices,
+                    column: this.state.columns,
+                    tabselect: '1'
+                })
+                break;
+        }
+
+        // this.handleCheckChange(this.props.selectedOptions)
 
     }
 
@@ -812,7 +893,6 @@ class Devices extends Component {
     handleCheckChange(values) {
 
         let dumydata = this.state.columns;
-
 
         // console.log("dumyData", dumydata);
         if (values.length) {
@@ -853,28 +933,33 @@ class Devices extends Component {
         this.props.postDropdown(values, 'devices');
 
     }
-    componentWillMount() {
 
-        // this.props.suspendDevice(device_id);
-    }
     componentDidUpdate(prevProps) {
 
         // console.log('updated');
         if (this.props !== prevProps) {
+            // console.log('this.props ', this.props.DisplayPages);
             this.setState({
                 devices: this.props.devices,
                 columns: this.state.columns,
+                defaultPagingValue: this.props.DisplayPages,
+                selectedOptions: this.props.selectedOptions
 
             })
             // this.copyDevices = this.props.devices;
         }
     }
+
     handlePagination = (value) => {
+        //  alert(value);
+        // console.log('pagination value of ', value)
         this.refs.devcieList.handlePagination(value);
+        this.props.postPagination(value, 'devices');
     }
     componentDidMount() {
         this.props.getDevicesList();
         this.props.getDropdown('devices');
+        this.props.getPagination('devices')
     }
 
 
@@ -926,8 +1011,8 @@ class Devices extends Component {
             >
 
                 <Select.Option value="all">All</Select.Option>
-                <Select.Option value="new-device">New</Select.Option>
-                <Select.Option value="pre-active">Pre-Active</Select.Option>
+                <Select.Option value="pending activation">Pending Activation</Select.Option>
+                <Select.Option value="pre-activated">Pre Activated</Select.Option>
                 <Select.Option value="active">Active</Select.Option>
                 <Select.Option value="unlinked">Unlinked</Select.Option>
                 <Select.Option value="expired">Expired</Select.Option>
@@ -956,7 +1041,7 @@ class Devices extends Component {
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
                                 searchPlaceholder="Search Device"
-                                defaultPagingValue="10"
+                                defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText="Add Device"
                                 options={this.props.options}
                                 isAddButton={true}
@@ -977,8 +1062,15 @@ class Devices extends Component {
                                 rejectDevice={this.rejectDevice}
                                 selectedOptions={this.props.selectedOptions}
                                 ref="devcieList"
+                                pagination={this.props.DisplayPages}
                                 addDevice={this.props.addDevice}
                                 editDevice={this.props.editDevice}
+                                handleChange={this.handleChange}
+                                tabselect={this.state.tabselect}
+                                handleChangetab={this.handleChangetab}
+                                handlePagination={this.handlePagination}
+                    
+                               
                             />
 
                             <ShowMsg
@@ -1058,12 +1150,14 @@ function mapDispatchToProps(dispatch) {
         postDropdown: postDropdown,
         rejectDevice: rejectDevice,
         addDevice: addDevice,
-        preActiveDevice: preActiveDevice
-
+        preActiveDevice: preActiveDevice,
+        postPagination: postPagination,
+        getPagination: getPagination
     }, dispatch);
 }
+
 var mapStateToProps = ({ devices, auth }) => {
-    console.log('devices AUTH', auth, devices);
+    // console.log('devices AUTH', auth, devices);
     return {
         devices: devices.devices,
         msg: devices.msg,
@@ -1071,6 +1165,7 @@ var mapStateToProps = ({ devices, auth }) => {
         options: devices.options,
         isloading: devices.isloading,
         selectedOptions: devices.selectedOptions,
+        DisplayPages: devices.DisplayPages,
         user: auth.authUser,
     };
 }
