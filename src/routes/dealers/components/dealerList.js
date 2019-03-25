@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
-
+import { Tabs } from 'antd';
 import EditApk from './editDealer';
+const TabPane = Tabs.TabPane;
 
 let data = [];
 const confirm = Modal.confirm;
-export default class DealerList extends Component {
+class DealerList extends Component {
     constructor(props) {
         super(props);
 
@@ -21,13 +22,11 @@ export default class DealerList extends Component {
     }
 
     handlePagination = (value) => {
-
+        console.log(value)
         var x = Number(value)
-        // console.log(value)
         this.setState({
             pagination: x,
         });
-
     }
 
     componentDidUpdate(prevProps) {
@@ -115,13 +114,11 @@ export default class DealerList extends Component {
 
             })
         });
-
-
-
         return (data);
     }
 
     render() {
+        console.log(this.state.pagination)
         return (
             <Card>
                 <Table size="middle"
@@ -130,8 +127,9 @@ export default class DealerList extends Component {
                     scroll={{ x: 500 }}
                     columns={this.state.columns}
                     rowKey='row_key'
-                    align='center' dataSource={this.renderList(this.props.dealersList)}
-                    pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
+                    align='center'
+                    pagination={{ pageSize: this.state.pagination, size: "midddle" }}
+                    dataSource={this.renderList(this.props.dealersList)}
                 />
                 <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
 
@@ -156,4 +154,107 @@ function showConfirm(id, action, btn_title) {
         },
         onCancel() { },
     });
+}
+export default class Tab extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            dealersList: this.props.dealersList,
+            tabselect: this.props.tabselect,
+            selectedOptions: this.props.selectedOptions,
+            tabselect: this.props.tabselect
+
+        }
+    }
+    callback = (key) => {
+        // alert('callback');
+        // console.log(key);
+        this.props.handleChangetab(key);
+    }
+
+    handlePagination = (value) => {
+        this.refs.dealersList.handlePagination(value);
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (this.props !== prevProps) {
+
+            this.setState({
+                dealersList: this.props.dealersList,
+                columns: this.props.columns,
+                tabselect: this.props.tabselect,
+                selectedOptions: this.props.selectedOptions
+            })
+        }
+    }
+
+    render() {
+        return (
+            <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
+                <TabPane tab="All" key="1" >
+                <DealerList
+                    dealersList={this.state.dealersList}
+                    suspendDealer={this.props.suspendDealer}
+                    activateDealer={this.props.activateDealer}
+                    deleteDealer={this.props.deleteDealer}
+                    undoDealer={this.props.undoDealer}
+                    columns={this.props.columns}
+                    selectedOptions={this.state.selectedOptions}
+                    ref="dealersList"
+                    pagination={this.props.pagination}
+                    editDealer={this.props.editDealer}
+
+
+                />
+                </TabPane>
+
+                <TabPane tab={<span className="green">Activated</span>} key="2" forceRender={true}>
+                    <DealerList
+                        dealersList={this.state.dealersList}
+                        suspendDealer={this.props.suspendDealer}
+                        activateDealer={this.props.activateDealer}
+                        deleteDealer={this.props.deleteDealer}
+                        undoDealer={this.props.undoDealer}
+                        columns={this.props.columns}
+                        selectedOptions={this.state.selectedOptions}
+                        // ref="dealersList"
+                        pagination={this.props.pagination}
+                        editDealer={this.props.editDealer}
+
+                    />
+                </TabPane>
+                <TabPane tab={<span className="orange">Unlinked</span>} key="3" forceRender={true}>
+                    <DealerList
+                        dealersList={this.state.dealersList}
+                        suspendDealer={this.props.suspendDealer}
+                        activateDealer={this.props.activateDealer}
+                        deleteDealer={this.props.deleteDealer}
+                        undoDealer={this.props.undoDealer}
+                        columns={this.props.columns}
+                        selectedOptions={this.state.selectedOptions}
+                        // ref="dealersList"
+                        pagination={this.props.pagination}
+                        editDealer={this.props.editDealer}
+
+                    />
+                </TabPane>
+                <TabPane tab={<span className="grey">Suspended</span>} key="4" forceRender={true}>
+                    <DealerList
+                        dealersList={this.state.dealersList}
+                        suspendDealer={this.props.suspendDealer}
+                        activateDealer={this.props.activateDealer}
+                        deleteDealer={this.props.deleteDealer}
+                        undoDealer={this.props.undoDealer}
+                        columns={this.props.columns}
+                        selectedOptions={this.state.selectedOptions}
+                        // ref="dealersList"
+                        pagination={this.props.pagination}
+                        editDealer={this.props.editDealer}
+                    />
+                </TabPane>
+            </Tabs>
+
+        )
+    }
 }

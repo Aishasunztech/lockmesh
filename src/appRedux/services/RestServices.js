@@ -4,8 +4,6 @@ import { BASE_URL } from '../../constants/Application';
 const RestService = {
     // Login
     login: (user) => {
-        // console.log("login rest service");
-        // console.log(user);
         return axios.post(BASE_URL + 'users/login', user);
     },
     getHeader: () => {
@@ -156,6 +154,9 @@ const RestService = {
         return axios.get(BASE_URL + "users/get_apps/" + device_id, RestService.getHeader());
 
     },
+    getDefaultApps: () => {
+        return axios.get(BASE_URL + "users/default_apps", RestService.getHeader());
+    },
     // getDealerInfo
     getDealer: (dealer_id) => {
 
@@ -172,11 +173,6 @@ const RestService = {
     // For Dealer update
     updateDeviceDetails: (formData) => {
         return axios.put(BASE_URL + 'users/edit/devices', formData, RestService.getHeader());
-
-        // this.setHeaders(this.sessionLogin('token'));
-        // this.response = this.http.put(this.baseUrl + '/users/edit/devices', dealer, this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
     },
 
     // for dealer reset password(admin dashboard)
@@ -184,42 +180,18 @@ const RestService = {
 
         return axios.post(BASE_URL + 'users/resetpwd', dealer, RestService.getHeader());
 
-        // let payload = {
-        //   dealerId : dealer.dealerId,
-        //   email: dealer.email,
-        //   newpwd: dealer.newpwd
-        // };
-        // console.log(payload);
-
-        // this.setHeaders(this.sessionLogin('token'));
-        // this.response = this.http.post(this.baseUrl + '/users/resetpwd', dealer, this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
     },
 
     // For dealer(admin dashboard)
     updateDealerDetails: (formData) => {
         return axios.put(BASE_URL + 'users/edit/dealers', formData, RestService.getHeader());
-        // this.setHeaders(this.sessionLogin('token'));
-        // this.response = this.http.put(this.baseUrl + '/users/edit/dealers', dealer, this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
+
     },
 
     // For Apk edit(admin dashboard)
     updateApkDetails: (formData) => {
         return axios.post(BASE_URL + 'users/edit/apk', formData, RestService.getHeader());
-        // this.setHeaders(this.sessionLogin('token'));
-
-        // const formData: FormData = new FormData();
-        // formData.append('name', apk_name);
-        // formData.append('logo', logo);
-        // formData.append('apk', apk);
-        // formData.append('apk_id', apk_id);
-
-        // this.response = this.http.post(this.baseUrl + '/users/edit/apk', formData, this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
+        
     },
 
     updateUserProfile: (formData) => {
@@ -233,34 +205,6 @@ const RestService = {
         }, RestService.getHeader());
     },
 
-
-
-    // for admin(all dealers)
-    // getDealers: (pageType)=>{
-    //     this.setHeaders(this.sessionLogin('token'));
-    //     this.response = this.http.get(this.baseUrl + '/users/dealers/' + pageType, this.oHeaders);
-    //     this.authtoken(this.response);
-    //     return this.response;
-    // },
-
-    // For admin(all sdealers)
-    // getUserSDealers() {
-    //   this.setHeaders(this.sessionLogin('token'));
-    //   console.log(this.baseUrl);
-    //   this.response = this.http.get(this.baseUrl + '/users/sdealers', this.oHeaders);
-    //   this.authtoken(this.response);
-    //   console.log(this.response);
-    //   return this.response;
-    // }
-
-    // For dealers(all sdealers)
-    // getUserSubDealers: (dealer_id) =>{
-    //     this.setHeaders(this.sessionLogin('token'));
-    //     this.response = this.http.get(this.baseUrl + '/users/sdealers/' + dealer_id, this.oHeaders);
-    //     this.authtoken(this.response);
-    //     return this.response;
-    // },
-
     // unlink Dealer.
     unlinkDealer: (dealer_id) => {
         return axios.post(BASE_URL + 'users/dealer/delete', { dealer_id }, RestService.getHeader());
@@ -271,41 +215,8 @@ const RestService = {
 
         return axios.post(BASE_URL + 'users/unlink/' + id, { id }, RestService.getHeader());
 
-        // this.spinnerService.show();
-        // this.setHeaders(this.sessionLogin('token'));
-        // this.response = this.http.post(this.baseUrl + '/users/unlink/' + device_id, '', this.oHeaders)
-        // .subscribe(response => {
-        //   this.spinnerService.hide();
-        //   this.authtoken(response);
-        //   console.log(response);
-        //   Swal({
-        //    text: 'Device unlink successfully',
-        //    type: 'success'
-        //   }).then(okay => {
-        //    location.reload(true);
-        //  });
-        //  return this.response;
-        //  });
     },
-    // unlink (dealer-cevices) admin dash.
-    // unlinkdealerUser: (dealer_id)=>{
-    //     this.spinnerService.show();
-    //     // console.log(this.baseUrl);
-    //     this.setHeaders(this.sessionLogin('token'));
-    //     this.response = this.http.delete(this.baseUrl + '/users/dealer/delete/' + dealer_id, this.oHeaders).subscribe(response => {
-    //       this.spinnerService.hide();
-    //       this.authtoken(response);
-    //       this.response = response;
-    //       console.log(response);
-    //       Swal({
-    //         text: this.response.msg,
-    //         type: 'warning'
-    //       }).then(okay => {
-    //         location.reload(true);
-    //       });
-    //       return this.response;
-    //     });
-    // },
+ 
 
     // unlink (dealer-cevices) admin dash.
     unlinkAPK: (apk_id) => {
@@ -385,8 +296,6 @@ const RestService = {
     getSelectedItems(pageName) {
         // console.log('page name', pageName);
         return axios.get(BASE_URL + 'users/dealer/gtdropdown/' + pageName, RestService.getHeader());
-        // this.authtoken(this.response);
-        // return this.response;
     },
 
 
@@ -446,19 +355,6 @@ const RestService = {
         // this.response = this.http.post(this.baseUrl + '/users/check_pass/' , {password:currentPass},this.oHeaders);
         // this.authtoken(this.response);
         // return this.response;
-    },
-
-    // for authentication token
-    authtoken: (response) => {
-        // if (response.success === false && response.message === 'Failed to authenticate token.') {
-        //     Swal({
-        //     text: response.message,
-        //     type: 'error',
-        //     customClass: 'swal-height'
-        //     }).then(okay => {
-        //     this.router.navigate(['/login']);
-        //     });
-        // }
     },
 
     invalidPage: () => {

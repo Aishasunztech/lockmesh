@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styles from './AppList';
 import { Card, Table, Icon } from "antd";
+import { getStatus, getColor } from '../../../routes/utils/commonUtils'
 let make_red = 'captilize';
 export default class DeviceSidebar extends Component {
     // constructor(props){
@@ -11,27 +12,31 @@ export default class DeviceSidebar extends Component {
     // }    
 
     renderDetailsData(device_details) {
-        let device_status = 'Active';
 
-        if ((device_details.status === 'expired')) {
-            device_status = 'Expired';
-            make_red = 'make_red captilize'
-        } else if (device_details.account_status === 'suspended') {
-            device_status = 'Suspended';
-            make_red = 'make_red captilize'
-        } else if(device_details.unlink_status==1){
-            device_status = 'Unlinked';
-            make_red = 'make_red captilize'
-        } else {
-            device_status = 'Active';
-            make_red = 'captilize'
-        }
+        let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
+        let color = getColor(status)
+
+        // let device_status = 'Active';
+
+        // if ((device_details.status === 'expired')) {
+        //     device_status = 'Expired';
+        //     make_red = 'make_red captilize'
+        // } else if (device_details.account_status === 'suspended') {
+        //     device_status = 'Suspended';
+        //     make_red = 'make_red captilize'
+        // } else if (device_details.unlink_status == 1) {
+        //     device_status = 'Unlinked';
+        //     make_red = 'make_red captilize'
+        // } else {
+        //     device_status = 'Active';
+        //     make_red = 'captilize'
+        // }
 
         return [
             {
                 key: 1,
                 name: (<a href="javascript:void(0)">Name:</a>),
-                value:(<span className="captilize">{device_details.name}</span>)
+                value: (<span className="captilize">{device_details.name}</span>)
             },
             {
                 key: 2,
@@ -46,12 +51,12 @@ export default class DeviceSidebar extends Component {
             {
                 key: 4,
                 name: (<a href="javascript:void(0)">Chat ID:</a>),
-                value: (device_details.chat_id === 'null' || device_details.chat_id === null || device_details.chat_id ==='')?'N/A':device_details.chat_id
+                value: (device_details.chat_id === 'null' || device_details.chat_id === null || device_details.chat_id === '') ? 'N/A' : device_details.chat_id
             },
             {
                 key: 5,
                 name: (<a href="javascript:void(0)">Client ID:</a>),
-                value: (device_details.client_id === 'null' || device_details.client_id === null || device_details.client_id ==='')?'N/A':device_details.client_id
+                value: (device_details.client_id === 'null' || device_details.client_id === null || device_details.client_id === '') ? 'N/A' : device_details.client_id
             },
             {
                 key: 6,
@@ -61,7 +66,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 7,
                 name: (<a href="javascript:void(0)">Dealer Name:</a>),
-                value: (<span className="captilize">{(device_details.dealer_name === 'null' || device_details.dealer_name === null || device_details.dealer_name ==='')?'N/A':device_details.dealer_name}</span>)
+                value: (<span className="captilize">{(device_details.dealer_name === 'null' || device_details.dealer_name === null || device_details.dealer_name === '') ? 'N/A' : device_details.dealer_name}</span>)
             },
             {
                 key: 8,
@@ -76,17 +81,17 @@ export default class DeviceSidebar extends Component {
             {
                 key: 10,
                 name: (<a href="javascript:void(0)" >Status:</a>),
-                value: <span className={make_red}>{(device_details.account_status=="suspended")?"Suspended":(device_status.unlink_status==1)?"Unlinked":(device_details.status=="active")?"Active":"Expired"}</span>,
+                value: <span style={color}>{status}</span>,
             },
             {
                 key: 11,
                 name: (<a href="javascript:void(0)">Model:</a>),
-                value: (device_details.model === 'null' || device_details.model === null || device_details.model ==='')?'N/A':device_details.model
+                value: (device_details.model === undefined || device_details.model === 'null' ||  device_details.model === null || device_details.model === '') ? 'N/A' : device_details.model
             },
             {
                 key: 12,
                 name: (<a href="javascript:void(0)">SIM ID:</a>),
-                value:(device_details.sim_id === 'null' || device_details.sim_id === null || device_details.sim_id ==='')?'N/A':device_details.sim_id
+                value: (device_details.sim_id === 'null' || device_details.sim_id === null || device_details.sim_id === '') ? 'N/A' : device_details.sim_id
             },
             {
                 key: 13,
@@ -106,7 +111,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 16,
                 name: (<a href="javascript:void(0)">SIM 2:</a>),
-                value:(device_details.simno2 === 'null' || device_details.simno2 === null || device_details.simno2 ==='')?'N/A':device_details.simno2
+                value: (device_details.simno2 === 'null' || device_details.simno2 === null || device_details.simno2 === '') ? 'N/A' : device_details.simno2
             },
             {
                 key: 17,

@@ -41,7 +41,7 @@ export default (state = initialState, action) => {
                 options: state.options
             }
 
-            break;
+        
 
         case UNLINK_APK:
             // console.log('action delted id');

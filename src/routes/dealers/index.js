@@ -244,8 +244,9 @@ class Dealers extends Component {
             columns: columns,
             options: this.props.options,
             pagination: 10,
+            tabselect: '1'
         };
-
+        this.handleChange = this.handleChange.bind(this);
     }
 
 
@@ -267,37 +268,51 @@ class Dealers extends Component {
         return dumyDealers;
     }
 
-    handleChange = (value) => {
-        let type = value.toLowerCase();
-        switch (type) {
+    handleChange(value) {
+        // alert('value');
+        // alert(value);
+        // let type = value.toLowerCase();
+        switch (value) {
             case 'active':
                 this.setState({
                     dealers: this.filterList('active', this.props.dealers),
-                    column: this.columns
+                    column: this.columns,
+                    tabselect: '2'
                 })
 
                 break;
             case 'suspended':
-
                 this.setState({
                     dealers: this.filterList('suspended', this.props.dealers),
-                    column: this.columns
+                    column: this.columns,
+                    tabselect: '4'
                 })
                 break;
+
             case 'all':
-                // console.log("dealers list", this.props.dealers);
                 this.setState({
                     dealers: this.props.dealers,
-                    column: this.columns
+                    column: this.columns,
+                    tabselect: '1'
                 })
                 break;
             case "unlinked":
                 this.setState({
                     dealers: this.filterList('unlinked', this.props.dealers),
-                    column: this.columns
+                    column: this.columns,
+                    tabselect: '3'
+                })
+                break;
+
+            default:
+                this.setState({
+                    dealers: this.props.dealers,
+                    column: this.columns,
+                    tabselect: '1'
                 })
                 break;
         }
+
     }
 
     handleCheckChange = (values) => {
@@ -361,7 +376,7 @@ class Dealers extends Component {
                 onChange={this.handleChange}
             >
                 <Select.Option value="all">All</Select.Option>
-                <Select.Option value="active">Active</Select.Option>
+                <Select.Option value="active">Activated</Select.Option>
                 <Select.Option value="unlinked">Unlinked</Select.Option>
                 <Select.Option value="suspended">Suspended</Select.Option>
             </Select>
@@ -479,6 +494,55 @@ class Dealers extends Component {
         this.props.postPagination(value, this.state.dealer_type);
     }
 
+    handleChangetab = (value) => {
+        // alert('value');
+        // alert(value);
+
+        // console.log('selsect', this.props.selectedOptions)
+        // let type = value.toLowerCase();
+        switch (value) {
+            case '2':
+                this.setState({
+                    dealers: this.filterList('active', this.props.dealers),
+                    column: this.state.columns,
+                    tabselect: '2'
+                })
+
+                break;
+            case '4':
+                this.setState({
+                    dealers: this.filterList('suspended', this.props.dealers),
+                    column: this.state.columns,
+                    tabselect: '4'
+                })
+                break;
+            case '1':
+                this.setState({
+                    dealers: this.props.dealers,
+                    column: this.state.columns,
+                    tabselect: '1'
+                })
+                break;
+            case "3":
+                this.setState({
+                    dealers: this.filterList('unlinked', this.props.dealers),
+                    column: this.state.columns,
+                    tabselect: '3'
+                })
+                break;
+            default:
+                this.setState({
+                    dealers: this.props.dealers,
+                    column: this.state.columns,
+                    tabselect: '1'
+                })
+                break;
+        }
+
+        // this.handleCheckChange(this.props.selectedOptions)
+
+    }
+
 
     render() {
 
@@ -486,7 +550,7 @@ class Dealers extends Component {
         // alert('render');
         //  console.log('render check', this.state.dealer_type, 'columns', this.state.options.length, 'option', this.state.columns)
         // alert('render');
-        if ((window.location.pathname.split("/").pop() !== 'dealer') && (this.state.options.length <= 6) && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null)) {
+        if ((window.location.pathname.split("/").pop() !== 'dealer') && (this.state.options.length <= 6) && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 8)) {
             //  alert('if sdealer')
             // console.log('sdealer came')
             this.state.columns.push(
@@ -545,8 +609,9 @@ class Dealers extends Component {
                 }
             )
 
+        }
+        if ((window.location.pathname.split("/").pop() !== 'dealer') && (this.state.options.length <= 6)) {
             this.state.options.push('PARENT DEALER', 'PARENT DEALER ID');
-
         }
         else if ((window.location.pathname.split("/").pop() === 'dealer') && (this.state.columns.length > 8)) {
 
@@ -555,7 +620,6 @@ class Dealers extends Component {
             this.state.options = this.state.options.slice(0, 6);
 
         }
-
         return (
 
             <div>
@@ -595,6 +659,8 @@ class Dealers extends Component {
                                 editDealer={this.props.editDealer}
                                 pagination={this.props.DisplayPages}
                                 getDealerList={this.props.getDealerList}
+                                tabselect={this.state.tabselect}
+                                handleChangetab={this.handleChangetab}
                                 updatePassword={this.props.updatePassword}
                                 ref='dealerList'
 

@@ -5,3 +5,4 @@ export * from './Dealers';
 export * from './Apk';
 export * from './ConnectDevice';
 export * from './Account';
+export * from './Policy';

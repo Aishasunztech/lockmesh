@@ -6,6 +6,8 @@ export const SWITCH_LANGUAGE = 'SWITCH-LANGUAGE';
 // AppFilter
 export const GET_DROPDOWN = 'GET_DROPDOWN';
 export const POST_DROPDOWN = 'POST_DROPDOWN';
+export const POST_PAGINATION = 'POST_PAGINATION';
+export const GET_PAGINATION = 'GET_PAGINATION'
 
 //Contact Module const
 export const SHOW_MESSAGE = 'SHOW_MESSAGE';
@@ -103,8 +105,5 @@ export const GET_SIM_IDS = 'GET_SIM_IDS';
 export const GET_CHAT_IDS = 'GET_CHAT_IDS';
 export const GET_PGP_EMAILS = 'GET_PGP_EMAILS';
 
-
-export const POST_PAGINATION = 'POST_PAGINATION';
-export const GET_PAGINATION = 'GET_PAGINATION'
-
-
+// Policy consts
+export const GET_POLICIES = 'GET_POLICIES'

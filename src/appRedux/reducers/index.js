@@ -7,6 +7,8 @@ import Dealers from "./Dealer";
 import Apk_List from "./Apk";
 import ConnectDevice from "./ConnectDevice";
 import Account from "./Account"
+import Policy from "./Policy";
+
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -17,6 +19,7 @@ const reducers = combineReducers({
   apk_list: Apk_List,
   device_details: ConnectDevice,
   account: Account,
+  policies: Policy
 });
 
 export default reducers;

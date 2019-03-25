@@ -128,6 +128,7 @@ export const updateUserProfile = (fromData) => {
     RestService.updateUserProfile(fromData).then((resp) => {
       if (RestService.checkAuth(resp.data)) {
         if (resp.data.status === true) {
+          
           dispatch({
             type: UPDATE_PROFILE,
             response: resp.data

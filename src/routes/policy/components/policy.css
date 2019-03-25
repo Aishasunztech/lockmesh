@@ -1,5 +1,5 @@
 .policy_steps .steps-content {
-    margin: 24px 0;
+    margin: 24px 0 10px;
 }
 .policy_steps .ant-table-tbody > tr > td {
     font-size: 12px;
@@ -22,4 +22,16 @@
 }
 .policy_steps .line_break {
     width: 100%;
+}
+/* .policy_popup {
+    width: 700px !important;
+} */
+.policy_popup .ant-modal-body {
+    padding: 24px 24px 10px;
+}
+.policy_popup .ant-steps-item-title {
+    padding-right: 6px;
+}
+.policy_steps .ant-steps-item {
+    margin-right: 6px !important;
 }

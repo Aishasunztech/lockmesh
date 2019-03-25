@@ -351,7 +351,8 @@ export default (state = initialState, action) => {
                 ...state,
                 guestPwd: action.payload.pwd,
                 guestCPwd: action.payload.confirm,
-                isGuestPwd: true
+                isGuestPwd: true,
+                applyBtn: true
             }
             }
         case ENCRYPTED_PASSWORD:
@@ -362,45 +363,44 @@ export default (state = initialState, action) => {
                 ...state,
                 encryptedPwd: action.payload.pwd,
                 encryptedCPwd: action.payload.confirm,
-                isEncryptedPwd: true
+                isEncryptedPwd: true,
+                applyBtn: true
             }
             }
-        case DURESS_PASSWORD:
-            {
+        case DURESS_PASSWORD: {
             // console.log(DURESS_PASSWORD);
             // console.log(action.payload);
             return {
                 ...state,
                 duressPwd: action.payload.pwd,
                 duressCPwd: action.payload.confirm,
-                isDuressPwd: true
+                isDuressPwd: true,
+                applyBtn: true
             }
-            }
-        case ADMIN_PASSWORD:
-            {
+        }
+        case ADMIN_PASSWORD: {
             // console.log(ADMIN_PASSWORD);
             // console.log(action.payload);
             return {
                 ...state,
                 adminPwd: action.payload.pwd,
                 adminCPwd: action.payload.confirm,
-                isAdminPwd: true
+                isAdminPwd: true,
+                applyBtn: true
             }
-            }
-        case POLICY:
-            {
+        }
+        case POLICY: {
             return {
                 ...state,
                 policyName: action.payload
             }
-            }
-        case PROFILE:
-            {
+        }
+        case PROFILE: {
             return {
                 ...state,
                 profileName: action.payload
             }
-            }
+        }
         case SHOW_SAVE_PROFILE_MODAL:
             {
             return {

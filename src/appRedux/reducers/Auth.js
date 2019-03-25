@@ -116,22 +116,18 @@ export default (state = INIT_STATE, action) => {
 
     case UPDATE_PROFILE: {
       if (action.response.status) {
+        state.authUser.name = action.response.data.name;
+        localStorage.setItem('name', action.response.data.name);
         message.success(action.response.msg);
-        state.authUser.firstName = action.response.data.first_Name;
-        state.authUser.lastName = action.response.data.Last_Name;
-        localStorage.setItem('firstName', action.response.data.first_Name);
-        localStorage.setItem('lastName', action.response.data.Last_Name);
-
         // console.log('user detail',action.response);
         // console.log('user state',state.authUser);
-
       }
       else {
         message.error(action.response.msg);
       }
       return {
         ...state,
-
+        authUser: state.authUser,
         loader: false,
 
       }

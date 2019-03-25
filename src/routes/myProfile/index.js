@@ -20,7 +20,7 @@ class Profile extends Component {
             {
                 key: 2,
                 name: 'Dealer Name',
-                value: (this.props.profile.firstName !== '' && this.props.profile.firstName !== null && this.props.profile.firstName !== "null") ? (this.props.profile.firstName + ' ' + this.props.profile.lastName) : this.props.profile.name,
+                value: this.props.profile.name
 
             },
             {
@@ -61,7 +61,7 @@ class Profile extends Component {
                                                 <h1>Your Profile</h1>
                                             </Col>
                                             <Col span={4} style={{ textAlign: "center" }}>
-                                                <a href="#" onClick={() => this.refs.change_profile.showModal()} >Edit</a>
+                                                <a onClick={() => this.refs.change_profile.showModal()} >Edit</a>
                                             </Col>
                                         </Row>
 
@@ -85,7 +85,7 @@ class Profile extends Component {
                                                 <img src={require("../../assets/images/profile-image.png")} style={{ height: 'auto', width: '100%', borderRadius: 50 }} />
                                             </Col>
                                             <Col span={15}>
-                                                {(this.props.profile.firstName !== null) ? <h1>{this.props.profile.firstName + ' ' + this.props.profile.lastName}</h1> : <h1>{this.props.profile.name}</h1>}
+                                                 <h1>{this.props.profile.name}</h1>
 
                                                 <p>({this.props.profile.type})</p>
                                             </Col>

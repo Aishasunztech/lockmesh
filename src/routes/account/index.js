@@ -3,18 +3,18 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import styles from './account.css'
-import { 
+import {
     importCSV,
     exportCSV
- } from "../../appRedux/actions/Account";
+} from "../../appRedux/actions/Account";
 
-import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table } from "antd";
+import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select } from "antd";
 import { BASE_URL } from "../../constants/Application";
-import { 
-    getSimIDs, 
-    getChatIDs, 
+import {
+    getSimIDs,
+    getChatIDs,
     getPGPEmails
- } from "../../appRedux/actions/Devices";
+} from "../../appRedux/actions/Devices";
 
 
 class Account extends Component {
@@ -28,6 +28,12 @@ class Account extends Component {
             dataVisible: false,
             dataFieldName: '',
             dataFieldTitle: '',
+            sim_ids:[],
+            chat_ids:[],
+            pgp_emails: [],
+            sim_ids_page: 10,
+            chat_ids_page: 10,
+            pgp_emails_page: 10
         }
     }
 
@@ -40,24 +46,46 @@ class Account extends Component {
         });
     }
 
-    showViewmodal = (dataVisible, dataFieldName = "", dataFieldTitle = "") =>{
+    showViewmodal = (dataVisible, dataFieldName = "", dataFieldTitle = "") => {
         this.setState({
             dataVisible: dataVisible,
             dataFieldName: dataFieldName,
             dataFieldTitle: dataFieldTitle
         });
 
-        if(dataFieldName==="sim_ids"){
+        if (dataFieldName === "sim_ids") {
             this.props.getSimIDs();
+            this.setState({
+                sim_ids: this.props.sim_ids,
+            });
         }else if(dataFieldName==="pgp_emails"){
             this.props.getPGPEmails();
+            this.setState({
+                pgp_emails: this.props.pgp_emails
+            });
         }else if(dataFieldName==="chat_ids"){
             this.props.getChatIDs();
+            this.setState({
+                chat_ids: this.props.chat_ids,
+            });
         }
 
     }
 
-    
+    componentDidMount(){
+        this.props.getSimIDs();
+        this.props.getPGPEmails();
+        this.props.getChatIDs();
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.sim_ids.length !==nextProps.sim_ids.length || nextProps.pgp_emails.length !==nextProps.pgp_emails.length || nextProps.chat_ids.length !==nextProps.chat_ids.length){
+            this.setState({
+                sim_ids: nextProps.sim_ids,
+                chat_ids: nextProps.chat_ids,
+                pgp_emails: nextProps.pgp_emails
+            });
+        }
+    }
     uploadFile = (file) => {
         this.setState({
             file: file
@@ -79,18 +107,87 @@ class Account extends Component {
             }
             // formData.append('fieldName', this.state.fieldName);
             // console.log(formData);
-
+            this.state.file = null
             this.props.importCSV(formData, this.state.fieldName);
-
             this.showImportModal(false);
+
 
         }
     }
     exportCSV = (fieldName) => {
         this.props.exportCSV(fieldName);
     }
-    render() {
+    searchField = (originalData, fieldName, value) =>  {
+        let demoData = [];
+            
+        if (value.length) {
+            originalData.forEach((data) => {
+                if (data[fieldName] !== undefined) {
+                    if ((typeof data[fieldName]) === 'string') {
 
+                        if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
+                            demoData.push(data);
+                        }
+                    } else if (data[fieldName] != null) {
+                        if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
+                            demoData.push(data);
+                        }
+                    } 
+                    // else {
+                    //     // demoDevices.push(device);
+                    // }
+                } else {
+                    demoData.push(data);
+                }
+            });
+            
+            return demoData;
+        } else {
+            return originalData;    
+        }
+    }
+    handleSearch = (e, dataName) => {
+
+        let fieldName = e.target.name;
+        let fieldValue = e.target.value;
+
+        if(dataName === "sim_ids"){
+            let searchedData = this.searchField(this.props.sim_ids,fieldName, fieldValue);
+            this.setState({
+                sim_ids: searchedData
+            });
+        } else if (dataName === "chat_ids"){
+            let searchedData = this.searchField(this.props.chat_ids,fieldName, fieldValue);
+            // console.log(searchedData);
+            this.setState({
+                chat_ids: searchedData
+            });
+        } else if (dataName === "pgp_emails"){
+            let searchedData = this.searchField(this.props.pgp_emails,fieldName, fieldValue);
+            // console.log(searchedData);
+            this.setState({
+                pgp_emails: searchedData
+            });
+        }
+    }
+
+    handlePagination = (e, dataName) => {
+        if(dataName === "sim_ids"){
+            this.setState({
+                sim_ids_page: e
+            });
+        } else if (dataName === "chat_ids"){
+            this.setState({
+                chat_ids_page: e
+            });
+        } else if (dataName === "pgp_emails"){
+            this.setState({
+                pgp_emails_page: e
+            });
+        }
+    }
+    
+    render() {
 
         if (this.props.showMsg) {
             if (this.props.msg === "imported successfully") {
@@ -101,6 +198,8 @@ class Account extends Component {
 
         }
 
+        const { file } = this.state
+        // console.log(file);
         let self = this;
         const props = {
             name: 'file',
@@ -123,6 +222,7 @@ class Account extends Component {
                     self.uploadFile(null);
                 }
             },
+            fileList: (file === null) ? null : [file]
         };
 
         return (
@@ -163,7 +263,7 @@ class Account extends Component {
                                 >
                                     <div className="dropbox">
 
-                                        <Upload.Dragger  {...props} disabled={(this.state.file === null) ? false : true}>
+                                        <Upload.Dragger  {...props} disabled={(file === null) ? false : true} >
                                             <p className="ant-upload-drag-icon">
                                                 <Icon type="file-excel" />
                                             </p>
@@ -176,6 +276,7 @@ class Account extends Component {
                         </Row>
                     </Form>
                 </Modal>
+                
                 <Modal
                     visible={this.state.dataVisible}
                     title={`${this.state.dataFieldTitle}`}
@@ -186,67 +287,256 @@ class Account extends Component {
                         }
                     }
                 >
-                    {(this.state.dataFieldName==="sim_ids")?<Table 
-                    
-                    columns={[{
-                        dataIndex:"sim_id",
-                        title: "Sim ID",
-                        key:"sim_id",
-                        align: "center"
-                    },{
-                        dataIndex: "start_date",
-                        title: "Start Date",
-                        key:"start_date",
-                        align: "center"
-                    },{
-                        dataIndex: "expiry_date",
-                        title: "Expiry Date",
-                        key: "expiry_date",
-                        align: "center"
-                    }]} 
-                    dataSource={
-                        this.props.sim_ids.map(sim_id=>{
-                            return {
-                                key:sim_id.id,
-                                sim_id: sim_id.sim_id,
-                                start_date: sim_id.start_date,
-                                expiry_date: sim_id.expiry_date
+                    {(this.state.dataFieldName==="sim_ids")?
+                    <Fragment>
+                        <Select
+                            value={this.state.sim_ids_page}
+                            //  defaultValue={this.state.DisplayPages}
+                            style={{ width: '100%' }}
+                            // onSelect={value => this.setState({DisplayPages:value})}
+                            onChange={value => this.handlePagination(value, 'sim_ids')}
+                        >
+                            <Select.Option value="10" >10</Select.Option>
+                            <Select.Option value="20">20</Select.Option>
+                            <Select.Option value="30">30</Select.Option>
+                            <Select.Option value="50">50</Select.Option>
+                            <Select.Option value="100">100</Select.Option>
+                        </Select>
+                        <Table 
+                            columns={[
+                                {
+                                    title: (
+                                        <Input.Search
+                                            name="sim_id"
+                                            key="sim_id"
+                                            id="sim_id"
+                                            className="search_heading"
+                                            onKeyUp={
+                                                (e)=>{
+                                                    this.handleSearch(e,'sim_ids')
+                                                }
+                                            }
+                                            autoComplete="new-password"
+                                            placeholder="SIM ID"
+                                        />
+                                    ),
+                                    dataIndex: 'sim_id',
+                                    className: '',
+                                    children: [
+                                        {
+                                            title: 'SIM ID',
+                                            align: "center",
+                                            dataIndex: 'sim_id',
+                                            key: "sim_id",
+                                            className: '',
+                                            sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
+                                            sortDirections: ['ascend', 'descend'],
+                                        }
+                                    ],
+                                },
+                                {
+                                    title: (
+                                        <Input.Search
+                                            name="start_date"
+                                            key="start_date"
+                                            id="start_date"
+                                            className="search_heading"
+                                            onKeyUp={
+                                                (e)=>{
+                                                    this.handleSearch(e,'sim_ids')
+                                                }
+                                            }
+                                            autoComplete="new-password"
+                                            placeholder="START DATE"
+                                        />
+                                    ),
+                                    dataIndex: 'start_date',
+                                    className: '',
+                                    children: [
+                                        {
+                                            title: 'START DATE',
+                                            align: "center",
+                                            dataIndex: 'start_date',
+                                            key: "start_date",
+                                            className: '',
+                                            sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+                                            sortDirections: ['ascend', 'descend'],
+                                        }
+                                    ],
+                                },
+                                {
+                                    title: (
+                                        <Input.Search
+                                            name="expiry_date"
+                                            key="expiry_date"
+                                            id="expiry_date"
+                                            className="search_heading"
+                                            onKeyUp={
+                                                (e)=>{
+                                                    this.handleSearch(e,'sim_ids')
+                                                }
+                                            }
+                                            autoComplete="new-password"
+                                            placeholder="EXPIRY DATE"
+                                        />
+                                    ),
+                                    dataIndex: 'expiry_date',
+                                    className: '',
+                                    children: [
+                                        {
+                                            title: 'EXPIRY DATE',
+                                            align: "center",
+                                            dataIndex: 'expiry_date',
+                                            key: "expiry_date",
+                                            className: '',
+                                            sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+                                            sortDirections: ['ascend', 'descend'],
+                                        }
+                                    ],
+                                },
+                            ]} 
+                            dataSource={
+                                this.state.sim_ids.map(sim_id=>{
+                                    return {
+                                        key:sim_id.id,
+                                        sim_id: sim_id.sim_id,
+                                        start_date: sim_id.start_date,
+                                        expiry_date: sim_id.expiry_date
+                                    }
+                                })
                             }
-                        })
-                    } />:(this.state.dataFieldName==="chat_ids")?<Table 
-                    columns={[{
-                        dataIndex:"chat_id",
-                        title: "Chat ID",
-                        key:"chat_id",
-                        align: "center"
-                    }]} 
-                    dataSource={
-                        this.props.chat_ids.map(chat_id=>{
-                            return {
-                                key:chat_id.id,
-                                chat_id: chat_id.chat_id,
-                            }
-                        })
-                    }    
-                    />:(this.state.dataFieldName==="pgp_emails")?<Table 
-                    columns={[{
-                        dataIndex:"pgp_email",
-                        title: "PGP Email",
-                        key:"pgp_email",
-                        align: "center"
-                    }]} 
-                    dataSource={
-                        this.props.pgp_emails.map(email=>{
-                            return {
-                                key:email.id,
-                                pgp_email: email.pgp_email,
+
+                            pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+
+                        /> 
+                    </Fragment>
+                    :(this.state.dataFieldName==="chat_ids")?
+                    <Fragment>
+                        <Select
+                            value={this.state.chat_ids_page}
+                            //  defaultValue={this.state.DisplayPages}
+                            style={{ width: '100%' }}
+                            // onSelect={value => this.setState({DisplayPages:value})}
+                            onChange={value => this.handlePagination(value, 'chat_ids')}
+                        >
+                            <Select.Option value="10" >10</Select.Option>
+                            <Select.Option value="20">20</Select.Option>
+                            <Select.Option value="30">30</Select.Option>
+                            <Select.Option value="50">50</Select.Option>
+                            <Select.Option value="100">100</Select.Option>
+                        </Select>
+                        <Table 
+                            columns={[
                                 
+                                {
+                                    title: (
+                                        <Input.Search
+                                            name="chat_id"
+                                            key="chat_id"
+                                            id="chat_id"
+                                            className="search_heading"
+                                            onKeyUp={
+                                                (e)=>{
+                                                    this.handleSearch(e,'chat_ids')
+                                                }
+                                            }
+                                            autoComplete="new-password"
+                                            placeholder="CHAT ID"
+                                        />
+                                    ),
+                                    dataIndex: 'chat_id',
+                                    className: '',
+                                    children: [
+                                        {
+                                            title: 'CHAT ID',
+                                            align: "center",
+                                            dataIndex: 'chat_id',
+                                            key: "chat_id",
+                                            className: '',
+                                            sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
+                                            sortDirections: ['ascend', 'descend'],
+                                        }
+                                    ],
+                                },
+                            ]} 
+                            dataSource={
+                                this.state.chat_ids.map(chat_id=>{
+                                    return {
+                                        key:chat_id.id,
+                                        chat_id: chat_id.chat_id,
+                                    }
+                                })
                             }
-                        })
-                    }
-                    />:null}
+                            
+                            pagination={{ pageSize: Number(this.state.chat_ids_page), size: "middle" }}
+                        />
+                    </Fragment>
+                    :(this.state.dataFieldName==="pgp_emails")?
+                    <Fragment>
+                        <Select
+                            value={this.state.pgp_emails_page}
+                            //  defaultValue={this.state.DisplayPages}
+                            style={{ width: '100%' }}
+                            // onSelect={value => this.setState({DisplayPages:value})}
+                            onChange={value => this.handlePagination(value, 'pgp_emails')}
+                        >
+                            <Select.Option value="10" >10</Select.Option>
+                            <Select.Option value="20">20</Select.Option>
+                            <Select.Option value="30">30</Select.Option>
+                            <Select.Option value="50">50</Select.Option>
+                            <Select.Option value="100">100</Select.Option>
+                        </Select>
+                        <Table 
+                            columns={[
+                                
+                                {
+                                    title: (
+                                        <Input.Search
+                                            name="pgp_email"
+                                            key="pgp_email"
+                                            id="pgp_email"
+                                            className="search_heading"
+                                            onKeyUp={
+                                                (e)=>{
+                                                    this.handleSearch(e,'pgp_emails')
+                                                }
+                                            }
+                                            autoComplete="new-password"
+                                            placeholder="PGP Email"
+                                        />
+                                    ),
+                                    dataIndex: 'pgp_email',
+                                    className: '',
+                                    children: [
+                                        {
+                                            title: 'PGP EMAILS',
+                                            align: "center",
+                                            dataIndex: 'pgp_email',
+                                            key: "pgp_email",
+                                            className: '',
+                                            sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+                                            sortDirections: ['ascend', 'descend'],
+                                        }
+                                    ],
+                                },
+                            ]}
+                            
+                            dataSource={
+                                this.state.pgp_emails.map(email=>{
+                                    return {
+                                        key:email.id,
+                                        pgp_email: email.pgp_email,
+                                        
+                                    }
+                                })
+                            }
+
+                            pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                        />
+                    </Fragment>
+                    :null}
                 </Modal>
-                <Row> 
+                <Row>
                     <div className="col-md-4 ac_card">
                         <Card
                             title="Manage Data"
@@ -255,7 +545,7 @@ class Account extends Component {
                         >
                             <div className="inline_b">
                                 <span className="headings">PGP Emails</span>
-                                <Button onClick={()=>{ this.showViewmodal(true,'pgp_emails','PGP Emails')}} size='small' className="pull-right exp_btn">View</Button>
+                                <Button onClick={() => { this.showViewmodal(true, 'pgp_emails', 'PGP Emails') }} size='small' className="pull-right exp_btn">View</Button>
                                 <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
                                     this.exportCSV('pgp_emails');
                                 }} >Export</Button>
@@ -269,7 +559,7 @@ class Account extends Component {
                             </div>
                             <div className="inline_b">
                                 <span className="headings">Chat IDs</span>
-                                <Button onClick={()=>{ this.showViewmodal(true,'chat_ids','Chat IDs')}} size='small' className="pull-right exp_btn">View</Button>
+                                <Button onClick={() => { this.showViewmodal(true, 'chat_ids', 'Chat IDs') }} size='small' className="pull-right exp_btn">View</Button>
                                 <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
                                     this.exportCSV('chat_ids');
                                 }} >Export</Button>
@@ -283,14 +573,14 @@ class Account extends Component {
                             </div>
                             <div className="inline_b">
                                 <span className="headings">SIM IDs</span>
-                                <Button onClick={()=>{ this.showViewmodal(true,'sim_ids','Sim IDs')}} size='small' className="pull-right exp_btn mb-0">View</Button>
+                                <Button onClick={() => { this.showViewmodal(true, 'sim_ids', 'Sim IDs') }} size='small' className="pull-right exp_btn mb-0">View</Button>
                                 <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
                                     this.exportCSV('sim_ids');
                                 }} >Export</Button>
                                 <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
                                     this.showImportModal(true, "sim_ids", "Sim IDs")
                                 }}>Import</Button>
-                                
+
                                 <a href={`${BASE_URL}users/getFile/import_sim_ids.xlsx`}>
                                     <Button size='small' className="pull-right imp_btn mb-0" type="dashed">Sample</Button>
                                 </a>
@@ -298,7 +588,7 @@ class Account extends Component {
                             </div>
                         </Card>
                     </div>
-                   
+
                     {/* <div className="col-md-4 ac_card p-0">
                         <Card
                             title=""
@@ -364,13 +654,13 @@ class Account extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getSimIDs: getSimIDs,
-        getChatIDs: getChatIDs, 
+        getChatIDs: getChatIDs,
         getPGPEmails: getPGPEmails,
         importCSV: importCSV,
         exportCSV: exportCSV
     }, dispatch);
 }
-var mapStateToProps = ({ account, devices}) => {
+var mapStateToProps = ({ account, devices }) => {
 
     return {
         msg: account.msg,

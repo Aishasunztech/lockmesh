@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Card, Button, Row, Col, Select, Input, Checkbox, Icon } from "antd";
 // import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import styles from "./appfilter.css";
@@ -29,7 +29,6 @@ class AppFilter extends Component {
         this.setState({
             selectedDisplayValues: this.props.selectedOptions,
         });
-
         //this.setDropdowns(this.props.selectedOptions);
         // alert('did mount ', )
         // this.setDropdowns(this.props.selectedOptions);
@@ -103,74 +102,81 @@ class AppFilter extends Component {
                 <Row gutter={16} className="filter_top">
                     <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
-                            <Icon type="down" className="down_icon" />
-                            <Picky
-                                options={this.props.options}
-                                value={this.state.selectedDisplayValues}
-                                placeholder="Display"
-                                className="display_"
-                                multiple={true}
-                                includeSelectAll={true}
-                                onChange={values => this.setDropdowns(values)}
-                                dropdownHeight={300}
-                                renderSelectAll={({
-                                    filtered,
-                                    tabIndex,
-                                    allSelected,
-                                    toggleSelectAll,
-                                    multiple
-                                }) => {
-
-                                    // Don't show if single select or items have been filtered.
-                                    if (multiple && !filtered) {
+                            {(this.props.options !== undefined && this.props.options !== null)?
+                                <Fragment>
+                                    <Icon type="down" className="down_icon" />
+                                    <Picky
+                                    options={this.props.options}
+                                    value={this.state.selectedDisplayValues}
+                                    placeholder="Display"
+                                    className="display_"
+                                    multiple={true}
+                                    includeSelectAll={true}
+                                    onChange={values => this.setDropdowns(values)}
+                                    dropdownHeight={300}
+                                    renderSelectAll={({
+                                        filtered,
+                                        tabIndex,
+                                        allSelected,
+                                        toggleSelectAll,
+                                        multiple
+                                    }) => {
+    
+                                        // Don't show if single select or items have been filtered.
+                                        if (multiple && !filtered) {
+                                            return (
+    
+                                                <li
+                                                    tabIndex={tabIndex}
+                                                    role="option"
+                                                    className={allSelected ? 'option selected' : 'option'}
+                                                    onClick={toggleSelectAll}
+                                                    onKeyPress={toggleSelectAll}
+                                                >
+                                                    {/* required to select item */}
+                                                    {/* <input type="checkbox" checked={isSelected} readOnly /> */}
+                                                    <Checkbox
+                                                        checked={allSelected} className="slct_all"
+                                                    >SELECT ALL</Checkbox>
+                                                </li>
+                                            );
+                                        }
+                                    }}
+                                    render={({
+                                        style,
+                                        isSelected,
+                                        item,
+                                        selectValue,
+                                        labelKey,
+                                        valueKey,
+                                        multiple
+                                    }) => {
+    
                                         return (
-
                                             <li
-                                                tabIndex={tabIndex}
-                                                role="option"
-                                                className={allSelected ? 'option selected' : 'option'}
-                                                onClick={toggleSelectAll}
-                                                onKeyPress={toggleSelectAll}
+                                                style={style} // required
+                                                className={isSelected ? 'selected' : ''} // required to indicate is selected
+                                                key={item[valueKey]} // required
+                                                onClick={() => selectValue(item)}
                                             >
                                                 {/* required to select item */}
                                                 {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                <Checkbox
-                                                    checked={allSelected} className="slct_all"
-                                                >SELECT ALL</Checkbox>
+                                                <Checkbox checked={isSelected}>{item}</Checkbox>
+    
                                             </li>
                                         );
-                                    }
-                                }}
-                                render={({
-                                    style,
-                                    isSelected,
-                                    item,
-                                    selectValue,
-                                    labelKey,
-                                    valueKey,
-                                    multiple
-                                }) => {
-
-                                    return (
-                                        <li
-                                            style={style} // required
-                                            className={isSelected ? 'selected' : ''} // required to indicate is selected
-                                            key={item[valueKey]} // required
-                                            onClick={() => selectValue(item)}
-                                        >
-                                            {/* required to select item */}
-                                            {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                            <Checkbox checked={isSelected}>{item}</Checkbox>
-
-                                        </li>
-                                    );
-                                }}
-                            />
+                                    }}
+                                />
+                            </Fragment>
+                            :
+                             null                        
+                            }
+                           
                         </div>
                     </Col>
                     <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
-                            {this.props.handleFilterOptions()}
+                            {(this.props.handleFilterOptions!==undefined && this.props.handleFilterOptions !== null) ? this.props.handleFilterOptions() : null}
                         </div>
                     </Col>
                     <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
@@ -221,6 +227,15 @@ class AppFilter extends Component {
                                                 onClick={() => this.props.handleDeviceModal(true)}
                                             >
                                                 {this.props.addButtonText}
+                                            </Button>:
+                                            (this.props.AddPolicyModel)?
+                                            <Button
+                                                type="primary"
+                                                disabled={(this.props.disableAddButton == true) ? true : false}
+                                                style={{ width: '100%' }}
+                                                onClick={() => this.props.handlePolicyModal(true)}
+                                            >
+                                                {this.props.addButtonText}
                                             </Button>
                                             :
                                             <Button
@@ -243,8 +258,8 @@ class AppFilter extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        checkComponent: checkComponent,
-        getUser: getUser
+        // checkComponent: checkComponent,
+        // getUser: getUser
     }, dispatch);
 }
 var mapStateToProps = ({ routing, auth }, otherProps) => {
@@ -254,8 +269,8 @@ var mapStateToProps = ({ routing, auth }, otherProps) => {
     return {
         // routing: routing,
         pathname: routing.location.pathname,
-        authUser: auth.authUser,
-        isAllowed: auth.isAllowed
+        // authUser: auth.authUser,
+        // isAllowed: auth.isAllowed
     };
 }
 

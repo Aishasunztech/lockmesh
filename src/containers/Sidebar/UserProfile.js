@@ -23,6 +23,11 @@ class UserProfile extends Component {
     //   query: token
     // });
   }
+  componentWillReceiveProps(nextprops) {
+    if (this.props.pathname !== nextprops.pathname) {
+      this.props.getNewDevicesList();
+    }
+  }
   render() {
     // console.log("header devices count", this.props.devices);
 
@@ -72,11 +77,11 @@ class UserProfile extends Component {
   }
 }
 
-var mapStateToProps = ({ devices }) => {
+var mapStateToProps = ({ settings, devices }) => {
   // console.log('devices new', devices.newDevices);
   return {
     devices: devices.newDevices,
-
+    pathname: settings.pathname
   };
 }
 

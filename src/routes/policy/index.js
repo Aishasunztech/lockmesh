@@ -8,6 +8,7 @@ import AddPolicy from "./components/AddPolicy";
 
 import {
     getPolicies,
+    getDefaultApps
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -106,6 +107,7 @@ class Policy extends Component {
     componentDidMount() {
         this.props.getPolicies();
         this.props.getApkList();
+        this.props.getDefaultApps();
     }
 
     handlePolicyModal= (visible) => {
@@ -137,7 +139,9 @@ class Policy extends Component {
                     columns={this.columns}
                     policies={this.props.policies}
                 />
-                <Modal
+                <Modal 
+                width="700px"
+                    className="policy_popup"
                     visible={this.state.policyModal}
                     title="Add Policy"
                     onOk={() => this.handlePolicyModal(false)}
@@ -158,6 +162,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getPolicies: getPolicies,
         getApkList: getApkList,
+        getDefaultApps: getDefaultApps
     }, dispatch);
 }
 var mapStateToProps = ({ policies }) => {

@@ -11,23 +11,27 @@ export default class AddPolicy extends Component {
         };
 
         this.steps = [{
-            title: 'First',
+            title: 'Menu Apps',
             content: (
                 <AppList
                     apk_list={this.props.apk_list}
                 />
             ),
         }, {
-            title: 'Second',
+            title: 'Defaut Apps',
             content: (
                 <AppList
                     app_list={this.props.app_list}
                 />
             ),
         }, {
-            title: 'Last',
+            title: 'Device Controls',
             content: "hello",
-        }];
+        }, {
+            title: 'Policy Info',
+            content: "hello",
+        }
+        ];
     }
 
     next() {

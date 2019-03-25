@@ -192,7 +192,6 @@ class Apk extends React.Component {
     handlePagination = (value) => {
         this.refs.listApk.handlePagination(value);
         this.props.postPagination(value, 'apk');
-        console.log()
     }
     handleComponentSearch = (value) => {
         try {
@@ -297,7 +296,7 @@ class Apk extends React.Component {
                                 <div className="col-sm-12">
                                     <div className="col-sm-5"></div>
                                     <div className="col-sm-2" style={{ padding: "0" }}>
-                                        <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.42.apk">
+                                        <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.43.apk">
                                             <button style={{ width: "100%", marginBottom: "16px" }} className="btn btn-sm btn-default">Download Screenlocker</button>
                                         </a>
                                     </div>

@@ -21,7 +21,7 @@ export default class ChangeProfile extends Component {
 
         this.setState({
             visible: true,
-            name: this.props.profile.firstName + ' ' + this.props.profile.lastName,
+            name: this.props.name,
 
         });
     }
@@ -55,6 +55,7 @@ export default class ChangeProfile extends Component {
                     profile={this.props.profile} 
                     handleCancel={this.handleCancel}
                     updateUserProfile={this.props.updateUserProfile}
+                    getUser={this.props.getUser}
                     
                 />
 
@@ -89,20 +90,20 @@ class EditForm extends Component {
             <Form onSubmit={this.handleSubmit}>
 
                 <Form.Item
-                    label="First Name "
+                    label="Name "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 12 }}
                 >
-                 {this.props.form.getFieldDecorator('first_Name', {
-                      initialValue: this.props.profile.firstName,
-                    rules: [{ required: true, message: 'Please input your First Name!' }],
+                 {this.props.form.getFieldDecorator('name', {
+                      initialValue: this.props.profile.name,
+                    rules: [{ required: true, message: 'Please input your Name!' }],
                 })(
 
                     <Input />
                 )}
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                     label="Last Name "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 12 }}
@@ -115,7 +116,7 @@ class EditForm extends Component {
              
                     <Input />
                 )}
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item>
                {this.props.form.getFieldDecorator('dealerId', {
                     initialValue: this.props.profile.dealerId,

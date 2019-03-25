@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Menu } from "antd";
+import { Menu, Icon } from "antd";
 import { Link } from "react-router-dom";
 
 import CustomScrollbars from "util/CustomScrollbars";
@@ -16,6 +16,7 @@ import {
 import IntlMessages from "../../util/IntlMessages";
 import { connect } from "react-redux";
 import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
+import { timingSafeEqual } from "crypto";
 // import MenuItems from "../MenuItems";
 
 const SubMenu = Menu.SubMenu;
@@ -45,10 +46,16 @@ class SidebarContent extends Component {
 
   componentDidMount() {
     // console.log('did mount of content', this.props.devices)
-    this.props.getDevicesList();
+    // this.props.getDevicesList();
   }
+  componentWillReceiveProps(nextprops) {
+    // if(this.props.pathname!==nextprops.pathname){
+    //   alert("hello");
+    //   this.props.getDevicesList();
+    // }
 
 
+  }
   render() {
     const { themeType, navStyle, pathname, authUser } = this.props;
 
@@ -60,7 +67,7 @@ class SidebarContent extends Component {
         <div className="gx-sidebar-content ">
           <div className={`gx-sidebar-notifications ${this.getNoHeaderClass(navStyle)} `}>
             <UserProfile
-              devices={this.props.devices}
+              // devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
             />
@@ -78,6 +85,10 @@ class SidebarContent extends Component {
 
             {(authUser.type === "admin") ? <Menu.Item key="account">
               <Link to="/account"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.account" /></Link>
+            </Menu.Item> : null}
+
+            {(authUser.type === "admin") ? <Menu.Item key="policy">
+              <Link to="/policy"><Icon type="file-protect" className="icon" /> <IntlMessages id="sidebar.policy" /></Link>
             </Menu.Item> : null}
 
             {(authUser.type === "admin") ? <Menu.Item key="dealer/dealer">

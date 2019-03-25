@@ -60,10 +60,9 @@ class Devices extends Component {
                         className: '',
                         // ...this.getColumnSearchProps('device_id'),
                         sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+                        sortDirections: ['ascend', 'descend'],
                     }
                 ],
-
-                sortDirections: ['ascend', 'descend'],
             },
             {
                 title: (
@@ -79,6 +78,7 @@ class Devices extends Component {
                 ),
                 dataIndex: 'status',
                 className: '',
+
                 children: [
                     {
                         title: 'STATUS',
@@ -86,9 +86,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'status',
                         key: 'status',
-
-                        // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.status.localeCompare(b.status) },
+                        sorter: (a, b) => { console.log('done', a.status); return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -510,7 +508,7 @@ class Devices extends Component {
                     }
                 ]
             },
-           
+
             {
                 title: (
                     <Input.Search
@@ -719,8 +717,8 @@ class Devices extends Component {
             columns: columns,
             searchText: '',
             devices: [],
-            tabselect:'1'
-        }   
+            tabselect: '1'
+        }
         this.copyDevices = [];
 
         this.handleCheckChange = this.handleCheckChange.bind(this)
@@ -746,28 +744,28 @@ class Devices extends Component {
     handleChange(value) {
         // alert('value');
         // alert(value);
-        // let type = value.toLowerCase();
+        // value = value.toLowerCase();
         switch (value) {
             case 'active':
                 this.setState({
-                    devices: this.filterList('active', this.props.devices),
+                    devices: this.filterList('Activated', this.props.devices),
                     column: this.columns,
-                    tabselect:'4'
+                    tabselect: '4'
                 })
 
                 break;
             case 'suspended':
                 this.setState({
-                    devices: this.filterList('suspended', this.props.devices),
+                    devices: this.filterList('Suspended', this.props.devices),
                     column: this.columns,
-                    tabselect:'7'
+                    tabselect: '7'
                 })
                 break;
             case 'expired':
                 this.setState({
-                    devices: this.filterList('expired', this.props.devices),
+                    devices: this.filterList('Expired', this.props.devices),
                     column: this.columns,
-                    tabselect:'6'
+                    tabselect: '6'
                 })
                 break;
             case 'all':
@@ -779,21 +777,22 @@ class Devices extends Component {
                 break;
             case "unlinked":
                 this.setState({
-                    devices: this.filterList('unlinked', this.props.devices),
+                    devices: this.filterList('Unlinked', this.props.devices),
                     column: this.columns,
                     tabselect: '5'
                 })
                 break;
             case "pending activation":
+                // alert(value);
                 this.setState({
-                    devices: this.filterList('pending activation', this.props.devices),
+                    devices: this.filterList('Pending activation', this.props.devices),
                     column: this.columns,
                     tabselect: '2'
                 })
                 break;
             case "pre-activated":
                 this.setState({
-                    devices: this.filterList('pre-activated', this.props.devices),
+                    devices: this.filterList('Pre-activated', this.props.devices),
                     column: this.columns,
                     tabselect: '3'
                 })
@@ -808,16 +807,17 @@ class Devices extends Component {
         }
 
     }
+
     handleChangetab = (value) => {
         // alert('value');
         // alert(value);
-        
-       // console.log('selsect', this.props.selectedOptions)
-      // let type = value.toLowerCase();
+
+        // console.log('selsect', this.props.selectedOptions)
+        // let type = value.toLowerCase();
         switch (value) {
             case '4':
                 this.setState({
-                    devices: this.filterList('active', this.props.devices),
+                    devices: this.filterList('Activated', this.props.devices),
                     column: this.state.columns,
                     tabselect: '4'
                 })
@@ -825,14 +825,14 @@ class Devices extends Component {
                 break;
             case '7':
                 this.setState({
-                    devices: this.filterList('suspended', this.props.devices),
+                    devices: this.filterList('Suspended', this.props.devices),
                     column: this.state.columns,
                     tabselect: '7'
                 })
                 break;
             case '6':
                 this.setState({
-                    devices: this.filterList('expired', this.props.devices),
+                    devices: this.filterList('Expired', this.props.devices),
                     column: this.state.columns,
                     tabselect: '6'
                 })
@@ -846,21 +846,21 @@ class Devices extends Component {
                 break;
             case "5":
                 this.setState({
-                    devices: this.filterList('unlinked', this.props.devices),
+                    devices: this.filterList('Unlinked', this.props.devices),
                     column: this.state.columns,
                     tabselect: '5'
                 })
                 break;
             case "2":
                 this.setState({
-                    devices: this.filterList('pending activation', this.props.devices),
+                    devices: this.filterList('Pending activation', this.props.devices),
                     column: this.state.columns,
                     tabselect: '2'
                 })
                 break;
             case "3":
                 this.setState({
-                    devices: this.filterList('pre-activated', this.props.devices),
+                    devices: this.filterList('Pre-activated', this.props.devices),
                     column: this.state.columns,
                     tabselect: '3'
                 })
@@ -1013,7 +1013,7 @@ class Devices extends Component {
                 <Select.Option value="all">All</Select.Option>
                 <Select.Option value="pending activation">Pending Activation</Select.Option>
                 <Select.Option value="pre-activated">Pre Activated</Select.Option>
-                <Select.Option value="active">Active</Select.Option>
+                <Select.Option value="active">Activated</Select.Option>
                 <Select.Option value="unlinked">Unlinked</Select.Option>
                 <Select.Option value="expired">Expired</Select.Option>
                 <Select.Option value="suspended">Suspended</Select.Option>
@@ -1044,7 +1044,7 @@ class Devices extends Component {
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText="Add Device"
                                 options={this.props.options}
-                                isAddButton={true}
+                                isAddButton={this.props.user.type !== 'admin'}
                                 AddDeviceModal={true}
                                 disableAddButton={this.props.user.type === 'admin'}
                                 // toLink="add-device"
@@ -1069,8 +1069,6 @@ class Devices extends Component {
                                 tabselect={this.state.tabselect}
                                 handleChangetab={this.handleChangetab}
                                 handlePagination={this.handlePagination}
-                    
-                               
                             />
 
                             <ShowMsg
@@ -1095,14 +1093,14 @@ class Devices extends Component {
             coppyDevices = this.state.devices;
             status = false;
         }
-        console.log("devices", coppyDevices);
+        //  console.log("devices", coppyDevices);
 
         if (e.target.value.length) {
-            console.log("keyname", e.target.name);
-            console.log("value", e.target.value);
-            console.log(this.state.devices);
+            // console.log("keyname", e.target.name);
+            // console.log("value", e.target.value);
+            // console.log(this.state.devices);
             coppyDevices.forEach((device) => {
-                console.log("device", device);
+                // console.log("device", device);
 
                 if (device[e.target.name] !== undefined) {
                     if ((typeof device[e.target.name]) === 'string') {
