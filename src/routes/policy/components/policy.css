@@ -1,0 +1,25 @@
+.policy_steps .steps-content {
+    margin: 24px 0;
+}
+.policy_steps .ant-table-tbody > tr > td {
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 8px !important;
+    font-weight: 300;
+    width: 25%;
+}
+.policy_steps .ant-table-thead > tr > th {
+    background: #fafafa;
+    color: #535353;
+    border-bottom: 1px solid #e8e8e8;
+    text-align: center;
+}
+.policy_steps .ant-table-content {
+    border: 1px solid #e8e8e8;
+}
+.policy_steps .steps-action {
+    text-align: center; 
+}
+.policy_steps .line_break {
+    width: 100%;
+}
