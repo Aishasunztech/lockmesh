@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styles from './AppList';
 import { Card, Table, Icon } from "antd";
-import { getStatus, getColor } from '../../../routes/utils/commonUtils'
+import { getStatus, getColor, checkValue } from '../../../routes/utils/commonUtils'
 let make_red = 'captilize';
 export default class DeviceSidebar extends Component {
     // constructor(props){
@@ -15,7 +15,6 @@ export default class DeviceSidebar extends Component {
 
         let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
         let color = getColor(status)
-
         // let device_status = 'Active';
 
         // if ((device_details.status === 'expired')) {
@@ -74,6 +73,11 @@ export default class DeviceSidebar extends Component {
                 value: device_details.link_code
             },
             {
+                key: 812,
+                name: (<a href="javascript:void(0)">Activation Code:</a>),
+                value: checkValue(device_details.activation_code)
+            },
+            {
                 key: 9,
                 name: (<a href="javascript:void(0)">Mac Address:</a>),
                 value: device_details.mac_address
@@ -86,7 +90,12 @@ export default class DeviceSidebar extends Component {
             {
                 key: 11,
                 name: (<a href="javascript:void(0)">Model:</a>),
-                value: (device_details.model === undefined || device_details.model === 'null' ||  device_details.model === null || device_details.model === '') ? 'N/A' : device_details.model
+                value: (device_details.model === undefined || device_details.model === 'null' || device_details.model === null || device_details.model === '') ? 'N/A' : device_details.model
+            },
+            {
+                key: 111,
+                name: (<a href="javascript:void(0)">Serial Number:</a>),
+                value: checkValue(device_details.serial_number)
             },
             {
                 key: 12,
@@ -119,10 +128,25 @@ export default class DeviceSidebar extends Component {
                 value: device_details.ip_address
             },
             {
+                key: 171,
+                name: (<a href="javascript:void(0)">Online:</a>),
+                value: checkValue(device_details.online)
+            },
+            {
+                key: 172,
+                name: (<a href="javascript:void(0)">S-Dealer:</a>),
+                value: checkValue(device_details.s_dealer)
+            },
+            {
+                key: 173,
+                name: (<a href="javascript:void(0)">S Dealer Name:</a>),
+                value: checkValue(device_details.s_dealer_name)
+            },
+            {
                 key: 18,
                 name: (<a href="javascript:void(0)">Start Date:</a>),
                 // value: (Date(device_details.start_date,'mm-dd-Y'))
-                value: (device_details.start_date)
+                value: checkValue(device_details.start_date)
             },
             {
                 key: 19,
@@ -138,7 +162,7 @@ export default class DeviceSidebar extends Component {
                 title: 'Device ID:',
                 dataIndex: 'name',
                 className: "device_info",
-                width: 100,
+                width: 110,
             }, {
                 key: 0,
                 title: (<span >{device_details.device_id}<a href="#" className="ref-btn" onClick={() => {

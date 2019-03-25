@@ -1,8 +1,46 @@
 import React, { Component, Fragment } from 'react'
-import { Card, Button, Row, Col, Select, Input, Checkbox, Icon, Steps, message } from "antd";
+import { Card, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
 import styles from './policy.css'
 
+const TextArea = Input;
+const columns = [{
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    render: text => <a href="javascript:;">{text}</a>,
+}, {
+    title: 'Action',
+    dataIndex: 'action',
+    key: 'action',
+}];
+const data = [
+    {
+        name: "Wifi",
+        action: (<Switch size="small"></Switch>),
+        key: 1,
+    },
+    {
+        name: "Bluetooth",
+        action: (<Switch size="small"></Switch>),
+        key: 2,
+    },
+    {
+        name: "Screenshot",
+        action: (<Switch size="small"></Switch>),
+        key: 3,
+    },
+    {
+        name: "Location",
+        action: (<Switch size="small"></Switch>),
+        key: 4,
+    },
+    {
+        name: "Hotspot",
+        action: (<Switch size="small"></Switch>),
+        key: 4,
+    }
+];
 export default class AddPolicy extends Component {
     constructor(props) {
         super(props);
@@ -26,10 +64,32 @@ export default class AddPolicy extends Component {
             ),
         }, {
             title: 'Device Controls',
-            content: "hello",
+            content: (
+                <Table
+                    pagination={false}
+                    dataSource={data}
+                    size="small"
+                    columns={columns}>
+                </Table>
+            ),
         }, {
             title: 'Policy Info',
-            content: "hello",
+            content: (
+                <div className="lst_stp">
+                    <div className="row">
+                        <div className="col-md-2 pr-0 "><label>Name:</label></div>
+                        <div className="col-md-8">
+                            <Input placeholder="Name" className="pol_inp" />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-2 pr-0 "><label>Note:</label></div>
+                        <div className="col-md-8">
+                            <textarea placeholder="Note" class="ant-input"></textarea>
+                        </div>
+                    </div>
+                </div>
+            )
         }
         ];
     }
@@ -52,18 +112,8 @@ export default class AddPolicy extends Component {
                     <Steps current={current}>
                         {this.steps.map(item => <Steps.Step key={item.title} title={item.title} />)}
                     </Steps>
-
                     <div className="steps-content">{this.steps[current].content}</div>
-
                     <div className="steps-action">
-                        {
-                            current < this.steps.length - 1
-                            && <Button type="primary" onClick={() => this.next()}>Next</Button>
-                        }
-                        {
-                            current === this.steps.length - 1
-                            && <Button type="primary" onClick={() => message.success('Processing complete!')}>Done</Button>
-                        }
                         {
                             current > 0
                             && (
@@ -71,10 +121,22 @@ export default class AddPolicy extends Component {
                                     Previous
                             </Button>
                             )
+
+                        }
+                        {
+                            current === this.steps.length - 1
+                            && <Button type="primary" onClick={() => message.success('Processing complete!')}>Done</Button>
+                        }
+                        {
+                            current < this.steps.length - 1
+                            && <Button type="primary" onClick={() => this.next()}>Next</Button>
+
                         }
                     </div>
                 </div>
             </Fragment>
         );
     }
+
+
 }

@@ -8,7 +8,7 @@ import {
 
 import { BASE_URL } from '../../../constants/Application';
 
-import { Table, Switch, } from "antd";
+import { Table, Switch, Popover, Checkbox, Icon } from "antd";
 import AppDropdown from "./AppDropdown";
 
 
@@ -88,7 +88,7 @@ class AppList extends Component {
 
     handleChecked = (e, key, app_id) => {
         // this.props.handleCheckApp(e,key,app_id);
-        
+
 
     }
 
@@ -111,12 +111,12 @@ class AppList extends Component {
 
     renderSingleApp = (app) => {
         console.log("this app", app);
-        let app_id =  (app.apk_id !==undefined )?app.apk_id :app.app_id;
-        let guest = (app.guest !== undefined)? app.guest : false;
-        let encrypted = (app.encrypted !== undefined)? app.encrypted : false;
-        let enable = (app.enable !== undefined)? app.enable : false;
-        let label = (app.apk_name !== undefined)? app.apk_name : app.label;
-        let icon = (app.logo !== undefined)? app.logo : app.icon;
+        let app_id = (app.apk_id !== undefined) ? app.apk_id : app.app_id;
+        let guest = (app.guest !== undefined) ? app.guest : false;
+        let encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
+        let enable = (app.enable !== undefined) ? app.enable : false;
+        let label = (app.apk_name !== undefined) ? app.apk_name : app.label;
+        let icon = (app.logo !== undefined) ? app.logo : app.icon;
         // alert(guest);
 
         return ({
@@ -127,7 +127,7 @@ class AppList extends Component {
                     <br />
                     <div className="line_break">{label}</div>
                 </Fragment>,
-            guest: 
+            guest:
                 <Switch
                     size="small"
                     ref={`guest_${app_id}`}
@@ -139,27 +139,27 @@ class AppList extends Component {
                         this.handleChecked(e, "guest", app_id);
                     }}
                 />,
-            encrypted: 
+            encrypted:
                 <Switch
                     size="small"
                     ref={`encrypted_${app_id}`}
                     name={`encrypted_${app_id}`}
                     value={encrypted}
-                    
+
                     checked={(encrypted === true || encrypted === 1) ? true : false}
                     onClick={(e) => {
                         // console.log("encrypted", e);
                         this.handleChecked(e, "encrypted", app_id);
                     }}
                 />,
-            enable: 
+            enable:
                 <Switch
                     size="small"
                     ref={`enable_${app_id}`}
                     name={`enable_${app_id}`}
                     value={enable}
                     checked={((enable === true) || (enable === 1)) ? true : false}
-                    
+
                     onClick={(e) => {
                         this.handleChecked(e, "enable", app_id);
                     }}
@@ -168,7 +168,7 @@ class AppList extends Component {
     }
 
     renderApps = () => {
-        if(this.props.apk_list) {
+        if (this.props.apk_list) {
             return this.props.apk_list.map(app => {
                 return this.renderSingleApp(app)
             })
@@ -177,11 +177,20 @@ class AppList extends Component {
                 return this.renderSingleApp(app)
             })
         }
-        
-    }
 
+    }
+    renderDropdown() {
+        return (
+            <div className="applist_menu">
+                <Checkbox>Turn on Guests All</Checkbox><br></br>
+                <Checkbox>Turn On Encrypted All</Checkbox><br></br>
+                <Checkbox>Enable All</Checkbox>
+            </div>
+        );
+    }
     render() {
         return (
+
             <div>
                 {/* <AppDropdown 
                     checked_app_id={this.props.checked_app_id} 
@@ -189,6 +198,10 @@ class AppList extends Component {
                     encryptedAll={this.state.encryptedAll} 
                     guestAll={this.state.guestAll} handleCheckedAll={this.handleCheckedAll} 
                 /> */}
+                <Popover className="list_p_down" placement="bottomRight" content={this.renderDropdown()} trigger="click">
+                    <a><Icon type="ellipsis" /></a>
+
+                </Popover>
                 <Table
                     style={{ margin: 0, padding: 0 }}
                     size='small'

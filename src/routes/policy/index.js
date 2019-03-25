@@ -140,7 +140,7 @@ class Policy extends Component {
                     policies={this.props.policies}
                 />
                 <Modal 
-                width="700px"
+                    width="700px"
                     className="policy_popup"
                     visible={this.state.policyModal}
                     title="Add Policy"

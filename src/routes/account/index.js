@@ -28,8 +28,8 @@ class Account extends Component {
             dataVisible: false,
             dataFieldName: '',
             dataFieldTitle: '',
-            sim_ids:[],
-            chat_ids:[],
+            sim_ids: [],
+            chat_ids: [],
             pgp_emails: [],
             sim_ids_page: 10,
             chat_ids_page: 10,
@@ -58,12 +58,12 @@ class Account extends Component {
             this.setState({
                 sim_ids: this.props.sim_ids,
             });
-        }else if(dataFieldName==="pgp_emails"){
+        } else if (dataFieldName === "pgp_emails") {
             this.props.getPGPEmails();
             this.setState({
                 pgp_emails: this.props.pgp_emails
             });
-        }else if(dataFieldName==="chat_ids"){
+        } else if (dataFieldName === "chat_ids") {
             this.props.getChatIDs();
             this.setState({
                 chat_ids: this.props.chat_ids,
@@ -72,13 +72,13 @@ class Account extends Component {
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.getSimIDs();
         this.props.getPGPEmails();
         this.props.getChatIDs();
     }
-    componentWillReceiveProps(nextProps){
-        if(nextProps.sim_ids.length !==nextProps.sim_ids.length || nextProps.pgp_emails.length !==nextProps.pgp_emails.length || nextProps.chat_ids.length !==nextProps.chat_ids.length){
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.sim_ids.length !== nextProps.sim_ids.length || nextProps.pgp_emails.length !== nextProps.pgp_emails.length || nextProps.chat_ids.length !== nextProps.chat_ids.length) {
             this.setState({
                 sim_ids: nextProps.sim_ids,
                 chat_ids: nextProps.chat_ids,
@@ -117,9 +117,9 @@ class Account extends Component {
     exportCSV = (fieldName) => {
         this.props.exportCSV(fieldName);
     }
-    searchField = (originalData, fieldName, value) =>  {
+    searchField = (originalData, fieldName, value) => {
         let demoData = [];
-            
+
         if (value.length) {
             originalData.forEach((data) => {
                 if (data[fieldName] !== undefined) {
@@ -132,7 +132,7 @@ class Account extends Component {
                         if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }
-                    } 
+                    }
                     // else {
                     //     // demoDevices.push(device);
                     // }
@@ -140,10 +140,10 @@ class Account extends Component {
                     demoData.push(data);
                 }
             });
-            
+
             return demoData;
         } else {
-            return originalData;    
+            return originalData;
         }
     }
     handleSearch = (e, dataName) => {
@@ -151,19 +151,19 @@ class Account extends Component {
         let fieldName = e.target.name;
         let fieldValue = e.target.value;
 
-        if(dataName === "sim_ids"){
-            let searchedData = this.searchField(this.props.sim_ids,fieldName, fieldValue);
+        if (dataName === "sim_ids") {
+            let searchedData = this.searchField(this.props.sim_ids, fieldName, fieldValue);
             this.setState({
                 sim_ids: searchedData
             });
-        } else if (dataName === "chat_ids"){
-            let searchedData = this.searchField(this.props.chat_ids,fieldName, fieldValue);
+        } else if (dataName === "chat_ids") {
+            let searchedData = this.searchField(this.props.chat_ids, fieldName, fieldValue);
             // console.log(searchedData);
             this.setState({
                 chat_ids: searchedData
             });
-        } else if (dataName === "pgp_emails"){
-            let searchedData = this.searchField(this.props.pgp_emails,fieldName, fieldValue);
+        } else if (dataName === "pgp_emails") {
+            let searchedData = this.searchField(this.props.pgp_emails, fieldName, fieldValue);
             // console.log(searchedData);
             this.setState({
                 pgp_emails: searchedData
@@ -172,21 +172,21 @@ class Account extends Component {
     }
 
     handlePagination = (e, dataName) => {
-        if(dataName === "sim_ids"){
+        if (dataName === "sim_ids") {
             this.setState({
                 sim_ids_page: e
             });
-        } else if (dataName === "chat_ids"){
+        } else if (dataName === "chat_ids") {
             this.setState({
                 chat_ids_page: e
             });
-        } else if (dataName === "pgp_emails"){
+        } else if (dataName === "pgp_emails") {
             this.setState({
                 pgp_emails_page: e
             });
         }
     }
-    
+
     render() {
 
         if (this.props.showMsg) {
@@ -276,7 +276,7 @@ class Account extends Component {
                         </Row>
                     </Form>
                 </Modal>
-                
+
                 <Modal
                     visible={this.state.dataVisible}
                     title={`${this.state.dataFieldTitle}`}
@@ -287,166 +287,155 @@ class Account extends Component {
                         }
                     }
                 >
-                    {(this.state.dataFieldName==="sim_ids")?
-                    <Fragment>
-                        <Select
-                            value={this.state.sim_ids_page}
-                            //  defaultValue={this.state.DisplayPages}
-                            style={{ width: '100%' }}
-                            // onSelect={value => this.setState({DisplayPages:value})}
-                            onChange={value => this.handlePagination(value, 'sim_ids')}
-                        >
-                            <Select.Option value="10" >10</Select.Option>
-                            <Select.Option value="20">20</Select.Option>
-                            <Select.Option value="30">30</Select.Option>
-                            <Select.Option value="50">50</Select.Option>
-                            <Select.Option value="100">100</Select.Option>
-                        </Select>
-                        <Table 
-                            columns={[
-                                {
-                                    title: (
-                                        <Input.Search
-                                            name="sim_id"
-                                            key="sim_id"
-                                            id="sim_id"
-                                            className="search_heading"
-                                            onKeyUp={
-                                                (e)=>{
-                                                    this.handleSearch(e,'sim_ids')
-                                                }
+                    {(this.state.dataFieldName === "sim_ids") ?
+                        <Fragment>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <Select
+                                        value={this.state.sim_ids_page}
+                                        //  defaultValue={this.state.DisplayPages}
+                                        style={{ width: '100%' }}
+                                        // onSelect={value => this.setState({DisplayPages:value})}
+                                        onChange={value => this.handlePagination(value, 'sim_ids')}
+                                    >
+                                        <Select.Option value="10" >10</Select.Option>
+                                        <Select.Option value="20">20</Select.Option>
+                                        <Select.Option value="30">30</Select.Option>
+                                        <Select.Option value="50">50</Select.Option>
+                                        <Select.Option value="100">100</Select.Option>
+                                    </Select>
+                                </div>
+                                <div className="col-md-6">
+                                    <Input.Search
+                                        name="sim_id"
+                                        key="sim_id"
+                                        id="sim_id"
+                                        className="search_heading1"
+                                        onKeyUp={
+                                            (e) => {
+                                                this.handleSearch(e, 'sim_ids')
                                             }
-                                            autoComplete="new-password"
-                                            placeholder="SIM ID"
-                                        />
-                                    ),
-                                    dataIndex: 'sim_id',
-                                    className: '',
-                                    children: [
-                                        {
-                                            title: 'SIM ID',
-                                            align: "center",
-                                            dataIndex: 'sim_id',
-                                            key: "sim_id",
-                                            className: '',
-                                            sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
-                                            sortDirections: ['ascend', 'descend'],
                                         }
-                                    ],
-                                },
-                                {
-                                    title: (
-                                        <Input.Search
-                                            name="start_date"
-                                            key="start_date"
-                                            id="start_date"
-                                            className="search_heading"
-                                            onKeyUp={
-                                                (e)=>{
-                                                    this.handleSearch(e,'sim_ids')
-                                                }
+                                        autoComplete="new-password"
+                                        placeholder="SIM ID"
+                                    />
+                                </div>
+                                <div className="col-md-6">
+                                    <Input.Search
+                                        name="start_date"
+                                        key="start_date"
+                                        id="start_date"
+                                        className="search_heading1"
+                                        onKeyUp={
+                                            (e) => {
+                                                this.handleSearch(e, 'sim_ids')
                                             }
-                                            autoComplete="new-password"
-                                            placeholder="START DATE"
-                                        />
-                                    ),
-                                    dataIndex: 'start_date',
-                                    className: '',
-                                    children: [
-                                        {
-                                            title: 'START DATE',
-                                            align: "center",
-                                            dataIndex: 'start_date',
-                                            key: "start_date",
-                                            className: '',
-                                            sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
-                                            sortDirections: ['ascend', 'descend'],
                                         }
-                                    ],
-                                },
-                                {
-                                    title: (
-                                        <Input.Search
-                                            name="expiry_date"
-                                            key="expiry_date"
-                                            id="expiry_date"
-                                            className="search_heading"
-                                            onKeyUp={
-                                                (e)=>{
-                                                    this.handleSearch(e,'sim_ids')
-                                                }
+                                        autoComplete="new-password"
+                                        placeholder="START DATE"
+                                    />
+                                </div>
+                                <div className="col-md-6">
+                                    <Input.Search
+                                        name="expiry_date"
+                                        key="expiry_date"
+                                        id="expiry_date"
+                                        className="search_heading1"
+                                        onKeyUp={
+                                            (e) => {
+                                                this.handleSearch(e, 'sim_ids')
                                             }
-                                            autoComplete="new-password"
-                                            placeholder="EXPIRY DATE"
-                                        />
-                                    ),
-                                    dataIndex: 'expiry_date',
-                                    className: '',
-                                    children: [
-                                        {
-                                            title: 'EXPIRY DATE',
-                                            align: "center",
-                                            dataIndex: 'expiry_date',
-                                            key: "expiry_date",
-                                            className: '',
-                                            sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
-                                            sortDirections: ['ascend', 'descend'],
                                         }
-                                    ],
-                                },
-                            ]} 
-                            dataSource={
-                                this.state.sim_ids.map(sim_id=>{
-                                    return {
-                                        key:sim_id.id,
-                                        sim_id: sim_id.sim_id,
-                                        start_date: sim_id.start_date,
-                                        expiry_date: sim_id.expiry_date
-                                    }
-                                })
-                            }
+                                        autoComplete="new-password"
+                                        placeholder="EXPIRY DATE"
+                                    />
+                                </div>
+                            </div>
 
-                            pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                            <Table
+                                columns={[
+                                    {
+                                        title: 'SIM ID',
+                                        align: "center",
+                                        dataIndex: 'sim_id',
+                                        key: "sim_id",
+                                        className: '',
+                                        sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
+                                        sortDirections: ['ascend', 'descend'],
 
-                        /> 
-                    </Fragment>
-                    :(this.state.dataFieldName==="chat_ids")?
-                    <Fragment>
-                        <Select
-                            value={this.state.chat_ids_page}
-                            //  defaultValue={this.state.DisplayPages}
-                            style={{ width: '100%' }}
-                            // onSelect={value => this.setState({DisplayPages:value})}
-                            onChange={value => this.handlePagination(value, 'chat_ids')}
-                        >
-                            <Select.Option value="10" >10</Select.Option>
-                            <Select.Option value="20">20</Select.Option>
-                            <Select.Option value="30">30</Select.Option>
-                            <Select.Option value="50">50</Select.Option>
-                            <Select.Option value="100">100</Select.Option>
-                        </Select>
-                        <Table 
-                            columns={[
-                                
-                                {
-                                    title: (
+                                    },
+                                    {
+                                        title: 'START DATE',
+                                        align: "center",
+                                        dataIndex: 'start_date',
+                                        key: "start_date",
+                                        className: '',
+                                        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+                                        sortDirections: ['ascend', 'descend'],
+
+                                    },
+                                    {
+                                        title: 'EXPIRY DATE',
+                                        align: "center",
+                                        dataIndex: 'expiry_date',
+                                        key: "expiry_date",
+                                        className: '',
+                                        sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+                                        sortDirections: ['ascend', 'descend'],
+                                    },
+                                ]}
+                                dataSource={
+                                    this.state.sim_ids.map(sim_id => {
+                                        return {
+                                            key: sim_id.id,
+                                            sim_id: sim_id.sim_id,
+                                            start_date: sim_id.start_date,
+                                            expiry_date: sim_id.expiry_date
+                                        }
+                                    })
+                                }
+
+                                pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+
+                            />
+                        </Fragment>
+                        : (this.state.dataFieldName === "chat_ids") ?
+                            <Fragment>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <Select
+                                            value={this.state.chat_ids_page}
+                                            //  defaultValue={this.state.DisplayPages}
+                                            style={{ width: '100%' }}
+                                            // onSelect={value => this.setState({DisplayPages:value})}
+                                            onChange={value => this.handlePagination(value, 'chat_ids')}
+                                        >
+                                            <Select.Option value="10" >10</Select.Option>
+                                            <Select.Option value="20">20</Select.Option>
+                                            <Select.Option value="30">30</Select.Option>
+                                            <Select.Option value="50">50</Select.Option>
+                                            <Select.Option value="100">100</Select.Option>
+                                        </Select>
+                                    </div>
+                                    <div className="col-md-6">
                                         <Input.Search
                                             name="chat_id"
                                             key="chat_id"
                                             id="chat_id"
-                                            className="search_heading"
+                                            className="search_heading1"
                                             onKeyUp={
-                                                (e)=>{
-                                                    this.handleSearch(e,'chat_ids')
+                                                (e) => {
+                                                    this.handleSearch(e, 'chat_ids')
                                                 }
                                             }
                                             autoComplete="new-password"
                                             placeholder="CHAT ID"
                                         />
-                                    ),
-                                    dataIndex: 'chat_id',
-                                    className: '',
-                                    children: [
+                                    </div>
+                                </div>
+
+                                <Table
+                                    columns={[
                                         {
                                             title: 'CHAT ID',
                                             align: "center",
@@ -455,86 +444,83 @@ class Account extends Component {
                                             className: '',
                                             sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
                                             sortDirections: ['ascend', 'descend'],
-                                        }
-                                    ],
-                                },
-                            ]} 
-                            dataSource={
-                                this.state.chat_ids.map(chat_id=>{
-                                    return {
-                                        key:chat_id.id,
-                                        chat_id: chat_id.chat_id,
-                                    }
-                                })
-                            }
-                            
-                            pagination={{ pageSize: Number(this.state.chat_ids_page), size: "middle" }}
-                        />
-                    </Fragment>
-                    :(this.state.dataFieldName==="pgp_emails")?
-                    <Fragment>
-                        <Select
-                            value={this.state.pgp_emails_page}
-                            //  defaultValue={this.state.DisplayPages}
-                            style={{ width: '100%' }}
-                            // onSelect={value => this.setState({DisplayPages:value})}
-                            onChange={value => this.handlePagination(value, 'pgp_emails')}
-                        >
-                            <Select.Option value="10" >10</Select.Option>
-                            <Select.Option value="20">20</Select.Option>
-                            <Select.Option value="30">30</Select.Option>
-                            <Select.Option value="50">50</Select.Option>
-                            <Select.Option value="100">100</Select.Option>
-                        </Select>
-                        <Table 
-                            columns={[
-                                
-                                {
-                                    title: (
-                                        <Input.Search
-                                            name="pgp_email"
-                                            key="pgp_email"
-                                            id="pgp_email"
-                                            className="search_heading"
-                                            onKeyUp={
-                                                (e)=>{
-                                                    this.handleSearch(e,'pgp_emails')
-                                                }
+                                        },
+                                    ]}
+                                    dataSource={
+                                        this.state.chat_ids.map(chat_id => {
+                                            return {
+                                                key: chat_id.id,
+                                                chat_id: chat_id.chat_id,
                                             }
-                                            autoComplete="new-password"
-                                            placeholder="PGP Email"
-                                        />
-                                    ),
-                                    dataIndex: 'pgp_email',
-                                    className: '',
-                                    children: [
-                                        {
-                                            title: 'PGP EMAILS',
-                                            align: "center",
-                                            dataIndex: 'pgp_email',
-                                            key: "pgp_email",
-                                            className: '',
-                                            sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
-                                            sortDirections: ['ascend', 'descend'],
-                                        }
-                                    ],
-                                },
-                            ]}
-                            
-                            dataSource={
-                                this.state.pgp_emails.map(email=>{
-                                    return {
-                                        key:email.id,
-                                        pgp_email: email.pgp_email,
-                                        
+                                        })
                                     }
-                                })
-                            }
 
-                            pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
-                        />
-                    </Fragment>
-                    :null}
+                                    pagination={{ pageSize: Number(this.state.chat_ids_page), size: "middle" }}
+                                />
+                            </Fragment>
+                            : (this.state.dataFieldName === "pgp_emails") ?
+                                <Fragment>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <Select
+                                                value={this.state.pgp_emails_page}
+                                                //  defaultValue={this.state.DisplayPages}
+                                                style={{ width: '100%' }}
+                                                // onSelect={value => this.setState({DisplayPages:value})}
+                                                onChange={value => this.handlePagination(value, 'pgp_emails')}
+                                            >
+                                                <Select.Option value="10" >10</Select.Option>
+                                                <Select.Option value="20">20</Select.Option>
+                                                <Select.Option value="30">30</Select.Option>
+                                                <Select.Option value="50">50</Select.Option>
+                                                <Select.Option value="100">100</Select.Option>
+                                            </Select>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <Input.Search
+                                                name="pgp_email"
+                                                key="pgp_email"
+                                                id="pgp_email"
+                                                className="search_heading1"
+                                                onKeyUp={
+                                                    (e) => {
+                                                        this.handleSearch(e, 'pgp_emails')
+                                                    }
+                                                }
+                                                autoComplete="new-password"
+                                                placeholder="PGP Email"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <Table
+                                        columns={[
+                                            {
+                                                title: 'PGP EMAILS',
+                                                align: "center",
+                                                dataIndex: 'pgp_email',
+                                                key: "pgp_email",
+                                                className: '',
+                                                sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+                                                sortDirections: ['ascend', 'descend'],
+
+                                            },
+                                        ]}
+
+                                        dataSource={
+                                            this.state.pgp_emails.map(email => {
+                                                return {
+                                                    key: email.id,
+                                                    pgp_email: email.pgp_email,
+
+                                                }
+                                            })
+                                        }
+
+                                        pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                    />
+                                </Fragment>
+                                : null}
                 </Modal>
                 <Row>
                     <div className="col-md-4 ac_card">

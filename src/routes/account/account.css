@@ -11,29 +11,37 @@
     margin-bottom: 8px;
     line-height: 22px !important;
 }
+
 .exp_btn:last-child {
     margin-bottom: 0;
 }
+
 .ac_card .imp_btn {
     margin-right: 8px;
     margin-bottom: 8px;
     line-height: 22px !important;
 }
+
 .imp_btn:last-child {
     margin-bottom: 0;
 }
+
 .headings {
     vertical-align: sub;
     font-size: small;
 }
+
 .p-0 {
     padding: 0;
 }
+
 .inline_b {
     display: inline-block;
     width: 100%
 }
+
 /*-----------*/
+
 .animationLoading {
     background: #fff;
     border: 1px solid;
@@ -95,6 +103,7 @@
     top: 50px;
     width: 50%;
 }
+
 @media screen and (max-width: 992px) {
     .ac_card {
         width: 100%;
@@ -102,4 +111,11 @@
     .p-0 {
         padding: 0 16px;
     }
-  }
+}
+
+.search_heading1 input {
+    font-size: 12px;
+    font-weight: 300;
+    padding: 5px;
+    padding-right: 18px !important;
+}

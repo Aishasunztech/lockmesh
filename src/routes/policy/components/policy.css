@@ -1,37 +1,76 @@
 .policy_steps .steps-content {
-    margin: 24px 0 10px;
+    margin: 4px 0 10px;
 }
-.policy_steps .ant-table-tbody > tr > td {
+
+.policy_steps .ant-table-tbody>tr>td {
     font-size: 12px;
     text-align: center;
     padding: 8px 8px !important;
     font-weight: 300;
     width: 25%;
 }
-.policy_steps .ant-table-thead > tr > th {
+
+.policy_steps .ant-table-thead>tr>th {
     background: #fafafa;
     color: #535353;
     border-bottom: 1px solid #e8e8e8;
     text-align: center;
 }
+
 .policy_steps .ant-table-content {
     border: 1px solid #e8e8e8;
 }
+
 .policy_steps .steps-action {
-    text-align: center; 
+    text-align: center;
 }
+
 .policy_steps .line_break {
     width: 100%;
 }
+
 /* .policy_popup {
     width: 700px !important;
 } */
+
 .policy_popup .ant-modal-body {
     padding: 24px 24px 10px;
 }
+
 .policy_popup .ant-steps-item-title {
     padding-right: 6px;
 }
+
 .policy_steps .ant-steps-item {
     margin-right: 6px !important;
+}
+
+.list_p_down {
+    font-size: 26px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    position: relative;
+    left: 95%;
+}
+
+.pol_inp {
+    margin: 0 0 16px;
+}
+
+.lst_stp label {
+    line-height: 20px;
+    margin-top: 8px;
+    float: right;
+}
+
+.lst_stp {
+    margin-top: 24px;
+}
+
+.pr-0 {
+    padding-right: 0px;
+}
+
+.lst_stp textarea {
+    min-height: 70px;
 }

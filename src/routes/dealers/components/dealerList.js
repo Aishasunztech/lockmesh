@@ -102,7 +102,7 @@ class DealerList extends Component {
 
                     </Button>
                 </span>,
-                'actions': <Button type="primary" style={{ margin: '0' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >RESET PASS</Button>,
+                'actions': <Button type="primary" style={{ margin: '0' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'PASSWORD RESET')} >RESET PASS</Button>,
                 'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
                 'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
                 'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
@@ -193,20 +193,21 @@ export default class Tab extends Component {
         return (
             <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
                 <TabPane tab="All" key="1" >
-                <DealerList
-                    dealersList={this.state.dealersList}
-                    suspendDealer={this.props.suspendDealer}
-                    activateDealer={this.props.activateDealer}
-                    deleteDealer={this.props.deleteDealer}
-                    undoDealer={this.props.undoDealer}
-                    columns={this.props.columns}
-                    selectedOptions={this.state.selectedOptions}
-                    ref="dealersList"
-                    pagination={this.props.pagination}
-                    editDealer={this.props.editDealer}
+                    <DealerList
+                        dealersList={this.state.dealersList}
+                        suspendDealer={this.props.suspendDealer}
+                        activateDealer={this.props.activateDealer}
+                        deleteDealer={this.props.deleteDealer}
+                        undoDealer={this.props.undoDealer}
+                        columns={this.props.columns}
+                        selectedOptions={this.state.selectedOptions}
+                        ref="dealersList"
+                        pagination={this.props.pagination}
+                        editDealer={this.props.editDealer}
+                        updatePassword={this.props.updatePassword}
 
 
-                />
+                    />
                 </TabPane>
 
                 <TabPane tab={<span className="green">Activated</span>} key="2" forceRender={true}>
@@ -221,6 +222,7 @@ export default class Tab extends Component {
                         // ref="dealersList"
                         pagination={this.props.pagination}
                         editDealer={this.props.editDealer}
+                        updatePassword={this.props.updatePassword}
 
                     />
                 </TabPane>
@@ -236,6 +238,7 @@ export default class Tab extends Component {
                         // ref="dealersList"
                         pagination={this.props.pagination}
                         editDealer={this.props.editDealer}
+                        updatePassword={this.props.updatePassword}
 
                     />
                 </TabPane>
@@ -251,6 +254,7 @@ export default class Tab extends Component {
                         // ref="dealersList"
                         pagination={this.props.pagination}
                         editDealer={this.props.editDealer}
+                        updatePassword={this.props.updatePassword}
                     />
                 </TabPane>
             </Tabs>
