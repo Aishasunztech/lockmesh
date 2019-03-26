@@ -43,16 +43,26 @@ export function getDropdown(pageName) {
     return (dispatch) => {
         RestService.getSelectedItems(pageName)
             .then((response) => {
-                // console.log("apk_list form server");
-                //  console.log(response.data);
+                //  console.log("apk_list form server");
+                //   console.log(response.data);
                 if (RestService.checkAuth(response.data)) {
                     //  console.log("action selected options", JSON.parse(response.data.data));
-
+                    let res = response.data.data;
+                    // console.log(res);
+                    if(res == undefined || res == 'undefined')
+                    {
+                        
+                        res = [];
+                       
+                    }
+                    else{
+                        res= JSON.parse(res)
+                    }
+                  //  res = (res !== undefined || res !== 'undefined') ? res : [""];
                     dispatch({
                         type: GET_DROPDOWN,
-                        payload: JSON.parse(response.data.data)
+                        payload: res
                     });
-
 
                 } else {
                     dispatch({

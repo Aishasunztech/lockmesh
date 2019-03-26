@@ -217,7 +217,7 @@ class AddDevice extends Component {
                         >
                             <Select.Option value="">Select Sim ID</Select.Option>
                             {this.props.sim_ids.map((sim_id,index) =>{
-                                return (<Select.Option key={index} value={sim_id.id}>{sim_id.sim_id}</Select.Option>)
+                                return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
                             })}
                         </Select>,
                     )}

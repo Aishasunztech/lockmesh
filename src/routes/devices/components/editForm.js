@@ -16,11 +16,12 @@ class EditDevice extends Component {
     }
 
     handleSubmit = (e) => {
-       // alert('submit', this.props.editDeviceFunc);
+        // alert('submit', this.props.editDeviceFunc);
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('form', values);
+                // console.log("Device List", values)
+                values.prevPGP = this.props.device.pgp_email;
                 this.props.editDeviceFunc(values);
                 this.props.hideModal();
                 this.handleReset();
@@ -43,40 +44,37 @@ class EditDevice extends Component {
 
     handleReset = () => {
         this.props.form.resetFields();
-      }
+    }
 
-      get_current_date = () => {
+    get_current_date = () => {
 
         let day = new Date().getDay(); //Current Date
         let month = new Date().getMonth() + 1; //Current Month
         let year = new Date().getFullYear();
 
-        if(day < 10)
-        {
-            day = '0'  + day;
+        if (day < 10) {
+            day = '0' + day;
         }
-           
-        if(month < 10)
-        {
+
+        if (month < 10) {
             month = '0' + month;
         }
 
-       var current_date = year +'/'+ month + '/' +day;
-      // console.log('date', current_date);
-       return current_date;
-      }
+        var current_date = year + '/' + month + '/' + day;
+        // console.log('date', current_date);
+        return current_date;
+    }
 
     handleCancel = () => {
         this.setState({ visible: false });
     }
 
-    createdDate = () =>{
-        return new Date().toJSON().slice(0,10).replace(/-/g,'/')
+    createdDate = () => {
+        return new Date().toJSON().slice(0, 10).replace(/-/g, '/')
     }
 
     render() {
-         console.log('props of coming', this.props.device);
-       //  alert(this.props.device.device_id);
+        //  alert(this.props.device.device_id);
         const { visible, loading } = this.state;
 
         return (
@@ -102,7 +100,7 @@ class EditDevice extends Component {
                         initialValue: this.props.device.dealer_id,
                     })(
 
-                        <Input type='hidden' disabled/>
+                        <Input type='hidden' disabled />
                     )}
                 </Form.Item>
                 <Form.Item
@@ -117,11 +115,11 @@ class EditDevice extends Component {
                             required: true, message: 'Device Name is Required !',
                         }],
                     })(
-                        <Input autoComplete="new-password"/>
+                        <Input autoComplete="new-password" />
                     )}
                 </Form.Item>
                 <Form.Item
-                    
+
                     label="Account Email "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
@@ -137,7 +135,7 @@ class EditDevice extends Component {
                         <Input autoComplete="new-password" />
                     )}
                 </Form.Item>
-                
+
                 <Form.Item
                     label="PGP Email "
                     labelCol={{ span: 8 }}
@@ -161,7 +159,7 @@ class EditDevice extends Component {
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                             <Select.Option value="">Select PGP Email</Select.Option>
-                            {this.props.pgp_emails.map((pgp_email) =>{
+                            {this.props.pgp_emails.map((pgp_email) => {
                                 return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                             })}
                         </Select>
@@ -199,7 +197,7 @@ class EditDevice extends Component {
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                             <Select.Option value="">Select Chat ID</Select.Option>
-                            {this.props.chat_ids.map((chat_id,index) =>{
+                            {this.props.chat_ids.map((chat_id, index) => {
                                 return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                             })}
                         </Select>
@@ -224,8 +222,8 @@ class EditDevice extends Component {
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                             <Select.Option value="">Select Sim ID</Select.Option>
-                            {this.props.sim_ids.map((sim_id,index) =>{
-                                return (<Select.Option key={index} value={sim_id.id}>{sim_id.sim_id}</Select.Option>)
+                            {this.props.sim_ids.map((sim_id, index) => {
+                                return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
                             })}
                         </Select>,
                     )}
@@ -246,11 +244,11 @@ class EditDevice extends Component {
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
-                 {this.props.form.getFieldDecorator('start_date', {
-                        initialValue: (this.props.device.start_date)? this.props.device.start_date : this.createdDate() 
+                    {this.props.form.getFieldDecorator('start_date', {
+                        initialValue: (this.props.device.start_date) ? this.props.device.start_date : this.createdDate()
                     })(
 
-                    <Input disabled />
+                        <Input disabled />
                     )}
                 </Form.Item>
                 <Form.Item
@@ -347,7 +345,7 @@ function mapDispatchToProps(dispatch) {
         // getDeviceDetails: getDeviceDetails,
         // importCSV: importCSV
         getSimIDs: getSimIDs,
-        getChatIDs: getChatIDs, 
+        getChatIDs: getChatIDs,
         getPGPEmails: getPGPEmails
     }, dispatch);
 }

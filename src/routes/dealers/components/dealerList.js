@@ -102,7 +102,7 @@ class DealerList extends Component {
 
                     </Button>
                 </span>,
-                'actions': <Button type="primary" style={{ margin: '0' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'PASSWORD RESET')} >RESET PASS</Button>,
+                'actions': <Button type="primary" style={{ margin: '0' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >PASSWORD RESET</Button>,
                 'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
                 'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
                 'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',

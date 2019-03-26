@@ -67,11 +67,11 @@ export default class EditDealer extends Component {
                     className="edit_form"
                 >
 
-                    <EditForm 
-                        device={this.state.device} 
-                        hideModal={this.handleCancel} 
+                    <EditForm
+                        device={this.state.device}
+                        hideModal={this.handleCancel}
                         editDeviceFunc={this.state.func}
-                        handleCancel={this.handleCancel} 
+                        handleCancel={this.handleCancel}
                     />
 
                 </Modal>

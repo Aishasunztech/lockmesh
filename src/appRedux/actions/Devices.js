@@ -35,7 +35,7 @@ export function getDevicesList() {
                         type: DEVICES_LIST,
                         payload: response.data.data,
                         response: response.data,
-    
+
                     });
                 }
             } else {
@@ -49,23 +49,16 @@ export function getDevicesList() {
 }
 export function editDevice(formData) {
     return (dispatch) => {
-         console.log('edit form data ',formData);
+        // console.log('edit form data ', formData);
         RestService.updateDeviceDetails(formData).then((response) => {
-            // console.log("data form server");
-             console.log('respomse from edit device',response.data);
             if (RestService.checkAuth(response.data)) {
-
-                if (response.data.status) {
-                    console.log('dispactch called')
-                    dispatch({
-                        type: EDIT_DEVICE,
-                        response: response.data,
-                        payload: {
-                            formData: formData,
-                        }
-                    });
-                }
-
+                dispatch({
+                    type: EDIT_DEVICE,
+                    response: response.data,
+                    payload: {
+                        formData: formData,
+                    }
+                });
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -251,8 +244,8 @@ export function addDevice(device) {
     }
 }
 
-export function preActiveDevice(device){
-     console.log("action called", device);
+export function preActiveDevice(device) {
+    console.log("action called", device);
     return (dispatch) => {
         RestService.preActiveDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -264,7 +257,7 @@ export function preActiveDevice(device){
                         formData: device,
                     }
                 });
-                
+
             } else {
                 dispatch({
                     type: INVALID_TOKEN

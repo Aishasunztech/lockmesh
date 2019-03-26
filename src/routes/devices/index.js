@@ -147,32 +147,7 @@ class Devices extends Component {
                     }
                 ]
             },
-            {
-                title: (
-                    <Input.Search
-                        name="activation_code"
-                        key="activation_code"
-                        id="activation_code"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="ACTIVATION CODE"
-                    />
-                ),
-                dataIndex: 'activation_code',
-                className: '',
-                children: [
-                    {
-                        title: 'ACTIVATION CODE',
-                        align: "center",
-                        dataIndex: 'activation_code',
-                        className: '',
-                        // ...this.getColumnSearchProps('activation_code'),
-                        sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
+
             {
                 title: (
                     <Input.Search
@@ -195,6 +170,32 @@ class Devices extends Component {
                         className: '',
                         // ...this.getColumnSearchProps('pgp_email'),
                         sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="activation_code"
+                        key="activation_code"
+                        id="activation_code"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="ACTIVATION CODE"
+                    />
+                ),
+                dataIndex: 'activation_code',
+                className: '',
+                children: [
+                    {
+                        title: 'ACTIVATION CODE',
+                        align: "center",
+                        dataIndex: 'activation_code',
+                        className: '',
+                        // ...this.getColumnSearchProps('activation_code'),
+                        sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -276,6 +277,35 @@ class Devices extends Component {
                         className: '',
                         // ...this.getColumnSearchProps('dealer_id'),
                         sorter: (a, b) => { return a.dealer_id.localeCompare(b.dealer_id) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="dealer_name"
+                        key="dealer_name"
+                        id="dealer_name"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Dealer Name"
+                    />
+                ),
+                dataIndex: 'dealer_name',
+                className: '',
+                children: [
+                    {
+                        title: 'DEALER NAME',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'dealer_name',
+                        key: 'dealer_name',
+
+                        // ...this.getColumnSearchProps('dealer_name'),
+                        sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -537,93 +567,8 @@ class Devices extends Component {
                     }
                 ]
             },
-            {
-                title: (
-                    <Input.Search
-                        name="start_date"
-                        key="start_date"
-                        id="start_date"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="Start Date"
-                    />
-                ),
-                dataIndex: 'start_date',
-                className: '',
-                children: [
-                    {
-                        title: 'START DATE',
-                        align: "center",
-                        className: '',
-                        dataIndex: 'start_date',
-                        key: 'start_date',
 
-                        // ...this.getColumnSearchProps('start_date'),
-                        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
 
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="expiry_date"
-                        key="expiry_date"
-                        id="expiry_date"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="Expiry Date"
-                    />
-                ),
-                dataIndex: 'expiry_date',
-                className: '',
-                children: [
-                    {
-                        title: 'EXPIRY DATE',
-                        align: "center",
-                        className: '',
-                        dataIndex: 'expiry_date',
-                        key: 'expiry_date',
-
-                        // ...this.getColumnSearchProps('expiry_date'),
-                        sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
-
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="dealer_name"
-                        key="dealer_name"
-                        id="dealer_name"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="Dealer Name"
-                    />
-                ),
-                dataIndex: 'dealer_name',
-                className: '',
-                children: [
-                    {
-                        title: 'DEALER NAME',
-                        align: "center",
-                        className: '',
-                        dataIndex: 'dealer_name',
-                        key: 'dealer_name',
-
-                        // ...this.getColumnSearchProps('dealer_name'),
-                        sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
             {
                 title: (
                     <Input.Search
@@ -711,7 +656,65 @@ class Devices extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            }
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="start_date"
+                        key="start_date"
+                        id="start_date"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Start Date"
+                    />
+                ),
+                dataIndex: 'start_date',
+                className: '',
+                children: [
+                    {
+                        title: 'START DATE',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'start_date',
+                        key: 'start_date',
+
+                        // ...this.getColumnSearchProps('start_date'),
+                        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="expiry_date"
+                        key="expiry_date"
+                        id="expiry_date"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Expiry Date"
+                    />
+                ),
+                dataIndex: 'expiry_date',
+                className: '',
+                children: [
+                    {
+                        title: 'EXPIRY DATE',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'expiry_date',
+                        key: 'expiry_date',
+
+                        // ...this.getColumnSearchProps('expiry_date'),
+                        sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
         ];
         this.state = {
             columns: columns,

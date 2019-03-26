@@ -38,14 +38,30 @@ export default class DeviceSidebar extends Component {
                 value: (<span className="captilize">{device_details.name}</span>)
             },
             {
+                key: 10,
+                name: (<a href="javascript:void(0)" >Status:</a>),
+                value: <span style={color}>{status}</span>,
+            },
+            {
+                key: 101,
+                name: (<a href="javascript:void(0)" >Device Name:</a>),
+                value: checkValue(device_details.device_name)
+            },
+            {
                 key: 2,
                 name: (<a href="javascript:void(0)">Account Email:</a>),
                 value: device_details.email
             },
+
             {
                 key: 3,
                 name: (<a href="javascript:void(0)">PGP Email:</a>),
                 value: device_details.pgp_email
+            },
+            {
+                key: 812,
+                name: (<a href="javascript:void(0)">Activation Code:</a>),
+                value: checkValue(device_details.activation_code)
             },
             {
                 key: 4,
@@ -69,39 +85,22 @@ export default class DeviceSidebar extends Component {
             },
             {
                 key: 8,
-                name: (<a href="javascript:void(0)">Link Code:</a>),
+                name: (<a href="javascript:void(0)">Dealer Pin:</a>),
                 value: device_details.link_code
             },
-            {
-                key: 812,
-                name: (<a href="javascript:void(0)">Activation Code:</a>),
-                value: checkValue(device_details.activation_code)
-            },
+
             {
                 key: 9,
                 name: (<a href="javascript:void(0)">Mac Address:</a>),
                 value: device_details.mac_address
             },
             {
-                key: 10,
-                name: (<a href="javascript:void(0)" >Status:</a>),
-                value: <span style={color}>{status}</span>,
-            },
-            {
-                key: 11,
-                name: (<a href="javascript:void(0)">Model:</a>),
-                value: (device_details.model === undefined || device_details.model === 'null' || device_details.model === null || device_details.model === '') ? 'N/A' : device_details.model
-            },
-            {
-                key: 111,
-                name: (<a href="javascript:void(0)">Serial Number:</a>),
-                value: checkValue(device_details.serial_number)
-            },
-            {
                 key: 12,
                 name: (<a href="javascript:void(0)">SIM ID:</a>),
                 value: (device_details.sim_id === 'null' || device_details.sim_id === null || device_details.sim_id === '') ? 'N/A' : device_details.sim_id
             },
+
+
             {
                 key: 13,
                 name: (<a href="javascript:void(0)">IMEI 1:</a>),
@@ -121,6 +120,17 @@ export default class DeviceSidebar extends Component {
                 key: 16,
                 name: (<a href="javascript:void(0)">SIM 2:</a>),
                 value: (device_details.simno2 === 'null' || device_details.simno2 === null || device_details.simno2 === '') ? 'N/A' : device_details.simno2
+            },
+
+            {
+                key: 111,
+                name: (<a href="javascript:void(0)">Serial Number:</a>),
+                value: checkValue(device_details.serial_number)
+            },
+            {
+                key: 11,
+                name: (<a href="javascript:void(0)">Model:</a>),
+                value: (device_details.model === undefined || device_details.model === 'null' || device_details.model === null || device_details.model === '') ? 'N/A' : device_details.model
             },
             {
                 key: 17,

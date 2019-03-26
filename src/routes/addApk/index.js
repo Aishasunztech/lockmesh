@@ -7,12 +7,13 @@ import { Link } from 'react-router-dom';
 import 'react-picky/dist/picky.css';
 import { bindActionCreators } from "redux";
 import { BASE_URL } from "../../constants/Application";
-import { addApk, } from "../../appRedux/actions/Apk";
+import { addApk ,getApkList } from "../../appRedux/actions/Apk";
 
 import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message } from 'antd';
 
 // import asyncComponent from "util/asyncComponent";
-let token = sessionStorage.getItem('token');
+let token = localStorage.getItem('token');
+// console.log('token', token);
 let logo = '';
 let apk = '';
 let form_data = '';
@@ -46,8 +47,12 @@ class AddApk extends Component {
                                 </Link>
                                 <Divider />
                                 <div style={{ justifyContent: 'center' }} >
-                                    <WrappedNormalApkForm addApk={this.props.addApk} />
+                                    <WrappedNormalApkForm push={this.props.history} 
+                                    addApk={this.props.addApk}
+                                    getApkList={this.props.getApkList}
+                                    />
                                 </div>
+                               
 
                             </div>
                         </Card>
@@ -71,22 +76,27 @@ class AddApkForm extends Component {
         }
     }
 
-
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                
                 form_data = { 'logo': logo, 'apk': apk, 'name': values.name }
-                // console.log(form_data);
+                // console.log('hisory',this.props.go_back);
                 this.props.addApk(form_data);
-                disableLogo = false;
+                disableLogo = false;    
                 disableApk = false;
+                this.props.push.push('/apk-list');
+                
                 //  console.log(form_data);
             }
             else {
 
             }
         });
+
+        
+       
     }
 
     render() {
@@ -268,4 +278,4 @@ const mapStateToProps = ({ apk_list }) => {
     };
 }
 
-export default connect(mapStateToProps, { addApk })(AddApk);
+export default connect(mapStateToProps, { addApk, getApkList })(AddApk);

@@ -55,19 +55,19 @@ class Account extends Component {
 
         if (dataFieldName === "sim_ids") {
             this.props.getSimIDs();
-            this.setState({
-                sim_ids: this.props.sim_ids,
-            });
+            // this.setState({
+            //     sim_ids: this.props.sim_ids,
+            // });
         } else if (dataFieldName === "pgp_emails") {
             this.props.getPGPEmails();
-            this.setState({
-                pgp_emails: this.props.pgp_emails
-            });
+            // this.setState({
+            //     pgp_emails: this.props.pgp_emails
+            // });
         } else if (dataFieldName === "chat_ids") {
             this.props.getChatIDs();
-            this.setState({
-                chat_ids: this.props.chat_ids,
-            });
+            // this.setState({
+            //     chat_ids: this.props.chat_ids,
+            // });
         }
 
     }
@@ -76,9 +76,29 @@ class Account extends Component {
         this.props.getSimIDs();
         this.props.getPGPEmails();
         this.props.getChatIDs();
+        // console.log("this.props.chat_ids", this.props.chat_ids);
+        // this.setState({
+        //     sim_ids: this.props.sim_ids,
+        //     pgp_emails: this.props.pgp_emails,
+        //     chat_ids: this.props.chat_ids,
+        // });
+    }
+    componentDidUpdate(prevProps, nextProps) {
+        if (prevProps !== nextProps) {
+            // this.setState({
+            //     sim_ids: nextProps.sim_ids,
+            //     pgp_emails: nextProps.pgp_emails,
+            //     chat_ids: nextProps.chat_ids
+            // });
+            // this.setState({
+            //     sim_ids: this.props.sim_ids,
+            //     pgp_emails: this.props.pgp_emails,
+            //     chat_ids: this.props.chat_ids,
+            // });
+        }
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.sim_ids.length !== nextProps.sim_ids.length || nextProps.pgp_emails.length !== nextProps.pgp_emails.length || nextProps.chat_ids.length !== nextProps.chat_ids.length) {
+        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length) {
             this.setState({
                 sim_ids: nextProps.sim_ids,
                 chat_ids: nextProps.chat_ids,
@@ -228,6 +248,7 @@ class Account extends Component {
         return (
             <Fragment>
                 <Modal
+                    className="m_d_pop"
                     visible={this.state.visible}
                     title={`Import ${this.state.fieldValue}`}
                     // onOk={this.handleOk}
@@ -278,6 +299,7 @@ class Account extends Component {
                 </Modal>
 
                 <Modal
+                    className="m_d_pop"
                     visible={this.state.dataVisible}
                     title={`${this.state.dataFieldTitle}`}
                     // onOk={this.handleOk}
@@ -290,22 +312,23 @@ class Account extends Component {
                     {(this.state.dataFieldName === "sim_ids") ?
                         <Fragment>
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-6 pr-8">
                                     <Select
+                                        className="search_heading2"
                                         value={this.state.sim_ids_page}
                                         //  defaultValue={this.state.DisplayPages}
                                         style={{ width: '100%' }}
                                         // onSelect={value => this.setState({DisplayPages:value})}
                                         onChange={value => this.handlePagination(value, 'sim_ids')}
                                     >
-                                        <Select.Option value="10" >10</Select.Option>
-                                        <Select.Option value="20">20</Select.Option>
-                                        <Select.Option value="30">30</Select.Option>
-                                        <Select.Option value="50">50</Select.Option>
-                                        <Select.Option value="100">100</Select.Option>
+                                        <Select.Option className="font-12" value="10" >10</Select.Option>
+                                        <Select.Option className="font-12" value="20">20</Select.Option>
+                                        <Select.Option className="font-12" value="30">30</Select.Option>
+                                        <Select.Option className="font-12" value="50">50</Select.Option>
+                                        <Select.Option className="font-12" value="100">100</Select.Option>
                                     </Select>
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-6 pl-8">
                                     <Input.Search
                                         name="sim_id"
                                         key="sim_id"
@@ -320,7 +343,7 @@ class Account extends Component {
                                         placeholder="SIM ID"
                                     />
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-6 pr-8">
                                     <Input.Search
                                         name="start_date"
                                         key="start_date"
@@ -335,7 +358,7 @@ class Account extends Component {
                                         placeholder="START DATE"
                                     />
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-6 pl-8">
                                     <Input.Search
                                         name="expiry_date"
                                         key="expiry_date"
@@ -395,29 +418,30 @@ class Account extends Component {
                                     })
                                 }
 
-                                pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
 
                             />
                         </Fragment>
                         : (this.state.dataFieldName === "chat_ids") ?
                             <Fragment>
                                 <div className="row">
-                                    <div className="col-md-6">
+                                    <div className="col-md-6 pr-8">
                                         <Select
+                                            className="search_heading2"
                                             value={this.state.chat_ids_page}
                                             //  defaultValue={this.state.DisplayPages}
                                             style={{ width: '100%' }}
                                             // onSelect={value => this.setState({DisplayPages:value})}
                                             onChange={value => this.handlePagination(value, 'chat_ids')}
                                         >
-                                            <Select.Option value="10" >10</Select.Option>
-                                            <Select.Option value="20">20</Select.Option>
-                                            <Select.Option value="30">30</Select.Option>
-                                            <Select.Option value="50">50</Select.Option>
-                                            <Select.Option value="100">100</Select.Option>
+                                            <Select.Option className="font-12" value="10" >10</Select.Option>
+                                            <Select.Option className="font-12" value="20">20</Select.Option>
+                                            <Select.Option className="font-12" value="30">30</Select.Option>
+                                            <Select.Option className="font-12" value="50">50</Select.Option>
+                                            <Select.Option className="font-12" value="100">100</Select.Option>
                                         </Select>
                                     </div>
-                                    <div className="col-md-6">
+                                    <div className="col-md-6 pl-8">
                                         <Input.Search
                                             name="chat_id"
                                             key="chat_id"
@@ -461,22 +485,23 @@ class Account extends Component {
                             : (this.state.dataFieldName === "pgp_emails") ?
                                 <Fragment>
                                     <div className="row">
-                                        <div className="col-md-6">
+                                        <div className="col-md-6 pr-8">
                                             <Select
+                                                className="search_heading2"
                                                 value={this.state.pgp_emails_page}
                                                 //  defaultValue={this.state.DisplayPages}
                                                 style={{ width: '100%' }}
                                                 // onSelect={value => this.setState({DisplayPages:value})}
                                                 onChange={value => this.handlePagination(value, 'pgp_emails')}
                                             >
-                                                <Select.Option value="10" >10</Select.Option>
-                                                <Select.Option value="20">20</Select.Option>
-                                                <Select.Option value="30">30</Select.Option>
-                                                <Select.Option value="50">50</Select.Option>
-                                                <Select.Option value="100">100</Select.Option>
+                                                <Select.Option className="font-12" value="10" >10</Select.Option>
+                                                <Select.Option className="font-12" value="20">20</Select.Option>
+                                                <Select.Option className="font-12" value="30">30</Select.Option>
+                                                <Select.Option className="font-12" value="50">50</Select.Option>
+                                                <Select.Option className="font-12" value="100">100</Select.Option>
                                             </Select>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-6 pl-8">
                                             <Input.Search
                                                 name="pgp_email"
                                                 key="pgp_email"
@@ -494,6 +519,7 @@ class Account extends Component {
                                     </div>
 
                                     <Table
+                                        size="middle"
                                         columns={[
                                             {
                                                 title: 'PGP EMAILS',
@@ -647,7 +673,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {
-
+    console.log("sim_ids", devices.sim_ids);
+    console.log("chat_ids", devices.chat_ids);
+    console.log("pgp_emails", devices.pgp_emails);
     return {
         msg: account.msg,
         showMsg: account.showMsg,

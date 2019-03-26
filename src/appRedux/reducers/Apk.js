@@ -63,6 +63,7 @@ export default (state = initialState, action) => {
                 message.error(action.response.msg)
             }
             return {
+                ...state,
                 apk_list: [...state.apk_list],
             }
 
