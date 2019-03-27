@@ -1,8 +1,19 @@
 import axios from 'axios';
 import { BASE_URL } from '../../constants/Application';
+import io from "socket.io-client";
 
 const RestService = {
     // Login
+    connectSocket: (token) => {
+        let makeToken = "token=" + token + "&isWeb=true";
+        let socket = io.connect(BASE_URL, {
+            token: makeToken,
+            // reconnectionDelay:1000,
+            // reconnection:true,
+            // forceNew:true
+        });
+        return socket;
+    },
     login: (user) => {
         return axios.post(BASE_URL + 'users/login', user);
     },

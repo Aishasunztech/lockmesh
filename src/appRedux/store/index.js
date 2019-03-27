@@ -11,16 +11,25 @@ import ReduxThunk from "redux-thunk";
 // import rootSaga from "../sagas/index";
 
 const history = createHistory();
-const routeMiddleware = routerMiddleware(history);
 // const sagaMiddleware = createSagaMiddleware();
 
+const routeMiddleware = routerMiddleware(history);
 // const middlewares = [sagaMiddleware, routeMiddleware];
 
-const middlewares = [ routeMiddleware, ReduxThunk];
+const middlewares = [ 
+  routeMiddleware, 
+  ReduxThunk,
+];
 // console.log("middlewares");
 // console.log(middlewares);
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+// function myPlugin(middleware) {
+//   middleware.onConnect(init_function)
+//   middleware.onActionIn(h1, h2, h3)
+//   middleware.onActionOut(h4)
+// }
 
 export default function configureStore(initialState) {
   // console.log("initial state store", initialState);

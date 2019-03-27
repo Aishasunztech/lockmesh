@@ -16,15 +16,15 @@ import {
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
 import { message } from "antd";
+import io from 'socket.io-client';
 
 const INIT_STATE = {
   loader: false,
   alertMessage: '',
   showMessage: false,
   initURL: '',
-
+  socket: io,
   isAllowed: true,
-
   authUser: {
     id: localStorage.getItem('id'),
     connected_dealer: localStorage.getItem('connected_dealer'),
@@ -41,20 +41,15 @@ const INIT_STATE = {
 
 
 export default (state = INIT_STATE, action) => {
-  // console.log("auth.js");
-  // console.log("states");
-  // console.log("auth user state");
-  // console.log(state.authUser);
-  // console.log("actions");
-  // console.log(action.type);
 
   switch (action.type) {
 
     case LOGIN_USER_SUCCESS: {
-      // console.log("logged in");
+      let socket = RestService.connectSocket(action.payload.token);
       return {
         ...state,
         loader: false,
+        socket: socket,
         authUser: action.payload
       }
     }

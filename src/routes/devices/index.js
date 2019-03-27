@@ -11,6 +11,10 @@ import {
     addDevice,
     preActiveDevice
 } from "../../appRedux/actions/Devices";
+import {
+    getNotification
+} from "../../appRedux/actions/Socket";
+
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 
 import { bindActionCreators } from "redux";
@@ -962,7 +966,8 @@ class Devices extends Component {
     componentDidMount() {
         this.props.getDevicesList();
         this.props.getDropdown('devices');
-        this.props.getPagination('devices')
+        this.props.getPagination('devices');
+        // this.props.getNotification();
     }
 
 
@@ -1153,7 +1158,8 @@ function mapDispatchToProps(dispatch) {
         addDevice: addDevice,
         preActiveDevice: preActiveDevice,
         postPagination: postPagination,
-        getPagination: getPagination
+        getPagination: getPagination,
+        getNotification: getNotification
     }, dispatch);
 }
 
@@ -1168,6 +1174,7 @@ var mapStateToProps = ({ devices, auth }) => {
         selectedOptions: devices.selectedOptions,
         DisplayPages: devices.DisplayPages,
         user: auth.authUser,
+        socket: auth.socket
     };
 }
 
