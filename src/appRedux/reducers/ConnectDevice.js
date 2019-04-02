@@ -118,7 +118,7 @@ export default (state = initialState, action) => {
 
                 return {
                     ...state,
-                    device: action.payload,
+                    device: action.payload, 
                     applyBtn: false,
                     undoBtn: false,
                     redoBtn: false,
