@@ -129,7 +129,7 @@ class DevicesList extends Component {
             // console.log("device status", device_status);
             // console.log("activation status", device.activation_status);
 
-            var status = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
+            var status = device.finalStatus;
             // console.log("not avail", status);
             let color = getColor(status);
             var style = { margin: '0', width: '60px' }
@@ -180,7 +180,7 @@ class DevicesList extends Component {
                 ,
                 device_id: (device.device_id !== undefined && device.device_id !== '' && device.device_id !== null && device.device_id !== 'null' && (status != 'pre-activated' && status != "Pre-activated")) ? `${device.device_id}` : "N/A",
                 name: device.name ? `${device.name}` : "N/A",
-                account_email: checkValue(device.email),
+                account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
                 activation_code: device.activation_code ? `${device.activation_code}` : "N/A",
                 chat_id: checkValue(device.chat_id),
