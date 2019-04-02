@@ -116,7 +116,7 @@ export default class ListApk extends Component {
                     columns={this.state.columns}
                     dataSource={this.renderList(this.props.apk_list)}
                     pagination={{ pageSize: Number(this.state.pagination) }}
-                    onChange={this.props.tableChangeHandler()}
+                    // onChange={this.props.tableChangeHandler()}
                     scroll={{ x: 500 }}
                     rowKey="apk_id"
                 />
