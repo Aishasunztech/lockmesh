@@ -20,7 +20,8 @@ import {
     ACTIVATE_DEVICE2,
     SUSPEND_DEVICE2,
     HANDLE_CHECK_APP,
-    HANDLE_CHECK_ALL
+    HANDLE_CHECK_ALL,
+    GET_USER_ACC_ID
 } from "constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -118,12 +119,36 @@ export function getDeviceHistories(deviceId) {
     }
 }
 
+
+export function getAccIdFromDvcId(deviceId) {
+  //  console.log('Do it')
+    return (dispatch) => {
+        RestService.getUserAccountId(deviceId).then((response) => {
+         //  console.log('t e s t', response );
+           if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_USER_ACC_ID,
+                    response: response.data,
+                    payload: {
+                      
+                    }
+                });
+          
+        } else {
+            dispatch({
+                type: INVALID_TOKEN
+            });
+        }
+        });
+    }
+}
+
 export function suspendDevice2(device) {
 
     return (dispatch) => {
         //  console.log("suspendDevice action");
 
-        RestService.suspendDevice(device.device_id).then((response) => {
+        RestService.suspendDevice(device.usr_device_id).then((response) => {
           
 
             if (RestService.checkAuth(response.data)) {
@@ -179,7 +204,7 @@ export function activateDevice2(device) {
 
     return (dispatch) => {
 
-        RestService.activateDevice(device.device_id).then((response) => {
+        RestService.activateDevice(device.usr_device_id).then((response) => {
             // console.log('conect device method call', device);
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);

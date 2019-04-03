@@ -22,7 +22,8 @@ import {
     unlinkDevice,
     changePage,
     activateDevice2,
-    suspendDevice2
+    suspendDevice2,
+    getAccIdFromDvcId
 } from "../../appRedux/actions/ConnectDevice";
 import {getDevicesList} from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -82,7 +83,6 @@ class ConnectDevice extends Component {
     }
     onBackHandler = () => {
         this.props.changePage("main_menu");
-
     }
     componentDidMount() {
         this.props.startLoading();
@@ -95,10 +95,12 @@ class ConnectDevice extends Component {
         const device_id = atob(this.props.match.params.device_id);
         if (device_id !== '') {
 
+             this.props.getAccIdFromDvcId(device_id);
+
             this.props.getDeviceDetails(device_id);
             this.props.getDeviceApps(device_id);
             this.props.getProfiles();
-            this.props.getDeviceHistories(device_id);
+            this.props.getDeviceHistories(this.props.user_acc_id);
             // this.setState({
             //     syncStatus: this.props.device_details.is_sync
             // })
@@ -299,6 +301,7 @@ function mapDispatchToProps(dispatch) {
         activateDevice2: activateDevice2,
         editDevice: editDevice,
         getDevicesList:getDevicesList,
+        getAccIdFromDvcId: getAccIdFromDvcId,
 
 
         // showMessage: showMessage,
@@ -308,7 +311,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-    // console.log("connect device state");
+    // console.log("connect device state", device_details);
     return {
         routing: routing,
         pathName: routing.location.pathname,
@@ -331,7 +334,8 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
         duressCPwd: device_details.duressCPwd,
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
-        status: device_details.status
+        status: device_details.status,
+        user_acc_id: device_details.user_acc_id
     };
 }
 

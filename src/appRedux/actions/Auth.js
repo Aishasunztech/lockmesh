@@ -85,7 +85,7 @@ export const getUser = () => {
     RestService.getUser().then((resp) => {
       if (RestService.checkAuth(resp.data)) {
         if (resp.data.status === false) {
-          dispatch({
+          dispatch({  
             type: LOGIN_FAILED,
             payload: {
               msg: resp.data.msg,

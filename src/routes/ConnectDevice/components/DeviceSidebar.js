@@ -15,6 +15,8 @@ export default class DeviceSidebar extends Component {
 
         let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
         let color = getColor(status)
+
+        
         // let device_status = 'Active';
 
         // if ((device_details.status === 'expired')) {

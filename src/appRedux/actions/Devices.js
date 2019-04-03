@@ -73,7 +73,7 @@ export function suspendDevice(device) {
     return (dispatch) => {
         // console.log("suspendDevice action");
 
-        RestService.suspendDevice(device.device_id).then((response) => {
+        RestService.suspendDevice(device.usr_device_id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
 
@@ -106,7 +106,7 @@ export function activateDevice(device) {
 
     return (dispatch) => {
 
-        RestService.activateDevice(device.device_id).then((response) => {
+        RestService.activateDevice(device.usr_device_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);
                 device.account_status = '';

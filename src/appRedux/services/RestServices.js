@@ -168,6 +168,11 @@ const RestService = {
     getDefaultApps: () => {
         return axios.get(BASE_URL + "users/default_apps", RestService.getHeader());
     },
+
+    getUserAccountId: (d) => {
+        console.log('rest ser')
+        return axios.get(BASE_URL + "users/get_usr_acc_id/" + d, RestService.getHeader());
+    },
     // getDealerInfo
     getDealer: (dealer_id) => {
 
@@ -320,7 +325,7 @@ const RestService = {
 
     // applySettings
     applySettings: (device_setting, device_id = null, type = "history", name = null, dealer_id = 0) => {
-        // console.log(device_setting);
+   //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {
             device_setting.app_list.forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');

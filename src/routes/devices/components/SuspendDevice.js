@@ -10,6 +10,7 @@ export default class SuspendDevice extends Component {
     }
 
     handleSuspendDevice = (device) => {
+        console.log('device', device)
         const title = (device.account_status === "suspended") ? "Are you sure, you want to activate the device?" : "Are you sure, you want to suspend the device?";
         this.confirm({
             title: title,
