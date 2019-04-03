@@ -89,6 +89,15 @@ class AddDevice extends Component {
                 </Form.Item>
                 <Form.Item
                 >
+                    {this.props.form.getFieldDecorator('usr_device_id', {
+                    initialValue: this.props.new ? "" : this.props.device.usr_device_id,
+                    })(
+
+                        <Input type='hidden' disabled/>
+                    )}
+                </Form.Item>
+                <Form.Item
+                >
                     {this.props.form.getFieldDecorator('usr_acc_id', {
                     initialValue: this.props.new ? "" : this.props.device.id,
                     })(

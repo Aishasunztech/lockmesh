@@ -22,6 +22,7 @@ class EditDevice extends Component {
             if (!err) {
                 // console.log("Device List", values)
                 values.prevPGP = this.props.device.pgp_email;
+                console.log("Device Details ", values)
                 this.props.editDeviceFunc(values);
                 this.props.hideModal();
                 this.handleReset();
@@ -75,6 +76,7 @@ class EditDevice extends Component {
 
     render() {
         //  alert(this.props.device.device_id);
+        console.log('props of coming', this.props.device);
         const { visible, loading } = this.state;
 
         return (
@@ -104,6 +106,24 @@ class EditDevice extends Component {
                     )}
                 </Form.Item>
                 <Form.Item
+                >
+                    {this.props.form.getFieldDecorator('usr_device_id', {
+                        initialValue: this.props.new ? "" : this.props.device.usr_device_id,
+                    })(
+
+                        <Input type='hidden' disabled />
+                    )}
+                </Form.Item>
+                <Form.Item
+                >
+                    {this.props.form.getFieldDecorator('usr_acc_id', {
+                        initialValue: this.props.new ? "" : this.props.device.id,
+                    })(
+
+                        <Input type='hidden' disabled />
+                    )}
+                </Form.Item>
+                <Form.Item
                     label="Device Name "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
@@ -118,7 +138,7 @@ class EditDevice extends Component {
                         <Input autoComplete="new-password" />
                     )}
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
 
                     label="Account Email "
                     labelCol={{ span: 8 }}
@@ -134,7 +154,7 @@ class EditDevice extends Component {
                     })(
                         <Input autoComplete="new-password" />
                     )}
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item
                     label="PGP Email "
