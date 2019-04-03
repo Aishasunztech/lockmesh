@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Card, Tag } from "antd";
+import { Table, Button, Card, Tag, Form, Input, Popconfirm } from "antd";
 import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
@@ -11,6 +11,93 @@ import { Tabs } from 'antd';
 
 const TabPane = Tabs.TabPane;
 
+const EditableContext = React.createContext();
+
+const EditableRow = ({ form, index, ...props }) => (
+    <EditableContext.Provider value={form}>
+      <tr {...props} />
+    </EditableContext.Provider>
+);
+  
+const EditableFormRow = Form.create()(EditableRow);
+
+class EditableCell extends React.Component {
+    state = {
+      editing: false,
+    }
+  
+    toggleEdit = () => {
+      const editing = !this.state.editing;
+      this.setState({ editing }, () => {
+        if (editing) {
+          this.input.focus();
+        }
+      });
+    }
+  
+    save = (e) => {
+      const { record, handleSave } = this.props;
+      this.form.validateFields((error, values) => {
+        if (error && error[e.currentTarget.id]) {
+          return;
+        }
+        this.toggleEdit();
+        handleSave({ ...record, ...values });
+      });
+    }
+  
+    render() {
+      const { editing } = this.state;
+      const {
+        editable,
+        dataIndex,
+        title,
+        record,
+        index,
+        handleSave,
+        ...restProps
+      } = this.props;
+      return (
+        <td {...restProps}>
+          {editable ? (
+            <EditableContext.Consumer>
+              {(form) => {
+                this.form = form;
+                return (
+                  editing ? (
+                    <Form.Item style={{ margin: 0 }}>
+                      {form.getFieldDecorator(dataIndex, {
+                        rules: [{
+                          required: true,
+                          message: `${title} is required.`,
+                        }],
+                        initialValue: record[dataIndex],
+                      })(
+                        <Input
+                          ref={node => (this.input = node)}
+                          onPressEnter={this.save}
+                          onBlur={this.save}
+                        />
+                      )}
+                    </Form.Item>
+                  ) : (
+                    <div
+                      className="editable-cell-value-wrap"
+                      style={{ paddingRight: 24 }}
+                      onClick={this.toggleEdit}
+                    >
+                      {restProps.children}
+                    </div>
+                  )
+                );
+              }}
+            </EditableContext.Consumer>
+          ) : restProps.children}
+        </td>
+      );
+    }
+}
+
 class DevicesList extends Component {
 
     constructor(props) {
@@ -19,6 +106,7 @@ class DevicesList extends Component {
         this.state = {
             searchText: '',
             showMsg: false,
+            editing: false,
             msg: "",
             columns: [],
             devices: [],
@@ -26,11 +114,13 @@ class DevicesList extends Component {
         };
         this.renderList = this.renderList.bind(this);
     }
-
+    
     // renderList
     renderList(list) {
+        
 
         return list.map((device, index) => {
+            // console.log(device.device_id);
             const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             // const device_status =  "SUSPEND";
             const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
@@ -40,7 +130,7 @@ class DevicesList extends Component {
             // console.log("device status", device_status);
             // console.log("activation status", device.activation_status);
 
-            var status = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
+            var status = device.finalStatus;
             // console.log("not avail", status);
             let color = getColor(status);
             var style = { margin: '0', width: '60px' }
@@ -91,7 +181,7 @@ class DevicesList extends Component {
                 ,
                 device_id: (device.device_id !== undefined && device.device_id !== '' && device.device_id !== null && device.device_id !== 'null' && (status != 'pre-activated' && status != "Pre-activated")) ? `${device.device_id}` : "N/A",
                 name: device.name ? `${device.name}` : "N/A",
-                account_email: checkValue(device.email),
+                account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
                 activation_code: device.activation_code ? `${device.activation_code}` : "N/A",
                 chat_id: checkValue(device.chat_id),
@@ -154,13 +244,28 @@ class DevicesList extends Component {
 
 
 
+    
 
     render() {
 
 
         const { activateDevice, suspendDevice } = this.props;
-        //  console.log('columns r', this.state.columns)
-
+        const components = {
+            body: {
+              row: EditableFormRow,
+              cell: EditableCell,
+            },
+        };
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            },
+            getCheckboxProps: record => ({
+              disabled: record.name === 'Disabled User', // Column configuration not to be checked
+              name: record.name,
+            }),
+        };
+          
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
@@ -169,13 +274,17 @@ class DevicesList extends Component {
                     suspendDevice={suspendDevice} />
 
                 <Card>
-                    <Table className="devices"
+                    <Table 
+                        className="devices"
+                        components={components}
+                        // rowSelection={rowSelection}
+                        rowClassName={() => 'editable-row'}
                         size="middle"
                         bordered
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.devices)}
                         pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
-                        rowKey="device_list"
+        
                         scroll={{
                             x: 500,
                             // y: 600 

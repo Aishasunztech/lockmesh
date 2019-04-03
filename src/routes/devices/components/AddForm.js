@@ -77,10 +77,29 @@ class AddDevice extends Component {
                         <Input disabled />
                     )}
                 </Form.Item>
+
                 <Form.Item
                 >
                     {this.props.form.getFieldDecorator('dealer_id', {
                     initialValue: this.props.new ? "" : this.props.device.dealer_id,
+                    })(
+
+                        <Input type='hidden' disabled/>
+                    )}
+                </Form.Item>
+                <Form.Item
+                >
+                    {this.props.form.getFieldDecorator('usr_device_id', {
+                    initialValue: this.props.new ? "" : this.props.device.usr_device_id,
+                    })(
+
+                        <Input type='hidden' disabled/>
+                    )}
+                </Form.Item>
+                <Form.Item
+                >
+                    {this.props.form.getFieldDecorator('usr_acc_id', {
+                    initialValue: this.props.new ? "" : this.props.device.id,
                     })(
 
                         <Input type='hidden' disabled/>
@@ -223,7 +242,7 @@ class AddDevice extends Component {
                     )}
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                     label="Policy "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
@@ -246,7 +265,7 @@ class AddDevice extends Component {
                             })}
                         </Select>,
                     )}
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item
                     label="Model"

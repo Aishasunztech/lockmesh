@@ -29,6 +29,7 @@ export function getDevicesList() {
             // console.log("data form server");
             // console.log(response.data);
             if (RestService.checkAuth(response.data)) {
+                // console.log(response.data)
                 if (response.data.status) {
 
                     dispatch({

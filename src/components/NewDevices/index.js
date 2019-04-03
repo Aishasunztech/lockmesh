@@ -36,7 +36,6 @@ export default class NewDevices extends Component {
     renderList(list) {
 
         return list.map((device) => {
-
             const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             // const device_status =  "SUSPEND";
             const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
@@ -82,7 +81,7 @@ export default class NewDevices extends Component {
             <div>
                 <Modal
                     width={1000}
-                   
+
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
@@ -90,25 +89,25 @@ export default class NewDevices extends Component {
                     <Table
                         bordered
                         columns={columns}
-                        style={{marginTop:20}}
+                        style={{ marginTop: 20 }}
                         dataSource={this.renderList(this.props.devices)}
 
                     />
                 </Modal>
-                <AddDeviceModal ref='add_device_modal'  />
+                <AddDeviceModal ref='add_device_modal' />
             </div>
         )
     }
 }
 
 const columns = [
-    { title: 'Action', dataIndex: 'action', key: 'action' , align:"center"},
-    { title: 'DEVICE ID', dataIndex: 'device_id', key: 'device_id' , align:"center"},
-    { title: 'SERIAL NUMBER', dataIndex: 'serial_number', key: 'serial_number' , align:"center"},
-    { title: 'SIM 1 ', dataIndex: 'sim_1', key: 'sim_1' , align:"center"},
-    { title: 'IMEI 1', dataIndex: 'imei_1', key: 'imei_1' , align:"center"},
-    { title: 'SIM 2', dataIndex: 'sim_2', key: 'sim_2' , align:"center"},
-    { title: 'IMEI 2 ', dataIndex: 'imei_2', key: 'imei_2' , align:"center"},
+    { title: 'Action', dataIndex: 'action', key: 'action', align: "center" },
+    { title: 'DEVICE ID', dataIndex: 'device_id', key: 'device_id', align: "center" },
+    { title: 'SERIAL NUMBER', dataIndex: 'serial_number', key: 'serial_number', align: "center" },
+    { title: 'SIM 1 ', dataIndex: 'sim_1', key: 'sim_1', align: "center" },
+    { title: 'IMEI 1', dataIndex: 'imei_1', key: 'imei_1', align: "center" },
+    { title: 'SIM 2', dataIndex: 'sim_2', key: 'sim_2', align: "center" },
+    { title: 'IMEI 2 ', dataIndex: 'imei_2', key: 'imei_2', align: "center" },
 ];
 
 

@@ -21,11 +21,17 @@ export function getApkList() {
                 // console.log("apk_list form server");
                 //  console.log(response.data);
                 if (RestService.checkAuth(response.data)) {
-
-                    dispatch({
-                        type: APK_LIST,
-                        payload: response.data.list
-                    });
+                    if(response.data.status){
+                        dispatch({
+                            type: APK_LIST,
+                            payload: response.data.list
+                        });
+                    } else {
+                        dispatch({
+                            type: APK_LIST,
+                            payload: []
+                        })
+                    }
 
 
                 } else {

@@ -107,11 +107,12 @@ class Devices extends Component {
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder="Device Name"
-
+                        
                     />
                 ),
                 className: '',
                 dataIndex: 'name',
+                editable: true,
                 children: [
                     {
                         align: "center",
@@ -122,6 +123,8 @@ class Devices extends Component {
                         // ...this.getColumnSearchProps('name'),
                         sorter: (a, b) => { return a.name.localeCompare(b.name) },
                         sortDirections: ['ascend', 'descend'],
+                        editable: true,
+                        
                     }
                 ]
             },

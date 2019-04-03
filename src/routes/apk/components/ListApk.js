@@ -78,7 +78,6 @@ export default class ListApk extends Component {
 
     }
 
-
     // renderList
     renderList(list) {
 
@@ -104,19 +103,28 @@ export default class ListApk extends Component {
             }
         });
     }
+
+    onSelectChange = (selectedRowKeys) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        // this.setState({ selectedRowKeys });
+    }
     render() {
-        // console.log('rendder of list apk call');
-        // console.log(this.props.apk_list);
-        // console.log('end');
+        
+        const rowSelection = {
+            onChange: this.onSelectChange,
+        };
+
         return (
             <Card>
-                <Table className="gx-table-responsive apklist_table"
+                <Table 
+                    rowSelection={rowSelection}
+                    className="gx-table-responsive apklist_table"
                     size="midddle"
                     bordered
                     columns={this.state.columns}
                     dataSource={this.renderList(this.props.apk_list)}
                     pagination={{ pageSize: Number(this.state.pagination) }}
-                    onChange={this.props.tableChangeHandler()}
+               
                     scroll={{ x: 500 }}
                     rowKey="apk_id"
                 />

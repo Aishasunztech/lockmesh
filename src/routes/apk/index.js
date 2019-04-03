@@ -76,7 +76,7 @@ class Apk extends React.Component {
         // binding methods
         this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
         this.handleStatusChange = this.handleStatusChange.bind(this);
-        this.tableChangeHandler = this.tableChangeHandler.bind(this);
+        // this.tableChangeHandler = this.tableChangeHandler.bind(this);
 
 
     }
@@ -225,10 +225,7 @@ class Apk extends React.Component {
     handleChange = (value) => {
         // alert(value);
     }
-    tableChangeHandler(pagination, filters, sorter) {
-        // alert('hello');
-        // console.log('params', pagination, filters, sorter);
-    }
+   
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
@@ -272,6 +269,7 @@ class Apk extends React.Component {
 
     render() {
 
+        
         return (
             <div>
                 {
@@ -311,7 +309,7 @@ class Apk extends React.Component {
 
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
-                                tableChangeHandler={this.tableChangeHandler}
+                                // tableChangeHandler={this.tableChangeHandler}
                                 handleConfirmDelete={this.handleConfirmDelete}
                                 editApk={this.props.editApk}
                                 columns={this.state.columns}
@@ -400,7 +398,7 @@ const mapStateToProps = ({ apk_list, auth }) => {
     // console.log(apk_list);
     // console.log("apk_list", auth);
     // console.log("apk_list", apk_list.selectedOptions);
-    // console.log("APK LIST", apk_list.DisplayPages)
+    console.log("APK LIST", apk_list)
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
