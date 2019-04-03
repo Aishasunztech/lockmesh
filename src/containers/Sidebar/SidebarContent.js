@@ -57,6 +57,7 @@ class SidebarContent extends Component {
 
   }
   render() {
+    // console.log(addDevice)
     const { themeType, navStyle, pathname, authUser } = this.props;
 
     const selectedKeys = pathname.substr(1);

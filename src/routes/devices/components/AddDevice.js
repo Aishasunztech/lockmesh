@@ -19,10 +19,10 @@ export default class AddDevice extends Component {
         message.success('Action Done Susscefully ');
     };
 
-    showModal = (device=null, handleSubmit, preActive=false) => {
-         console.log('device Detail', device)
+    showModal = (device = null, handleSubmit, preActive = false) => {
+        console.log('device Detail', device)
 
-         if(preActive !== undefined && preActive === true){
+        if (preActive !== undefined && preActive === true) {
 
             this.setState({
 
@@ -32,18 +32,17 @@ export default class AddDevice extends Component {
                 preActive: preActive
             });
 
-         } else {
+        } else {
             this.setState({
 
                 device: device,
                 visible: true,
                 handleSubmit: handleSubmit
-    
-            });
-         }
-       device.start_date = this.createdDate();
 
-        
+            });
+        }
+        device.start_date = this.createdDate();
+
 
     }
 
@@ -57,13 +56,13 @@ export default class AddDevice extends Component {
             'pgp_email': this.state.pgp_email,
             's_dealer': this.state.s_dealer,
             'expiry_date': this.state.expiry_date,
-           // 'start_date': this.state.start_date,
+            // 'start_date': this.state.start_date,
             'email': this.state.email,
             'name': this.state.name,
             'model': this.state.model,
             'sttatus': this.state.status,
             'client_id': this.state.client_id,
-            'connected_dealer': this.state.connected_dealer 
+            'connected_dealer': this.state.connected_dealer
         }
     }
 
@@ -71,12 +70,12 @@ export default class AddDevice extends Component {
         this.setState({ visible: false });
     }
 
-    createdDate = () =>{
-        return new Date().toJSON().slice(0,10).replace(/-/g,'/')
+    createdDate = () => {
+        return new Date().toJSON().slice(0, 10).replace(/-/g, '/')
     }
+
     render() {
         const { visible, loading } = this.state;
-
         return (
             <div>
                 <Modal
@@ -87,12 +86,12 @@ export default class AddDevice extends Component {
                     footer={null}
                     className="edit_form"
                 >
-                    <AddForm 
-                        device={this.state.device} 
+                    <AddForm
+                        device={this.state.device}
                         hideModal={this.handleCancel}
                         AddDeviceHandler={this.state.handleSubmit}
                         handleCancel={this.handleCancel}
-                        preActive = {this.state.preActive}
+                        preActive={this.state.preActive}
                     />
                 </Modal>
             </div>
