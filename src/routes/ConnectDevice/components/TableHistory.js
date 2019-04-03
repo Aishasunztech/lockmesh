@@ -20,7 +20,7 @@ class TableHistory extends Component {
     }
     componentDidMount() {
         // console.log("componentDidMount", this.props);
-        let histories = [];
+        let histories = [];     
         this.props.histories.map((history) => {
 
             if (this.props.type !== "history" && this.props.type === history.type) {

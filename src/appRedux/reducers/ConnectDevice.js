@@ -25,7 +25,8 @@ import {
   ACTIVATE_DEVICE2,
   SUSPEND_DEVICE2,
   HANDLE_CHECK_APP,
-  HANDLE_CHECK_ALL
+  HANDLE_CHECK_ALL,
+  GET_USER_ACC_ID
 } from "constants/ActionTypes";
 import {
   message
@@ -188,6 +189,17 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: true,
                 profiles: action.payload
+            }
+            }
+
+            case GET_USER_ACC_ID:
+            {
+             console.log('GET_USER_ACC_ID',action.response.user_acount_id);
+           
+            return {
+                ...state,
+                isloading: true,
+                user_acc_id: action.response.user_acount_id
             }
             }
         case GET_DEVICE_HISTORIES:

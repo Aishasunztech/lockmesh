@@ -11,6 +11,7 @@ import {
     addDevice,
     preActiveDevice
 } from "../../appRedux/actions/Devices";
+
 import {
     getNotification
 } from "../../appRedux/actions/Socket";
@@ -1167,7 +1168,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ devices, auth }) => {
-    // console.log('devices AUTH', auth, devices);
+  //   console.log('devices AUTH', devices.devices);
     return {
         devices: devices.devices,
         msg: devices.msg,
