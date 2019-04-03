@@ -23,7 +23,7 @@ export default function register() {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
-    console.log("publicUrl",publicUrl);
+    console.log("publicUrl", publicUrl);
     console.log("window origin", window.location.origin);
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
@@ -57,6 +57,19 @@ export default function register() {
   }
 }
 
+window.addEventListener('message', event => {
+  // alert('hello');
+  if (!event.data) {
+    return;
+  }
+  
+  if (event.data === 'skipWaiting') {
+    console.log("skip waiting listener",event.data);
+
+    navigator.serviceWorker.skipWaiting();
+  }
+});
+
 function registerValidSW(swUrl) {
   navigator.serviceWorker
     .register(swUrl)
@@ -66,17 +79,15 @@ function registerValidSW(swUrl) {
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
+              unregister();
               // At this point, the old content will have been purged and
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
-              console.log('New content is available; please refresh.');
-              // alert('New content is available; please refresh.');
-              // navigator.serviceWorker.ready.then(registration => {
-              //   registration.unregister().then(() => {
-              //     window.location.reload();
-              //   });
-              // });
+              // regist
+
+              window.location.replace(window.location.origin);
+              // const actived = registration.activate;
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
@@ -84,10 +95,7 @@ function registerValidSW(swUrl) {
               console.log('Content is cached for offline use.');
               // alert("hello content is cached for offline use");
               // navigator.serviceWorker.ready.then(registration => {
-              //   registration.unregister().then(() => {
-              //     window.location.reload();
-              //   });
-              // });
+              
             }
           }
         };
@@ -128,7 +136,15 @@ function checkValidServiceWorker(swUrl) {
 export function unregister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then(registration => {
-      registration.unregister();
+      console.log("deleted",registration);
+      if(registration.waiting !== null){
+        // caches.keys().then(function(names) {
+        //     for (let name of names)
+        //         caches.delete(name);
+        // });
+      
+        registration.unregister();
+      }
     });
   }
 }

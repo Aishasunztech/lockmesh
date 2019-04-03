@@ -106,70 +106,72 @@ class AppFilter extends Component {
                                 <Fragment>
                                     <Icon type="down" className="down_icon" />
                                     <Picky
-                                    options={this.props.options}
-                                    value={this.state.selectedDisplayValues}
-                                    placeholder="Display"
-                                    className="display_"
-                                    multiple={true}
-                                    includeSelectAll={true}
-                                    onChange={values => this.setDropdowns(values)}
-                                    dropdownHeight={300}
-                                    renderSelectAll={({
-                                        filtered,
-                                        tabIndex,
-                                        allSelected,
-                                        toggleSelectAll,
-                                        multiple
-                                    }) => {
-    
-                                        // Don't show if single select or items have been filtered.
-                                        if (multiple && !filtered) {
-                                            return (
-    
-                                                <li
-                                                    tabIndex={tabIndex}
-                                                    role="option"
-                                                    className={allSelected ? 'option selected' : 'option'}
-                                                    onClick={toggleSelectAll}
-                                                    onKeyPress={toggleSelectAll}
-                                                >
-                                                    {/* required to select item */}
-                                                    {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                    <Checkbox
-                                                        checked={allSelected} className="slct_all"
-                                                    >SELECT ALL</Checkbox>
-                                                </li>
-                                            );
+                                        options={this.props.options}
+                                        value={this.state.selectedDisplayValues}
+                                        placeholder="Display"
+                                        className="display_"
+                                        multiple={true}
+                                        includeSelectAll={true}
+                                        onChange={values => this.setDropdowns(values)}
+                                        dropdownHeight={300}
+                                        renderSelectAll={({
+                                                filtered,
+                                                tabIndex,
+                                                allSelected,
+                                                toggleSelectAll,
+                                                multiple
+                                            }) => {
+                                                // Don't show if single select or items have been filtered.
+                                                if (multiple && !filtered) {
+                                                    return (
+            
+                                                        <li
+                                                            tabIndex={tabIndex}
+                                                            role="option"
+                                                            className={allSelected ? 'option selected' : 'option'}
+                                                            onClick={toggleSelectAll}
+                                                            onKeyPress={toggleSelectAll}
+                                                            key={tabIndex}
+                                                        >
+                                                            {/* required to select item */}
+                                                            {/* <input type="checkbox" checked={isSelected} readOnly /> */}
+                                                            <Checkbox
+                                                                checked={allSelected} className="slct_all"
+                                                            >SELECT ALL</Checkbox>
+                                                        </li>
+                                                    );
+                                                }
+                                            }
                                         }
-                                    }}
-                                    render={({
-                                        style,
-                                        isSelected,
-                                        item,
-                                        selectValue,
-                                        labelKey,
-                                        valueKey,
-                                        multiple
-                                    }) => {
-    
-                                        return (
-                                            <li
-                                                style={style} // required
-                                                className={isSelected ? 'selected' : ''} // required to indicate is selected
-                                                key={item[valueKey]} // required
-                                                onClick={() => selectValue(item)}
-                                            >
-                                                {/* required to select item */}
-                                                {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                <Checkbox checked={isSelected}>{item}</Checkbox>
-    
-                                            </li>
-                                        );
-                                    }}
-                                />
-                            </Fragment>
+
+                                        render={({
+                                                style,
+                                                isSelected,
+                                                item,
+                                                selectValue,
+                                                labelKey,
+                                                valueKey,
+                                                multiple
+                                            }) => {
+                                                return (
+                                                    <li
+                                                        style={style} // required
+                                                        className={isSelected ? 'selected' : ''} // required to indicate is selected
+                                                        key={item} // required
+                                                        onClick={() => selectValue(item)}
+                                                    >
+                                                        {/* required to select item */}
+                                                        {/* <input type="checkbox" checked={isSelected} readOnly /> */}
+                                                        <Checkbox checked={isSelected}>{item}</Checkbox>
+            
+                                                    </li>
+                                                );
+                                            }
+                                        }
+                                    />
+                                </Fragment>
                             :
-                             null                        
+                                null                        
                             }
                            
                         </div>

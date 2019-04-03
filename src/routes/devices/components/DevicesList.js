@@ -276,7 +276,7 @@ class DevicesList extends Component {
                     <Table 
                         className="devices"
                         components={components}
-                        rowSelection={rowSelection}
+                        // rowSelection={rowSelection}
                         rowClassName={() => 'editable-row'}
                         size="middle"
                         bordered
