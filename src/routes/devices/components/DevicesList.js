@@ -118,7 +118,6 @@ class DevicesList extends Component {
     // renderList
     renderList(list) {
 
-
         return list.map((device, index) => {
             // console.log(device.device_id);
             const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";

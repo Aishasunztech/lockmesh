@@ -70,9 +70,10 @@ export default (state = initialState, action) => {
 
         case SUSPEND_DEVICE:
             if (action.response.status) {
-                let objIndex = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
+                console.log('dedlksjaflkj', action.response)
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
                 if (objIndex !== -1) {
-                    state.devices[objIndex] = action.payload.device;
+                    state.devices[objIndex] = action.response.data;
                 }
                 message.success(action.response.msg);
             }
@@ -92,9 +93,9 @@ export default (state = initialState, action) => {
 
         case ACTIVATE_DEVICE:
             if (action.response.status) {
-                let objIndex1 = state.devices.findIndex((obj => obj.device_id === action.payload.device.device_id));
+                let objIndex1 = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
                 if (objIndex1 !== -1) {
-                    state.devices[objIndex1] = action.payload.device;
+                    state.devices[objIndex1] = action.response.data;
                 }
                 message.success(action.response.msg);
             }

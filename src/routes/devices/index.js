@@ -743,7 +743,8 @@ class Devices extends Component {
         let dumyDevices = [];
 
         devices.filter(function (device) {
-            let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
+            // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
+           let deviceStatus = device.finalStatus;
             if (deviceStatus === type) {
                 dumyDevices.push(device);
             }

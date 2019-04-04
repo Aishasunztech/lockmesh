@@ -78,14 +78,14 @@ export function suspendDevice(device) {
 
             if (RestService.checkAuth(response.data)) {
 
-                device.account_status = "suspended";
+             //   device.account_status = "suspended";
 
                 if (response.data.status) {
                     dispatch({
                         type: SUSPEND_DEVICE,
                         response: response.data,
                         payload: {
-                            device: device,
+                           // device: device,
                             msg: response.data.msg,
                         }
                     });
