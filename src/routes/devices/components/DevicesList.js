@@ -15,86 +15,86 @@ const EditableContext = React.createContext();
 
 const EditableRow = ({ form, index, ...props }) => (
     <EditableContext.Provider value={form}>
-      <tr {...props} />
+        <tr {...props} />
     </EditableContext.Provider>
 );
-  
+
 const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
     state = {
-      editing: false,
+        editing: false,
     }
-  
+
     toggleEdit = () => {
-      const editing = !this.state.editing;
-      this.setState({ editing }, () => {
-        if (editing) {
-          this.input.focus();
-        }
-      });
+        const editing = !this.state.editing;
+        this.setState({ editing }, () => {
+            if (editing) {
+                this.input.focus();
+            }
+        });
     }
-  
+
     save = (e) => {
-      const { record, handleSave } = this.props;
-      this.form.validateFields((error, values) => {
-        if (error && error[e.currentTarget.id]) {
-          return;
-        }
-        this.toggleEdit();
-        handleSave({ ...record, ...values });
-      });
+        const { record, handleSave } = this.props;
+        this.form.validateFields((error, values) => {
+            if (error && error[e.currentTarget.id]) {
+                return;
+            }
+            this.toggleEdit();
+            handleSave({ ...record, ...values });
+        });
     }
-  
+
     render() {
-      const { editing } = this.state;
-      const {
-        editable,
-        dataIndex,
-        title,
-        record,
-        index,
-        handleSave,
-        ...restProps
-      } = this.props;
-      return (
-        <td {...restProps}>
-          {editable ? (
-            <EditableContext.Consumer>
-              {(form) => {
-                this.form = form;
-                return (
-                  editing ? (
-                    <Form.Item style={{ margin: 0 }}>
-                      {form.getFieldDecorator(dataIndex, {
-                        rules: [{
-                          required: true,
-                          message: `${title} is required.`,
-                        }],
-                        initialValue: record[dataIndex],
-                      })(
-                        <Input
-                          ref={node => (this.input = node)}
-                          onPressEnter={this.save}
-                          onBlur={this.save}
-                        />
-                      )}
-                    </Form.Item>
-                  ) : (
-                    <div
-                      className="editable-cell-value-wrap"
-                      style={{ paddingRight: 24 }}
-                      onClick={this.toggleEdit}
-                    >
-                      {restProps.children}
-                    </div>
-                  )
-                );
-              }}
-            </EditableContext.Consumer>
-          ) : restProps.children}
-        </td>
-      );
+        const { editing } = this.state;
+        const {
+            editable,
+            dataIndex,
+            title,
+            record,
+            index,
+            handleSave,
+            ...restProps
+        } = this.props;
+        return (
+            <td {...restProps}>
+                {editable ? (
+                    <EditableContext.Consumer>
+                        {(form) => {
+                            this.form = form;
+                            return (
+                                editing ? (
+                                    <Form.Item style={{ margin: 0 }}>
+                                        {form.getFieldDecorator(dataIndex, {
+                                            rules: [{
+                                                required: true,
+                                                message: `${title} is required.`,
+                                            }],
+                                            initialValue: record[dataIndex],
+                                        })(
+                                            <Input
+                                                ref={node => (this.input = node)}
+                                                onPressEnter={this.save}
+                                                onBlur={this.save}
+                                            />
+                                        )}
+                                    </Form.Item>
+                                ) : (
+                                        <div
+                                            className="editable-cell-value-wrap"
+                                            style={{ paddingRight: 24 }}
+                                            onClick={this.toggleEdit}
+                                        >
+                                            {restProps.children}
+                                        </div>
+                                    )
+                            );
+                        }}
+                    </EditableContext.Consumer>
+                ) : restProps.children}
+            </td>
+        );
     }
 }
 
@@ -114,10 +114,10 @@ class DevicesList extends Component {
         };
         this.renderList = this.renderList.bind(this);
     }
-    
+
     // renderList
     renderList(list) {
-        
+
 
         return list.map((device, index) => {
             // console.log(device.device_id);
@@ -151,7 +151,7 @@ class DevicesList extends Component {
                     (<Fragment>
                         {(status === "pending activation" || status === "Pending activation" || status === "Pending Activation") ?
                             <Fragment>
-                                <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device.device_id) }}>Decline</Button>
+                                <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>Decline</Button>
                                 <Button
                                     type="primary"
                                     size="small"
@@ -244,7 +244,7 @@ class DevicesList extends Component {
 
 
 
-    
+
 
     render() {
 
@@ -252,20 +252,20 @@ class DevicesList extends Component {
         const { activateDevice, suspendDevice } = this.props;
         const components = {
             body: {
-              row: EditableFormRow,
-              cell: EditableCell,
+                row: EditableFormRow,
+                cell: EditableCell,
             },
         };
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => ({
-              disabled: record.name === 'Disabled User', // Column configuration not to be checked
-              name: record.name,
+                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                name: record.name,
             }),
         };
-          
+
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
@@ -274,7 +274,7 @@ class DevicesList extends Component {
                     suspendDevice={suspendDevice} />
 
                 <Card>
-                    <Table 
+                    <Table
                         className="devices"
                         components={components}
                         // rowSelection={rowSelection}
@@ -284,7 +284,7 @@ class DevicesList extends Component {
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.devices)}
                         pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
-        
+
                         scroll={{
                             x: 500,
                             // y: 600 
@@ -393,9 +393,9 @@ class DevicesList extends Component {
         this.refs.activate.handleActivateDevice(device);
     }
 
-    handleRejectDevice = (device_id) => {
+    handleRejectDevice = (device) => {
 
-        this.props.rejectDevice(device_id)
+        this.props.rejectDevice(device)
     }
     addDevice = (device) => {
         // console.log(device);

@@ -254,7 +254,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('model', {
-                        initialValue: this.props.device.model,
+                        initialValue: (this.props.device.model === "null") ? '' : this.props.device.model,
                     })(
                         <Input />
                     )}
