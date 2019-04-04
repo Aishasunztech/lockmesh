@@ -87,7 +87,7 @@ const RestService = {
         // return this.response;
     },
     transferDeviceProfile: (device_id) => {
-        return axios.post(BASE_URL + 'users/transfer/device_profile', {device_id: device_id}, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/transfer/device_profile', { device_id: device_id }, RestService.getHeader());
     },
     // getuserType
     getUserType: () => {
@@ -207,7 +207,7 @@ const RestService = {
     // For Apk edit(admin dashboard)
     updateApkDetails: (formData) => {
         return axios.post(BASE_URL + 'users/edit/apk', formData, RestService.getHeader());
-        
+
     },
 
     updateUserProfile: (formData) => {
@@ -232,7 +232,7 @@ const RestService = {
         return axios.post(BASE_URL + 'users/unlink/' + id, { id }, RestService.getHeader());
 
     },
- 
+
 
     // unlink (dealer-cevices) admin dash.
     unlinkAPK: (apk_id) => {
@@ -267,10 +267,9 @@ const RestService = {
         )
     },
 
-    rejectDevice: (device_id) => {
-
-        return axios.delete(BASE_URL + 'users/delete/' + device_id, RestService.getHeader());
-
+    rejectDevice: (device) => {
+        console.log(device);
+        return axios.put(BASE_URL + 'users/delete/' + device.device_id, device, RestService.getHeader());
     },
 
     // Undo For Dealer and Sub dealer
@@ -325,7 +324,7 @@ const RestService = {
 
     // applySettings
     applySettings: (device_setting, device_id = null, type = "history", name = null, dealer_id = 0) => {
-   //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
+        //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {
             device_setting.app_list.forEach((elem) => {
                 elem.packageName = elem.uniqueName.replace(elem.label, '');

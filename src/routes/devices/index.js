@@ -1006,8 +1006,8 @@ class Devices extends Component {
         }
     }
 
-    rejectDevice = (device_id) => {
-        this.props.rejectDevice(device_id);
+    rejectDevice = (device) => {
+        this.props.rejectDevice(device);
     }
     handleFilterOptions = () => {
         return (
