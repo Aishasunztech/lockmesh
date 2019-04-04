@@ -138,23 +138,23 @@ class EditDevice extends Component {
                         <Input autoComplete="new-password" />
                     )}
                 </Form.Item>
-                {/* <Form.Item
+                <Form.Item
 
                     label="Account Email "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('email', {
-                        initialValue: this.props.device.email,
+                        initialValue: this.props.device.account_email,
                         rules: [{
                             type: 'email', message: 'The input is not valid E-mail!',
                         }, {
                             required: true, message: 'Account Email is Required !',
                         }],
                     })(
-                        <Input autoComplete="new-password" />
+                        <Input disabled />
                     )}
-                </Form.Item> */}
+                </Form.Item>
 
                 <Form.Item
                     label="PGP Email "
