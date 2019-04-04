@@ -13,10 +13,10 @@ export default class DeviceSidebar extends Component {
 
     renderDetailsData(device_details) {
 
-        let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
-        let color = getColor(status)
+      //  let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
+        let color = getColor(device_details.finalStatus)
 
-        
+
         // let device_status = 'Active';
 
         // if ((device_details.status === 'expired')) {
@@ -42,7 +42,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 10,
                 name: (<a href="javascript:void(0)" >Status:</a>),
-                value: <span style={color}>{status}</span>,
+                value: <span style={color}>{device_details.finalStatus}</span>,
             },
             {
                 key: 101,

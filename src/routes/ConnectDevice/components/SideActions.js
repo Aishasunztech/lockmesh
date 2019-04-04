@@ -175,7 +175,7 @@ class SideActions extends Component {
                                 </Button>
 
                                 <Button disabled={this.props.device.unlink_status ? true: this.state.disabled}
-                                    onClick={()=>showConfirm(this.props.device.device_id,this.props.unlinkDevice,this)} 
+                                    onClick={()=>showConfirm(this.props.device.usr_device_id,this.props.unlinkDevice,this)} 
                                     style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
