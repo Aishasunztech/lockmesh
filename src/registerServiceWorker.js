@@ -57,18 +57,18 @@ export default function register() {
   }
 }
 
-window.addEventListener('message', event => {
-  // alert('hello');
-  if (!event.data) {
-    return;
-  }
+// self.addEventListener('message', event => {
+//   // alert('hello');
+//   if (!event.data) {
+//     return;
+//   }
   
-  if (event.data === 'skipWaiting') {
-    console.log("skip waiting listener",event.data);
+//   if (event.data === 'skipWaiting') {
+//     console.log("skip waiting listener",event.data);
 
-    navigator.serviceWorker.skipWaiting();
-  }
-});
+//     navigator.serviceWorker.skipWaiting();
+//   }
+// });
 
 function registerValidSW(swUrl) {
   navigator.serviceWorker
@@ -79,7 +79,7 @@ function registerValidSW(swUrl) {
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
-              unregister();
+              // unregister();
               // At this point, the old content will have been purged and
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
@@ -142,7 +142,10 @@ export function unregister() {
         //     for (let name of names)
         //         caches.delete(name);
         // });
-      
+        caches.keys().then(function(names) {
+          for (let name of names)
+              caches.delete(name);
+        });
         registration.unregister();
       }
     });
