@@ -13,7 +13,7 @@ export default class DeviceSidebar extends Component {
 
     renderDetailsData(device_details) {
 
-      //  let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
+        //  let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
         let color = getColor(device_details.finalStatus)
 
 
@@ -52,7 +52,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 2,
                 name: (<a href="javascript:void(0)">Account Email:</a>),
-                value: device_details.email
+                value: device_details.account_email
             },
 
             {
