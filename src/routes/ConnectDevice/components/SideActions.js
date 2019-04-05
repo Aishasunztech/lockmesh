@@ -284,7 +284,7 @@ var mapStateToProps = ({ device_details }) => {
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         device_id: device_details.device.device_id,
-        usr_acc_id: device_details.device.id 
+        usr_acc_id: device_details.device.id
     };
 }
 
