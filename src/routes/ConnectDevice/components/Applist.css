@@ -11,6 +11,10 @@
     font-weight: 400;
     margin-top: 8px;
 }
+.side_action .ant-btn > span {
+    margin-left: 8px;
+    font-size: 12px;
+}
 .applist_menu .ant-checkbox-wrapper:first-child {
     margin-top:0;
 }
@@ -34,4 +38,7 @@
 }
 .captilize {
     text-transform: capitalize;
+}
+.side_action .ant-btn {
+    border-radius: 8px !important;
 }

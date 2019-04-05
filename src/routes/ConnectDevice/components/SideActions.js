@@ -134,7 +134,7 @@ class SideActions extends Component {
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         return (
             <div className="gutter-box bordered">
-                <div className="gutter-example">
+                <div className="gutter-example side_action">
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12}
@@ -160,7 +160,7 @@ class SideActions extends Component {
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
+                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff'}} >Wipe Device</Button>
 
                             </Col>
 
@@ -183,7 +183,7 @@ class SideActions extends Component {
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button  onClick={()=>this.refs.edit_device.showModal(this.props.device,this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
-                                <Button disabled type="default"  style={{ width: "100%", marginBottom: 15}} >Power(N/A)</Button>
+                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff'}} ><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign:'text-top'}}/></Button>
                             </Col>
                         </Row>
                     </Card>
