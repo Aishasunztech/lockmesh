@@ -19,9 +19,9 @@ class PolicyList extends Component {
 
     renderList(list) {
         let policy_list = list.filter((data) => {
-            if (data.type === "policy") {
+            // if (data.type === "policy") {
                 return data
-            }
+            // }
         })
         return policy_list.map((policy, index) => {
             return {
@@ -44,8 +44,8 @@ class PolicyList extends Component {
                     </Fragment>)
                 ,
                 rowKey: index,
-                policy_name: (policy.name) ? `${policy.name}` : "N/A",
-                policy_note: (policy.note) ? `${policy.note}` : "N/A"
+                policy_name: (policy.policy_name) ? `${policy.policy_name}` : "N/A",
+                policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A"
             }
         });
 
@@ -57,6 +57,7 @@ class PolicyList extends Component {
     }
 
     render() {
+        console.log(this.props.policies)
         return (
             <Fragment>
                 <Card>

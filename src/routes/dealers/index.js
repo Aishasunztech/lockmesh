@@ -35,6 +35,7 @@ class Dealers extends Component {
             dataIndex: 'actions',
             align: 'center',
             className: 'row',
+            
 
         },
         {
