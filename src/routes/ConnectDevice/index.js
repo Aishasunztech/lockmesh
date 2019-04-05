@@ -64,6 +64,35 @@ class ConnectDevice extends Component {
                 pageName: "system_controls",
                 value: 'System Controls'
             },
+            // {
+            //     pageName: "guest_password",
+            //     value: 'Set Guest Password'
+            // },
+            // {
+            //     pageName: "encrypted_password",
+            //     value: 'Set Encrypted Password'
+            // },
+            // {
+            //     pageName: "duress_password",
+            //     value: 'Set Duress Password'
+            // },
+            // {
+            //     pageName: "settings",
+            //     value: 'Setting Menu'
+            // },
+            // {
+            //     pageName: "admin_password",
+            //     value: 'Change Admin Panel Code'
+            // },
+            {
+                pageName: "Manage_password",
+                value: 'Manage Passwords'
+            },
+
+        ]
+
+        this.subMenu = [
+           
             {
                 pageName: "guest_password",
                 value: 'Set Guest Password'
@@ -76,15 +105,14 @@ class ConnectDevice extends Component {
                 pageName: "duress_password",
                 value: 'Set Duress Password'
             },
-            // {
-            //     pageName: "settings",
-            //     value: 'Setting Menu'
-            // },
+           
             {
                 pageName: "admin_password",
                 value: 'Change Admin Panel Code'
-            }
+            },
         ]
+
+
     }
     changePage = (pageName) => {
         this.props.changePage(pageName);
@@ -188,7 +216,25 @@ class ConnectDevice extends Component {
             return (<Password pwdType={this.state.pageName} />);
         } else if (this.props.pageName === "not_available") {
             return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
-        } else {
+        } else if(this.props.pageName === "Manage_password"){
+            return(
+                <List
+                className="dev_main_menu"
+                size="small"
+                dataSource={this.subMenu}
+                renderItem={item => {
+                    return (<List.Item
+                        onClick={() => {
+
+                            this.changePage(item.pageName)
+                        }}
+                    ><a>{item.value}</a></List.Item>)
+                }}
+            />
+            )
+            
+        }
+         else {
             return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
         }
     }
