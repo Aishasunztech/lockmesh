@@ -400,7 +400,7 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         status: device_details.status,
-        user_acc_id: device_details.device.usr_acc_id
+        user_acc_id: device_details.device.id
     };
 }
 

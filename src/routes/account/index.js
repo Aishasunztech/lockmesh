@@ -246,30 +246,40 @@ class Account extends Component {
         };
 
         return (
-            <Fragment>
-                <Modal
-                    className="m_d_pop"
-                    visible={this.state.visible}
-                    title={`Import ${this.state.fieldValue}`}
-                    // onOk={this.handleOk}
-                    onCancel={
-                        () => {
-                            this.showImportModal(false);
-                        }
-                    }
-                    footer={[
-                        <Button key="back" onClick={() => {
-                            this.showImportModal(false);
-                        }}>Cancel</Button>,
 
-                        <Button key="submit" ref="formSubmission" type="primary" onClick={(e) => this.handleSubmit()} >
-                            Submit
+            <div>
+                <Row justify='center' style={{ backgroundColor: '#012346', height: 150, paddingTop: 50 }}>
+                </Row>
+                <div style={{ marginTop: -60 }}>
+                    <Row>
+                        <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                            <div>
+                                <Card style={{ borderRadius: 12 }}>
+                                    <div className="profile_table">
+                                        <Fragment>
+                                            <Modal
+                                                className="m_d_pop"
+                                                visible={this.state.visible}
+                                                title={`Import ${this.state.fieldValue}`}
+                                                // onOk={this.handleOk}
+                                                onCancel={
+                                                    () => {
+                                                        this.showImportModal(false);
+                                                    }
+                                                }
+                                                footer={[
+                                                    <Button key="back" onClick={() => {
+                                                        this.showImportModal(false);
+                                                    }}>Cancel</Button>,
+
+                                                    <Button key="submit" ref="formSubmission" type="primary" onClick={(e) => this.handleSubmit()} >
+                                                        Submit
                         </Button>
-                    ]}
-                >
-                    <Form onSubmit={(e) => { this.handleSubmit(e) }}>
+                                                ]}
+                                            >
+                                                <Form onSubmit={(e) => { this.handleSubmit(e) }}>
 
-                        {/* <Form.Item
+                                                    {/* <Form.Item
                             label="Name* "
                             labelCol={{ span: 7 }}
                             wrapperCol={{ span: 12 }}
@@ -278,330 +288,330 @@ class Account extends Component {
                             <Input disabled type='text' required={true} value={this.state.apk_name} onChange={(event) => this.setState({ apk_name: event.target.value })} />
 
                         </Form.Item> */}
-                        <Row>
-                            <Col span={24} className="upload_file">
-                                <Form.Item
-                                >
-                                    <div className="dropbox">
+                                                    <Row>
+                                                        <Col span={24} className="upload_file">
+                                                            <Form.Item
+                                                            >
+                                                                <div className="dropbox">
 
-                                        <Upload.Dragger  {...props} disabled={(file === null) ? false : true} >
-                                            <p className="ant-upload-drag-icon">
-                                                <Icon type="file-excel" />
-                                            </p>
-                                            <h2 className="ant-upload-hint">UPLOAD FILE </h2>
-                                            <p className="ant-upload-text">Upload file (.xls, .xlsx, .csv)</p>
-                                        </Upload.Dragger>
-                                    </div>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Modal>
+                                                                    <Upload.Dragger  {...props} disabled={(file === null) ? false : true} >
+                                                                        <p className="ant-upload-drag-icon">
+                                                                            <Icon type="file-excel" />
+                                                                        </p>
+                                                                        <h2 className="ant-upload-hint">UPLOAD FILE </h2>
+                                                                        <p className="ant-upload-text">Upload file (.xls, .xlsx, .csv)</p>
+                                                                    </Upload.Dragger>
+                                                                </div>
+                                                            </Form.Item>
+                                                        </Col>
+                                                    </Row>
+                                                </Form>
+                                            </Modal>
 
-                <Modal
-                    className="m_d_pop"
-                    visible={this.state.dataVisible}
-                    title={`${this.state.dataFieldTitle}`}
-                    // onOk={this.handleOk}
-                    onCancel={
-                        () => {
-                            this.showViewmodal(false);
-                        }
-                    }
-                >
-                    {(this.state.dataFieldName === "sim_ids") ?
-                        <Fragment>
-                            <div className="row">
-                                <div className="col-md-6 pr-8">
-                                    <Select
-                                        className="search_heading2"
-                                        value={this.state.sim_ids_page}
-                                        //  defaultValue={this.state.DisplayPages}
-                                        style={{ width: '100%' }}
-                                        // onSelect={value => this.setState({DisplayPages:value})}
-                                        onChange={value => this.handlePagination(value, 'sim_ids')}
-                                    >
-                                        <Select.Option className="font-12" value="10" >10</Select.Option>
-                                        <Select.Option className="font-12" value="20">20</Select.Option>
-                                        <Select.Option className="font-12" value="30">30</Select.Option>
-                                        <Select.Option className="font-12" value="50">50</Select.Option>
-                                        <Select.Option className="font-12" value="100">100</Select.Option>
-                                    </Select>
-                                </div>
-                                <div className="col-md-6 pl-8">
-                                    <Input.Search
-                                        name="sim_id"
-                                        key="sim_id"
-                                        id="sim_id"
-                                        className="search_heading1"
-                                        onKeyUp={
-                                            (e) => {
-                                                this.handleSearch(e, 'sim_ids')
-                                            }
-                                        }
-                                        autoComplete="new-password"
-                                        placeholder="SIM ID"
-                                    />
-                                </div>
-                                <div className="col-md-6 pr-8">
-                                    <Input.Search
-                                        name="start_date"
-                                        key="start_date"
-                                        id="start_date"
-                                        className="search_heading1"
-                                        onKeyUp={
-                                            (e) => {
-                                                this.handleSearch(e, 'sim_ids')
-                                            }
-                                        }
-                                        autoComplete="new-password"
-                                        placeholder="START DATE"
-                                    />
-                                </div>
-                                <div className="col-md-6 pl-8">
-                                    <Input.Search
-                                        name="expiry_date"
-                                        key="expiry_date"
-                                        id="expiry_date"
-                                        className="search_heading1"
-                                        onKeyUp={
-                                            (e) => {
-                                                this.handleSearch(e, 'sim_ids')
-                                            }
-                                        }
-                                        autoComplete="new-password"
-                                        placeholder="EXPIRY DATE"
-                                    />
-                                </div>
-                            </div>
-
-                            <Table
-                                columns={[
-                                    {
-                                        title: 'SIM ID',
-                                        align: "center",
-                                        dataIndex: 'sim_id',
-                                        key: "sim_id",
-                                        className: '',
-                                        sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                    {
-                                        title: 'START DATE',
-                                        align: "center",
-                                        dataIndex: 'start_date',
-                                        key: "start_date",
-                                        className: '',
-                                        sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
-                                        sortDirections: ['ascend', 'descend'],
-
-                                    },
-                                    {
-                                        title: 'EXPIRY DATE',
-                                        align: "center",
-                                        dataIndex: 'expiry_date',
-                                        key: "expiry_date",
-                                        className: '',
-                                        sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
-                                        sortDirections: ['ascend', 'descend'],
-                                    },
-                                ]}
-                                dataSource={
-                                    this.state.sim_ids.map(sim_id => {
-                                        return {
-                                            key: sim_id.id,
-                                            sim_id: sim_id.sim_id,
-                                            start_date: sim_id.start_date,
-                                            expiry_date: sim_id.expiry_date
-                                        }
-                                    })
-                                }
-
-                                pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
-
-                            />
-                        </Fragment>
-                        : (this.state.dataFieldName === "chat_ids") ?
-                            <Fragment>
-                                <div className="row">
-                                    <div className="col-md-6 pr-8">
-                                        <Select
-                                            className="search_heading2"
-                                            value={this.state.chat_ids_page}
-                                            //  defaultValue={this.state.DisplayPages}
-                                            style={{ width: '100%' }}
-                                            // onSelect={value => this.setState({DisplayPages:value})}
-                                            onChange={value => this.handlePagination(value, 'chat_ids')}
-                                        >
-                                            <Select.Option className="font-12" value="10" >10</Select.Option>
-                                            <Select.Option className="font-12" value="20">20</Select.Option>
-                                            <Select.Option className="font-12" value="30">30</Select.Option>
-                                            <Select.Option className="font-12" value="50">50</Select.Option>
-                                            <Select.Option className="font-12" value="100">100</Select.Option>
-                                        </Select>
-                                    </div>
-                                    <div className="col-md-6 pl-8">
-                                        <Input.Search
-                                            name="chat_id"
-                                            key="chat_id"
-                                            id="chat_id"
-                                            className="search_heading1"
-                                            onKeyUp={
-                                                (e) => {
-                                                    this.handleSearch(e, 'chat_ids')
-                                                }
-                                            }
-                                            autoComplete="new-password"
-                                            placeholder="CHAT ID"
-                                        />
-                                    </div>
-                                </div>
-
-                                <Table
-                                    columns={[
-                                        {
-                                            title: 'CHAT ID',
-                                            align: "center",
-                                            dataIndex: 'chat_id',
-                                            key: "chat_id",
-                                            className: '',
-                                            sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
-                                            sortDirections: ['ascend', 'descend'],
-                                        },
-                                    ]}
-                                    dataSource={
-                                        this.state.chat_ids.map(chat_id => {
-                                            return {
-                                                key: chat_id.id,
-                                                chat_id: chat_id.chat_id,
-                                            }
-                                        })
-                                    }
-
-                                    pagination={{ pageSize: Number(this.state.chat_ids_page), size: "middle" }}
-                                />
-                            </Fragment>
-                            : (this.state.dataFieldName === "pgp_emails") ?
-                                <Fragment>
-                                    <div className="row">
-                                        <div className="col-md-6 pr-8">
-                                            <Select
-                                                className="search_heading2"
-                                                value={this.state.pgp_emails_page}
-                                                //  defaultValue={this.state.DisplayPages}
-                                                style={{ width: '100%' }}
-                                                // onSelect={value => this.setState({DisplayPages:value})}
-                                                onChange={value => this.handlePagination(value, 'pgp_emails')}
-                                            >
-                                                <Select.Option className="font-12" value="10" >10</Select.Option>
-                                                <Select.Option className="font-12" value="20">20</Select.Option>
-                                                <Select.Option className="font-12" value="30">30</Select.Option>
-                                                <Select.Option className="font-12" value="50">50</Select.Option>
-                                                <Select.Option className="font-12" value="100">100</Select.Option>
-                                            </Select>
-                                        </div>
-                                        <div className="col-md-6 pl-8">
-                                            <Input.Search
-                                                name="pgp_email"
-                                                key="pgp_email"
-                                                id="pgp_email"
-                                                className="search_heading1"
-                                                onKeyUp={
-                                                    (e) => {
-                                                        this.handleSearch(e, 'pgp_emails')
+                                            <Modal
+                                                className="m_d_pop"
+                                                visible={this.state.dataVisible}
+                                                title={`${this.state.dataFieldTitle}`}
+                                                // onOk={this.handleOk}
+                                                onCancel={
+                                                    () => {
+                                                        this.showViewmodal(false);
                                                     }
                                                 }
-                                                autoComplete="new-password"
-                                                placeholder="PGP Email"
-                                            />
-                                        </div>
-                                    </div>
+                                            >
+                                                {(this.state.dataFieldName === "sim_ids") ?
+                                                    <Fragment>
+                                                        <div className="row">
+                                                            <div className="col-md-6 pr-8">
+                                                                <Select
+                                                                    className="search_heading2"
+                                                                    value={this.state.sim_ids_page}
+                                                                    //  defaultValue={this.state.DisplayPages}
+                                                                    style={{ width: '100%' }}
+                                                                    // onSelect={value => this.setState({DisplayPages:value})}
+                                                                    onChange={value => this.handlePagination(value, 'sim_ids')}
+                                                                >
+                                                                    <Select.Option className="font-12" value="10" >10</Select.Option>
+                                                                    <Select.Option className="font-12" value="20">20</Select.Option>
+                                                                    <Select.Option className="font-12" value="30">30</Select.Option>
+                                                                    <Select.Option className="font-12" value="50">50</Select.Option>
+                                                                    <Select.Option className="font-12" value="100">100</Select.Option>
+                                                                </Select>
+                                                            </div>
+                                                            <div className="col-md-6 pl-8">
+                                                                <Input.Search
+                                                                    name="sim_id"
+                                                                    key="sim_id"
+                                                                    id="sim_id"
+                                                                    className="search_heading1"
+                                                                    onKeyUp={
+                                                                        (e) => {
+                                                                            this.handleSearch(e, 'sim_ids')
+                                                                        }
+                                                                    }
+                                                                    autoComplete="new-password"
+                                                                    placeholder="SIM ID"
+                                                                />
+                                                            </div>
+                                                            <div className="col-md-6 pr-8">
+                                                                <Input.Search
+                                                                    name="start_date"
+                                                                    key="start_date"
+                                                                    id="start_date"
+                                                                    className="search_heading1"
+                                                                    onKeyUp={
+                                                                        (e) => {
+                                                                            this.handleSearch(e, 'sim_ids')
+                                                                        }
+                                                                    }
+                                                                    autoComplete="new-password"
+                                                                    placeholder="START DATE"
+                                                                />
+                                                            </div>
+                                                            <div className="col-md-6 pl-8">
+                                                                <Input.Search
+                                                                    name="expiry_date"
+                                                                    key="expiry_date"
+                                                                    id="expiry_date"
+                                                                    className="search_heading1"
+                                                                    onKeyUp={
+                                                                        (e) => {
+                                                                            this.handleSearch(e, 'sim_ids')
+                                                                        }
+                                                                    }
+                                                                    autoComplete="new-password"
+                                                                    placeholder="EXPIRY DATE"
+                                                                />
+                                                            </div>
+                                                        </div>
 
-                                    <Table
-                                        size="middle"
-                                        columns={[
-                                            {
-                                                title: 'PGP EMAILS',
-                                                align: "center",
-                                                dataIndex: 'pgp_email',
-                                                key: "pgp_email",
-                                                className: '',
-                                                sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
-                                                sortDirections: ['ascend', 'descend'],
+                                                        <Table
+                                                            columns={[
+                                                                {
+                                                                    title: 'SIM ID',
+                                                                    align: "center",
+                                                                    dataIndex: 'sim_id',
+                                                                    key: "sim_id",
+                                                                    className: '',
+                                                                    sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
+                                                                    sortDirections: ['ascend', 'descend'],
 
-                                            },
-                                        ]}
+                                                                },
+                                                                {
+                                                                    title: 'START DATE',
+                                                                    align: "center",
+                                                                    dataIndex: 'start_date',
+                                                                    key: "start_date",
+                                                                    className: '',
+                                                                    sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+                                                                    sortDirections: ['ascend', 'descend'],
 
-                                        dataSource={
-                                            this.state.pgp_emails.map(email => {
-                                                return {
-                                                    key: email.id,
-                                                    pgp_email: email.pgp_email,
+                                                                },
+                                                                {
+                                                                    title: 'EXPIRY DATE',
+                                                                    align: "center",
+                                                                    dataIndex: 'expiry_date',
+                                                                    key: "expiry_date",
+                                                                    className: '',
+                                                                    sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+                                                                    sortDirections: ['ascend', 'descend'],
+                                                                },
+                                                            ]}
+                                                            dataSource={
+                                                                this.state.sim_ids.map(sim_id => {
+                                                                    return {
+                                                                        key: sim_id.id,
+                                                                        sim_id: sim_id.sim_id,
+                                                                        start_date: sim_id.start_date,
+                                                                        expiry_date: sim_id.expiry_date
+                                                                    }
+                                                                })
+                                                            }
 
-                                                }
-                                            })
-                                        }
+                                                            pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
 
-                                        pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
-                                    />
-                                </Fragment>
-                                : null}
-                </Modal>
-                <Row>
-                    <div className="col-md-4 ac_card">
-                        <Card
-                            title="Manage Data"
-                            extra={<a href="#"></a>}
-                            style={{}}
-                        >
-                            <div className="inline_b">
-                                <span className="headings">PGP Emails</span>
-                                <Button onClick={() => { this.showViewmodal(true, 'pgp_emails', 'PGP Emails') }} size='small' className="pull-right exp_btn">View</Button>
-                                <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
-                                    this.exportCSV('pgp_emails');
-                                }} >Export</Button>
-                                <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
-                                    this.showImportModal(true, "pgp_emails", "PGP Emails")
-                                }}>Import</Button>
-                                <a href={`${BASE_URL}users/getFile/import_pgp_emails.xlsx`}>
-                                    <Button size='small' className="pull-right imp_btn" type="dashed">Sample</Button>
-                                </a>
+                                                        />
+                                                    </Fragment>
+                                                    : (this.state.dataFieldName === "chat_ids") ?
+                                                        <Fragment>
+                                                            <div className="row">
+                                                                <div className="col-md-6 pr-8">
+                                                                    <Select
+                                                                        className="search_heading2"
+                                                                        value={this.state.chat_ids_page}
+                                                                        //  defaultValue={this.state.DisplayPages}
+                                                                        style={{ width: '100%' }}
+                                                                        // onSelect={value => this.setState({DisplayPages:value})}
+                                                                        onChange={value => this.handlePagination(value, 'chat_ids')}
+                                                                    >
+                                                                        <Select.Option className="font-12" value="10" >10</Select.Option>
+                                                                        <Select.Option className="font-12" value="20">20</Select.Option>
+                                                                        <Select.Option className="font-12" value="30">30</Select.Option>
+                                                                        <Select.Option className="font-12" value="50">50</Select.Option>
+                                                                        <Select.Option className="font-12" value="100">100</Select.Option>
+                                                                    </Select>
+                                                                </div>
+                                                                <div className="col-md-6 pl-8">
+                                                                    <Input.Search
+                                                                        name="chat_id"
+                                                                        key="chat_id"
+                                                                        id="chat_id"
+                                                                        className="search_heading1"
+                                                                        onKeyUp={
+                                                                            (e) => {
+                                                                                this.handleSearch(e, 'chat_ids')
+                                                                            }
+                                                                        }
+                                                                        autoComplete="new-password"
+                                                                        placeholder="CHAT ID"
+                                                                    />
+                                                                </div>
+                                                            </div>
 
-                            </div>
-                            <div className="inline_b">
-                                <span className="headings">Chat IDs</span>
-                                <Button onClick={() => { this.showViewmodal(true, 'chat_ids', 'Chat IDs') }} size='small' className="pull-right exp_btn">View</Button>
-                                <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
-                                    this.exportCSV('chat_ids');
-                                }} >Export</Button>
-                                <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
-                                    this.showImportModal(true, "chat_ids", "Chat IDs")
-                                }}>Import</Button>
-                                <a href={`${BASE_URL}users/getFile/import_chat_ids.xlsx`}>
-                                    <Button size='small' className="pull-right imp_btn" type="dashed" >Sample</Button>
-                                </a>
+                                                            <Table
+                                                                columns={[
+                                                                    {
+                                                                        title: 'CHAT ID',
+                                                                        align: "center",
+                                                                        dataIndex: 'chat_id',
+                                                                        key: "chat_id",
+                                                                        className: '',
+                                                                        sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
+                                                                        sortDirections: ['ascend', 'descend'],
+                                                                    },
+                                                                ]}
+                                                                dataSource={
+                                                                    this.state.chat_ids.map(chat_id => {
+                                                                        return {
+                                                                            key: chat_id.id,
+                                                                            chat_id: chat_id.chat_id,
+                                                                        }
+                                                                    })
+                                                                }
 
-                            </div>
-                            <div className="inline_b">
-                                <span className="headings">SIM IDs</span>
-                                <Button onClick={() => { this.showViewmodal(true, 'sim_ids', 'Sim IDs') }} size='small' className="pull-right exp_btn mb-0">View</Button>
-                                <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
-                                    this.exportCSV('sim_ids');
-                                }} >Export</Button>
-                                <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
-                                    this.showImportModal(true, "sim_ids", "Sim IDs")
-                                }}>Import</Button>
+                                                                pagination={{ pageSize: Number(this.state.chat_ids_page), size: "middle" }}
+                                                            />
+                                                        </Fragment>
+                                                        : (this.state.dataFieldName === "pgp_emails") ?
+                                                            <Fragment>
+                                                                <div className="row">
+                                                                    <div className="col-md-6 pr-8">
+                                                                        <Select
+                                                                            className="search_heading2"
+                                                                            value={this.state.pgp_emails_page}
+                                                                            //  defaultValue={this.state.DisplayPages}
+                                                                            style={{ width: '100%' }}
+                                                                            // onSelect={value => this.setState({DisplayPages:value})}
+                                                                            onChange={value => this.handlePagination(value, 'pgp_emails')}
+                                                                        >
+                                                                            <Select.Option className="font-12" value="10" >10</Select.Option>
+                                                                            <Select.Option className="font-12" value="20">20</Select.Option>
+                                                                            <Select.Option className="font-12" value="30">30</Select.Option>
+                                                                            <Select.Option className="font-12" value="50">50</Select.Option>
+                                                                            <Select.Option className="font-12" value="100">100</Select.Option>
+                                                                        </Select>
+                                                                    </div>
+                                                                    <div className="col-md-6 pl-8">
+                                                                        <Input.Search
+                                                                            name="pgp_email"
+                                                                            key="pgp_email"
+                                                                            id="pgp_email"
+                                                                            className="search_heading1"
+                                                                            onKeyUp={
+                                                                                (e) => {
+                                                                                    this.handleSearch(e, 'pgp_emails')
+                                                                                }
+                                                                            }
+                                                                            autoComplete="new-password"
+                                                                            placeholder="PGP Email"
+                                                                        />
+                                                                    </div>
+                                                                </div>
 
-                                <a href={`${BASE_URL}users/getFile/import_sim_ids.xlsx`}>
-                                    <Button size='small' className="pull-right imp_btn mb-0" type="dashed">Sample</Button>
-                                </a>
+                                                                <Table
+                                                                    size="middle"
+                                                                    columns={[
+                                                                        {
+                                                                            title: 'PGP EMAILS',
+                                                                            align: "center",
+                                                                            dataIndex: 'pgp_email',
+                                                                            key: "pgp_email",
+                                                                            className: '',
+                                                                            sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+                                                                            sortDirections: ['ascend', 'descend'],
 
-                            </div>
-                        </Card>
-                    </div>
+                                                                        },
+                                                                    ]}
 
-                    {/* <div className="col-md-4 ac_card p-0">
+                                                                    dataSource={
+                                                                        this.state.pgp_emails.map(email => {
+                                                                            return {
+                                                                                key: email.id,
+                                                                                pgp_email: email.pgp_email,
+
+                                                                            }
+                                                                        })
+                                                                    }
+
+                                                                    pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                                                />
+                                                            </Fragment>
+                                                            : null}
+                                            </Modal>
+                                            <Row>
+                                                <div className="col-md-4 ac_card">
+                                                    <Card
+                                                        title="Manage Data"
+                                                        extra={<a href="#"></a>}
+                                                        style={{}}
+                                                    >
+                                                        <div className="inline_b">
+                                                            <span className="headings">PGP Emails</span>
+                                                            <Button onClick={() => { this.showViewmodal(true, 'pgp_emails', 'PGP Emails') }} size='small' className="pull-right exp_btn">View</Button>
+                                                            <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                                                this.exportCSV('pgp_emails');
+                                                            }} >Export</Button>
+                                                            <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                                                this.showImportModal(true, "pgp_emails", "PGP Emails")
+                                                            }}>Import</Button>
+                                                            <a href={`${BASE_URL}users/getFile/import_pgp_emails.xlsx`}>
+                                                                <Button size='small' className="pull-right imp_btn" type="dashed">Sample</Button>
+                                                            </a>
+
+                                                        </div>
+                                                        <div className="inline_b">
+                                                            <span className="headings">Chat IDs</span>
+                                                            <Button onClick={() => { this.showViewmodal(true, 'chat_ids', 'Chat IDs') }} size='small' className="pull-right exp_btn">View</Button>
+                                                            <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                                                this.exportCSV('chat_ids');
+                                                            }} >Export</Button>
+                                                            <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                                                this.showImportModal(true, "chat_ids", "Chat IDs")
+                                                            }}>Import</Button>
+                                                            <a href={`${BASE_URL}users/getFile/import_chat_ids.xlsx`}>
+                                                                <Button size='small' className="pull-right imp_btn" type="dashed" >Sample</Button>
+                                                            </a>
+
+                                                        </div>
+                                                        <div className="inline_b">
+                                                            <span className="headings">SIM IDs</span>
+                                                            <Button onClick={() => { this.showViewmodal(true, 'sim_ids', 'Sim IDs') }} size='small' className="pull-right exp_btn mb-0">View</Button>
+                                                            <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
+                                                                this.exportCSV('sim_ids');
+                                                            }} >Export</Button>
+                                                            <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
+                                                                this.showImportModal(true, "sim_ids", "Sim IDs")
+                                                            }}>Import</Button>
+
+                                                            <a href={`${BASE_URL}users/getFile/import_sim_ids.xlsx`}>
+                                                                <Button size='small' className="pull-right imp_btn mb-0" type="dashed">Sample</Button>
+                                                            </a>
+
+                                                        </div>
+                                                    </Card>
+                                                </div>
+
+                                                {/* <div className="col-md-4 ac_card p-0">
                         <Card
                             title=""
                             >
@@ -653,9 +663,51 @@ class Account extends Component {
                         </Card>
                     </div> */}
 
-                </Row>
+                                            </Row>
 
-            </Fragment>
+                                        </Fragment>
+                                    </div>
+                                </Card>
+                            </div>
+                        </Col>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <div>
+                                <Card style={{ borderRadius: 12 }}>
+                                    <div>
+                                        {/* <h1>Your Profile</h1>
+                                    <Divider className="mb-0" />
+                                    <Row style={{ padding: 16 }}>
+                                        <Col span={9} style={{ padding: 0, textAlign: "center" }}>
+                                            <img src={require("../../assets/images/profile-image.png")} style={{ height: 'auto', width: '100%', borderRadius: 50 }} />
+                                        </Col>
+                                        <Col span={15}>
+                                             <h1>{this.props.profile.name}</h1>
+
+                                            <p>({this.props.profile.type})</p>
+                                        </Col>
+                                    </Row>
+                                    <Row justify='center'>
+                                        <Col span={12} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
+                                            <Button type="primary" style={{ width: "100%" }}
+                                                onClick={() => this.refs.change_password.showModal()}
+                                                icon="unlock">Change Password</Button>
+                                        </Col>
+                                        <Col span={12} style={{ padding: "0px 16px 0px 8px" }} className="change_email">
+                                            <Button disabled type="primary" style={{ width: "100%" }} icon="mail">Change Email</Button>
+                                        </Col>
+                                    </Row> */}
+
+                                    </div>
+                                </Card>
+                            </div>
+                        </Col>
+
+                    </Row>
+                </div>
+
+            </div>
+
+
         );
 
     }

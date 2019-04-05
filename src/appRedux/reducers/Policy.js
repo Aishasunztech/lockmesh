@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
         case GET_POLICIES:
             return {
                 ...state,
-                policies: [action.payload]
+                policies: action.payload
             }
         
         case APK_LIST: {

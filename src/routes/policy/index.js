@@ -166,7 +166,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ policies }) => {
-    // console.log("policies", policies);
+     console.log("policies", policies.policies);
     return {
         policies: policies.policies,
         apk_list: policies.apk_list,
