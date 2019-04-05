@@ -149,6 +149,7 @@ const RestService = {
 
     // getDeviceDetails
     getDeviceDetails: (device_id) => {
+        //console.log('rest apoi')
         return axios.get(BASE_URL + 'users/connect/' + device_id, RestService.getHeader());
     },
 
@@ -227,6 +228,13 @@ const RestService = {
         }, RestService.getHeader());
         
     },
+    getPolicies: (device_id = "") => {
+        return axios.post(BASE_URL + 'users/get_policies', {
+            device_id: device_id
+        }, RestService.getHeader());
+        
+    },
+    
 
     // unlink Dealer.
     unlinkDealer: (dealer_id) => {

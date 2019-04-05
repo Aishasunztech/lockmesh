@@ -19,11 +19,13 @@ class TableHistory extends Component {
         this.props.showHistoryModal(false,'');
     }
     componentDidMount() {
-        // console.log("componentDidMount", this.props);
+       //  console.log("componentDidMount", this.props);
         let histories = [];     
         this.props.histories.map((history) => {
 
-            if (this.props.type !== "history" && this.props.type === history.type) {
+           // console.log(history,'object',this.props.type)
+
+            if (this.props.type !== "history" && (this.props.type === history.type) || this.props.type === 'policy') {
                 histories.push({
                     key: history.id,
                     history_date: history.name,
@@ -66,7 +68,7 @@ class TableHistory extends Component {
             // console.log("compnentWillReceiveProps", nextProps);
             let histories = [];
             nextProps.histories.map((history) => {
-                if (nextProps.type !== "history" && nextProps.type === history.type) {
+                if (nextProps.type !== "history" && (this.props.type === history.type) || this.props.type === 'policy') {
                     histories.push( {
                         key: history.id,
                         history_date: history.name,

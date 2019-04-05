@@ -25,6 +25,7 @@ import {
 } from "constants/ActionTypes"
 
 import RestService from '../services/RestServices';
+import { GET_POLICIES } from "../../constants/ActionTypes";
 
 // action creaters 
 
@@ -36,15 +37,16 @@ export function changePage(pageName) {
 }
 
 export function getDeviceDetails(deviceId) {
-
+//console.log('object is callse')
     return (dispatch) => {
         RestService.getDeviceDetails(deviceId).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                // console.log("slkdflaskdfjlasf", response.data);
+           // console.log("slkdflaskdfjlasf", response.data);
+            if (RestService.checkAuth(response.data.status)) {
+             //    console.log("slkdflaskdfjlasf", response.data);
                 if (response.data) {
                     dispatch({
                         type: GET_DEVICE_DETAILS,
-                        payload: response.data
+                        payload: response.data.data
                     })
                 }
 
@@ -88,6 +90,27 @@ export function getProfiles(device_id) {
                     dispatch({
                         type: GET_PROFILES,
                         payload: response.data.profiles
+                    })
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
+export function getPolicies(device_id) {
+    return (dispatch) => {
+        RestService.getPolicies(device_id).then((response) => {
+            
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    dispatch({
+                        type: GET_POLICIES,
+                        payload: response.data.policies
                     })
                 }
 
