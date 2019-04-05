@@ -145,8 +145,8 @@ export default class ListApk extends Component {
                         <Button type="danger" size="small" style={{ margin: '0px', width: '60px' }} onClick={(e) => {
                             this.props.handleConfirmDelete(app.apk_id);
                         }}>DELETE</Button>
-                        <Button type="primary" size="small" style={{ margin: '0px', marginLeft: "8px" }}
-                            onClick={this.showModal} >Permission</Button>
+                        {/* <Button type="primary" size="small" style={{ margin: '0px', marginLeft: "8px" }}
+                            onClick={this.showModal} >Permission</Button> */}
                         <Modal
                             title="Dealers"
                             visible={this.state.visible}
