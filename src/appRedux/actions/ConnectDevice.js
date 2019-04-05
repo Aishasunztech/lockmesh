@@ -79,9 +79,9 @@ export function getDeviceApps(deviceId) {
     }
 }
 
-export function getProfiles() {
+export function getProfiles(device_id) {
     return (dispatch) => {
-        RestService.getDeviceProfiles().then((response) => {
+        RestService.getDeviceProfiles(device_id).then((response) => {
             
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -100,9 +100,9 @@ export function getProfiles() {
     }
 }
 
-export function getDeviceHistories(deviceId) {
+export function getDeviceHistories(user_acc_id) {
     return (dispatch) => {
-        RestService.getDeviceProfiles(deviceId).then((response) => {
+        RestService.getDeviceHistory(user_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({

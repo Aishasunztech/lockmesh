@@ -215,10 +215,17 @@ const RestService = {
 
     },
 
-    getDeviceProfiles: (deviceId = "") => {
-        return axios.post(BASE_URL + 'users/get_profiles', {
-            device_id: deviceId
+    getDeviceHistory: (device_id = "") => {
+        return axios.post(BASE_URL + 'users/get_device_history', {
+            device_id: device_id
         }, RestService.getHeader());
+    },
+
+    getDeviceProfiles: (device_id = "") => {
+        return axios.post(BASE_URL + 'users/get_profiles', {
+            device_id: device_id
+        }, RestService.getHeader());
+        
     },
 
     // unlink Dealer.

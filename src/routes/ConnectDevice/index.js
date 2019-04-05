@@ -103,12 +103,10 @@ class ConnectDevice extends Component {
         const device_id = atob(this.props.match.params.device_id);
         if (device_id !== '') {
 
-            // this.props.getAccIdFromDvcId(device_id);
-
             this.props.getDeviceDetails(device_id);
             this.props.getDeviceApps(device_id);
-            this.props.getProfiles();
-            this.props.getDeviceHistories(this.props.user_acc_id);
+            this.props.getProfiles(device_id);
+            this.props.getDeviceHistories(device_id);
             // this.setState({
             //     syncStatus: this.props.device_details.is_sync
             // })
