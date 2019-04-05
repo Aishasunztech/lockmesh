@@ -1,10 +1,64 @@
 import React, { Component } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card } from "antd";
+import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 
 import EditApk from './EditApk';
 
+const columns = [{
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    render: text => <a href="javascript:;">{text}</a>,
+}, {
+    title: 'Age',
+    dataIndex: 'age',
+    key: 'age',
+}, {
+    title: 'Address',
+    dataIndex: 'address',
+    key: 'address',
+}];
+const data = [{
+    key: '1',
+    name: 'John Brown',
+    age: 32,
+    address: 'New York No. 1 Lake Park',
+    tags: ['nice', 'developer'],
+}, {
+    key: '2',
+    name: 'Jim Green',
+    age: 42,
+    address: 'London No. 1 Lake Park',
+    tags: ['loser'],
+}, {
+    key: '3',
+    name: 'Joe Black',
+    age: 32,
+    address: 'Sidney No. 1 Lake Park',
+    tags: ['cool', 'teacher'],
+}];
 export default class ListApk extends Component {
+    state = { visible: false }
+
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    }
+
+    handleOk = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+
+    handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -91,6 +145,17 @@ export default class ListApk extends Component {
                         <Button type="danger" size="small" style={{ margin: '0px', width: '60px' }} onClick={(e) => {
                             this.props.handleConfirmDelete(app.apk_id);
                         }}>DELETE</Button>
+                        <Button type="primary" size="small" style={{ margin: '0px', marginLeft: "8px" }}
+                            onClick={this.showModal} >Permission</Button>
+                        <Modal
+                            title="Dealers"
+                            visible={this.state.visible}
+                            onOk={this.handleOk}
+                            onCancel={this.handleCancel}
+                        >
+                            <Table columns={columns} dataSource={data} />
+                        </Modal>
+
                     </div>
                 ),
                 'apk_status': (<Switch defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
@@ -109,14 +174,14 @@ export default class ListApk extends Component {
         // this.setState({ selectedRowKeys });
     }
     render() {
-        
+
         const rowSelection = {
             onChange: this.onSelectChange,
         };
 
         return (
             <Card>
-                <Table 
+                <Table
                     rowSelection={rowSelection}
                     className="gx-table-responsive apklist_table"
                     size="midddle"
@@ -124,7 +189,7 @@ export default class ListApk extends Component {
                     columns={this.state.columns}
                     dataSource={this.renderList(this.props.apk_list)}
                     pagination={{ pageSize: Number(this.state.pagination) }}
-               
+
                     scroll={{ x: 500 }}
                     rowKey="apk_id"
                 />

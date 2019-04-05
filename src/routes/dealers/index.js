@@ -29,13 +29,6 @@ class Dealers extends Component {
             align: 'center',
             className: 'row',
             width: 300,
-
-        }, {
-            title: '',
-            dataIndex: 'actions',
-            align: 'center',
-            className: 'row',
-
         },
         {
             title: (

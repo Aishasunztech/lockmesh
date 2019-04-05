@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { 
-    showHistoryModal, 
-    showSaveProfileModal, 
+import {
+    showHistoryModal,
+    showSaveProfileModal,
     saveProfile,
     hanldeProfileInput,
     transferDeviceProfile
@@ -36,15 +36,15 @@ class SideActions extends Component {
             historyModal: false,
             saveProfileModal: false,
             historyType: "history",
-            saveProfileType:'',
+            saveProfileType: '',
             profileName: '',
             policyName: '',
-            disabled:false
+            disabled: false
         }
     }
 
     componentDidMount() {
-       // console.log(this.props.historyType, 'did')
+        // console.log(this.props.historyType, 'did')
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
@@ -54,10 +54,10 @@ class SideActions extends Component {
             policyName: this.props.policyName
         })
     }
-    
+
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
-          //  console.log(nextProps.historyType, 'reciceve')
+            //  console.log(nextProps.historyType, 'reciceve')
             this.setState({
                 historyModal: nextProps.historyModal,
                 saveProfileModal: nextProps.saveProfileModal,
@@ -70,11 +70,11 @@ class SideActions extends Component {
     }
 
     showHistoryModal(visible, type) {
-        if (((type !== undefined) || type ==="" || type===null) && visible ===false) {
+        if (((type !== undefined) || type === "" || type === null) && visible === false) {
             this.props.showHistoryModal(visible);
-        }else{
-           // console.log('else')
-            this.props.showHistoryModal(visible,type);
+        } else {
+            // console.log('else')
+            this.props.showHistoryModal(visible, type);
         }
     }
 
@@ -87,10 +87,10 @@ class SideActions extends Component {
     }
 
     onInputChange = (e) => {
-        this.props.hanldeProfileInput(this.state.saveProfileType,e.target.value);
+        this.props.hanldeProfileInput(this.state.saveProfileType, e.target.value);
 
     }
-    saveProfile = () =>  {
+    saveProfile = () => {
 
         if (this.state.saveProfileType === "profile" && this.state.profileName !== '') {
             this.props.saveProfile(this.props.app_list, {
@@ -98,15 +98,15 @@ class SideActions extends Component {
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
                 duressPwd: this.props.duressPwd,
-            } ,this.state.saveProfileType, this.state.profileName, this.props.usr_acc_id);
+            }, this.state.saveProfileType, this.state.profileName, this.props.usr_acc_id);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
             this.props.saveProfile(this.props.app_list,
                 {
-                   adminPwd: this.props.adminPwd,
-                   guestPwd: this.props.guestPwd,
-                   encryptedPwd: this.props.encryptedPwd,
-                   duressPwd: this.props.duressPwd,
-                },this.state.saveProfileType, this.state.policyName, this.props.usr_acc_id);
+                    adminPwd: this.props.adminPwd,
+                    guestPwd: this.props.guestPwd,
+                    encryptedPwd: this.props.encryptedPwd,
+                    duressPwd: this.props.duressPwd,
+                }, this.state.saveProfileType, this.state.policyName, this.props.usr_acc_id);
         }
         this.showSaveProfileModal(false)
     }
@@ -114,19 +114,19 @@ class SideActions extends Component {
         let _this = this;
         confirm({
             content: (
-              <h2>
-                Are You Sure, You want to Transfer this Device 
+                <h2>
+                    Are You Sure, You want to Transfer this Device
             </h2>
             ),
             onOk() {
-              console.log('OK');
-             _this.props.transferDeviceProfile(device_id);
+                console.log('OK');
+                _this.props.transferDeviceProfile(device_id);
             },
             onCancel() {
-              console.log('Cancel');
+                console.log('Cancel');
             },
-          });
-        
+        });
+
     }
     render() {
         //  console.log('device', this.props.device);
@@ -139,28 +139,31 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12}
                                 className="gutter-row" justify="center" >
-                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} ><Icon type='upload' /> Push</Button>
+                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15 }} ><Icon type='upload' /> Push</Button>
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
-                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >Disable N/A</Button>
+
+                                {/* <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
-                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
-                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
-                                <Button type="default" onClick={() => { this.transferDeviceProfile(this.props.device_id)}} style={{ width: "100%", marginBottom: 15,backgroundColor: '#00336C', color: '#fff'}} >Transfer</Button>
+                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button> */}
+
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} > <Icon type='download' /> Pull</Button>
-                                {(localStorage.getItem("type")==="admin" || localStorage.getItem("type")==="dealer")?<Button type="primary "  style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} > <Icon type="save" style={{fontSize:"14px" }} /> Save Profile</Button>:null}
-                                {(localStorage.getItem("type")==="admin")?<Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{fontSize:"14px" }} /> Save Policy</Button>:null}
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15 }} > <Icon type='download' /> Pull</Button>
+                                {(localStorage.getItem("type") === "admin") ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{ fontSize: "14px" }} /> Save Policy</Button> : null}
+                                {(localStorage.getItem("type") === "admin" || localStorage.getItem("type") === "dealer") ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
+                                    <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
+
+                                {/* <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
-                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff'}} >Wipe Device</Button>
+                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button> */}
+
+                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15 }} >N/A</Button>
 
                             </Col>
 
@@ -169,7 +172,7 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-
+                                <Button type="default" onClick={() => { this.transferDeviceProfile(this.props.device_id) }} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} >Transfer</Button>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 15, fontSize: "12px" }} >
@@ -177,14 +180,15 @@ class SideActions extends Component {
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button disabled={this.props.device.unlink_status ? true: this.state.disabled}
-                                    onClick={()=>showConfirm(this.props.device.usr_device_id,this.props.unlinkDevice,this)} 
-                                    style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
+                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} >Wipe Device</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button  onClick={()=>this.refs.edit_device.showModal(this.props.device,this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
-                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff'}} ><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign:'text-top'}}/></Button>
+                                <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#1b1b1b', color: '#fff' }}><Icon type="flag" />Flag</Button>
+                                <Button disabled={this.props.device.unlink_status ? true : this.state.disabled} onClick={() => showConfirm(this.props.device.usr_device_id, this.props.unlinkDevice, this)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
+                                <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
+
                             </Col>
+                            <Button type="default" style={{ width: "46%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top' }} /></Button>
                         </Row>
                     </Card>
                 </div>
@@ -203,10 +207,10 @@ class SideActions extends Component {
                             :
                             (this.state.historyType === "policy") ?
                                 <TableHistory showHistoryModal={this.props.showHistoryModal} histories={this.props.policies} type={this.state.historyType} />
-                                 : 
-                                (this.state.historyType === undefined) ? 
-                                <p>{this.state.historyType}</p> : null
-                                }
+                                :
+                                (this.state.historyType === undefined) ?
+                                    <p>{this.state.historyType}</p> : null
+                    }
 
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
@@ -228,22 +232,22 @@ class SideActions extends Component {
                 />
 
                 <SuspendDevice ref="suspend"
-                   suspendDevice={this.props.suspendDevice}
-                   go_back={ this.props.history.goBack}
-                   getDevice = {this.props.getDevicesList}
-                    
+                    suspendDevice={this.props.suspendDevice}
+                    go_back={this.props.history.goBack}
+                    getDevice={this.props.getDevicesList}
+
                 />
 
                 <EditDevice ref='edit_device' />
 
-                
+
             </div>
         )
     }
     activateDevice
-    handleSuspendDevice = (device,_this) => {
+    handleSuspendDevice = (device, _this) => {
         this.refs.suspend.handleSuspendDevice(device);
-        
+
     }
 
     handleActivateDevice = (device) => {
@@ -261,8 +265,8 @@ function mapDispatchToProps(dispatch) {
         transferDeviceProfile: transferDeviceProfile
     }, dispatch);
 }
-var mapStateToProps = ( {device_details} ) => {
-   
+var mapStateToProps = ({ device_details }) => {
+
     return {
         historyModal: device_details.historyModal,
         saveProfileModal: device_details.saveProfileModal,
@@ -280,25 +284,25 @@ var mapStateToProps = ( {device_details} ) => {
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         device_id: device_details.device.device_id,
-        usr_acc_id: device_details.device.usr_acc_id 
+        usr_acc_id: device_details.device.usr_acc_id
     };
 }
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(SideActions);
-function showConfirm(id, action,_this) {
+function showConfirm(id, action, _this) {
     confirm({
-        title: 'Do you want to Unlink this Device  '+id,
+        title: 'Do you want to Unlink this Device  ' + id,
         onOk() {
-            _this.setState({disabled:true})
+            _this.setState({ disabled: true })
             // console.log('go back func', _this.props);
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
-                 action(id);
-                
-                 _this.props.history.goBack();
-                 _this.props.getDevicesList();
-              //  message.success('Action Done Susscefully ');
+                action(id);
+
+                _this.props.history.goBack();
+                _this.props.getDevicesList();
+                //  message.success('Action Done Susscefully ');
 
             }).catch(() => console.log('Oops errors!'));
         },
