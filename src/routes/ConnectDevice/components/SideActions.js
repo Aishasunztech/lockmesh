@@ -183,7 +183,7 @@ class SideActions extends Component {
                                 <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} >Wipe Device</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#1b1b1b', color: '#fff' }}><Icon type="flag" />Flag</Button>
+                                <Button  style={{ width: "100%", marginBottom: 15, backgroundColor: '#1b1b1b', color: '#fff' }}><Icon type="flag" />Flag</Button>
                                 <Button disabled={this.props.device.unlink_status ? true : this.state.disabled} onClick={() => showConfirm(this.props.device.usr_device_id, this.props.unlinkDevice, this)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
                                 <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
 
