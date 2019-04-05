@@ -9,6 +9,7 @@ import {
     getDeviceDetails,
     getDeviceApps,
     getProfiles,
+    getPolicies,
     getDeviceHistories,
     saveDeviceProfile,
     loadDeviceProfile,
@@ -101,11 +102,14 @@ class ConnectDevice extends Component {
         });
 
         const device_id = atob(this.props.match.params.device_id);
+    // console.log('ref', device_id)
+
         if (device_id !== '') {
 
             this.props.getDeviceDetails(device_id);
             this.props.getDeviceApps(device_id);
             this.props.getProfiles(device_id);
+            this.props.getPolicies(device_id);
             this.props.getDeviceHistories(device_id);
             // this.setState({
             //     syncStatus: this.props.device_details.is_sync
@@ -207,10 +211,16 @@ class ConnectDevice extends Component {
         this.props.startLoading();
         // console.log("refreshDevice", this.props);
      //   this.props.getAccIdFromDvcId(deviceId);
+     if(deviceId === undefined)
+     {
+         deviceId =atob(this.props.match.params.device_id);
+     }
+    // console.log('ref', deviceId)
         this.props.getDeviceDetails(deviceId);
         this.props.getDeviceApps(deviceId);
-        this.props.getProfiles();
-        this.props.getDeviceHistories(this.props.user_acc_id);
+        this.props.getProfiles(deviceId);
+        this.props.getPolicies(deviceId);
+        this.props.getDeviceHistories(deviceId);
         this.onBackHandler();
         setTimeout(() => {
             this.props.endLoading();
@@ -270,7 +280,7 @@ class ConnectDevice extends Component {
                         <SideActions
                             device={this.props.device_details}
                             profiles={this.props.profiles}
-
+                            policies={this.props.policies}
                             histories={this.props.histories}
                             activateDevice={this.props.activateDevice2}
                             suspendDevice={this.props.suspendDevice2}
@@ -294,6 +304,7 @@ function mapDispatchToProps(dispatch) {
         getDeviceDetails: getDeviceDetails,
         getDeviceApps: getDeviceApps,
         getProfiles: getProfiles,
+        getPolicies: getPolicies,
         getDeviceHistories: getDeviceHistories,
         saveDeviceProfile: saveDeviceProfile,
         loadDeviceProfile: loadDeviceProfile,
@@ -318,7 +329,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-     console.log("connect device state", device_details.device.usr_acc_id);
+    // console.log("connect device state", device_details.device);
     return {
         routing: routing,
         pathName: routing.location.pathname,
@@ -326,6 +337,7 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
         app_list: device_details.app_list,
         undoApps: device_details.undoApps,
         profiles: device_details.profiles,
+        policies: device_details.policies,
         histories: device_details.device_histories,
         isLoading: device_details.isLoading,
         showMessage: device_details.showMessage,

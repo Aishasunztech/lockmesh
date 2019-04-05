@@ -44,6 +44,7 @@ class SideActions extends Component {
     }
 
     componentDidMount() {
+       // console.log(this.props.historyType, 'did')
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
@@ -56,6 +57,7 @@ class SideActions extends Component {
     
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
+          //  console.log(nextProps.historyType, 'reciceve')
             this.setState({
                 historyModal: nextProps.historyModal,
                 saveProfileModal: nextProps.saveProfileModal,
@@ -71,6 +73,7 @@ class SideActions extends Component {
         if (((type !== undefined) || type ==="" || type===null) && visible ===false) {
             this.props.showHistoryModal(visible);
         }else{
+           // console.log('else')
             this.props.showHistoryModal(visible,type);
         }
     }
@@ -186,7 +189,7 @@ class SideActions extends Component {
                     </Card>
                 </div>
                 <Modal
-
+                    title={this.state.historyType}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}
                     onOk={() => this.showHistoryModal(false, '')}
@@ -199,7 +202,11 @@ class SideActions extends Component {
                             <TableHistory showHistoryModal={this.props.showHistoryModal} histories={this.props.profiles} type={this.state.historyType} />
                             :
                             (this.state.historyType === "policy") ?
-                                <TableHistory showHistoryModal={this.props.showHistoryModal} histories={this.props.profiles} type={this.state.historyType} /> : null}
+                                <TableHistory showHistoryModal={this.props.showHistoryModal} histories={this.props.policies} type={this.state.historyType} />
+                                 : 
+                                (this.state.historyType === undefined) ? 
+                                <p>{this.state.historyType}</p> : null
+                                }
 
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}

@@ -26,7 +26,8 @@ import {
   SUSPEND_DEVICE2,
   HANDLE_CHECK_APP,
   HANDLE_CHECK_ALL,
-  GET_USER_ACC_ID
+  GET_USER_ACC_ID,
+  GET_POLICIES
 } from "constants/ActionTypes";
 import {
   message
@@ -60,6 +61,7 @@ const initialState = {
     clearBtn: false,
 
     profiles: [],
+    policies: [],
     device_histories: [],
     historyModal: false,
     saveProfileModal: false,
@@ -106,6 +108,9 @@ export default (state = initialState, action) => {
         }
         case GET_DEVICE_DETAILS: {
             let device = action.payload;
+           //
+           
+           console.log(action.payload,'reducer detail')
             if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status===1) {
                 let status = null;
                 
@@ -191,6 +196,22 @@ export default (state = initialState, action) => {
                 profiles: action.payload
             }
             }
+
+            case GET_POLICIES:
+            {
+             console.log('GET_PROFILES');
+            // console.log({
+            //     ...state,
+            //     isloading: true,
+            //     profiles: action.payload
+            // });
+            return {
+                ...state,
+                isloading: true,
+                policies: action.payload
+            }
+            }
+            
 
             case GET_USER_ACC_ID:
             {
@@ -295,6 +316,7 @@ export default (state = initialState, action) => {
             //     historyType: action.payload.ProfileType,
             //     historyModal: action.payload.visible
             // })
+            console.log(action.payload.profileType, action.payload.visible, 'ok')
             return {
                 ...state,
                 historyType: action.payload.profileType,
