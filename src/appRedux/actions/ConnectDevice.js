@@ -82,6 +82,7 @@ export function getDeviceApps(deviceId) {
 export function getProfiles() {
     return (dispatch) => {
         RestService.getDeviceProfiles().then((response) => {
+            
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
@@ -251,7 +252,7 @@ export function loadDeviceProfile(app_list) {
     };
 }
 
-export function applySetting(app_list, passwords, device_id, type = "history", name = null) {
+export function applySetting(app_list, passwords, device_id,usr_acc_id, type = "history", name = null, ) {
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -263,7 +264,8 @@ export function applySetting(app_list, passwords, device_id, type = "history", n
             },
             controls: {}
         }
-        RestService.applySettings(device_setting, device_id).then((response) => {
+        console.log('my test is ', usr_acc_id)
+        RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
@@ -417,7 +419,7 @@ export function hanldeProfileInput(profileType, profileValue) {
         })
     }
 }
-export function saveProfile(app_list, passwords = null, profileType, profileName) {
+export function saveProfile(app_list, passwords = null, profileType, profileName,usr_acc_id) {
     return (dispatch) => {
         let pwd = {};
         if (passwords != null) {
@@ -440,15 +442,15 @@ export function saveProfile(app_list, passwords = null, profileType, profileName
             passwords: pwd,
             controls: {}
         }
-        // console.log("applist save profile", app_list);
-        RestService.applySettings(device_setting, null, profileType, profileName).then((response) => {
+         console.log("applist save profile", device_setting);
+        RestService.applySettings(device_setting, null, profileType, profileName, null,usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: SHOW_MESSAGE,
                     payload: {
                         showMessage: true,
-                        messageType: 'success',
-                        messageText: "Profile saved successfully"
+                        messageType: (response.data.status === true) ? 'success' : 'error',
+                        messageText: response.data.msg
                     }
                 })
                 dispatch({

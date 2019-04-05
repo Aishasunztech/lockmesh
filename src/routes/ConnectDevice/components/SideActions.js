@@ -87,7 +87,7 @@ class SideActions extends Component {
         this.props.hanldeProfileInput(this.state.saveProfileType,e.target.value);
 
     }
-    saveProfile = () => {
+    saveProfile = () =>  {
 
         if (this.state.saveProfileType === "profile" && this.state.profileName !== '') {
             this.props.saveProfile(this.props.app_list, {
@@ -95,7 +95,7 @@ class SideActions extends Component {
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
                 duressPwd: this.props.duressPwd,
-            } ,this.state.saveProfileType, this.state.profileName);
+            } ,this.state.saveProfileType, this.state.profileName, this.props.usr_acc_id);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
             this.props.saveProfile(this.props.app_list,
                 {
@@ -103,7 +103,7 @@ class SideActions extends Component {
                    guestPwd: this.props.guestPwd,
                    encryptedPwd: this.props.encryptedPwd,
                    duressPwd: this.props.duressPwd,
-                },this.state.saveProfileType, this.state.policyName);
+                },this.state.saveProfileType, this.state.policyName, this.props.usr_acc_id);
         }
         this.showSaveProfileModal(false)
     }
@@ -254,7 +254,7 @@ function mapDispatchToProps(dispatch) {
         transferDeviceProfile: transferDeviceProfile
     }, dispatch);
 }
-var mapStateToProps = ( {device_details}) => {
+var mapStateToProps = ( {device_details} ) => {
    
     return {
         historyModal: device_details.historyModal,
@@ -272,7 +272,8 @@ var mapStateToProps = ( {device_details}) => {
         duressCPwd: device_details.duressCPwd,
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
-        device_id: device_details.device.device_id
+        device_id: device_details.device.device_id,
+        usr_acc_id: device_details.device.usr_acc_id 
     };
 }
 

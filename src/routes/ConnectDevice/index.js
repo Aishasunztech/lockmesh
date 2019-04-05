@@ -95,7 +95,7 @@ class ConnectDevice extends Component {
         const device_id = atob(this.props.match.params.device_id);
         if (device_id !== '') {
 
-             this.props.getAccIdFromDvcId(device_id);
+            // this.props.getAccIdFromDvcId(device_id);
 
             this.props.getDeviceDetails(device_id);
             this.props.getDeviceApps(device_id);
@@ -191,7 +191,7 @@ class ConnectDevice extends Component {
                 encryptedPwd: this.props.encryptedPwd,
                 duressPwd: this.props.duressPwd,
             }
-            , this.state.device_id);
+            , this.state.device_id, this.props.user_acc_id);
         // 
     }
     componentWillUnmount() {
@@ -200,10 +200,11 @@ class ConnectDevice extends Component {
     refreshDevice = (deviceId) => {
         this.props.startLoading();
         // console.log("refreshDevice", this.props);
+     //   this.props.getAccIdFromDvcId(deviceId);
         this.props.getDeviceDetails(deviceId);
         this.props.getDeviceApps(deviceId);
         this.props.getProfiles();
-        this.props.getDeviceHistories(deviceId);
+        this.props.getDeviceHistories(this.props.user_acc_id);
         this.onBackHandler();
         setTimeout(() => {
             this.props.endLoading();
@@ -311,7 +312,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-    // console.log("connect device state", device_details);
+     console.log("connect device state", device_details.device.usr_acc_id);
     return {
         routing: routing,
         pathName: routing.location.pathname,
@@ -335,7 +336,7 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         status: device_details.status,
-        user_acc_id: device_details.user_acc_id
+        user_acc_id: device_details.device.usr_acc_id
     };
 }
 
