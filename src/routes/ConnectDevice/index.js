@@ -25,7 +25,7 @@ import {
     suspendDevice2,
     getAccIdFromDvcId
 } from "../../appRedux/actions/ConnectDevice";
-import {getDevicesList} from '../../appRedux/actions/Devices';
+import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
 import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
@@ -54,6 +54,14 @@ class ConnectDevice extends Component {
             {
                 pageName: "apps",
                 value: 'Set Apps & Permissions'
+            },
+            {
+                pageName: "setting_app_permissions",
+                value: 'Setting App Permissions'
+            },
+            {
+                pageName: "system_controls",
+                value: 'System Controls'
             },
             {
                 pageName: "guest_password",
@@ -95,7 +103,7 @@ class ConnectDevice extends Component {
         const device_id = atob(this.props.match.params.device_id);
         if (device_id !== '') {
 
-             this.props.getAccIdFromDvcId(device_id);
+            this.props.getAccIdFromDvcId(device_id);
 
             this.props.getDeviceDetails(device_id);
             this.props.getDeviceApps(device_id);
@@ -176,9 +184,9 @@ class ConnectDevice extends Component {
             return (<Password pwdType={this.state.pageName} />);
         } else if (this.props.pageName === "settings" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.state.pageName} />);
-        } else if(this.props.pageName === "not_available"){
+        } else if (this.props.pageName === "not_available") {
             return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
-        }else {
+        } else {
             return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
         }
     }
@@ -264,14 +272,14 @@ class ConnectDevice extends Component {
                             device={this.props.device_details}
                             profiles={this.props.profiles}
 
-                            histories={this.props.histories} 
-                            activateDevice={this.props.activateDevice2} 
-                            suspendDevice = {this.props.suspendDevice2}
-                            editDevice = {this.props.editDevice}
-                            unlinkDevice = {this.props.unlinkDevice}
+                            histories={this.props.histories}
+                            activateDevice={this.props.activateDevice2}
+                            suspendDevice={this.props.suspendDevice2}
+                            editDevice={this.props.editDevice}
+                            unlinkDevice={this.props.unlinkDevice}
                             history={this.props.history}
-                            getDevicesList={this.props.getDevicesList} 
-                            refreshDevice={this.refreshDevice}   
+                            getDevicesList={this.props.getDevicesList}
+                            refreshDevice={this.refreshDevice}
 
                         />
 
@@ -300,7 +308,7 @@ function mapDispatchToProps(dispatch) {
         suspendDevice2: suspendDevice2,
         activateDevice2: activateDevice2,
         editDevice: editDevice,
-        getDevicesList:getDevicesList,
+        getDevicesList: getDevicesList,
         getAccIdFromDvcId: getAccIdFromDvcId,
 
 
