@@ -252,7 +252,7 @@ class Account extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-                        <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div>
                                 <Card style={{ borderRadius: 12 }}>
                                     <div className="profile_table">
@@ -274,7 +274,7 @@ class Account extends Component {
 
                                                     <Button key="submit" ref="formSubmission" type="primary" onClick={(e) => this.handleSubmit()} >
                                                         Submit
-                        </Button>
+                                                        </Button>
                                                 ]}
                                             >
                                                 <Form onSubmit={(e) => { this.handleSubmit(e) }}>
@@ -559,7 +559,7 @@ class Account extends Component {
                                                             : null}
                                             </Modal>
                                             <Row>
-                                                <div className="col-md-4 ac_card">
+                                                <div className="col-md-12 ac_card">
                                                     <Card
                                                         title="Manage Data"
                                                         extra={<a href="#"></a>}
@@ -611,58 +611,7 @@ class Account extends Component {
                                                     </Card>
                                                 </div>
 
-                                                {/* <div className="col-md-4 ac_card p-0">
-                        <Card
-                            title=""
-                            >
-                            <div className="animationLoading">
-                                <div id="one"></div>
-                                <div id="two"></div>
-                                <div id="three"></div>
-                                <div id="four"></div>
-                                <div id="five"></div>
-                                <div id="six"></div>
-                            </div>
-                        </Card>
-                    </div>
-
-                    <div className="col-md-4 ac_card">
-                        <Card
-                            title=""
-                            >
-                            <div className="animationLoading">
-                                <div id="one"></div>
-                                <div id="two"></div>
-                                <div id="three"></div>
-                                <div id="four"></div>
-                                <div id="five"></div>
-                                <div id="six"></div>
-                            </div>
-                        </Card>
-                   
-                        <Card
-                            title="Dummy Data"
-                            extra={<a href="#"></a>}
-                            style={{}}
-                        >
-                            <div className="inline_b">
-                                <span>Dummy Data</span>
-                                <Button size='small' className="pull-right exp_btn">Button2</Button>
-                                <Button size='small' className="pull-right imp_btn">Button1</Button>
-                            </div>
-                            <div className="inline_b">
-                                <span>Dummy Data</span>
-                                <Button size='small' className="pull-right exp_btn">Button2</Button>
-                                <Button size='small' className="pull-right imp_btn">Button1</Button>
-                            </div>
-                            <div className="inline_b">
-                                <span>Dummy Data</span>
-                                <Button size='small' className="pull-right exp_btn">Button2</Button>
-                                <Button size='small' className="pull-right imp_btn">Button1</Button>
-                            </div> 
-                        </Card>
-                    </div> */}
-
+                                                
                                             </Row>
 
                                         </Fragment>
@@ -670,33 +619,11 @@ class Account extends Component {
                                 </Card>
                             </div>
                         </Col>
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div>
                                 <Card style={{ borderRadius: 12 }}>
                                     <div>
-                                        {/* <h1>Your Profile</h1>
-                                    <Divider className="mb-0" />
-                                    <Row style={{ padding: 16 }}>
-                                        <Col span={9} style={{ padding: 0, textAlign: "center" }}>
-                                            <img src={require("../../assets/images/profile-image.png")} style={{ height: 'auto', width: '100%', borderRadius: 50 }} />
-                                        </Col>
-                                        <Col span={15}>
-                                             <h1>{this.props.profile.name}</h1>
-
-                                            <p>({this.props.profile.type})</p>
-                                        </Col>
-                                    </Row>
-                                    <Row justify='center'>
-                                        <Col span={12} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
-                                            <Button type="primary" style={{ width: "100%" }}
-                                                onClick={() => this.refs.change_password.showModal()}
-                                                icon="unlock">Change Password</Button>
-                                        </Col>
-                                        <Col span={12} style={{ padding: "0px 16px 0px 8px" }} className="change_email">
-                                            <Button disabled type="primary" style={{ width: "100%" }} icon="mail">Change Email</Button>
-                                        </Col>
-                                    </Row> */}
-
+                                        <h1 className="coming_s">Coming Soon</h1>
                                     </div>
                                 </Card>
                             </div>
