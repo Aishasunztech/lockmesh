@@ -25,10 +25,10 @@ class TableHistory extends Component {
 
            // console.log(history,'object',this.props.type)
 
-            if (this.props.type !== "history" && (this.props.type === history.type) || this.props.type === 'policy') {
+            if (this.props.type !== "history" && this.props.type === history.type) {
                 histories.push({
                     key: history.id,
-                    history_date: history.name,
+                    history_date: history.profile_name,
                     action: (<Button size="small" className="mb-0" onClick={()=>{ this.applyProfile(history.app_list)}} >Apply</Button>),
                     app_list: history.app_list,
                     controls: history.controls
@@ -37,6 +37,15 @@ class TableHistory extends Component {
                 histories.push({
                     key: history.id,
                     history_date: history.created_at,
+                    action: (<Button size="small" className="mb-0" onClick={()=>{ this.applyProfile(history.app_list)}} >Apply</Button>),
+                    app_list: history.app_list,
+                    controls: history.controls
+                })
+            }
+            else if (this.props.type === "policy") {
+                histories.push({
+                    key: history.id,
+                    history_date: history.policy_name,
                     action: (<Button size="small" className="mb-0" onClick={()=>{ this.applyProfile(history.app_list)}} >Apply</Button>),
                     app_list: history.app_list,
                     controls: history.controls
@@ -71,7 +80,7 @@ class TableHistory extends Component {
                 if (nextProps.type !== "history" && (this.props.type === history.type) || this.props.type === 'policy') {
                     histories.push( {
                         key: history.id,
-                        history_date: history.name,
+                        history_date: history.profile_name,
                         action: (<Button size="small" className="mb-0" onClick={()=>{ this.applyProfile(history.app_list)}} >Apply</Button>),
                         app_list: history.app_list,
                         controls: history.controls
@@ -80,6 +89,15 @@ class TableHistory extends Component {
                     histories.push( {
                         key: history.id,
                         history_date: history.created_at,
+                        action: (<Button size="small" className="mb-0" onClick={()=>{ this.applyProfile(history.app_list)}} >Apply</Button>),
+                        app_list: history.app_list,
+                        controls: history.controls
+                    })
+                }
+                else if (this.props.type === "policy") {
+                    histories.push({
+                        key: history.id,
+                        history_date: history.policy_name,
                         action: (<Button size="small" className="mb-0" onClick={()=>{ this.applyProfile(history.app_list)}} >Apply</Button>),
                         app_list: history.app_list,
                         controls: history.controls
