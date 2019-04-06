@@ -172,7 +172,7 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                <Button type="default" onClick={() => { this.transferDeviceProfile(this.props.device_id) }} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} >Transfer</Button>
+                                <Button type="default" onClick={() => { this.transferDeviceProfile(this.props.device_id) }} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 15, fontSize: "12px" }} >
@@ -180,7 +180,7 @@ class SideActions extends Component {
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} >Wipe Device</Button>
+                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" /> Wipe Device</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button  style={{ width: "100%", marginBottom: 15, backgroundColor: '#1b1b1b', color: '#fff' }}><Icon type="flag" />Flag</Button>
@@ -188,7 +188,7 @@ class SideActions extends Component {
                                 <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
 
                             </Col>
-                            <Button type="default" style={{ width: "46%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top' }} /></Button>
+                            <Button type="default" style={{ width: "46%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
                         </Row>
                     </Card>
                 </div>
