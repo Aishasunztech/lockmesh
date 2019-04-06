@@ -54,15 +54,15 @@ class ConnectDevice extends Component {
         this.mainMenu = [
             {
                 pageName: "apps",
-                value: 'Application Controls'
+                value: 'Application Permission'
             },
             {
                 pageName: "setting_app_permissions",
-                value: 'Secure Settings Controls'
+                value: 'Secure Settings Permission'
             },
             {
                 pageName: "system_controls",
-                value: 'System Controls'
+                value: 'System Permission'
             },
             // {
             //     pageName: "guest_password",

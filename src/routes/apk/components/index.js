@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Table, Button, Divider } from 'antd';
+import { Row, Col, Card, Table, Icon, Button, Divider } from 'antd';
+import styles from './app.css';
+import { relative } from 'path';
 
 export default class Apk extends Component {
 
@@ -11,30 +13,32 @@ export default class Apk extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div>
                                 <Card style={{ borderRadius: 12 }}>
                                     <div>
-                                        <h1>Your Profile</h1>
+                                        <h1>Manage App</h1>
                                         <Divider className="mb-0" />
-                                        <Row style={{ padding: 16 }}>
-                                            <Col span={9} style={{ padding: 0, textAlign: "center" }}>
-                                                <img src={require("../../../assets/images/profile-image.png")} style={{ height: 'auto', width: '100%', borderRadius: 50 }} />
+                                        <Row style={{ padding: '12px 0 6px' }}>
+                                            <Col span={6} className="" style={{ padding: 0, textAlign: "right" }}>
+                                                <Icon type="android" className="and_icon" />
                                             </Col>
                                             <Col span={15}>
-                                                <h1>trd</h1>
-
-                                                <p>tref</p>
+                                                <h4 style={{ position: 'relative', right: 16 }}>Upload apk</h4>
+                                                <h4 style={{ position: 'relative', right: 0 }}>Manage apk's</h4>
+                                                <h4 style={{ position: 'relative', right: 6 }}>activate apk push</h4>
+                                                <h4 style={{ position: 'relative', right: 22 }}>set apk Dealer permissions</h4>
+                                                <h4 style={{ position: 'relative', right: 65 }}>and more...</h4>
                                             </Col>
                                         </Row>
                                         <Row justify='center'>
-                                            <Col span={12} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
-                                                <Button type="primary" style={{ width: "100%" }}
+                                            <Col span={10} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
+                                                {/* <Button type="primary" style={{ width: "100%" }}
                                                  //   onClick={() => this.refs.change_password.showModal()}
-                                                    icon="unlock">Change Password</Button>
+                                                    icon="unlock">Change Password</Button> */}
                                             </Col>
-                                            <Col span={12} style={{ padding: "0px 16px 0px 8px" }} className="change_email">
-                                                <Button disabled type="primary" style={{ width: "100%" }} icon="mail">Change Email</Button>
+                                            <Col span={10} style={{ padding: "0px 16px 0px 8px" }} className="change_email">
+                                                <Button type="primary" style={{ width: "100%" }}>Open</Button>
                                             </Col>
                                         </Row>
 
@@ -46,26 +50,26 @@ export default class Apk extends Component {
                             <div>
                                 <Card style={{ borderRadius: 12 }}>
                                     <div>
-                                        <h1>Your Profile</h1>
+                                        <h1>Manage Policy</h1>
                                         <Divider className="mb-0" />
-                                        <Row style={{ padding: 16 }}>
-                                            <Col span={9} style={{ padding: 0, textAlign: "center" }}>
-                                                <img src={require("../../../assets/images/profile-image.png")} style={{ height: 'auto', width: '100%', borderRadius: 50 }} />
+                                        <Row style={{ padding: '12px 0px 0px' }}>
+                                            <Col span={6} style={{ padding: 0, textAlign: "right" }}>
+                                                <Icon type="file-text" className="policy_icon" />
                                             </Col>
                                             <Col span={15}>
-                                                <h1>trd</h1>
-
-                                                <p>tref</p>
+                                                <h4 style={{ position: 'relative', right: 16 }}>Creat/Edit Policies</h4>
+                                                <h4 style={{ position: 'relative', right: 0 }}>Set Policy  Permission</h4>
+                                                <h4 style={{ position: 'relative', right: 4 }}>and more...</h4>
                                             </Col>
                                         </Row>
                                         <Row justify='center'>
-                                            <Col span={12} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
-                                                <Button type="primary" style={{ width: "100%" }}
+                                            <Col span={10} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
+                                                {/* <Button type="primary" style={{ width: "100%" }}
                                                  //   onClick={() => this.refs.change_password.showModal()}
-                                                    icon="unlock">Change Password</Button>
+                                                    icon="unlock">Change Password</Button> */}
                                             </Col>
-                                            <Col span={12} style={{ padding: "0px 16px 0px 8px" }} className="change_email">
-                                                <Button disabled type="primary" style={{ width: "100%" }} icon="mail">Change Email</Button>
+                                            <Col span={10} style={{ padding: "0px 16px 0px 8px" }} className="change_email">
+                                                <Button type="primary" style={{ width: "100%" }}>Open</Button>
                                             </Col>
                                         </Row>
 

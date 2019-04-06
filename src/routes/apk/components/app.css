@@ -1,0 +1,8 @@
+.and_icon , .policy_icon {
+    font-size: 55px;
+    border: 4px solid #038fdd;
+    border-radius: 50%;
+    padding: 15px;
+    background: #036;
+    color: #9dceff;
+}
