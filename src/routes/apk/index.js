@@ -225,7 +225,7 @@ class Apk extends React.Component {
     handleChange = (value) => {
         // alert(value);
     }
-   
+
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
@@ -269,7 +269,7 @@ class Apk extends React.Component {
 
     render() {
 
-        
+
         return (
             <div>
                 {
@@ -292,17 +292,9 @@ class Apk extends React.Component {
                             />
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <div className="col-sm-5"></div>
-                                    <div className="col-sm-2" style={{ padding: "0" }}>
-                                        <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk">
-                                            <button style={{ width: "100%", marginBottom: "16px" }} className="btn btn-sm btn-default">Download Screenlocker</button>
-                                        </a>
-                                    </div>
-                                    <div className="col-sm-5">
-                                        {/* <a  href="http://api.lockmesh.com/users/getFile/apk-MDM-v2.23.apk">
-                                            <button style={{width:"100%"}} className="btn btn-sm btn-default">Download MDM</button>
-                                        </a> */}
-                                    </div>
+                                    <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display:'flex', justifyContent: 'center'}}>
+                                        <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
+                                    </a>
                                 </div>
                             </div>
                             <ListApk
