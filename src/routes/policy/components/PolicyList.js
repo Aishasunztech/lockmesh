@@ -57,7 +57,7 @@ class PolicyList extends Component {
     }
 
     render() {
-        console.log(this.props.policies)
+        // console.log(this.props.policies)
         return (
             <Fragment>
                 <Card>

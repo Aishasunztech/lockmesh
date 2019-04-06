@@ -22,7 +22,7 @@ class EditDevice extends Component {
             if (!err) {
                 // console.log("Device List", values)
                 values.prevPGP = this.props.device.pgp_email;
-                console.log("Device Details ", values)
+                // console.log("Device Details ", values)
                 this.props.editDeviceFunc(values);
                 this.props.hideModal();
                 this.handleReset();
@@ -76,7 +76,7 @@ class EditDevice extends Component {
 
     render() {
         //  alert(this.props.device.device_id);
-        console.log('props of coming', this.props.device);
+        // console.log('props of coming', this.props.device);
         const { visible, loading } = this.state;
 
         return (

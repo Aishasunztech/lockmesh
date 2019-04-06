@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {  message, Input, Modal, Button} from "antd";
+import { message, Input, Modal, Button } from "antd";
 import AppFilter from '../../components/AppFilter';
 import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
@@ -28,6 +28,7 @@ class Policy extends Component {
             //     width: 800,
             // },
             {
+                
                 dataIndex: 'Action',
                 className: '',
                 children: [
@@ -110,7 +111,7 @@ class Policy extends Component {
         this.props.getDefaultApps();
     }
 
-    handlePolicyModal= (visible) => {
+    handlePolicyModal = (visible) => {
         this.setState({
             policyModal: visible
         });
@@ -129,24 +130,24 @@ class Policy extends Component {
                     isAddButton={true}
                     AddPolicyModel={true}
                     handlePolicyModal={this.handlePolicyModal}
-                    
+
                     handleCheckChange={this.handleCheckChange}
                     handlePagination={this.handlePagination}
                     handleComponentSearch={this.handleComponentSearch}
-                    
+
                 />
                 <PolicyList
                     columns={this.columns}
                     policies={this.props.policies}
                 />
-                <Modal 
+                <Modal
                     width="700px"
                     className="policy_popup"
                     visible={this.state.policyModal}
                     title="Add Policy"
                     onOk={() => this.handlePolicyModal(false)}
                     onCancel={() => this.handlePolicyModal(false)}
-                    
+
                 >
                     <AddPolicy
                         apk_list={this.props.apk_list}
@@ -166,7 +167,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ policies }) => {
-     console.log("policies", policies.policies);
+    //  console.log("policies", policies.policies);
     return {
         policies: policies.policies,
         apk_list: policies.apk_list,

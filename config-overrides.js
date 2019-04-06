@@ -1,6 +1,9 @@
 const path = require('path');
 const AntDesignThemePlugin = require('antd-theme-webpack-plugin');
-const {override, fixBabelImports, addLessLoader} = require('customize-cra')
+const { override, fixBabelImports, addLessLoader } = require('customize-cra')
+// const workboxPlugin = require('workbox-webpack-plugin');
+// const publicUrl = new URL(process.env.PUBLIC_URL);
+// console.log(publicUrl);
 
 
 const options = {
@@ -27,10 +30,30 @@ const options = {
 
 
 const overrideProcessEnv = value => config => {
+  // console.log(config.plugins[8].config.clientsClaim);
   config.resolve.modules = [
     path.join(__dirname, 'src')
   ].concat(config.resolve.modules);
+  // config.plugins.push(new workboxPlugin.GenerateSW({
+  //   swDest: '/service-worker.js',
+  //   clientsClaim: true,
+  //   skipWaiting: true,
+  // }));
   config.plugins.push(new AntDesignThemePlugin(options));
+  config.plugins.forEach((obj) => {
+    if (obj.config) {
+      if (obj.config.clientsClaim) {
+        obj.config.skipWaiting = true
+      }
+    }
+  });
+  // config.plugins[8].config.skipWaiting = true;
+  // config.plugins.push(new workboxPlugin.GenerateSW({
+  //   swDest: '/service-worker.js',
+  //   clientsClaim: true,
+  //   skipWaiting: true,
+  // }));
+
   return config;
 };
 

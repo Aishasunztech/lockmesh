@@ -22,7 +22,7 @@ class DealerList extends Component {
     }
 
     handlePagination = (value) => {
-        console.log(value)
+        // console.log(value)
         var x = Number(value)
         this.setState({
             pagination: x,
@@ -118,7 +118,7 @@ class DealerList extends Component {
     }
 
     render() {
-        console.log(this.state.pagination)
+        // console.log(this.state.pagination)
         return (
             <Card>
                 <Table size="middle"

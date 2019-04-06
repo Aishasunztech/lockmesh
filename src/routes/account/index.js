@@ -611,7 +611,7 @@ class Account extends Component {
                                                     </Card>
                                                 </div>
 
-                                                
+
                                             </Row>
 
                                         </Fragment>
@@ -652,9 +652,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {
-    console.log("sim_ids", devices.sim_ids);
-    console.log("chat_ids", devices.chat_ids);
-    console.log("pgp_emails", devices.pgp_emails);
+    // console.log("sim_ids", devices.sim_ids);
+    // console.log("chat_ids", devices.chat_ids);
+    // console.log("pgp_emails", devices.pgp_emails);
     return {
         msg: account.msg,
         showMsg: account.showMsg,
