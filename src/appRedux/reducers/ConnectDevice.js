@@ -110,7 +110,7 @@ export default (state = initialState, action) => {
             let device = action.payload;
            //
            
-           console.log(action.payload,'reducer detail')
+        //    console.log(action.payload,'reducer detail')
             if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status===1) {
                 let status = null;
                 
@@ -184,7 +184,7 @@ export default (state = initialState, action) => {
         }
         case GET_PROFILES:
             {
-             console.log('GET_PROFILES');
+            //  console.log('GET_PROFILES');
             // console.log({
             //     ...state,
             //     isloading: true,
@@ -199,7 +199,7 @@ export default (state = initialState, action) => {
 
             case GET_POLICIES:
             {
-             console.log('GET_PROFILES');
+            //  console.log('GET_PROFILES');
             // console.log({
             //     ...state,
             //     isloading: true,
@@ -215,7 +215,7 @@ export default (state = initialState, action) => {
 
             case GET_USER_ACC_ID:
             {
-             console.log('GET_USER_ACC_ID',action.response.user_acount_id);
+            //  console.log('GET_USER_ACC_ID',action.response.user_acount_id);
            
             return {
                 ...state,
@@ -316,7 +316,7 @@ export default (state = initialState, action) => {
             //     historyType: action.payload.ProfileType,
             //     historyModal: action.payload.visible
             // })
-            console.log(action.payload.profileType, action.payload.visible, 'ok')
+            // console.log(action.payload.profileType, action.payload.visible, 'ok')
             return {
                 ...state,
                 historyType: action.payload.profileType,

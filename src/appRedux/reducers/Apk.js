@@ -30,7 +30,7 @@ export default (state = initialState, action) => {
 			}
 
 		case APK_LIST:
-			console.log(action.payload);
+			// console.log(action.payload);
 
 			return {
 				...state,
@@ -42,7 +42,7 @@ export default (state = initialState, action) => {
 
 		case UNLINK_APK:
 			
-			console.log(UNLINK_APK);
+			// console.log(UNLINK_APK);
 			state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
 
 			return {
@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
 			}
 
 		case ADD_APK:
-			console.log(ADD_APK);
+			// console.log(ADD_APK);
 			
 			if (action.response.status) {
 				message.success(action.response.msg)
@@ -69,7 +69,7 @@ export default (state = initialState, action) => {
 		case EDIT_APK:
 			// console.log('action edit id');
 			// console.log(action.payload);
-            console.log(EDIT_APK);			
+            // console.log(EDIT_APK);			
 			if (action.response.status) {
 				let objIndex1 = state.apk_list.findIndex((obj => obj.apk_id === action.payload.apk_id));
 				if (objIndex1 !== undefined) {
@@ -92,7 +92,7 @@ export default (state = initialState, action) => {
 			}
 
 		case APK_STATUS_CHANGED: {
-			console.log(APK_STATUS_CHANGED)
+			// console.log(APK_STATUS_CHANGED)
 			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.payload));
 			// console.log('index of item',objIndex);
 			if (state.apk_list[objIndex].apk_status === 'Off') {
@@ -113,7 +113,7 @@ export default (state = initialState, action) => {
 			}
 		}
 		case GET_PAGINATION: {
-			console.log(GET_PAGINATION)
+			// console.log(GET_PAGINATION)
 			// console.log(GET_DROPDOWN);
 			// console.log({
 			//     ...state,
@@ -125,7 +125,7 @@ export default (state = initialState, action) => {
 			}
 		}
 		case GET_DROPDOWN: {
-			console.log(GET_DROPDOWN)
+			// console.log(GET_DROPDOWN)
 			// console.log(GET_DROPDOWN);
 			// console.log({
 			//     ...state,
