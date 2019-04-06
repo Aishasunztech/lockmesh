@@ -88,9 +88,9 @@ class SidebarContent extends Component {
               <Link to="/account"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.account" /></Link>
             </Menu.Item> : null}
 
-            {(authUser.type === "admin") ? <Menu.Item key="policy">
+            {/* {(authUser.type === "admin") ? <Menu.Item key="policy">
               <Link to="/policy"><Icon type="file-protect" className="icon" /> <IntlMessages id="sidebar.policy" /></Link>
-            </Menu.Item> : null}
+            </Menu.Item> : null} */}
 
             {(authUser.type === "admin") ? <Menu.Item key="dealer/dealer">
               <Link to="/dealer/dealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.dealers" /></Link>
@@ -100,9 +100,13 @@ class SidebarContent extends Component {
               <Link to="/dealer/sdealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.sdealers" /></Link>
             </Menu.Item> : null}
 
-            {(authUser.type === "admin") ? <Menu.Item key="apk-list">
-              <Link to="/apk-list"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
+            {(authUser.type === "admin") ? <Menu.Item key="app">
+              <Link to="/app"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
             </Menu.Item> : null}
+
+            {/* {(authUser.type === "admin") ? <Menu.Item key="apk-list">
+              <Link to="/app"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
+            </Menu.Item> : null} */}
 
             <Menu.Item key="profile">
               <Link to="/profile"><i className="icon icon-contacts" /> <IntlMessages id="sidebar.profile" /></Link>

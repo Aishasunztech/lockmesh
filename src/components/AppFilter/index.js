@@ -84,14 +84,25 @@ class AppFilter extends Component {
     render() {
         // console.log(" Current State", this.state.DisplayPages)
         let fullScreenClass1 = "";
+        let col_class_apk3 = ""; 
+        let col_class_apk2 = ""; 
         let fullScreenClass2 = "";
-        if (this.props.isAddButton === false) {
-            fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-3";
-        } else {
-            fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-2";
+        if(window.location.pathname.split("/").pop() === 'apk-list'){
+
+            col_class_apk2 = "col-md-2";
+            col_class_apk3 = "col-md-3";
+
         }
+        else{
+            if (this.props.isAddButton === false) {
+                fullScreenClass1 = "col-md-3";
+                fullScreenClass2 = "col-md-3";
+            } else {
+                fullScreenClass1 = "col-md-3";
+                fullScreenClass2 = "col-md-2";
+            }
+        }
+        
 
         const Search = Input.Search;
         //  console.log('render ...', this.props.selectedOptions);
@@ -100,9 +111,9 @@ class AppFilter extends Component {
             // className="gutter-example"
             <Card >
                 <Row gutter={16} className="filter_top">
-                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass1} ${col_class_apk3} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
-                            {(this.props.options !== undefined && this.props.options !== null)?
+                            {(this.props.options !== undefined && this.props.options !== null) ?
                                 <Fragment>
                                     <Icon type="down" className="down_icon" />
                                     <Picky
@@ -115,73 +126,73 @@ class AppFilter extends Component {
                                         onChange={values => this.setDropdowns(values)}
                                         dropdownHeight={300}
                                         renderSelectAll={({
-                                                filtered,
-                                                tabIndex,
-                                                allSelected,
-                                                toggleSelectAll,
-                                                multiple
-                                            }) => {
-                                                // Don't show if single select or items have been filtered.
-                                                if (multiple && !filtered) {
-                                                    return (
-            
-                                                        <li
-                                                            tabIndex={tabIndex}
-                                                            role="option"
-                                                            className={allSelected ? 'option selected' : 'option'}
-                                                            onClick={toggleSelectAll}
-                                                            onKeyPress={toggleSelectAll}
-                                                            key={tabIndex}
-                                                        >
-                                                            {/* required to select item */}
-                                                            {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                            <Checkbox
-                                                                checked={allSelected} className="slct_all"
-                                                            >SELECT ALL</Checkbox>
-                                                        </li>
-                                                    );
-                                                }
-                                            }
-                                        }
-
-                                        render={({
-                                                style,
-                                                isSelected,
-                                                item,
-                                                selectValue,
-                                                labelKey,
-                                                valueKey,
-                                                multiple
-                                            }) => {
+                                            filtered,
+                                            tabIndex,
+                                            allSelected,
+                                            toggleSelectAll,
+                                            multiple
+                                        }) => {
+                                            // Don't show if single select or items have been filtered.
+                                            if (multiple && !filtered) {
                                                 return (
+
                                                     <li
-                                                        style={style} // required
-                                                        className={isSelected ? 'selected' : ''} // required to indicate is selected
-                                                        key={item} // required
-                                                        onClick={() => selectValue(item)}
+                                                        tabIndex={tabIndex}
+                                                        role="option"
+                                                        className={allSelected ? 'option selected' : 'option'}
+                                                        onClick={toggleSelectAll}
+                                                        onKeyPress={toggleSelectAll}
+                                                        key={tabIndex}
                                                     >
                                                         {/* required to select item */}
                                                         {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                        <Checkbox checked={isSelected}>{item}</Checkbox>
-            
+                                                        <Checkbox
+                                                            checked={allSelected} className="slct_all"
+                                                        >SELECT ALL</Checkbox>
                                                     </li>
                                                 );
                                             }
                                         }
+                                        }
+
+                                        render={({
+                                            style,
+                                            isSelected,
+                                            item,
+                                            selectValue,
+                                            labelKey,
+                                            valueKey,
+                                            multiple
+                                        }) => {
+                                            return (
+                                                <li
+                                                    style={style} // required
+                                                    className={isSelected ? 'selected' : ''} // required to indicate is selected
+                                                    key={item} // required
+                                                    onClick={() => selectValue(item)}
+                                                >
+                                                    {/* required to select item */}
+                                                    {/* <input type="checkbox" checked={isSelected} readOnly /> */}
+                                                    <Checkbox checked={isSelected}>{item}</Checkbox>
+
+                                                </li>
+                                            );
+                                        }
+                                        }
                                     />
                                 </Fragment>
-                            :
-                                null                        
+                                :
+                                null
                             }
-                           
+
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass1} ${col_class_apk2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
-                            {(this.props.handleFilterOptions!==undefined && this.props.handleFilterOptions !== null) ? this.props.handleFilterOptions() : null}
+                            {(this.props.handleFilterOptions !== undefined && this.props.handleFilterOptions !== null) ? this.props.handleFilterOptions() : null}
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} ${col_class_apk2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             <Search
 
@@ -191,7 +202,7 @@ class AppFilter extends Component {
                             />
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} ${col_class_apk2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             <Select
                                 value={this.state.DisplayPages}
@@ -208,46 +219,54 @@ class AppFilter extends Component {
                             </Select>
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} ${col_class_apk3} col-sm-12 col-xs-12`}>
                         <div className="gutter-box">
                             {
-                                (this.props.isAddButton === true) ?
-                                    (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
-                                        <Button
-                                            type="primary"
-                                            disabled={(this.props.disableAddButton == true) ? true : false}
-                                            style={{ width: '100%' }}
-                                        >
-                                            <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
-                                        </Button>
-                                        :
-                                        (this.props.AddDeviceModal) ?
+                                (this.props.toLink === '/downlaod-apk') ?
+                                    (
+                                        
+                                                <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display: 'flex', justifyContent: 'center' }}>
+                                                    <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
+                                                </a>
+                                           
+                                    ) : ((this.props.isAddButton === true) ?
+                                        (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
                                             <Button
                                                 type="primary"
                                                 disabled={(this.props.disableAddButton == true) ? true : false}
                                                 style={{ width: '100%' }}
-                                                onClick={() => this.props.handleDeviceModal(true)}
                                             >
-                                                {this.props.addButtonText}
-                                            </Button>:
-                                            (this.props.AddPolicyModel)?
-                                            <Button
-                                                type="primary"
-                                                disabled={(this.props.disableAddButton == true) ? true : false}
-                                                style={{ width: '100%' }}
-                                                onClick={() => this.props.handlePolicyModal(true)}
-                                            >
-                                                {this.props.addButtonText}
+                                                <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
                                             </Button>
                                             :
-                                            <Button
-                                                type="primary"
-                                                disabled={(this.props.disableAddButton == true) ? true : false}
-                                                style={{ width: '100%' }}
-                                            >
-                                                {this.props.addButtonText}
-                                            </Button>
-                                    : null
+                                            (this.props.AddDeviceModal) ?
+                                                <Button
+                                                    type="primary"
+                                                    disabled={(this.props.disableAddButton == true) ? true : false}
+                                                    style={{ width: '100%' }}
+                                                    onClick={() => this.props.handleDeviceModal(true)}
+                                                >
+                                                    {this.props.addButtonText}
+                                                </Button> :
+                                                (this.props.AddPolicyModel) ?
+                                                    <Button
+                                                        type="primary"
+                                                        disabled={(this.props.disableAddButton == true) ? true : false}
+                                                        style={{ width: '100%' }}
+                                                        onClick={() => this.props.handlePolicyModal(true)}
+                                                    >
+                                                        {this.props.addButtonText}
+                                                    </Button>
+                                                    :
+                                                    <Button
+                                                        type="primary"
+                                                        disabled={(this.props.disableAddButton == true) ? true : false}
+                                                        style={{ width: '100%' }}
+                                                    >
+                                                        {this.props.addButtonText}
+                                                    </Button>
+                                        : null)
+
                             }
                         </div>
                     </Col>
