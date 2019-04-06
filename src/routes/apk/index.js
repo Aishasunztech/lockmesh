@@ -278,7 +278,6 @@ class Apk extends React.Component {
 
                         <div>
                             <AppFilter
-
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search APK"
                                 // addButtonText="Upload APK"
@@ -301,14 +300,15 @@ class Apk extends React.Component {
 
                             {
                                 (this.props.user.type === 'admin') ?
-                            
-                            <Button
-                                type="primary"
-                                // disabled={(this.props.disableAddButton == true) ? true : false}
-                                style={{ width: '100%' }}
-                            >
-                                <Link to='/upload-apk'>Upload apk</Link>
-                            </Button> : false
+                                    <div style={{textAlign:"center"}}>
+                                        <Button
+                                            type="primary"
+                                            // disabled={(this.props.disableAddButton == true) ? true : false}
+                                            style={{ width: '12%', marginBottom:16 }}
+                                        >
+                                            <Link to='/upload-apk'>Upload apk</Link>
+                                        </Button>
+                                    </div> : false
                             }
                             <ListApk
 

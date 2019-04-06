@@ -84,16 +84,16 @@ class AppFilter extends Component {
     render() {
         // console.log(" Current State", this.state.DisplayPages)
         let fullScreenClass1 = "";
-        let col_class_apk3 = ""; 
-        let col_class_apk2 = ""; 
+        let col_class_apk3 = "";
+        let col_class_apk2 = "";
         let fullScreenClass2 = "";
-        if(window.location.pathname.split("/").pop() === 'apk-list'){
+        if (window.location.pathname.split("/").pop() === 'apk-list') {
 
             col_class_apk2 = "col-md-2";
             col_class_apk3 = "col-md-3";
 
         }
-        else{
+        else {
             if (this.props.isAddButton === false) {
                 fullScreenClass1 = "col-md-3";
                 fullScreenClass2 = "col-md-3";
@@ -102,7 +102,7 @@ class AppFilter extends Component {
                 fullScreenClass2 = "col-md-2";
             }
         }
-        
+
 
         const Search = Input.Search;
         //  console.log('render ...', this.props.selectedOptions);
@@ -224,11 +224,9 @@ class AppFilter extends Component {
                             {
                                 (this.props.toLink === '/downlaod-apk') ?
                                     (
-                                        
-                                                <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display: 'flex', justifyContent: 'center' }}>
-                                                    <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
-                                                </a>
-                                           
+                                        <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk">
+                                            <button className="btn btn-default down_btn"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
+                                        </a>
                                     ) : ((this.props.isAddButton === true) ?
                                         (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
                                             <Button

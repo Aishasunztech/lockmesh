@@ -33,6 +33,25 @@
  .filter_top .ant-btn {
      margin: 0 8px 0 0;
  }
+ .down_btn {
+    width: 100%;
+    padding: 0px 8px;
+    background-color: orange;
+    color: #fff !important;
+    margin-bottom: 0;
+ }
+ .down_btn:active:hover {
+    color: #fff;
+    background-color: orange;
+}
+.down_btn:focus {
+    color: #fff;
+    background-color: orange;
+}
+.down_btn:hover {
+    color: #fff;
+    background-color: orange;
+}
 
  .filter_top .css-t0fuvl, .filter_top .css-hppqp6 {
      color: #bfbfbf;
