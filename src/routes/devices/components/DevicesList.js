@@ -179,6 +179,7 @@ class DevicesList extends Component {
                     </Fragment>)
                 ,
                 device_id: (device.device_id !== undefined && device.device_id !== '' && device.device_id !== null && device.device_id !== 'null' && (status != 'pre-activated' && status != "Pre-activated")) ? `${device.device_id}` : "N/A",
+                flagged: "N/A",
                 name: device.name ? `${device.name}` : "N/A",
                 account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
@@ -455,53 +456,7 @@ export default class Tab extends Component {
                         editDevice={this.props.editDevice}
                     />
                 </TabPane>
-
-                <TabPane tab={<span className="yellow">Pending Activation</span>} key="2" forceRender={true}>
-                    <DevicesList
-                        devices={this.state.devices}
-                        suspendDevice={this.props.suspendDevice}
-                        activateDevice={this.props.activateDevice}
-                        columns={this.props.columns}
-                        rejectDevice={this.props.rejectDevice}
-                        selectedOptions={this.state.selectedOptions}
-                        //   ref="devciesList"
-                        pagination={this.props.pagination}
-                        addDevice={this.props.addDevice}
-                        editDevice={this.props.editDevice}
-                        handlePagination={this.props.handlePagination}
-                    />
-                </TabPane>
-                <TabPane tab={<span className="blue">Pre Activated</span>} key="3" forceRender={true}>
-                    <DevicesList
-                        devices={this.state.devices}
-                        suspendDevice={this.props.suspendDevice}
-                        activateDevice={this.props.activateDevice}
-                        columns={this.state.columns}
-                        rejectDevice={this.props.rejectDevice}
-                        selectedOptions={this.state.selectedOptions}
-                        //   ref="devciesList"
-                        pagination={this.props.pagination}
-                        addDevice={this.props.addDevice}
-                        editDevice={this.props.editDevice}
-                        handlePagination={this.props.handlePagination}
-                    />
-                </TabPane>
-                <TabPane tab={<span className="green">Activated</span>} key="4" forceRender={true}>
-                    <DevicesList
-                        devices={this.state.devices}
-                        suspendDevice={this.props.suspendDevice}
-                        activateDevice={this.props.activateDevice}
-                        columns={this.state.columns}
-                        rejectDevice={this.props.rejectDevice}
-                        selectedOptions={this.props.selectedOptions}
-                        //   ref="devciesList"
-                        pagination={this.props.pagination}
-                        addDevice={this.props.addDevice}
-                        editDevice={this.props.editDevice}
-                        handlePagination={this.props.handlePagination}
-                    />
-                </TabPane>
-                <TabPane tab={<span className="orange">Unlinked</span>} key="5" forceRender={true}>
+                <TabPane tab={<span className="green">Active</span>} key="4" forceRender={true}>
                     <DevicesList
                         devices={this.state.devices}
                         suspendDevice={this.props.suspendDevice}
@@ -540,6 +495,67 @@ export default class Tab extends Component {
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
                         //  ref="devciesList"
+                        pagination={this.props.pagination}
+                        addDevice={this.props.addDevice}
+                        editDevice={this.props.editDevice}
+                        handlePagination={this.props.handlePagination}
+                    />
+                </TabPane>
+                <TabPane tab={<span className="blue">Pre Activated</span>} key="3" forceRender={true}>
+                    <DevicesList
+                        devices={this.state.devices}
+                        suspendDevice={this.props.suspendDevice}
+                        activateDevice={this.props.activateDevice}
+                        columns={this.state.columns}
+                        rejectDevice={this.props.rejectDevice}
+                        selectedOptions={this.state.selectedOptions}
+                        //   ref="devciesList"
+                        pagination={this.props.pagination}
+                        addDevice={this.props.addDevice}
+                        editDevice={this.props.editDevice}
+                        handlePagination={this.props.handlePagination}
+                    />
+                </TabPane>
+                <TabPane tab={<span className="yellow">Pending Activation</span>} key="2" forceRender={true}>
+                    <DevicesList
+                        devices={this.state.devices}
+                        suspendDevice={this.props.suspendDevice}
+                        activateDevice={this.props.activateDevice}
+                        columns={this.props.columns}
+                        rejectDevice={this.props.rejectDevice}
+                        selectedOptions={this.state.selectedOptions}
+                        //   ref="devciesList"
+                        pagination={this.props.pagination}
+                        addDevice={this.props.addDevice}
+                        editDevice={this.props.editDevice}
+                        handlePagination={this.props.handlePagination}
+                    />
+                </TabPane>
+                <TabPane tab={<span className="purple">Transfer</span>} key="8" forceRender={true}>
+                <h2 className="coming_s">Coming Soon</h2>
+                    <DevicesList
+                        devices={this.state.devices}
+                        suspendDevice={this.props.suspendDevice}
+                        activateDevice={this.props.activateDevice}
+                        columns={this.state.columns}
+                        rejectDevice={this.props.rejectDevice}
+                        selectedOptions={this.props.selectedOptions}
+                        //   ref="devciesList"
+                        pagination={this.props.pagination}
+                        addDevice={this.props.addDevice}
+                        editDevice={this.props.editDevice}
+                        handlePagination={this.props.handlePagination}
+                    />
+                </TabPane>
+                <TabPane tab={<span className="orange">Unlinked</span>} key="5" forceRender={true}>
+                    <DevicesList
+                        devices={this.state.devices}
+                        suspendDevice={this.props.suspendDevice}
+                        activateDevice={this.props.activateDevice}
+                        columns={this.state.columns}
+                        rejectDevice={this.props.rejectDevice}
+                        selectedOptions={this.props.selectedOptions}
+                        //   ref="devciesList"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}

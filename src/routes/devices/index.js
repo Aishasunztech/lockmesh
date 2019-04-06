@@ -41,8 +41,7 @@ class Devices extends Component {
                 align: 'center',
                 className: 'row',
                 width: 800,
-            },
-            {
+            }, {
                 title: (
                     <Input.Search
                         name="device_id"
@@ -107,7 +106,7 @@ class Devices extends Component {
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder="Device Name"
-                        
+
                     />
                 ),
                 className: '',
@@ -124,7 +123,7 @@ class Devices extends Component {
                         sorter: (a, b) => { return a.name.localeCompare(b.name) },
                         sortDirections: ['ascend', 'descend'],
                         editable: true,
-                        
+
                     }
                 ]
             },
@@ -664,8 +663,30 @@ class Devices extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            },
-            {
+            }, {
+                title: (
+                    <Input.Search
+                        name="flagged"
+                        key="flagged"
+                        id="flagged"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Flagged"
+                    />
+                ),
+                dataIndex: 'flagged',
+                className: '',
+                children: [
+                    {
+                        title: 'Flagged',
+                        dataIndex: 'flagged',
+                        align: 'center',
+                        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ],
+            }, {
                 title: (
                     <Input.Search
                         name="start_date"
@@ -689,12 +710,10 @@ class Devices extends Component {
 
                         // ...this.getColumnSearchProps('start_date'),
                         sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            },
-            {
+            }, {
                 title: (
                     <Input.Search
                         name="expiry_date"
@@ -744,7 +763,7 @@ class Devices extends Component {
 
         devices.filter(function (device) {
             // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
-           let deviceStatus = device.finalStatus;
+            let deviceStatus = device.finalStatus;
             if (deviceStatus === type) {
                 dumyDevices.push(device);
             }
@@ -875,6 +894,13 @@ class Devices extends Component {
                     devices: this.filterList('Pre-activated', this.props.devices),
                     column: this.state.columns,
                     tabselect: '3'
+                })
+                break;
+            case "8":
+                this.setState({
+                    devices: [],
+                    column: this.state.columns,
+                    tabselect: '8'
                 })
                 break;
             default:
@@ -1169,7 +1195,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ devices, auth }) => {
-  //   console.log('devices AUTH', devices.devices);
+    //   console.log('devices AUTH', devices.devices);
     return {
         devices: devices.devices,
         msg: devices.msg,

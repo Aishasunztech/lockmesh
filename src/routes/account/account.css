@@ -6,6 +6,10 @@
     padding: 16px 16px !important;
 }
 
+.ac_card .ant-card-head-title {
+    text-align: center;
+}
+
 .ac_card .exp_btn {
     margin-right: 0;
     margin-bottom: 8px;
@@ -38,6 +42,18 @@
 .inline_b {
     display: inline-block;
     width: 100%
+}
+
+.profile_table .ant-card-bordered {
+    margin-bottom: 0;
+}
+
+.coming_s {
+    line-height: 162px;
+    text-align: center;
+    font-size: 30px;
+    color: #b5b5b5;
+    margin: 6px 0;
 }
 
 /*-----------*/
@@ -108,6 +124,7 @@
     .ac_card {
         width: 100%;
     }
+
     .p-0 {
         padding: 0 16px;
     }
@@ -121,7 +138,7 @@
     border: 1px solid #e8e8e8;
 }
 
-.m_d_pop .ant-table-thead > tr > th {
+.m_d_pop .ant-table-thead>tr>th {
     padding: 8px 8px !important;
 }
 

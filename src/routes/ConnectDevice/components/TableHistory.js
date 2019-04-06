@@ -70,7 +70,7 @@ class TableHistory extends Component {
             appData: histories
         });
 
-
+        
     }
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {

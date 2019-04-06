@@ -112,7 +112,9 @@
 .ant-tabs-tab-active .orange {
     color: #FFA500
 }
-
+.ant-tabs-tab-active .purple {
+    color: #7a05b9
+}
 .ant-tabs-tab-active .yellow {
     color: #cccc0e
 }
@@ -144,7 +146,9 @@
 .blue:hover {
     color: rgb(38, 38, 255)
 }
-
+.purple:hover {
+    color: #7a05b9;
+}
 .red:hover {
     color: rgb(252, 40, 40)
 }
