@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, Table, Button, Divider } from 'antd';
+import { Link } from "react-router-dom";
 
 export default class Apk extends Component {
 
@@ -13,6 +14,7 @@ export default class Apk extends Component {
                     <Row>
                     <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div>
+                            <Link to="/apk-list">
                                 <Card style={{ borderRadius: 12 }}>
                                     <div>
                                         <h1>Your Profile</h1>
@@ -40,10 +42,12 @@ export default class Apk extends Component {
 
                                     </div>
                                 </Card>
+                                </Link>
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div>
+                            <Link to="/policy">
                                 <Card style={{ borderRadius: 12 }}>
                                     <div>
                                         <h1>Your Profile</h1>
@@ -71,6 +75,7 @@ export default class Apk extends Component {
 
                                     </div>
                                 </Card>
+                                </Link>
                             </div>
                         </Col>
 

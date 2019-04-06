@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select } from "antd";
+import { Input, Icon, Modal, Select, Button } from "antd";
+import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 // import {Route, Switch} from "react-router-dom";
 // import Apk from "../../containers/ApkList"
@@ -280,23 +281,35 @@ class Apk extends React.Component {
 
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search APK"
-                                addButtonText="Upload APK"
-                                isAddButton={this.props.user.type === 'admin'}
+                                // addButtonText="Upload APK"
+                                // isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
-                                toLink="/upload-apk"
+                                toLink="/downlaod-apk"
                                 selectedOptions={this.props.selectedOptions}
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
                             />
-                            <div className="row">
+                            {/* <div className="row">
                                 <div className="col-sm-12">
                                     <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display:'flex', justifyContent: 'center'}}>
                                         <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
                                     </a>
                                 </div>
-                            </div>
+                            </div> */}
+
+                            {
+                                (this.props.user.type === 'admin') ?
+                            
+                            <Button
+                                type="primary"
+                                // disabled={(this.props.disableAddButton == true) ? true : false}
+                                style={{ width: '100%' }}
+                            >
+                                <Link to='/upload-apk'>Upload apk</Link>
+                            </Button> : false
+                            }
                             <ListApk
 
                                 handleStatusChange={this.handleStatusChange}
