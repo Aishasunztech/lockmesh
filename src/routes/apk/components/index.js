@@ -19,7 +19,7 @@ export default class Apk extends Component {
                         <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div>
                                 <Link to="/apk-list">
-                                    <Card style={{ borderRadius: 12 }}>
+                                    <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                         <div>
                                             <h1>Manage App</h1>
                                             <Divider className="mb-0" />
@@ -54,7 +54,7 @@ export default class Apk extends Component {
                         <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <div>
                                 <Link to="/policy">
-                                    <Card style={{ borderRadius: 12 }}>
+                                    <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                         <div>
                                             <h1>Manage Policy</h1>
                                             <Divider className="mb-0" />
@@ -74,7 +74,7 @@ export default class Apk extends Component {
                                                  //   onClick={() => this.refs.change_password.showModal()}
                                                     icon="unlock">Change Password</Button> */}
                                                 </Col>
-                                                <Col span={10} style={{ padding: "0px 16px 0px 8px" }} className="change_email">
+                                                <Col span={10} style={{ padding: "0px 16px 0px 8px", marginTop:48}} className="change_email">
                                                     <Button type="primary" style={{ width: "100%" }}>Open</Button>
                                                 </Col>
                                             </Row>
