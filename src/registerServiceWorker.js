@@ -62,7 +62,7 @@ export default function register() {
 //   if (!event.data) {
 //     return;
 //   }
-  
+
 //   if (event.data === 'skipWaiting') {
 //     console.log("skip waiting listener",event.data);
 
@@ -95,7 +95,7 @@ function registerValidSW(swUrl) {
               console.log('Content is cached for offline use.');
               // alert("hello content is cached for offline use");
               // navigator.serviceWorker.ready.then(registration => {
-              
+
             }
           }
         };
@@ -136,15 +136,14 @@ function checkValidServiceWorker(swUrl) {
 export function unregister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then(registration => {
-      console.log("deleted",registration);
-      if(registration.waiting !== null){
+      if (registration.waiting !== null) {
         // caches.keys().then(function(names) {
         //     for (let name of names)
         //         caches.delete(name);
         // });
-        caches.keys().then(function(names) {
+        caches.keys().then(function (names) {
           for (let name of names)
-              caches.delete(name);
+            caches.delete(name);
         });
         registration.unregister();
       }
