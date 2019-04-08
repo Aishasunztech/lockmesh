@@ -16,7 +16,7 @@ export default class Apk extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                        <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                             <div>
                                 <Link to="/apk-list">
                                     <Card className="manage_sec" style={{ borderRadius: 12 }}>
@@ -51,7 +51,7 @@ export default class Apk extends Component {
                                 </Link>
                             </div>
                         </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                        <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                             <div>
                                 <Link to="/policy">
                                     <Card className="manage_sec" style={{ borderRadius: 12 }}>
