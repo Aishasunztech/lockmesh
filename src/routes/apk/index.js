@@ -280,11 +280,11 @@ class Apk extends React.Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search APK"
-                                // addButtonText="Upload APK"
-                                // isAddButton={this.props.user.type === 'admin'}
+                                 addButtonText="Upload APK"
+                                 isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
-                                toLink="/downlaod-apk"
+                                toLink="/upload-apk"
                                 selectedOptions={this.props.selectedOptions}
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
