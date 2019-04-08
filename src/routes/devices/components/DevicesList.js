@@ -378,8 +378,11 @@ class DevicesList extends Component {
                     />
                 </Card>
 
-                <EditDevice ref='edit_device' />
-                <AddDevice ref="add_device" />
+                <EditDevice ref='edit_device'
+
+                />
+                <AddDevice ref="add_device"
+                />
             </div>
 
         )
@@ -532,7 +535,7 @@ export default class Tab extends Component {
                     />
                 </TabPane>
                 <TabPane tab={<span className="purple">Transfer</span>} key="8" forceRender={true}>
-                <h2 className="coming_s">Coming Soon</h2>
+                    <h2 className="coming_s">Coming Soon</h2>
                     <DevicesList
                         devices={this.state.devices}
                         suspendDevice={this.props.suspendDevice}

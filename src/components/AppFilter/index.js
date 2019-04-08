@@ -103,7 +103,7 @@ class AppFilter extends Component {
             }
         }
 
-
+        // console.log(this.props.options);
         const Search = Input.Search;
         //  console.log('render ...', this.props.selectedOptions);
 

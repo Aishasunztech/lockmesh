@@ -16,6 +16,7 @@ import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
 import EditDevice from '../../devices/components/editDevice';
+import FlagDevice from '../../ConnectDevice/components/flagDevice';
 const confirm = Modal.confirm;
 
 class SideActions extends Component {
@@ -128,10 +129,19 @@ class SideActions extends Component {
         });
 
     }
+    handleFlag(flagged) {
+        if (flagged == 'Unflag') {
+            showConfirm(this.props.device.usr_device_id, this.props.flagged, this, "Do you really want to unflag the device ")
+        }
+        else {
+            this.refs.flag_device.showModel(this.props.device, this.props.flagged)
+        }
+    }
     render() {
-        //  console.log('device', this.props.device);
+        console.log('device', this.props.device.flagged);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
+        const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
@@ -172,7 +182,7 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                <Button type="default" onClick={() => { this.transferDeviceProfile(this.props.device_id) }} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button>
+                                <Button type="default" onClick={() => { this.transferDeviceProfile(this.props.device_id) }} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} disabled={flagged === 'Flag' ? true : false}  ><Icon type="swap" /> Transfer</Button>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 15, fontSize: "12px" }} >
@@ -183,8 +193,8 @@ class SideActions extends Component {
                                 <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" /> Wipe Device</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button  style={{ width: "100%", marginBottom: 15, backgroundColor: '#1b1b1b', color: '#fff' }}><Icon type="flag" />Flag</Button>
-                                <Button disabled={this.props.device.unlink_status ? true : this.state.disabled} onClick={() => showConfirm(this.props.device.usr_device_id, this.props.unlinkDevice, this)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
+                                <Button style={{ width: "100%", marginBottom: 15, backgroundColor: '#1b1b1b', color: '#fff' }} onClick={() => this.handleFlag(flagged)} ><Icon type="flag" />{flagged}</Button>
+                                <Button disabled={this.props.device.unlink_status ? true : this.state.disabled} onClick={() => showConfirm(this.props.device.usr_device_id, this.props.unlinkDevice, this, "Do you really want to unlink the device ")} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
                                 <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
 
                             </Col>
@@ -239,6 +249,7 @@ class SideActions extends Component {
                 />
 
                 <EditDevice ref='edit_device' />
+                <FlagDevice ref='flag_device' />
 
 
             </div>
@@ -290,9 +301,9 @@ var mapStateToProps = ({ device_details }) => {
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(SideActions);
-function showConfirm(id, action, _this) {
+function showConfirm(id, action, _this, msg) {
     confirm({
-        title: 'Do you want to Unlink this Device  ' + id,
+        title: msg + id,
         onOk() {
             _this.setState({ disabled: true })
             // console.log('go back func', _this.props);
