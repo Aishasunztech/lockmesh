@@ -36,13 +36,18 @@ class AddDevice extends Component {
         this.props.getProfiles();
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props !== nextProps) {
+        if (this.props.pgp_emails !== nextProps.pgp_emails) {
             // nextProps.getSimIDs();
+            console.log('next', nextProps.pgp_emails)
         }
     }
 
 
     handleReset = () => {
+       
+        this.props.getSimIDs();
+        this.props.getChatIDs();
+        this.props.getPGPEmails();
         this.props.form.resetFields();
     }
 

@@ -284,11 +284,11 @@ class Apk extends React.Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search APK"
-                                // addButtonText="Upload APK"
-                                // isAddButton={this.props.user.type === 'admin'}
+                                 addButtonText="Upload APK"
+                                 isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
-                                toLink="/downlaod-apk"
+                                toLink="/upload-apk"
                                 selectedOptions={this.props.selectedOptions}
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
@@ -299,7 +299,7 @@ class Apk extends React.Component {
                                     <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display:'flex', justifyContent: 'center'}}>
                                         <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
                                     </a>
-                                </div>
+                                </div> 
                             </div> */}
 
                             {
