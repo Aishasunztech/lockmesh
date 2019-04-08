@@ -295,7 +295,7 @@ class Apk extends React.Component {
                                     <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display:'flex', justifyContent: 'center'}}>
                                         <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
                                     </a>
-                                </div>
+                                </div> 
                             </div> */}
 
                             {
