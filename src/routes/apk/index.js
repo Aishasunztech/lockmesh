@@ -30,9 +30,9 @@ class Apk extends React.Component {
         let self = this;
         this.state = {
             apk_list: [],
-            columns: [
+            columns: [ 
                 {
-                    title: 'ACTIONS',
+                    title: 'ACTION',
                     dataIndex: 'action',
                     key: 'action',
                     className: 'row'
@@ -301,15 +301,15 @@ class Apk extends React.Component {
                             {
                                 (this.props.user.type === 'admin') ?
                                     <div style={{textAlign:"center"}}>
-                                        <Button
+                                        {/* <Button
                                             type="primary"
                                             // disabled={(this.props.disableAddButton == true) ? true : false}
                                             style={{ width: '12%', marginBottom:16 }}
                                         >
                                             <Link to='/upload-apk'>Upload apk</Link>
-                                        </Button>
+                                        </Button> */}
                                     </div> : false
-                            }
+                            } 
                             <ListApk
 
                                 handleStatusChange={this.handleStatusChange}
