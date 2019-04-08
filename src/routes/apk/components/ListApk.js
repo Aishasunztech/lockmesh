@@ -163,7 +163,6 @@ export default class ListApk extends Component {
                 }} />),
                 'apk': app.apk ? app.apk : 'N/A',
                 'apk_name': app.apk_name ? app.apk_name : 'N/A',
-                // http://localhost:3000
                 'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
             }
         });
@@ -182,7 +181,8 @@ export default class ListApk extends Component {
         return (
             <Card>
                 <Table
-                    rowSelection={rowSelection}
+                    // rowSelection={rowSelection}
+                    // expandedRowRender={record => <p style={{ margin: 0 }}>Testing</p>}
                     className="gx-table-responsive apklist_table"
                     size="midddle"
                     bordered
