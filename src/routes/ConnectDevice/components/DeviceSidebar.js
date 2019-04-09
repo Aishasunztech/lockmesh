@@ -45,6 +45,11 @@ export default class DeviceSidebar extends Component {
                 value: <span style={color}>{device_details.finalStatus}</span>,
             },
             {
+                key: 102,
+                name: (<a href="javascript:void(0)" >Flagged:</a>),
+                value: checkValue(device_details.flagged)
+            },
+            {
                 key: 101,
                 name: (<a href="javascript:void(0)" >Device Name:</a>),
                 value: checkValue(device_details.device_name)
@@ -188,7 +193,7 @@ export default class DeviceSidebar extends Component {
     }
 
     render() {
-        // console.log('device detail', this.props.device_details)
+        console.log('device detail', this.props.device_details)
         return (
             <Card>
                 <Table

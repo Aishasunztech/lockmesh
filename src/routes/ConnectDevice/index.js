@@ -24,7 +24,8 @@ import {
     changePage,
     activateDevice2,
     suspendDevice2,
-    getAccIdFromDvcId
+    getAccIdFromDvcId,
+    flagged
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -340,6 +341,7 @@ class ConnectDevice extends Component {
                             suspendDevice={this.props.suspendDevice2}
                             editDevice={this.props.editDevice}
                             unlinkDevice={this.props.unlinkDevice}
+                            flagged={this.props.flagged}
                             history={this.props.history}
                             getDevicesList={this.props.getDevicesList}
                             refreshDevice={this.refreshDevice}
@@ -378,6 +380,7 @@ function mapDispatchToProps(dispatch) {
 
         // showMessage: showMessage,
         unlinkDevice: unlinkDevice,
+        flagged: flagged,
 
 
     }, dispatch);

@@ -19,8 +19,12 @@ export default class AddDevice extends Component {
         message.success('Action Done Susscefully ');
     };
 
+
     showModal = (device = null, handleSubmit, preActive = false) => {
+
         console.log('device Detail', device)
+
+        
 
         if (preActive !== undefined && preActive === true) {
 
