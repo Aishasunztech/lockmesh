@@ -9,6 +9,7 @@
     position: relative;
     border: 2px solid #000;
 }
+
 .deviceImg .not_syn_txt {
     position: absolute;
     top: 45%;
@@ -18,11 +19,33 @@
     text-align: center;
 
 }
+
+.status_bar {
+    border-bottom: 1px solid #e8e8e8;
+    margin: 55px 6px 0 5px;
+    text-align: center;
+}
+
+.status_bar .active_st {
+    background: #b97a57;
+}
+
+.status_bar .offline_st {
+    background: #ed1b24;
+}
+
+.status_bar h3 {
+    padding: 6px 0;
+    color: yellow;
+    margin-bottom: 0;
+}
+
 .nav_btn_grp {
     position: absolute;
     bottom: 3px;
     width: 100%;
 }
+
 .nav_btn {
     margin-top: 0 !important;
     width: 33%;
@@ -30,26 +53,31 @@
     border: none !important;
     margin: 0;
 }
+
 .nav_btn:active {
     color: #c8c8c8;
     background-color: #fff;
 }
-.ant-table-tbody > tr > td {
+
+.ant-table-tbody>tr>td {
     font-size: 12px;
     text-align: center;
     padding: 8px 8px !important;
     font-weight: 300;
 }
-.deviceImg .ant-table-scroll { 
+
+.deviceImg .ant-table-scroll {
     width: 295px;
     margin: 23px auto 0;
     border-radius: 0px;
 }
+
 .ant-table-small {
     border: 1px solid transparent !important;
     border-radius: 6px;
 }
-.deviceImg .ant-table-scroll th {       
+
+.deviceImg .ant-table-scroll th {
     /* border-top-left-radius: 6px; */
     font-size: 12px;
     text-align: center !important;
@@ -57,65 +85,80 @@
     height: 45px;
     padding: 0 8px !important;
 }
+
 .action_btn {
     height: 30px;
     margin-top: 16px !important;
     margin-right: 0 !important;
     margin-bottom: 0 !important;
-    width: 25%; 
+    width: 25%;
     padding: 0;
     line-height: 20px;
 }
-.deviceImg .ant-table-thead > tr > th {
+
+.deviceImg .ant-table-thead>tr>th {
     padding: 0 5px 0 3px !important;
     font-size: 13px;
     width: 60%;
 }
+
 th.device_info {
     font-size: 13px;
     padding: 0 4px !important;
 }
-.left_bar .ant-table-tbody > tr > td {
+
+.left_bar .ant-table-tbody>tr>td {
     text-align: left;
     padding: 8px 4px 8px 16px !important;
 }
+
 .action_group .ant-btn-group {
     display: block
 }
+
 .ant-list {
     font-size: 13px;
 }
+
 .ant-switch-small {
     vertical-align: bottom;
 }
+
 .deviceImg .ant-spin-container {
     width: 300px;
     margin: 0px auto;
-    padding:0;
+    padding: 0;
 }
+
 .deviceImg .dev_main_menu {
-    padding-top: 56px;
+    padding-top: 0;
 }
+
 .deviceImg .ant-list-item {
     padding: 16px 16px;
     font-size: 14px;
 }
+
 .deviceImg .ant-list-item:last-child {
     border-bottom: 1px solid #e8e8e8 !important;
 }
-.line_break {  
+
+.line_break {
     width: 60px;
     margin: 0 auto;
     word-break: break-word;
 }
+
 .deviceImg .ant-form {
     width: 200px;
     margin: 0 auto;
     text-align: center;
 }
+
 .deviceImg .ant-input-affix-wrapper {
     margin-bottom: 15px;
 }
+
 .deviceImg .ant-input {
     color: #038fde;
     background-color: #fff;
@@ -128,86 +171,108 @@ th.device_info {
     margin-bottom: 16px;
     height: 26px;
 }
+
 .deviceImg .ant-input:focus {
     border-color: #038fde !important;
     box-shadow: 0 0 0 2px rgba(23, 23, 23, 0);
 }
+
 .deviceImg .ant-form-item-control-wrapper {
     margin-top: 70px;
 }
+
 .left_bar .ant-card-body {
-    padding:0 !important;
+    padding: 0 !important;
 }
+
 .right_bar .ant-card-body {
-    padding:16px 16px 0 !important;
+    padding: 16px 16px 0 !important;
 }
-.apklist_table .ant-table-thead > tr > th {
+
+.apklist_table .ant-table-thead>tr>th {
     text-align: center;
     font-size: 13px;
-    padding:12px 8px ;
+    padding: 12px 8px;
 }
+
 .device_value {
-    text-align: left !important ;
+    text-align: left !important;
 }
+
 .ref-btn {
     display: inline-flex;
     float: right;
 }
-.ref-btn .anticon  {
-margin-right: 3px;
+
+.ref-btn .anticon {
+    margin-right: 3px;
 }
+
 .ref-btn .loading_icon {
     display: none;
 }
-.device_info{ 
+
+.device_info {
     text-align: right !important;
 }
+
 .device_value {
     font-size: 13px;
 }
-.deviceImg .dev_main_menu  .ant-spin-container{
-    width: 295px !important ;
+
+.deviceImg .dev_main_menu .ant-spin-container {
+    width: 295px !important;
 }
+
 /*---- Apk List Css----*/
-.ant-table-filter-dropdown .ant-btn{
+.ant-table-filter-dropdown .ant-btn {
     margin-bottom: 0;
 }
+
 .change_pass .ant-btn,
 .change_email .ant-btn {
     padding: 0;
 }
-.profile_table .ant-table-tbody > tr > td {
+
+.profile_table .ant-table-tbody>tr>td {
     font-size: 15px;
     text-align: center;
     padding: 10px 16px !important;
     font-weight: 400;
 }
-.ant-btn > .anticon + span, .ant-btn > span + .anticon {
+
+.ant-btn>.anticon+span,
+.ant-btn>span+.anticon {
     margin-left: 8px;
     font-size: 12px;
 }
+
 .mb-0 {
-    margin-bottom: 0 !important ;
+    margin-bottom: 0 !important;
 }
 
 /*----------Sidebar page----------*/
 .side_bar_main .gx-mr-3 {
     margin-right: 15px !important;
 }
+
 .side_bar_main.gx-mb-4 {
-    margin-bottom: 0px !important; 
+    margin-bottom: 0px !important;
 }
+
 .side_bar_main .notification_icn {
     font-size: 26px;
 }
+
 .side_bar_main .ant-badge-count {
     position: absolute;
     left: 10px;
     top: 0px;
 }
+
 .side_bar_main .ant-badge-count {
     height: 15px;
-    border-radius:50%;
+    border-radius: 50%;
     min-width: 15px;
     line-height: 15px;
     padding: 0;
@@ -215,20 +280,25 @@ margin-right: 3px;
     -webkit-transform: translate(30%, -30%);
     transform: translate(30%, -30%);
 }
+
 .side_bar_main .ant-badge-count {
     background: #038fdd;
 }
+
 .side_bar_main .gx-avatar-name {
     padding-right: 25px;
 }
+
 .bell_icon li {
     padding: 0;
     position: absolute;
     right: 25px;
 }
+
 .bell_icon .ant-badge {
     margin-bottom: 0px;
 }
+
 .submitButton {
     text-align: center;
 }

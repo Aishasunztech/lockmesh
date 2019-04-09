@@ -30,13 +30,18 @@ class Apk extends React.Component {
         let self = this;
         this.state = {
             apk_list: [],
-            columns: [
+            columns: [ 
                 {
-                    title: 'ACTIONS',
+                    title: 'ACTION',
                     dataIndex: 'action',
                     key: 'action',
                     className: 'row'
                 },
+                // {
+                //     title: 'Permission',
+                //     dataIndex: 'permission',
+                //     key: 'permission',
+                // },
                 {
                     title: 'APP STATUS',
                     dataIndex: 'apk_status',
@@ -46,7 +51,6 @@ class Apk extends React.Component {
                     title: 'APK',
                     dataIndex: 'apk',
                     key: 'apk',
-                    ...this.getColumnSearchProps('apk'),
                 },
                 {
                     title: 'APP NAME',
@@ -280,11 +284,11 @@ class Apk extends React.Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search APK"
-                                // addButtonText="Upload APK"
-                                // isAddButton={this.props.user.type === 'admin'}
+                                 addButtonText="Upload APK"
+                                 isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
-                                toLink="/downlaod-apk"
+                                toLink="/upload-apk"
                                 selectedOptions={this.props.selectedOptions}
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
@@ -295,21 +299,21 @@ class Apk extends React.Component {
                                     <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display:'flex', justifyContent: 'center'}}>
                                         <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
                                     </a>
-                                </div>
+                                </div> 
                             </div> */}
 
                             {
                                 (this.props.user.type === 'admin') ?
                                     <div style={{textAlign:"center"}}>
-                                        <Button
+                                        {/* <Button
                                             type="primary"
                                             // disabled={(this.props.disableAddButton == true) ? true : false}
                                             style={{ width: '12%', marginBottom:16 }}
                                         >
                                             <Link to='/upload-apk'>Upload apk</Link>
-                                        </Button>
+                                        </Button> */}
                                     </div> : false
-                            }
+                            } 
                             <ListApk
 
                                 handleStatusChange={this.handleStatusChange}

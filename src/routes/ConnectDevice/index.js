@@ -302,6 +302,15 @@ class ConnectDevice extends Component {
                     <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
                         <Card>
                             <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
+                               
+                                <div className="status_bar">
+                                    <div className="col-md-6 active_st">
+                                        <h3>ACTIVE</h3>
+                                    </div>
+                                    <div className="col-md-6 offline_st">
+                                        <h3>OFFLINE</h3>
+                                    </div>
+                                </div>
                                 {this.renderScreen()}
                                 <Button.Group className="nav_btn_grp">
                                     <Button type="default" icon="left" className="nav_btn" onClick={() => {
