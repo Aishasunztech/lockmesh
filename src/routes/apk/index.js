@@ -86,43 +86,6 @@ class Apk extends React.Component {
 
 
     }
-    sortOrder = (direction) => {
-        // console.log("hello");
-        let apk_list = this.state.apk_list;
-        if (direction === "ascend") {
-            //   console.log("before",apk_list);
-            apk_list = apk_list.sort((a, b) => (a.apk_name > b.apk_name) ? 1 : ((b.apk_name > a.apk_name) ? -1 : 0));
-            //   console.log("after",apk_list);
-            //   return (a.apk_name > b.apk_name) ? 1 : ((b.apk_name > a.apk_name) ? -1 : 0);
-        } else if (direction === "descend") {
-            // return (a.apk_name > b.apk_name) ? -1 : ((b.apk_name > a.apk_name) ? 1 : 0);
-
-            // console.log("before",apk_list);
-            apk_list = apk_list.sort((a, b) => {
-                var nameA = a.apk_name.toLowerCase(), nameB = b.apk_name.toLowerCase()
-                if (nameA < nameB) //sort string ascending
-                    return 1
-                if (nameA > nameB)
-                    return -1
-                return 0
-            });
-
-            // if(a.apk_name < b.apk_name){
-            //     return 1;
-            // }else{
-            //     return -1;
-            // }
-            // return 0;
-            // console.log("after",apk_list);
-            // this.setState({
-            //     apk_list: apk_list
-            // })
-        }
-        // return apk_list;
-        this.state.apk_list = apk_list;
-        // console.log("state update", this.state.apk_list);
-
-    }
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({

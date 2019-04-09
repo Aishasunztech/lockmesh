@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
+import React, { Component, Fragment } from 'react'
+import { Table, Avatar, Switch, Button, Icon, Card, Modal, Row, Col, Input } from "antd";
 import { BASE_URL } from '../../../constants/Application';
+import Permissions from './permissions';
 
 import EditApk from './EditApk';
 
@@ -37,6 +38,7 @@ const data = [{
     address: 'Sidney No. 1 Lake Park',
     tags: ['cool', 'teacher'],
 }];
+
 export default class ListApk extends Component {
     state = { visible: false }
 
@@ -153,11 +155,12 @@ export default class ListApk extends Component {
                             onOk={this.handleOk}
                             onCancel={this.handleCancel}
                         >
-                            <Table columns={columns} dataSource={data} />
+                            {/* <Table columns={columns} dataSource={data} /> */}
                         </Modal>
 
                     </div>
                 ),
+                'permission':2,
                 'apk_status': (<Switch defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                     this.props.handleStatusChange(e, app.apk_id);
                 }} />),
@@ -172,6 +175,19 @@ export default class ListApk extends Component {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         // this.setState({ selectedRowKeys });
     }
+    customExpandIcon(props) {
+        if (props.expanded) {
+            return <a style={{ color: 'black' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="down" /></a>
+        } else {
+
+            return <a style={{ color: 'black' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="right" /></a>
+        }
+    }
+
     render() {
 
         const rowSelection = {
@@ -182,9 +198,14 @@ export default class ListApk extends Component {
             <Card>
                 <Table
                     // rowSelection={rowSelection}
+                    // expandableRowIcon={<Icon type="right" />}
+                    // collapsedRowIcon={<Icon type="down" />}
+                    expandIcon={(props) => this.customExpandIcon(props)}
                     expandedRowRender={(record) => {
                         console.log("table row",record);
-                        return (<p style={{ margin: 0 }}>Testing</p>);
+                        return (
+                            <Permissions record={record} />
+                        );
                     
                     }}
                     expandIconColumnIndex={1}
