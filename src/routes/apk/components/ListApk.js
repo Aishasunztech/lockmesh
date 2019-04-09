@@ -182,7 +182,9 @@ export default class ListApk extends Component {
             <Card>
                 <Table
                     // rowSelection={rowSelection}
-                    // expandedRowRender={record => <p style={{ margin: 0 }}>Testing</p>}
+                    expandedRowRender={record => <p style={{ margin: 0 }}>Testing</p>}
+                    expandIconColumnIndex={1}
+                    expandIconAsCell={false}
                     className="gx-table-responsive apklist_table"
                     size="midddle"
                     bordered

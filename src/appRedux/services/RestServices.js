@@ -226,15 +226,15 @@ const RestService = {
         return axios.post(BASE_URL + 'users/get_profiles', {
             device_id: device_id
         }, RestService.getHeader());
-        
+
     },
     getPolicies: (device_id = "") => {
         return axios.post(BASE_URL + 'users/get_policies', {
             device_id: device_id
         }, RestService.getHeader());
-        
+
     },
-    
+
 
     // unlink Dealer.
     unlinkDealer: (dealer_id) => {
@@ -403,7 +403,12 @@ const RestService = {
         // this.authtoken(this.response);
         // return this.response;
     },
+    unflagged(device_id) {
+        return axios.post(BASE_URL + 'users/UnflagDevice/' + device_id,{}, RestService.getHeader());
+    },
+    flagged(device_id, data) {
+        return axios.post(BASE_URL + 'users/flagDevice/' + device_id, { data }, RestService.getHeader());
 
+    }
 }
-
 export default RestService;

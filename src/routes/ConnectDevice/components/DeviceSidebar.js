@@ -104,7 +104,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 12,
                 name: (<a href="javascript:void(0)">SIM ID:</a>),
-                value: (device_details.sim_id === 'null' || device_details.sim_id === null || device_details.sim_id === '') ? 'N/A' : device_details.sim_id
+                value: checkValue(device_details.sim_id)
             },
 
 
@@ -116,7 +116,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 14,
                 name: (<a href="javascript:void(0)">SIM 1:</a>),
-                value: device_details.simno
+                value: checkValue(device_details.simno)
             },
             {
                 key: 15,

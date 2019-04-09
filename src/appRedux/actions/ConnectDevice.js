@@ -21,7 +21,9 @@ import {
     SUSPEND_DEVICE2,
     HANDLE_CHECK_APP,
     HANDLE_CHECK_ALL,
-    GET_USER_ACC_ID
+    GET_USER_ACC_ID,
+    FLAG_DEVICE,
+    UNFLAG_DEVICE
 } from "constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -529,33 +531,43 @@ export const transferDeviceProfile = (device_id) => {
         })
     }
 }
-export const flagged = (device_id) => {
-    alert(device_id)
-    // alert(device_id);
-    // return (dispatch) => {
-    // RestService.flagged(device_id).then((response) => {
-    //     if (RestService.checkAuth(response.data)) {
-    //         dispatch({
-    //             type: SHOW_MESSAGE,
-    //             payload: {
-    //                 showMessage: true,
-    //                 messageType: response.data.status ? 'success' : 'error',
-    //                 messageText: response.data.data.msg
-    //             }
-    //         })
-    //         dispatch({
-    //             type: SHOW_MESSAGE,
-    //             payload: {
-    //                 showMessage: false,
-    //                 messageType: response.data.status ? 'success' : 'error',
-    //                 messageText: response.data.data.msg
-    //             }
-    //         })
-    //     } else {
-    //         dispatch({
-    //             type: INVALID_TOKEN
-    //         })
-    //     }
-    // })
-    // }
+export const unflagged = (device_id) => {
+    return (dispatch) => {
+        RestService.unflagged(device_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: UNFLAG_DEVICE,
+                    response: response.data,
+                    payload: {
+                        device: response.data.data,
+                        msg: response.data.msg,
+                    }
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export const flagged = (device_id, data) => {
+    return (dispatch) => {
+        RestService.flagged(device_id, data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: FLAG_DEVICE,
+                    response: response.data,
+                    payload: {
+                        device: response.data.data,
+                        msg: response.data.msg,
+                    }
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
 }

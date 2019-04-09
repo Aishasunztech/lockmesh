@@ -113,7 +113,7 @@ class Devices extends Component {
 
                 children: [
                     {
-                        title: 'flagged',
+                        title: 'FLAGGED',
                         align: "center",
                         className: '',
                         dataIndex: 'flagged',

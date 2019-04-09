@@ -25,6 +25,7 @@ import {
     activateDevice2,
     suspendDevice2,
     getAccIdFromDvcId,
+    unflagged,
     flagged
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
@@ -182,7 +183,8 @@ class ConnectDevice extends Component {
 
     renderScreen = () => {
         if (this.props.pageName === "main_menu" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (
+            return (<div>
+                <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
                 <List
                     className="dev_main_menu"
                     size="small"
@@ -196,6 +198,7 @@ class ConnectDevice extends Component {
                         ><a>{item.value}</a></List.Item>)
                     }}
                 />
+            </div>
             );
         } else if (this.props.pageName === "apps" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (
@@ -342,6 +345,7 @@ class ConnectDevice extends Component {
                             editDevice={this.props.editDevice}
                             unlinkDevice={this.props.unlinkDevice}
                             flagged={this.props.flagged}
+                            unflagged={this.props.unflagged}
                             history={this.props.history}
                             getDevicesList={this.props.getDevicesList}
                             refreshDevice={this.refreshDevice}
@@ -381,6 +385,7 @@ function mapDispatchToProps(dispatch) {
         // showMessage: showMessage,
         unlinkDevice: unlinkDevice,
         flagged: flagged,
+        unflagged: unflagged,
 
 
     }, dispatch);
