@@ -48,9 +48,9 @@ class Profile extends Component {
 
         return (
             <div>
-                <Row justify='center' style={{ backgroundColor: '#012346', height: 150, paddingTop: 50 }}>
+                <Row justify='center' style={{ backgroundColor: '#012346', height: 110, paddingTop: 20 }}>
                 </Row>
-                <div style={{ marginTop: -60 }}>
+                <div style={{ marginTop: -40 }}>
                     <Row>
                         <Col xs={24} sm={24} md={14} lg={14} xl={14}>
                             <div>
@@ -85,7 +85,7 @@ class Profile extends Component {
                                                 <img src={require("../../assets/images/profile-image.png")} style={{ height: 'auto', width: '100%', borderRadius: 50 }} />
                                             </Col>
                                             <Col span={15}>
-                                                 <h1>{this.props.profile.name}</h1>
+                                                <h1>{this.props.profile.name}</h1>
 
                                                 <p>({this.props.profile.type})</p>
                                             </Col>
