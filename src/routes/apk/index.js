@@ -38,7 +38,7 @@ class Apk extends React.Component {
                     className: 'row'
                 },
                 {
-                    title: 'Permission',
+                    title: 'PERMISSION',
                     dataIndex: 'permission',
                     key: 'permission',
                     className: 'row'
