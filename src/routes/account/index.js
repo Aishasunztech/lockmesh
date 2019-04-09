@@ -252,7 +252,7 @@ class Account extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                        <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                             <div>
                                 <Card style={{ borderRadius: 12 }}>
                                     <div className="profile_table">
@@ -619,7 +619,7 @@ class Account extends Component {
                                 </Card>
                             </div>
                         </Col>
-                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                        <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                             <div>
                                 <Card style={{ borderRadius: 12 }}>
                                     <div>

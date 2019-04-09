@@ -30,8 +30,8 @@ export default class Apk extends Component {
                                                 <Col span={15}>
                                                     <h4 style={{ position: 'relative', right: 16 }}>Upload apk</h4>
                                                     <h4 style={{ position: 'relative', right: 0 }}>Manage apk's</h4>
-                                                    <h4 style={{ position: 'relative', right: 6 }}>activate apk push</h4>
-                                                    <h4 style={{ position: 'relative', right: 22 }}>set apk Dealer permissions</h4>
+                                                    <h4 style={{ position: 'relative', right: 6 }}>Activate apk push</h4>
+                                                    <h4 style={{ position: 'relative', right: 22 }}>Set apk Dealer permissions</h4>
                                                     <h4 style={{ position: 'relative', right: 65 }}>and more...</h4>
                                                 </Col>
                                             </Row>
