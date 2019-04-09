@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card, Modal, Row, Col, Input } from "antd";
+import { Table, Button, Modal, Row, Col, Input } from "antd";
 
 const columns = [{
   title: 'Name',
@@ -36,39 +36,41 @@ const data = [{
 }];
 
 export default class Permissions extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      showDealersModal:false,
+      showDealersModal: false,
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
   }
 
   render() {
     return (
       <Fragment>
-        <Row gutter={16}>
-            <Col className="gutter-row" span={6}>
-                <div className="gutter-box">Permission List</div>
-            </Col>
-            <Col className="gutter-row" span={6}>
-                <div className="gutter-box"><Button>Add</Button></div>
-            </Col>
-            <Col className="gutter-row" span={6}>
-                <div className="gutter-box"><Button>Select All</Button></div>
-            </Col>
-            <Col className="gutter-row" span={6}>
-                <div className="gutter-box"><Input.Search placeholder="Dealer Email" /></div>
-            </Col>
+        <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
+          <Col className="gutter-row" span={4}>
+            <div className="gutter-box"><h2>Permission List</h2> </div>
+          </Col>
+          <Col className="gutter-row" span={2}>
+            <div className="gutter-box"><Button size="small" type="primary">Add</Button></div>
+          </Col>
+          <Col className="gutter-row" span={2}>
+            <div className="gutter-box"><Button size="small" type="primary">Select All</Button></div>
+          </Col>
+          <Col className="gutter-row" span={4}>
+            <div className="gutter-box search_heading">
+              <Input.Search placeholder="Dealer Email" style={{ marginBottom: 0 }} />
+            </div>
+          </Col>
         </Row>
         <Row gutter={16}>
-            <Table 
-                columns={columns} 
-                dataSource={data}
-            />
+          <Table
+            columns={columns}
+            dataSource={data}
+          />
         </Row>
         <Modal
           title="Dealers Permission"
@@ -76,9 +78,9 @@ export default class Permissions extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-            {/* <Table columns={columns} dataSource={data} /> */}
+          {/* <Table columns={columns} dataSource={data} /> */}
         </Modal>
-    </Fragment>
+      </Fragment>
     )
   }
 }

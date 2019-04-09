@@ -160,7 +160,7 @@ export default class ListApk extends Component {
 
                     </div>
                 ),
-                'permission':2,
+                'permission': <span style={{fontSize:15, fontWeight:400}}>2</span>,
                 'apk_status': (<Switch defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                     this.props.handleStatusChange(e, app.apk_id);
                 }} />),
@@ -177,14 +177,14 @@ export default class ListApk extends Component {
     }
     customExpandIcon(props) {
         if (props.expanded) {
-            return <a style={{ color: 'black' }} onClick={e => {
+            return <a style={{ fontSize: 22, verticalAlign: 'middle' }} onClick={e => {
                 props.onExpand(props.record, e);
-            }}><Icon type="down" /></a>
+            }}><Icon type="caret-down" /></a>
         } else {
 
-            return <a style={{ color: 'black' }} onClick={e => {
+            return <a style={{ fontSize: 22, verticalAlign: 'middle' }} onClick={e => {
                 props.onExpand(props.record, e);
-            }}><Icon type="right" /></a>
+            }}><Icon type="caret-right" /></a>
         }
     }
 
@@ -202,11 +202,11 @@ export default class ListApk extends Component {
                     // collapsedRowIcon={<Icon type="down" />}
                     expandIcon={(props) => this.customExpandIcon(props)}
                     expandedRowRender={(record) => {
-                        console.log("table row",record);
+                        console.log("table row", record);
                         return (
                             <Permissions record={record} />
                         );
-                    
+
                     }}
                     expandIconColumnIndex={1}
                     expandIconAsCell={false}

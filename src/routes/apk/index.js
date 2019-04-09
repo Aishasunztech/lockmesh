@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button } from "antd";
+import { Input, Icon, Modal, Select, Button, Tooltip } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 // import {Route, Switch} from "react-router-dom";
@@ -30,7 +30,7 @@ class Apk extends React.Component {
         let self = this;
         this.state = {
             apk_list: [],
-            columns: [ 
+            columns: [
                 {
                     title: 'ACTION',
                     dataIndex: 'action',
@@ -38,7 +38,13 @@ class Apk extends React.Component {
                     className: 'row'
                 },
                 {
-                    title: 'PERMISSION',
+                    title: (
+                        <span>
+                            PERMISSION
+                        <Tooltip placement="top" title="Dummy Data">
+                                <span style={{ float: "right", cursor: 'pointer' }}><Icon type="question" /></span>
+                            </Tooltip>
+                        </span>),
                     dataIndex: 'permission',
                     key: 'permission',
                     className: 'row'
@@ -248,8 +254,8 @@ class Apk extends React.Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search APK"
-                                 addButtonText="Upload APK"
-                                 isAddButton={this.props.user.type === 'admin'}
+                                addButtonText="Upload APK"
+                                isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
                                 toLink="/upload-apk"
@@ -268,7 +274,7 @@ class Apk extends React.Component {
 
                             {
                                 (this.props.user.type === 'admin') ?
-                                    <div style={{textAlign:"center"}}>
+                                    <div style={{ textAlign: "center" }}>
                                         {/* <Button
                                             type="primary"
                                             // disabled={(this.props.disableAddButton == true) ? true : false}
@@ -277,7 +283,7 @@ class Apk extends React.Component {
                                             <Link to='/upload-apk'>Upload apk</Link>
                                         </Button> */}
                                     </div> : false
-                            } 
+                            }
                             <ListApk
 
                                 handleStatusChange={this.handleStatusChange}
