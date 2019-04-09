@@ -52,13 +52,13 @@ class Profile extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-                        <Col xs={24} sm={24} md={16} lg={16} xl={16}>
+                        <Col xs={24} sm={24} md={14} lg={14} xl={14}>
                             <div>
                                 <Card style={{ borderRadius: 12 }}>
                                     <div className="profile_table">
                                         <Row>
                                             <Col span={20}>
-                                                <h1>Your Profile</h1>
+                                                <h1>Detail</h1>
                                             </Col>
                                             <Col span={4} style={{ textAlign: "center" }}>
                                                 <a onClick={() => this.refs.change_profile.showModal()} >Edit</a>
@@ -78,7 +78,7 @@ class Profile extends Component {
                             <div>
                                 <Card style={{ borderRadius: 12 }}>
                                     <div>
-                                        <h1>Your Profile</h1>
+                                        <h1>Profile</h1>
                                         <Divider className="mb-0" />
                                         <Row style={{ padding: 16 }}>
                                             <Col span={9} style={{ padding: 0, textAlign: "center" }}>

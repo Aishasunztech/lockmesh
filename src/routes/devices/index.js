@@ -99,6 +99,34 @@ class Devices extends Component {
             {
                 title: (
                     <Input.Search
+                        name="flagged"
+                        key="flagged"
+                        id="flagged"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Flagged"
+                    />
+                ),
+                dataIndex: 'flagged',
+                className: '',
+
+                children: [
+                    {
+                        title: 'FLAGGED',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'flagged',
+                        key: 'flagged',
+                        sorter: (a, b) => { console.log('done', a.status); return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
                         name="name"
                         key="name"
                         id="name"
@@ -663,29 +691,6 @@ class Devices extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            }, {
-                title: (
-                    <Input.Search
-                        name="flagged"
-                        key="flagged"
-                        id="flagged"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="Flagged"
-                    />
-                ),
-                dataIndex: 'flagged',
-                className: '',
-                children: [
-                    {
-                        title: 'Flagged',
-                        dataIndex: 'flagged',
-                        align: 'center',
-                        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ],
             }, {
                 title: (
                     <Input.Search

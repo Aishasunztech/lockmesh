@@ -94,10 +94,9 @@ class AppFilter extends Component {
                 fullScreenClass2 = "col-md-2";
             }
 
-
+        // console.log(this.props.options);
         const Search = Input.Search;
         //  console.log('render ...', this.props.selectedOptions);
-
         return (
             // className="gutter-example"
             <Card >

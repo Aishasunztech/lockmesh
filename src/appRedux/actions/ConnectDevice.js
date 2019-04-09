@@ -21,7 +21,9 @@ import {
     SUSPEND_DEVICE2,
     HANDLE_CHECK_APP,
     HANDLE_CHECK_ALL,
-    GET_USER_ACC_ID
+    GET_USER_ACC_ID,
+    FLAG_DEVICE,
+    UNFLAG_DEVICE
 } from "constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -37,12 +39,12 @@ export function changePage(pageName) {
 }
 
 export function getDeviceDetails(deviceId) {
-//console.log('object is callse')
+    //console.log('object is callse')
     return (dispatch) => {
         RestService.getDeviceDetails(deviceId).then((response) => {
-           // console.log("slkdflaskdfjlasf", response.data);
+            // console.log("slkdflaskdfjlasf", response.data);
             if (RestService.checkAuth(response.data.status)) {
-             //    console.log("slkdflaskdfjlasf", response.data);
+                //    console.log("slkdflaskdfjlasf", response.data);
                 if (response.data) {
                     dispatch({
                         type: GET_DEVICE_DETAILS,
@@ -84,7 +86,7 @@ export function getDeviceApps(deviceId) {
 export function getProfiles(device_id) {
     return (dispatch) => {
         RestService.getDeviceProfiles(device_id).then((response) => {
-            
+
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
@@ -105,7 +107,7 @@ export function getProfiles(device_id) {
 export function getPolicies(device_id) {
     return (dispatch) => {
         RestService.getPolicies(device_id).then((response) => {
-            
+
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
@@ -145,24 +147,24 @@ export function getDeviceHistories(user_acc_id) {
 
 
 export function getAccIdFromDvcId(deviceId) {
-  //  console.log('Do it')
+    //  console.log('Do it')
     return (dispatch) => {
         RestService.getUserAccountId(deviceId).then((response) => {
-         //  console.log('t e s t', response );
-           if (RestService.checkAuth(response.data)) {
+            //  console.log('t e s t', response );
+            if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: GET_USER_ACC_ID,
                     response: response.data,
                     payload: {
-                      
+
                     }
                 });
-          
-        } else {
-            dispatch({
-                type: INVALID_TOKEN
-            });
-        }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
         });
     }
 }
@@ -173,21 +175,21 @@ export function suspendDevice2(device) {
         //  console.log("suspendDevice action");
 
         RestService.suspendDevice(device.usr_device_id).then((response) => {
-          
+
 
             if (RestService.checkAuth(response.data)) {
                 // console.log('reslut', response);
-                    // console.log('conect device', device);
-                    // console.log('done status');
-                    dispatch({
-                        type: SUSPEND_DEVICE2,
-                        response: response.data,
-                        payload: {
-                            device: device,
-                            msg: response.data.msg,
-                        }
-                    });
-              
+                // console.log('conect device', device);
+                // console.log('done status');
+                dispatch({
+                    type: SUSPEND_DEVICE2,
+                    response: response.data,
+                    payload: {
+                        device: device,
+                        msg: response.data.msg,
+                    }
+                });
+
 
             } else {
                 dispatch({
@@ -207,7 +209,7 @@ export function unlinkDevice(deviceId) {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
-                        response:response.data,
+                        response: response.data,
                         type: UNLINK_DEVICE,
                         payload: response.data.profiles
                     })
@@ -275,7 +277,7 @@ export function loadDeviceProfile(app_list) {
     };
 }
 
-export function applySetting(app_list, passwords, device_id,usr_acc_id, type = "history", name = null, ) {
+export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null, ) {
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -372,7 +374,7 @@ export function showMessage(show, message, type) {
 }
 
 export function handleCheckApp(e, key, app_id) {
-    return (dispatch) =>{
+    return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_APP,
             payload: {
@@ -442,7 +444,7 @@ export function hanldeProfileInput(profileType, profileValue) {
         })
     }
 }
-export function saveProfile(app_list, passwords = null, profileType, profileName,usr_acc_id) {
+export function saveProfile(app_list, passwords = null, profileType, profileName, usr_acc_id) {
     return (dispatch) => {
         let pwd = {};
         if (passwords != null) {
@@ -465,8 +467,8 @@ export function saveProfile(app_list, passwords = null, profileType, profileName
             passwords: pwd,
             controls: {}
         }
-         console.log("applist save profile", device_setting);
-        RestService.applySettings(device_setting, null, profileType, profileName, null,usr_acc_id).then((response) => {
+        console.log("applist save profile", device_setting);
+        RestService.applySettings(device_setting, null, profileType, profileName, null, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: SHOW_MESSAGE,
@@ -500,16 +502,16 @@ export function saveProfile(app_list, passwords = null, profileType, profileName
 
 }
 
-export const transferDeviceProfile =(device_id) =>{
+export const transferDeviceProfile = (device_id) => {
     // alert(device_id);
     return (dispatch) => {
         RestService.transferDeviceProfile(device_id).then((response) => {
-            if (RestService.checkAuth(response.data)){
+            if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: SHOW_MESSAGE,
                     payload: {
                         showMessage: true,
-                        messageType:  response.data.status ? 'success' : 'error',
+                        messageType: response.data.status ? 'success' : 'error',
                         messageText: response.data.data.msg
                     }
                 })
@@ -517,8 +519,48 @@ export const transferDeviceProfile =(device_id) =>{
                     type: SHOW_MESSAGE,
                     payload: {
                         showMessage: false,
-                        messageType:  response.data.status ? 'success' : 'error',
+                        messageType: response.data.status ? 'success' : 'error',
                         messageText: response.data.data.msg
+                    }
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export const unflagged = (device_id) => {
+    return (dispatch) => {
+        RestService.unflagged(device_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: UNFLAG_DEVICE,
+                    response: response.data,
+                    payload: {
+                        device: response.data.data,
+                        msg: response.data.msg,
+                    }
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export const flagged = (device_id, data) => {
+    return (dispatch) => {
+        RestService.flagged(device_id, data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: FLAG_DEVICE,
+                    response: response.data,
+                    payload: {
+                        device: response.data.data,
+                        msg: response.data.msg,
                     }
                 })
             } else {

@@ -24,7 +24,9 @@ import {
     changePage,
     activateDevice2,
     suspendDevice2,
-    getAccIdFromDvcId
+    getAccIdFromDvcId,
+    unflagged,
+    flagged
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -92,7 +94,7 @@ class ConnectDevice extends Component {
         ]
 
         this.subMenu = [
-           
+
             {
                 pageName: "guest_password",
                 value: 'Set Guest Password'
@@ -105,7 +107,7 @@ class ConnectDevice extends Component {
                 pageName: "duress_password",
                 value: 'Set Duress Password'
             },
-           
+
             {
                 pageName: "admin_password",
                 value: 'Change Admin Panel Code'
@@ -130,7 +132,7 @@ class ConnectDevice extends Component {
         });
 
         const device_id = atob(this.props.match.params.device_id);
-    // console.log('ref', device_id)
+        // console.log('ref', device_id)
 
         if (device_id !== '') {
 
@@ -181,7 +183,8 @@ class ConnectDevice extends Component {
 
     renderScreen = () => {
         if (this.props.pageName === "main_menu" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (
+            return (<div>
+                <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
                 <List
                     className="dev_main_menu"
                     size="small"
@@ -195,6 +198,7 @@ class ConnectDevice extends Component {
                         ><a>{item.value}</a></List.Item>)
                     }}
                 />
+            </div>
             );
         } else if (this.props.pageName === "apps" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (
@@ -216,25 +220,25 @@ class ConnectDevice extends Component {
             return (<Password pwdType={this.state.pageName} />);
         } else if (this.props.pageName === "not_available") {
             return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
-        } else if(this.props.pageName === "Manage_password"){
-            return(
+        } else if (this.props.pageName === "Manage_password") {
+            return (
                 <List
-                className="dev_main_menu"
-                size="small"
-                dataSource={this.subMenu}
-                renderItem={item => {
-                    return (<List.Item
-                        onClick={() => {
+                    className="dev_main_menu"
+                    size="small"
+                    dataSource={this.subMenu}
+                    renderItem={item => {
+                        return (<List.Item
+                            onClick={() => {
 
-                            this.changePage(item.pageName)
-                        }}
-                    ><a>{item.value}</a></List.Item>)
-                }}
-            />
+                                this.changePage(item.pageName)
+                            }}
+                        ><a>{item.value}</a></List.Item>)
+                    }}
+                />
             )
-            
+
         }
-         else {
+        else {
             return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
         }
     }
@@ -256,12 +260,11 @@ class ConnectDevice extends Component {
     refreshDevice = (deviceId) => {
         this.props.startLoading();
         // console.log("refreshDevice", this.props);
-     //   this.props.getAccIdFromDvcId(deviceId);
-     if(deviceId === undefined)
-     {
-         deviceId =atob(this.props.match.params.device_id);
-     }
-    // console.log('ref', deviceId)
+        //   this.props.getAccIdFromDvcId(deviceId);
+        if (deviceId === undefined) {
+            deviceId = atob(this.props.match.params.device_id);
+        }
+        // console.log('ref', deviceId)
         this.props.getDeviceDetails(deviceId);
         this.props.getDeviceApps(deviceId);
         this.props.getProfiles(deviceId);
@@ -299,6 +302,15 @@ class ConnectDevice extends Component {
                     <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
                         <Card>
                             <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
+                               
+                                <div className="status_bar">
+                                    <div className="col-md-6 active_st">
+                                        <h3>ACTIVE</h3>
+                                    </div>
+                                    <div className="col-md-6 offline_st">
+                                        <h3>OFFLINE</h3>
+                                    </div>
+                                </div>
                                 {this.renderScreen()}
                                 <Button.Group className="nav_btn_grp">
                                     <Button type="default" icon="left" className="nav_btn" onClick={() => {
@@ -332,6 +344,8 @@ class ConnectDevice extends Component {
                             suspendDevice={this.props.suspendDevice2}
                             editDevice={this.props.editDevice}
                             unlinkDevice={this.props.unlinkDevice}
+                            flagged={this.props.flagged}
+                            unflagged={this.props.unflagged}
                             history={this.props.history}
                             getDevicesList={this.props.getDevicesList}
                             refreshDevice={this.refreshDevice}
@@ -370,6 +384,8 @@ function mapDispatchToProps(dispatch) {
 
         // showMessage: showMessage,
         unlinkDevice: unlinkDevice,
+        flagged: flagged,
+        unflagged: unflagged,
 
 
     }, dispatch);

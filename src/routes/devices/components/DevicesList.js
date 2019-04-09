@@ -123,6 +123,8 @@ class DevicesList extends Component {
             const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             // const device_status =  "SUSPEND";
             const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
+            const flagged = device.flagged;
+            // console.log(flagged);
             // console.log("status", device.status);
             // console.log("account status", device.account_status);
             // console.log("unlink status", device.unlink_status);
@@ -142,7 +144,7 @@ class DevicesList extends Component {
                 text = "Activate";
                 // icon = 'add'
             }
-
+            // console.log(device);
             return {
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
@@ -161,25 +163,30 @@ class DevicesList extends Component {
                             </Fragment>
                             :
                             <Fragment>
-                                <Button
-                                    type={button_type}
-                                    size="small"
-                                    style={style}
-                                    onClick={() => (device_status === "ACTIVATE") ? this.handleActivateDevice(device) : this.handleSuspendDevice(device)}
-                                >
-                                    {(device.account_status === '') ? <Fragment> {device_status}</Fragment> : <Fragment> {device_status}</Fragment>}
-                                </Button>
+                                {((device.flagged === '' || device.flagged === null || device.flagged === 'null') && (device.finalStatus !== "Suspended")) ?
+                                    <Button
+                                        type={button_type}
+                                        size="small"
+                                        style={style}
+                                        onClick={() => (device_status === "ACTIVATE") ? this.handleActivateDevice(device) : this.handleSuspendDevice(device)}
+                                    >
+                                        {(device.account_status === '') ? <Fragment> {device_status}</Fragment> : <Fragment> {device_status}</Fragment>}
+                                    </Button>
+                                    : ''
+                                }
 
                                 {(device.device_status === 1) ? <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button> : null}
-                                {(status === 'activated' || status === 'Activated') ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button> : null}
+                                {(status !== 'Unlinked' || status !== 'unlinked') ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button> : <Button type="default" size="small" style={style}> INFO</Button>}
                             </Fragment>
 
                         }
 
                     </Fragment>)
                 ,
+                status: (<span style={color} > {status}</span >),
+                flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
                 device_id: (device.device_id !== undefined && device.device_id !== '' && device.device_id !== null && device.device_id !== 'null' && (status != 'pre-activated' && status != "Pre-activated")) ? `${device.device_id}` : "N/A",
-                flagged: "N/A",
+
                 name: device.name ? `${device.name}` : "N/A",
                 account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
@@ -195,7 +202,7 @@ class DevicesList extends Component {
                 imei_2: device.imei2 ? `${device.imei2}` : "N/A",
                 sim_2: checkValue(device.simno2),
                 serial_number: device.serial_number ? `${device.serial_number}` : "N/A",
-                status: (<span style={color} > {status}</span >),
+
                 model: checkValue(device.model),
 
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
@@ -378,8 +385,11 @@ class DevicesList extends Component {
                     />
                 </Card>
 
-                <EditDevice ref='edit_device' />
-                <AddDevice ref="add_device" />
+                <EditDevice ref='edit_device'
+
+                />
+                <AddDevice ref="add_device"
+                />
             </div>
 
         )
@@ -532,7 +542,7 @@ export default class Tab extends Component {
                     />
                 </TabPane>
                 <TabPane tab={<span className="purple">Transfer</span>} key="8" forceRender={true}>
-                <h2 className="coming_s">Coming Soon</h2>
+                    <h2 className="coming_s">Coming Soon</h2>
                     <DevicesList
                         devices={this.state.devices}
                         suspendDevice={this.props.suspendDevice}

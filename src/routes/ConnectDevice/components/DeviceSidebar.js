@@ -45,6 +45,11 @@ export default class DeviceSidebar extends Component {
                 value: <span style={color}>{device_details.finalStatus}</span>,
             },
             {
+                key: 102,
+                name: (<a href="javascript:void(0)" >Flagged:</a>),
+                value: checkValue(device_details.flagged)
+            },
+            {
                 key: 101,
                 name: (<a href="javascript:void(0)" >Device Name:</a>),
                 value: checkValue(device_details.device_name)
@@ -99,7 +104,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 12,
                 name: (<a href="javascript:void(0)">SIM ID:</a>),
-                value: (device_details.sim_id === 'null' || device_details.sim_id === null || device_details.sim_id === '') ? 'N/A' : device_details.sim_id
+                value: checkValue(device_details.sim_id)
             },
 
 
@@ -111,7 +116,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 14,
                 name: (<a href="javascript:void(0)">SIM 1:</a>),
-                value: device_details.simno
+                value: checkValue(device_details.simno)
             },
             {
                 key: 15,
@@ -188,7 +193,7 @@ export default class DeviceSidebar extends Component {
     }
 
     render() {
-        // console.log('device detail', this.props.device_details)
+        console.log('device detail', this.props.device_details)
         return (
             <Card>
                 <Table

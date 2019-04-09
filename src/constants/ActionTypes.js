@@ -73,6 +73,10 @@ export const ADMIN_PASSWORD = 'admin_password';
 export const ACTIVATE_DEVICE2 = 'ACTIVATE_DEVICE2';
 export const SUSPEND_DEVICE2 = 'SUSPEND_DEVICE2';
 export const GET_USER_ACC_ID = 'GET_USER_ACC_ID';
+export const FLAG_DEVICE = 'FLAG_DEVICE';
+export const UNFLAG_DEVICE = 'UNFLAG_DEVICE';
+
+
 // export const HANDLE_CHECK_APP = 'HANDLE_CHECK_APP';
 
 export const CHANGE_PAGE = 'CHANGE_PAGE';
