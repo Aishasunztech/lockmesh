@@ -84,16 +84,8 @@ class AppFilter extends Component {
     render() {
         // console.log(" Current State", this.state.DisplayPages)
         let fullScreenClass1 = "";
-        let col_class_apk3 = "";
-        let col_class_apk2 = "";
         let fullScreenClass2 = "";
-        if (window.location.pathname.split("/").pop() === 'apk-list') {
-
-            col_class_apk2 = "col-md-2";
-            col_class_apk3 = "col-md-3";
-
-        }
-        else {
+       
             if (this.props.isAddButton === false) {
                 fullScreenClass1 = "col-md-3";
                 fullScreenClass2 = "col-md-3";
@@ -101,7 +93,6 @@ class AppFilter extends Component {
                 fullScreenClass1 = "col-md-3";
                 fullScreenClass2 = "col-md-2";
             }
-        }
 
 
         const Search = Input.Search;
@@ -111,7 +102,7 @@ class AppFilter extends Component {
             // className="gutter-example"
             <Card >
                 <Row gutter={16} className="filter_top">
-                    <Col className={`${fullScreenClass1} ${col_class_apk3} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             {(this.props.options !== undefined && this.props.options !== null) ?
                                 <Fragment>
@@ -187,12 +178,12 @@ class AppFilter extends Component {
 
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass1} ${col_class_apk2} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             {(this.props.handleFilterOptions !== undefined && this.props.handleFilterOptions !== null) ? this.props.handleFilterOptions() : null}
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} ${col_class_apk2} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             <Search
 
@@ -202,7 +193,7 @@ class AppFilter extends Component {
                             />
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} ${col_class_apk2} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             <Select
                                 value={this.state.DisplayPages}
@@ -219,15 +210,10 @@ class AppFilter extends Component {
                             </Select>
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} ${col_class_apk3} col-sm-12 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
                         <div className="gutter-box">
                             {
-                                (this.props.toLink === '/downlaod-apk') ?
-                                    (
-                                        <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk">
-                                            <button className="btn btn-default down_btn"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
-                                        </a>
-                                    ) : ((this.props.isAddButton === true) ?
+                                 (this.props.isAddButton === true) ?
                                         (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
                                             <Button
                                                 type="primary"
@@ -263,7 +249,7 @@ class AppFilter extends Component {
                                                     >
                                                         {this.props.addButtonText}
                                                     </Button>
-                                        : null)
+                                        : null
 
                             }
                         </div>
