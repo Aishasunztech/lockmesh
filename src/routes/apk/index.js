@@ -37,11 +37,12 @@ class Apk extends React.Component {
                     key: 'action',
                     className: 'row'
                 },
-                // {
-                //     title: 'Permission',
-                //     dataIndex: 'permission',
-                //     key: 'permission',
-                // },
+                {
+                    title: 'Permission',
+                    dataIndex: 'permission',
+                    key: 'permission',
+                    className: 'row'
+                },
                 {
                     title: 'APP STATUS',
                     dataIndex: 'apk_status',
