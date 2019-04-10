@@ -28,11 +28,11 @@ export default class Apk extends Component {
                                                     <Icon type="android" className="and_icon" />
                                                 </Col>
                                                 <Col>
-                                                    <h5 style={{ position: 'relative', right: 1 }}>Upload apk</h5>
-                                                    <h5 style={{ position: 'relative', left: 12 }}>Manage apk's</h5>
-                                                    <h5 style={{ position: 'relative', left: 10 }}>Activate apk push</h5>
-                                                    <h5 style={{ position: 'relative', right: 4, marginBottom: 2 }}>Set apk Dealer permissions</h5>
-                                                    <h5 style={{ position: 'relative', right: 35 }}>and more...</h5>
+                                                    <h5 style={{ position: 'relative', right: 1 }}><span className="diamond_icon">&#9670;</span>Upload apk</h5>
+                                                    <h5 style={{ position: 'relative', left: 12 }}><span className="diamond_icon">&#9670;</span>Manage apk's</h5>
+                                                    <h5 style={{ position: 'relative', left: 10 }}><span className="diamond_icon">&#9670;</span>Activate apk push</h5>
+                                                    <h5 style={{ position: 'relative', right: 4, marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Set apk Dealer permissions</h5>
+                                                    <h5 style={{ position: 'relative', right: 35 }} className="more_txt">and more...</h5>
                                                 </Col>
                                             </Row>
                                             <Row justify='center'>
@@ -61,15 +61,15 @@ export default class Apk extends Component {
                                                     <Icon type="file-text" className="policy_icon" />
                                                 </Col>
                                                 <Col span={15}>
-                                                    <h5 style={{ position: 'relative', right: 16 }}>Creat/Edit Policies</h5>
-                                                    <h5 style={{ position: 'relative', right: 0 }}>Set Policy  Permission</h5>
-                                                    <h5 style={{ position: 'relative', right: 4 }}>and more...</h5>
+                                                    <h5 style={{ position: 'relative', right: 16 }}><span className="diamond_icon">&#9670;</span>Creat/Edit Policies</h5>
+                                                    <h5 style={{ position: 'relative', right: 0 }}><span className="diamond_icon">&#9670;</span>Set Policy  Permission</h5>
+                                                    <h5 style={{ position: 'relative', right: 4 }} className="more_txt">and more...</h5>
                                                 </Col>
                                             </Row>
                                             <Row justify='center'>
                                                 <Col span={10} style={{ padding: "0px 8px 0px 16px" }}>
                                                 </Col>
-                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 32 }}>
+                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 46 }}>
                                                     <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
                                                 </Col>
                                             </Row>
@@ -91,16 +91,16 @@ export default class Apk extends Component {
                                                     <Icon type="appstore" className="policy_icon" />
                                                 </Col>
                                                 <Col span={15}>
-                                                    <h5 style={{ position: 'relative', right: 12, marginBottom: 2 }}>Add/remove apps in </h5>
-                                                    <h5 style={{ position: 'relative', right: 4 }}> Secure Market</h5>
-                                                    <h5 style={{ position: 'relative', right: 2 }}>set permissions</h5>
-                                                    <h5 style={{ position: 'relative', right: 10 }}>and more...</h5>
+                                                    <h5 style={{ position: 'relative', right: 12, marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Add/remove apps in </h5>
+                                                    <h5 style={{ position: 'relative', left: 10 }}> Secure Market</h5>
+                                                    <h5 style={{ position: 'relative', right: 2 }}><span className="diamond_icon">&#9670;</span>Set permissions</h5>
+                                                    <h5 style={{ position: 'relative', right: 10 }} className="more_txt">and more...</h5>
                                                 </Col>
                                             </Row>
                                             <Row justify='center'>
                                                 <Col span={10} style={{ padding: "0px 8px 0px 16px" }}>
                                                 </Col>
-                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 23 }}>
+                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 28 }}>
                                                     <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
                                                 </Col>
                                             </Row>

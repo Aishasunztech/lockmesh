@@ -630,10 +630,10 @@ class Account extends Component {
                                                                     <h2 style={{ textAlign: "center" }}> <a href="#"><Icon type="branches" /> </a> Manage Tokens</h2>
                                                                     <Divider className="mb-0" />
                                                                     <div className="token_txt">
-                                                                        <p>Distribute tokens</p>
-                                                                        <p>Set prices and delay for each token</p>
-                                                                        <p>Set permissions for Tokens</p>
-                                                                        <p>and more...</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
+                                                                        <p className="more_txt">and more...</p>
                                                                     </div>
                                                                 </div>
                                                             </Card>
@@ -662,10 +662,10 @@ class Account extends Component {
                                                                 <h2 style={{ textAlign: "center" }}><a href="#"> <Icon type="credit-card" /></a> Payment Gateway</h2>
                                                                 <Divider className="mb-0" />
                                                                 <div className="token_txt">
-                                                                    <p>Add/edit payment gateway</p>
-                                                                    <p>Set permissions</p>
-                                                                    <p>Customize prices and packages</p>
-                                                                    <p>and more...</p>
+                                                                    <p><span className="diamond_icon">&#9670;</span>Add/edit payment gateway</p>
+                                                                    <p><span className="diamond_icon">&#9670;</span>Set permissions</p>
+                                                                    <p><span className="diamond_icon">&#9670;</span>Customize prices and packages</p>
+                                                                    <p className="more_txt">and more...</p>
                                                                 </div>
                                                             </Card>
                                                         </div>
