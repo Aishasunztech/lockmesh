@@ -148,69 +148,6 @@ class Permissions extends Component {
           }
         ]
       },
-      {
-        title: (
-          <Input.Search
-            name="connected_devices"
-            key="connected_devices"
-            id="connected_devices"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder="Connected Devices"
-            onKeyUp={this.handleSearch}
-
-          />
-        ),
-        dataIndex: 'connected_devices',
-        className: '',
-        children: [
-          {
-            title: 'CONNECTED DEVICES',
-            dataIndex: 'connected_devices',
-            key: 'connected_devices',
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.connected_devices.length;
-            // },
-            sorter: (a, b) => { return a.connected_devices.localeCompare(b.connected_devices) },
-
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-      {
-        title: (
-          <Input.Search
-            name="dealer_token"
-            key="dealer_token"
-            id="dealer_token"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder="Tokens"
-            onKeyUp={this.handleSearch}
-
-          />
-        ),
-        dataIndex: 'dealer_token',
-        className: '',
-        children: [
-          {
-            title: 'TOKENS',
-            dataIndex: 'dealer_token',
-            key: 'dealer_token',
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.dealer_token.length;
-            // },
-            sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
-
-          }
-        ]
-      }
     ]
   }
 
@@ -271,6 +208,7 @@ class Permissions extends Component {
           />*/}
         </Row>
         <Modal
+          className="permiss_tabl"
           title="Dealers Permission"
           visible={this.state.showDealersModal}
           onOk={() => {
@@ -282,7 +220,7 @@ class Permissions extends Component {
           }}
         >
           <DealerList
-            columns = {this.addDealerCols}
+            columns={this.addDealerCols}
             dealers={this.renderDealer(this.props.dealerList)}
           />
         </Modal>

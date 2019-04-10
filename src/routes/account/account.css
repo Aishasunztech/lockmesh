@@ -24,7 +24,7 @@
 
 .ac_card .imp_btn {
     margin-right: 6px;
-    margin-bottom: 6px;
+    margin-bottom: 16px;
     line-height: 22px !important;
 }
 
@@ -51,6 +51,12 @@
     border: 0;
 }
 
+.diamond_icon {
+    color: #ccc;
+    margin-right: 6px;
+}
+
+
 .coming_s_a {
     line-height: 130px;
     text-align: center;
@@ -69,15 +75,19 @@
 }
 
 .manage_ac .ant-card-body {
-    height: 142px;
+    height: 160px;
+}
+
+.more_txt {
+    margin-top: 16px !important;
 }
 
 .token_txt {
-    margin: 14px 6px;
+    margin: 14px 0;
 }
 
 .token_txt p {
-    margin: 5px 0;
+    margin: 6px 0;
     font-size: 15px;
 }
 
