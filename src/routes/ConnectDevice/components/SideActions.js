@@ -142,7 +142,7 @@ class SideActions extends Component {
     render() {
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
-        const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';
+        const flagged = (this.props.device.flagged !== '' || this.props.device.flagged !== 'null' || this.props.device.flagged !== null) ? 'Unflag' : 'Flag';
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
