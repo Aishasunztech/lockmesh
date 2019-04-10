@@ -52,12 +52,12 @@ export default class FlagDevice extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
-                    className="Flag Device"
+                    className="flag_device"
                 >
 
                     <Form onSubmit={this.handleSubmit} autoComplete="new-password">
 
-                        <Form.Item className="edit_ftr_btn"
+                        <Form.Item className="edit_ftr_1 border_btm"
                             wrapperCol={{
                                 xs: { span: 24, offset: 0 },
                                 sm: { span: 24, offset: 0 },
@@ -70,14 +70,16 @@ export default class FlagDevice extends Component {
                                 <Radio.Button value="Other">Other</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
-                        <Form.Item className="edit_ftr_btn"
+                        <Form.Item className="edit_ftr_1"
                             wrapperCol={{
                                 xs: { span: 24, offset: 0 },
                                 sm: { span: 24, offset: 0 },
                             }}
                         >
-                            <Button key="back" type="button" onClick={this.handleCancel}>Cancel</Button>
-                            <Button type="primary" htmlType="submit">Submit</Button>
+                            <div className="text-right">
+                                <Button key="back" type="button" onClick={this.handleCancel}>Cancel</Button>
+                                <Button type="primary" htmlType="submit">Submit</Button>
+                            </div>
                         </Form.Item>
                     </Form>
                 </Modal>
