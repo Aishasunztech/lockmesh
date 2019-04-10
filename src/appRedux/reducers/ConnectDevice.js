@@ -29,13 +29,16 @@ import {
     GET_USER_ACC_ID,
     GET_POLICIES,
     FLAG_DEVICE,
-    UNFLAG_DEVICE
+    UNFLAG_DEVICE,
+    WIPE_DEVICE,
+    CHECKPASS
 
 } from "constants/ActionTypes";
 import {
-    message
+    message, Modal
 } from 'antd';
-
+const confirm = Modal.confirm;
+const actions = require("../../appRedux/actions/ConnectDevice")
 const initialState = {
     isLoading: false,
 
@@ -184,6 +187,19 @@ export default (state = initialState, action) => {
             }
 
         case UNFLAG_DEVICE:
+            console.log(action.response.msg);
+            if (action.response.status) {
+                message.success(action.response.msg);
+            } else {
+                message.error(action.response.msg);
+
+            }
+            // console.log('action done ', state.device)
+            return {
+                ...state,
+                isloading: false,
+            }
+        case WIPE_DEVICE:
             console.log(action.response.msg);
             if (action.response.status) {
                 message.success(action.response.msg);
@@ -458,6 +474,15 @@ export default (state = initialState, action) => {
                 applyBtn: true
             }
         }
+        case CHECKPASS: {
+            if (action.payload.PasswordMatch.password_matched) {
+                showConfirm1(action.payload.device, "Do You really Want to Wipe the device")
+            }
+            else {
+                message.error("Password Did not Match Please Try again.");
+            }
+
+        }
         case POLICY: {
             return {
                 ...state,
@@ -566,4 +591,26 @@ function handleCheckedAll(applications) {
         encryptedAll: encryptedAll,
         enableAll: enableAll
     }
+}
+function showConfirm1(device, msg) {
+    confirm({
+        title: 'WARNNING!',
+        content: msg,
+        okText: "WIPE DEVICE",
+        onOk() {
+            showConfirm(device, "This is will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.")
+        },
+        onCancel() { },
+    });
+}
+function showConfirm(device, msg) {
+    confirm({
+        title: 'WARNNING!',
+        content: msg,
+        okText: "PROCEED WITH WIPING THE DEVICE",
+        onOk() {
+            actions.wipe(device)
+        },
+        onCancel() { },
+    });
 }
