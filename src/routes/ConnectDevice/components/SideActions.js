@@ -141,7 +141,7 @@ class SideActions extends Component {
         }
     }
     render() {
-        console.log(this.props.authUser);
+        // console.log(this.props.authUser);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';

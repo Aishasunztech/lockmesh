@@ -193,7 +193,7 @@ export default class DeviceSidebar extends Component {
     }
 
     render() {
-        console.log('device detail', this.props.device_details)
+        // console.log('device detail', this.props.device_details)
         return (
             <Card>
                 <Table

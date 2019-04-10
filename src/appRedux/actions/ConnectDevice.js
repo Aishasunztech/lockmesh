@@ -222,6 +222,9 @@ export function wipe(device) {
             // });
             message.success(response.data.msg);
         }
+        else {
+            message.error("Device Not Wiped.Please Try again.")
+        }
     });
 }
 
@@ -312,7 +315,7 @@ export function applySetting(app_list, passwords, device_id, usr_acc_id, type = 
             },
             controls: {}
         }
-        console.log('my test is ', usr_acc_id)
+        // console.log('my test is ', usr_acc_id)
         RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -595,11 +598,11 @@ export const flagged = (device_id, data) => {
     }
 }
 export const checkPass = (user) => {
-    console.log(user);
+    // console.log(user);
     return (dispatch) => {
         RestService.checkPass(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
+                // console.log(response.data);
                 dispatch({
                     type: CHECKPASS,
                     response: response.data,
