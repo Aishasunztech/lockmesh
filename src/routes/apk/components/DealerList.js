@@ -5,9 +5,11 @@ import { Input, Modal, Select, Table } from "antd";
 
 
 const DealerList =(props) =>{
-    
+    // let selectedDealers = props.selectedDealers;
     const rowSelection = {
+        // selectedDealers,
         onChange: props.onSelectChange,
+        selectionColumnIndex:1
     };
     return (
         <Fragment>
