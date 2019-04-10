@@ -26,7 +26,8 @@ import {
     suspendDevice2,
     getAccIdFromDvcId,
     unflagged,
-    flagged
+    flagged,
+    wipe
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -277,6 +278,8 @@ class ConnectDevice extends Component {
     }
 
     render() {
+        let finalStatus = this.props.device_details.finalStatus;
+        let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'online';
         return (
             <div className="gutter-example">
                 {this.props.isLoading ?
@@ -302,13 +305,13 @@ class ConnectDevice extends Component {
                     <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
                         <Card>
                             <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
-                               
+
                                 <div className="status_bar">
                                     <div className="col-md-6 active_st">
-                                        <h3>ACTIVE</h3>
+                                        <h3>{finalStatus}</h3>
                                     </div>
                                     <div className="col-md-6 offline_st">
-                                        <h3>OFFLINE</h3>
+                                        <h3>{onlineStatus}</h3>
                                     </div>
                                 </div>
                                 {this.renderScreen()}
@@ -346,6 +349,7 @@ class ConnectDevice extends Component {
                             unlinkDevice={this.props.unlinkDevice}
                             flagged={this.props.flagged}
                             unflagged={this.props.unflagged}
+                            wipe={this.props.wipe}
                             history={this.props.history}
                             getDevicesList={this.props.getDevicesList}
                             refreshDevice={this.refreshDevice}
@@ -386,8 +390,7 @@ function mapDispatchToProps(dispatch) {
         unlinkDevice: unlinkDevice,
         flagged: flagged,
         unflagged: unflagged,
-
-
+        wipe: wipe,
     }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {

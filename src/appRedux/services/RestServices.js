@@ -268,7 +268,11 @@ const RestService = {
         )
 
     },
-
+    wipe: (device_id) => {
+        return axios.post(BASE_URL + 'users/wipe/' + device_id, device_id,
+            RestService.getHeader()
+        )
+    },
     activateDealer: (dealer_id) => {
         return axios.post(BASE_URL + 'users/dealer/activate/', { dealer_id },
             RestService.getHeader()
@@ -404,7 +408,7 @@ const RestService = {
         // return this.response;
     },
     unflagged(device_id) {
-        return axios.post(BASE_URL + 'users/UnflagDevice/' + device_id,{}, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/UnflagDevice/' + device_id, {}, RestService.getHeader());
     },
     flagged(device_id, data) {
         return axios.post(BASE_URL + 'users/flagDevice/' + device_id, { data }, RestService.getHeader());

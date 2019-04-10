@@ -18,13 +18,11 @@ export default class ActivateDevice extends Component {
             title: 'Are you sure, you want to activate the device?',
             content: '',
             onOk: () => {
-                
+
                 this.props.activateDevice(device);
-                if(window.location.pathname.split("/").pop() !== 'devices')
-                {
+                if (window.location.pathname.split("/").pop() !== 'devices') {
                     refresh(device.device_id);
-                   // console.log('activate device check', device);
-                } 
+                }
             },
             onCancel() { },
         });

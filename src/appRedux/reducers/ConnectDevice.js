@@ -29,7 +29,8 @@ import {
     GET_USER_ACC_ID,
     GET_POLICIES,
     FLAG_DEVICE,
-    UNFLAG_DEVICE
+    UNFLAG_DEVICE,
+    WIPE_DEVICE
 
 } from "constants/ActionTypes";
 import {
@@ -184,6 +185,19 @@ export default (state = initialState, action) => {
             }
 
         case UNFLAG_DEVICE:
+            console.log(action.response.msg);
+            if (action.response.status) {
+                message.success(action.response.msg);
+            } else {
+                message.error(action.response.msg);
+
+            }
+            // console.log('action done ', state.device)
+            return {
+                ...state,
+                isloading: false,
+            }
+        case WIPE_DEVICE:
             console.log(action.response.msg);
             if (action.response.status) {
                 message.success(action.response.msg);

@@ -9,7 +9,7 @@ export default class SuspendDevice extends Component {
         this.confirm = Modal.confirm;
     }
 
-    handleSuspendDevice = (device) => {
+    handleSuspendDevice = (device, refresh) => {
         // console.log('device', device)
         const title = (device.account_status === "suspended") ? "Are you sure, you want to activate the device?" : "Are you sure, you want to suspend the device?";
         this.confirm({
@@ -18,8 +18,7 @@ export default class SuspendDevice extends Component {
             onOk: (() => {
                 this.props.suspendDevice(device);
                 if (window.location.pathname.split("/").pop() !== 'devices') {
-                    this.props.go_back();
-                    this.props.getDevice();
+                    refresh(device.device_id);
                 }
             }),
             onCancel() { },

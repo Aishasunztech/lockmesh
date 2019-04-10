@@ -16,7 +16,7 @@ export default class FlagDevice extends Component {
         message.success('Action Done Susscefully ');
     };
 
-    showModel = (device, func) => {
+    showModel = (device, func, refreshDevice) => {
         // console.log('device Detail', device)
         // alert('its working')
         // editDevice = func;
@@ -25,15 +25,16 @@ export default class FlagDevice extends Component {
             device: device,
             visible: true,
             func: func,
+            refreshDevice: refreshDevice
 
         });
 
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        this.state.func(this.state.device, this.refs.option.state.value)
-        this.props.go_back();
-        this.props.getDevice();
+        this.state.func(this.state.device.usr_device_id, this.refs.option.state.value);
+        this.setState({ visible: false });
+        this.state.refreshDevice(this.state.device.device_id)
     }
 
 
