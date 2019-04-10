@@ -184,7 +184,7 @@ export default class ListApk extends Component {
 
             return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
                 props.onExpand(props.record, e);
-            }}><Icon type="caret-right" /></a>
+            }}><Icon type="caret-down" /></a>
         }
     }
 
