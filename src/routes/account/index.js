@@ -618,54 +618,66 @@ class Account extends Component {
                         </Col>
                         <Col xs={24} sm={24} md={7} lg={7} xl={7}>
                             <div>
-                                <a href="javascript:void(0)"><Card style={{ borderRadius: 12 }}>
-                                    <div className="profile_table">
-                                        <Fragment>
-                                            <Row>
-                                                <div className="col-md-12 ac_card">
-                                                    <Card className="manage_ac" style={{ borderRadius: 12 }}>
-                                                        <div>
-                                                            <h2 style={{ textAlign: "center" }}> <a href="#"><Icon type="branches" /> </a> Manage Tokens</h2>
-                                                            <Divider className="mb-0" />
-                                                            <div className="token_txt">
-                                                                <p>Distribute tokens</p>
-                                                                <p>Set prices and delay for each token</p>
-                                                                <p>Set permissions for Tokens</p>
-                                                                <p>and more...</p>
-                                                            </div>
+                                <div class="contenar">
+                                    <a href="javascript:void(0)" >
+                                        <Card style={{ borderRadius: 12 }}>
+                                            <div className="profile_table image_1">
+                                                <Fragment>
+                                                    <Row>
+                                                        <div className="col-md-12 ac_card">
+                                                            <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                                                <div>
+                                                                    <h2 style={{ textAlign: "center" }}> <a href="#"><Icon type="branches" /> </a> Manage Tokens</h2>
+                                                                    <Divider className="mb-0" />
+                                                                    <div className="token_txt">
+                                                                        <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
+                                                                        <p className="more_txt">and more...</p>
+                                                                    </div>
+                                                                </div>
+                                                            </Card>
                                                         </div>
-                                                    </Card>
-                                                </div>
-                                            </Row>
-                                        </Fragment>
+                                                    </Row>
+                                                </Fragment>
+                                            </div>
+                                        </Card>
+                                    </a>
+                                    <div class="middle">
+                                        <div class="text">Coming Soon</div>
                                     </div>
-                                </Card>
-                                </a>
+                                </div>
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={7} lg={7} xl={7}>
                             <div>
-                                <a href="javascript:void(0)"><Card style={{ borderRadius: 12 }}>
-                                    <div className="profile_table">
-                                        <Fragment>
-                                            <Row>
-                                                <div className="col-md-12 ac_card">
-                                                    <Card className="manage_ac" style={{ borderRadius: 12 }}>
-                                                        <h2 style={{ textAlign: "center" }}><a href="#"> <Icon type="credit-card" /></a> Payment Gateway</h2>
-                                                        <Divider className="mb-0" />
-                                                        <div className="token_txt">
-                                                            <p>Add/edit payment gateway</p>
-                                                            <p>Set permissions</p>
-                                                            <p>Customize prices and packages</p>
-                                                            <p>and more...</p>
+                                <div class="contenar">
+                                    <a href="javascript:void(0)">
+                                        <Card style={{ borderRadius: 12 }}>
+                                            <div className="profile_table image_1">
+                                                <Fragment>
+                                                    <Row>
+                                                        <div className="col-md-12 ac_card">
+                                                            <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                                                <h2 style={{ textAlign: "center" }}><a href="#"> <Icon type="credit-card" /></a> Payment Gateway</h2>
+                                                                <Divider className="mb-0" />
+                                                                <div className="token_txt">
+                                                                    <p><span className="diamond_icon">&#9670;</span>Add/edit payment gateway</p>
+                                                                    <p><span className="diamond_icon">&#9670;</span>Set permissions</p>
+                                                                    <p><span className="diamond_icon">&#9670;</span>Customize prices and packages</p>
+                                                                    <p className="more_txt">and more...</p>
+                                                                </div>
+                                                            </Card>
                                                         </div>
-                                                    </Card>
-                                                </div>
-                                            </Row>
-                                        </Fragment>
+                                                    </Row>
+                                                </Fragment>
+                                            </div>
+                                        </Card>
+                                    </a>
+                                    <div class="middle">
+                                        <div class="text">Coming Soon</div>
                                     </div>
-                                </Card>
-                                </a>
+                                </div>
                             </div>
                         </Col>
                     </Row>

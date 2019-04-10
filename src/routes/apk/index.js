@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip } from "antd";
+import { Input, Icon, Modal, Select, Button, Tooltip, Popover } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 // import {Route, Switch} from "react-router-dom";
@@ -20,6 +20,11 @@ import ListApk from './components/ListApk';
 
 import { componentSearch } from "../utils/commonUtils";
 
+const question_txt = (
+    <div>
+        <p>Here you can see the number  of Dealers<br></br> who permission to  use this app. <br></br>Press <a style={{ fontSize: 18, verticalAlign: 'sub' }}><Icon type="caret-right" /> </a>Arrow to Add/Remove or view the List.</p>
+    </div>
+);
 var status = true;
 var coppyApks = [];
 
@@ -41,10 +46,10 @@ class Apk extends React.Component {
                     title: (
                         <span>
                             PERMISSION
-                        <Tooltip placement="top" title="Dummy Data">
+                        <Popover placement="top" content={question_txt}>
                                 <span style={{ float: "right", cursor: 'pointer' }}><Icon type="question" /></span>
-                            </Tooltip>
-                        </span>),
+                            </Popover>
+                         </span>),
                     dataIndex: 'permission',
                     key: 'permission',
                     className: 'row'

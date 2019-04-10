@@ -160,7 +160,8 @@ export default class ListApk extends Component {
 
                     </div>
                 ),
-                'permission': <span style={{fontSize:15, fontWeight:400}}>2</span>,
+                'permission': <span style={{fontSize:15, fontWeight:400}}>{app.permission_count}</span>,
+                "permissions": app.permissions,
                 'apk_status': (<Switch defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                     this.props.handleStatusChange(e, app.apk_id);
                 }} />),
