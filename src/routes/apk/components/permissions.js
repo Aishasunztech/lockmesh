@@ -232,6 +232,10 @@ class Permissions extends Component {
       this.setState({
         dealerList: this.props.dealerList
       })
+    } else if (this.props.dealerList.length !== nextProps.dealerList.length){
+      this.setState({
+        dealerList: nextProps.dealerList
+      })
     }
   }
 
@@ -372,7 +376,7 @@ class Permissions extends Component {
             'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
             'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
             'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
-            'action':(<Button>Reject</Button>)
+            'action':(<Button size="small" type="danger">Remove</Button>)
           })
         }
       });
