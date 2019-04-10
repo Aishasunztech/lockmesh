@@ -7,7 +7,8 @@ import {
 	LOADING,
 	POST_DROPDOWN,
 	GET_DROPDOWN,
-	GET_PAGINATION
+	GET_PAGINATION,
+	PERMSSION_SAVED
 } from "constants/ActionTypes";
 import { message } from 'antd';
 
@@ -110,6 +111,11 @@ export default (state = initialState, action) => {
 				isloading: false,
 				apk_list: [...state.apk_list],
 				options: state.options
+			}
+		}
+		case PERMSSION_SAVED: {
+			return{
+				...state
 			}
 		}
 		case GET_PAGINATION: {

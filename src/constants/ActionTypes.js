@@ -57,6 +57,8 @@ export const UNLINK_APK = 'UNLINK_APK';
 export const ADD_APK = 'ADD_APK';
 export const EDIT_APK = 'EDIT_APK';
 export const APK_STATUS_CHANGED = 'APK_STATUS_CHANGED';
+export const PERMSSION_SAVED = 'PERMSSION_SAVED';
+
 
 // Connect Device 
 export const GET_DEVICE_DETAILS = 'GET_DEVICE_DETAILS';

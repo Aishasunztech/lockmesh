@@ -185,6 +185,14 @@ const RestService = {
         console.log('rest ser')
         return axios.get(BASE_URL + "users/get_usr_acc_id/" + d, RestService.getHeader());
     },
+    savePermissions: (apkId, dealers) => {
+        return axios.post(BASE_URL + 'users/save_permissions', {
+                apkId: apkId,
+                dealers: dealers
+            }, 
+            RestService.getHeader()
+        );
+    },
     // getDealerInfo
     getDealer: (dealer_id) => {
 

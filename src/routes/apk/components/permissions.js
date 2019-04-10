@@ -3,6 +3,7 @@ import { Table, Button, Modal, Row, Col, Input } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
+import { savePermission } from "../../../appRedux/actions/Apk";
 import DealerList from "./DealerList";
 
 
@@ -12,7 +13,7 @@ class Permissions extends Component {
     super(props);
     this.state = {
       showDealersModal: false,
-
+      dealer_ids:[]
     }
     
     this.addDealerCols = [
@@ -271,34 +272,7 @@ class Permissions extends Component {
         sortDirections: ['ascend', 'descend'],
         className: '',
       },
-      
-      // {
-      //   title: 'CONNECTED DEVICES',
-      //   dataIndex: 'connected_devices',
-      //   key: 'connected_devices',
-      //   // sorter: (a, b) => {
-      //   //     console.log(a);
-      //   //     // console.log(b);
-      //   //     return a.connected_devices.length;
-      //   // },
-      //   sorter: (a, b) => { return a.connected_devices.localeCompare(b.connected_devices) },
-
-      //   align: 'center',
-      //   sortDirections: ['ascend', 'descend'],
-      //   className: '',
-      // },
-      // {
-      //   title: 'TOKENS',
-      //   dataIndex: 'dealer_token',
-      //   key: 'dealer_token',
-      //   // sorter: (a, b) => {
-      //   //     console.log(a);
-      //   //     // console.log(b);
-      //   //     return a.dealer_token.length;
-      //   // },
-      //   sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
-
-      // }
+     
     ]
    
   }
@@ -312,9 +286,25 @@ class Permissions extends Component {
     })
   }
   savePermission = () => {
+    // console.log("dealer ids", this.state.dealer_ids);
+    if(this.state.dealer_ids.length){
+      // console.log("saved successfully", this.props.record.apk_id);
+      this.props.savePermission(this.props.record.apk_id,JSON.stringify(this.state.dealer_ids));
 
+    }
   }
 
+  onSelectChange = (selectedRowKeys,selectedRows) => {
+    let dealer_ids = []
+    selectedRows.forEach(row => {
+      // console.log("selected row", row)
+      dealer_ids.push(row.dealer_id);
+    });
+    this.setState({
+      dealer_ids: dealer_ids
+    });
+    // this.setState({ selectedRowKeys });
+  }
   renderDealer(list) {
     let data = [];
     list.map((dealer) => {
@@ -375,7 +365,7 @@ class Permissions extends Component {
           <DealerList
             columns = {this.addDealerCols}
             dealers={this.renderDealer(this.props.dealerList)}
-
+            onSelectChange = {this.onSelectChange}
           />
         </Modal>
       </Fragment>
@@ -386,15 +376,17 @@ class Permissions extends Component {
 // export default Apk;
 const mapStateToProps = ({ dealers }, props) => {
   console.log("dealer", dealers);
+  console.log("permission", props.record);
   return {
-    dealerList: dealers.dealers
+    dealerList: dealers.dealers,
+    record: props.record
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getAllDealers: getAllDealers,
-    //  getDevicesList: getDevicesList
+    savePermission: savePermission
   }, dispatch);
 }
 
