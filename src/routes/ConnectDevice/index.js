@@ -121,7 +121,16 @@ class ConnectDevice extends Component {
 
     }
     onBackHandler = () => {
-        this.props.changePage("main_menu");
+        // console.log("pageName", this.state.pageName);
+
+        if(this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password"){
+            this.props.changePage("Manage_password");
+            
+        } else if (this.props.pageName === "Manage_password"){
+            this.props.changePage("main_menu");
+        } else {
+            this.props.changePage("main_menu");
+        }
     }
     componentDidMount() {
         this.props.startLoading();
@@ -209,15 +218,15 @@ class ConnectDevice extends Component {
                 />
             );
         } else if (this.props.pageName === "guest_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<Password pwdType={this.state.pageName} />);
+            return (<Password pwdType={this.props.pageName} />);
         } else if (this.props.pageName === "encrypted_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<Password pwdType={this.state.pageName} />);
+            return (<Password pwdType={this.props.pageName} />);
         } else if (this.props.pageName === "duress_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<Password pwdType={this.state.pageName} />);
+            return (<Password pwdType={this.props.pageName} />);
         } else if (this.props.pageName === "admin_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<Password pwdType={this.state.pageName} />);
+            return (<Password pwdType={this.props.pageName} />);
         } else if (this.props.pageName === "settings" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<Password pwdType={this.state.pageName} />);
+            return (<Password pwdType={this.props.pageName} />);
         } else if (this.props.pageName === "not_available") {
             return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
         } else if (this.props.pageName === "Manage_password") {
