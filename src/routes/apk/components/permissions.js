@@ -13,9 +13,9 @@ class Permissions extends Component {
     super(props);
     this.state = {
       showDealersModal: false,
-      dealer_ids:[]
+      dealer_ids: []
     }
-    
+
     this.addDealerCols = [
       {
         title: (
@@ -26,7 +26,11 @@ class Permissions extends Component {
             className="search_heading"
             autoComplete="new-password"
             placeholder="Device ID"
-            onKeyUp={this.handleSearch}
+            onKeyUp={
+              (e) => {
+                  this.handleSearch(e)
+              }
+            }
 
           />
         ),
@@ -38,12 +42,6 @@ class Permissions extends Component {
             dataIndex: 'dealer_id',
             key: 'dealer_id',
             sortDirections: ['ascend', 'descend'],
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.dealer_id.length;
-            // },
-
             sorter: (a, b) => a.dealer_id - b.dealer_id,
             align: 'center',
             sortDirections: ['ascend', 'descend'],
@@ -60,7 +58,11 @@ class Permissions extends Component {
             className="search_heading"
             autoComplete="new-password"
             placeholder="Dealer Pin"
-            onKeyUp={this.handleSearch}
+            onKeyUp={
+              (e) => {
+                  this.handleSearch(e)
+              }
+            }
 
           />
         ),
@@ -71,11 +73,7 @@ class Permissions extends Component {
             title: 'DEALER PIN',
             dataIndex: 'link_code',
             key: 'link_code',
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.link_code.length;
-            // },
+            
             sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
 
             align: 'center',
@@ -214,7 +212,7 @@ class Permissions extends Component {
         ]
       }
     ]
-    
+
     this.listDealerCols = [
       {
         title: 'DEALER ID',
@@ -272,9 +270,9 @@ class Permissions extends Component {
         sortDirections: ['ascend', 'descend'],
         className: '',
       },
-     
+
     ]
-   
+
   }
 
   componentDidMount() {
@@ -287,7 +285,7 @@ class Permissions extends Component {
   }
   saveAllDealers = () => {
     let dealer_ids = []
-    this.props.dealerList.map((dealer)=>{
+    this.props.dealerList.map((dealer) => {
       dealer_ids.push(dealer.dealer_id);
     });
 
@@ -298,19 +296,19 @@ class Permissions extends Component {
   }
   savePermission = () => {
     // console.log("dealer ids", this.state.dealer_ids);
-    if(this.state.dealer_ids.length){
+    if (this.state.dealer_ids.length) {
       // console.log("saved successfully", this.props.record.apk_id);
-      this.props.savePermission(this.props.record.apk_id,JSON.stringify(this.state.dealer_ids));
+      this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.dealer_ids));
 
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    if(this.props.record.apk_id!==nextProps.record.apk_id){
+  componentWillReceiveProps(nextProps) {
+    if (this.props.record.apk_id !== nextProps.record.apk_id) {
       this.props.getAllDealers()
     }
   }
-  onSelectChange = (selectedRowKeys,selectedRows) => {
+  onSelectChange = (selectedRowKeys, selectedRows) => {
     let dealer_ids = []
     selectedRows.forEach(row => {
       // console.log("selected row", row)
@@ -321,14 +319,58 @@ class Permissions extends Component {
     });
     // this.setState({ selectedRowKeys });
   }
-  renderDealer(list, permitted=false) {
+
+  searchField = (originalData, fieldName, value) => {
+    let demoData = [];
+
+    if (value.length) {
+      originalData.forEach((data) => {
+        if (data[fieldName] !== undefined) {
+          if ((typeof data[fieldName]) === 'string') {
+
+            if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
+              demoData.push(data);
+            }
+          } else if (data[fieldName] != null) {
+            if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
+              demoData.push(data);
+            }
+          }
+          // else {
+          //     // demoDevices.push(device);
+          // }
+        } else {
+          demoData.push(data);
+        }
+      });
+
+      return demoData;
+    } else {
+      return originalData;
+    }
+  }
+
+  handleSearch = (e, global=false) => {
+
+    let fieldName = e.target.name;
+    let fieldValue = e.target.value;
+    if(global){
+
+    } else {
+
+      let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
+      console.log("searchedData", searchedData);
+    }
+    //this.setState({
+    //   sim_ids: searchedData
+    // });
+  }
+  renderDealer(list, permitted = false) {
     let data = [];
-    if(permitted){
+    if (permitted) {
       list.map((dealer) => {
-        console.log("permitted", this.props.record.permissions)
         let is_included = this.props.record.permissions.includes(dealer.dealer_id);
-        console.log("is_inclouded", is_included)
-        if(is_included){
+        if (is_included) {
           data.push({
             'row_key': dealer.dealer_id,
             'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
@@ -339,13 +381,13 @@ class Permissions extends Component {
             'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
             'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
             'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
-    
+
           })
         }
       });
     } else {
       list.map((dealer) => {
-  
+
         data.push({
           'row_key': dealer.dealer_id,
           'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
@@ -356,7 +398,7 @@ class Permissions extends Component {
           'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
           'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
           'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
-  
+
         })
       });
 
@@ -374,11 +416,19 @@ class Permissions extends Component {
             <div className="gutter-box"><Button size="small" type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" type="primary" onClick={() => { this.saveAllDealers()}}>Select All</Button></div>
+            <div className="gutter-box"><Button size="small" type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
           </Col>
           <Col className="gutter-row" span={4}>
             <div className="gutter-box search_heading">
-              <Input.Search placeholder="Dealer Email" style={{ marginBottom: 0 }} />
+              <Input.Search 
+                placeholder="Dealer Email" 
+                style={{ marginBottom: 0 }} 
+                onKeyUp={
+                  (e) => {
+                      this.handleSearch(e)
+                  }
+                }
+              />
             </div>
           </Col>
         </Row>
@@ -390,7 +440,7 @@ class Permissions extends Component {
         </Row>
         <Modal
           // size={}
-          width = '700'
+          width='700'
           title="Dealers Permission"
           visible={this.state.showDealersModal}
           onOk={() => {
@@ -402,9 +452,9 @@ class Permissions extends Component {
           }}
         >
           <DealerList
-            columns = {this.addDealerCols}
+            columns={this.addDealerCols}
             dealers={this.renderDealer(this.props.dealerList)}
-            onSelectChange = {this.onSelectChange}
+            onSelectChange={this.onSelectChange}
           />
         </Modal>
       </Fragment>
