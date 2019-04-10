@@ -359,7 +359,16 @@ class Permissions extends Component {
     }
   }
   rejectPemission = (dealer_id) => {
-    console.log("console", dealer_id);
+    let dealers = this.props.record.permissions;
+    // console.log("permissions",dealers);
+    var index = dealers.indexOf(dealer_id);
+    console.log("array index", index);
+    if (index > -1) {
+       dealers.splice(index, 1);
+    }
+    // console.log("permissions",dealers);
+    this.props.savePermission(this.props.record.apk_id,JSON.stringify(dealers));
+
   }
 
   renderDealer(list, permitted = false) {
