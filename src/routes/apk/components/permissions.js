@@ -14,6 +14,7 @@ class Permissions extends Component {
       showDealersModal: false,
 
     }
+    
     this.addDealerCols = [
       {
         title: (
@@ -212,6 +213,93 @@ class Permissions extends Component {
         ]
       }
     ]
+    
+    this.listDealerCols = [
+      {
+        title: 'DEALER ID',
+        dataIndex: 'dealer_id',
+        key: 'dealer_id',
+        sortDirections: ['ascend', 'descend'],
+
+        sorter: (a, b) => a.dealer_id - b.dealer_id,
+        align: 'center',
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      {
+        title: 'DEALER NAME',
+        dataIndex: 'dealer_name',
+        key: 'dealer_name',
+        // sorter: (a, b) => {
+        //     console.log(a);
+        //     // console.log(b);
+        //     return a.dealer_name.length;
+        // },
+        sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+
+        align: 'center',
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      {
+        title: 'DEALER EMAIL',
+        dataIndex: 'dealer_email',
+        key: 'dealer_email',
+        // sorter: (a, b) => {
+        //     console.log(a);
+        //     // console.log(b);
+        //     return a.dealer_email.length;
+        // },
+        sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+
+        align: 'center',
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      {
+        title: 'DEALER PIN',
+        dataIndex: 'link_code',
+        key: 'link_code',
+        // sorter: (a, b) => {
+        //     console.log(a);
+        //     // console.log(b);
+        //     return a.link_code.length;
+        // },
+        sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+
+        align: 'center',
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      // {
+      //   title: 'CONNECTED DEVICES',
+      //   dataIndex: 'connected_devices',
+      //   key: 'connected_devices',
+      //   // sorter: (a, b) => {
+      //   //     console.log(a);
+      //   //     // console.log(b);
+      //   //     return a.connected_devices.length;
+      //   // },
+      //   sorter: (a, b) => { return a.connected_devices.localeCompare(b.connected_devices) },
+
+      //   align: 'center',
+      //   sortDirections: ['ascend', 'descend'],
+      //   className: '',
+      // },
+      // {
+      //   title: 'TOKENS',
+      //   dataIndex: 'dealer_token',
+      //   key: 'dealer_token',
+      //   // sorter: (a, b) => {
+      //   //     console.log(a);
+      //   //     // console.log(b);
+      //   //     return a.dealer_token.length;
+      //   // },
+      //   sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
+
+      // }
+    ]
+   
   }
 
   componentDidMount() {
@@ -265,12 +353,14 @@ class Permissions extends Component {
           </Col>
         </Row>
         <Row gutter={16}>
-          {/* <Table
-            columns={columns}
-            dataSource={data} 
-          />*/}
+          <Table
+            columns={this.listDealerCols}
+            // dataSource={data} 
+          />
         </Row>
         <Modal
+          // size={}
+          width = '700'
           title="Dealers Permission"
           visible={this.state.showDealersModal}
           onOk={() => {
@@ -284,6 +374,7 @@ class Permissions extends Component {
           <DealerList
             columns = {this.addDealerCols}
             dealers={this.renderDealer(this.props.dealerList)}
+
           />
         </Modal>
       </Fragment>
