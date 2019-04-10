@@ -479,7 +479,7 @@ export default (state = initialState, action) => {
                 showConfirm1(action.payload.device, "Do You really Want to Wipe the device")
             }
             else {
-                message.error("Password Did not Match Please Try again.");
+                message.error("Password Did not Match. Please Try again.");
             }
 
         }

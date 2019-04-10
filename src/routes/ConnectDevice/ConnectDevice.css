@@ -329,3 +329,6 @@ th.device_info {
 .flag_device .ant-modal-body {
     padding: 8px 16px;
 }
+.ant-modal-confirm .ant-modal-body {
+    padding: 24px 24px 16px; 
+}
