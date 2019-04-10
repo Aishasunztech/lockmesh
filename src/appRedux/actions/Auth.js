@@ -55,7 +55,7 @@ export const loginUser = (user) => {
 };
 
 export const checkComponent = (componentUri) => {
-  console.log("KSDJ")
+  // console.log("KSDJ")
   return (dispatch) => {
     // alert("hello");
     RestService.checkComponent(componentUri).then((resp) => {

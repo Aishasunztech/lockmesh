@@ -49,14 +49,14 @@ export default class ListApk extends Component {
     }
 
     handleOk = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
     }
 
     handleCancel = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
@@ -173,7 +173,7 @@ export default class ListApk extends Component {
     }
 
     onSelectChange = (selectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        // console.log('selectedRowKeys changed: ', selectedRowKeys);
         // this.setState({ selectedRowKeys });
     }
     customExpandIcon(props) {
@@ -203,7 +203,7 @@ export default class ListApk extends Component {
                     // collapsedRowIcon={<Icon type="down" />}
                     expandIcon={(props) => this.customExpandIcon(props)}
                     expandedRowRender={(record) => {
-                        console.log("table row", record);
+                        // console.log("table row", record);
                         return (
                             <Permissions record={record} />
                         );

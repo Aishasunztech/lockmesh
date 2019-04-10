@@ -110,7 +110,7 @@ class AppList extends Component {
     }
 
     renderSingleApp = (app) => {
-        console.log("this app", app);
+        // console.log("this app", app);
         let app_id = (app.apk_id !== undefined) ? app.apk_id : app.app_id;
         let guest = (app.guest !== undefined) ? app.guest : false;
         let encrypted = (app.encrypted !== undefined) ? app.encrypted : false;

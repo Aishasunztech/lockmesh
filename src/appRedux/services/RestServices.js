@@ -182,7 +182,7 @@ const RestService = {
     },
 
     getUserAccountId: (d) => {
-        console.log('rest ser')
+        // console.log('rest ser')
         return axios.get(BASE_URL + "users/get_usr_acc_id/" + d, RestService.getHeader());
     },
     savePermissions: (apkId, dealers) => {
@@ -306,7 +306,7 @@ const RestService = {
     },
 
     rejectDevice: (device) => {
-        console.log(device);
+        // console.log(device);
         return axios.put(BASE_URL + 'users/delete/' + device.device_id, device, RestService.getHeader());
     },
 

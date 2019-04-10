@@ -27,7 +27,7 @@ export function getDefaultApps() {
     return (dispatch) => {
         RestService.getDefaultApps().then((response) => {
             if(RestService.checkAuth(response.data)) {
-                console.log("hello", response.data);
+                // console.log("hello", response.data);
                 
             } else {
                 dispatch({

@@ -22,9 +22,7 @@ export default class AddDevice extends Component {
 
     showModal = (device = null, handleSubmit, preActive = false) => {
 
-        console.log('device Detail', device)
-
-        
+        // console.log('device Detail', device)
 
         if (preActive !== undefined && preActive === true) {
 

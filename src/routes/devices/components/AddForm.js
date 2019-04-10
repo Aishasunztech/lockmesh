@@ -20,7 +20,7 @@ class AddDevice extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('form', values);
+                // console.log('form', values);
                 this.props.AddDeviceHandler(values);
                 this.props.hideModal();
                 this.handleReset();
@@ -38,7 +38,7 @@ class AddDevice extends Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.pgp_emails !== nextProps.pgp_emails) {
             // nextProps.getSimIDs();
-            console.log('next', nextProps.pgp_emails)
+            // console.log('next', nextProps.pgp_emails)
         }
     }
 
@@ -61,7 +61,7 @@ class AddDevice extends Component {
     }
 
     render() {
-          console.log('props of coming', this.props.device);
+        //   console.log('props of coming', this.props.device);
        //  alert(this.props.device.device_id);
         const { visible, loading } = this.state;
 
@@ -401,7 +401,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details }) => {
-     console.log("sdfsaf", device_details.profiles,);
+    //  console.log("sdfsaf", device_details.profiles,);
     return {
         routing: routing,
         sim_ids: devices.sim_ids,
