@@ -208,7 +208,7 @@ class Permissions extends Component {
           />*/}
         </Row>
         <Modal
-          width='605px'
+          width='610px'
           className="permiss_tabl"
           title="Dealers Permission"
           visible={this.state.showDealersModal}
