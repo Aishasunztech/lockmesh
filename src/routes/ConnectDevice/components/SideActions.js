@@ -17,6 +17,7 @@ import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
+import WipeDevice from '../../ConnectDevice/components/wipeDevice';
 const confirm = Modal.confirm;
 
 class SideActions extends Component {
@@ -133,18 +134,18 @@ class SideActions extends Component {
 
     handleFlag(flagged) {
         if (flagged == 'Unflag') {
-            showConfirm(this.props.device.usr_device_id, this.props.unflagged, this, "Do you really want to unflag the device ")
+            showConfirm(this.props.device, this.props.unflagged, this, "Do you really want to unflag the device ", 'flagged')
         }
         else {
-            this.refs.flag_device.showModel(this.props.device.usr_device_id, this.props.flagged)
+            this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
         }
     }
     render() {
+        // console.log(this.props.authUser);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';
-        const disabledButton = (device_status === "Suspend") ? 'disabled' : '';
-        const MsgArg = { key: 'updatable', message: 'Notification Title', description: 'I will never close automatically. I will be close automatically. I will never close automatically.', duration: 0 }
+        // console.log(flagged);
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
@@ -195,11 +196,11 @@ class SideActions extends Component {
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" /> Wipe Device</Button>
+                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" /> Wipe Device</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button style={{ width: "100%", marginBottom: 15, backgroundColor: '#1b1b1b', color: '#fff' }} onClick={() => this.handleFlag(flagged)} ><Icon type="flag" />{flagged}</Button>
-                                <Button disabled={this.props.device.unlink_status ? true : this.state.disabled} onClick={() => showConfirm(this.props.device.usr_device_id, this.props.unlinkDevice, this, "Do you really want to unlink the device ")} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
+                                <Button onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
                                 <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
 
                             </Col>
@@ -250,10 +251,16 @@ class SideActions extends Component {
                     suspendDevice={this.props.suspendDevice}
                     go_back={this.props.history.goBack}
                     getDevice={this.props.getDevicesList}
-
                 />
 
                 <EditDevice ref='edit_device' />
+                <WipeDevice ref='wipe_device'
+                    device={this.props.device}
+                    authUser={this.props.authUser}
+                    checkPass={this.props.checkPass}
+
+
+                />
                 <FlagDevice ref='flag_device'
                     go_back={this.props.history.goBack}
                     getDevice={this.props.getDevicesList}
@@ -265,7 +272,7 @@ class SideActions extends Component {
     }
     activateDevice
     handleSuspendDevice = (device, _this) => {
-        this.refs.suspend.handleSuspendDevice(device);
+        this.refs.suspend.handleSuspendDevice(device, this.props.refreshDevice);
 
     }
 
@@ -284,9 +291,10 @@ function mapDispatchToProps(dispatch) {
         transferDeviceProfile: transferDeviceProfile
     }, dispatch);
 }
-var mapStateToProps = ({ device_details }) => {
-
+var mapStateToProps = ({ device_details, auth }) => {
+    const { authUser } = auth;
     return {
+        authUser,
         historyModal: device_details.historyModal,
         saveProfileModal: device_details.saveProfileModal,
         historyType: device_details.historyType,
@@ -309,18 +317,25 @@ var mapStateToProps = ({ device_details }) => {
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(SideActions);
-function showConfirm(id, action, _this, msg) {
+function showConfirm(device, action, _this, msg, type) {
     confirm({
-        title: msg + id,
+        title: msg + device.device_id,
         onOk() {
             _this.setState({ disabled: true })
             // console.log('go back func', _this.props);
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
-                action(id);
-
-                _this.props.history.goBack();
-                _this.props.getDevicesList();
+                if (type === 'wipe') {
+                    action(device)
+                } else {
+                    action(device.usr_device_id);
+                }
+                if (type === 'unlink') {
+                    _this.props.history.goBack();
+                    _this.props.getDevicesList();
+                } else {
+                    _this.props.refreshDevice(device.device_id);
+                }
                 //  message.success('Action Done Susscefully ');
 
             }).catch(() => console.log('Oops errors!'));
