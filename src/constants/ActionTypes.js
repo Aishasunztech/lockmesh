@@ -76,6 +76,7 @@ export const GET_USER_ACC_ID = 'GET_USER_ACC_ID';
 export const FLAG_DEVICE = 'FLAG_DEVICE';
 export const UNFLAG_DEVICE = 'UNFLAG_DEVICE';
 export const WIPE_DEVICE = 'WIPE_DEVICE';
+export const CHECKPASS = 'CHECKPASS';
 
 
 // export const HANDLE_CHECK_APP = 'HANDLE_CHECK_APP';

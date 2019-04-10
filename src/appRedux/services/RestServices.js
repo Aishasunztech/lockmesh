@@ -394,13 +394,9 @@ const RestService = {
         // });
     },
 
-    // Dealer and sdealers items apis
-    checkPass: (currentPass) => {
-        // this.setHeaders(this.sessionLogin('token'));
-        // // tslint:disable-next-line:max-line-length
-        // this.response = this.http.post(this.baseUrl + '/users/check_pass/' , {password:currentPass},this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
+    // Check pass 
+    checkPass: (user) => {
+        return axios.post(BASE_URL + 'users/check_pass', { user }, RestService.getHeader());
     },
 
     invalidPage: () => {

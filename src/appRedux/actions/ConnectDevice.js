@@ -24,9 +24,12 @@ import {
     GET_USER_ACC_ID,
     FLAG_DEVICE,
     UNFLAG_DEVICE,
-    WIPE_DEVICE
+    WIPE_DEVICE,
+    CHECKPASS
 } from "constants/ActionTypes"
-
+import {
+    message
+} from 'antd';
 import RestService from '../services/RestServices';
 import { GET_POLICIES } from "../../constants/ActionTypes";
 
@@ -203,34 +206,23 @@ export function suspendDevice2(device) {
 
 }
 export function wipe(device) {
+    RestService.wipe(device.usr_device_id).then((response) => {
 
-    return (dispatch) => {
-        //  console.log("suspendDevice action");
-
-        RestService.wipe(device.usr_device_id).then((response) => {
-
-
-            if (RestService.checkAuth(response.data)) {
-                // console.log('reslut', response);
-                // console.log('conect device', device);
-                // console.log('done status');
-                dispatch({
-                    type: WIPE_DEVICE,
-                    response: response.data,
-                    payload: {
-                        device: device,
-                        msg: response.data.msg,
-                    }
-                });
-
-
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                });
-            }
-        });
-    }
+        if (RestService.checkAuth(response.data)) {
+            // console.log('reslut', response);
+            // console.log('conect device', device);
+            // console.log('done status');
+            // dispatch({
+            //     type: WIPE_DEVICE,
+            //     response: response.data,
+            //     payload: {
+            //         device: device,
+            //         msg: response.data.msg,
+            //     }
+            // });
+            message.success(response.data.msg);
+        }
+    });
 }
 
 export function unlinkDevice(deviceId) {
@@ -592,6 +584,28 @@ export const flagged = (device_id, data) => {
                     payload: {
                         device: response.data.data,
                         msg: response.data.msg,
+                    }
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export const checkPass = (user) => {
+    console.log(user);
+    return (dispatch) => {
+        RestService.checkPass(user).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: CHECKPASS,
+                    response: response.data,
+                    payload: {
+                        device: user.device,
+                        PasswordMatch: response.data,
                     }
                 })
             } else {

@@ -27,7 +27,8 @@ import {
     getAccIdFromDvcId,
     unflagged,
     flagged,
-    wipe
+    wipe,
+    checkPass
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -124,10 +125,10 @@ class ConnectDevice extends Component {
     onBackHandler = () => {
         // console.log("pageName", this.state.pageName);
 
-        if(this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password"){
+        if (this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password") {
             this.props.changePage("Manage_password");
-            
-        } else if (this.props.pageName === "Manage_password"){
+
+        } else if (this.props.pageName === "Manage_password") {
             this.props.changePage("main_menu");
         } else {
             this.props.changePage("main_menu");
@@ -359,6 +360,7 @@ class ConnectDevice extends Component {
                             flagged={this.props.flagged}
                             unflagged={this.props.unflagged}
                             wipe={this.props.wipe}
+                            checkPass={this.props.checkPass}
                             history={this.props.history}
                             getDevicesList={this.props.getDevicesList}
                             refreshDevice={this.refreshDevice}
@@ -400,6 +402,7 @@ function mapDispatchToProps(dispatch) {
         flagged: flagged,
         unflagged: unflagged,
         wipe: wipe,
+        checkPass: checkPass,
     }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {

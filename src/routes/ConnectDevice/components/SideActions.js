@@ -17,6 +17,7 @@ import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
+import WipeDevice from '../../ConnectDevice/components/wipeDevice';
 const confirm = Modal.confirm;
 
 class SideActions extends Component {
@@ -140,7 +141,7 @@ class SideActions extends Component {
         }
     }
     render() {
-        // console.log(this.props.device.flagged);
+        console.log(this.props.authUser);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';
@@ -195,7 +196,7 @@ class SideActions extends Component {
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} onClick={() => showConfirm(this.props.device, this.props.wipe, this, "Do you really want to Wipe the device ", 'wipe')}><Icon type="lock" /> Wipe Device</Button>
+                                <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" /> Wipe Device</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button style={{ width: "100%", marginBottom: 15, backgroundColor: '#1b1b1b', color: '#fff' }} onClick={() => this.handleFlag(flagged)} ><Icon type="flag" />{flagged}</Button>
@@ -253,6 +254,13 @@ class SideActions extends Component {
                 />
 
                 <EditDevice ref='edit_device' />
+                <WipeDevice ref='wipe_device'
+                    device={this.props.device}
+                    authUser={this.props.authUser}
+                    checkPass={this.props.checkPass}
+
+
+                />
                 <FlagDevice ref='flag_device'
                     go_back={this.props.history.goBack}
                     getDevice={this.props.getDevicesList}
@@ -283,9 +291,10 @@ function mapDispatchToProps(dispatch) {
         transferDeviceProfile: transferDeviceProfile
     }, dispatch);
 }
-var mapStateToProps = ({ device_details }) => {
-
+var mapStateToProps = ({ device_details, auth }) => {
+    const { authUser } = auth;
     return {
+        authUser,
         historyModal: device_details.historyModal,
         saveProfileModal: device_details.saveProfileModal,
         historyType: device_details.historyType,
