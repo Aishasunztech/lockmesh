@@ -39,8 +39,8 @@ export default (state = initialState, action) => {
             }
 
         case DEALERS_LIST:
-            // console.log('DEALERS_LIST');
-
+            console.log('DEALERS_LIST');
+            console.log(action.payload);
             return {
                 ...state,
                 isloading: false,
