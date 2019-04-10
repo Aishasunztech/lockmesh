@@ -3,9 +3,10 @@ import {
     INVALID_TOKEN,
     ADD_APK,
     UNLINK_APK,
-    // EDIT_APK,
+    EDIT_APK,
     LOADING,
-} from "constants/ActionTypes"
+    PERMSSION_SAVED
+} from "../../constants/ActionTypes"
 // import AuthFailed from './Auth';
 
 import RestService from '../services/RestServices';
@@ -21,7 +22,7 @@ export function getApkList() {
                 // console.log("apk_list form server");
                 //  console.log(response.data);
                 if (RestService.checkAuth(response.data)) {
-                    if(response.data.status){
+                    if (response.data.status) {
                         dispatch({
                             type: APK_LIST,
                             payload: response.data.list
@@ -132,7 +133,7 @@ export function editApk(formData) {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
-                    type: "EDIT_APK",
+                    type: EDIT_APK,
                     response: response.data,
                     payload: formData
                 });
@@ -145,4 +146,23 @@ export function editApk(formData) {
             }
         });
     };
+}
+
+export function savePermission(apk_id, dealers) {
+    return (dispatch) => {
+        RestService.savePermissions(apk_id, dealers).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: PERMSSION_SAVED,
+                    payload: response.data.msg
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
 }

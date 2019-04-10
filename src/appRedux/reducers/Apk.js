@@ -7,7 +7,8 @@ import {
 	LOADING,
 	POST_DROPDOWN,
 	GET_DROPDOWN,
-	GET_PAGINATION
+	GET_PAGINATION,
+	PERMSSION_SAVED
 } from "constants/ActionTypes";
 import { message } from 'antd';
 
@@ -38,10 +39,10 @@ export default (state = initialState, action) => {
 				apk_list: action.payload,
 				options: state.options
 			}
-		
+
 
 		case UNLINK_APK:
-			
+
 			// console.log(UNLINK_APK);
 			state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
 
@@ -54,7 +55,7 @@ export default (state = initialState, action) => {
 
 		case ADD_APK:
 			// console.log(ADD_APK);
-			
+
 			if (action.response.status) {
 				message.success(action.response.msg)
 			}
@@ -69,7 +70,7 @@ export default (state = initialState, action) => {
 		case EDIT_APK:
 			// console.log('action edit id');
 			// console.log(action.payload);
-            // console.log(EDIT_APK);			
+			// console.log(EDIT_APK);			
 			if (action.response.status) {
 				let objIndex1 = state.apk_list.findIndex((obj => obj.apk_id === action.payload.apk_id));
 				if (objIndex1 !== undefined) {
@@ -103,13 +104,19 @@ export default (state = initialState, action) => {
 				// console.log('apk_status_on',state.apk_list[objIndex].apk_status);
 				state.apk_list[objIndex].apk_status = "Off";
 			}
-	
+
 			// console.log('new_apk_list',state.apk_list)
 			return {
 				...state,
 				isloading: false,
 				apk_list: [...state.apk_list],
 				options: state.options
+			}
+		}
+		case PERMSSION_SAVED: {
+			message.success(action.payload);
+			return {
+				...state
 			}
 		}
 		case GET_PAGINATION: {
