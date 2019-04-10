@@ -285,6 +285,17 @@ class Permissions extends Component {
       showDealersModal: visible
     })
   }
+  saveAllDealers = () => {
+    let dealer_ids = []
+    this.props.dealerList.map((dealer)=>{
+      dealer_ids.push(dealer.dealer_id);
+    });
+
+    this.props.savePermission(this.props.record.apk_id, JSON.stringify(dealer_ids));
+    // this.setState({
+    //   dealer_ids: dealer_ids
+    // });
+  }
   savePermission = () => {
     // console.log("dealer ids", this.state.dealer_ids);
     if(this.state.dealer_ids.length){
@@ -294,6 +305,11 @@ class Permissions extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps){
+    if(this.props.record.apk_id!==nextProps.record.apk_id){
+      this.props.getAllDealers()
+    }
+  }
   onSelectChange = (selectedRowKeys,selectedRows) => {
     let dealer_ids = []
     selectedRows.forEach(row => {
@@ -305,23 +321,46 @@ class Permissions extends Component {
     });
     // this.setState({ selectedRowKeys });
   }
-  renderDealer(list) {
+  renderDealer(list, permitted=false) {
     let data = [];
-    list.map((dealer) => {
+    if(permitted){
+      list.map((dealer) => {
+        console.log("permitted", this.props.record.permissions)
+        let is_included = this.props.record.permissions.includes(dealer.dealer_id);
+        console.log("is_inclouded", is_included)
+        if(is_included){
+          data.push({
+            'row_key': dealer.dealer_id,
+            'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
+            'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
+            'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
+            'link_code': dealer.link_code ? dealer.link_code : 'N/A',
+            'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+            'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+            'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+            'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
+    
+          })
+        }
+      });
+    } else {
+      list.map((dealer) => {
+  
+        data.push({
+          'row_key': dealer.dealer_id,
+          'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
+          'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
+          'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
+          'link_code': dealer.link_code ? dealer.link_code : 'N/A',
+          'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+          'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+          'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+          'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
+  
+        })
+      });
 
-      data.push({
-        'row_key': dealer.dealer_id,
-        'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-        'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-        'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-        'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-        'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-        'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-        'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-        'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
-
-      })
-    });
+    }
     return (data);
   }
   render() {
@@ -335,7 +374,7 @@ class Permissions extends Component {
             <div className="gutter-box"><Button size="small" type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" type="primary">Select All</Button></div>
+            <div className="gutter-box"><Button size="small" type="primary" onClick={() => { this.saveAllDealers()}}>Select All</Button></div>
           </Col>
           <Col className="gutter-row" span={4}>
             <div className="gutter-box search_heading">
@@ -346,7 +385,7 @@ class Permissions extends Component {
         <Row gutter={16}>
           <Table
             columns={this.listDealerCols}
-            // dataSource={data} 
+            dataSource={this.renderDealer(this.props.dealerList, true)}
           />
         </Row>
         <Modal
