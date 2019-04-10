@@ -250,11 +250,11 @@
 }
 
 .text {
-    background-color: #1d1d1d7d;
+    background-color: #00000096;
     color: #fff;
-    font-size: 22px;
+    font-size: 28px;
     font-weight: 600;
     border-radius: 12px;
     white-space: nowrap;
-    line-height: 175px;
+    line-height: 193px;
 }

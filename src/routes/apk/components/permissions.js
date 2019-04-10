@@ -449,6 +449,7 @@ class Permissions extends Component {
           />
         </Row>
         <Modal
+          width='610px'
           className="permiss_tabl"
           title="Dealers Permission"
           visible={this.state.showDealersModal}
@@ -467,7 +468,7 @@ class Permissions extends Component {
             // selectedDealers={[]}
           />
         </Modal>
-      </Fragment>
+      </Fragment >
     )
   }
 }

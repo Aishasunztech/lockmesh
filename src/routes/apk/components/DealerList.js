@@ -20,7 +20,7 @@ const DealerList =(props) =>{
             />
         </Fragment>
     )
-    
+
 }
 
 export default DealerList;

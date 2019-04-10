@@ -318,10 +318,10 @@ class ConnectDevice extends Component {
 
                                 <div className="status_bar">
                                     <div className="col-md-6 active_st">
-                                        <h3>{finalStatus}</h3>
+                                        <h5>{finalStatus}</h5>
                                     </div>
                                     <div className="col-md-6 offline_st">
-                                        <h3>{onlineStatus}</h3>
+                                        <h5>{onlineStatus}</h5>
                                     </div>
                                 </div>
                                 {this.renderScreen()}

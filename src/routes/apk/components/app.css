@@ -1,4 +1,5 @@
-.and_icon , .policy_icon {
+.and_icon,
+.policy_icon {
     font-size: 40px;
     border: 4px solid #038fdd;
     border-radius: 50%;
@@ -6,15 +7,15 @@
     background: #036;
     color: #9dceff;
 }
+
 .manage_sec .ant-card-body {
     height: 229px;
 }
-.permiss_tabl .ant-table {
-    border: 1px solid #e8e8e8;
-}
-.permiss_tabl .ant-table-thead > tr > th {
+
+.permiss_tabl .ant-table-thead>tr>th {
     padding: 8px 8px;
 }
+
 .permiss_tabl .ant-modal-body {
     padding: 16px 16px;
 }
