@@ -53,6 +53,39 @@ class Permissions extends Component {
       {
         title: (
           <Input.Search
+            name="link_code"
+            key="link_code"
+            id="link_code"
+            className="search_heading"
+            autoComplete="new-password"
+            placeholder="Dealer Pin"
+            onKeyUp={this.handleSearch}
+
+          />
+        ),
+        dataIndex: 'link_code',
+        className: '',
+        children: [
+          {
+            title: 'DEALER PIN',
+            dataIndex: 'link_code',
+            key: 'link_code',
+            // sorter: (a, b) => {
+            //     console.log(a);
+            //     // console.log(b);
+            //     return a.link_code.length;
+            // },
+            sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+
+            align: 'center',
+            sortDirections: ['ascend', 'descend'],
+            className: '',
+          }
+        ]
+      },
+      {
+        title: (
+          <Input.Search
             name="dealer_name"
             key="dealer_name"
             id="dealer_name"
@@ -109,39 +142,6 @@ class Permissions extends Component {
             //     return a.dealer_email.length;
             // },
             sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-      {
-        title: (
-          <Input.Search
-            name="link_code"
-            key="link_code"
-            id="link_code"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder="Dealer Pin"
-            onKeyUp={this.handleSearch}
-
-          />
-        ),
-        dataIndex: 'link_code',
-        className: '',
-        children: [
-          {
-            title: 'DEALER PIN',
-            dataIndex: 'link_code',
-            key: 'link_code',
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.link_code.length;
-            // },
-            sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
 
             align: 'center',
             sortDirections: ['ascend', 'descend'],
@@ -227,6 +227,21 @@ class Permissions extends Component {
         className: '',
       },
       {
+        title: 'DEALER PIN',
+        dataIndex: 'link_code',
+        key: 'link_code',
+        // sorter: (a, b) => {
+        //     console.log(a);
+        //     // console.log(b);
+        //     return a.link_code.length;
+        // },
+        sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+
+        align: 'center',
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      {
         title: 'DEALER NAME',
         dataIndex: 'dealer_name',
         key: 'dealer_name',
@@ -256,21 +271,7 @@ class Permissions extends Component {
         sortDirections: ['ascend', 'descend'],
         className: '',
       },
-      {
-        title: 'DEALER PIN',
-        dataIndex: 'link_code',
-        key: 'link_code',
-        // sorter: (a, b) => {
-        //     console.log(a);
-        //     // console.log(b);
-        //     return a.link_code.length;
-        // },
-        sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
+      
       // {
       //   title: 'CONNECTED DEVICES',
       //   dataIndex: 'connected_devices',
