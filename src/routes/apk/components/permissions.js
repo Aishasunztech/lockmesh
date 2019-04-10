@@ -358,6 +358,9 @@ class Permissions extends Component {
       });
     }
   }
+  rejectPemission = (dealer_id) => {
+    console.log("console", dealer_id);
+  }
 
   renderDealer(list, permitted = false) {
     let data = [];
@@ -376,7 +379,9 @@ class Permissions extends Component {
             'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
             'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
             'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
-            'action':(<Button size="small" type="danger">Remove</Button>)
+            'action':(<Button size="small" type="danger" onClick={()=>{
+              this.rejectPemission(dealer.dealer_id)
+            }}>Remove</Button>)
           })
         }
       });
