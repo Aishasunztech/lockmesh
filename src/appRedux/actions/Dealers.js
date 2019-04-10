@@ -40,6 +40,26 @@ export function getDealerList(d) {
     };
 }
 
+export function getAllDealers() {
+    return (dispatch) => {
+        
+        RestService.getAllDealers().then((response) => {
+            
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: DEALERS_LIST,
+                    payload: response.data
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+        
+    };
+}
 
 export function suspendDealer(id) {
     return (dispatch) => {

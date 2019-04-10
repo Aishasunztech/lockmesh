@@ -139,6 +139,17 @@ const RestService = {
             // console.log(error);
         });
     },
+    getAllDealers: () => {
+        return axios.get(BASE_URL + 'users/dealers',
+            {
+                headers: {
+                    authorization: localStorage.getItem('token') //the token is a variable which holds the token
+                }
+            }
+        ).catch((error) => {
+            // console.log(error);
+        });
+    },
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },
