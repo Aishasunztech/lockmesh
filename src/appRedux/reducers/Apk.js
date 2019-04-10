@@ -39,10 +39,10 @@ export default (state = initialState, action) => {
 				apk_list: action.payload,
 				options: state.options
 			}
-		
+
 
 		case UNLINK_APK:
-			
+
 			// console.log(UNLINK_APK);
 			state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
 
@@ -55,7 +55,7 @@ export default (state = initialState, action) => {
 
 		case ADD_APK:
 			// console.log(ADD_APK);
-			
+
 			if (action.response.status) {
 				message.success(action.response.msg)
 			}
@@ -70,7 +70,7 @@ export default (state = initialState, action) => {
 		case EDIT_APK:
 			// console.log('action edit id');
 			// console.log(action.payload);
-            // console.log(EDIT_APK);			
+			// console.log(EDIT_APK);			
 			if (action.response.status) {
 				let objIndex1 = state.apk_list.findIndex((obj => obj.apk_id === action.payload.apk_id));
 				if (objIndex1 !== undefined) {
@@ -104,7 +104,7 @@ export default (state = initialState, action) => {
 				// console.log('apk_status_on',state.apk_list[objIndex].apk_status);
 				state.apk_list[objIndex].apk_status = "Off";
 			}
-	
+
 			// console.log('new_apk_list',state.apk_list)
 			return {
 				...state,
@@ -114,7 +114,8 @@ export default (state = initialState, action) => {
 			}
 		}
 		case PERMSSION_SAVED: {
-			return{
+			message.success(action.payload);
+			return {
 				...state
 			}
 		}

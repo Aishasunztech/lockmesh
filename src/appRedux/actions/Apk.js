@@ -22,7 +22,7 @@ export function getApkList() {
                 // console.log("apk_list form server");
                 //  console.log(response.data);
                 if (RestService.checkAuth(response.data)) {
-                    if(response.data.status){
+                    if (response.data.status) {
                         dispatch({
                             type: APK_LIST,
                             payload: response.data.list
@@ -148,11 +148,10 @@ export function editApk(formData) {
     };
 }
 
-export function savePermission (apk_id, dealers) {
+export function savePermission(apk_id, dealers) {
     return (dispatch) => {
         RestService.savePermissions(apk_id, dealers).then((response) => {
             if (RestService.checkAuth(response.data)) {
-
                 dispatch({
                     type: PERMSSION_SAVED,
                     payload: response.data.msg
