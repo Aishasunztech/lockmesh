@@ -11,7 +11,7 @@ import {
     transferDeviceProfile
 } from "../../../appRedux/actions/ConnectDevice";
 
-import { Card, Row, Col, Button, message, Icon, Modal, Input, notification } from "antd";
+import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
@@ -153,7 +153,9 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12}
                                 className="gutter-row" justify="center" >
-                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15 }} ><Icon type='upload' /> Push</Button>
+                                <Tooltip title="Coming Soon">
+                                    <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 15 }} ><Icon type='upload' /> Push</Button>
+                                </Tooltip>
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
@@ -166,7 +168,9 @@ class SideActions extends Component {
 
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 15 }} > <Icon type='download' /> Pull</Button>
+                                <Tooltip placement="bottom" title="Coming Soon">
+                                    <Button type="default " style={{ width: "100%", marginBottom: 15 }} > <Icon type='download' /> Pull</Button>
+                                </Tooltip>
                                 {(localStorage.getItem("type") === "admin") ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{ fontSize: "14px" }} /> Save Policy</Button> : null}
                                 {(localStorage.getItem("type") === "admin" || localStorage.getItem("type") === "dealer") ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
@@ -176,9 +180,9 @@ class SideActions extends Component {
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button> */}
-
-                                <Button type="default" disabled style={{ width: "100%", marginBottom: 15 }} >N/A</Button>
-
+                                <Tooltip title="Coming Soon" placement="left">
+                                    <Button  type="default" style={{ width: "100%", marginBottom: 15 }} >IMEI</Button>
+                                </Tooltip>
                             </Col>
 
                         </Row>
@@ -186,7 +190,10 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button>
+                                <Tooltip title="Coming Soon">
+                                    <Button type="default" style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button>
+                                    {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 15, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
+                                </Tooltip>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 15, fontSize: "12px" }}
@@ -204,7 +211,9 @@ class SideActions extends Component {
                                 <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 15, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
 
                             </Col>
-                            <Button type="default" style={{ width: "46%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
+                            <Tooltip title="Coming Soon" placement="bottom" >
+                                <Button type="default" style={{ width: "46%", marginBottom: 15, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
+                            </Tooltip>
                         </Row>
                     </Card>
                 </div>

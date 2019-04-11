@@ -481,6 +481,21 @@ export default class Tab extends Component {
                         handlePagination={this.props.handlePagination}
                     />
                 </TabPane>
+                <TabPane tab={<span className="yellow">Suspended</span>} key="7" forceRender={true}>
+                    <DevicesList
+                        devices={this.state.devices}
+                        suspendDevice={this.props.suspendDevice}
+                        activateDevice={this.props.activateDevice}
+                        columns={this.state.columns}
+                        rejectDevice={this.props.rejectDevice}
+                        selectedOptions={this.props.selectedOptions}
+                        //  ref="devciesList"
+                        pagination={this.props.pagination}
+                        addDevice={this.props.addDevice}
+                        editDevice={this.props.editDevice}
+                        handlePagination={this.props.handlePagination}
+                    />
+                </TabPane>
                 <TabPane tab={<span className="red">Expired</span>} key="6" forceRender={true}>
                     <DevicesList
                         devices={this.state.devices}
@@ -496,21 +511,7 @@ export default class Tab extends Component {
                         handlePagination={this.props.handlePagination}
                     />
                 </TabPane>
-                <TabPane tab={<span className="grey">Suspended</span>} key="7" forceRender={true}>
-                    <DevicesList
-                        devices={this.state.devices}
-                        suspendDevice={this.props.suspendDevice}
-                        activateDevice={this.props.activateDevice}
-                        columns={this.state.columns}
-                        rejectDevice={this.props.rejectDevice}
-                        selectedOptions={this.props.selectedOptions}
-                        //  ref="devciesList"
-                        pagination={this.props.pagination}
-                        addDevice={this.props.addDevice}
-                        editDevice={this.props.editDevice}
-                        handlePagination={this.props.handlePagination}
-                    />
-                </TabPane>
+
                 <TabPane tab={<span className="blue">Pre Activated</span>} key="3" forceRender={true}>
                     <DevicesList
                         devices={this.state.devices}
@@ -526,7 +527,7 @@ export default class Tab extends Component {
                         handlePagination={this.props.handlePagination}
                     />
                 </TabPane>
-                <TabPane tab={<span className="yellow">Pending Activation</span>} key="2" forceRender={true}>
+                <TabPane tab={<span className="gray">Pending Activation</span>} key="2" forceRender={true}>
                     <DevicesList
                         devices={this.state.devices}
                         suspendDevice={this.props.suspendDevice}
