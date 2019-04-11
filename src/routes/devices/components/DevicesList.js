@@ -8,6 +8,14 @@ import { getStatus, getColor, checkValue } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs } from 'antd';
+import {
+    DEVICE_ACTIVATED,
+    DEVICE_EXPIRED,
+    DEVICE_PENDING_ACTIVATION,
+    DEVICE_PRE_ACTIVATION,
+    DEVICE_SUSPENDED,
+    DEVICE_UNLINKED
+} from '../../../constants/Constants'
 
 const TabPane = Tabs.TabPane;
 
@@ -185,34 +193,34 @@ class DevicesList extends Component {
                 ,
                 status: (<span style={color} > {status}</span >),
                 flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
-                device_id: (device.device_id !== undefined && device.device_id !== '' && device.device_id !== null && device.device_id !== 'null' && (status != 'pre-activated' && status != "Pre-activated")) ? `${device.device_id}` : "N/A",
+                device_id: (device.device_id !== undefined && device.device_id !== '' && device.device_id !== null && device.device_id !== 'null' && (status != DEVICE_PRE_ACTIVATION)) ? `${device.device_id}` : "N/A",
 
-                name: device.name ? `${device.name}` : "N/A",
+                name: checkValue(device.name),
                 account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
-                activation_code: device.activation_code ? `${device.activation_code}` : "N/A",
+                activation_code: checkValue(device.activation_code),
                 chat_id: checkValue(device.chat_id),
                 client_id: checkValue(device.client_id),
-                dealer_id: device.dealer_id ? `${device.dealer_id}` : "N/A",
-                dealer_pin: device.link_code ? `${device.link_code}` : "N/A",
-                mac_address: device.mac_address ? `${device.mac_address}` : "N/A",
-                sim_id: device.sim_id ? `${device.sim_id}` : "N/A",
-                imei_1: device.imei ? `${device.imei}` : "N/A",
+                dealer_id: checkValue(device.dealer_id),
+                dealer_pin: checkValue(device.link_code),
+                mac_address: checkValue(device.mac_address),
+                sim_id: checkValue(device.sim_id),
+                imei_1: checkValue(device.imei),
                 sim_1: checkValue(device.simno),
-                imei_2: device.imei2 ? `${device.imei2}` : "N/A",
+                imei_2: checkValue(device.imei2),
                 sim_2: checkValue(device.simno2),
-                serial_number: device.serial_number ? `${device.serial_number}` : "N/A",
+                serial_number: checkValue(device.serial_number),
 
                 model: checkValue(device.model),
 
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                dealer_name: device.dealer_name ? `${device.dealer_name}` : "N/A",
-                online: device.online ? (device.online=="On")?(<span style={{color:"green"}}>Online</span>):(<span style={{color:"red"}}>Offline</span>) : "N/A",
-                s_dealer: device.s_dealer ? `${device.s_dealer}` : "N/A",
-                s_dealer_name: device.s_dealer_name ? `${device.s_dealer_name}` : "N/A",
-                start_date: device.start_date ? `${device.start_date}` : "N/A",
-                expiry_date: device.expiry_date ? `${device.expiry_date}` : "N/A",
+                dealer_name: checkValue(device.dealer_name),
+                online: device.online ? (device.online == "On") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A",
+                s_dealer: checkValue(device.s_dealer),
+                s_dealer_name: checkValue(device.s_dealer_name),
+                start_date: checkValue(device.start_date),
+                expiry_date: checkValue(device.expiry_date),
             }
         });
 

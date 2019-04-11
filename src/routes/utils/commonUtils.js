@@ -1,49 +1,66 @@
+// import {
+//     DEVICE_ACTIVATED,
+//     DEVICE_EXPIRED,
+//     DEVICE_PENDING_ACTIVATION,
+//     DEVICE_PRE_ACTIVATION,
+//     DEVICE_SUSPENDED,
+//     DEVICE_UNLINKED
+// } from '../../constants/Constants'
+
+const DEALER_SUSPENDED = "suspended";
+const DEALER_UNLINKED = "unlinked";
+const DEVICE_ACTIVATED = "Active";
+const DEVICE_SUSPENDED = "Suspended";
+const DEVICE_EXPIRED = "Expired";
+const DEVICE_UNLINKED = "Unlinked";
+const DEVICE_PENDING_ACTIVATION = "Pending activation";
+const DEVICE_PRE_ACTIVATION = "Pre-activated";
+
 module.exports = {
 
     getStatus: function (status, account_status, unlink_status, device_status, activation_status) {
 
         if (status === 'active' && (account_status === '' || account_status === null) && unlink_status === 0 && (device_status === 1 || device_status === '1')) {
-            return 'Activated';
+            return DEVICE_ACTIVATED;
         } else if (status === 'expired') {
-            return 'Expired';
+            return DEVICE_EXPIRED;
         } else if ((device_status === '0' || device_status === 0) && (unlink_status === '0' || unlink_status === 0) && (activation_status === null || activation_status === '')) {
-            return 'Pending activation';
+            return DEVICE_PENDING_ACTIVATION;
         } else if ((device_status === '0' || device_status === 0) && (unlink_status === '0' || unlink_status === 0) && (activation_status === 0)) {
-            return 'Pre-activated';
+            return DEVICE_PRE_ACTIVATION;
         } else if ((unlink_status === '1' || unlink_status === 1) && (device_status === 0 || device_status === '0')) {
             // console.log("hello unlinked");
-            return 'Unlinked';
+            return DEVICE_UNLINKED;
         } else if (account_status === 'suspended') {
-            return 'Suspended';
+            return DEVICE_SUSPENDED;
         } else {
             return 'N/A';
         }
     },
-    
+
     getColor: function (status) {
         switch (status) {
-            case 'Activated':
+            case DEVICE_ACTIVATED:
                 return { color: "#008000" };
 
-            case 'Pre-activated':
+            case DEVICE_PRE_ACTIVATION:
                 return { color: "#0000FF" };
 
-            case 'Expired':
+            case DEVICE_EXPIRED:
                 return { color: "#FF0000" };
-            case 'Unlinked':
+            case DEVICE_UNLINKED:
                 return { color: "#FFA500" };
-            case 'Suspended':
-                return { color: "#808080" };
-            case 'Pending activation':
+            case DEVICE_SUSPENDED:
                 return { color: "#cccc0e" };
-
+            case DEVICE_PENDING_ACTIVATION:
+                return { color: "grey" };
             default:
                 return {};
         }
     },
 
-    checkValue: function (value){
-        if(value !== undefined && value !== '' && value!=null && value !== 'undefined' && value !=='null'){
+    checkValue: function (value) {
+        if (value !== undefined && value !== '' && value != null && value !== 'undefined' && value !== 'null') {
             return value;
         } else {
             return 'N/A';

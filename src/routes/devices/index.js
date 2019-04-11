@@ -11,6 +11,14 @@ import {
     addDevice,
     preActiveDevice
 } from "../../appRedux/actions/Devices";
+import {
+    DEVICE_ACTIVATED,
+    DEVICE_EXPIRED,
+    DEVICE_PENDING_ACTIVATION,
+    DEVICE_PRE_ACTIVATION,
+    DEVICE_SUSPENDED,
+    DEVICE_UNLINKED
+} from '../../constants/Constants'
 
 import {
     getNotification
@@ -782,24 +790,24 @@ class Devices extends Component {
         // alert(value);
         // value = value.toLowerCase();
         switch (value) {
-            case 'active':
+            case DEVICE_ACTIVATED:
                 this.setState({
-                    devices: this.filterList('Activated', this.props.devices),
+                    devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
                     column: this.columns,
                     tabselect: '4'
                 })
 
                 break;
-            case 'suspended':
+            case DEVICE_SUSPENDED:
                 this.setState({
-                    devices: this.filterList('Suspended', this.props.devices),
+                    devices: this.filterList(DEVICE_SUSPENDED, this.props.devices),
                     column: this.columns,
                     tabselect: '7'
                 })
                 break;
-            case 'expired':
+            case DEVICE_EXPIRED:
                 this.setState({
-                    devices: this.filterList('Expired', this.props.devices),
+                    devices: this.filterList(DEVICE_EXPIRED, this.props.devices),
                     column: this.columns,
                     tabselect: '6'
                 })
@@ -811,24 +819,24 @@ class Devices extends Component {
                     tabselect: '1'
                 })
                 break;
-            case "unlinked":
+            case DEVICE_UNLINKED:
                 this.setState({
-                    devices: this.filterList('Unlinked', this.props.devices),
+                    devices: this.filterList(DEVICE_UNLINKED, this.props.devices),
                     column: this.columns,
                     tabselect: '5'
                 })
                 break;
-            case "pending activation":
+            case DEVICE_PENDING_ACTIVATION:
                 // alert(value);
                 this.setState({
-                    devices: this.filterList('Pending activation', this.props.devices),
+                    devices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
                     column: this.columns,
                     tabselect: '2'
                 })
                 break;
-            case "pre-activated":
+            case DEVICE_PRE_ACTIVATION:
                 this.setState({
-                    devices: this.filterList('Pre-activated', this.props.devices),
+                    devices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices),
                     column: this.columns,
                     tabselect: '3'
                 })
@@ -853,7 +861,7 @@ class Devices extends Component {
         switch (value) {
             case '4':
                 this.setState({
-                    devices: this.filterList('Activated', this.props.devices),
+                    devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
                     column: this.state.columns,
                     tabselect: '4'
                 })
@@ -861,14 +869,14 @@ class Devices extends Component {
                 break;
             case '7':
                 this.setState({
-                    devices: this.filterList('Suspended', this.props.devices),
+                    devices: this.filterList(DEVICE_SUSPENDED, this.props.devices),
                     column: this.state.columns,
                     tabselect: '7'
                 })
                 break;
             case '6':
                 this.setState({
-                    devices: this.filterList('Expired', this.props.devices),
+                    devices: this.filterList(DEVICE_EXPIRED, this.props.devices),
                     column: this.state.columns,
                     tabselect: '6'
                 })
@@ -882,21 +890,21 @@ class Devices extends Component {
                 break;
             case "5":
                 this.setState({
-                    devices: this.filterList('Unlinked', this.props.devices),
+                    devices: this.filterList(DEVICE_UNLINKED, this.props.devices),
                     column: this.state.columns,
                     tabselect: '5'
                 })
                 break;
             case "2":
                 this.setState({
-                    devices: this.filterList('Pending activation', this.props.devices),
+                    devices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
                     column: this.state.columns,
                     tabselect: '2'
                 })
                 break;
             case "3":
                 this.setState({
-                    devices: this.filterList('Pre-activated', this.props.devices),
+                    devices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices),
                     column: this.state.columns,
                     tabselect: '3'
                 })
@@ -1055,12 +1063,12 @@ class Devices extends Component {
             >
 
                 <Select.Option value="all">All</Select.Option>
-                <Select.Option value="pending activation">Pending Activation</Select.Option>
-                <Select.Option value="pre-activated">Pre Activated</Select.Option>
-                <Select.Option value="active">Activated</Select.Option>
-                <Select.Option value="unlinked">Unlinked</Select.Option>
-                <Select.Option value="expired">Expired</Select.Option>
-                <Select.Option value="suspended">Suspended</Select.Option>
+                <Select.Option value={DEVICE_ACTIVATED}>Active</Select.Option>
+                <Select.Option value={DEVICE_SUSPENDED}>Suspended</Select.Option>
+                <Select.Option value={DEVICE_EXPIRED}>Expired</Select.Option>
+                <Select.Option value={DEVICE_PRE_ACTIVATION}>Pre Activated</Select.Option>
+                <Select.Option value={DEVICE_PENDING_ACTIVATION}>Pending Activation</Select.Option>
+                <Select.Option value={DEVICE_UNLINKED}>Unlinked</Select.Option>
 
             </Select>
         );
