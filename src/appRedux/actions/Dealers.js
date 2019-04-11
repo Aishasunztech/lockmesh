@@ -8,7 +8,8 @@ import {
     UNDO_DEALER,
     EDIT_DEALER,
     LOADING,ADD_DEALER,
-    INIT_URL
+    INIT_URL,
+    SPIN_lOADING
 } from "constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -42,6 +43,10 @@ export function getDealerList(d) {
 
 export function getAllDealers() {
     return (dispatch) => {
+        dispatch({
+            type: SPIN_lOADING,
+            spinloading: true
+        });
         
         RestService.getAllDealers().then((response) => {
             

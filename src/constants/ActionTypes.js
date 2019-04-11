@@ -39,6 +39,7 @@ export const ADD_DEVICE = 'ADD_DEVICE';
 export const REJECT_DEVICE = 'REJECT_DEVICE';
 export const NEW_DEVICES_LIST = 'NEW_DEVICES_LIST';
 export const PRE_ACTIVATE_DEVICE = 'PRE_ACTIVATE_DEVICE';
+export const SPIN_lOADING = 'SPIN_lOADING';
 
 
 //Dealer const
