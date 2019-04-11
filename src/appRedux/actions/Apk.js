@@ -152,9 +152,13 @@ export function savePermission(apk_id, dealers) {
     return (dispatch) => {
         RestService.savePermissions(apk_id, dealers).then((response) => {
             if (RestService.checkAuth(response.data)) {
+              
                 dispatch({
                     type: PERMSSION_SAVED,
-                    payload: response.data.msg
+                    payload: response.data.msg,
+                    permission_count: response.data.permission_count,
+                    apk_id: apk_id,
+                    dealers: dealers
                 })
 
             } else {

@@ -254,6 +254,7 @@ class Permissions extends Component {
     this.props.dealerList.map((dealer) => {
       dealer_ids.push(dealer.dealer_id);
     });
+    this.setState({permissions: dealer_ids})
 
     this.props.savePermission(this.props.record.apk_id, JSON.stringify(dealer_ids));
    
@@ -387,7 +388,7 @@ class Permissions extends Component {
   }
 
   rejectPemission = (dealer_id) => {
-    let dealers = this.props.record.permissions;
+    let dealers = this.state.permissions;
     // console.log("permissions",dealers);
     var index = dealers.indexOf(dealer_id);
     console.log("array index", index);
