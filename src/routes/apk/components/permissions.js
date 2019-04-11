@@ -368,6 +368,9 @@ class Permissions extends Component {
     }
     // console.log("permissions",dealers);
     this.props.savePermission(this.props.record.apk_id,JSON.stringify(dealers));
+    this.setState({
+      dealerList:this.props.dealerList
+    })
 
   }
 
@@ -396,22 +399,23 @@ class Permissions extends Component {
       });
     } else {
       list.map((dealer) => {
+        let is_included = this.props.record.permissions.includes(dealer.dealer_id);
+        if (!is_included) {
+          data.push({
+            'key': dealer.dealer_id,
+            'row_key': dealer.dealer_id,
+            'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
+            'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
+            'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
+            'link_code': dealer.link_code ? dealer.link_code : 'N/A',
+            'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+            'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+            'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+            'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
 
-        data.push({
-          'key': dealer.dealer_id,
-          'row_key': dealer.dealer_id,
-          'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-          'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-          'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-          'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-          'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-          'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-          'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-          'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
-
-        })
+          })
+        }
       });
-
     }
     return (data);
   }
