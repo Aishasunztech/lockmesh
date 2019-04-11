@@ -119,7 +119,7 @@ export default (state = initialState, action) => {
 			let dealers = JSON.parse(action.dealers)
 			console.log(dealers.length ,'itrititt',action.apk_id);
 			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
-			state.apk_list[objIndex].permission_count = dealers.length;
+			state.apk_list[objIndex].permission_count = action.permission_count;
 			
 			return {
 				...state,

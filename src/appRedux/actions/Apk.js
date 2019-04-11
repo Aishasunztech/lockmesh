@@ -156,6 +156,7 @@ export function savePermission(apk_id, dealers) {
                 dispatch({
                     type: PERMSSION_SAVED,
                     payload: response.data.msg,
+                    permission_count: response.data.permission_count,
                     apk_id: apk_id,
                     dealers: dealers
                 })
