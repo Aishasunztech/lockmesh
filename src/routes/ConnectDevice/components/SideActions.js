@@ -121,11 +121,11 @@ class SideActions extends Component {
             </h2>
             ),
             onOk() {
-                console.log('OK');
+                // console.log('OK');
                 _this.props.transferDeviceProfile(device_id);
             },
             onCancel() {
-                console.log('Cancel');
+                // console.log('Cancel');
             },
         });
     }
