@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Modal, Row, Col, Input } from "antd";
+import { Table, Button, Modal, Row, Col,Spin, Input } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
 import { savePermission } from "../../../appRedux/actions/Apk";
 import DealerList from "./DealerList";
+import CircularProgress from "components/CircularProgress/index";
 
 
 // export default 
@@ -14,7 +15,8 @@ class Permissions extends Component {
     this.state = {
       showDealersModal: false,
       dealer_ids: [],
-      dealerList: []
+      dealerList: [],
+      permissions: [],
     }
 
     this.addDealerCols = [
@@ -222,7 +224,8 @@ class Permissions extends Component {
   componentDidMount() {
     this.props.getAllDealers()
     this.setState({
-      dealerList: this.props.dealerList
+      dealerList: this.props.dealerList,
+      permissions: this.props.record.permissions
     })
   }
   
@@ -230,11 +233,13 @@ class Permissions extends Component {
     if (this.props.record.apk_id !== nextProps.record.apk_id) {
       this.props.getAllDealers();
       this.setState({
-        dealerList: this.props.dealerList
+        dealerList: this.props.dealerList,
+        permissions: this.props.record.permissions
       })
     } else if (this.props.dealerList.length !== nextProps.dealerList.length){
       this.setState({
-        dealerList: nextProps.dealerList
+        dealerList: nextProps.dealerList,
+        permissions: this.props.record.permissions
       })
     }
   }
@@ -249,21 +254,44 @@ class Permissions extends Component {
     this.props.dealerList.map((dealer) => {
       dealer_ids.push(dealer.dealer_id);
     });
+    this.setState({permissions: dealer_ids})
 
     this.props.savePermission(this.props.record.apk_id, JSON.stringify(dealer_ids));
+   
     // this.setState({
     //   dealer_ids: dealer_ids
     // });
   }
   savePermission = () => {
-    // console.log("dealer ids", this.state.dealer_ids);
+     console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
     if (this.state.dealer_ids.length) {
-      // console.log("saved successfully", this.props.record.apk_id);
-      this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.dealer_ids));
+      this.props.dealerList.map((dealer)=> {
+        if(this.state.dealer_ids.includes(dealer.dealer_id)){
+             this.state.permissions.push(dealer.dealer_id);
+       
+        }
+        else{
+          if(this.state.permissions.includes(dealer.dealer_id)){
+            this.state.dealer_ids.push(dealer.dealer_id);
+          
+          }
+         
+        }
+       this.setState({
+         dealer_ids: [],
+         permissions: this.state.permissions
+       })
+      })
 
+      
+     this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.dealer_ids));
+    
+      this.showDealersModal(false);
+   
+        // this.props.getAllDealers()
+     
     }
   }
-
   
   onSelectChange = (selectedRowKeys, selectedRows) => {
     let dealer_ids = []
@@ -358,8 +386,9 @@ class Permissions extends Component {
       });
     }
   }
+
   rejectPemission = (dealer_id) => {
-    let dealers = this.props.record.permissions;
+    let dealers = this.state.permissions;
     // console.log("permissions",dealers);
     var index = dealers.indexOf(dealer_id);
     console.log("array index", index);
@@ -376,50 +405,80 @@ class Permissions extends Component {
 
   renderDealer(list, permitted = false) {
     let data = [];
-    if (permitted) {
-      list.map((dealer) => {
-        let is_included = this.props.record.permissions.includes(dealer.dealer_id);
-        if (is_included) {
-          data.push({
-            'key': dealer.dealer_id,
-            'row_key': dealer.dealer_id,
-            'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-            'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-            'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-            'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-            'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-            'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-            'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-            'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
-            'action':(<Button size="small" type="danger" onClick={()=>{
-              this.rejectPemission(dealer.dealer_id)
-            }}>Remove</Button>)
-          })
-        }
-      });
-    } else {
-      list.map((dealer) => {
-        let is_included = this.props.record.permissions.includes(dealer.dealer_id);
-        if (!is_included) {
-          data.push({
-            'key': dealer.dealer_id,
-            'row_key': dealer.dealer_id,
-            'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-            'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-            'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-            'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-            'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-            'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-            'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-            'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
+    // if (permitted) {
+    //   list.map((dealer) => {
+    //     let is_included = this.props.record.permissions.includes(dealer.dealer_id);
+    //     if (is_included) {
+    //       data.push({
+    //         'key': dealer.dealer_id,
+    //         'row_key': dealer.dealer_id,
+    //         'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
+    //         'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
+    //         'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
+    //         'link_code': dealer.link_code ? dealer.link_code : 'N/A',
+    //         'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+    //         'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+    //         'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+    //         'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
+    //         'action':(<Button size="small" type="danger" onClick={()=>{
+    //           this.rejectPemission(dealer.dealer_id)
+    //         }}>Remove</Button>)
+    //       })
+    //     }
+    //   });
+    // } else {
+    //   list.map((dealer) => {
+    //     let is_included = this.props.record.permissions.includes(dealer.dealer_id);
+    //     if (!is_included) {
+    //       data.push({
+    //         'key': dealer.dealer_id,
+    //         'row_key': dealer.dealer_id,
+    //         'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
+    //         'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
+    //         'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
+    //         'link_code': dealer.link_code ? dealer.link_code : 'N/A',
+    //         'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+    //         'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+    //         'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+    //         'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
 
+    //       })
+    //     }
+    //   });
+    // }
+
+    list.map((dealer) => {
+      console.log('object recrd', this.props.record.permissions);
+      let is_included = this.state.permissions.includes(dealer.dealer_id);
+      let common = {
+          'key': dealer.dealer_id,
+          'row_key': dealer.dealer_id,
+          'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
+          'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
+          'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
+          'link_code': dealer.link_code ? dealer.link_code : 'N/A',
+          'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+          'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+          'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+          'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
+      }
+  
+      if (permitted && is_included) {
+          
+          data.push({
+              ...common,
+              'action':(<Button size="small" type="danger" onClick={()=>{
+                  this.rejectPemission(dealer.dealer_id)
+              }}>Remove</Button>)
           })
-        }
-      });
-    }
+      } else if (permitted === false && is_included===false){
+          data.push({...common})
+      }
+  });
     return (data);
   }
   render() {
+    console.log('dealer state', this.state.dealerList);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
@@ -447,10 +506,15 @@ class Permissions extends Component {
           </Col>
         </Row>
         <Row gutter={16}>
+        
+        { 
+          this.props.spinloading ? <CircularProgress /> : 
+        
           <Table
             columns={this.listDealerCols}
             dataSource={this.renderDealer(this.state.dealerList, true)}
           />
+        }
         </Row>
         <Modal
           width='665px'
@@ -482,8 +546,9 @@ const mapStateToProps = ({ dealers }, props) => {
   console.log("dealer", dealers);
   console.log("permission", props.record);
   return {
-    dealerList: dealers.dealers,
-    record: props.record
+    dealerList: dealers.dealers,  
+    record: props.record,
+    spinloading: dealers.spinloading
   };
 }
 
