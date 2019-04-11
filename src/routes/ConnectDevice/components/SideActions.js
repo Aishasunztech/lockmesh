@@ -279,7 +279,6 @@ class SideActions extends Component {
             </div>
         )
     }
-    activateDevice
     handleSuspendDevice = (device, _this) => {
         this.refs.suspend.handleSuspendDevice(device, this.props.refreshDevice);
 
@@ -338,6 +337,9 @@ function showConfirm(device, action, _this, msg, type) {
                     action(device)
                 } else {
                     action(device.usr_device_id);
+                }
+                if (type === 'flagged') {
+                    _this.props.activateDevice(device)
                 }
                 if (type === 'unlink') {
                     _this.props.history.goBack();
