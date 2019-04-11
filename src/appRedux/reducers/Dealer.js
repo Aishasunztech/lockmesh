@@ -10,12 +10,14 @@ import {
     LOADING,
     GET_DROPDOWN,
     POST_DROPDOWN,
-    GET_PAGINATION
+    GET_PAGINATION,
+    SPIN_lOADING
 } from "constants/ActionTypes";
 import { message } from 'antd';
 
 const initialState = {
     isloading: false,
+    subIsloading: false,
     dealers: [],
     suspended: 'no change',
     action: '',
@@ -38,17 +40,24 @@ export default (state = initialState, action) => {
                 options: state.options
             }
 
+            case SPIN_lOADING:
+
+            return {
+                ...state,
+                spinloading: true,
+                options: state.options
+            }
+
         case DEALERS_LIST:
             // console.log('DEALERS_LIST');
             // console.log(action.payload);
             return {
                 ...state,
                 isloading: false,
+                spinloading: false,
                 dealers: action.payload,
                 options: state.options
             }
-
-
 
         case SUSPEND_DEALERS:
 
