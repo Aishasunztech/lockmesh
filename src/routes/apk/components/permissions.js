@@ -519,7 +519,7 @@ class Permissions extends Component {
         <Modal
           width='665px'
           className="permiss_tabl"
-          title="Dealers Permission"
+          title="Add Dealer to permissions list for this App"
           visible={this.state.showDealersModal}
           onOk={() => {
             this.savePermission()
