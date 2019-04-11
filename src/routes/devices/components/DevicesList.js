@@ -208,7 +208,7 @@ class DevicesList extends Component {
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 dealer_name: device.dealer_name ? `${device.dealer_name}` : "N/A",
-                online: device.online ? `${device.online}` : "N/A",
+                online: device.online ? (device.online=="On")?(<span style={{color:"green"}}>Online</span>):(<span style={{color:"red"}}>Offline</span>) : "N/A",
                 s_dealer: device.s_dealer ? `${device.s_dealer}` : "N/A",
                 s_dealer_name: device.s_dealer_name ? `${device.s_dealer_name}` : "N/A",
                 start_date: device.start_date ? `${device.start_date}` : "N/A",

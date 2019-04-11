@@ -620,7 +620,7 @@ class Devices extends Component {
                 className: '',
                 children: [
                     {
-                        title: 'ONLINE',
+                        title: 'MODE',
                         align: "center",
                         className: '',
                         dataIndex: 'online',
