@@ -99,6 +99,35 @@ class Devices extends Component {
             {
                 title: (
                     <Input.Search
+                        name="online"
+                        key="online"
+                        id="online"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Online"
+                    />
+                ),
+                dataIndex: 'online',
+                className: '',
+                children: [
+                    {
+                        title: 'MODE',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'online',
+                        key: 'online',
+
+                        // ...this.getColumnSearchProps('online'),
+                        sorter: (a, b) => { return a.online.localeCompare(b.online) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
                         name="flagged"
                         key="flagged"
                         id="flagged"
@@ -603,36 +632,6 @@ class Devices extends Component {
                 ]
             },
 
-
-            {
-                title: (
-                    <Input.Search
-                        name="online"
-                        key="online"
-                        id="online"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="Online"
-                    />
-                ),
-                dataIndex: 'online',
-                className: '',
-                children: [
-                    {
-                        title: 'MODE',
-                        align: "center",
-                        className: '',
-                        dataIndex: 'online',
-                        key: 'online',
-
-                        // ...this.getColumnSearchProps('online'),
-                        sorter: (a, b) => { return a.online.localeCompare(b.online) },
-
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
             {
                 title: (
                     <Input.Search
