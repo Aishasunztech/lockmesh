@@ -598,7 +598,7 @@ function showConfirm1(device, msg) {
         content: msg,
         okText: "WIPE DEVICE",
         onOk() {
-            showConfirm(device, "This is will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.")
+            showConfirm(device, "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.")
         },
         onCancel() { },
     });
