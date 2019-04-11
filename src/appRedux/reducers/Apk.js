@@ -11,6 +11,7 @@ import {
 	PERMSSION_SAVED
 } from "constants/ActionTypes";
 import { message } from 'antd';
+import { DEALERS_LIST } from "../../constants/ActionTypes";
 
 const initialState = {
 	isloading: false,
@@ -115,8 +116,14 @@ export default (state = initialState, action) => {
 		}
 		case PERMSSION_SAVED: {
 			message.success(action.payload);
+			let dealers = JSON.parse(action.dealers)
+			console.log(dealers.length ,'itrititt',action.apk_id);
+			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
+			state.apk_list[objIndex].permission_count = dealers.length;
+			
 			return {
-				...state
+				...state,
+				apk_list: [...state.apk_list]
 			}
 		}
 		case GET_PAGINATION: {
