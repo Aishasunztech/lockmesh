@@ -226,7 +226,7 @@ export default class Tab extends Component {
 
                     />
                 </TabPane>
-                <TabPane tab={<span className="grey">Suspended</span>} key="4" forceRender={true}>
+                <TabPane tab={<span className="yellow">Suspended</span>} key="4" forceRender={true}>
                     <DealerList
                         dealersList={this.state.dealersList}
                         suspendDealer={this.props.suspendDealer}
