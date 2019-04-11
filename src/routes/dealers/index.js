@@ -369,9 +369,9 @@ class Dealers extends Component {
                 onChange={this.handleChange}
             >
                 <Select.Option value="all">All</Select.Option>
-                <Select.Option value="active">Activated</Select.Option>
-                <Select.Option value="unlinked">Unlinked</Select.Option>
+                <Select.Option value="active">Active</Select.Option>
                 <Select.Option value="suspended">Suspended</Select.Option>
+                <Select.Option value="unlinked">Archived</Select.Option>
             </Select>
         );
     }
