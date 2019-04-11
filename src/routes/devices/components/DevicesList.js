@@ -176,7 +176,7 @@ class DevicesList extends Component {
                                 }
 
                                 {(device.device_status === 1) ? <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button> : null}
-                                {(status !== 'Unlinked' || status !== 'unlinked') ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button> : <Button type="default" size="small" style={style}> INFO</Button>}
+                                {(status !== 'Unlinked' || status !== 'unlinked') ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button> : ''}
                             </Fragment>
 
                         }
