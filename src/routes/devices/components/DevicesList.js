@@ -192,7 +192,7 @@ class DevicesList extends Component {
                 pgp_email: checkValue(device.pgp_email),
                 activation_code: device.activation_code ? `${device.activation_code}` : "N/A",
                 chat_id: checkValue(device.chat_id),
-                client_id: device.client_id ? `${device.client_id}` : "N/A",
+                client_id: checkValue(device.client_id),
                 dealer_id: device.dealer_id ? `${device.dealer_id}` : "N/A",
                 dealer_pin: device.link_code ? `${device.link_code}` : "N/A",
                 mac_address: device.mac_address ? `${device.mac_address}` : "N/A",

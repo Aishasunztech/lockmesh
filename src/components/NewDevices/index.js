@@ -55,12 +55,12 @@ export default class NewDevices extends Component {
 
             return {
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.props.rejectDevice(device.device_id) }}>Reject</Button>
+                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.props.rejectDevice(device) }}>decline</Button>
                     <Button
                         type="primary"
                         size="small"
                         style={{ margin: '0 8px 0 8px' }}
-                        onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice) }}>
+                        onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}>
                         Accept
                     </Button></div>,
                 device_id: device.device_id ? `${device.device_id}` : "N/A",
