@@ -58,6 +58,26 @@ module.exports = {
                 return {};
         }
     },
+    getSortOrder: function (status) {
+        switch (status) {
+            case DEVICE_ACTIVATED:
+                return '1';
+
+            case DEVICE_PRE_ACTIVATION:
+                return '4';
+
+            case DEVICE_EXPIRED:
+                return '2';
+            case DEVICE_UNLINKED:
+                return '7';
+            case DEVICE_SUSPENDED:
+                return '3';
+            case DEVICE_PENDING_ACTIVATION:
+                return '5';
+            default:
+                return
+        }
+    },
 
     checkValue: function (value) {
         if (value !== undefined && value !== '' && value != null && value !== 'undefined' && value !== 'null') {

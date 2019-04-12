@@ -187,9 +187,9 @@ const RestService = {
     },
     savePermissions: (apkId, dealers) => {
         return axios.post(BASE_URL + 'users/save_permissions', {
-                apkId: apkId,
-                dealers: dealers
-            }, 
+            apkId: apkId,
+            dealers: dealers
+        },
             RestService.getHeader()
         );
     },
@@ -261,9 +261,9 @@ const RestService = {
     },
 
     // unlink Device
-    unlinkDevice: (id) => {
+    unlinkDevice: (device) => {
 
-        return axios.post(BASE_URL + 'users/unlink/' + id, { id }, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/unlink/' + device.usr_device_id, { device }, RestService.getHeader());
 
     },
 

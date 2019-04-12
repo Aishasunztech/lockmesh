@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { Button, Form, Input, Select } from 'antd';
+import { checkValue } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 
@@ -193,7 +194,7 @@ class EditDevice extends Component {
                 >
                     {this.props.form.getFieldDecorator('client_id', {
 
-                        initialValue: this.props.device.client_id,
+                        initialValue: checkValue(this.props.device.client_id),
                     })(
                         <Input />
                     )}

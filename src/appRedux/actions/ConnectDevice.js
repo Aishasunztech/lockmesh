@@ -228,9 +228,9 @@ export function wipe(device) {
     });
 }
 
-export function unlinkDevice(deviceId) {
+export function unlinkDevice(device) {
     return (dispatch) => {
-        RestService.unlinkDevice(deviceId).then((response) => {
+        RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
