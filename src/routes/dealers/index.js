@@ -171,7 +171,7 @@ class Dealers extends Component {
                     id="connected_devices"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder="Connected Devices"
+                    placeholder="Devices"
                     onKeyUp={this.handleSearch}
 
                 />
@@ -180,7 +180,7 @@ class Dealers extends Component {
             className: '',
             children: [
                 {
-                    title: 'CONNECTED DEVICES',
+                    title: 'DEVICES',
                     dataIndex: 'connected_devices',
                     key: 'connected_devices',
                     // sorter: (a, b) => {

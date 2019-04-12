@@ -411,11 +411,11 @@ class Customizer extends Component {
             this.getCustomizerContent()
           }
         </Drawer>
-        <div className="gx-customizer-option">
+        {/* <div className="gx-customizer-option">
           <Button type="primary" onClick={this.toggleCustomizer.bind(this)}>
             <i className="icon icon-setting fxicon-hc-spin gx-d-block"/>
           </Button>
-        </div>
+        </div> */}
       </Auxiliary>
     );
   }

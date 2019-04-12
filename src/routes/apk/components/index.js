@@ -16,7 +16,7 @@ export default class Apk extends Component {
                 </Row>
                 <div style={{ marginTop: -40 }}>
                     <Row>
-                        <Col xs={24} sm={24} md={7} lg={7} xl={7}>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <Link to="/apk-list">
                                     <Card className="manage_sec" style={{ borderRadius: 12 }}>
@@ -36,10 +36,10 @@ export default class Apk extends Component {
                                                 </Col>
                                             </Row>
                                             <Row justify='center'>
-                                                <Col span={10} style={{ padding: "0px 8px 0px 16px" }} >
+                                                <Col span={6} >
 
                                                 </Col>
-                                                <Col span={12} style={{ padding: "0px 16px 0px 8px" }}>
+                                                <Col span={12} style={{}}>
                                                     <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
                                                 </Col>
                                             </Row>
@@ -49,7 +49,7 @@ export default class Apk extends Component {
                                 </Link>
                             </div>
                         </Col>
-                        <Col xs={24} sm={24} md={7} lg={7} xl={7}>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <Link to="/policy">
                                     <Card className="manage_sec" style={{ borderRadius: 12 }}>
@@ -67,9 +67,9 @@ export default class Apk extends Component {
                                                 </Col>
                                             </Row>
                                             <Row justify='center'>
-                                                <Col span={10} style={{ padding: "0px 8px 0px 16px" }}>
+                                                <Col span={6}>
                                                 </Col>
-                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 46 }}>
+                                                <Col span={12} style={{ marginTop: 46 }}>
                                                     <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
                                                 </Col>
                                             </Row>
@@ -79,7 +79,7 @@ export default class Apk extends Component {
                                 </Link>
                             </div>
                         </Col>
-                        <Col xs={24} sm={24} md={7} lg={7} xl={7}>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div class="contenar">
                                     <Link to="/#">
@@ -99,9 +99,9 @@ export default class Apk extends Component {
                                                     </Col>
                                                 </Row>
                                                 <Row justify='center'>
-                                                    <Col span={10} style={{ padding: "0px 8px 0px 16px" }}>
+                                                    <Col span={6}>
                                                     </Col>
-                                                    <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 28 }}>
+                                                    <Col span={12} style={{ marginTop: 28 }}>
                                                         <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
                                                     </Col>
                                                 </Row>
@@ -115,9 +115,9 @@ export default class Apk extends Component {
                             </div>
                         </Col>
                     </Row>
-                </div>
+                </div >
 
-            </div>
+            </div >
         )
     }
 }

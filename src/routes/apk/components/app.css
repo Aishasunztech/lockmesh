@@ -19,3 +19,12 @@
 .permiss_tabl .ant-modal-body {
     padding: 16px 16px;
 }
+
+.helping_txt {
+    font-size: 16px;
+    line-height: 0;
+    color: #4b87c8;
+    margin-left: 12px;
+    vertical-align: middle;
+    cursor: pointer;
+}
