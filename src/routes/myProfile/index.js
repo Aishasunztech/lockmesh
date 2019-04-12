@@ -13,7 +13,7 @@ import Customizer1 from './components/Customizer';
 
 class Profile extends Component {
 
-    callChild= () => {
+    callChild = () => {
         this.refs.Customize33.toggleCustomizer();
     }
 
@@ -73,7 +73,7 @@ class Profile extends Component {
                     <Row>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                <Card className="manage_sec_pro" style={{ borderRadius: 12 }}>
                                     <div className="profile_table">
                                         <Row>
                                             <Col span={24}>
@@ -87,7 +87,7 @@ class Profile extends Component {
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                <Card className="manage_sec_pro" style={{ borderRadius: 12 }}>
                                     <div>
                                         <Row>
                                             <Col span={24} style={{ textAlign: "center" }}>
@@ -106,8 +106,8 @@ class Profile extends Component {
                                                 <p>({this.props.profile.type})</p>
                                             </Col>
                                         </Row>
-                                        <Row justify='center' style={{ marginTop: 20 }}>
-                                            <Col span={12} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
+                                        <Row justify='center' style={{ marginTop: 43 }}>
+                                            <Col span={12} style={{}} className="change_pass">
                                                 <Button type="primary" size="small" style={{ width: "100%" }}
                                                     onClick={() => this.refs.change_password.showModal()} icon="unlock">Change Password</Button>
                                             </Col>
@@ -120,7 +120,7 @@ class Profile extends Component {
                                 </Card>
                             </div>
                         </Col>
-                      <Customizer1 ref="Customize33" />
+                        <Customizer1 ref="Customize33" />
                     </Row>
                 </div>
                 <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} />
@@ -130,7 +130,7 @@ class Profile extends Component {
                     func={this.props.updatePassword}
                     updateUserProfile={this.props.updateUserProfile}
                 />
-               
+
             </div>
         )
     }
