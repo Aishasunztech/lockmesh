@@ -44,7 +44,7 @@ class Devices extends Component {
         super(props);
         const columns = [
             {
-                // title: 'ACTIONS',
+                // title: (this.state.tabselect === "5") ? <Button onClink={()=> this.deleteAllUnlinked()}>Delete All</Button>:'',
                 dataIndex: 'action',
                 align: 'center',
                 className: 'row',
@@ -769,6 +769,9 @@ class Devices extends Component {
 
     }
 
+    deleteAllUnlinked = () => {
+        alert('Its working')
+    }
 
     filterList = (type, devices) => {
         let dumyDevices = [];

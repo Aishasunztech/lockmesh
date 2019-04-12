@@ -68,6 +68,7 @@ const RestService = {
         } else {
             return true;
         }
+        
     },
 
     // Component Allowed

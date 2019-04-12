@@ -9,7 +9,8 @@ const DealerList = (props) => {
     const rowSelection = {
         // selectedDealers,
         onChange: props.onSelectChange,
-        selectionColumnIndex: 1
+        selectionColumnIndex: 1,
+        selectedRows: props.selectedRows
     };
     return (
         <Fragment>
@@ -18,6 +19,7 @@ const DealerList = (props) => {
                 rowSelection={rowSelection}
                 dataSource={props.dealers}
                 columns={props.columns}
+                hideDefaultSelections={props.hideDefaultSelections}
             />
         </Fragment>
     )
