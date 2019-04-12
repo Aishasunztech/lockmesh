@@ -17,6 +17,7 @@ class Permissions extends Component {
       dealer_ids: [],
       dealerList: [],
       permissions: [],
+      hideDefaultSelections:false
     }
 
     this.addDealerCols = [
@@ -246,7 +247,8 @@ class Permissions extends Component {
 
   showDealersModal = (visible) => {
     this.setState({
-      showDealersModal: visible
+      showDealersModal: visible,
+      dealer_ids :[]
     })
   }
   saveAllDealers = () => {
@@ -294,6 +296,7 @@ class Permissions extends Component {
   }
   
   onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log(selectedRowKeys ,'selected', selectedRows);
     let dealer_ids = []
     selectedRows.forEach(row => {
       // console.log("selected row", row)
@@ -506,6 +509,8 @@ class Permissions extends Component {
             columns={this.addDealerCols}
             dealers={this.renderDealer(this.state.dealerList)}
             onSelectChange={this.onSelectChange}
+            hideDefaultSelections={this.state.hideDefaultSelections}
+            selectedRows = {this.state.dealer_ids}
             // selectedDealers={[]}
           />
         </Modal>
