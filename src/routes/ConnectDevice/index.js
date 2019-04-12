@@ -34,6 +34,7 @@ import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
 import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
+import {DEVICE_ACTIVATED} from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
 import DeviceSidebar from './components/DeviceSidebar';
@@ -123,15 +124,16 @@ class ConnectDevice extends Component {
 
     }
     onBackHandler = () => {
-        // console.log("pageName", this.state.pageName);
-
-        if (this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password") {
-            this.props.changePage("Manage_password");
-
-        } else if (this.props.pageName === "Manage_password") {
-            this.props.changePage("main_menu");
-        } else {
-            this.props.changePage("main_menu");
+        console.log("device details", this.props.device_details);
+        if(this.props.device_details.finalStatus === DEVICE_ACTIVATED){
+            if (this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password") {
+                this.props.changePage("Manage_password");
+    
+            } else if (this.props.pageName === "Manage_password") {
+                this.props.changePage("main_menu");
+            } else {
+                this.props.changePage("main_menu");
+            }
         }
     }
     componentDidMount() {

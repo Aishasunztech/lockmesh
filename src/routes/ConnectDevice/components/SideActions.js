@@ -34,7 +34,7 @@ class SideActions extends Component {
             // profileType: '',
             // profileName: '',
             // policyName: ''
-
+            pushAppsModal: false,
             historyModal: false,
             saveProfileModal: false,
             historyType: "history",
@@ -130,7 +130,11 @@ class SideActions extends Component {
         });
     }
 
-
+    showPushAppsModal = (visible) => {
+        this.setState({
+            pushAppsModal: visible
+        })
+    }
 
     handleFlag(flagged) {
         if (flagged == 'Unflag') {
@@ -151,11 +155,13 @@ class SideActions extends Component {
                 <div className="gutter-example side_action">
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
-                            <Col span={12}
-                                className="gutter-row" justify="center" >
-                                <Tooltip title="Coming Soon">
-                                    <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 15 }} ><Icon type='upload' /> Push</Button>
-                                </Tooltip>
+                            <Col
+                                span={12}
+                                className="gutter-row"
+                                justify="center"
+                            >
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showPushAppsModal(true) } ><Icon type='upload' /> Push</Button>
+
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
@@ -167,7 +173,11 @@ class SideActions extends Component {
                                 <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button> */}
 
                             </Col>
-                            <Col className="gutter-row" justify="center" span={12} >
+                            <Col
+                                span={12}
+                                className="gutter-row"
+                                justify="center"
+                            >
                                 <Tooltip placement="bottom" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 15 }} > <Icon type='download' /> Pull</Button>
                                 </Tooltip>
@@ -181,7 +191,7 @@ class SideActions extends Component {
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button> */}
                                 <Tooltip title="Coming Soon" placement="left">
-                                    <Button  type="default" style={{ width: "100%", marginBottom: 15 }} >IMEI</Button>
+                                    <Button type="default" style={{ width: "100%", marginBottom: 15 }} >IMEI</Button>
                                 </Tooltip>
                             </Col>
 
@@ -251,31 +261,46 @@ class SideActions extends Component {
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
                 </Modal>
+                
+                <Modal
+                    closable={false}
+                    style={{ top: 20 }}
 
-                <ActivateDevcie ref="activate"
+                    visible={this.state.pushAppsModal}
+                    onOk={() => {
+                        // this.saveProfile();
+                    }}
+                    onCancel={() => this.showPushAppsModal(false)}
+                >
+                    <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
+                </Modal>
+
+                <ActivateDevcie
+                    ref="activate"
                     activateDevice={this.props.activateDevice}
                 />
 
-                <SuspendDevice ref="suspend"
+                <SuspendDevice
+                    ref="suspend"
                     suspendDevice={this.props.suspendDevice}
-                    go_back={this.props.history.goBack}
-                    getDevice={this.props.getDevicesList}
+                    // go_back={this.props.history.goBack}
+                    // getDevice={this.props.getDevicesList}
                 />
 
-                <EditDevice ref='edit_device' />
-                <WipeDevice ref='wipe_device'
+                <EditDevice
+                    ref='edit_device'
+                />
+                <WipeDevice
+                    ref='wipe_device'
                     device={this.props.device}
                     authUser={this.props.authUser}
                     checkPass={this.props.checkPass}
-
-
                 />
-                <FlagDevice ref='flag_device'
-                    go_back={this.props.history.goBack}
-                    getDevice={this.props.getDevicesList}
+                <FlagDevice
+                    ref='flag_device'
+                    // go_back={this.props.history.goBack}
+                    // getDevice={this.props.getDevicesList}
                 />
-
-
             </div>
         )
     }
