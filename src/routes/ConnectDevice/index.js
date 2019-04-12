@@ -288,8 +288,8 @@ class ConnectDevice extends Component {
     }
 
     render() {
-        let finalStatus = (this.props.device_details.finalStatus === 'Activated') ? 'ACTIVE' : this.props.device_details.finalStatus;
-        let onlineStatus = (this.props.device_details.online === 'off') ? 'OFFLINE' : 'ONLINE';
+        let finalStatus = (this.props.device_details.finalStatus === 'Activated') ? 'Active' : this.props.device_details.finalStatus;
+        let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'Online';
         return (
             <div className="gutter-example">
                 {this.props.isLoading ?

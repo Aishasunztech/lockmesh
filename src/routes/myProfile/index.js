@@ -120,9 +120,9 @@ class Profile extends Component {
                                                 </Col>
                                             </Row>
                                             <Row justify='center'>
-                                                <Col span={10} style={{ padding: "0px 8px 0px 16px" }}>
+                                                <Col span={6} style={{ padding: "0px 8px 0px 16px" }}>
                                                 </Col>
-                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 43 }}>
+                                                <Col span={12} style={{ marginTop: 43 }}>
                                                     <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
                                                 </Col>
                                             </Row>

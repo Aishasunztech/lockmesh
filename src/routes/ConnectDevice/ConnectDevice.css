@@ -26,19 +26,27 @@
     text-align: center;
 }
 
-.status_bar .active_st {
-    background: #b97a57;
-}
-
-.status_bar .offline_st {
-    background: #ed1b24;
-}
-
 .status_bar h5 {
-    padding: 6px 0;
-    color: yellow;
+    padding: 5px 0 4px;
     margin-bottom: 0;
 }
+.offline_st {
+    border: 1px solid #e8e8e8
+}
+
+.active_st {
+    border: 1px solid #e8e8e8;
+    border-right: 0;
+}
+
+.active_st h5 {
+    color: green;
+}
+
+.offline_st h5 {
+    color: red;
+}
+
 
 .nav_btn_grp {
     position: absolute;
@@ -329,6 +337,7 @@ th.device_info {
 .flag_device .ant-modal-body {
     padding: 8px 16px;
 }
+
 .ant-modal-confirm .ant-modal-body {
-    padding: 24px 24px 16px; 
+    padding: 24px 24px 16px;
 }
