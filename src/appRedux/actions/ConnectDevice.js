@@ -25,8 +25,9 @@ import {
     FLAG_DEVICE,
     UNFLAG_DEVICE,
     WIPE_DEVICE,
-    CHECKPASS
-} from "constants/ActionTypes"
+    CHECKPASS,
+    GET_DEALER_APPS
+} from "../../constants/ActionTypes"
 import {
     message
 } from 'antd';
@@ -610,6 +611,23 @@ export const checkPass = (user) => {
                         device: user.device,
                         PasswordMatch: response.data,
                     }
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export const getDealerApps = () => {
+    return (dispatch) => {
+        RestService.getDealerApps().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_DEALER_APPS,
+                    payload: response.data.list
                 })
             } else {
                 dispatch({

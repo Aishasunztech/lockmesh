@@ -165,12 +165,8 @@ const RestService = {
     },
 
     // connect devices for dealer dash.
-    connectDevice: (device_id) => {
-        // this.setHeaders(this.sessionLogin('token'));    
-
-        // this.response = this.http.get(this.baseUrl + '/users/connect/' + device_id, this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
+    getDealerApps: () => {
+        return axios.get(BASE_URL + "users/get_dealer_apps", RestService.getHeader());
     },
 
     getDeviceApps: (device_id) => {

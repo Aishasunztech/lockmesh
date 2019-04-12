@@ -8,7 +8,8 @@ import {
     showSaveProfileModal,
     saveProfile,
     hanldeProfileInput,
-    transferDeviceProfile
+    transferDeviceProfile,
+    getDealerApps
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip } from "antd";
@@ -18,6 +19,9 @@ import ActivateDevcie from '../../devices/components/ActivateDevice';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
+import DealerApps from "./DealerApps";
+
+
 const confirm = Modal.confirm;
 
 class SideActions extends Component {
@@ -25,15 +29,7 @@ class SideActions extends Component {
     constructor(props) {
         super(props);
 
-
         this.state = {
-            // type: "history",
-            // historyModal: false,
-
-            // saveProfileModal: false,
-            // profileType: '',
-            // profileName: '',
-            // policyName: ''
             pushAppsModal: false,
             historyModal: false,
             saveProfileModal: false,
@@ -47,6 +43,7 @@ class SideActions extends Component {
 
     componentDidMount() {
         // console.log(this.props.historyType, 'did')
+        this.props.getDealerApps();
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
@@ -134,6 +131,10 @@ class SideActions extends Component {
         this.setState({
             pushAppsModal: visible
         })
+    }
+
+    onSelectChange = (selectedRowKeys, selectedRows) => {
+
     }
 
     handleFlag(flagged) {
@@ -258,21 +259,28 @@ class SideActions extends Component {
                         this.saveProfile();
                     }}
                     onCancel={() => this.showSaveProfileModal(false)}
+                   
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
                 </Modal>
                 
                 <Modal
-                    closable={false}
+                    // closable={false}
                     style={{ top: 20 }}
-
+                    title="Select Apps"
                     visible={this.state.pushAppsModal}
                     onOk={() => {
                         // this.saveProfile();
+
+                        this.showPushAppsModal(false)
                     }}
                     onCancel={() => this.showPushAppsModal(false)}
+                    okText="Push Apps"
                 >
-                    <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
+                    <DealerApps 
+                        apk_list = {this.props.apk_list}
+                        onSelectChange= {this.onSelectChange}
+                    />
                 </Modal>
 
                 <ActivateDevcie
@@ -321,7 +329,8 @@ function mapDispatchToProps(dispatch) {
         showSaveProfileModal: showSaveProfileModal,
         saveProfile: saveProfile,
         hanldeProfileInput: hanldeProfileInput,
-        transferDeviceProfile: transferDeviceProfile
+        transferDeviceProfile: transferDeviceProfile,
+        getDealerApps: getDealerApps
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }) => {
@@ -344,7 +353,8 @@ var mapStateToProps = ({ device_details, auth }) => {
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         device_id: device_details.device.device_id,
-        usr_acc_id: device_details.device.id
+        usr_acc_id: device_details.device.id,
+        apk_list: device_details.apk_list
     };
 }
 
