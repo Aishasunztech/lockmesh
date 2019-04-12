@@ -37,7 +37,8 @@ class SideActions extends Component {
             saveProfileType: '',
             profileName: '',
             policyName: '',
-            disabled: false
+            disabled: false,
+            selectedApps:[]
         }
     }
 
@@ -133,8 +134,17 @@ class SideActions extends Component {
         })
     }
 
-    onSelectChange = (selectedRowKeys, selectedRows) => {
+    pushApps = () => {
+        if(this.selectedApps.length){
+            console.log("save pushed apps",this.selectedApps);
+        }
+    }
 
+    onSelectChange = (selectedRowKeys, selectedRows) => {
+        // console.log("on selection", selectedRows)
+        this.setState({
+            selectedApps: selectedRows
+        })
     }
 
     handleFlag(flagged) {
@@ -270,7 +280,7 @@ class SideActions extends Component {
                     title="Select Apps"
                     visible={this.state.pushAppsModal}
                     onOk={() => {
-                        // this.saveProfile();
+                        this.pushApps();
 
                         this.showPushAppsModal(false)
                     }}
