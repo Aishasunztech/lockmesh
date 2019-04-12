@@ -49,7 +49,18 @@ class Devices extends Component {
                 align: 'center',
                 className: 'row',
                 width: 800,
-            }, {
+            },
+            // {
+            //     // title: 'ACTIONS',
+            //     dataIndex: 'sortOrder',
+            //     align: 'center',
+            //     className: 'row',
+            //     id:"order",
+            //     // hide: true,
+            //     // sortDirections: ['ascend', 'descend'],
+            //     defaultSortOrder: 'ascend'
+            // },
+            {
                 title: (
                     <Input.Search
                         name="device_id"

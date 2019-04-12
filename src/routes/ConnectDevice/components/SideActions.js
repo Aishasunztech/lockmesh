@@ -380,8 +380,8 @@ function showConfirm(device, action, _this, msg, type) {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
                 if (type === 'wipe') {
                     action(device)
-                } else {
-                    action(device.usr_device_id);
+                } else if (type === 'unlink') {
+                    action(device);
                 }
                 if (type === 'flagged') {
                     _this.props.activateDevice(device)

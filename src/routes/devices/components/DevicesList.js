@@ -4,7 +4,7 @@ import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs } from 'antd';
@@ -146,6 +146,7 @@ class DevicesList extends Component {
 
             var status = device.finalStatus;
             // console.log("not avail", status);
+            var order = getSortOrder(status)
             let color = getColor(status);
             var style = { margin: '0', width: '60px' }
             var text = "EDIT";
@@ -159,6 +160,9 @@ class DevicesList extends Component {
             }
             // console.log(device);
             return {
+                // sortOrder: <span style={{ display: 'none' }}>{order}</span>,
+                // sortOrder: (<span id="order">{order}</span>),
+                // sortOrder: {order},
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
                 action: (device.activation_status === 0) ?

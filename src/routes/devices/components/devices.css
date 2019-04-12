@@ -175,3 +175,10 @@ border: 1px solid #d9d9d9;
 border-radius: 4px;
 padding: 4px 11px;
 }
+
+#order::parent{
+    display: none;
+}
+#order{
+    display: none;
+}
