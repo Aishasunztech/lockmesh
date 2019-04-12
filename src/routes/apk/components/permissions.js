@@ -455,13 +455,13 @@ class Permissions extends Component {
             <div className="gutter-box"><h2>Permission List</h2> </div>
           </Col>
           <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
+            <div className="gutter-box"><Button size="small" style={{width:'100%'}} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
+            <div className="gutter-box"><Button size="small" style={{width:'100%'}} type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
-          <div className="gutter-box"><Button size="small" type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
+          <div className="gutter-box"><Button size="small" style={{width:'100%'}} type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
           </Col>
           <Col className="gutter-row" span={4}>
             <div className="gutter-box search_heading">
