@@ -7,10 +7,15 @@ import { Row, Col, Card, Table, Button, Divider, Icon } from 'antd';
 import ChangePassword from './components/changePassword';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
+import Customizer1 from './components/Customizer';
 
 // import {Link} from 'react-router-dom';
 
 class Profile extends Component {
+
+    callChild= () => {
+        this.refs.Customize33.toggleCustomizer();
+    }
 
     render() {
         const dataSource = [
@@ -35,6 +40,16 @@ class Profile extends Component {
                 key: 4,
                 name: 'Dealer Pin',
                 value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
+            },
+            {
+                key: 5,
+                name: 'Dealers',
+                value: this.props.profile.connected_dealer,
+            },
+            {
+                key: 6,
+                name: 'Token',
+                value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
             }
         ];
 
@@ -47,6 +62,8 @@ class Profile extends Component {
             dataIndex: 'value',
             key: 'value',
         }];
+
+        // console.log('uio', this.refs.Customizer.toggleCustomizer)
 
         return (
             <div>
@@ -101,37 +118,7 @@ class Profile extends Component {
                                 </Card>
                             </div>
                         </Col>
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <div>
-                                <a href="javascript:void(0)">
-                                    <Card className="manage_sec" style={{ borderRadius: 12 }}>
-                                        <div>
-                                            <h2 style={{ textAlign: "center" }}>Theme and Colors</h2>
-                                            <Divider className="mb-0" />
-                                            <Row style={{ padding: '12px 0px 0px' }}>
-                                                <Col span={8}>
-                                                    {/* <Icon type="file-text" className="policy_icon" /> */}
-                                                    <img src={require("../../assets/images/theme.png")} ></img>
-                                                </Col>
-                                                <Col span={16} style={{ padding: 0, marginTop: 12 }}>
-                                                    <h5><span className="diamond_icon">&#9670;</span>Edit Themes for the panel</h5>
-                                                    <h5><span className="diamond_icon">&#9670;</span>Edit the color Schemes for the panel</h5>
-                                                    {/* <h5 className="more_txt">and more...</h5> */}
-                                                </Col>
-                                            </Row>
-                                            <Row justify='center'>
-                                                <Col span={10} style={{ padding: "0px 8px 0px 16px" }}>
-                                                </Col>
-                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 43 }}>
-                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
-                                                </Col>
-                                            </Row>
-
-                                        </div>
-                                    </Card>
-                                </a>
-                            </div>
-                        </Col>
+                      <Customizer1 ref="Customize33" />
                     </Row>
                 </div>
                 <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} />
@@ -141,6 +128,7 @@ class Profile extends Component {
                     func={this.props.updatePassword}
                     updateUserProfile={this.props.updateUserProfile}
                 />
+               
             </div>
         )
     }
@@ -148,7 +136,7 @@ class Profile extends Component {
 
 var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
-    // console.log(state.auth.authUser);
+    console.log('ooo', state.auth);
 
     return {
         isloading: state.isloading,
