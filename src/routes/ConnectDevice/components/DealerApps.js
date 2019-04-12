@@ -70,6 +70,7 @@ const DealerApps = (props)=>{
     return (
         <Fragment>
             <Table
+                bordered
                 rowSelection={rowSelection}
                 columns={columns}
                 dataSource={renderApps(props.apk_list)}        
