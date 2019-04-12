@@ -402,53 +402,22 @@ class Permissions extends Component {
     })
 
   }
-
+  removeAllDealers = () => {
+    let permittedDealers = this.state.permissions;
+    // console.log("permitted dealers", permittedDealers);
+    
+    this.setState({
+      permissions:[]
+    })
+    this.props.savePermission(this.props.record.apk_id,JSON.stringify([]));
+    // this.state.dealerList.map((dealer)=>{
+    //   console.log(dealer);
+    // })
+  }
   renderDealer(list, permitted = false) {
     let data = [];
-    // if (permitted) {
-    //   list.map((dealer) => {
-    //     let is_included = this.props.record.permissions.includes(dealer.dealer_id);
-    //     if (is_included) {
-    //       data.push({
-    //         'key': dealer.dealer_id,
-    //         'row_key': dealer.dealer_id,
-    //         'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-    //         'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-    //         'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-    //         'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-    //         'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-    //         'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-    //         'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-    //         'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
-    //         'action':(<Button size="small" type="danger" onClick={()=>{
-    //           this.rejectPemission(dealer.dealer_id)
-    //         }}>Remove</Button>)
-    //       })
-    //     }
-    //   });
-    // } else {
-    //   list.map((dealer) => {
-    //     let is_included = this.props.record.permissions.includes(dealer.dealer_id);
-    //     if (!is_included) {
-    //       data.push({
-    //         'key': dealer.dealer_id,
-    //         'row_key': dealer.dealer_id,
-    //         'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-    //         'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-    //         'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-    //         'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-    //         'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-    //         'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-    //         'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-    //         'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
-
-    //       })
-    //     }
-    //   });
-    // }
-
     list.map((dealer) => {
-      console.log('object recrd', this.props.record.permissions);
+      // console.log('object recrd', this.props.record.permissions);
       let is_included = this.state.permissions.includes(dealer.dealer_id);
       let common = {
           'key': dealer.dealer_id,
@@ -491,10 +460,13 @@ class Permissions extends Component {
           <Col className="gutter-row" span={2}>
             <div className="gutter-box"><Button size="small" type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
           </Col>
+          <Col className="gutter-row" span={2}>
+          <div className="gutter-box"><Button size="small" type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
+          </Col>
           <Col className="gutter-row" span={4}>
             <div className="gutter-box search_heading">
               <Input.Search 
-                placeholder="Dealer Email" 
+                placeholder="Search" 
                 style={{ marginBottom: 0 }} 
                 onKeyUp={
                   (e) => {
@@ -504,6 +476,7 @@ class Permissions extends Component {
               />
             </div>
           </Col>
+  
         </Row>
         <Row gutter={16}>
         
@@ -543,8 +516,8 @@ class Permissions extends Component {
 
 // export default Apk;
 const mapStateToProps = ({ dealers }, props) => {
-  console.log("dealer", dealers);
-  console.log("permission", props.record);
+  // console.log("dealer", dealers);
+  // console.log("permission", props.record);
   return {
     dealerList: dealers.dealers,  
     record: props.record,
