@@ -23,7 +23,7 @@ const initialState = {
     action: '',
     msg: 'no message',
     selectedOptions: [],
-    options: ["DEALER ID", "DEALER NAME", "DEALER EMAIL", "DEALER PIN", "CONNECTED DEVICES", "TOKENS"],
+    options: ["DEALER ID", "DEALER NAME", "DEALER EMAIL", "DEALER PIN", "DEVICES", "TOKENS"],
 
 };
 
