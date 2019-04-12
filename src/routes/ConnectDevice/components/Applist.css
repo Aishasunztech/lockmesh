@@ -11,34 +11,48 @@
     font-weight: 400;
     margin-top: 8px;
 }
-.side_action .ant-btn > span {
+
+.side_action .ant-btn>span {
     margin-left: 8px;
     font-size: 12px;
 }
+
 .applist_menu .ant-checkbox-wrapper:first-child {
-    margin-top:0;
+    margin-top: 0;
 }
+
 .list_d_down .ant-popover-inner-content {
     box-shadow: 0px 6px 25px #dedede
 }
-.clr_red{
+
+.clr_red {
     color: #FE4E51 !important;
 }
+
 .clr_orange {
     color: #FF861C !important;
 }
+
 .clr_green {
     color: green !important;
 }
+
 .make_red {
     color: red;
 }
+
 .mb-0 {
     margin-bottom: 0 !important;
 }
+
 .captilize {
     text-transform: capitalize;
 }
+
 .side_action .ant-btn {
     border-radius: 8px !important;
+}
+
+.gx-customizer-option .ant-btn {
+    display: none;
 }
