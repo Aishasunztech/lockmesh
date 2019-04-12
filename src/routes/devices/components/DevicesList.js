@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Card, Tag, Form, Input, Popconfirm } from "antd";
+import { Table, Button, Card, Tag, Form, Input, Popconfirm, Empty } from "antd";
 import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
@@ -32,6 +32,7 @@ const EditableFormRow = Form.create()(EditableRow);
 class EditableCell extends React.Component {
     state = {
         editing: false,
+        
     }
 
     toggleEdit = () => {
@@ -118,9 +119,13 @@ class DevicesList extends Component {
             msg: "",
             columns: [],
             devices: [],
-            pagination: this.props.pagination
+            pagination: this.props.pagination,
+            selectedRows: []
         };
         this.renderList = this.renderList.bind(this);
+    }
+    deleteUnlinkedDevice = (dvc_id, dlr_id) => {
+        console.log(dvc_id, 'done', dlr_id);
     }
 
     // renderList
@@ -156,7 +161,9 @@ class DevicesList extends Component {
             return {
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: (device.activation_status === 0) ? "" :
+                action: (device.activation_status === 0) ?
+                    ((status !== 'Unlinked' || status !== 'unlinked') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device.device_id, device.dealer_id)} >Delete</Button> : false)
+                    :
                     (<Fragment>
                         {(status === "pending activation" || status === "Pending activation" || status === "Pending Activation") ?
                             <Fragment>
@@ -184,7 +191,8 @@ class DevicesList extends Component {
                                 }
 
                                 {(device.device_status === 1) ? <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button> : null}
-                                {(status !== 'Unlinked' || status !== 'unlinked') ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button> : ''}
+                                {(status !== 'Unlinked' || status !== 'unlinked') ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
+                                    : ''}
                             </Fragment>
 
                         }
@@ -239,6 +247,16 @@ class DevicesList extends Component {
         // console.log('did update', )
     }
 
+    deleteAllUnlinkedDevice = () => {
+        if(this.state.selectedRows.length){
+            console.log('devices', this.state.selectedRows);
+        }
+        else{
+            console.log('empty data', this.state.selectedRows);
+        }
+        
+    }
+
 
     handlePagination = (value) => {
         // alert('sub child');
@@ -271,15 +289,24 @@ class DevicesList extends Component {
                 cell: EditableCell,
             },
         };
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                name: record.name,
-            }),
-        };
+        let rowSelection;
+        if (this.props.tabselect == '5') {
+             rowSelection = {
+                onChange: (selectedRowKeys, selectedRows) => {
+                this.setState({selectedRows: selectedRows})
+                    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                },
+                getCheckboxProps: record => ({
+                    disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                    name: record.name,
+                }),
+                columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+            };
+        }
+        else {
+ rowSelection = null;
+        }
+
 
         return (
             <div className="dev_table">
@@ -289,10 +316,11 @@ class DevicesList extends Component {
                     suspendDevice={suspendDevice} />
 
                 <Card>
+
                     <Table
                         className="devices"
                         components={components}
-                        // rowSelection={rowSelection}
+                        rowSelection={rowSelection}
                         rowClassName={() => 'editable-row'}
                         size="middle"
                         bordered
@@ -472,6 +500,7 @@ export default class Tab extends Component {
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
+                        tabselect={this.state.tabselect}
                     />
                 </TabPane>
                 <TabPane tab={<span className="green">Active</span>} key="4" forceRender={true}>
@@ -487,6 +516,7 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
+                        tabselect={this.state.tabselect}
                     />
                 </TabPane>
                 <TabPane tab={<span className="yellow">Suspended</span>} key="7" forceRender={true}>
@@ -502,6 +532,7 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
+                        tabselect={this.state.tabselect}
                     />
                 </TabPane>
                 <TabPane tab={<span className="red">Expired</span>} key="6" forceRender={true}>
@@ -517,6 +548,7 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
+                        tabselect={this.state.tabselect}
                     />
                 </TabPane>
 
@@ -533,6 +565,7 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
+                        tabselect={this.state.tabselect}
                     />
                 </TabPane>
                 <TabPane tab={<span className="gray">Pending Activation</span>} key="2" forceRender={true}>
@@ -548,6 +581,7 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
+                        tabselect={this.state.tabselect}
                     />
                 </TabPane>
                 <TabPane tab={<span className="purple">Transfer</span>} key="8" forceRender={true}>
@@ -564,6 +598,7 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
+                        tabselect={this.state.tabselect}
                     />
                 </TabPane>
                 <TabPane tab={<span className="orange">Unlinked</span>} key="5" forceRender={true}>
@@ -579,6 +614,7 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
+                        tabselect={this.state.tabselect}
                     />
                 </TabPane>
             </Tabs>
