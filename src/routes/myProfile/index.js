@@ -59,11 +59,8 @@ class Profile extends Component {
                                 <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                     <div className="profile_table">
                                         <Row>
-                                            <Col span={20}>
-                                                <h2 style={{ textAlign: "center" }}>Detail</h2>
-                                            </Col>
-                                            <Col span={4} style={{ textAlign: "center" }}>
-                                                <a onClick={() => this.refs.change_profile.showModal()} >Edit</a>
+                                            <Col span={24}>
+                                                <h2 style={{ textAlign: "center" }}>Profile info</h2>
                                             </Col>
                                         </Row>
                                         <Table columns={columns} dataSource={dataSource} bordered={true} pagination={false} showHeader={false}></Table>
@@ -75,7 +72,12 @@ class Profile extends Component {
                             <div>
                                 <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                     <div>
-                                        <h2 style={{ textAlign: "center" }}>Profile</h2>
+                                        <Row>
+                                            <Col span={24} style={{ textAlign: "center" }}>
+                                                <h2 style={{ textAlign: "center" }}>Edit Profile  <a style={{ float: "right", fontSize: 15, lineHeight: '25px' }} onClick={() => this.refs.change_profile.showModal()} >Edit</a></h2>
+
+                                            </Col>
+                                        </Row>
                                         <Divider className="mb-0" />
                                         <Row style={{ padding: '16px 0' }}>
                                             <Col span={8} style={{ textAlign: "center" }}>
@@ -106,7 +108,7 @@ class Profile extends Component {
                                 <a href="javascript:void(0)">
                                     <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                         <div>
-                                            <h2 style={{ textAlign: "center" }}>Theme and Colors</h2>
+                                            <h2 style={{ textAlign: "center" }}>Themes and Colors</h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0px 0px' }}>
                                                 <Col span={8}>
