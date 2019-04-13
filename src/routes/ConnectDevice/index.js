@@ -5,6 +5,7 @@ import { Card, Row, Col, List, Button, message } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import { editDevice } from "../../appRedux/actions/Devices";
 
+
 import {
     getDeviceDetails,
     getDeviceApps,
@@ -34,13 +35,14 @@ import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
 import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
-import {DEVICE_ACTIVATED} from '../../constants/Constants';
+import { DEVICE_ACTIVATED } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
 import DeviceSidebar from './components/DeviceSidebar';
 import SideActions from './components/SideActions';
 import AppList from './components/AppList';
 import Password from "./components/Password"
+import { getColor } from "../utils/commonUtils"
 
 class ConnectDevice extends Component {
 
@@ -125,10 +127,10 @@ class ConnectDevice extends Component {
     }
     onBackHandler = () => {
         console.log("device details", this.props.device_details);
-        if(this.props.device_details.finalStatus === DEVICE_ACTIVATED){
+        if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
             if (this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password") {
                 this.props.changePage("Manage_password");
-    
+
             } else if (this.props.pageName === "Manage_password") {
                 this.props.changePage("main_menu");
             } else {
@@ -290,8 +292,10 @@ class ConnectDevice extends Component {
     }
 
     render() {
-        let finalStatus = (this.props.device_details.finalStatus === 'Activated') ? 'Active' : this.props.device_details.finalStatus;
+        let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
+        let color = getColor(finalStatus)
         let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'Online';
+        let onlineColor = (onlineStatus === 'Offline') ? { color: 'red' } : { color: 'green' }
         return (
             <div className="gutter-example">
                 {this.props.isLoading ?
@@ -320,10 +324,10 @@ class ConnectDevice extends Component {
 
                                 <div className="status_bar">
                                     <div className="col-md-6 active_st">
-                                        <h5>{finalStatus}</h5>
+                                        <h5><span style={color}>{finalStatus}</span></h5>
                                     </div>
                                     <div className="col-md-6 offline_st">
-                                        <h5>{onlineStatus}</h5>
+                                        <h5><span style={onlineColor}>{onlineStatus}</span></h5>
                                     </div>
                                 </div>
                                 {this.renderScreen()}
