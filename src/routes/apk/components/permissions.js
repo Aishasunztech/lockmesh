@@ -248,7 +248,8 @@ class Permissions extends Component {
   showDealersModal = (visible) => {
     this.setState({
       showDealersModal: visible,
-      dealer_ids :[]
+      dealer_ids :[],
+      selectedRowKeys: []
     })
   }
   saveAllDealers = () => {
@@ -303,7 +304,8 @@ class Permissions extends Component {
       dealer_ids.push(row.dealer_id);
     });
     this.setState({
-      dealer_ids: dealer_ids
+      dealer_ids: dealer_ids,
+      selectedRowKeys: selectedRowKeys
     });
     // this.setState({ selectedRowKeys });
   }
@@ -511,6 +513,7 @@ class Permissions extends Component {
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
             selectedRows = {this.state.dealer_ids}
+            selectedRowKeys={this.state.selectedRowKeys}
             // selectedDealers={[]}
           />
         </Modal>
