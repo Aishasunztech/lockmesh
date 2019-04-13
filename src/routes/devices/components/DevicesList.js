@@ -124,8 +124,11 @@ class DevicesList extends Component {
         };
         this.renderList = this.renderList.bind(this);
     }
-    deleteUnlinkedDevice = (dvc_id, dlr_id) => {
-        console.log(dvc_id, 'done', dlr_id);
+    deleteUnlinkedDevice = (device) => {
+        let arr = [];
+        arr.push(device);
+        
+        console.log( 'done', arr);
     }
 
     // renderList
@@ -162,8 +165,9 @@ class DevicesList extends Component {
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
                 action: (device.activation_status === 0) ?
-                    ((status !== 'Unlinked' || status !== 'unlinked') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device.device_id, device.dealer_id)} >Delete</Button> : false)
+                    ((status == 'Unlinked' || status == 'unlinked') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button> : false)
                     :
+
                     (<Fragment>
                         {(status === "pending activation" || status === "Pending activation" || status === "Pending Activation") ?
                             <Fragment>
@@ -248,12 +252,7 @@ class DevicesList extends Component {
     }
 
     deleteAllUnlinkedDevice = () => {
-        if(this.state.selectedRows.length){
-            console.log('devices', this.state.selectedRows);
-        }
-        else{
-            console.log('empty data', this.state.selectedRows);
-        }
+       console.log('DELETE ALL', this.state.selectedRows);
         
     }
 
@@ -300,7 +299,7 @@ class DevicesList extends Component {
                     disabled: record.name === 'Disabled User', // Column configuration not to be checked
                     name: record.name,
                 }),
-                columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+              //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
         }
         else {
@@ -316,6 +315,10 @@ class DevicesList extends Component {
                     suspendDevice={suspendDevice} />
 
                 <Card>
+                    {
+                        this.props.tabselect == '5' ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button> 
+                        : false
+                    }
 
                     <Table
                         className="devices"
