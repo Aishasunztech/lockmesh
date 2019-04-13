@@ -1,11 +1,11 @@
-import React, {Component} from "react";
-import {Button, Drawer, Form, message, Radio,Row,Col,Card,Divider} from "antd";
-import {connect} from "react-redux";
+import React, { Component } from "react";
+import { Button, Drawer, Form, message, Radio, Row, Col, Card, Divider } from "antd";
+import { connect } from "react-redux";
 
 import ColorPicker from "../../../containers/ColorPicker";
 import Auxiliary from "util/Auxiliary";
 import CustomScrollbars from "util/CustomScrollbars";
-import {onLayoutTypeChange, onNavStyleChange, setThemeColorSelection, setThemeType} from "appRedux/actions/Setting";
+import { onLayoutTypeChange, onNavStyleChange, setThemeColorSelection, setThemeType } from "appRedux/actions/Setting";
 
 import {
   BLUE,
@@ -69,19 +69,19 @@ class Customizer extends Component {
 
 
   onChangeComplete = (varName, color) => {
-    const {vars} = this.state;
+    const { vars } = this.state;
     vars[varName] = color;
-    this.setState({vars});
+    this.setState({ vars });
   };
   handleColorChange = (varname, color) => {
-    const {vars} = this.state;
+    const { vars } = this.state;
     if (varname) vars[varname] = color;
     // console.log("vars: ", vars)
     window.less
       .modifyVars(vars)
       .then(() => {
         message.success(`Theme updated successfully`);
-        this.setState({vars});
+        this.setState({ vars });
         localStorage.setItem("app-theme", JSON.stringify(vars));
       })
       .catch(error => {
@@ -122,7 +122,7 @@ class Customizer extends Component {
   );
   resetTheme = () => {
     localStorage.setItem('app-theme', '{}');
-    this.setState({vars: this.state.initialValue});
+    this.setState({ vars: this.state.initialValue });
     window.less
       .modifyVars(this.state.initialValue)
       .catch(error => {
@@ -150,7 +150,7 @@ class Customizer extends Component {
 
   getCustomizerContent = () => {
     const colorPickers = Object.keys(this.state.vars).map(varName => this.getColorPicker(varName));
-    const {themeType, layoutType, navStyle, colorSelection} = this.props;
+    const { themeType, layoutType, navStyle, colorSelection } = this.props;
 
     if (themeType === THEME_TYPE_DARK) {
       document.body.classList.add('dark-theme');
@@ -178,8 +178,8 @@ class Customizer extends Component {
           <div className="gx-cus-customiz">
             {colorPickers}
             <Button className="gx-mb-0"
-                    type="primary"
-                    onClick={this.resetTheme}>
+              type="primary"
+              onClick={this.resetTheme}>
               Reset Theme
             </Button>
           </div>
@@ -201,7 +201,7 @@ class Customizer extends Component {
     modifiedVars['@secondary-color'] = secondaryColor;
     modifiedVars['@nav-dark-bg'] = navDarkBg;
     modifiedVars['@nav-dark-text-color'] = navDarkTextColor;
-    this.setState({vars: modifiedVars});
+    this.setState({ vars: modifiedVars });
     this.handleColorChange();
   };
 
@@ -215,47 +215,47 @@ class Customizer extends Component {
       <li>
         <span
           onClick={this.handleThemeColor.bind(this, LIGHT_PURPLE, LIGHT_PURPLE_SEC, LIGHT_PURPLE_DARK_TEXT_COLOR, LIGHT_PURPLE_NAV_DARK_BG)}
-          style={{backgroundColor: LIGHT_PURPLE_SEC, color: LIGHT_PURPLE_DARK_TEXT_COLOR}}
-          className={`gx-link gx-color-light-purple ${themeColor === LIGHT_PURPLE && 'active'}`}/>
+          style={{ backgroundColor: LIGHT_PURPLE_SEC, color: LIGHT_PURPLE_DARK_TEXT_COLOR }}
+          className={`gx-link gx-color-light-purple ${themeColor === LIGHT_PURPLE && 'active'}`} />
       </li>
       <li>
         <span
           onClick={this.handleThemeColor.bind(this, RED, RED_SEC, RED_DARK_TEXT_COLOR, RED_NAV_DARK_BG)}
-          style={{backgroundColor: RED_SEC, color: RED_DARK_TEXT_COLOR}}
-          className={`gx-link gx-color-red ${themeColor === RED && 'active'}`}/>
+          style={{ backgroundColor: RED_SEC, color: RED_DARK_TEXT_COLOR }}
+          className={`gx-link gx-color-red ${themeColor === RED && 'active'}`} />
       </li>
       <li>
         <span
           onClick={this.handleThemeColor.bind(this, BLUE, BLUE_SEC, BLUE_DARK_TEXT_COLOR, BLUE_NAV_DARK_BG)}
-          style={{backgroundColor: BLUE_SEC, color: BLUE_DARK_TEXT_COLOR}}
-          className={`gx-link gx-color-blue ${themeColor === BLUE && 'active'}`}/>
+          style={{ backgroundColor: BLUE_SEC, color: BLUE_DARK_TEXT_COLOR }}
+          className={`gx-link gx-color-blue ${themeColor === BLUE && 'active'}`} />
       </li>
       <li>
         <span
           onClick={this.handleThemeColor.bind(this, DARK_BLUE, DARK_BLUE_SEC, DARK_BLUE_DARK_TEXT_COLOR, DARK_BLUE_NAV_DARK_BG)}
-          style={{backgroundColor: DARK_BLUE_SEC, color: DARK_BLUE_DARK_TEXT_COLOR}}
-          className={`gx-link gx-color-dark-blue ${themeColor === DARK_BLUE && 'active'}`}/>
+          style={{ backgroundColor: DARK_BLUE_SEC, color: DARK_BLUE_DARK_TEXT_COLOR }}
+          className={`gx-link gx-color-dark-blue ${themeColor === DARK_BLUE && 'active'}`} />
       </li>
 
       <li>
         <span
           onClick={this.handleThemeColor.bind(this, ORANGE, ORANGE_SEC, ORANGE_DARK_TEXT_COLOR, ORANGE_NAV_DARK_BG)}
-          style={{backgroundColor: ORANGE_SEC, color: ORANGE_DARK_TEXT_COLOR}}
-          className={`gx-link gx-color-orange ${themeColor === ORANGE && 'active'}`}/>
+          style={{ backgroundColor: ORANGE_SEC, color: ORANGE_DARK_TEXT_COLOR }}
+          className={`gx-link gx-color-orange ${themeColor === ORANGE && 'active'}`} />
       </li>
 
       <li>
         <span
           onClick={this.handleThemeColor.bind(this, LIGHT_BLUE, LIGHT_BLUE_SEC, LIGHT_BLUE_DARK_TEXT_COLOR, LIGHT_BLUE_NAV_DARK_BG)}
-          style={{backgroundColor: LIGHT_BLUE_SEC, color: LIGHT_BLUE_DARK_TEXT_COLOR}}
-          className={`gx-link gx-color-light-blue ${themeColor === LIGHT_BLUE && 'active'}`}/>
+          style={{ backgroundColor: LIGHT_BLUE_SEC, color: LIGHT_BLUE_DARK_TEXT_COLOR }}
+          className={`gx-link gx-color-light-blue ${themeColor === LIGHT_BLUE && 'active'}`} />
       </li>
 
       <li>
         <span
           onClick={this.handleThemeColor.bind(this, DEEP_ORANGE, DEEP_ORANGE_SEC, DEEP_ORANGE_DARK_TEXT_COLOR, DEEP_ORANGE_NAV_DARK_BG)}
-          style={{backgroundColor: DEEP_ORANGE_SEC, color: DEEP_ORANGE_DARK_TEXT_COLOR}}
-          className={`gx-link gx-color-deep-orange ${themeColor === DEEP_ORANGE && 'active'}`}/>
+          style={{ backgroundColor: DEEP_ORANGE_SEC, color: DEEP_ORANGE_DARK_TEXT_COLOR }}
+          className={`gx-link gx-color-deep-orange ${themeColor === DEEP_ORANGE && 'active'}`} />
       </li>
 
       <li>
@@ -265,7 +265,7 @@ class Customizer extends Component {
             backgroundColor: LIGHT_PURPLE_1_SEC,
             color: LIGHT_PURPLE_1_DARK_TEXT_COLOR
           }}
-          className={`gx-link gx-color-light-purple1 ${themeColor === LIGHT_PURPLE_1 && 'active'}`}/>
+          className={`gx-link gx-color-light-purple1 ${themeColor === LIGHT_PURPLE_1 && 'active'}`} />
       </li>
 
       <li>
@@ -275,7 +275,7 @@ class Customizer extends Component {
             backgroundColor: LIGHT_PURPLE_2_SEC,
             color: LIGHT_PURPLE_2_DARK_TEXT_COLOR
           }}
-          className={`gx-link gx-color-light-purple2 ${themeColor === LIGHT_PURPLE_2 && 'active'}`}/>
+          className={`gx-link gx-color-light-purple2 ${themeColor === LIGHT_PURPLE_2 && 'active'}`} />
       </li>
     </ul>
   };
@@ -284,20 +284,20 @@ class Customizer extends Component {
     return <ul className="gx-layout-option gx-list-inline">
       <li>
         <span onClick={this.handleLayoutTypes.bind(this, LAYOUT_TYPE_FRAMED)}
-              className={`gx-pointer ${layoutType === LAYOUT_TYPE_FRAMED && 'active'}`}>
-        <img src={require('assets/images/layouts/framed.png')} alt='framed'/>
+          className={`gx-pointer ${layoutType === LAYOUT_TYPE_FRAMED && 'active'}`}>
+          <img src={require('assets/images/layouts/framed.png')} alt='framed' />
         </span>
       </li>
       <li>
         <span onClick={this.handleLayoutTypes.bind(this, LAYOUT_TYPE_FULL)}
-              className={`gx-pointer ${layoutType === LAYOUT_TYPE_FULL && 'active'}`}>
-        <img src={require('assets/images/layouts/full width.png')} alt='full width'/>
+          className={`gx-pointer ${layoutType === LAYOUT_TYPE_FULL && 'active'}`}>
+          <img src={require('assets/images/layouts/full width.png')} alt='full width' />
         </span>
       </li>
       <li>
         <span onClick={this.handleLayoutTypes.bind(this, LAYOUT_TYPE_BOXED)}
-              className={`gx-pointer ${layoutType === LAYOUT_TYPE_BOXED && 'active'}`}>
-        <img src={require('assets/images/layouts/boxed.png')} alt='boxed'/>
+          className={`gx-pointer ${layoutType === LAYOUT_TYPE_BOXED && 'active'}`}>
+          <img src={require('assets/images/layouts/boxed.png')} alt='boxed' />
         </span>
       </li>
     </ul>
@@ -306,32 +306,32 @@ class Customizer extends Component {
     return <ul className="gx-nav-option gx-list-inline">
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_FIXED)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_FIXED && 'active'}`}>
-        <img src={require('assets/images/layouts/fixed.png')} alt='fixed'/>
+          className={`gx-pointer ${navStyle === NAV_STYLE_FIXED && 'active'}`}>
+          <img src={require('assets/images/layouts/fixed.png')} alt='fixed' />
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_MINI_SIDEBAR)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_MINI_SIDEBAR && 'active'}`}>
-        <img src={require('assets/images/layouts/mini sidebar.png')} alt='mini sidebar'/>
+          className={`gx-pointer ${navStyle === NAV_STYLE_MINI_SIDEBAR && 'active'}`}>
+          <img src={require('assets/images/layouts/mini sidebar.png')} alt='mini sidebar' />
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_DRAWER)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_DRAWER && 'active'}`}>
-        <img src={require('assets/images/layouts/drawer nav.png')} alt='drawer nav'/>
+          className={`gx-pointer ${navStyle === NAV_STYLE_DRAWER && 'active'}`}>
+          <img src={require('assets/images/layouts/drawer nav.png')} alt='drawer nav' />
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_NO_HEADER_MINI_SIDEBAR)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR && 'active'}`}>
-        <img src={require('assets/images/layouts/no header mini sidebar.png')} alt='no hader mini sidebar'/>
+          className={`gx-pointer ${navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR && 'active'}`}>
+          <img src={require('assets/images/layouts/no header mini sidebar.png')} alt='no hader mini sidebar' />
         </span>
       </li>
       <li>
         <span onClick={this.onNavStyleChange.bind(this, NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR)}
-              className={`gx-pointer ${navStyle === NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR && 'active'}`}>
-        <img src={require('assets/images/layouts/vertical no header.png')} alt='vertical no header'/>
+          className={`gx-pointer ${navStyle === NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR && 'active'}`}>
+          <img src={require('assets/images/layouts/vertical no header.png')} alt='vertical no header' />
         </span>
       </li>
       {/* <li>
@@ -389,7 +389,7 @@ class Customizer extends Component {
     try {
       vars = Object.assign({}, initialValue, JSON.parse(localStorage.getItem('app-theme')));
     } finally {
-      this.state = {vars, initialValue, isCustomizerOpened: false};
+      this.state = { vars, initialValue, isCustomizerOpened: false };
       window.less
         .modifyVars(vars)
         .then(() => {
@@ -399,7 +399,7 @@ class Customizer extends Component {
         });
     }
   }
- 
+
   render() {
 
     return (
@@ -414,40 +414,40 @@ class Customizer extends Component {
           }
         </Drawer>
         {/* <div className="gx-customizer-option"> */}
-          {/* <Button type="primary" onClick={this.toggleCustomizer.bind(this)}>
+        {/* <Button type="primary" onClick={this.toggleCustomizer.bind(this)}>
             <i className="icon icon-setting fxicon-hc-spin gx-d-block"/>
           </Button> */}
-       <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <div>
-                                <a onClick={this.toggleCustomizer.bind(this)}>
-                                    <Card className="manage_sec" style={{ borderRadius: 12 }}>
-                                        <div>
-                                            <h2 style={{ textAlign: "center" }}>Theme and Colors</h2>
-                                            <Divider className="mb-0" />
-                                            <Row style={{ padding: '12px 0px 0px' }}>
-                                                <Col span={8}>
-                                                    {/* <Icon type="file-text" className="policy_icon" /> */}
-                                                    <img src={require("assets/images/theme.png")} ></img>
-                                                </Col>
-                                                <Col span={16} style={{ padding: 0, marginTop: 12 }}>
-                                                    <h5><span className="diamond_icon">&#9670;</span>Edit Themes for the panel</h5>
-                                                    <h5><span className="diamond_icon">&#9670;</span>Edit the color Schemes for the panel</h5>
-                                                    {/* <h5 className="more_txt">and more...</h5> */}
-                                                </Col>
-                                            </Row>
-                                            <Row justify='center'>
-                                                <Col span={10} style={{ padding: "0px 8px 0px 16px" }}>
-                                                </Col>
-                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 43 }}>
-                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
-                                                </Col>
-                                            </Row>
+        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+          <div>
+            <a onClick={this.toggleCustomizer.bind(this)}>
+              <Card className="manage_sec_pro" style={{ borderRadius: 12 }}>
+                <div>
+                  <h2 style={{ textAlign: "center" }}>Themes and Colors</h2>
+                  <Divider className="mb-0" />
+                  <Row style={{ padding: '12px 0px 0px' }}>
+                    <Col span={8}>
+                      {/* <Icon type="file-text" className="policy_icon" /> */}
+                      <img src={require("assets/images/theme.png")} ></img>
+                    </Col>
+                    <Col span={16} style={{ padding: 0, marginTop: 12 }}>
+                      <h5><span className="diamond_icon">&#9670;</span>Edit Themes for the panel</h5>
+                      <h5><span className="diamond_icon">&#9670;</span>Edit the color Schemes for the panel</h5>
+                      {/* <h5 className="more_txt">and more...</h5> */}
+                    </Col>
+                  </Row>
+                  <Row justify='center'>
+                    <Col span={6}>
+                    </Col>
+                    <Col span={12} style={{ padding: "", marginTop: 73 }}>
+                      <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
+                    </Col>
+                  </Row>
 
-                                        </div>
-                                    </Card>
-                                </a>
-                            </div>
-                        </Col>
+                </div>
+              </Card>
+            </a>
+          </div>
+        </Col>
         {/* </div> */}
       </Auxiliary>
     );
@@ -456,9 +456,9 @@ class Customizer extends Component {
 
 Customizer = Form.create()(Customizer);
 
-const mapStateToProps = ({settings}) => {
-  const {themeType, width, colorSelection, navStyle, layoutType} = settings;
-  return {themeType, width, colorSelection, navStyle, layoutType}
+const mapStateToProps = ({ settings }) => {
+  const { themeType, width, colorSelection, navStyle, layoutType } = settings;
+  return { themeType, width, colorSelection, navStyle, layoutType }
 };
 export default connect(mapStateToProps, {
   setThemeType,

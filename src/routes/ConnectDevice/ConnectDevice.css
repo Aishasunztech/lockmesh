@@ -30,6 +30,7 @@
     padding: 5px 0 4px;
     margin-bottom: 0;
 }
+
 .offline_st {
     border: 1px solid #e8e8e8
 }
@@ -245,8 +246,12 @@ th.device_info {
 .profile_table .ant-table-tbody>tr>td {
     font-size: 15px;
     text-align: center;
-    padding: 10px 16px !important;
+    padding: 6px 6px !important;
     font-weight: 400;
+}
+
+.manage_sec_pro .ant-card-body {
+    height: 259px;
 }
 
 .ant-btn>.anticon+span,
