@@ -32,6 +32,7 @@ export const loginUser = (user) => {
           }
         });
       } else {
+        console.log('dealer auth', resp);
         let payload = {
           id: resp.data.user.id,
           connected_dealer: resp.data.user.connected_dealer,
@@ -42,7 +43,8 @@ export const loginUser = (user) => {
           name: resp.data.user.dealer_name,
           token: resp.data.token,
           type: resp.data.user.user_type,
-          dealer_pin: resp.data.user.link_code
+          dealer_pin: resp.data.user.link_code,
+          dealer_token: resp.data.user.token
         }
         RestService.authLogIn(resp.data)
         dispatch({

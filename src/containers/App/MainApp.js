@@ -11,7 +11,7 @@ import BelowHeader from "../Topbar/BelowHeader/index";
 import Topbar from "../Topbar/index";
 import {footerText} from "util/config";
 import App from "routes/index";
-import Customizer from "containers/Customizer";
+import Customizer from "routes/myProfile/components/Customizer";
 import {connect} from "react-redux";
 import {
   NAV_STYLE_ABOVE_HEADER,
@@ -112,7 +112,7 @@ export class MainApp extends Component {
             </Footer>
           </Content>
         </Layout>
-        <Customizer/>
+        {/* <Customizer/> */}
       </Layout>
     )
   }

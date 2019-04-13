@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import {Button, Drawer, Form, message, Radio} from "antd";
+import {Button, Drawer, Form, message, Radio,Row,Col,Card,Divider} from "antd";
 import {connect} from "react-redux";
 
-import ColorPicker from "./ColorPicker";
+import ColorPicker from "../../../containers/ColorPicker";
 import Auxiliary from "util/Auxiliary";
 import CustomScrollbars from "util/CustomScrollbars";
 import {onLayoutTypeChange, onNavStyleChange, setThemeColorSelection, setThemeType} from "appRedux/actions/Setting";
@@ -62,10 +62,12 @@ import {
   THEME_TYPE_DARK,
   THEME_TYPE_LITE,
   THEME_TYPE_SEMI_DARK
-} from "../constants/ThemeSetting";
+} from "../../../constants/ThemeSetting";
 
 
 class Customizer extends Component {
+
+
   onChangeComplete = (varName, color) => {
     const {vars} = this.state;
     vars[varName] = color;
@@ -133,6 +135,7 @@ class Customizer extends Component {
         isCustomizerOpened: !previousState.isCustomizerOpened
       }));
   };
+
 
   onThemeTypeChange = (e) => {
     this.props.setThemeType(e.target.value);
@@ -396,9 +399,8 @@ class Customizer extends Component {
         });
     }
   }
-
+ 
   render() {
-
 
     return (
       <Auxiliary>
@@ -411,11 +413,42 @@ class Customizer extends Component {
             this.getCustomizerContent()
           }
         </Drawer>
-        <div className="gx-customizer-option">
-          <Button type="primary" onClick={this.toggleCustomizer.bind(this)}>
+        {/* <div className="gx-customizer-option"> */}
+          {/* <Button type="primary" onClick={this.toggleCustomizer.bind(this)}>
             <i className="icon icon-setting fxicon-hc-spin gx-d-block"/>
-          </Button>
-        </div>
+          </Button> */}
+       <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <div>
+                                <a onClick={this.toggleCustomizer.bind(this)}>
+                                    <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                        <div>
+                                            <h2 style={{ textAlign: "center" }}>Theme and Colors</h2>
+                                            <Divider className="mb-0" />
+                                            <Row style={{ padding: '12px 0px 0px' }}>
+                                                <Col span={8}>
+                                                    {/* <Icon type="file-text" className="policy_icon" /> */}
+                                                    <img src={require("assets/images/theme.png")} ></img>
+                                                </Col>
+                                                <Col span={16} style={{ padding: 0, marginTop: 12 }}>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Edit Themes for the panel</h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Edit the color Schemes for the panel</h5>
+                                                    {/* <h5 className="more_txt">and more...</h5> */}
+                                                </Col>
+                                            </Row>
+                                            <Row justify='center'>
+                                                <Col span={10} style={{ padding: "0px 8px 0px 16px" }}>
+                                                </Col>
+                                                <Col span={12} style={{ padding: "0px 16px 0px 8px", marginTop: 43 }}>
+                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
+                                                </Col>
+                                            </Row>
+
+                                        </div>
+                                    </Card>
+                                </a>
+                            </div>
+                        </Col>
+        {/* </div> */}
       </Auxiliary>
     );
   }
