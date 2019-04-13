@@ -44,7 +44,7 @@ class Devices extends Component {
         super(props);
         const columns = [
             {
-                // title: (this.state.tabselect === "5") ? <Button onClink={()=> this.deleteAllUnlinked()}>Delete All</Button>:'',
+                // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
                 dataIndex: 'action',
                 align: 'center',
                 className: 'row',
@@ -791,6 +791,15 @@ class Devices extends Component {
         // alert('value');
         // alert(value);
         // value = value.toLowerCase();
+
+        console.log('clollolol',this.state.columns);
+        if(value == DEVICE_UNLINKED){
+            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+        }
+        else{
+             this.state.columns[0]['title'] = ''
+        }
+       
         switch (value) {
             case DEVICE_ACTIVATED:
                 this.setState({
@@ -860,6 +869,14 @@ class Devices extends Component {
 
         // console.log('selsect', this.props.selectedOptions)
         // let type = value.toLowerCase();
+
+         if(value == '5'){
+            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+        }
+        else{
+             this.state.columns[0]['title'] = ''
+        }
+
         switch (value) {
             case '4':
                 this.setState({

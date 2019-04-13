@@ -7,7 +7,7 @@ import ActivateDevcie from './ActivateDevice';
 import { getStatus, getColor, checkValue } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
-import { Tabs } from 'antd';
+import { Tabs,Modal } from 'antd';
 import {
     DEVICE_ACTIVATED,
     DEVICE_EXPIRED,
@@ -111,6 +111,7 @@ class DevicesList extends Component {
 
     constructor(props) {
         super(props);
+        this.confirm = Modal.confirm;
 
         this.state = {
             searchText: '',
@@ -120,15 +121,16 @@ class DevicesList extends Component {
             columns: [],
             devices: [],
             pagination: this.props.pagination,
-            selectedRows: []
+            selectedRows: [],
+            self: this
         };
         this.renderList = this.renderList.bind(this);
     }
     deleteUnlinkedDevice = (device) => {
         let arr = [];
         arr.push(device);
-        
-        console.log( 'done', arr);
+        let title = ' Are you sure, you want to delete the device';
+        this.confirmDelete(arr, title);
     }
 
     // renderList
@@ -164,7 +166,7 @@ class DevicesList extends Component {
             return {
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: (device.activation_status === 0) ?
+                action: (device.activation_status === 0 || device.activation_status === null) ?
                     ((status == 'Unlinked' || status == 'unlinked') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button> : false)
                     :
 
@@ -235,7 +237,6 @@ class DevicesList extends Component {
                 expiry_date: checkValue(device.expiry_date),
             }
         });
-
     }
 
     componentDidUpdate(prevProps) {
@@ -252,8 +253,26 @@ class DevicesList extends Component {
     }
 
     deleteAllUnlinkedDevice = () => {
-       console.log('DELETE ALL', this.state.selectedRows);
+        if(this.state.selectedRows.length){
+            let title = ' Are you sure, you want to delete All these devices'
+            this.confirmDelete(this.state.selectedRows, title);
+        }
         
+       console.log('DELETE ALL 1', this.state.selectedRows);
+        
+    }
+
+
+    confirmDelete = (devices, title)=> {
+        this.confirm({
+            title: title,
+            content: '',
+            onOk: (() => {
+               // this.props.suspendDevice(device);
+               
+            }),
+            onCancel() { },
+        });
     }
 
 
@@ -306,7 +325,6 @@ class DevicesList extends Component {
  rowSelection = null;
         }
 
-
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
@@ -315,10 +333,6 @@ class DevicesList extends Component {
                     suspendDevice={suspendDevice} />
 
                 <Card>
-                    {
-                        this.props.tabselect == '5' ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button> 
-                        : false
-                    }
 
                     <Table
                         className="devices"
@@ -429,6 +443,16 @@ class DevicesList extends Component {
                 />
                 <AddDevice ref="add_device"
                 />
+                {/* <Modal
+                    title="Basic Modal"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    >
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                </Modal> */}
             </div>
 
         )
@@ -467,6 +491,10 @@ export default class Tab extends Component {
         // alert('callback');
         // console.log(key);
         this.props.handleChangetab(key);
+    }
+
+    deleteAllUnlinkedDevice = () => {
+        this.refs.devciesList1.deleteAllUnlinkedDevice()
     }
 
     handlePagination = (value) => {
@@ -612,7 +640,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        //   ref="devciesList"
+                           ref="devciesList1"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
