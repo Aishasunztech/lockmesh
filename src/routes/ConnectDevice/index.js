@@ -44,6 +44,7 @@ import AppList from './components/AppList';
 import Password from "./components/Password"
 import { getColor } from "../utils/commonUtils"
 import SettingAppPermissions from "./components/SettingAppPermissions";
+import SystemControls from "./components/SystemControls";
 
 class ConnectDevice extends Component {
 
@@ -233,9 +234,9 @@ class ConnectDevice extends Component {
         } else if (this.props.pageName === "admin_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.props.pageName} />);
         } else if (this.props.pageName === "setting_app_permissions" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<div><h1 className="not_syn_txt"><a>Coming Soon</a></h1></div>);
+            return (<SettingAppPermissions />);
         } else if (this.props.pageName === "system_controls" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<div><h1 className="not_syn_txt"><a>Coming Soon</a></h1></div>);
+            return (<SystemControls />);
         } else if (this.props.pageName === "not_available") {
             return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
         } else if (this.props.pageName === "Manage_password") {
