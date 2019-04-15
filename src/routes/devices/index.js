@@ -9,7 +9,8 @@ import {
     editDevice,
     rejectDevice,
     addDevice,
-    preActiveDevice
+    preActiveDevice,
+    deleteUnlinkDevice
 } from "../../appRedux/actions/Devices";
 import {
     DEVICE_ACTIVATED,
@@ -875,6 +876,7 @@ class Devices extends Component {
     }
 
     handleChangetab = (value) => {
+    
         // alert('value');
         // alert(value);
 
@@ -1028,6 +1030,7 @@ class Devices extends Component {
 
             })
             // this.copyDevices = this.props.devices;
+            this.handleChangetab(this.state.tabselect)
         }
     }
 
@@ -1111,6 +1114,9 @@ class Devices extends Component {
         }, true);
     }
 
+    refreshComponent =()=> {
+        this.props.history.push('/devices');
+    }
     render() {
 
         return (
@@ -1151,6 +1157,9 @@ class Devices extends Component {
                                 tabselect={this.state.tabselect}
                                 handleChangetab={this.handleChangetab}
                                 handlePagination={this.handlePagination}
+                                deleteUnlinkDevice={this.props.deleteUnlinkDevice}
+                                getDevicesList={this.props.getDevicesList}
+                                refreshComponent={this.refreshComponent}
                             />
 
                             <ShowMsg
@@ -1233,12 +1242,14 @@ function mapDispatchToProps(dispatch) {
         preActiveDevice: preActiveDevice,
         postPagination: postPagination,
         getPagination: getPagination,
-        getNotification: getNotification
+        getNotification: getNotification,
+        deleteUnlinkDevice: deleteUnlinkDevice
     }, dispatch);
 }
 
 var mapStateToProps = ({ devices, auth }) => {
     //   console.log('devices AUTH', devices.devices);
+  //  console.log('devices is', devices);
     return {
         devices: devices.devices,
         msg: devices.msg,

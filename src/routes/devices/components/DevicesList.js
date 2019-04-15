@@ -269,8 +269,8 @@ class DevicesList extends Component {
                     }
                 }
             }
-            console.log('object of ', arr);
-            this.confirmDelete(this.state.selectedRows, title);
+           // console.log('object of ', arr);
+            this.confirmDelete(arr, title);
         }
         
      //  console.log('DELETE ALL 1', this.state.selectedRows);
@@ -282,7 +282,11 @@ class DevicesList extends Component {
             title: title,
             content: '',
             onOk: (() => {
-               // this.props.suspendDevice(device);
+               this.props.deleteUnlinkDevice(devices);
+               this.props.resetTabSelected()
+              // this.props.refreshComponent();
+            
+             //  this.props.resetTabSelected()
                
             }),
             onCancel() { },
@@ -326,7 +330,7 @@ class DevicesList extends Component {
              rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                 this.setState({selectedRows: selectedRows, selectedRowKeys: selectedRowKeys})
-                    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                  //  console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
                     disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -510,6 +514,10 @@ export default class Tab extends Component {
     deleteAllUnlinkedDevice = () => {
         this.refs.devciesList1.deleteAllUnlinkedDevice()
     }
+    resetTabSelected = () => {
+    // this.setState({tabselect: '1'})
+      this.props.handleChangetab('5');
+    }
 
     handlePagination = (value) => {
         this.refs.devciesList.handlePagination(value);
@@ -546,6 +554,9 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         tabselect={this.state.tabselect}
+                        deleteUnlinkDevice={this.props.deleteUnlinkDevice}
+                        resetTabSelected={this.resetTabSelected}
+                        refreshComponent={this.props.refreshComponent}
                     />
                 </TabPane>
                 <TabPane tab={<span className="green">Active</span>} key="4" forceRender={true}>
@@ -660,6 +671,10 @@ export default class Tab extends Component {
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
                         tabselect={this.state.tabselect}
+                        deleteUnlinkDevice={this.props.deleteUnlinkDevice}
+                         getDevicesList={this.props.getDevicesList}
+                           refreshComponent={this.props.refreshComponent}
+                           resetTabSelected={this.resetTabSelected}
                     />
                 </TabPane>
             </Tabs>
