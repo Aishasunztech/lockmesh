@@ -804,9 +804,9 @@ class Devices extends Component {
         // alert(value);
         // value = value.toLowerCase();
 
-        console.log('clollolol',this.state.columns);
-        if(value == DEVICE_UNLINKED){
-            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+       // console.log('clollolol',this.state.columns);
+        if(value == DEVICE_UNLINKED && (this.props.user.type !== 'admin')){
+            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete Selected</Button>
         }
         else{
              this.state.columns[0]['title'] = ''
@@ -883,8 +883,8 @@ class Devices extends Component {
         // console.log('selsect', this.props.selectedOptions)
         // let type = value.toLowerCase();
 
-         if(value == '5'){
-            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+         if(value == '5' && (this.props.user.type !== 'admin')){
+            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete Selected</Button>
         }
         else{
              this.state.columns[0]['title'] = ''
@@ -1158,7 +1158,7 @@ class Devices extends Component {
                                 handleChangetab={this.handleChangetab}
                                 handlePagination={this.handlePagination}
                                 deleteUnlinkDevice={this.props.deleteUnlinkDevice}
-                                getDevicesList={this.props.getDevicesList}
+                                user={this.props.user}
                                 refreshComponent={this.refreshComponent}
                             />
 

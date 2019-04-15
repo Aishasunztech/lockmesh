@@ -138,7 +138,7 @@ class DevicesList extends Component {
     renderList(list) {
 
         return list.map((device, index) => {
-            // console.log(device.device_id);
+           //  console.log(this.props.user.type, 'lkslkdflk');
             const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             // const device_status =  "SUSPEND";
             const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
@@ -171,8 +171,8 @@ class DevicesList extends Component {
                 // sortOrder: {order},
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: (device.activation_status === 0 || device.activation_status === null) ?
-                    ((status == 'Unlinked' || status == 'unlinked') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button> : false)
+                action: (device.activation_status === 0 || device.activation_status === null ) ?
+                    (((status == 'Unlinked' || status == 'unlinked') && this.props.user.type !== 'admin') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button> : false)
                     :
 
                     (<Fragment>
@@ -326,7 +326,7 @@ class DevicesList extends Component {
             },
         };
         let rowSelection;
-        if (this.props.tabselect == '5') {
+        if (this.props.tabselect == '5' && this.props.user.type !== 'admin') {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
@@ -551,7 +551,7 @@ export default class Tab extends Component {
                         tabselect={this.state.tabselect}
                         deleteUnlinkDevice={this.props.deleteUnlinkDevice}
                         resetTabSelected={this.resetTabSelected}
-                    // refreshComponent={this.props.refreshComponent}
+                        user={this.props.user}
                     />
                 </TabPane>
                 <TabPane tab={<span className="green">Active</span>} key="4" forceRender={true}>
@@ -568,6 +568,7 @@ export default class Tab extends Component {
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
                         tabselect={this.state.tabselect}
+                        user={this.props.user}
                     />
                 </TabPane>
                 <TabPane tab={<span className="yellow">Suspended</span>} key="7" forceRender={true}>
@@ -584,6 +585,7 @@ export default class Tab extends Component {
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
                         tabselect={this.state.tabselect}
+                        user={this.props.user}
                     />
                 </TabPane>
                 <TabPane tab={<span className="red">Expired</span>} key="6" forceRender={true}>
@@ -600,6 +602,7 @@ export default class Tab extends Component {
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
                         tabselect={this.state.tabselect}
+                        user={this.props.user}
                     />
                 </TabPane>
 
@@ -617,6 +620,7 @@ export default class Tab extends Component {
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
                         tabselect={this.state.tabselect}
+                        user={this.props.user}
                     />
                 </TabPane>
                 <TabPane tab={<span className="gray">Pending Activation</span>} key="2" forceRender={true}>
@@ -633,6 +637,7 @@ export default class Tab extends Component {
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
                         tabselect={this.state.tabselect}
+                        user={this.props.user}
                     />
                 </TabPane>
                 <TabPane tab={<span className="purple">Transfer</span>} key="8" forceRender={true}>
@@ -650,6 +655,7 @@ export default class Tab extends Component {
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
                         tabselect={this.state.tabselect}
+                        user={this.props.user}
                     />
                 </TabPane>
                 <TabPane tab={<span className="orange">Unlinked</span>} key="5" forceRender={true}>
@@ -667,7 +673,8 @@ export default class Tab extends Component {
                         handlePagination={this.props.handlePagination}
                         tabselect={this.state.tabselect}
                         deleteUnlinkDevice={this.props.deleteUnlinkDevice}
-                        getDevicesList={this.props.getDevicesList}
+                        user={this.props.user}
+                      //  getDevicesList={this.props.getDevicesList}
                     //    refreshComponent={this.props.refreshComponent}
                     // resetTabSelected={this.resetTabSelected}
                     />
