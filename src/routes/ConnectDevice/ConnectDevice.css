@@ -187,7 +187,7 @@ th.device_info {
 }
 
 .deviceImg .ant-form-item-control-wrapper {
-    margin-top: 70px;
+    margin-top: 20px;
 }
 
 .left_bar .ant-card-body {
@@ -244,14 +244,14 @@ th.device_info {
 }
 
 .profile_table .ant-table-tbody>tr>td {
-    font-size: 15px;
+    font-size: 14px;
     text-align: center;
     padding: 6px 6px !important;
     font-weight: 400;
 }
 
 .manage_sec_pro .ant-card-body {
-    height: 259px;
+    height: 253px;
 }
 
 .ant-btn>.anticon+span,

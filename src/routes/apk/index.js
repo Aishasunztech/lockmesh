@@ -22,7 +22,7 @@ import { componentSearch } from "../utils/commonUtils";
 
 const question_txt = (
     <div>
-        <p>Press <a style={{ fontSize: 18, verticalAlign: 'sub' }}><Icon type="caret-right" /> </a> to Add, remove or View <br></br>the Dealers who have permission <br></br> to use this App</p>
+        <p>Press <a style={{ fontSize: 14 }}><Icon type="caret-right" /> </a> to Add, remove or View <br></br>the Dealers who have permission <br></br> to use this App</p>
     </div>
 );
 var status = true;
