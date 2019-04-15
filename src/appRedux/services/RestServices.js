@@ -113,6 +113,10 @@ const RestService = {
 
     },
 
+    deleteUnlinkDevice: (devices)=> {
+        return axios.put(BASE_URL + 'users/deleteUnlinkDevice',{devices}, RestService.getHeader())
+    },
+
     // getNewDevices
     NewDeviceList: () => {
         return axios.get(BASE_URL + 'users/new/devices',
