@@ -37,6 +37,7 @@ import {
 import {
     message, Modal
 } from 'antd';
+import { stat } from "fs";
 const confirm = Modal.confirm;
 const actions = require("../../appRedux/actions/ConnectDevice")
 const initialState = {
@@ -153,6 +154,7 @@ export default (state = initialState, action) => {
             // console.log('reducer suspend')
             if (action.response.status) {
 
+                state.device = action.response.data;
                 state.device.account_status = 'suspended';
 
                 message.success(action.response.msg);
@@ -174,7 +176,11 @@ export default (state = initialState, action) => {
 
             if (action.response.status) {
 
-                state.device.account_status = 'suspended';
+                state.device = action.response.data;
+                // state.device.account_status = 'suspended';
+                // state.device.finalStatus = 'Suspended';
+                state.pageName = 'not_available';
+                state.status = 'Suspended';
                 message.success(action.response.msg);
             } else {
                 message.error(action.response.msg);
@@ -401,7 +407,9 @@ export default (state = initialState, action) => {
                 //  console.log(state.device, 'active device done', action.payload.device);
                 if (action.response.status) {
 
-                    state.device.account_status = '';
+                    state.device = action.response.data;
+                    state.status = '';
+                    state.pageName = 'main_menu'
 
                     message.success(action.response.msg);
                 } else {
@@ -547,7 +555,7 @@ export default (state = initialState, action) => {
                 undoBtn: true
             }
         }
-        case GET_DEALER_APPS:{
+        case GET_DEALER_APPS: {
 
             return {
                 ...state,

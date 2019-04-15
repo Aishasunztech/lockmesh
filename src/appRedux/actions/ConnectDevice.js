@@ -566,7 +566,7 @@ export const unflagged = (device_id) => {
                     type: UNFLAG_DEVICE,
                     response: response.data,
                     payload: {
-                        device: response.data.data,
+                        // device: response.data.data,
                         msg: response.data.msg,
                     }
                 })

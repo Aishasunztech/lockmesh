@@ -130,7 +130,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('name', {
-                        initialValue: this.props.device.name,
+                        initialValue: checkValue(this.props.device.name),
                         rules: [{
 
                             required: true, message: 'Device Name is Required !',
