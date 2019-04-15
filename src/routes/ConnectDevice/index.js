@@ -43,6 +43,7 @@ import SideActions from './components/SideActions';
 import AppList from './components/AppList';
 import Password from "./components/Password"
 import { getColor } from "../utils/commonUtils"
+import SettingAppPermissions from "./components/SettingAppPermissions";
 
 class ConnectDevice extends Component {
 
