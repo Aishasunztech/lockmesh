@@ -323,7 +323,7 @@ class ConnectDevice extends Component {
                     <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
                         <Card>
                             <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
-                                <div className="status_bar">
+                                <div className="status_bar"> 
                                     <div className="col-md-6 active_st">
                                         <h5><span style={color}>{finalStatus}</span></h5>
                                     </div>

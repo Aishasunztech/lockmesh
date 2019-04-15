@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Drawer, Layout} from "antd";
-
+import styles from './sidebar.css';
 import SidebarContent from "./SidebarContent";
 import {toggleCollapsedSideNav, updateWindowWidth} from "appRedux/actions/Setting";
 import {

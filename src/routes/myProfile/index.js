@@ -8,6 +8,8 @@ import ChangePassword from './components/changePassword';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
+import styles from './components/profile.css';
+
 
 // import {Link} from 'react-router-dom';
 
@@ -23,22 +25,20 @@ class Profile extends Component {
                 key: 1,
                 name: <a>Dealer ID</a>,
                 value: this.props.profile.id,
+            },{
+                key: 2,
+                name: <a>Dealer Pin</a>,
+                value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
             },
             {
-                key: 2,
+                key: 3,
                 name: <a>Dealer Name</a>,
                 value: this.props.profile.name,
             },
             {
-                key: 3,
+                key: 4,
                 name: <a>Login Email</a>,
                 value: this.props.profile.email,
-            },
-
-            {
-                key: 4,
-                name: <a>Dealer Pin</a>,
-                value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
             },
             {
                 key: 5,
