@@ -8,4 +8,4 @@ export const DEVICE_PENDING_ACTIVATION = "Pending activation";
 export const DEVICE_PRE_ACTIVATION = "Pre-activated";
 export const ADMIN = "admin";
 export const DEALER = "dealer";
-export const SDEEALER = "sdealer";
+export const SDEALER = "sdealer";

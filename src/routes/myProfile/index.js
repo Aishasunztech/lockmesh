@@ -10,7 +10,7 @@ import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
 import {
-    SDEEALER
+    SDEALER
 } from "../../constants/Constants";
 
 // import {Link} from 'react-router-dom';
@@ -50,7 +50,7 @@ class Profile extends Component {
             }
         ]
 
-        if(this.props.profile.type === SDEEALER){
+        if(this.props.profile.type === SDEALER){
             columnData = {
                 key: 6,
                 name: <a>Parent Dealer</a>,
