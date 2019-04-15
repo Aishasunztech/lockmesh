@@ -26,20 +26,20 @@ class Profile extends Component {
             },
             {
                 key: 2,
+                name: <a>Dealer Pin</a>,
+                value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
+            },
+            {
+                key: 3,
                 name: <a>Dealer Name</a>,
                 value: this.props.profile.name,
             },
             {
-                key: 3,
+                key: 4,
                 name: <a>Login Email</a>,
                 value: this.props.profile.email,
             },
 
-            {
-                key: 4,
-                name: <a>Dealer Pin</a>,
-                value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
-            },
             {
                 key: 5,
                 name: <a>Devices</a>,
