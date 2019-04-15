@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Redirect, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators, compose } from "redux";
 import  RestService  from '../../appRedux/services/RestServices';
 import CircularProgress from "../../components/CircularProgress/index";
+import Sidebar from "../Sidebar";
+
 import { 
-  checkComponent,
-  getUser
+  checkComponent
 } from "../../appRedux/actions/Auth";
 
 class RestrictedRoute extends Component {
@@ -62,7 +63,12 @@ class RestrictedRoute extends Component {
               }
             }
           }else{
-            return <CircularProgress />
+            return (
+              <Fragment>
+                <Sidebar />
+                <CircularProgress/>
+              </Fragment>
+               )
           }
         }
       } />
@@ -72,8 +78,7 @@ class RestrictedRoute extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    checkComponent: checkComponent,
-    getUser: getUser
+    checkComponent: checkComponent
   }, dispatch);
 }
 
