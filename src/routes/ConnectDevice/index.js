@@ -231,8 +231,10 @@ class ConnectDevice extends Component {
             return (<Password pwdType={this.props.pageName} />);
         } else if (this.props.pageName === "admin_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.props.pageName} />);
-        } else if (this.props.pageName === "settings" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<Password pwdType={this.props.pageName} />);
+        } else if (this.props.pageName === "setting_app_permissions" && (this.props.isSync === 1 || this.props.isSync === true)) {
+            return (<div><h1 className="not_syn_txt"><a>Coming Soon</a></h1></div>);
+        } else if (this.props.pageName === "system_controls" && (this.props.isSync === 1 || this.props.isSync === true)) {
+            return (<div><h1 className="not_syn_txt"><a>Coming Soon</a></h1></div>);
         } else if (this.props.pageName === "not_available") {
             return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
         } else if (this.props.pageName === "Manage_password") {
@@ -252,8 +254,7 @@ class ConnectDevice extends Component {
                 />
             )
 
-        }
-        else {
+        } else {
             return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
         }
     }
