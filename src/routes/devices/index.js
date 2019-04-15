@@ -9,7 +9,8 @@ import {
     editDevice,
     rejectDevice,
     addDevice,
-    preActiveDevice
+    preActiveDevice,
+    deleteUnlinkDevice
 } from "../../appRedux/actions/Devices";
 import {
     DEVICE_ACTIVATED,
@@ -17,7 +18,8 @@ import {
     DEVICE_PENDING_ACTIVATION,
     DEVICE_PRE_ACTIVATION,
     DEVICE_SUSPENDED,
-    DEVICE_UNLINKED
+    DEVICE_UNLINKED,
+    ADMIN
 } from '../../constants/Constants'
 
 import {
@@ -803,9 +805,9 @@ class Devices extends Component {
         // alert(value);
         // value = value.toLowerCase();
 
-        // console.log('clollolol',this.state.columns);
-        if(value == DEVICE_UNLINKED){
-            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+       // console.log('clollolol',this.state.columns);
+        if(value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)){
+            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete Selected</Button>
         }
         else{
              this.state.columns[0]['title'] = ''
@@ -875,14 +877,15 @@ class Devices extends Component {
     }
 
     handleChangetab = (value) => {
+    
         // alert('value');
         // alert(value);
 
         // console.log('selsect', this.props.selectedOptions)
         // let type = value.toLowerCase();
 
-         if(value == '5'){
-            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+         if(value == '5' && (this.props.user.type !== ADMIN)){
+            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete Selected</Button>
         }
         else{
              this.state.columns[0]['title'] = ''
@@ -1028,6 +1031,7 @@ class Devices extends Component {
 
             })
             // this.copyDevices = this.props.devices;
+            this.handleChangetab(this.state.tabselect)
         }
     }
 
@@ -1111,6 +1115,9 @@ class Devices extends Component {
         }, true);
     }
 
+    refreshComponent =()=> {
+        this.props.history.push('/devices');
+    }
     render() {
 
         return (
@@ -1126,9 +1133,9 @@ class Devices extends Component {
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText="Add Device"
                                 options={this.props.options}
-                                isAddButton={this.props.user.type !== 'admin'}
+                                isAddButton={this.props.user.type !== ADMIN}
                                 AddDeviceModal={true}
-                                disableAddButton={this.props.user.type === 'admin'}
+                                disableAddButton={this.props.user.type === ADMIN}
                                 // toLink="add-device"
                                 handleDeviceModal={this.handleDeviceModal}
                                 handleCheckChange={this.handleCheckChange}
@@ -1151,6 +1158,9 @@ class Devices extends Component {
                                 tabselect={this.state.tabselect}
                                 handleChangetab={this.handleChangetab}
                                 handlePagination={this.handlePagination}
+                                deleteUnlinkDevice={this.props.deleteUnlinkDevice}
+                                user={this.props.user}
+                                refreshComponent={this.refreshComponent}
                             />
 
                             <ShowMsg
@@ -1233,12 +1243,14 @@ function mapDispatchToProps(dispatch) {
         preActiveDevice: preActiveDevice,
         postPagination: postPagination,
         getPagination: getPagination,
-        getNotification: getNotification
+        getNotification: getNotification,
+        deleteUnlinkDevice: deleteUnlinkDevice
     }, dispatch);
 }
 
 var mapStateToProps = ({ devices, auth }) => {
     //   console.log('devices AUTH', devices.devices);
+  //  console.log('devices is', devices);
     return {
         devices: devices.devices,
         msg: devices.msg,

@@ -11,7 +11,8 @@ import {
     GET_CHAT_IDS,
     GET_PGP_EMAILS,
     REJECT_DEVICE,
-    PRE_ACTIVATE_DEVICE
+    PRE_ACTIVATE_DEVICE,
+    DELETE_UNLINK_DEVICE,
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -68,6 +69,30 @@ export function editDevice(formData) {
         });
     }
 }
+
+export function deleteUnlinkDevice(devices) {
+    console.log('at action file  for save history abaid: ', devices )
+    return (dispatch) => {
+        // alert("hello");
+        RestService.deleteUnlinkDevice(devices).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log('successfully ', response.data);
+                dispatch({
+                    type: DELETE_UNLINK_DEVICE,
+                    response: response.data,
+                    payload: {
+                        formData: devices
+                    }
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
 
 export function suspendDevice(device) {
 

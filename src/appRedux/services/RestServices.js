@@ -68,7 +68,7 @@ const RestService = {
         } else {
             return true;
         }
-        
+
     },
 
     // Component Allowed
@@ -108,6 +108,10 @@ const RestService = {
             RestService.getHeader()
         )
 
+    },
+
+    deleteUnlinkDevice: (devices)=> {
+        return axios.put(BASE_URL + 'users/deleteUnlinkDevice',{devices}, RestService.getHeader())
     },
 
     // getNewDevices
@@ -417,6 +421,7 @@ const RestService = {
         // return this.response;
     },
     unflagged(device_id) {
+        // alert("dadsada")
         return axios.post(BASE_URL + 'users/UnflagDevice/' + device_id, {}, RestService.getHeader());
     },
     flagged(device_id, data) {

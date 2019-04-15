@@ -127,7 +127,7 @@ class ConnectDevice extends Component {
 
     }
     onBackHandler = () => {
-        console.log("device details", this.props.device_details);
+        // console.log("device details", this.props.device_details);
         if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
             if (this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password") {
                 this.props.changePage("Manage_password");
@@ -275,6 +275,7 @@ class ConnectDevice extends Component {
         this.onBackHandler();
     }
     refreshDevice = (deviceId) => {
+        console.log(deviceId);
         this.props.startLoading();
         // console.log("refreshDevice", this.props);
         //   this.props.getAccIdFromDvcId(deviceId);
