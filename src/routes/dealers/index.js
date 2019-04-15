@@ -63,6 +63,38 @@ class Dealers extends Component {
                     className: '',
                 }
             ]
+        }, {
+            title: (
+                <Input.Search
+                    name="link_code"
+                    key="link_code"
+                    id="link_code"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder="Dealer Pin"
+                    onKeyUp={this.handleSearch}
+
+                />
+            ),
+            dataIndex: 'link_code',
+            className: '',
+            children: [
+                {
+                    title: 'DEALER PIN',
+                    dataIndex: 'link_code',
+                    key: 'link_code',
+                    // sorter: (a, b) => {
+                    //     console.log(a);
+                    //     // console.log(b);
+                    //     return a.link_code.length;
+                    // },
+                    sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+
+                    align: 'center',
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
         },
         {
             title: (
@@ -130,39 +162,7 @@ class Dealers extends Component {
                 }
             ]
         },
-        {
-            title: (
-                <Input.Search
-                    name="link_code"
-                    key="link_code"
-                    id="link_code"
-                    className="search_heading"
-                    autoComplete="new-password"
-                    placeholder="Dealer Pin"
-                    onKeyUp={this.handleSearch}
 
-                />
-            ),
-            dataIndex: 'link_code',
-            className: '',
-            children: [
-                {
-                    title: 'DEALER PIN',
-                    dataIndex: 'link_code',
-                    key: 'link_code',
-                    // sorter: (a, b) => {
-                    //     console.log(a);
-                    //     // console.log(b);
-                    //     return a.link_code.length;
-                    // },
-                    sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
-                    align: 'center',
-                    sortDirections: ['ascend', 'descend'],
-                    className: '',
-                }
-            ]
-        },
         {
             title: (
                 <Input.Search
