@@ -803,7 +803,7 @@ class Devices extends Component {
         // alert(value);
         // value = value.toLowerCase();
 
-        console.log('clollolol',this.state.columns);
+        // console.log('clollolol',this.state.columns);
         if(value == DEVICE_UNLINKED){
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
         }

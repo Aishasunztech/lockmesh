@@ -78,7 +78,7 @@ class Profile extends Component {
                 }
             ];
         }
-        console.log('datasource', dataSource);
+        // console.log('datasource', dataSource);
 
         const columns = [{
             title: 'Name',
@@ -167,7 +167,7 @@ class Profile extends Component {
 
 var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
-    console.log('ooo', state.auth);
+    // console.log('ooo', state.auth);
 
     return {
         isloading: state.isloading,

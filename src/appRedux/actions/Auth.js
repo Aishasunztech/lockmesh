@@ -32,7 +32,7 @@ export const loginUser = (user) => {
           }
         });
       } else {
-        console.log('dealer auth', resp);
+        // console.log('dealer auth', resp);
         let payload = {
           id: resp.data.user.id,
           connected_dealer: resp.data.user.connected_dealer,
