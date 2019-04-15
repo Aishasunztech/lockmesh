@@ -122,6 +122,7 @@ class DevicesList extends Component {
             devices: [],
             pagination: this.props.pagination,
             selectedRows: [],
+            selectedRowKeys: [],
             self: this
         };
         this.renderList = this.renderList.bind(this);
@@ -258,14 +259,23 @@ class DevicesList extends Component {
 
     deleteAllUnlinkedDevice = () => {
         if(this.state.selectedRows.length){
-            let title = ' Are you sure, you want to delete All these devices'
+            let title = ' Are you sure, you want to delete All these devices';
+            let arr = [];
+          //  console.log('delete the device', this.state.selectedRowKeys);
+            for(let id of this.state.selectedRowKeys){
+                for(let device of this.props.devices){
+                    if(id == device.device_id){
+                        arr.push(device)
+                    }
+                }
+            }
+            console.log('object of ', arr);
             this.confirmDelete(this.state.selectedRows, title);
         }
         
-       console.log('DELETE ALL 1', this.state.selectedRows);
+     //  console.log('DELETE ALL 1', this.state.selectedRows);
         
     }
-
 
     confirmDelete = (devices, title)=> {
         this.confirm({
@@ -315,7 +325,7 @@ class DevicesList extends Component {
         if (this.props.tabselect == '5') {
              rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
-                this.setState({selectedRows: selectedRows})
+                this.setState({selectedRows: selectedRows, selectedRowKeys: selectedRowKeys})
                     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
