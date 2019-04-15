@@ -76,9 +76,6 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check_component', { ComponentUri: ComponentUri }, RestService.getHeader());
 
     },
-    getUser: () => {
-        // return axios.get(BASE_URL + 'users/get_user', RestService.getHeader());
-    },
     // isAdmin
     isAdmin: () => {
         // var self = this;
