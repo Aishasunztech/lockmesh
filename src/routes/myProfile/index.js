@@ -47,6 +47,11 @@ class Profile extends Component {
             },
             {
                 key: 6,
+                name: <a>Parent Dealer</a>,
+                value: (this.props.profile.connected_dealer==0)?"N/A": this.props.profile.connected_dealer,
+            },
+            {
+                key: 7,
                 name: <a>Token</a>,
                 value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
             }
