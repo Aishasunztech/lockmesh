@@ -8,6 +8,10 @@ import ChangePassword from './components/changePassword';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
+import styles from './components/profile.css';
+import {
+    SDEEALER
+} from "../../constants/Constants";
 
 // import {Link} from 'react-router-dom';
 
@@ -18,13 +22,13 @@ class Profile extends Component {
     }
 
     render() {
-        const dataSource = [
+        let columnData = null
+        let commonColumns = [
             {
                 key: 1,
                 name: <a>Dealer ID</a>,
                 value: this.props.profile.id,
-            },
-            {
+            },{
                 key: 2,
                 name: <a>Dealer Pin</a>,
                 value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
@@ -39,23 +43,42 @@ class Profile extends Component {
                 name: <a>Login Email</a>,
                 value: this.props.profile.email,
             },
-
             {
                 key: 5,
                 name: <a>Devices</a>,
                 value: this.props.profile.connected_dealer,
-            },
-            {
+            }
+        ]
+
+        if(this.props.profile.type === SDEEALER){
+            columnData = {
                 key: 6,
                 name: <a>Parent Dealer</a>,
                 value: (this.props.profile.connected_dealer==0)?"N/A": this.props.profile.connected_dealer,
-            },
-            {
+            }
+        }
+        let dataSource=[];
+        if(columnData!=null){
+
+            dataSource = commonColumns;
+            dataSource.push(columnData);
+            dataSource.push({
                 key: 7,
                 name: <a>Token</a>,
                 value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
-            }
-        ];
+            });
+
+        } else {
+            dataSource = [
+                ...commonColumns,
+                {
+                    key: 7,
+                    name: <a>Token</a>,
+                    value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
+                }
+            ];
+        }
+        console.log('datasource', dataSource);
 
         const columns = [{
             title: 'Name',
