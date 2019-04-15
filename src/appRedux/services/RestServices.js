@@ -77,7 +77,7 @@ const RestService = {
 
     },
     getUser: () => {
-        return axios.get(BASE_URL + 'users/get_user', RestService.getHeader());
+        // return axios.get(BASE_URL + 'users/get_user', RestService.getHeader());
     },
     // isAdmin
     isAdmin: () => {

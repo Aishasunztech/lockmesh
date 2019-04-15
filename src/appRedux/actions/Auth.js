@@ -64,9 +64,27 @@ export const checkComponent = (componentUri) => {
       
       if (RestService.checkAuth(resp.data)) {
         if (resp.data.status === true) {
+
+          let payload = {
+            id: resp.data.user.id,
+            connected_dealer: resp.data.user.connected_dealer,
+            email: resp.data.user.email,
+            dealerId: resp.data.user.id,
+            firstName: resp.data.user.firstName,
+            lastName: resp.data.user.lastName,
+            name: resp.data.user.dealer_name,
+            // token: resp.data.token,
+            type: resp.data.user.user_type,
+            dealer_pin: resp.data.user.link_code
+          }
+          RestService.setUserData(resp.data);
+
           dispatch({
             type: COMPONENT_ALLOWED,
-            payload: resp.data.ComponentAllowed
+            payload: {
+              ComponentAllowed: resp.data.ComponentAllowed,
+              ...payload
+            }
           });
 
         } else {
@@ -83,47 +101,48 @@ export const checkComponent = (componentUri) => {
   }
 };
 export const getUser = () => {
-  return (dispatch) => {
-    RestService.getUser().then((resp) => {
-      if (RestService.checkAuth(resp.data)) {
-        if (resp.data.status === false) {
-          dispatch({  
-            type: LOGIN_FAILED,
-            payload: {
-              msg: resp.data.msg,
-              status: resp.data.status
-            }
-          });
-        } else {
+  // return (dispatch) => {
+  //   RestService.getUser().then((resp) => {
+  //     if (RestService.checkAuth(resp.data)) {
+  //       if (resp.data.status === false) {
+  //         dispatch({  
+  //           type: LOGIN_FAILED,
+  //           payload: {
+  //             msg: resp.data.msg,
+  //             status: resp.data.status
+  //           }
+  //         });
+  //       } else {
 
-          let payload = {
-            id: resp.data.user.id,
-            connected_dealer: resp.data.user.connected_dealer,
-            email: resp.data.user.email,
-            dealerId: resp.data.user.id,
-            firstName: resp.data.user.firstName,
-            lastName: resp.data.user.lastName,
-            name: resp.data.user.dealer_name,
-            // token: resp.data.token,
-            type: resp.data.user.user_type,
-            dealer_pin: resp.data.user.link_code
-          }
-          RestService.setUserData(resp.data);
-          // console.log(payload);
+  //         let payload = {
+  //           id: resp.data.user.id,
+  //           connected_dealer: resp.data.user.connected_dealer,
+  //           email: resp.data.user.email,
+  //           dealerId: resp.data.user.id,
+  //           firstName: resp.data.user.firstName,
+  //           lastName: resp.data.user.lastName,
+  //           name: resp.data.user.dealer_name,
+  //           // token: resp.data.token,
+  //           type: resp.data.user.user_type,
+  //           dealer_pin: resp.data.user.link_code
+  //         }
+  //         RestService.setUserData(resp.data);
+  //         // console.log(payload);
 
-          dispatch({
-            type: GET_USER,
-            payload: payload
-          })
-        }
-      } else {
-        dispatch({
-          type: INVALID_TOKEN
-        })
-      }
-    });
-  }
+  //         dispatch({
+  //           type: GET_USER,
+  //           payload: payload
+  //         })
+  //       }
+  //     } else {
+  //       dispatch({
+  //         type: INVALID_TOKEN
+  //       })
+  //     }
+  //   });
+  // }
 }
+
 export const updateUserProfile = (fromData) => {
   return (dispatch) => {
     // alert("hello");

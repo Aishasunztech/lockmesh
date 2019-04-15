@@ -24,7 +24,8 @@ const INIT_STATE = {
   showMessage: false,
   initURL: '',
   socket: io,
-  isAllowed: true,
+  isAllowed: false,
+  isRequested:false,
   authUser: {
     id: localStorage.getItem('id'),
     connected_dealer: localStorage.getItem('connected_dealer'),
@@ -180,11 +181,22 @@ export default (state = INIT_STATE, action) => {
       }
     }
     case COMPONENT_ALLOWED: {
-
       // console.log("dsfsdfsdf",action.payload)
       return {
         ...state,
-        isAllowed: action.payload
+        isAllowed: action.payload.ComponentAllowed,
+        isRequested: true,
+        authUser:{
+          id: action.payload.id,
+          connected_dealer: action.payload.connected_dealer,
+          email: action.payload.email,
+          dealerId: action.payload.dealerId,
+          firstName: action.payload.firstName,
+          lastName: action.payload.lastName,
+          name: action.payload.name,
+          type: action.payload.type,
+          dealer_pin: action.payload.dealer_pin
+        }
       }
       break;
     }
