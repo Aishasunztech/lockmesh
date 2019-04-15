@@ -166,12 +166,8 @@ const RestService = {
     },
 
     // connect devices for dealer dash.
-    connectDevice: (device_id) => {
-        // this.setHeaders(this.sessionLogin('token'));    
-
-        // this.response = this.http.get(this.baseUrl + '/users/connect/' + device_id, this.oHeaders);
-        // this.authtoken(this.response);
-        // return this.response;
+    getDealerApps: () => {
+        return axios.get(BASE_URL + "users/get_dealer_apps", RestService.getHeader());
     },
 
     getDeviceApps: (device_id) => {
@@ -188,9 +184,9 @@ const RestService = {
     },
     savePermissions: (apkId, dealers) => {
         return axios.post(BASE_URL + 'users/save_permissions', {
-                apkId: apkId,
-                dealers: dealers
-            }, 
+            apkId: apkId,
+            dealers: dealers
+        },
             RestService.getHeader()
         );
     },
@@ -262,9 +258,9 @@ const RestService = {
     },
 
     // unlink Device
-    unlinkDevice: (id) => {
+    unlinkDevice: (device) => {
 
-        return axios.post(BASE_URL + 'users/unlink/' + id, { id }, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/unlink/' + device.usr_device_id, { device }, RestService.getHeader());
 
     },
 

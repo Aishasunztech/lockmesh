@@ -4,10 +4,10 @@ import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
-import { Tabs } from 'antd';
+import { Tabs,Modal } from 'antd';
 import {
     DEVICE_ACTIVATED,
     DEVICE_EXPIRED,
@@ -111,6 +111,7 @@ class DevicesList extends Component {
 
     constructor(props) {
         super(props);
+        this.confirm = Modal.confirm;
 
         this.state = {
             searchText: '',
@@ -120,12 +121,17 @@ class DevicesList extends Component {
             columns: [],
             devices: [],
             pagination: this.props.pagination,
-            selectedRows: []
+            selectedRows: [],
+            selectedRowKeys: [],
+            self: this
         };
         this.renderList = this.renderList.bind(this);
     }
-    deleteUnlinkedDevice = (dvc_id, dlr_id) => {
-        console.log(dvc_id, 'done', dlr_id);
+    deleteUnlinkedDevice = (device) => {
+        let arr = [];
+        arr.push(device);
+        let title = ' Are you sure, you want to delete the device';
+        this.confirmDelete(arr, title);
     }
 
     // renderList
@@ -146,6 +152,7 @@ class DevicesList extends Component {
 
             var status = device.finalStatus;
             // console.log("not avail", status);
+            var order = getSortOrder(status)
             let color = getColor(status);
             var style = { margin: '0', width: '60px' }
             var text = "EDIT";
@@ -159,11 +166,15 @@ class DevicesList extends Component {
             }
             // console.log(device);
             return {
+                // sortOrder: <span style={{ display: 'none' }}>{order}</span>,
+                // sortOrder: (<span id="order">{order}</span>),
+                // sortOrder: {order},
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: (device.activation_status === 0) ?
-                    ((status !== 'Unlinked' || status !== 'unlinked') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device.device_id, device.dealer_id)} >Delete</Button> : false)
+                action: (device.activation_status === 0 || device.activation_status === null) ?
+                    ((status == 'Unlinked' || status == 'unlinked') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button> : false)
                     :
+
                     (<Fragment>
                         {(status === "pending activation" || status === "Pending activation" || status === "Pending Activation") ?
                             <Fragment>
@@ -231,7 +242,6 @@ class DevicesList extends Component {
                 expiry_date: checkValue(device.expiry_date),
             }
         });
-
     }
 
     componentDidUpdate(prevProps) {
@@ -249,12 +259,34 @@ class DevicesList extends Component {
 
     deleteAllUnlinkedDevice = () => {
         if(this.state.selectedRows.length){
-            console.log('devices', this.state.selectedRows);
-        }
-        else{
-            console.log('empty data', this.state.selectedRows);
+            let title = ' Are you sure, you want to delete All these devices';
+            let arr = [];
+          //  console.log('delete the device', this.state.selectedRowKeys);
+            for(let id of this.state.selectedRowKeys){
+                for(let device of this.props.devices){
+                    if(id == device.device_id){
+                        arr.push(device)
+                    }
+                }
+            }
+            console.log('object of ', arr);
+            this.confirmDelete(this.state.selectedRows, title);
         }
         
+     //  console.log('DELETE ALL 1', this.state.selectedRows);
+        
+    }
+
+    confirmDelete = (devices, title)=> {
+        this.confirm({
+            title: title,
+            content: '',
+            onOk: (() => {
+               // this.props.suspendDevice(device);
+               
+            }),
+            onCancel() { },
+        });
     }
 
 
@@ -293,20 +325,19 @@ class DevicesList extends Component {
         if (this.props.tabselect == '5') {
              rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
-                this.setState({selectedRows: selectedRows})
+                this.setState({selectedRows: selectedRows, selectedRowKeys: selectedRowKeys})
                     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
                     disabled: record.name === 'Disabled User', // Column configuration not to be checked
                     name: record.name,
                 }),
-                columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+              //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
         }
         else {
  rowSelection = null;
         }
-
 
         return (
             <div className="dev_table">
@@ -426,6 +457,16 @@ class DevicesList extends Component {
                 />
                 <AddDevice ref="add_device"
                 />
+                {/* <Modal
+                    title="Basic Modal"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    >
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                </Modal> */}
             </div>
 
         )
@@ -464,6 +505,10 @@ export default class Tab extends Component {
         // alert('callback');
         // console.log(key);
         this.props.handleChangetab(key);
+    }
+
+    deleteAllUnlinkedDevice = () => {
+        this.refs.devciesList1.deleteAllUnlinkedDevice()
     }
 
     handlePagination = (value) => {
@@ -609,7 +654,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        //   ref="devciesList"
+                           ref="devciesList1"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}

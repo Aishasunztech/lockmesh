@@ -31,9 +31,9 @@ import {
     FLAG_DEVICE,
     UNFLAG_DEVICE,
     WIPE_DEVICE,
-    CHECKPASS
-
-} from "constants/ActionTypes";
+    CHECKPASS,
+    GET_DEALER_APPS
+} from "../../constants/ActionTypes";
 import {
     message, Modal
 } from 'antd';
@@ -93,7 +93,9 @@ const initialState = {
     encryptedCPwd: '',
 
     duressPwd: '',
-    duressCPwd: ''
+    duressCPwd: '',
+
+    apk_list: [],
 };
 
 export default (state = initialState, action) => {
@@ -543,6 +545,13 @@ export default (state = initialState, action) => {
                 },
                 applyBtn: true,
                 undoBtn: true
+            }
+        }
+        case GET_DEALER_APPS:{
+
+            return {
+                ...state,
+                apk_list: action.payload,
             }
         }
         default:

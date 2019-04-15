@@ -8,7 +8,8 @@ import {
     showSaveProfileModal,
     saveProfile,
     hanldeProfileInput,
-    transferDeviceProfile
+    transferDeviceProfile,
+    getDealerApps
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip } from "antd";
@@ -18,6 +19,9 @@ import ActivateDevcie from '../../devices/components/ActivateDevice';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
+import DealerApps from "./DealerApps";
+
+
 const confirm = Modal.confirm;
 
 class SideActions extends Component {
@@ -25,28 +29,22 @@ class SideActions extends Component {
     constructor(props) {
         super(props);
 
-
         this.state = {
-            // type: "history",
-            // historyModal: false,
-
-            // saveProfileModal: false,
-            // profileType: '',
-            // profileName: '',
-            // policyName: ''
-
+            pushAppsModal: false,
             historyModal: false,
             saveProfileModal: false,
             historyType: "history",
             saveProfileType: '',
             profileName: '',
             policyName: '',
-            disabled: false
+            disabled: false,
+            selectedApps:[]
         }
     }
 
     componentDidMount() {
         // console.log(this.props.historyType, 'did')
+        this.props.getDealerApps();
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
@@ -130,7 +128,24 @@ class SideActions extends Component {
         });
     }
 
+    showPushAppsModal = (visible) => {
+        this.setState({
+            pushAppsModal: visible
+        })
+    }
 
+    pushApps = () => {
+        if(this.state.selectedApps.length){
+            console.log("save pushed apps",this.state.selectedApps);
+        }
+    }
+
+    onSelectChange = (selectedRowKeys, selectedRows) => {
+        // console.log("on selection", selectedRows)
+        this.setState({
+            selectedApps: selectedRows
+        })
+    }
 
     handleFlag(flagged) {
         if (flagged == 'Unflag') {
@@ -151,11 +166,13 @@ class SideActions extends Component {
                 <div className="gutter-example side_action">
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
-                            <Col span={12}
-                                className="gutter-row" justify="center" >
-                                <Tooltip title="Coming Soon">
-                                    <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 15 }} ><Icon type='upload' /> Push</Button>
-                                </Tooltip>
+                            <Col
+                                span={12}
+                                className="gutter-row"
+                                justify="center"
+                            >
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showPushAppsModal(true) } ><Icon type='upload' /> Push</Button>
+
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
@@ -167,7 +184,11 @@ class SideActions extends Component {
                                 <Button type="default" disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button> */}
 
                             </Col>
-                            <Col className="gutter-row" justify="center" span={12} >
+                            <Col
+                                span={12}
+                                className="gutter-row"
+                                justify="center"
+                            >
                                 <Tooltip placement="bottom" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 15 }} > <Icon type='download' /> Pull</Button>
                                 </Tooltip>
@@ -181,7 +202,7 @@ class SideActions extends Component {
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button> */}
                                 <Tooltip title="Coming Soon" placement="left">
-                                    <Button  type="default" style={{ width: "100%", marginBottom: 15 }} >IMEI</Button>
+                                    <Button type="default" style={{ width: "100%", marginBottom: 15 }} >IMEI</Button>
                                 </Tooltip>
                             </Col>
 
@@ -248,34 +269,56 @@ class SideActions extends Component {
                         this.saveProfile();
                     }}
                     onCancel={() => this.showSaveProfileModal(false)}
+                   
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
                 </Modal>
+                
+                <Modal
+                    // closable={false}
+                    style={{ top: 20 }}
+                    title="Select Apps"
+                    visible={this.state.pushAppsModal}
+                    onOk={() => {
+                        this.pushApps();
 
-                <ActivateDevcie ref="activate"
+                        this.showPushAppsModal(false)
+                    }}
+                    onCancel={() => this.showPushAppsModal(false)}
+                    okText="Push Apps"
+                >
+                    <DealerApps 
+                        apk_list = {this.props.apk_list}
+                        onSelectChange= {this.onSelectChange}
+                    />
+                </Modal>
+
+                <ActivateDevcie
+                    ref="activate"
                     activateDevice={this.props.activateDevice}
                 />
 
-                <SuspendDevice ref="suspend"
+                <SuspendDevice
+                    ref="suspend"
                     suspendDevice={this.props.suspendDevice}
-                    go_back={this.props.history.goBack}
-                    getDevice={this.props.getDevicesList}
+                    // go_back={this.props.history.goBack}
+                    // getDevice={this.props.getDevicesList}
                 />
 
-                <EditDevice ref='edit_device' />
-                <WipeDevice ref='wipe_device'
+                <EditDevice
+                    ref='edit_device'
+                />
+                <WipeDevice
+                    ref='wipe_device'
                     device={this.props.device}
                     authUser={this.props.authUser}
                     checkPass={this.props.checkPass}
-
-
                 />
-                <FlagDevice ref='flag_device'
-                    go_back={this.props.history.goBack}
-                    getDevice={this.props.getDevicesList}
+                <FlagDevice
+                    ref='flag_device'
+                    // go_back={this.props.history.goBack}
+                    // getDevice={this.props.getDevicesList}
                 />
-
-
             </div>
         )
     }
@@ -296,7 +339,8 @@ function mapDispatchToProps(dispatch) {
         showSaveProfileModal: showSaveProfileModal,
         saveProfile: saveProfile,
         hanldeProfileInput: hanldeProfileInput,
-        transferDeviceProfile: transferDeviceProfile
+        transferDeviceProfile: transferDeviceProfile,
+        getDealerApps: getDealerApps
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }) => {
@@ -319,7 +363,8 @@ var mapStateToProps = ({ device_details, auth }) => {
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         device_id: device_details.device.device_id,
-        usr_acc_id: device_details.device.id
+        usr_acc_id: device_details.device.id,
+        apk_list: device_details.apk_list
     };
 }
 
@@ -335,8 +380,8 @@ function showConfirm(device, action, _this, msg, type) {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
                 if (type === 'wipe') {
                     action(device)
-                } else {
-                    action(device.usr_device_id);
+                } else if (type === 'unlink') {
+                    action(device);
                 }
                 if (type === 'flagged') {
                     _this.props.activateDevice(device)
