@@ -45,6 +45,8 @@ const RestService = {
         localStorage.setItem('firstName', data.user.firstName);
         localStorage.setItem('lastName', data.user.lastName);
         localStorage.setItem('connected_dealer', data.user.connected_dealer);
+        localStorage.setItem('connected_devices', data.user.connected_devices[0].total);
+      
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
     },
@@ -57,6 +59,7 @@ const RestService = {
         localStorage.setItem('firstName', data.user.firstName);
         localStorage.setItem('lastName', data.user.lastName);
         localStorage.setItem('connected_dealer', data.user.connected_dealer);
+        localStorage.setItem('connected_devices', data.user.connected_devices[0].total);
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
 

@@ -24,6 +24,7 @@ export const loginUser = (user) => {
   return (dispatch) => {
 
     RestService.login(user).then((resp) => {
+      console.log('login', resp.data.user.connected_devices[0].total);
       if (resp.data.status === false) {
         dispatch({
           type: LOGIN_FAILED,
@@ -37,6 +38,7 @@ export const loginUser = (user) => {
         let payload = {
           id: resp.data.user.id,
           connected_dealer: resp.data.user.connected_dealer,
+          connected_devices: resp.data.user.connected_devices[0].total,
           email: resp.data.user.email,
           dealerId: resp.data.user.id,
           firstName: resp.data.user.firstName,
@@ -66,13 +68,14 @@ export const checkComponent = (componentUri) => {
       payload: false,
     })
     RestService.checkComponent(componentUri).then((resp) => {
-      
+      console.log('id id ', resp.data.user.connected_devices[0].total);
       if (RestService.checkAuth(resp.data)) {
         if (resp.data.status === true) {
 
           let payload = {
             id: resp.data.user.id,
             connected_dealer: resp.data.user.connected_dealer,
+             connected_devices: resp.data.user.connected_devices[0].total,
             email: resp.data.user.email,
             dealerId: resp.data.user.id,
             firstName: resp.data.user.firstName,

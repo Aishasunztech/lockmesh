@@ -28,6 +28,7 @@ const INIT_STATE = {
   isRequested:false,
   authUser: {
     id: localStorage.getItem('id'),
+    connected_devices: localStorage.getItem('connected_devices'),
     connected_dealer: localStorage.getItem('connected_dealer'),
     email: localStorage.getItem("email"),
     dealerId: localStorage.getItem("id"),
@@ -179,6 +180,7 @@ export default (state = INIT_STATE, action) => {
         authUser:{
           id: action.payload.id,
           connected_dealer: action.payload.connected_dealer,
+          connected_devices: action.payload.connected_devices,
           email: action.payload.email,
           dealerId: action.payload.dealerId,
           firstName: action.payload.firstName,

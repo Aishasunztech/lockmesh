@@ -46,7 +46,7 @@ class Profile extends Component {
             {
                 key: 5,
                 name: <a>Devices</a>,
-                value: this.props.profile.connected_dealer,
+                value: this.props.profile.type == 'admin' ? 'All' : this.props.profile.connected_devices,
             }
         ]
 
@@ -93,7 +93,6 @@ class Profile extends Component {
         }];
 
         // console.log('uio', this.refs.Customizer.toggleCustomizer)
-
         return (
             <div>
                 <Row justify='center' style={{ backgroundColor: '#012346', height: 110, paddingTop: 20 }}>

@@ -14,8 +14,7 @@ import {
     DEVICE_PENDING_ACTIVATION,
     DEVICE_PRE_ACTIVATION,
     DEVICE_SUSPENDED,
-    DEVICE_UNLINKED,
-    ADMIN
+    DEVICE_UNLINKED
 } from '../../../constants/Constants'
 
 const TabPane = Tabs.TabPane;
@@ -144,7 +143,12 @@ class DevicesList extends Component {
             // const device_status =  "SUSPEND";
             const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
             const flagged = device.flagged;
-           
+            // console.log(flagged);
+            // console.log("status", device.status);
+            // console.log("account status", device.account_status);
+            // console.log("unlink status", device.unlink_status);
+            // console.log("device status", device_status);
+            // console.log("activation status", device.activation_status);
 
             var status = device.finalStatus;
             // console.log("not avail", status);
@@ -168,7 +172,7 @@ class DevicesList extends Component {
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
                 action: (device.activation_status === 0 || device.activation_status === null ) ?
-                    (((status == 'Unlinked' || status == 'unlinked') && this.props.user.type !== 'admin') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button> : false)
+                    ((status === DEVICE_UNLINKED && this.props.user.type !== 'admin') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button> : false)
                     :
 
                     (<Fragment>
@@ -181,11 +185,11 @@ class DevicesList extends Component {
                                     style={{ margin: '0 8px 0 8px' }}
                                     onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}>
                                     Accept
-                                </Button>
+                        </Button>
                             </Fragment>
                             :
                             <Fragment>
-                                {((device.flagged === '' || device.flagged === null || device.flagged === 'null') && (device.finalStatus !== "Suspended")) ?
+                                {((device.flagged === '' || device.flagged === null || device.flagged === 'null') && (status !== DEVICE_SUSPENDED)) ?
                                     <Button
                                         type={button_type}
                                         size="small"
