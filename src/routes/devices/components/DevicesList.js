@@ -14,7 +14,8 @@ import {
     DEVICE_PENDING_ACTIVATION,
     DEVICE_PRE_ACTIVATION,
     DEVICE_SUSPENDED,
-    DEVICE_UNLINKED
+    DEVICE_UNLINKED,
+    ADMIN
 } from '../../../constants/Constants'
 
 const TabPane = Tabs.TabPane;
@@ -143,12 +144,7 @@ class DevicesList extends Component {
             // const device_status =  "SUSPEND";
             const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
             const flagged = device.flagged;
-            // console.log(flagged);
-            // console.log("status", device.status);
-            // console.log("account status", device.account_status);
-            // console.log("unlink status", device.unlink_status);
-            // console.log("device status", device_status);
-            // console.log("activation status", device.activation_status);
+           
 
             var status = device.finalStatus;
             // console.log("not avail", status);
@@ -176,7 +172,7 @@ class DevicesList extends Component {
                     :
 
                     (<Fragment>
-                        {(status === "pending activation" || status === "Pending activation" || status === "Pending Activation") ?
+                        {(status === DEVICE_PENDING_ACTIVATION) ?
                             <Fragment>
                                 <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>Decline</Button>
                                 <Button
@@ -185,7 +181,7 @@ class DevicesList extends Component {
                                     style={{ margin: '0 8px 0 8px' }}
                                     onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}>
                                     Accept
-                        </Button>
+                                </Button>
                             </Fragment>
                             :
                             <Fragment>
@@ -202,7 +198,7 @@ class DevicesList extends Component {
                                 }
 
                                 {(device.device_status === 1) ? <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button> : null}
-                                {(status !== 'Unlinked' || status !== 'unlinked') ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
+                                {(status !== DEVICE_UNLINKED) ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
                                     : ''}
                             </Fragment>
 
