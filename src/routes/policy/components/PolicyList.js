@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Table } from "antd";
+import { Card, Row, Col, List, Button, message, Table,Icon,Switch } from "antd";
 
 class PolicyList extends Component {
 
@@ -43,12 +43,33 @@ class PolicyList extends Component {
                         </Button>
                     </Fragment>)
                 ,
+                'permission': <span style={{fontSize:15, fontWeight:400}}>4</span>,
+                policy_status: (<Switch defaultChecked={ true} onChange={(e) => {
+                   
+                }} />),
+                policy_command: 'apk-1554898502524.apk',
                 rowKey: index,
                 policy_name: (policy.policy_name) ? `${policy.policy_name}` : "N/A",
-                policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A"
+                policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
+                default_policy: (<Switch defaultChecked={ true} onChange={(e) => {
+                   
+                }} />),
             }
         });
 
+    }
+
+    customExpandIcon(props) {
+        if (props.expanded) {
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-down" /></a>
+        } else {
+
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-right" /></a>
+        }
     }
 
 
@@ -64,6 +85,13 @@ class PolicyList extends Component {
                     <Table className="devices"
                         size="middle"
                         bordered
+                        expandIcon={(props) => this.customExpandIcon(props)}
+                        expandedRowRender={(record) => {
+                             console.log("table row", record);
+    
+                        }}
+                        expandIconColumnIndex={1}
+                        expandIconAsCell={false}
                         columns={this.props.columns}
                         dataSource={this.renderList(this.props.policies)}
                         pagination={{ pageSize: 10, size: "midddle" }}

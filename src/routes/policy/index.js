@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { message, Input, Modal, Button } from "antd";
+import { message, Input, Modal, Button,Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
@@ -40,6 +40,28 @@ class Policy extends Component {
                         className: '',
                     }
                 ],
+            },
+            {
+                title: (
+                    <span>
+                        PERMISSION
+                    <Popover placement="top" content='dumy'>
+                            <span className="helping_txt"><Icon type="info-circle" /></span>
+                        </Popover>
+                    </span>),
+                dataIndex: 'permission',
+                key: 'permission',
+                className: 'row'
+            },
+            {
+                title: 'STATUS',
+                dataIndex: 'policy_status',
+                key: 'policy_status',
+            },
+            {
+                title: 'POLICY COMMAND',
+                dataIndex: 'policy_command',
+                key: 'policy_command',
             },
             {
                 title: (
@@ -96,6 +118,11 @@ class Policy extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
+            },
+            {
+                title: 'DEFAULT',
+                dataIndex: 'default_policy',
+                key: 'default_policy',
             },
 
         ];
