@@ -139,40 +139,45 @@ class RestrictedRoute extends Component {
       // {...this.props.rest} 
       render={
         (props) => {
-          if(this.props.isRequested){
-
-            if (this.props.authUser.id === null || this.props.authUser.email === null || this.props.authUser.token === null || this.props.authUser.type === null) {
-              return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-            } else {
-              // alert("allowed", this.props.isAllowed);
+          
+          if (this.props.authUser.id === null || this.props.authUser.email === null || this.props.authUser.token === null || this.props.authUser.type === null) {
+            return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+          } else {
+            if(this.props.isRequested){
   
-              if(this.props.isAllowed || this.props.location.pathname==="/invalid_page"){
+   
+    
+                if(this.props.isAllowed || this.props.location.pathname==="/invalid_page"){
+    
+                return <Component {...props} />;
+                }else{
+                  // alert("usman hafeez");
+                  return <Redirect to={{ pathname: '/invalid_page', state: { from: props.location } }} />
+                }
+            
+            }else{
   
-              return <Component {...props} />;
-              }else{
-                // alert("usman hafeez");
-                return <Redirect to={{ pathname: '/invalid_page', state: { from: props.location } }} />
+                return (
+                  <Layout className="gx-app-layout">
+                  {this.getSidebar(navStyle, width)}
+                  <Layout>
+                    {/* {this.getNavStyles(navStyle)} */}
+                    <Content className={`gx-layout-content ${ this.getContainerClass(navStyle)} `}>
+                      <CircularProgress/>
+                      <Footer>
+                        <div className="gx-layout-footer-content">
+                          {footerText}
+                        </div>
+                      </Footer>
+                    </Content>
+                  </Layout>
+                  {/* <Customizer/> */}
+                </Layout>
+                   )
               }
-            }
-          }else{
-            return (
-              <Layout className="gx-app-layout">
-              {this.getSidebar(navStyle, width)}
-              <Layout>
-                {/* {this.getNavStyles(navStyle)} */}
-                <Content className={`gx-layout-content ${ this.getContainerClass(navStyle)} `}>
-                  <CircularProgress/>
-                  <Footer>
-                    <div className="gx-layout-footer-content">
-                      {footerText}
-                    </div>
-                  </Footer>
-                </Content>
-              </Layout>
-              {/* <Customizer/> */}
-            </Layout>
-               )
+            
           }
+        
         }
       } />
     )
