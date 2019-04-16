@@ -140,12 +140,12 @@ class DevicesList extends Component {
 
         return list.map((device, index) => {
             //  console.log(this.props.user.type, 'lkslkdflk');
-            const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
+            // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             // const device_status =  "SUSPEND";
-            const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
-            const flagged = device.flagged;
-
+            
             var status = device.finalStatus;
+            const button_type = (status === DEVICE_ACTIVATED) ? "danger" : "dashed";
+            const flagged = device.flagged;
             // console.log("not avail", status);
             var order = getSortOrder(status)
             let color = getColor(status);
@@ -153,7 +153,8 @@ class DevicesList extends Component {
             var text = "EDIT";
             // var icon = "edit";
 
-            if ((status === 'pending activation') || (device.unlink_status === 1)) {
+            // if ((status === 'pending activation') || (device.unlink_status === 1)) {
+            if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
                 // console.log('device name', device.name, 'status', device.unlink_status)
                 style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
                 text = "Activate";
