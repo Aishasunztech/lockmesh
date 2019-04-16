@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import {Layout} from "antd";
+import { Layout } from "antd";
 
 import { Redirect, Route } from "react-router-dom";
 import { connect } from "react-redux";
@@ -14,7 +14,7 @@ import AboveHeader from "../Topbar/AboveHeader/index";
 import BelowHeader from "../Topbar/BelowHeader/index";
 
 import Topbar from "../Topbar/index";
-import {footerText} from "util/config";
+import { footerText } from "util/config";
 
 import {
   NAV_STYLE_ABOVE_HEADER,
@@ -32,10 +32,10 @@ import {
 import NoHeaderNotification from "../Topbar/NoHeaderNotification/index";
 
 
-import { 
+import {
   checkComponent
 } from "../../appRedux/actions/Auth";
-const {Content, Footer} = Layout;
+const { Content, Footer } = Layout;
 
 
 class RestrictedRoute extends Component {
@@ -46,11 +46,11 @@ class RestrictedRoute extends Component {
     const componentRoute = this.props.pathname;
     // this.props.getUser();
     this.props.checkComponent(componentRoute);
-    
+
   }
-  
+
   componentDidMount() {
-    
+
     // console.log("restrictions");
 
   }
@@ -112,74 +112,74 @@ class RestrictedRoute extends Component {
 
   getSidebar = (navStyle, width) => {
     if (width < TAB_SIZE) {
-      return <Sidebar/>;
+      return <Sidebar />;
     }
     switch (navStyle) {
-      case NAV_STYLE_FIXED :
-        return <Sidebar/>;
-      case NAV_STYLE_DRAWER :
-        return <Sidebar/>;
-      case NAV_STYLE_MINI_SIDEBAR :
-        return <Sidebar/>;
-      case NAV_STYLE_NO_HEADER_MINI_SIDEBAR :
-        return <Sidebar/>;
+      case NAV_STYLE_FIXED:
+        return <Sidebar />;
+      case NAV_STYLE_DRAWER:
+        return <Sidebar />;
+      case NAV_STYLE_MINI_SIDEBAR:
+        return <Sidebar />;
+      case NAV_STYLE_NO_HEADER_MINI_SIDEBAR:
+        return <Sidebar />;
       case NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR:
-        return <Sidebar/>;
-      default :
+        return <Sidebar />;
+      default:
         return null;
     }
   };
 
   render() {
     const Component = this.props.component;
-    const { width, navStyle} = this.props;
+    const { width, navStyle } = this.props;
     // console.trace("restricted route allowed", this.props.rest);
     return (
-      <Route 
-      // {...this.props.rest} 
-      render={
-        (props) => {
-          
-          if (this.props.authUser.id === null || this.props.authUser.email === null || this.props.authUser.token === null || this.props.authUser.type === null) {
-            return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-          } else {
-            if(this.props.isRequested){
-  
-   
-    
-                if(this.props.isAllowed || this.props.location.pathname==="/invalid_page"){
-    
-                return <Component {...props} />;
-                }else{
+      <Route
+        // {...this.props.rest} 
+        render={
+          (props) => {
+
+            if (this.props.authUser.id === null || this.props.authUser.email === null || this.props.authUser.token === null || this.props.authUser.type === null) {
+              return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+            } else {
+              if (this.props.isRequested) {
+
+
+
+                if (this.props.isAllowed || this.props.location.pathname === "/invalid_page") {
+
+                  return <Component {...props} />;
+                } else {
                   // alert("usman hafeez");
                   return <Redirect to={{ pathname: '/invalid_page', state: { from: props.location } }} />
                 }
-            
-            }else{
-  
+
+              } else {
+
                 return (
                   <Layout className="gx-app-layout">
-                  {this.getSidebar(navStyle, width)}
-                  <Layout>
-                    {/* {this.getNavStyles(navStyle)} */}
-                    <Content className={`gx-layout-content ${ this.getContainerClass(navStyle)} `}>
-                      <CircularProgress/>
-                      <Footer>
-                        <div className="gx-layout-footer-content">
-                          {footerText}
-                        </div>
-                      </Footer>
-                    </Content>
+                    {this.getSidebar(navStyle, width)}
+                    <Layout>
+                      {/* {this.getNavStyles(navStyle)} */}
+                      <Content className={`gx-layout-content ${this.getContainerClass(navStyle)} `}>
+                        <CircularProgress />
+                        <Footer>
+                          <div className="gx-layout-footer-content">
+                            {footerText}
+                          </div>
+                        </Footer>
+                      </Content>
+                    </Layout>
+                    {/* <Customizer/> */}
                   </Layout>
-                  {/* <Customizer/> */}
-                </Layout>
-                   )
+                )
               }
-            
+
+            }
+
           }
-        
-        }
-      } />
+        } />
     )
   }
 }
@@ -190,8 +190,8 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-var mapStateToProps = ({ routing ,auth, settings}, otherProps) => {
-  const {width, navStyle} = settings;
+var mapStateToProps = ({ routing, auth, settings }, otherProps) => {
+  const { width, navStyle } = settings;
   return {
     // routing: routing,
     pathname: routing.location.pathname,

@@ -58,7 +58,7 @@ export class Sidebar extends Component {
         {
           navStyle === NAV_STYLE_DRAWER || width < TAB_SIZE ?
             <Drawer
-              wrapClassName={`gx-drawer-sidebar ${themeType !== THEME_TYPE_LITE ? 'gx-drawer-sidebar-dark' : null}`}
+              ClassName={`gx-drawer-sidebar ${themeType !== THEME_TYPE_LITE ? 'gx-drawer-sidebar-dark' : null}`}
               placement="left"
               closable={false}
               onClose={this.onToggleCollapsedNav.bind(this)}
