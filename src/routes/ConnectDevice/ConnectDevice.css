@@ -134,7 +134,7 @@ th.device_info {
 }
 
 .deviceImg .ant-spin-container {
-    width: 300px;
+    width: 295px;
     margin: 0px auto;
     padding: 0;
 }
@@ -233,12 +233,17 @@ th.device_info {
     width: 295px !important;
 }
 
-
-
-.mb-0 {
-    margin-bottom: 0 !important;
-}
-
 .ant-modal-confirm .ant-modal-body {
     padding: 24px 24px 16px;
+}
+
+.sec_head1 {
+    margin: 25px 0px 0px;
+    border-top: 1px solid #e8e8e8;
+    padding: 12px 0;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.sec_head1 span {
+    margin-right: 10px;
 }
