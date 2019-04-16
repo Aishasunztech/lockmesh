@@ -97,7 +97,7 @@ export const checkComponent = (componentUri) => {
 
         } else {
           dispatch({
-            type: INVALID_RESPONSE
+            type: INVALID_TOKEN
           });
         }
       } else {

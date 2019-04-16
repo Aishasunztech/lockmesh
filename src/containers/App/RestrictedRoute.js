@@ -155,23 +155,29 @@ class RestrictedRoute extends Component {
               }
             }
           }else{
-            return (
-              <Layout className="gx-app-layout">
-              {this.getSidebar(navStyle, width)}
-              <Layout>
-                {/* {this.getNavStyles(navStyle)} */}
-                <Content className={`gx-layout-content ${ this.getContainerClass(navStyle)} `}>
-                  <CircularProgress/>
-                  <Footer>
-                    <div className="gx-layout-footer-content">
-                      {footerText}
-                    </div>
-                  </Footer>
-                </Content>
+
+            if (this.props.authUser.id === null || this.props.authUser.email === null || this.props.authUser.token === null || this.props.authUser.type === null) {
+              return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+            } else {
+              return (
+                <Layout className="gx-app-layout">
+                {this.getSidebar(navStyle, width)}
+                <Layout>
+                  {/* {this.getNavStyles(navStyle)} */}
+                  <Content className={`gx-layout-content ${ this.getContainerClass(navStyle)} `}>
+                    <CircularProgress/>
+                    <Footer>
+                      <div className="gx-layout-footer-content">
+                        {footerText}
+                      </div>
+                    </Footer>
+                  </Content>
+                </Layout>
+                {/* <Customizer/> */}
               </Layout>
-              {/* <Customizer/> */}
-            </Layout>
-               )
+                 )
+            }
+            
           }
         }
       } />
