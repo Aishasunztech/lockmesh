@@ -54,7 +54,6 @@ const RestService = {
         // console.log("hello12312", data);
         localStorage.setItem('email', data.user.email);
         localStorage.setItem('id', data.user.id);
-        // // localStorage.setItem('token', data.token);
         localStorage.setItem('name', data.user.dealer_name);
         localStorage.setItem('firstName', data.user.firstName);
         localStorage.setItem('lastName', data.user.lastName);
@@ -79,6 +78,12 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check_component', { ComponentUri: ComponentUri }, RestService.getHeader());
 
     },
+    
+    // 
+    getAllowedComponents: () => {
+
+    },
+    
     // isAdmin
     isAdmin: () => {
         // var self = this;
@@ -87,9 +92,15 @@ const RestService = {
         // this.response= this.http.get(this.baseUrl + '/users/check_admin',this.oHeaders);
         // return this.response;
     },
+    
+    getUserType: () => {
+
+    },
+
     transferDeviceProfile: (device_id) => {
         return axios.post(BASE_URL + 'users/transfer/device_profile', { device_id: device_id }, RestService.getHeader());
     },
+    
     // getuserType
     getUserType: () => {
 
