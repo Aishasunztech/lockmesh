@@ -71,7 +71,7 @@ class ConnectDevice extends Component {
             },
             {
                 pageName: "system_controls",
-                value: 'System Permission'
+                value: 'System Controls'
             },
             // {
             //     pageName: "guest_password",
