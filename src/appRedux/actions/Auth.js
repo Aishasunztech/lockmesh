@@ -24,7 +24,6 @@ export const loginUser = (user) => {
   return (dispatch) => {
 
     RestService.login(user).then((resp) => {
-      console.log('login', resp.data.user.connected_devices[0].total);
       if (resp.data.status === false) {
         dispatch({
           type: LOGIN_FAILED,
