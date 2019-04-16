@@ -81,7 +81,7 @@ export default class Apk extends Component {
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div class="contenar">
+                                <div className="contenar">
                                     <Link to="/#">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div className="image_1">
@@ -108,8 +108,8 @@ export default class Apk extends Component {
                                             </div>
                                         </Card>
                                     </Link>
-                                    <div class="middle">
-                                        <div class="text text2">Coming Soon</div>
+                                    <div className="middle">
+                                        <div className="text text2">Coming Soon</div>
                                     </div>
                                 </div>
                             </div>

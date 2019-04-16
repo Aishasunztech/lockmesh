@@ -62,10 +62,8 @@ module.exports = {
         switch (status) {
             case DEVICE_ACTIVATED:
                 return '1';
-
             case DEVICE_PRE_ACTIVATION:
                 return '4';
-
             case DEVICE_EXPIRED:
                 return '2';
             case DEVICE_UNLINKED:

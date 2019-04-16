@@ -14,7 +14,8 @@ import {
     NEW_DEVICES_LIST,
     POST_PAGINATION,
     GET_PAGINATION,
-    PRE_ACTIVATE_DEVICE
+    PRE_ACTIVATE_DEVICE,
+    DELETE_UNLINK_DEVICE
 } from "../../constants/ActionTypes";
 import { message } from 'antd';
 import { stat } from "fs";
@@ -109,6 +110,22 @@ export default (state = initialState, action) => {
                 msg: action.payload.msg,
                 showMsg: true,
                 options: state.options,
+            }
+
+        case DELETE_UNLINK_DEVICE: 
+            if(action.response.status){
+                for(let id of action.response.data){
+                    let objIndex = state.devices.findIndex((obj => obj.usr_device_id === id));
+                    state.devices.splice(objIndex, 1);
+                }
+                  message.success(action.response.msg);
+            }else{
+                  message.error(action.response.msg);
+            }
+            return{
+                ...state,
+                devices: [...state.devices],
+                options: state.options
             }
 
         case CONNECT_DEVICE:

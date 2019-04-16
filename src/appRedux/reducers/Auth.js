@@ -11,8 +11,8 @@ import {
   COMPONENT_ALLOWED,
   ACCESS_DENIED,
   UPDATE_PROFILE,
-  GET_USER
-} from "constants/ActionTypes";
+  BEFORE_COMPONENT_ALLOWED
+} from "../../constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
 import { message } from "antd";
@@ -24,9 +24,11 @@ const INIT_STATE = {
   showMessage: false,
   initURL: '',
   socket: io,
-  isAllowed: true,
+  isAllowed: false,
+  isRequested:false,
   authUser: {
     id: localStorage.getItem('id'),
+    connected_devices: localStorage.getItem('connected_devices'),
     connected_dealer: localStorage.getItem('connected_dealer'),
     email: localStorage.getItem("email"),
     dealerId: localStorage.getItem("id"),
@@ -53,20 +55,10 @@ export default (state = INIT_STATE, action) => {
         authUser: action.payload
       }
     }
-    case GET_USER: {
+    case BEFORE_COMPONENT_ALLOWED: {
       return {
         ...state,
-        authUser:{
-          id: action.payload.id,
-          connected_dealer: action.payload.connected_dealer,
-          email: action.payload.email,
-          dealerId: action.payload.dealerId,
-          firstName: action.payload.firstName,
-          lastName: action.payload.lastName,
-          name: action.payload.name,
-          type: action.payload.type,
-          dealer_pin: action.payload.dealer_pin
-        }
+        isRequested: action.payload
       }
     }
     case LOGIN_FAILED: {
@@ -180,11 +172,23 @@ export default (state = INIT_STATE, action) => {
       }
     }
     case COMPONENT_ALLOWED: {
-
       // console.log("dsfsdfsdf",action.payload)
       return {
         ...state,
-        isAllowed: action.payload
+        isAllowed: action.payload.ComponentAllowed,
+        isRequested: true,
+        authUser:{
+          id: action.payload.id,
+          connected_dealer: action.payload.connected_dealer,
+          connected_devices: action.payload.connected_devices,
+          email: action.payload.email,
+          dealerId: action.payload.dealerId,
+          firstName: action.payload.firstName,
+          lastName: action.payload.lastName,
+          name: action.payload.name,
+          type: action.payload.type,
+          dealer_pin: action.payload.dealer_pin
+        }
       }
       break;
     }

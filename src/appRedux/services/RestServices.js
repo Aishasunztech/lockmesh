@@ -45,6 +45,8 @@ const RestService = {
         localStorage.setItem('firstName', data.user.firstName);
         localStorage.setItem('lastName', data.user.lastName);
         localStorage.setItem('connected_dealer', data.user.connected_dealer);
+        localStorage.setItem('connected_devices', data.user.connected_devices[0].total);
+      
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
     },
@@ -57,6 +59,7 @@ const RestService = {
         localStorage.setItem('firstName', data.user.firstName);
         localStorage.setItem('lastName', data.user.lastName);
         localStorage.setItem('connected_dealer', data.user.connected_dealer);
+        localStorage.setItem('connected_devices', data.user.connected_devices[0].total);
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
 
@@ -68,16 +71,13 @@ const RestService = {
         } else {
             return true;
         }
-        
+
     },
 
     // Component Allowed
     checkComponent: (ComponentUri) => {
         return axios.post(BASE_URL + 'users/check_component', { ComponentUri: ComponentUri }, RestService.getHeader());
 
-    },
-    getUser: () => {
-        return axios.get(BASE_URL + 'users/get_user', RestService.getHeader());
     },
     // isAdmin
     isAdmin: () => {
@@ -111,6 +111,10 @@ const RestService = {
             RestService.getHeader()
         )
 
+    },
+
+    deleteUnlinkDevice: (devices)=> {
+        return axios.put(BASE_URL + 'users/deleteUnlinkDevice',{devices}, RestService.getHeader())
     },
 
     // getNewDevices
@@ -420,6 +424,7 @@ const RestService = {
         // return this.response;
     },
     unflagged(device_id) {
+        // alert("dadsada")
         return axios.post(BASE_URL + 'users/UnflagDevice/' + device_id, {}, RestService.getHeader());
     },
     flagged(device_id, data) {

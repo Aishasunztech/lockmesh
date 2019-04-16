@@ -11,7 +11,8 @@ import {
     GET_CHAT_IDS,
     GET_PGP_EMAILS,
     REJECT_DEVICE,
-    PRE_ACTIVATE_DEVICE
+    PRE_ACTIVATE_DEVICE,
+    DELETE_UNLINK_DEVICE,
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -68,6 +69,30 @@ export function editDevice(formData) {
         });
     }
 }
+
+export function deleteUnlinkDevice(devices) {
+    console.log('at action file  for save history abaid: ', devices )
+    return (dispatch) => {
+        // alert("hello");
+        RestService.deleteUnlinkDevice(devices).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log('successfully ', response.data);
+                dispatch({
+                    type: DELETE_UNLINK_DEVICE,
+                    response: response.data,
+                    payload: {
+                        formData: devices
+                    }
+                });
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
 
 export function suspendDevice(device) {
 
@@ -208,7 +233,7 @@ export function getPGPEmails() {
 
 export function rejectDevice(device) {
     return (dispatch) => {
-        console.log(device)
+        // console.log(device)
         RestService.rejectDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -247,11 +272,11 @@ export function addDevice(device) {
 }
 
 export function preActiveDevice(device) {
-    console.log("action called", device);
+    // console.log("action called", device);
     return (dispatch) => {
         RestService.preActiveDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log('action done ', response.data);
+                // console.log('action done ', response.data);
                 dispatch({
                     type: PRE_ACTIVATE_DEVICE,
                     response: response.data,

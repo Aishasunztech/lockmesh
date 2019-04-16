@@ -38,7 +38,7 @@ class SideActions extends Component {
             profileName: '',
             policyName: '',
             disabled: false,
-            selectedApps:[]
+            selectedApps: []
         }
     }
 
@@ -135,8 +135,8 @@ class SideActions extends Component {
     }
 
     pushApps = () => {
-        if(this.state.selectedApps.length){
-            console.log("save pushed apps",this.state.selectedApps);
+        if (this.selectedApps.length) {
+            console.log("save pushed apps", this.state.selectedApps);
         }
     }
 
@@ -171,7 +171,7 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showPushAppsModal(true) } ><Icon type='upload' /> Push</Button>
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showPushAppsModal(true)} ><Icon type='upload' /> Push</Button>
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 15 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
 
@@ -269,11 +269,11 @@ class SideActions extends Component {
                         this.saveProfile();
                     }}
                     onCancel={() => this.showSaveProfileModal(false)}
-                   
+
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
                 </Modal>
-                
+
                 <Modal
                     // closable={false}
                     style={{ top: 20 }}
@@ -287,9 +287,9 @@ class SideActions extends Component {
                     onCancel={() => this.showPushAppsModal(false)}
                     okText="Push Apps"
                 >
-                    <DealerApps 
-                        apk_list = {this.props.apk_list}
-                        onSelectChange= {this.onSelectChange}
+                    <DealerApps
+                        apk_list={this.props.apk_list}
+                        onSelectChange={this.onSelectChange}
                     />
                 </Modal>
 
@@ -301,8 +301,8 @@ class SideActions extends Component {
                 <SuspendDevice
                     ref="suspend"
                     suspendDevice={this.props.suspendDevice}
-                    // go_back={this.props.history.goBack}
-                    // getDevice={this.props.getDevicesList}
+                // go_back={this.props.history.goBack}
+                // getDevice={this.props.getDevicesList}
                 />
 
                 <EditDevice
@@ -316,8 +316,8 @@ class SideActions extends Component {
                 />
                 <FlagDevice
                     ref='flag_device'
-                    // go_back={this.props.history.goBack}
-                    // getDevice={this.props.getDevicesList}
+                // go_back={this.props.history.goBack}
+                // getDevice={this.props.getDevicesList}
                 />
             </div>
         )
@@ -384,6 +384,7 @@ function showConfirm(device, action, _this, msg, type) {
                     action(device);
                 }
                 if (type === 'flagged') {
+                    action(device.device_id)
                     _this.props.activateDevice(device)
                 }
                 if (type === 'unlink') {
@@ -394,7 +395,7 @@ function showConfirm(device, action, _this, msg, type) {
                 }
                 //  message.success('Action Done Susscefully ');
 
-            }).catch(() => console.log('Oops errors!'));
+            }).catch(() => console.log(''));
         },
         onCancel() { },
     });
