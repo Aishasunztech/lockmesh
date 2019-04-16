@@ -73,26 +73,6 @@ class ConnectDevice extends Component {
         pageName: "system_controls",
         value: 'System Controls'
       },
-      // {
-      //     pageName: "guest_password",
-      //     value: 'Set Guest Password'
-      // },
-      // {
-      //     pageName: "encrypted_password",
-      //     value: 'Set Encrypted Password'
-      // },
-      // {
-      //     pageName: "duress_password",
-      //     value: 'Set Duress Password'
-      // },
-      // {
-      //     pageName: "settings",
-      //     value: 'Setting Menu'
-      // },
-      // {
-      //     pageName: "admin_password",
-      //     value: 'Change Admin Panel Code'
-      // },
       {
         pageName: "Manage_password",
         value: 'Manage Passwords'
