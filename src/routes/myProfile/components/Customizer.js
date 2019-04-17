@@ -438,7 +438,7 @@ class Customizer extends Component {
                   <Row justify='center'>
                     <Col span={6}>
                     </Col>
-                    <Col span={12} style={{ padding: "", marginTop: 73 }}>
+                    <Col span={12} style={{ padding: "", marginTop: 66 }}>
                       <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
                     </Col>
                   </Row>

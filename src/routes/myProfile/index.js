@@ -8,6 +8,10 @@ import ChangePassword from './components/changePassword';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
+import styles from './components/profile.css';
+import {
+    SDEALER
+} from "../../constants/Constants";
 
 // import {Link} from 'react-router-dom';
 
@@ -18,53 +22,77 @@ class Profile extends Component {
     }
 
     render() {
-        const dataSource = [
+        let columnData = null
+        let commonColumns = [
             {
                 key: 1,
-                name: 'Dealer ID',
+                name: <a>Dealer ID</a>,
                 value: this.props.profile.id,
-            },
-            {
+            },{
                 key: 2,
-                name: 'Dealer Name',
-                value: this.props.profile.name
-
-            },
-            {
-                key: 3,
-                name: 'Login Email',
-                value: this.props.profile.email,
-            },
-
-            {
-                key: 4,
-                name: 'Dealer Pin',
+                name: <a>Dealer Pin</a>,
                 value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
             },
             {
-                key: 5,
-                name: 'Dealers',
-                value: this.props.profile.connected_dealer,
+                key: 3,
+                name: <a>Dealer Name</a>,
+                value: this.props.profile.name,
             },
             {
-                key: 6,
-                name: 'Token',
-                value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
+                key: 4,
+                name: <a>Login Email</a>,
+                value: this.props.profile.email,
+            },
+            {
+                key: 5,
+                name: <a>Devices</a>,
+                value: this.props.profile.type == 'admin' ? 'All' : this.props.profile.connected_devices,
             }
-        ];
+        ]
+
+        if(this.props.profile.type === SDEALER){
+            columnData = {
+                key: 6,
+                name: <a>Parent Dealer</a>,
+                value: (this.props.profile.connected_dealer==0)?"N/A": this.props.profile.connected_dealer,
+            }
+        }
+        let dataSource=[];
+        if(columnData!=null){
+
+            dataSource = commonColumns;
+            dataSource.push(columnData);
+            dataSource.push({
+                key: 7,
+                name: <a>Token</a>,
+                value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
+            });
+
+        } else {
+            dataSource = [
+                ...commonColumns,
+                {
+                    key: 7,
+                    name: <a>Token</a>,
+                    value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
+                }
+            ];
+        }
+        // console.log('datasource', dataSource);
 
         const columns = [{
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            className: 'dealer_info'
         }, {
             title: 'value',
             dataIndex: 'value',
             key: 'value',
+            className: 'dealer_value'
         }];
 
         // console.log('uio', this.refs.Customizer.toggleCustomizer)
-
         return (
             <div>
                 <Row justify='center' style={{ backgroundColor: '#012346', height: 110, paddingTop: 20 }}>
@@ -91,7 +119,7 @@ class Profile extends Component {
                                     <div>
                                         <Row>
                                             <Col span={24} style={{ textAlign: "center" }}>
-                                                <h2 style={{ textAlign: "center" }}>Edit Profile  <a style={{ float: "right", fontSize: 15, lineHeight: '25px' }} onClick={() => this.refs.change_profile.showModal()} >Edit</a></h2>
+                                                <h2 style={{ textAlign: "center", marginBottom: 0 }}>Edit Profile  <a style={{ float: "right", fontSize: 15, lineHeight: '25px' }} onClick={() => this.refs.change_profile.showModal()} >Edit</a></h2>
 
                                             </Col>
                                         </Row>
@@ -106,8 +134,8 @@ class Profile extends Component {
                                                 <p>({this.props.profile.type})</p>
                                             </Col>
                                         </Row>
-                                        <Row justify='center' style={{ marginTop: 43 }}>
-                                            <Col span={12} style={{}} className="change_pass">
+                                        <Row justify='center' style={{ marginTop: 45 }}>
+                                            <Col span={12} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
                                                 <Button type="primary" size="small" style={{ width: "100%" }}
                                                     onClick={() => this.refs.change_password.showModal()} icon="unlock">Change Password</Button>
                                             </Col>
@@ -138,7 +166,7 @@ class Profile extends Component {
 
 var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
-    console.log('ooo', state.auth);
+    // console.log('ooo', state.auth);
 
     return {
         isloading: state.isloading,

@@ -618,7 +618,7 @@ class Account extends Component {
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div class="contenar">
+                                <div className="contenar">
                                     <a href="javascript:void(0)" >
                                         <Card style={{ borderRadius: 12 }}>
                                             <div className="profile_table image_1">
@@ -643,15 +643,15 @@ class Account extends Component {
                                             </div>
                                         </Card>
                                     </a>
-                                    <div class="middle">
-                                        <div class="text">Coming Soon</div>
+                                    <div className="middle">
+                                        <div className="text">Coming Soon</div>
                                     </div>
                                 </div>
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div class="contenar">
+                                <div className="contenar">
                                     <a href="javascript:void(0)">
                                         <Card style={{ borderRadius: 12 }}>
                                             <div className="profile_table image_1">
@@ -674,8 +674,8 @@ class Account extends Component {
                                             </div>
                                         </Card>
                                     </a>
-                                    <div class="middle">
-                                        <div class="text">Coming Soon</div>
+                                    <div className="middle">
+                                        <div className="text">Coming Soon</div>
                                     </div>
                                 </div>
                             </div>

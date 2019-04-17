@@ -136,7 +136,7 @@ class SideActions extends Component {
 
     pushApps = () => {
         if (this.selectedApps.length) {
-            console.log("save pushed apps", this.selectedApps);
+            console.log("save pushed apps", this.state.selectedApps);
         }
     }
 

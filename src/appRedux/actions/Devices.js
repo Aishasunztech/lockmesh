@@ -233,7 +233,7 @@ export function getPGPEmails() {
 
 export function rejectDevice(device) {
     return (dispatch) => {
-        console.log(device)
+        // console.log(device)
         RestService.rejectDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -272,11 +272,11 @@ export function addDevice(device) {
 }
 
 export function preActiveDevice(device) {
-    console.log("action called", device);
+    // console.log("action called", device);
     return (dispatch) => {
         RestService.preActiveDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log('action done ', response.data);
+                // console.log('action done ', response.data);
                 dispatch({
                     type: PRE_ACTIVATE_DEVICE,
                     response: response.data,

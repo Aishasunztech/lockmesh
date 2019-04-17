@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Drawer, Layout} from "antd";
-
+import styles from './sidebar.css';
 import SidebarContent from "./SidebarContent";
 import {toggleCollapsedSideNav, updateWindowWidth} from "appRedux/actions/Setting";
 import {
@@ -58,7 +58,7 @@ export class Sidebar extends Component {
         {
           navStyle === NAV_STYLE_DRAWER || width < TAB_SIZE ?
             <Drawer
-              wrapClassName={`gx-drawer-sidebar ${themeType !== THEME_TYPE_LITE ? 'gx-drawer-sidebar-dark' : null}`}
+              ClassName={`gx-drawer-sidebar ${themeType !== THEME_TYPE_LITE ? 'gx-drawer-sidebar-dark' : null}`}
               placement="left"
               closable={false}
               onClose={this.onToggleCollapsedNav.bind(this)}

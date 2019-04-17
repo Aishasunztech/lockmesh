@@ -1,0 +1,26 @@
+/*---- Apk List Css----*/
+.ant-table-filter-dropdown .ant-btn {
+    margin-bottom: 0;
+}
+
+.change_pass .ant-btn,
+.change_email .ant-btn {
+    padding: 0;
+}
+
+.profile_table .ant-table-tbody>tr>td {
+    font-size: 14px;
+    text-align: center;
+    padding: 6px 6px !important;
+    font-weight: 400;
+}
+
+.manage_sec_pro .ant-card-body {
+    height: 253px;
+}
+
+.ant-btn>.anticon+span,
+.ant-btn>span+.anticon {
+    margin-left: 8px;
+    font-size: 12px;
+}

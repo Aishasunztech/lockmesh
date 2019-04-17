@@ -18,7 +18,8 @@ import {
     DEVICE_PENDING_ACTIVATION,
     DEVICE_PRE_ACTIVATION,
     DEVICE_SUSPENDED,
-    DEVICE_UNLINKED
+    DEVICE_UNLINKED,
+    ADMIN
 } from '../../constants/Constants'
 
 import {
@@ -82,7 +83,6 @@ class Devices extends Component {
                         dataIndex: 'device_id',
                         key: "device_id",
                         className: '',
-                        // ...this.getColumnSearchProps('device_id'),
                         sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -137,9 +137,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'online',
                         key: 'online',
-
-                        // ...this.getColumnSearchProps('online'),
-                        sorter: (a, b) => { return a.online.localeCompare(b.online) },
+                        sorter: (a, b) => { return a.online.props.children[1].localeCompare(b.online.props.children[1]) },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -196,7 +194,6 @@ class Devices extends Component {
                         dataIndex: 'name',
                         key: 'name',
                         className: '',
-                        // ...this.getColumnSearchProps('name'),
                         sorter: (a, b) => { return a.name.localeCompare(b.name) },
                         sortDirections: ['ascend', 'descend'],
                         editable: true,
@@ -225,7 +222,6 @@ class Devices extends Component {
                         dataIndex: 'account_email',
                         key: 'account_email',
                         className: '',
-                        // ...this.getColumnSearchProps('account_email'),
                         sorter: (a, b) => { return a.account_email.localeCompare(b.account_email) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -252,7 +248,6 @@ class Devices extends Component {
                         align: "center",
                         dataIndex: 'pgp_email',
                         className: '',
-                        // ...this.getColumnSearchProps('pgp_email'),
                         sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -278,7 +273,6 @@ class Devices extends Component {
                         align: "center",
                         dataIndex: 'activation_code',
                         className: '',
-                        // ...this.getColumnSearchProps('activation_code'),
                         sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -305,7 +299,6 @@ class Devices extends Component {
                         dataIndex: 'chat_id',
                         key: 'chat_id',
                         className: '',
-                        // ...this.getColumnSearchProps('chat_id'),
                         sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
 
                         sortDirections: ['ascend', 'descend'],
@@ -333,7 +326,6 @@ class Devices extends Component {
                         dataIndex: 'client_id',
                         key: 'client_id',
                         className: '',
-                        // ...this.getColumnSearchProps('client_id'),
                         sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -359,7 +351,6 @@ class Devices extends Component {
                         align: "center",
                         dataIndex: 'dealer_id',
                         className: '',
-                        // ...this.getColumnSearchProps('dealer_id'),
                         sorter: (a, b) => { return a.dealer_id.localeCompare(b.dealer_id) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -386,10 +377,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'dealer_name',
                         key: 'dealer_name',
-
-                        // ...this.getColumnSearchProps('dealer_name'),
                         sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -415,9 +403,7 @@ class Devices extends Component {
                         dataIndex: 'dealer_pin',
                         key: 'dealer_pin',
                         className: '',
-                        // ...this.getColumnSearchProps('dealer_pin'),
                         sorter: (a, b) => { return a.dealer_pin.localeCompare(b.dealer_pin) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -443,10 +429,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'mac_address',
                         key: 'mac_address',
-
-                        // ...this.getColumnSearchProps('mac_address'),
                         sorter: (a, b) => { return a.mac_address.localeCompare(b.mac_address) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -472,7 +455,6 @@ class Devices extends Component {
                         dataIndex: 'sim_id',
                         key: 'sim_id',
                         className: '',
-                        // ...this.getColumnSearchProps('sim_id'),
                         sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -499,8 +481,6 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'imei_1',
                         key: 'imei_1',
-
-                        // ...this.getColumnSearchProps('imei_1'),
                         sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -527,8 +507,6 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'sim_1',
                         key: 'sim_1',
-
-                        // ...this.getColumnSearchProps('sim_1'),
                         sorter: (a, b) => { return a.sim_1.localeCompare(b.sim_1) },
 
                         sortDirections: ['ascend', 'descend'],
@@ -555,11 +533,8 @@ class Devices extends Component {
                         align: "center",
                         dataIndex: 'imei_2',
                         key: 'imei_2',
-
                         className: '',
-                        // ...this.getColumnSearchProps('imei_2'),
                         sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -584,11 +559,8 @@ class Devices extends Component {
                         align: "center",
                         dataIndex: 'sim_2',
                         key: 'sim_2',
-
                         className: '',
-                        // ...this.getColumnSearchProps('sim_2'),
                         sorter: (a, b) => { return a.sim_2.localeCompare(b.sim_2) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -613,11 +585,8 @@ class Devices extends Component {
                         align: "center",
                         dataIndex: 'serial_number',
                         key: 'serial_number',
-
                         className: '',
-                        // ...this.getColumnSearchProps('serial_number'),
                         sorter: (a, b) => { return a.serial_number.localeCompare(b.serial_number) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -644,8 +613,6 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'model',
                         key: 'model',
-
-                        // ...this.getColumnSearchProps('model'),
                         sorter: (a, b) => { return a.model.localeCompare(b.model) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -673,9 +640,6 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 's_dealer',
                         key: 's_dealer',
-
-                        // ...this.getColumnSearchProps('s_dealer'),
-
                         sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -702,11 +666,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 's_dealer_name',
                         key: 's_dealer_name',
-
-                        // ...this.getColumnSearchProps('s_dealer_name'),
-
                         sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -731,8 +691,6 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'start_date',
                         key: 'start_date',
-
-                        // ...this.getColumnSearchProps('start_date'),
                         sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -758,10 +716,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'expiry_date',
                         key: 'expiry_date',
-
-                        // ...this.getColumnSearchProps('expiry_date'),
                         sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -805,7 +760,7 @@ class Devices extends Component {
         // value = value.toLowerCase();
 
        // console.log('clollolol',this.state.columns);
-        if(value == DEVICE_UNLINKED && (this.props.user.type !== 'admin')){
+        if(value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)){
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete Selected</Button>
         }
         else{
@@ -883,7 +838,7 @@ class Devices extends Component {
         // console.log('selsect', this.props.selectedOptions)
         // let type = value.toLowerCase();
 
-         if(value == '5' && (this.props.user.type !== 'admin')){
+         if(value == '5' && (this.props.user.type !== ADMIN)){
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete Selected</Button>
         }
         else{
@@ -1132,9 +1087,9 @@ class Devices extends Component {
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText="Add Device"
                                 options={this.props.options}
-                                isAddButton={this.props.user.type !== 'admin'}
+                                isAddButton={this.props.user.type !== ADMIN}
                                 AddDeviceModal={true}
-                                disableAddButton={this.props.user.type === 'admin'}
+                                disableAddButton={this.props.user.type === ADMIN}
                                 // toLink="add-device"
                                 handleDeviceModal={this.handleDeviceModal}
                                 handleCheckChange={this.handleCheckChange}

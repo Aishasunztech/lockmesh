@@ -9,7 +9,7 @@ export default class Apk extends Component {
         return (
             <div>
                 <Row justify='center' style={{ backgroundColor: '#012346', height: 110, paddingTop: 20, display: 'flex', justifyContent: 'flex-end' }}>
-                    <p style={{ color: '#fff', lineHeight: '30px' }}>Download latest version of the App here</p>
+                    <p className="hidden-xs" style={{ color: '#fff', lineHeight: '30px' }}>Download latest version of the App here</p>
                     <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk">
                         <Button type="primary" size="default" style={{ margin: '0 16px', height: 30, lineHeight: '30px' }}> ScreenLocker apk (v4.45)</Button>
                     </a>
@@ -81,7 +81,7 @@ export default class Apk extends Component {
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div class="contenar">
+                                <div className="contenar">
                                     <Link to="/#">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div className="image_1">
@@ -108,8 +108,8 @@ export default class Apk extends Component {
                                             </div>
                                         </Card>
                                     </Link>
-                                    <div class="middle">
-                                        <div class="text text2">Coming Soon</div>
+                                    <div className="middle">
+                                        <div className="text text2">Coming Soon</div>
                                     </div>
                                 </div>
                             </div>

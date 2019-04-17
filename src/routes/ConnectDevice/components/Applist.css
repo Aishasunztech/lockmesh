@@ -2,8 +2,14 @@
     font-size: 25px;
     position: relative;
     left: 25px;
-    top: 25px;
+    bottom: 57px;
     z-index: 100;
+}
+
+.action_group .ant-table {
+    color: #545454;
+    position: relative;
+    bottom: 56px;
 }
 
 .applist_menu .ant-checkbox-wrapper {
@@ -55,4 +61,71 @@
 
 .gx-customizer-option .ant-btn {
     display: none;
+}
+
+.first_head {
+    margin-top: 35px;
+}
+
+.first_head h5 {
+    margin-top: 8px;
+}
+
+.sec_set_table img {
+    height: 30px;
+}
+
+.first_head img {
+    height: 30px;
+    float: right;
+}
+
+.sec_head {
+    margin: 4px 8px 6px;
+    border-top: 1px solid #e8e8e8;
+    padding: 12px 0;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.sec_head .ant-switch {
+    vertical-align: sub;
+}
+
+.sec_head span {
+    margin-right: 4px;
+    font-size: 14px;
+}
+
+.sec_head .ant-col-8 {
+    text-align: center;
+    padding: 0;
+}
+
+.sec_set_table {
+    margin: 56px auto 0;
+}
+
+.sec_set_table .ant-table-body {
+    margin-left: 1px;
+    margin-right: 8px;
+    width: 100%;
+}
+
+.sec_set_table .ant-table-scroll {
+    width: 295px;
+    margin: 0 auto;
+}
+
+.sec_set_table .ant-table-thead>tr>th {
+    font-size: 13px !important;
+    text-align: center !important;
+    padding: 12px 8px !important;
+    width: 100% !important;
+}
+
+.sec_set_table .ant-table-tbody>tr>td {
+    font-size: 13px !important;
+    text-align: center !important;
+    padding: 4px 20px !important;
+    width: 100% !important;
 }

@@ -134,7 +134,7 @@ th.device_info {
 }
 
 .deviceImg .ant-spin-container {
-    width: 300px;
+    width: 295px;
     margin: 0px auto;
     padding: 0;
 }
@@ -187,7 +187,7 @@ th.device_info {
 }
 
 .deviceImg .ant-form-item-control-wrapper {
-    margin-top: 70px;
+    margin-top: 20px;
 }
 
 .left_bar .ant-card-body {
@@ -233,116 +233,17 @@ th.device_info {
     width: 295px !important;
 }
 
-/*---- Apk List Css----*/
-.ant-table-filter-dropdown .ant-btn {
-    margin-bottom: 0;
-}
-
-.change_pass .ant-btn,
-.change_email .ant-btn {
-    padding: 0;
-}
-
-.profile_table .ant-table-tbody>tr>td {
-    font-size: 15px;
-    text-align: center;
-    padding: 6px 6px !important;
-    font-weight: 400;
-}
-
-.manage_sec_pro .ant-card-body {
-    height: 259px;
-}
-
-.ant-btn>.anticon+span,
-.ant-btn>span+.anticon {
-    margin-left: 8px;
-    font-size: 12px;
-}
-
-.mb-0 {
-    margin-bottom: 0 !important;
-}
-
-/*----------Sidebar page----------*/
-.side_bar_main .gx-mr-3 {
-    margin-right: 15px !important;
-}
-
-.side_bar_main.gx-mb-4 {
-    margin-bottom: 0px !important;
-}
-
-.side_bar_main .notification_icn {
-    font-size: 26px;
-}
-
-.side_bar_main .ant-badge-count {
-    position: absolute;
-    left: 10px;
-    top: 0px;
-}
-
-.side_bar_main .ant-badge-count {
-    height: 15px;
-    border-radius: 50%;
-    min-width: 15px;
-    line-height: 15px;
-    padding: 0;
-    font-size: 10px;
-    -webkit-transform: translate(30%, -30%);
-    transform: translate(30%, -30%);
-}
-
-.side_bar_main .ant-badge-count {
-    background: #038fdd;
-}
-
-.side_bar_main .gx-avatar-name {
-    padding-right: 25px;
-}
-
-.bell_icon li {
-    padding: 0;
-    position: absolute;
-    right: 25px;
-}
-
-.bell_icon .ant-badge {
-    margin-bottom: 0px;
-}
-
-.submitButton {
-    text-align: center;
-}
-
-.edit_ftr_1 .ant-radio-group {
-    width: 100%;
-    margin: 7px 0px 0;
-}
-
-.border_btm {
-    border-bottom: 1px solid #e8e8e8;
-    padding-bottom: 12px;
-    margin-bottom: 10px !important;
-}
-
-.edit_ftr_1 .ant-radio-button-wrapper {
-    width: 25%;
-    text-align: center;
-    font-size: 15px;
-    font-weight: 400;
-    color: #000;
-}
-
-.flag_device .edit_ftr_btn {
-    margin-top: 16px;
-}
-
-.flag_device .ant-modal-body {
-    padding: 8px 16px;
-}
-
 .ant-modal-confirm .ant-modal-body {
     padding: 24px 24px 16px;
+}
+
+.sec_head1 {
+    margin: 25px 0px 0px;
+    border-top: 1px solid #e8e8e8;
+    padding: 12px 0;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.sec_head1 span {
+    margin-right: 10px;
 }

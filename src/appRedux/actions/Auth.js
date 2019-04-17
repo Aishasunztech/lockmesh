@@ -11,9 +11,10 @@ import {
   COMPONENT_ALLOWED,
   INVALID_TOKEN,
   INVALID_RESPONSE,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  BEFORE_COMPONENT_ALLOWED
   // ACCESS_DENIED
-} from "constants/ActionTypes";
+} from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -32,10 +33,11 @@ export const loginUser = (user) => {
           }
         });
       } else {
-        console.log('dealer auth', resp);
+        // console.log('dealer auth', resp);
         let payload = {
           id: resp.data.user.id,
           connected_dealer: resp.data.user.connected_dealer,
+          connected_devices: resp.data.user.connected_devices[0].total,
           email: resp.data.user.email,
           dealerId: resp.data.user.id,
           firstName: resp.data.user.firstName,
@@ -60,45 +62,19 @@ export const checkComponent = (componentUri) => {
   // console.log("KSDJ")
   return (dispatch) => {
     // alert("hello");
+    dispatch({
+      type: BEFORE_COMPONENT_ALLOWED,
+      payload: false,
+    })
     RestService.checkComponent(componentUri).then((resp) => {
-      
+      // console.log('id id ', resp.data.user.connected_devices[0].total);
       if (RestService.checkAuth(resp.data)) {
         if (resp.data.status === true) {
-          dispatch({
-            type: COMPONENT_ALLOWED,
-            payload: resp.data.ComponentAllowed
-          });
-
-        } else {
-          dispatch({
-            type: INVALID_RESPONSE
-          });
-        }
-      } else {
-        dispatch({
-          type: INVALID_TOKEN
-        });
-      }
-    });
-  }
-};
-export const getUser = () => {
-  return (dispatch) => {
-    RestService.getUser().then((resp) => {
-      if (RestService.checkAuth(resp.data)) {
-        if (resp.data.status === false) {
-          dispatch({  
-            type: LOGIN_FAILED,
-            payload: {
-              msg: resp.data.msg,
-              status: resp.data.status
-            }
-          });
-        } else {
 
           let payload = {
             id: resp.data.user.id,
             connected_dealer: resp.data.user.connected_dealer,
+             connected_devices: resp.data.user.connected_devices[0].total,
             email: resp.data.user.email,
             dealerId: resp.data.user.id,
             firstName: resp.data.user.firstName,
@@ -109,21 +85,30 @@ export const getUser = () => {
             dealer_pin: resp.data.user.link_code
           }
           RestService.setUserData(resp.data);
-          // console.log(payload);
 
           dispatch({
-            type: GET_USER,
-            payload: payload
-          })
+            type: COMPONENT_ALLOWED,
+            payload: {
+              ComponentAllowed: resp.data.ComponentAllowed,
+              ...payload
+            }
+          });
+
+        } else {
+          dispatch({
+            type: INVALID_TOKEN
+          });
         }
       } else {
         dispatch({
           type: INVALID_TOKEN
-        })
+        });
       }
     });
   }
-}
+};
+
+
 export const updateUserProfile = (fromData) => {
   return (dispatch) => {
     // alert("hello");

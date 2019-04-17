@@ -26,7 +26,7 @@ class Password extends Component {
                 sm: { span: 24 },
             },
             style:{
-                marginTop:"10px"
+                marginTop:"40px"
             }
         };
     }
