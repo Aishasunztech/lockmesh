@@ -49,21 +49,24 @@ export default class AddPolicy extends Component {
         };
 
         this.steps = [{
-            title: 'Menu Apps',
+            title: 'SELECT APPS',
+            Icon: <span className="step_counting">1</span>,
             content: (
                 <AppList
                     apk_list={this.props.apk_list}
                 />
             ),
         }, {
-            title: 'Defaut Apps',
+            title: 'SET APP PERMISSIONS',
+            Icon: <span className="step_counting">2</span>,
             content: (
                 <AppList
                     app_list={this.props.app_list}
                 />
             ),
         }, {
-            title: 'Device Controls',
+            title: 'SET SECURE SETTINGS PERMSSION',
+            Icon: <span className="step_counting">3</span>,
             content: (
                 <Table
                     pagination={false}
@@ -73,7 +76,19 @@ export default class AddPolicy extends Component {
                 </Table>
             ),
         }, {
-            title: 'Policy Info',
+            title: 'SET SYSTEM CONTROLS PERMISSION',
+            Icon: <span className="step_counting">4</span>,
+            content: (
+                <Table
+                    pagination={false}
+                    dataSource={data}
+                    size="small"
+                    columns={columns}>
+                </Table>
+            ),
+        }, {
+            title: 'SET POLICY DETAILS',
+            Icon: <span className="step_counting">5</span>,
             content: (
                 <div className="lst_stp">
                     <div className="row">
@@ -83,9 +98,9 @@ export default class AddPolicy extends Component {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-2 pr-0 "><label>Note:</label></div>
+                        <div className="col-md-2 pr-0 "><label>Command:</label></div>
                         <div className="col-md-8">
-                            <textarea placeholder="Note" class="ant-input"></textarea>
+                            <textarea placeholder="Command" class="ant-input"></textarea>
                         </div>
                     </div>
                 </div>
@@ -109,8 +124,8 @@ export default class AddPolicy extends Component {
         return (
             <Fragment>
                 <div className="policy_steps">
-                    <Steps current={current}>
-                        {this.steps.map(item => <Steps.Step key={item.title} title={item.title} />)}
+                    <Steps current={current} labelPlacement="vertical">
+                        {this.steps.map(item => <Steps.Step icon={item.Icon}  key={item.title} title={item.title} />)}
                     </Steps>
                     <div className="steps-content">{this.steps[current].content}</div>
                     <div className="steps-action">
