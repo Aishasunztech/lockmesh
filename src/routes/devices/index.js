@@ -140,7 +140,7 @@ class Devices extends Component {
                         key: 'online',
 
                         // ...this.getColumnSearchProps('online'),
-                        sorter: (a, b) => { return a.online.localeCompare(b.online) },
+                        sorter: (a, b) => { return a.online.props.children[1].localeCompare(b.online.props.children[1]) },
 
                         sortDirections: ['ascend', 'descend'],
                     }
