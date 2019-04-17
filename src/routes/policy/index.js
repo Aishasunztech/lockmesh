@@ -28,18 +28,22 @@ class Policy extends Component {
             //     width: 800,
             // },
             {
-
-                dataIndex: 'Action',
-                className: '',
-                children: [
-                    {
-                        title: 'ACTION',
-                        align: "center",
-                        dataIndex: 'action',
-                        key: "action",
-                        className: '',
-                    }
-                ],
+                title: 'ACTION',
+                align: "center",
+                dataIndex: 'action',
+                key: "action",
+            },
+            {
+                title: (
+                    <span>
+                        POLICY INFO
+                    {/* <Popover placement="top" content='dumy'>
+                            <span className="helping_txt"><Icon type="info-circle" /></span>
+                        </Popover> */}
+                    </span>),
+                dataIndex: 'policy_info',
+                key: 'policy_info',
+                className: 'row'
             },
             {
                 title: (
@@ -59,9 +63,33 @@ class Policy extends Component {
                 key: 'policy_status',
             },
             {
-                title: 'POLICY COMMAND',
-                dataIndex: 'policy_command',
-                key: 'policy_command',
+                title: (
+                    <Input.Search
+                        name="policy_note"
+                        key="policy_note"
+                        id="policy_note"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Policy Note"
+                    />
+                ),
+                dataIndex: 'policy_note',
+                className: '',
+                children: [
+                    {
+                        title: 'POLICY COMMAND',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'policy_note',
+                        key: 'policy_note',
+
+                        // ...this.getColumnSearchProps('status'),
+                        sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
                 title: (
@@ -90,35 +118,7 @@ class Policy extends Component {
 
                 sortDirections: ['ascend', 'descend'],
             },
-            {
-                title: (
-                    <Input.Search
-                        name="policy_note"
-                        key="policy_note"
-                        id="policy_note"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="Policy Note"
-                    />
-                ),
-                dataIndex: 'policy_note',
-                className: '',
-                children: [
-                    {
-                        title: 'POLICY NOTE',
-                        align: "center",
-                        className: '',
-                        dataIndex: 'policy_note',
-                        key: 'policy_note',
 
-                        // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
-
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
             {
                 title: 'DEFAULT',
                 dataIndex: 'default_policy',
