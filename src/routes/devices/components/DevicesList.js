@@ -15,6 +15,7 @@ import {
     DEVICE_PRE_ACTIVATION,
     DEVICE_SUSPENDED,
     DEVICE_UNLINKED,
+    DEVICE_TRAIL,
     ADMIN
 } from '../../../constants/Constants'
 
@@ -142,9 +143,9 @@ class DevicesList extends Component {
             //  console.log(this.props.user.type, 'lkslkdflk');
             // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             // const device_status =  "SUSPEND";
-            
+
             var status = device.finalStatus;
-            const button_type = (status === DEVICE_ACTIVATED) ? "danger" : "dashed";
+            const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRAIL) ? "danger" : "dashed";
             const flagged = device.flagged;
             // console.log("not avail", status);
             var order = getSortOrder(status)
@@ -162,36 +163,36 @@ class DevicesList extends Component {
             }
 
             let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)} > Suspend</Button>;
-            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() =>  this.handleActivateDevice(device)}  >Suspend</Button>;
+            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}  >Suspend</Button>;
             let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button>
             let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
             let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let AcceptBtn = <Button type="primary"  size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> Accept </Button>;
+            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> Accept </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>Decline</Button>
-            
-            
+
+
             return {
                 // sortOrder: <span style={{ display: 'none' }}>{order}</span>,
                 // sortOrder: (<span id="order">{order}</span>),
                 // sortOrder: {order},
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: ((status === DEVICE_ACTIVATED) ? 
-                        (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                        : (status === DEVICE_SUSPENDED) ?
+                action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRAIL) ?
+                    (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                    : (status === DEVICE_SUSPENDED) ?
                         (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                         : (status === DEVICE_EXPIRED) ?
-                        (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                        : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
-                        (<Fragment>{DeleteBtn}</Fragment>)
-                        : (status === DEVICE_PENDING_ACTIVATION) ?
-                        (<Fragment><Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment></Fragment>)
-                        : (device.status === DEVICE_PRE_ACTIVATION) ?
-                            false
-                        : (status === DEVICE_EXPIRED) ?
-                        (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
-                        : false
-                        
+                            (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                            : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
+                                (<Fragment>{DeleteBtn}</Fragment>)
+                                : (status === DEVICE_PENDING_ACTIVATION) ?
+                                    (<Fragment><Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment></Fragment>)
+                                    : (device.status === DEVICE_PRE_ACTIVATION) ?
+                                        false
+                                        : (status === DEVICE_EXPIRED) ?
+                                            (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
+                                            : false
+
 
                 ),
                 // action: (device.activation_status === 0 || device.activation_status === null ) ?

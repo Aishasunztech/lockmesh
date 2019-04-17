@@ -248,8 +248,12 @@ class Apk extends React.Component {
 
 
     render() {
-
-
+        console.log(this.props.user);
+        if (this.props.user.type === 'dealer') {
+            this.state.columns[0].className = 'hide';
+        } else {
+            this.state.columns[0].className = 'row';
+        }
         return (
             <div>
                 {
@@ -299,6 +303,7 @@ class Apk extends React.Component {
                                 columns={this.state.columns}
                                 getApkList={this.props.getApkList}
                                 pagination={this.props.DisplayPages}
+                                user={this.props.user}
                                 ref="listApk"
                             />
                         </div>}
