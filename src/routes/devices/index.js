@@ -50,7 +50,7 @@ class Devices extends Component {
                 dataIndex: 'action',
                 align: 'center',
                 className: 'row',
-                width: 800,
+                width: 800, 
             },
             // {
             //     // title: 'ACTIONS',
