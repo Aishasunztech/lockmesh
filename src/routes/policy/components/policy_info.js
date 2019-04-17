@@ -5,28 +5,28 @@ const TabPane = Tabs.TabPane;
 export default class PolicyInfo extends Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             selected: '1'
         }
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.setState({
             selected: this.props.selected
         })
     }
 
-    componentDidUpdate(prevProps){
-        if(this.props !== prevProps){
+    componentDidUpdate(prevProps) {
+        if (this.props !== prevProps) {
             console.log('revire', prevProps)
-            this.setState({selected: this.props.selected})
+            this.setState({ selected: this.props.selected })
         }
     }
 
     callback = (key) => {
         console.log(key, 'id');
-        this.setState({selected: key})
+        this.setState({ selected: key })
     }
 
     render() {
@@ -35,9 +35,12 @@ export default class PolicyInfo extends Component {
         return (
             <div>
                 <Tabs onChange={this.callback} activeKey={this.state.selected} type="card">
-                    <TabPane tab="Tab 1" key="1">Content of Tab Pane 1</TabPane>
-                    <TabPane tab="Tab 2" key="2">Content of Tab Pane 2</TabPane>
-                    <TabPane tab="Tab 3" key="3">Content of Tab Pane 3</TabPane>
+                    <TabPane tab="Selected Apps " key="1">Content of Tab Pane 1</TabPane>
+                    <TabPane tab="App Permissions " key="2">Content of Tab Pane 2</TabPane>
+                    <TabPane tab="Secure Settings Permissions" key="3">Content of Tab Pane 3</TabPane>
+                    <TabPane tab="System Controls Permissions" key="4">Content of Tab Pane 4</TabPane>
+                    <TabPane tab="Policy Details" key="5">Permissions Tab</TabPane>
+                    <TabPane tab="Dealer Permissions" key="6">Dealer Permissions</TabPane>
                 </Tabs>
             </div>
         )

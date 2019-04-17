@@ -48,7 +48,7 @@ class Policy extends Component {
             {
                 title: (
                     <span>
-                        PERMISSION
+                        PERMISSIONS
                     <Popover placement="top" content='dumy'>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover>
@@ -61,35 +61,6 @@ class Policy extends Component {
                 title: 'STATUS',
                 dataIndex: 'policy_status',
                 key: 'policy_status',
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="policy_note"
-                        key="policy_note"
-                        id="policy_note"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder="Policy Note"
-                    />
-                ),
-                dataIndex: 'policy_note',
-                className: '',
-                children: [
-                    {
-                        title: 'POLICY COMMAND',
-                        align: "center",
-                        className: '',
-                        dataIndex: 'policy_note',
-                        key: 'policy_note',
-
-                        // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
-
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
             },
             {
                 title: (
@@ -118,12 +89,42 @@ class Policy extends Component {
 
                 sortDirections: ['ascend', 'descend'],
             },
+            {
+                title: (
+                    <Input.Search
+                        name="policy_note"
+                        key="policy_note"
+                        id="policy_note"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Policy Command"
+                    />
+                ),
+                dataIndex: 'policy_note',
+                className: '',
+                children: [
+                    {
+                        title: 'POLICY COMMAND',
+                        align: "center",
+                        className: '',
+                        dataIndex: 'policy_note',
+                        key: 'policy_note',
+
+                        // ...this.getColumnSearchProps('status'),
+                        sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
 
             {
                 title: 'DEFAULT',
                 dataIndex: 'default_policy',
                 key: 'default_policy',
             },
+
 
         ];
         this.state = {
@@ -169,7 +170,7 @@ class Policy extends Component {
                 />
                 <Modal
                     maskClosable={false}
-                    width="780px"
+                    width="700px"
                     className="policy_popup"
                     visible={this.state.policyModal}
                     title="Add Policy"

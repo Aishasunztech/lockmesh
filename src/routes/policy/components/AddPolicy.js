@@ -65,7 +65,7 @@ export default class AddPolicy extends Component {
                 />
             ),
         }, {
-            title: 'SET SECURE SETTINGS PERMSSION',
+            title: 'SET SECURE SETTINGS PERMISSIONS',
             Icon: <span className="step_counting">3</span>,
             content: (
                 <Table
@@ -76,7 +76,7 @@ export default class AddPolicy extends Component {
                 </Table>
             ),
         }, {
-            title: 'SET SYSTEM CONTROLS PERMISSION',
+            title: 'SET SYSTEM CONTROLS PERMISSIONS',
             Icon: <span className="step_counting">4</span>,
             content: (
                 <Table
@@ -125,7 +125,7 @@ export default class AddPolicy extends Component {
             <Fragment>
                 <div className="policy_steps">
                     <Steps current={current} labelPlacement="vertical">
-                        {this.steps.map(item => <Steps.Step icon={item.Icon}  key={item.title} title={item.title} />)}
+                        {this.steps.map(item => <Steps.Step icon={item.Icon} key={item.title} title={item.title} />)}
                     </Steps>
                     <div className="steps-content">{this.steps[current].content}</div>
                     <div className="steps-action">

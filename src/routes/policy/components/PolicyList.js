@@ -44,7 +44,7 @@ class PolicyList extends Component {
             this.state.expandedRowKeys.push(rowId);
             this.setState({
                 expandedRowKeys: this.state.expandedRowKeys,
-                expandTabSelected: (btnof == 'info') ? '1' : '2'
+                expandTabSelected: (btnof == 'info') ? '1' : '6'
 
             })
         }
@@ -83,7 +83,7 @@ class PolicyList extends Component {
                             this.expandRow(index, 'info')
                             // console.log('table cosn', this.refs.policy_table)
                             // this.refs.policy_table.props.onExpand()  
-                        }><Icon type="arrow-down" size={28} /></a> Detail</div>
+                        }><Icon type="arrow-down" size={28} /></a> <span className="exp_txt">EXPAND</span></div>
 
 
                 ,
