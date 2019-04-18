@@ -96,7 +96,7 @@ class Password extends Component {
                             ],
                         })(
 
-                            <Input placeholder="Password" type="password" style={{ width: '100%' }} />
+                            <Input.Password placeholder="Password" type="password" style={{ width: '100%' }} />
                         )
                     }
                 </Form.Item>
@@ -112,7 +112,7 @@ class Password extends Component {
                                 }
                             ],
                         })(
-                            <Input type="password" placeholder="Password Again" onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
+                            <Input.Password type="password" placeholder="Password Again" onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
                         )
                     }
                 </Form.Item>

@@ -62,13 +62,7 @@ export default (state = INIT_STATE, action) => {
       }
     }
     case LOGIN_FAILED: {
-      // console.log({
-      //   ...state,
-      //   alertMessage: action.payload.msg,
-      //   showMessage: true,
-      //   loader: false
-      // });
-
+     
       return {
         ...state,
         alertMessage: action.payload.msg,
