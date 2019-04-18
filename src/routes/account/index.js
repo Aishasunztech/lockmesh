@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import styles from './account.css'
 import {
     importCSV,
-    exportCSV
+    exportCSV,
+    releaseCSV,
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -14,10 +15,13 @@ import { BASE_URL } from "../../constants/Application";
 import {
     getSimIDs,
     getChatIDs,
-    getPGPEmails
-} from "../../appRedux/actions/Devices";
-import { relative } from "path";
+    getPGPEmails,
+    getUsedPGPEmails,
+    getUsedChatIds,
+    getUsedSimIds,
 
+} from "../../appRedux/actions/Devices";
+const confirm = Modal.confirm;
 
 class Account extends Component {
     constructor(props) {
@@ -33,9 +37,17 @@ class Account extends Component {
             sim_ids: [],
             chat_ids: [],
             pgp_emails: [],
+            used_pgp_emails: [],
+            used_sim_ids: [],
+            used_chat_ids: [],
             sim_ids_page: 10,
             chat_ids_page: 10,
-            pgp_emails_page: 10
+            pgp_emails_page: 10,
+            used_pgp_emails_page: 10,
+            used_sim_ids_page: 10,
+            used_chat_ids_page: 10,
+            selectedRowKeys: []
+
         }
     }
 
@@ -57,27 +69,23 @@ class Account extends Component {
 
         if (dataFieldName === "sim_ids") {
             this.props.getSimIDs();
-            // this.setState({
-            //     sim_ids: this.props.sim_ids,
-            // });
         } else if (dataFieldName === "pgp_emails") {
             this.props.getPGPEmails();
-            // this.setState({
-            //     pgp_emails: this.props.pgp_emails
-            // });
         } else if (dataFieldName === "chat_ids") {
             this.props.getChatIDs();
-            // this.setState({
-            //     chat_ids: this.props.chat_ids,
-            // });
+        } else if (dataFieldName === "used_pgp_emails") {
+            this.props.getUsedPGPEmails();
         }
-
     }
 
     componentDidMount() {
         this.props.getSimIDs();
         this.props.getPGPEmails();
         this.props.getChatIDs();
+        this.props.getUsedPGPEmails();
+        this.props.getUsedChatIds();
+        this.props.getUsedSimIds();
+        // this.props.getUsedSimIDs()
         // console.log("this.props.chat_ids", this.props.chat_ids);
         // this.setState({
         //     sim_ids: this.props.sim_ids,
@@ -100,11 +108,15 @@ class Account extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length) {
+        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length) {
+            // if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length) {
             this.setState({
                 sim_ids: nextProps.sim_ids,
                 chat_ids: nextProps.chat_ids,
-                pgp_emails: nextProps.pgp_emails
+                pgp_emails: nextProps.pgp_emails,
+                used_pgp_emails: nextProps.used_pgp_emails,
+                used_chat_ids: nextProps.used_chat_ids,
+                used_sim_ids: nextProps.used_sim_ids
             });
         }
     }
@@ -141,9 +153,9 @@ class Account extends Component {
     }
     searchField = (originalData, fieldName, value) => {
         let demoData = [];
-
         if (value.length) {
             originalData.forEach((data) => {
+                console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {
 
@@ -190,6 +202,13 @@ class Account extends Component {
             this.setState({
                 pgp_emails: searchedData
             });
+        } else if (dataName === "used_pgp_emails") {
+            console.log(this.props.used_pgp_emails, fieldName, fieldValue)
+            let searchedData = this.searchField(this.props.used_pgp_emails, fieldName, fieldValue);
+            console.log(searchedData);
+            this.setState({
+                used_pgp_emails: searchedData
+            });
         }
     }
 
@@ -206,6 +225,10 @@ class Account extends Component {
             this.setState({
                 pgp_emails_page: e
             });
+        } else if (dataName === "used_pgp_emails") {
+            this.setState({
+                used_pgp_emails_page: e
+            });
         }
     }
 
@@ -219,6 +242,7 @@ class Account extends Component {
         console.log(e);
         this.setState({
             visible1: false,
+            selectedRowKeys: []
         });
     }
 
@@ -226,10 +250,33 @@ class Account extends Component {
         console.log(e);
         this.setState({
             visible1: false,
+            selectedRowKeys: []
         });
     }
-    render() {
+    onSelectChange = (selectedRowKeys) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.setState({ selectedRowKeys });
+    }
+    showConfirm = (msg, _this, pageName, id = 0) => {
+        if (_this.state.selectedRowKeys.length > 0 || id != 0) {
+            confirm({
+                title: 'WARNNING!' + msg,
+                okText: "Confirm",
+                onOk() {
+                    if (id != 0) {
+                        _this.props.releaseCSV(pageName, [id]);
+                    }
+                    else if (_this.state.selectedRowKeys.length > 0) {
+                        _this.props.releaseCSV(pageName, _this.state.selectedRowKeys)
+                    }
+                },
+                onCancel() {
 
+                },
+            });
+        }
+    }
+    render() {
         if (this.props.showMsg) {
             if (this.props.msg === "imported successfully") {
                 message.success(this.props.msg);
@@ -239,7 +286,8 @@ class Account extends Component {
 
         }
 
-        const { file } = this.state
+
+        const { file, selectedRowKeys, } = this.state
         // console.log(file);
         let self = this;
         const props = {
@@ -266,6 +314,10 @@ class Account extends Component {
             fileList: (file === null) ? null : [file]
         };
 
+        const rowSelection = {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
+        };
 
         return (
 
@@ -606,7 +658,227 @@ class Account extends Component {
                                                                     pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
                                                                 />
                                                             </Fragment>
-                                                            : null}
+                                                            : (this.state.dataFieldName === "used_pgp_emails") ?
+                                                                <Fragment>
+                                                                    <div className="row">
+                                                                        <div className="col-md-6 pr-8">
+                                                                            <Select
+                                                                                className="search_heading2"
+                                                                                value={this.state.used_pgp_emails_page}
+                                                                                //  defaultValue={this.state.DisplayPages}
+                                                                                style={{ width: '100%' }}
+                                                                                // onSelect={value => this.setState({DisplayPages:value})}
+                                                                                onChange={value => this.handlePagination(value, 'used_pgp_emails')}
+                                                                            >
+                                                                                <Select.Option className="font-12" value="10" >10</Select.Option>
+                                                                                <Select.Option className="font-12" value="20">20</Select.Option>
+                                                                                <Select.Option className="font-12" value="30">30</Select.Option>
+                                                                                <Select.Option className="font-12" value="50">50</Select.Option>
+                                                                                <Select.Option className="font-12" value="100">100</Select.Option>
+                                                                            </Select>
+                                                                        </div>
+                                                                        <div className="col-md-6 pl-8">
+                                                                            <Input.Search
+                                                                                name="pgp_email"
+                                                                                key="used_pgp_emails"
+                                                                                id="used_pgp_emails"
+                                                                                className="search_heading1"
+                                                                                onKeyUp={
+                                                                                    (e) => {
+                                                                                        this.handleSearch(e, 'used_pgp_emails')
+                                                                                    }
+                                                                                }
+                                                                                autoComplete="new-password"
+                                                                                placeholder="USED PGP Email"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <Table
+                                                                        size="middle"
+                                                                        rowSelection={rowSelection}
+                                                                        columns={[
+                                                                            {
+                                                                                title: <Button onClick={() => { this.showConfirm("Do you really want to Release all pgp emails.", this, 'pgp_email') }}>Release selected</Button>,
+                                                                                align: "center",
+                                                                                dataIndex: 'action',
+                                                                                key: "action",
+                                                                                className: '',
+                                                                            },
+                                                                            {
+                                                                                title: 'USED PGP EMAILS',
+                                                                                align: "center",
+                                                                                dataIndex: 'used_pgp_email',
+                                                                                key: "used_pgp_email",
+                                                                                className: '',
+                                                                                sorter: (a, b) => { return a.used_pgp_email.localeCompare(b.used_pgp_email) },
+                                                                                sortDirections: ['ascend', 'descend'],
+
+                                                                            },
+
+                                                                        ]}
+
+                                                                        dataSource={
+                                                                            this.state.used_pgp_emails.map(email => {
+                                                                                return {
+                                                                                    key: email.id,
+                                                                                    used_pgp_email: email.pgp_email,
+                                                                                    action: <Button onClick={() => { this.showConfirm("Do you really want to Release this pgp email.", this, "pgp_email", email.id) }}>Release</Button>
+
+                                                                                }
+                                                                            })
+                                                                        }
+
+                                                                        pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                                                    />
+                                                                </Fragment> : (this.state.dataFieldName === "used_sim_ids") ?
+                                                                    <Fragment>
+                                                                        <div className="row">
+                                                                            <div className="col-md-6 pr-8">
+                                                                                <Select
+                                                                                    className="search_heading2"
+                                                                                    value={this.state.used_sim_ids_page}
+                                                                                    //  defaultValue={this.state.DisplayPages}
+                                                                                    style={{ width: '100%' }}
+                                                                                    // onSelect={value => this.setState({DisplayPages:value})}
+                                                                                    onChange={value => this.handlePagination(value, 'used_sim_ids')}
+                                                                                >
+                                                                                    <Select.Option className="font-12" value="10" >10</Select.Option>
+                                                                                    <Select.Option className="font-12" value="20">20</Select.Option>
+                                                                                    <Select.Option className="font-12" value="30">30</Select.Option>
+                                                                                    <Select.Option className="font-12" value="50">50</Select.Option>
+                                                                                    <Select.Option className="font-12" value="100">100</Select.Option>
+                                                                                </Select>
+                                                                            </div>
+                                                                            <div className="col-md-6 pl-8">
+                                                                                <Input.Search
+                                                                                    name="sim_id"
+                                                                                    key="used_sim_ids"
+                                                                                    id="used_sim_ids"
+                                                                                    className="search_heading1"
+                                                                                    onKeyUp={
+                                                                                        (e) => {
+                                                                                            this.handleSearch(e, 'used_sim_ids')
+                                                                                        }
+                                                                                    }
+                                                                                    autoComplete="new-password"
+                                                                                    placeholder="USED SIM IDS"
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <Table
+                                                                            size="middle"
+                                                                            rowSelection={rowSelection}
+                                                                            columns={[
+                                                                                {
+                                                                                    title: <Button onClick={() => { this.showConfirm("Do you really want to Release all sim ids.", this, 'sim_id') }}>Release selected</Button>,
+                                                                                    align: "center",
+                                                                                    dataIndex: 'action',
+                                                                                    key: "action",
+                                                                                    className: '',
+                                                                                },
+                                                                                {
+                                                                                    title: 'USED SIM IDS',
+                                                                                    align: "center",
+                                                                                    dataIndex: 'used_sim_ids',
+                                                                                    key: "used_sim_ids",
+                                                                                    className: '',
+                                                                                    sorter: (a, b) => { return a.used_sim_ids.localeCompare(b.used_sim_ids) },
+                                                                                    sortDirections: ['ascend', 'descend'],
+
+                                                                                },
+
+                                                                            ]}
+
+                                                                            dataSource={
+                                                                                this.state.used_sim_ids.map(email => {
+                                                                                    return {
+                                                                                        key: email.id,
+                                                                                        used_sim_ids: email.sim_id,
+                                                                                        action: <Button onClick={() => { this.showConfirm("Do you really want to Release this sim id.", this, "sim_id", email.id) }}>Release</Button>
+
+                                                                                    }
+                                                                                })
+                                                                            }
+
+                                                                            pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                                                        />
+                                                                    </Fragment> : (this.state.dataFieldName === "used_chat_ids") ?
+                                                                        <Fragment>
+                                                                            <div className="row">
+                                                                                <div className="col-md-6 pr-8">
+                                                                                    <Select
+                                                                                        className="search_heading2"
+                                                                                        value={this.state.used_chat_ids_page}
+                                                                                        //  defaultValue={this.state.DisplayPages}
+                                                                                        style={{ width: '100%' }}
+                                                                                        // onSelect={value => this.setState({DisplayPages:value})}
+                                                                                        onChange={value => this.handlePagination(value, 'used_chat_ids')}
+                                                                                    >
+                                                                                        <Select.Option className="font-12" value="10" >10</Select.Option>
+                                                                                        <Select.Option className="font-12" value="20">20</Select.Option>
+                                                                                        <Select.Option className="font-12" value="30">30</Select.Option>
+                                                                                        <Select.Option className="font-12" value="50">50</Select.Option>
+                                                                                        <Select.Option className="font-12" value="100">100</Select.Option>
+                                                                                    </Select>
+                                                                                </div>
+                                                                                <div className="col-md-6 pl-8">
+                                                                                    <Input.Search
+                                                                                        name="chat_ids"
+                                                                                        key="used_chat_ids"
+                                                                                        id="used_chat_ids"
+                                                                                        className="search_heading1"
+                                                                                        onKeyUp={
+                                                                                            (e) => {
+                                                                                                this.handleSearch(e, 'used_chat_ids')
+                                                                                            }
+                                                                                        }
+                                                                                        autoComplete="new-password"
+                                                                                        placeholder="USED CHAT IDS"
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <Table
+                                                                                size="middle"
+                                                                                rowSelection={rowSelection}
+                                                                                columns={[
+                                                                                    {
+                                                                                        title: <Button onClick={() => { this.showConfirm("Do you really want to Release all Chat ids.", this, 'chat_id') }}>Release selected</Button>,
+                                                                                        align: "center",
+                                                                                        dataIndex: 'action',
+                                                                                        key: "action",
+                                                                                        className: '',
+                                                                                    },
+                                                                                    {
+                                                                                        title: 'USED CHAT IDS',
+                                                                                        align: "center",
+                                                                                        dataIndex: 'used_chat_ids',
+                                                                                        key: "used_chat_ids",
+                                                                                        className: '',
+                                                                                        sorter: (a, b) => { return a.used_chat_ids.localeCompare(b.used_chat_ids) },
+                                                                                        sortDirections: ['ascend', 'descend'],
+
+                                                                                    },
+
+                                                                                ]}
+
+                                                                                dataSource={
+                                                                                    this.state.used_chat_ids.map(email => {
+                                                                                        return {
+                                                                                            key: email.id,
+                                                                                            used_chat_ids: email.chat_id,
+                                                                                            action: <Button onClick={() => { this.showConfirm("Do you really want to Release this Chat id.", this, "chat_id", email.id) }}>Release</Button>
+
+                                                                                        }
+                                                                                    })
+                                                                                }
+
+                                                                                pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                                                            />
+                                                                        </Fragment> : null
+                                                }
                                             </Modal>
                                             <Row>
                                                 <div className="col-md-12 ac_card">
@@ -617,7 +889,7 @@ class Account extends Component {
                                                             <Row style={{ padding: '16px' }}>
                                                                 <div className="inline_b">
                                                                     <span className="headings">PGP Emails</span>
-                                                                    <Button size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                    <Button onClick={() => { this.showViewmodal(true, 'used_pgp_emails', 'USED PGP EMAILS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
                                                                     <Button onClick={() => { this.showViewmodal(true, 'pgp_emails', 'PGP Emails') }} size='small' className="pull-right imp_btn">View</Button>
                                                                     <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
                                                                         this.exportCSV('pgp_emails');
@@ -633,7 +905,7 @@ class Account extends Component {
                                                                 </div>
                                                                 <div className="inline_b">
                                                                     <span className="headings">Chat IDs</span>
-                                                                    <Button size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                    <Button onClick={() => { this.showViewmodal(true, 'used_chat_ids', 'USED CHAT IDS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
                                                                     <Button onClick={() => { this.showViewmodal(true, 'chat_ids', 'Chat IDs') }} size='small' className="pull-right imp_btn">View</Button>
                                                                     <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
                                                                         this.exportCSV('chat_ids');
@@ -648,7 +920,7 @@ class Account extends Component {
                                                                 </div>
                                                                 <div className="inline_b">
                                                                     <span className="headings">SIM IDs</span>
-                                                                    <Button size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                    <Button onClick={() => { this.showViewmodal(true, 'used_sim_ids', 'USED SIM IDS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
                                                                     <Button onClick={() => { this.showViewmodal(true, 'sim_ids', 'Sim IDs') }} size='small' className="pull-right imp_btn mb-0">View</Button>
                                                                     <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
                                                                         this.exportCSV('sim_ids');
@@ -751,19 +1023,28 @@ function mapDispatchToProps(dispatch) {
         getChatIDs: getChatIDs,
         getPGPEmails: getPGPEmails,
         importCSV: importCSV,
-        exportCSV: exportCSV
+        exportCSV: exportCSV,
+        getUsedPGPEmails: getUsedPGPEmails,
+        getUsedChatIds: getUsedChatIds,
+        getUsedSimIds: getUsedSimIds,
+        releaseCSV: releaseCSV
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {
     // console.log("sim_ids", devices.sim_ids);
     // console.log("chat_ids", devices.chat_ids);
-    // console.log("pgp_emails", devices.pgp_emails);
+    console.log("used_pgp_emails", devices.used_pgp_emails);
+    console.log("used_caht", devices.used_chat_ids);
+    console.log("used_sadas", devices.used_sim_ids);
     return {
         msg: account.msg,
         showMsg: account.showMsg,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
-        pgp_emails: devices.pgp_emails
+        pgp_emails: devices.pgp_emails,
+        used_pgp_emails: devices.used_pgp_emails,
+        used_chat_ids: devices.used_chat_ids,
+        used_sim_ids: devices.used_sim_ids,
     };
 }
 

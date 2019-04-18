@@ -10,6 +10,9 @@ import {
     GET_SIM_IDS,
     GET_CHAT_IDS,
     GET_PGP_EMAILS,
+    GET_USED_PGP_EMAILS,
+    GET_USED_CHAT_IDS,
+    GET_USED_SIM_IDS,
     REJECT_DEVICE,
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
@@ -71,7 +74,7 @@ export function editDevice(formData) {
 }
 
 export function deleteUnlinkDevice(devices) {
-    console.log('at action file  for save history abaid: ', devices )
+    console.log('at action file  for save history abaid: ', devices)
     return (dispatch) => {
         // alert("hello");
         RestService.deleteUnlinkDevice(devices).then((response) => {
@@ -103,14 +106,14 @@ export function suspendDevice(device) {
 
             if (RestService.checkAuth(response.data)) {
 
-             //   device.account_status = "suspended";
+                //   device.account_status = "suspended";
 
                 if (response.data.status) {
                     dispatch({
                         type: SUSPEND_DEVICE,
                         response: response.data,
                         payload: {
-                           // device: device,
+                            // device: device,
                             msg: response.data.msg,
                         }
                     });
@@ -219,6 +222,64 @@ export function getPGPEmails() {
                 // console.log('response', response.data);
                 dispatch({
                     type: GET_PGP_EMAILS,
+                    payload: response.data.data
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+
+export function getUsedPGPEmails() {
+    return (dispatch) => {
+        // alert("hello");
+        RestService.getUsedPGPEmails().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+                dispatch({
+                    type: GET_USED_PGP_EMAILS,
+                    payload: response.data.data
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+export function getUsedSimIds() {
+    return (dispatch) => {
+        // alert("hello");
+        RestService.getUsedSimIds().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+                dispatch({
+                    type: GET_USED_SIM_IDS,
+                    payload: response.data.data
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+export function getUsedChatIds() {
+    return (dispatch) => {
+        // alert("hello");
+        RestService.getUsedChatIds().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+                dispatch({
+                    type: GET_USED_CHAT_IDS,
                     payload: response.data.data
                 });
 

@@ -46,7 +46,7 @@ const RestService = {
         localStorage.setItem('lastName', data.user.lastName);
         localStorage.setItem('connected_dealer', data.user.connected_dealer);
         localStorage.setItem('connected_devices', data.user.connected_devices[0].total);
-      
+
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
     },
@@ -78,12 +78,12 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check_component', { ComponentUri: ComponentUri }, RestService.getHeader());
 
     },
-    
+
     // 
     getAllowedComponents: () => {
 
     },
-    
+
     // isAdmin
     isAdmin: () => {
         // var self = this;
@@ -92,7 +92,7 @@ const RestService = {
         // this.response= this.http.get(this.baseUrl + '/users/check_admin',this.oHeaders);
         // return this.response;
     },
-    
+
     getUserType: () => {
 
     },
@@ -100,7 +100,7 @@ const RestService = {
     transferDeviceProfile: (device_id) => {
         return axios.post(BASE_URL + 'users/transfer/device_profile', { device_id: device_id }, RestService.getHeader());
     },
-    
+
     // getuserType
     getUserType: () => {
 
@@ -143,6 +143,15 @@ const RestService = {
     },
     getPGPEmails: () => {
         return axios.get(BASE_URL + 'users/get_pgp_emails', RestService.getHeader());
+    },
+    getUsedPGPEmails: () => {
+        return axios.get(BASE_URL + 'users/get_used_pgp_emails', RestService.getHeader());
+    },
+    getUsedSimIds: () => {
+        return axios.get(BASE_URL + 'users/get_used_sim_ids', RestService.getHeader());
+    },
+    getUsedChatIds: () => {
+        return axios.get(BASE_URL + 'users/get_used_chat_ids', RestService.getHeader());
     },
     DealerList: (dealer) => {
         return axios.get(BASE_URL + 'users/dealers/' + dealer,
@@ -357,6 +366,9 @@ const RestService = {
     },
     exportCSV: (fieldName) => {
         return axios.get(BASE_URL + 'users/export/' + fieldName, RestService.getHeader());
+    },
+    releaseCSV: (fieldName, ids) => {
+        return axios.post(BASE_URL + 'users/releaseCSV/' + fieldName, { ids }, RestService.getHeader());
     },
     // Dealer and sdealers items apis
     getSelectedItems(pageName) {

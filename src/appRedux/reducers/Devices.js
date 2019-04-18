@@ -10,6 +10,9 @@ import {
     GET_SIM_IDS,
     GET_CHAT_IDS,
     GET_PGP_EMAILS,
+    GET_USED_PGP_EMAILS,
+    GET_USED_CHAT_IDS,
+    GET_USED_SIM_IDS,
     REJECT_DEVICE,
     NEW_DEVICES_LIST,
     POST_PAGINATION,
@@ -30,6 +33,9 @@ const initialState = {
     sim_ids: [],
     chat_ids: [],
     pgp_emails: [],
+    used_pgp_emails: [],
+    used_sim_ids: [],
+    used_chat_ids: [],
     options: ["DEVICE ID", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
 };
@@ -112,17 +118,17 @@ export default (state = initialState, action) => {
                 options: state.options,
             }
 
-        case DELETE_UNLINK_DEVICE: 
-            if(action.response.status){
-                for(let id of action.response.data){
+        case DELETE_UNLINK_DEVICE:
+            if (action.response.status) {
+                for (let id of action.response.data) {
                     let objIndex = state.devices.findIndex((obj => obj.usr_device_id === id));
                     state.devices.splice(objIndex, 1);
                 }
-                  message.success(action.response.msg);
-            }else{
-                  message.error(action.response.msg);
+                message.success(action.response.msg);
+            } else {
+                message.error(action.response.msg);
             }
-            return{
+            return {
                 ...state,
                 devices: [...state.devices],
                 options: state.options
@@ -242,6 +248,27 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pgp_emails: action.payload
+            }
+        }
+        case GET_USED_PGP_EMAILS: {
+            // alert("hello");
+            return {
+                ...state,
+                used_pgp_emails: action.payload
+            }
+        }
+        case GET_USED_CHAT_IDS: {
+            // alert("hello");
+            return {
+                ...state,
+                used_chat_ids: action.payload
+            }
+        }
+        case GET_USED_SIM_IDS: {
+            // alert("hello");
+            return {
+                ...state,
+                used_sim_ids: action.payload
             }
         }
         case REJECT_DEVICE: {

@@ -5,7 +5,7 @@ import {
     UNLINK_APK,
     // EDIT_APK,
     LOADING,
-    IMPORT_CSV
+    IMPORT_CSV,
 } from "constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -62,14 +62,30 @@ export function importCSV(formData, fieldName) {
 
 export function exportCSV(fieldName) {
     return (dispatch) => {
-        RestService.exportCSV(fieldName).then((response)=>{
-            if(RestService.checkAuth(response.data)){
-                if(response.data.status === true){
+        RestService.exportCSV(fieldName).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status === true) {
                     RestService.getFile(response.data.path);
                 }
             } else {
                 dispatch({
-                    type : INVALID_TOKEN
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export function releaseCSV(fieldName, ids) {
+    console.log(fieldName, ids);
+    return (dispatch) => {
+        RestService.releaseCSV(fieldName, ids).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status === true) {
+
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
                 })
             }
         })

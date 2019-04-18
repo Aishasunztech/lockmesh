@@ -1067,11 +1067,11 @@ class Devices extends Component {
 
                 <Select.Option value="all">All</Select.Option>
                 <Select.Option value={DEVICE_ACTIVATED}>Active</Select.Option>
-                <Select.Option value={DEVICE_SUSPENDED}>Suspended</Select.Option>
                 <Select.Option value={DEVICE_EXPIRED}>Expired</Select.Option>
+                <Select.Option value={DEVICE_TRIAL}>Trial</Select.Option>
+                <Select.Option value={DEVICE_SUSPENDED}>Suspended</Select.Option>
                 <Select.Option value={DEVICE_PRE_ACTIVATION}>Pre Activated</Select.Option>
                 <Select.Option value={DEVICE_PENDING_ACTIVATION}>Pending Activation</Select.Option>
-                <Select.Option value={DEVICE_TRIAL}>Trial</Select.Option>
                 <Select.Option value={DEVICE_UNLINKED}>Unlinked</Select.Option>
 
             </Select>
