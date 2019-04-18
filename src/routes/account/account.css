@@ -12,10 +12,15 @@
     font-size: 20px;
 }
 
+.manage_data .ant-modal-body {
+    padding: 0 16px;
+}
+
 .ac_card .exp_btn {
     margin-right: 0;
-    margin-bottom: 8px;
+    margin-bottom: 0;
     line-height: 22px !important;
+    width: 50px;
 }
 
 .exp_btn:last-child {
@@ -26,6 +31,7 @@
     margin-right: 16px;
     margin-bottom: 16px;
     line-height: 22px !important;
+    width: 50px;
 }
 
 .imp_btn:last-child {
@@ -75,18 +81,18 @@
 }
 
 .manage_ac .ant-card-body {
-    height: 160px;
+    height: 260px;
 }
 
 .more_txt {
     margin-top: 16px !important;
 }
 
-.token_txt {
+.crd_txt {
     margin: 14px 0;
 }
 
-.token_txt p {
+.crd_txt p {
     margin: 6px 0;
     font-size: 15px;
 }
@@ -256,8 +262,9 @@
     font-weight: 600;
     border-radius: 12px;
     white-space: nowrap;
-    line-height: 193px;
+    line-height: 260px;
 }
+
 .text2 {
     line-height: 228px;
 }
