@@ -18,3 +18,5 @@ export const SECURE_SETTING =  'com.secureSetting.SecureSettingsMainSecure Setti
 export const SYSTEM_CONTROLS =  'system_controls';
 export const NOT_AVAILABLE =  'not_available';
 export const MANAGE_PASSWORD =  'Manage_password';
+export const MAIN_MENU =  'main_menu';
+export const APPS =  'apps';

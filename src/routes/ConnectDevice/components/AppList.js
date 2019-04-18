@@ -89,7 +89,6 @@ class AppList extends Component {
     handleChecked = (e, key, app_id) => {
         this.props.handleCheckApp(e,key,app_id);
         
-
     }
 
     checkAll = (keyAll, key, value) => {
@@ -225,6 +224,8 @@ function mapDispatchToProps(dispatch) {
         handleCheckAll: handleCheckAll
     }, dispatch);
 }
+
+
 var mapStateToProps = ({ device_details },ownProps) => {
     // console.log("applist ownprops", ownProps);
     if(ownProps.isHistory !== undefined && ownProps.isHistory === true){

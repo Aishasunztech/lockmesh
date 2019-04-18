@@ -36,7 +36,7 @@ import imgUrl from '../../assets/images/mobile.png';
 import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
 import { DEVICE_ACTIVATED,GUEST_PASSWORD,ENCRYPTED_PASSWORD,DURESS_PASSWORD,ADMIN_PASSWORD,
-    SECURE_SETTING,SYSTEM_CONTROLS,NOT_AVAILABLE,MANAGE_PASSWORD } from '../../constants/Constants';
+    SECURE_SETTING,SYSTEM_CONTROLS,NOT_AVAILABLE,MANAGE_PASSWORD,MAIN_MENU,APPS } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
 import DeviceSidebar from './components/DeviceSidebar';
@@ -184,7 +184,7 @@ class ConnectDevice extends Component {
   }
 
   renderScreen = () => {
-    if (this.props.pageName === "main_menu" && (this.props.isSync === 1 || this.props.isSync === true)) {
+    if (this.props.pageName === MAIN_MENU && (this.props.isSync === 1 || this.props.isSync === true)) {
         return (<div>
             <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
             <List
@@ -202,7 +202,7 @@ class ConnectDevice extends Component {
             />
         </div>
         );
-    } else if (this.props.pageName === "apps" && (this.props.isSync === 1 || this.props.isSync === true)) {
+    } else if (this.props.pageName === APPS && (this.props.isSync === 1 || this.props.isSync === true)) {
         return (
             <AppList
                 app_list={this.props.app_list}
@@ -247,14 +247,15 @@ class ConnectDevice extends Component {
 }
 
 applyActionButton = () => {
+    let objIndex = this.props.extensions.findIndex(item=>item.uniqueName === SECURE_SETTING);
     this.props.applySetting(this.props.app_list,
         {
             adminPwd: this.props.adminPwd,
             guestPwd: this.props.guestPwd,
             encryptedPwd: this.props.encryptedPwd,
             duressPwd: this.props.duressPwd,
-        }
-        , this.state.device_id, this.props.user_acc_id);
+        } 
+        , this.state.device_id, this.props.user_acc_id, null, null, this.props.extensions[objIndex].subExtension);
     // 
   }
   componentWillUnmount() {
@@ -389,8 +390,6 @@ function mapDispatchToProps(dispatch) {
     editDevice: editDevice,
     getDevicesList: getDevicesList,
     getAccIdFromDvcId: getAccIdFromDvcId,
-
-
     // showMessage: showMessage,
     unlinkDevice: unlinkDevice,
     flagged: flagged,
