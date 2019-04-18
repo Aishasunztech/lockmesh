@@ -32,7 +32,9 @@ import {
     UNFLAG_DEVICE,
     WIPE_DEVICE,
     CHECKPASS,
-    GET_DEALER_APPS
+    GET_DEALER_APPS,
+    HANDLE_CHECK_EXTENSION,
+    HANDLE_CHECK_ALL_EXTENSION
 } from "../../constants/ActionTypes";
 import {
     message, Modal
@@ -61,6 +63,9 @@ const initialState = {
     guestAll: false,
     encryptedAll: false,
     enableAll: false,
+
+    guestAllExt: false,
+    encryptedAllExt: false,
 
     applyBtn: false,
     undoBtn: false,
@@ -97,6 +102,7 @@ const initialState = {
     duressCPwd: '',
 
     apk_list: [],
+    extensions: []
 };
 
 export default (state = initialState, action) => {
@@ -235,6 +241,7 @@ export default (state = initialState, action) => {
                 ...state,
                 // isloading: true,
                 app_list: action.payload,
+                extensions: action.extensions,
                 // guestAll: guestAll,
                 // encryptedAll: encryptedAll,
                 // enableAll: enableAll
@@ -513,6 +520,71 @@ export default (state = initialState, action) => {
                     saveProfileType: action.payload.profileType
                 }
             }
+
+        case HANDLE_CHECK_EXTENSION: {
+            let changedExtensions = state.extensions;
+            let applications = state.extensions;
+          //  console.log(action.payload.ext, 'reducer ', changedExtensions);
+          state.extensions.forEach(extension => {
+               // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
+                if (extension.uniqueName === action.payload.uniqueName) {
+                    let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
+                 //   console.log(action.payload.value, 'chenged item', extension.subExtension[objIndex][action.payload.key])
+                   if(objIndex > -1)
+                    extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
+                }
+            });
+            // state.undoApps.push(changedApps);
+            //  let check = handleCheckedAll(applications);
+            let check = '';
+
+            return {
+                ...state,
+                extensions: [...state.extensions],
+                // checked_app_id: {
+                //     id: action.payload.app_id,
+                //     key: action.payload.key,
+                //     value: action.payload.value
+                // },
+                applyBtn: true,
+                undoBtn: true,
+                ...check
+            }
+        }
+
+        case HANDLE_CHECK_ALL_EXTENSION: {
+            console.log('reducer is called', action.payload.uniqueName)
+            let changedExtensions = state.extensions;
+            let applications = state.extensions;
+          //  console.log(action.payload.ext, 'reducer ', changedExtensions);
+          state[action.payload.keyAll] = action.payload.value;
+            changedExtensions.forEach(extension => {
+               // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
+                if (extension.uniqueName === action.payload.uniqueName) {
+                    for(let subExt of extension.subExtension){
+                        subExt[action.payload.key] = action.payload.value== true ? 1:0;
+
+                    }
+                   // let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
+                    console.log('chenged item', extension.subExtension)
+                //    if(objIndex > -1)
+                //     extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
+                }
+            });
+            // state.undoApps.push(changedApps);
+            //  let check = handleCheckedAll(applications);
+            let check = '';
+
+            return {
+                ...state,
+                extensions: changedExtensions,
+              
+                applyBtn: true,
+                undoBtn: true,
+                ...check
+            }
+        }
+
         case HANDLE_CHECK_APP: {
             let changedApps = state.app_list;
             let applications = state.app_list;

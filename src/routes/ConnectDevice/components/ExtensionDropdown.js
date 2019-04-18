@@ -3,15 +3,14 @@ import { Icon, Popover, Checkbox } from 'antd';
 import Styles from "./Applist.css";
 
 
-export default class AppDropdown extends Component {
+export default class ExtensionDropdown extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             guestAll: false,
-            encryptedAll: false,
-            enableAll: false
         }
+           
     }
     componentDidMount() {
         // console.log("AppDropdown");
@@ -19,7 +18,6 @@ export default class AppDropdown extends Component {
         this.setState({
             guestAll: this.props.guestAll,
             encryptedAll: this.props.encryptedAll,
-            enableAll: this.props.enableAll,
         });
     }
     componentWillReceiveProps(nextProps) {
@@ -30,7 +28,7 @@ export default class AppDropdown extends Component {
             this.setState({
                 guestAll: nextProps.guestAll,
                 encryptedAll: nextProps.encryptedAll,
-                enableAll: nextProps.enableAll,
+
             })
         // }
     }
@@ -39,19 +37,15 @@ export default class AppDropdown extends Component {
         // console.log(e.target.checked,key);
         this.props.handleCheckedAll(key, e.target.checked);
     }
-    
     renderDropdown() {
         return (
             <div className="applist_menu">
                 <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
-                    this.handleCheckedAll(e, "guestAll");
-                }}>Turn on Guests All</Checkbox><br></br>
+                    this.handleCheckedAll(e, "guestAllExt");
+                }}>Guests All</Checkbox><br></br>
                 <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
-                    this.handleCheckedAll(e, "encryptedAll");
-                }}>Turn On Encrypted All</Checkbox><br></br>
-                <Checkbox checked={this.state.enableAll ? true : false} onChange={(e) => {
-                    this.handleCheckedAll(e, "enableAll");
-                }}>Enable All</Checkbox>
+                    this.handleCheckedAll(e, "encryptedAllExt");
+                }}>Encrypted All</Checkbox><br></br>
             </div>
         );
     }

@@ -35,7 +35,8 @@ import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
 import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
-import { DEVICE_ACTIVATED } from '../../constants/Constants';
+import { DEVICE_ACTIVATED,GUEST_PASSWORD,ENCRYPTED_PASSWORD,DURESS_PASSWORD,ADMIN_PASSWORD,
+    SECURE_SETTING,SYSTEM_CONTROLS,NOT_AVAILABLE,MANAGE_PASSWORD,MAIN_MENU,APPS } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
 import DeviceSidebar from './components/DeviceSidebar';
@@ -48,78 +49,81 @@ import SystemControls from "./components/SystemControls";
 
 class ConnectDevice extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      device_id: '',
-      pageName: "main_menu",
-      // apply: true,
-      // undo: true,
-      // redo: true,
-      // clear: false,
-      // syncStatus: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            device_id: '',
+            pageName: "main_menu",
+            // apply: true,
+            // undo: true,
+            // redo: true,
+            // clear: false,
+            // syncStatus: false
+        }
+        // console.log("hello every body", this.props);
+        this.mainMenu = [
+            {
+                pageName: "apps",
+                value: 'Application Permission'
+            },
+            {
+                pageName: "com.secureSetting.SecureSettingsMainSecure Settings",
+                value: 'Secure Settings Permission'
+            },
+            {
+                pageName: "system_controls",
+                value: 'System Permission'
+            },
+         
+            {
+                pageName: "Manage_password",
+                value: 'Manage Passwords'
+            },
+
+        ]
+
+        this.subMenu = [
+
+            {
+                pageName: "guest_password",
+                value: 'Set Guest Password'
+            },
+            {
+                pageName: "encrypted_password",
+                value: 'Set Encrypted Password'
+            },
+            {
+                pageName: "duress_password",
+                value: 'Set Duress Password'
+            },
+
+            {
+                pageName: "admin_password",
+                value: 'Change Admin Panel Code'
+            },
+        ]
+
+
+    }
+    changePage = (pageName) => {
+        this.props.changePage(pageName);
+
+    }
+    onBackHandler = () => {
+        // console.log("device details", this.props.device_details);
+        if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
+            if (this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password") {
+                this.props.changePage("Manage_password");
+
+            } else if (this.props.pageName === "Manage_password") {
+                this.props.changePage("main_menu");
+            } else {
+                this.props.changePage("main_menu");
+            }
+        }
     }
     // console.log("hello every body", this.props);
-    this.mainMenu = [
-      {
-        pageName: "apps",
-        value: 'Application Permission'
-      },
-      {
-        pageName: "setting_app_permissions",
-        value: 'Secure Settings Permission'
-      },
-      {
-        pageName: "system_controls",
-        value: 'System Controls'
-      },
-      {
-        pageName: "Manage_password",
-        value: 'Manage Passwords'
-      },
-
-    ]
-
-    this.subMenu = [
-
-      {
-        pageName: "guest_password",
-        value: 'Set Guest Password'
-      },
-      {
-        pageName: "encrypted_password",
-        value: 'Set Encrypted Password'
-      },
-      {
-        pageName: "duress_password",
-        value: 'Set Duress Password'
-      },
-
-      {
-        pageName: "admin_password",
-        value: 'Change Admin Panel Code'
-      },
-    ]
-
-
-  }
-  changePage = (pageName) => {
-    this.props.changePage(pageName);
-
-  }
-  onBackHandler = () => {
-    // console.log("device details", this.props.device_details);
-    if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
-      if (this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password") {
-        this.props.changePage("Manage_password");
-
-      } else if (this.props.pageName === "Manage_password") {
-        this.props.changePage("main_menu");
-      } else {
-        this.props.changePage("main_menu");
-      }
-    }
-  }
+   
   componentDidMount() {
     this.props.startLoading();
 
@@ -142,6 +146,7 @@ class ConnectDevice extends Component {
       //     syncStatus: this.props.device_details.is_sync
       // })
     }
+
     // this.props.endLoading();
     setTimeout(() => {
       this.props.endLoading();
@@ -179,77 +184,78 @@ class ConnectDevice extends Component {
   }
 
   renderScreen = () => {
-    if (this.props.pageName === "main_menu" && (this.props.isSync === 1 || this.props.isSync === true)) {
-      return (<div>
-        <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
-        <List
-          className="dev_main_menu"
-          size="small"
-          dataSource={this.mainMenu}
-          renderItem={item => {
-            return (<List.Item
-              onClick={() => {
+    if (this.props.pageName === MAIN_MENU && (this.props.isSync === 1 || this.props.isSync === true)) {
+        return (<div>
+            <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
+            <List
+                className="dev_main_menu"
+                size="small"
+                dataSource={this.mainMenu}
+                renderItem={item => {
+                    return (<List.Item
+                        onClick={() => {
 
-                this.changePage(item.pageName)
-              }}
-            ><a>{item.value}</a></List.Item>)
-          }}
-        />
-      </div>
-      );
-    } else if (this.props.pageName === "apps" && (this.props.isSync === 1 || this.props.isSync === true)) {
-      return (
-        <AppList
-          app_list={this.props.app_list}
-          // pushApps={this.props.pushApps}
-          undoApps={this.props.undoApps}
-        />
-      );
-    } else if (this.props.pageName === "guest_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === "encrypted_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === "duress_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === "admin_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === "setting_app_permissions" && (this.props.isSync === 1 || this.props.isSync === true)) {
-      return (<SettingAppPermissions />);
-    } else if (this.props.pageName === "system_controls" && (this.props.isSync === 1 || this.props.isSync === true)) {
-      return (<SystemControls />);
-    } else if (this.props.pageName === "not_available") {
-      return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
-    } else if (this.props.pageName === "Manage_password") {
-      return (
-        <List
-          className="dev_main_menu"
-          size="small"
-          dataSource={this.subMenu}
-          renderItem={item => {
-            return (<List.Item
-              onClick={() => {
+                            this.changePage(item.pageName)
+                        }}
+                    ><a>{item.value}</a></List.Item>)
+                }}
+            />
+        </div>
+        );
+    } else if (this.props.pageName === APPS && (this.props.isSync === 1 || this.props.isSync === true)) {
+        return (
+            <AppList
+                app_list={this.props.app_list}
+                // pushApps={this.props.pushApps}
+                undoApps={this.props.undoApps}
+            />
+        );
+    } else if (this.props.pageName === GUEST_PASSWORD && (this.props.isSync === 1 || this.props.isSync === true)) {
+        return (<Password pwdType={this.props.pageName} />);
+    } else if (this.props.pageName === ENCRYPTED_PASSWORD && (this.props.isSync === 1 || this.props.isSync === true)) {
+        return (<Password pwdType={this.props.pageName} />);
+    } else if (this.props.pageName === DURESS_PASSWORD && (this.props.isSync === 1 || this.props.isSync === true)) {
+        return (<Password pwdType={this.props.pageName} />);
+    } else if (this.props.pageName === ADMIN_PASSWORD && (this.props.isSync === 1 || this.props.isSync === true)) {
+        return (<Password pwdType={this.props.pageName} />);
+    } else if (this.props.pageName === SECURE_SETTING && (this.props.isSync === 1 || this.props.isSync === true)) {
+        return (<SettingAppPermissions pageName={this.props.pageName} extensions={this.props.extensions}  />);
+    } else if (this.props.pageName === SYSTEM_CONTROLS && (this.props.isSync === 1 || this.props.isSync === true)) {
+        return (<SystemControls />);
+    } else if (this.props.pageName === NOT_AVAILABLE) {
+        return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
+    } else if (this.props.pageName === MANAGE_PASSWORD) {
+        return (
+            <List
+                className="dev_main_menu"
+                size="small"
+                dataSource={this.subMenu}
+                renderItem={item => {
+                    return (<List.Item
+                        onClick={() => {
 
-                this.changePage(item.pageName)
-              }}
-            ><a>{item.value}</a></List.Item>)
-          }}
-        />
-      )
+                            this.changePage(item.pageName)
+                        }}
+                    ><a>{item.value}</a></List.Item>)
+                }}
+            />
+        )
 
     } else {
-      return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
+        return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
     }
-  }
+}
 
-  applyActionButton = () => {
+applyActionButton = () => {
+    let objIndex = this.props.extensions.findIndex(item=>item.uniqueName === SECURE_SETTING);
     this.props.applySetting(this.props.app_list,
-      {
-        adminPwd: this.props.adminPwd,
-        guestPwd: this.props.guestPwd,
-        encryptedPwd: this.props.encryptedPwd,
-        duressPwd: this.props.duressPwd,
-      }
-      , this.state.device_id, this.props.user_acc_id);
+        {
+            adminPwd: this.props.adminPwd,
+            guestPwd: this.props.guestPwd,
+            encryptedPwd: this.props.encryptedPwd,
+            duressPwd: this.props.duressPwd,
+        } 
+        , this.state.device_id, this.props.user_acc_id, null, null, this.props.extensions[objIndex].subExtension);
     // 
   }
   componentWillUnmount() {
@@ -384,8 +390,6 @@ function mapDispatchToProps(dispatch) {
     editDevice: editDevice,
     getDevicesList: getDevicesList,
     getAccIdFromDvcId: getAccIdFromDvcId,
-
-
     // showMessage: showMessage,
     unlinkDevice: unlinkDevice,
     flagged: flagged,
@@ -395,33 +399,34 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-  // console.log("connect device state", device_details.device);
-  return {
-    routing: routing,
-    pathName: routing.location.pathname,
-    device_details: device_details.device,
-    app_list: device_details.app_list,
-    undoApps: device_details.undoApps,
-    profiles: device_details.profiles,
-    policies: device_details.policies,
-    histories: device_details.device_histories,
-    isLoading: device_details.isLoading,
-    showMessage: device_details.showMessage,
-    messageType: device_details.messageType,
-    messageText: device_details.messageText,
-    pageName: device_details.pageName,
-    isSync: device_details.device.is_sync,
-    guestPwd: device_details.guestPwd,
-    guestCPwd: device_details.guestCPwd,
-    encryptedPwd: device_details.encryptedPwd,
-    encryptedCPwd: device_details.encryptedCPwd,
-    duressPwd: device_details.duressPwd,
-    duressCPwd: device_details.duressCPwd,
-    adminPwd: device_details.adminPwd,
-    adminCPwd: device_details.adminCPwd,
-    status: device_details.status,
-    user_acc_id: device_details.device.id
-  };
+  //   console.log("connect device state", device_details);
+    return {
+        routing: routing,
+        pathName: routing.location.pathname,
+        device_details: device_details.device,
+        app_list: device_details.app_list,
+        undoApps: device_details.undoApps,
+        profiles: device_details.profiles,
+        policies: device_details.policies,
+        histories: device_details.device_histories,
+        isLoading: device_details.isLoading,
+        showMessage: device_details.showMessage,
+        messageType: device_details.messageType,
+        messageText: device_details.messageText,
+        pageName: device_details.pageName,
+        isSync: device_details.device.is_sync,
+        guestPwd: device_details.guestPwd,
+        guestCPwd: device_details.guestCPwd,
+        encryptedPwd: device_details.encryptedPwd,
+        encryptedCPwd: device_details.encryptedCPwd,
+        duressPwd: device_details.duressPwd,
+        duressCPwd: device_details.duressCPwd,
+        adminPwd: device_details.adminPwd,
+        adminCPwd: device_details.adminCPwd,
+        status: device_details.status,
+        user_acc_id: device_details.device.id,
+        extensions: device_details.extensions
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectDevice);

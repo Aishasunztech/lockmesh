@@ -26,7 +26,9 @@ import {
     UNFLAG_DEVICE,
     WIPE_DEVICE,
     CHECKPASS,
-    GET_DEALER_APPS
+    GET_DEALER_APPS,
+    HANDLE_CHECK_EXTENSION,
+    HANDLE_CHECK_ALL_EXTENSION
 } from "../../constants/ActionTypes"
 import {
     message
@@ -71,11 +73,14 @@ export function getDeviceDetails(deviceId) {
 export function getDeviceApps(deviceId) {
     return (dispatch) => {
         RestService.getDeviceApps(deviceId).then((response) => {
+            // console.log('dat form sercer', response.data)
             if (RestService.checkAuth(response.data)) {
+                // console.log('dat form sercer', response.data)
                 if (response.data.status) {
                     dispatch({
                         type: GET_DEVICE_APPS,
-                        payload: response.data.app_list
+                        payload: response.data.app_list,
+                        extensions: response.data.extensions
                     })
                 }
 
@@ -304,7 +309,8 @@ export function loadDeviceProfile(app_list) {
     };
 }
 
-export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null, ) {
+export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null,extensions ) {
+   console.log('apply Settings', extensions);
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -316,8 +322,8 @@ export function applySetting(app_list, passwords, device_id, usr_acc_id, type = 
             },
             controls: {}
         }
-        // console.log('my test is ', usr_acc_id)
-        RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id).then((response) => {
+     console.log('my test is ', extensions)
+        RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id, extensions).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
@@ -400,6 +406,22 @@ export function showMessage(show, message, type) {
     // })
 }
 
+
+export function handleCheckExtension(e, key, app_id, uniqueName) {
+   // console.log('name in action', uniqueName)
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_EXTENSION,
+            payload: {
+                value: e,
+                key: key,
+                app_id: app_id,
+                uniqueName:uniqueName
+            }
+        })
+    }
+}
+
 export function handleCheckApp(e, key, app_id) {
     return (dispatch) => {
         dispatch({
@@ -425,6 +447,22 @@ export function handleCheckAll(keyAll, key, value) {
         })
     }
 }
+
+export function handleCheckAllExtension(keyAll, key, value,uniqueName) {
+    console.log('actoin is called')
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_ALL_EXTENSION,
+            payload: {
+                keyAll: keyAll,
+                key: key,
+                value: value,
+                uniqueName: uniqueName
+            }
+        })
+    }
+}
+
 
 
 export function submitPassword(passwords, pwdType) {
