@@ -55,7 +55,7 @@ class Apk extends React.Component {
                     className: 'row'
                 },
                 {
-                    title: 'APP STATUS',
+                    title: 'SHOW ON DEVICE',
                     dataIndex: 'apk_status',
                     key: 'apk_status',
                 },
