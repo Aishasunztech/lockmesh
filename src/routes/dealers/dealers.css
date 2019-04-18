@@ -1,7 +1,9 @@
-.devices table th{
-    white-space: nowrap!important;
+.devices table th {
+    white-space: nowrap !important;
     font-size: 13px;
+    text-align: center;
 }
-.devices table td{
-    white-space: nowrap!important;
+
+.devices table td {
+    white-space: nowrap !important;
 }
