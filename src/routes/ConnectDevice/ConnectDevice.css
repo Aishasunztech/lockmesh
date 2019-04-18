@@ -165,7 +165,7 @@ th.device_info {
 }
 
 .deviceImg .ant-input-affix-wrapper {
-    margin-bottom: 15px;
+    margin-bottom: 4px;
 }
 
 .deviceImg .ant-input {
@@ -184,6 +184,16 @@ th.device_info {
 .deviceImg .ant-input:focus {
     border-color: #038fde !important;
     box-shadow: 0 0 0 2px rgba(23, 23, 23, 0);
+}
+
+.anticon-eye {
+    font-size: 20px;
+    color: #ccc;
+}
+
+.anticon-eye-invisible {
+    font-size: 20px;
+    color: #ccc;
 }
 
 .deviceImg .ant-form-item-control-wrapper {

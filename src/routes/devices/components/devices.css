@@ -24,6 +24,13 @@
     margin-top: 24px;
 }
 
+.edit_ftr_btn {
+    text-align: right;
+    padding-top: 13px;
+    margin-bottom: 0px !important;
+    margin-top: 24px;
+}
+
 .edit_ftr_btn button {
     margin-bottom: 0;
     margin-left: 1px;
@@ -33,8 +40,29 @@
     padding: 16px 16px 16px;
 }
 
+.wipe_device .ant-modal-content {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wipe_device .ant-modal-body {
+    padding: 0 45px 0;
+}
+
+.password_field {
+    margin: 16px 0;
+}
+
 .prof_f_b .ant-modal-body {
     padding: 16px 16px;
+}
+
+.wipe_content {
+    border: 2px solid #03A9F4;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .search_heading input {
@@ -112,9 +140,11 @@
 .ant-tabs-tab-active .orange {
     color: #FFA500
 }
+
 .ant-tabs-tab-active .purple {
     color: #7a05b9
 }
+
 .ant-tabs-tab-active .yellow {
     color: #cccc0e
 }
@@ -146,9 +176,11 @@
 .blue:hover {
     color: rgb(38, 38, 255)
 }
+
 .purple:hover {
     color: #7a05b9;
 }
+
 .red:hover {
     color: rgb(252, 40, 40)
 }
@@ -163,22 +195,23 @@
 
 .editable-cell {
     position: relative;
-  }
-  
+}
+
 .editable-cell-value-wrap {
-padding: 5px 12px;
-cursor: pointer;
+    padding: 5px 12px;
+    cursor: pointer;
 }
 
 .editable-row:hover .editable-cell-value-wrap {
-border: 1px solid #d9d9d9;
-border-radius: 4px;
-padding: 4px 11px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 4px 11px;
 }
 
-#order::parent{
+#order::parent {
     display: none;
 }
-#order{
+
+#order {
     display: none;
 }

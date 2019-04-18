@@ -52,15 +52,16 @@ export default class WipeDevice extends Component {
         return (
             <div>
                 <Modal
+                    width="330px"
                     visible={visible}
-                    title="PANNEL PASSWORD REQUIRED FOR THIS ACTION"
+                    title=""
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
-                    className="WIPE DEVICE"
+                    className="wipe_device"
                 >
 
-                    <Form onSubmit={this.handleSubmit} autoComplete="new-password">
+                    <Form onSubmit={this.handleSubmit} autoComplete="new-password" className="text-center wipe_content">
 
                         <Form.Item
                             wrapperCol={{
@@ -68,9 +69,10 @@ export default class WipeDevice extends Component {
                                 sm: { span: 24, offset: 0 },
                             }}
                         >
-                            <Input ref='pass' type='password' required placeholder="Enter Password" />
+                            <h4>PANNEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>
+                            <Input.Password ref='pass' className="password_field" type='password' required placeholder="Enter Password" />
                         </Form.Item>
-                        <Form.Item className="edit_ftr_btn"
+                        <Form.Item className="edit_ftr_btn1"
                             wrapperCol={{
                                 xs: { span: 24, offset: 0 },
                                 sm: { span: 24, offset: 0 },
