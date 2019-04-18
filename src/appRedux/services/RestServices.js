@@ -124,8 +124,8 @@ const RestService = {
 
     },
 
-    deleteUnlinkDevice: (devices)=> {
-        return axios.put(BASE_URL + 'users/deleteUnlinkDevice',{devices}, RestService.getHeader())
+    deleteUnlinkDevice: (devices) => {
+        return axios.put(BASE_URL + 'users/deleteUnlinkDevice', { devices }, RestService.getHeader())
     },
 
     // getNewDevices
@@ -197,10 +197,11 @@ const RestService = {
         // console.log('rest ser')
         return axios.get(BASE_URL + "users/get_usr_acc_id/" + d, RestService.getHeader());
     },
-    savePermissions: (apkId, dealers) => {
+    savePermissions: (apkId, dealers, action) => {
         return axios.post(BASE_URL + 'users/save_permissions', {
             apkId: apkId,
-            dealers: dealers
+            dealers: dealers,
+            action: action
         },
             RestService.getHeader()
         );

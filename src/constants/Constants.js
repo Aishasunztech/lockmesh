@@ -1,6 +1,7 @@
 export const DEALER_SUSPENDED = "suspended";
 export const DEALER_UNLINKED = "unlinked";
 export const DEVICE_ACTIVATED = "Active";
+export const DEVICE_TRIAL = "Trial";
 export const DEVICE_SUSPENDED = "Suspended";
 export const DEVICE_EXPIRED = "Expired";
 export const DEVICE_UNLINKED = "Unlinked";

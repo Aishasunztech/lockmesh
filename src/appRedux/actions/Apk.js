@@ -148,11 +148,11 @@ export function editApk(formData) {
     };
 }
 
-export function savePermission(apk_id, dealers) {
+export function savePermission(apk_id, dealers, action) {
     return (dispatch) => {
-        RestService.savePermissions(apk_id, dealers).then((response) => {
+        RestService.savePermissions(apk_id, dealers, action).then((response) => {
             if (RestService.checkAuth(response.data)) {
-              
+
                 dispatch({
                     type: PERMSSION_SAVED,
                     payload: response.data.msg,

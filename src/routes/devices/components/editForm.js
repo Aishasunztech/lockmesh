@@ -255,7 +255,7 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('model', {
-                        initialValue: (this.props.device.model === "null") ? '' : this.props.device.model,
+                        initialValue: checkValue(this.props.device.model),
                     })(
                         <Input />
                     )}
@@ -287,11 +287,11 @@ class EditDevice extends Component {
 
                             style={{ width: '100%' }}
                         >
-
-                            <Select.Option value={1}>1 Month</Select.Option>
-                            <Select.Option value={3}>3 Months</Select.Option>
-                            <Select.Option value={6}>6 Months</Select.Option>
-                            <Select.Option value={12}>12 Months</Select.Option>
+                            {(this.props.device.finalStatus === 'Trial') ? <Select.Option value={0}>Trial (7 days)</Select.Option> : null}
+                            {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={1}>1 Month</Select.Option> : null}
+                            {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={3}>3 Months</Select.Option> : null}
+                            {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={6}>6 Months</Select.Option> : null}
+                            {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={12}>12 Months</Select.Option> : null}
                         </Select>
                     )}
 

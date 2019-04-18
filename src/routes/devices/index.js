@@ -19,7 +19,8 @@ import {
     DEVICE_PRE_ACTIVATION,
     DEVICE_SUSPENDED,
     DEVICE_UNLINKED,
-    ADMIN
+    ADMIN,
+    DEVICE_TRIAL
 } from '../../constants/Constants'
 
 import {
@@ -759,20 +760,28 @@ class Devices extends Component {
         // alert(value);
         // value = value.toLowerCase();
 
-       // console.log('clollolol',this.state.columns);
-        if(value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)){
+        // console.log('clollolol',this.state.columns);
+        if (value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete Selected</Button>
         }
-        else{
-             this.state.columns[0]['title'] = ''
+        else {
+            this.state.columns[0]['title'] = ''
         }
-       
+
         switch (value) {
             case DEVICE_ACTIVATED:
                 this.setState({
                     devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
                     column: this.columns,
                     tabselect: '4'
+                })
+
+                break;
+            case DEVICE_TRIAL:
+                this.setState({
+                    devices: this.filterList(DEVICE_TRIAL, this.props.devices),
+                    column: this.columns,
+                    tabselect: '9'
                 })
 
                 break;
@@ -831,18 +840,18 @@ class Devices extends Component {
     }
 
     handleChangetab = (value) => {
-    
+
         // alert('value');
         // alert(value);
 
         // console.log('selsect', this.props.selectedOptions)
         // let type = value.toLowerCase();
 
-         if(value == '5' && (this.props.user.type !== ADMIN)){
+        if (value == '5' && (this.props.user.type !== ADMIN)) {
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice()} >Delete Selected</Button>
         }
-        else{
-             this.state.columns[0]['title'] = ''
+        else {
+            this.state.columns[0]['title'] = ''
         }
 
         switch (value) {
@@ -852,7 +861,13 @@ class Devices extends Component {
                     column: this.state.columns,
                     tabselect: '4'
                 })
-
+                break;
+            case '9':
+                this.setState({
+                    devices: this.filterList(DEVICE_TRIAL, this.props.devices),
+                    column: this.state.columns,
+                    tabselect: '9'
+                })
                 break;
             case '7':
                 this.setState({
@@ -1057,6 +1072,7 @@ class Devices extends Component {
                 <Select.Option value={DEVICE_PRE_ACTIVATION}>Pre Activated</Select.Option>
                 <Select.Option value={DEVICE_PENDING_ACTIVATION}>Pending Activation</Select.Option>
                 <Select.Option value={DEVICE_UNLINKED}>Unlinked</Select.Option>
+                <Select.Option value={DEVICE_TRIAL}>Trial</Select.Option>
 
             </Select>
         );
@@ -1069,7 +1085,7 @@ class Devices extends Component {
         }, true);
     }
 
-    refreshComponent =()=> {
+    refreshComponent = () => {
         this.props.history.push('/devices');
     }
     render() {
@@ -1204,7 +1220,7 @@ function mapDispatchToProps(dispatch) {
 
 var mapStateToProps = ({ devices, auth }) => {
     //   console.log('devices AUTH', devices.devices);
-  //  console.log('devices is', devices);
+    //  console.log('devices is', devices);
     return {
         devices: devices.devices,
         msg: devices.msg,
