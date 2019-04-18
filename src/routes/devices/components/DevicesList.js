@@ -15,7 +15,7 @@ import {
     DEVICE_PRE_ACTIVATION,
     DEVICE_SUSPENDED,
     DEVICE_UNLINKED,
-    DEVICE_TRAIL,
+    DEVICE_TRIAL,
     ADMIN
 } from '../../../constants/Constants'
 
@@ -145,7 +145,7 @@ class DevicesList extends Component {
             // const device_status =  "SUSPEND";
 
             var status = device.finalStatus;
-            const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRAIL) ? "danger" : "dashed";
+            const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
             const flagged = device.flagged;
             // console.log("not avail", status);
             var order = getSortOrder(status)
@@ -177,7 +177,7 @@ class DevicesList extends Component {
                 // sortOrder: {order},
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRAIL) ?
+                action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_SUSPENDED) ?
                         (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
@@ -691,6 +691,27 @@ export default class Tab extends Component {
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
                         ref="devciesList1"
+                        pagination={this.props.pagination}
+                        addDevice={this.props.addDevice}
+                        editDevice={this.props.editDevice}
+                        handlePagination={this.props.handlePagination}
+                        tabselect={this.state.tabselect}
+                        deleteUnlinkDevice={this.props.deleteUnlinkDevice}
+                        user={this.props.user}
+                    //  getDevicesList={this.props.getDevicesList}
+                    //    refreshComponent={this.props.refreshComponent}
+                    // resetTabSelected={this.resetTabSelected}
+                    />
+                </TabPane>
+                <TabPane tab={<span className="green">Trial</span>} key="9" forceRender={true}>
+                    <DevicesList
+                        devices={this.state.devices}
+                        suspendDevice={this.props.suspendDevice}
+                        activateDevice={this.props.activateDevice}
+                        columns={this.state.columns}
+                        rejectDevice={this.props.rejectDevice}
+                        selectedOptions={this.props.selectedOptions}
+                        // ref="devciesList1"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}

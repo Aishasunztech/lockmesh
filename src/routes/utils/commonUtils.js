@@ -15,6 +15,7 @@ const DEVICE_EXPIRED = "Expired";
 const DEVICE_UNLINKED = "Unlinked";
 const DEVICE_PENDING_ACTIVATION = "Pending activation";
 const DEVICE_PRE_ACTIVATION = "Pre-activated";
+const DEVICE_TRIAL = "Trial";
 
 module.exports = {
 
@@ -41,6 +42,9 @@ module.exports = {
     getColor: function (status) {
         switch (status) {
             case DEVICE_ACTIVATED:
+                return { color: "#008000" };
+
+            case DEVICE_TRIAL:
                 return { color: "#008000" };
 
             case DEVICE_PRE_ACTIVATION:
