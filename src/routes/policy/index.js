@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { message, Input, Modal, Button } from "antd";
+import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
@@ -28,18 +28,39 @@ class Policy extends Component {
             //     width: 800,
             // },
             {
-                
-                dataIndex: 'Action',
-                className: '',
-                children: [
-                    {
-                        title: 'ACTION',
-                        align: "center",
-                        dataIndex: 'action',
-                        key: "action",
-                        className: '',
-                    }
-                ],
+                title: 'ACTION',
+                align: "center",
+                dataIndex: 'action',
+                key: "action",
+            },
+            {
+                title: (
+                    <span>
+                        POLICY INFO
+                    {/* <Popover placement="top" content='dumy'>
+                            <span className="helping_txt"><Icon type="info-circle" /></span>
+                        </Popover> */}
+                    </span>),
+                dataIndex: 'policy_info',
+                key: 'policy_info',
+                className: 'row'
+            },
+            {
+                title: (
+                    <span>
+                        PERMISSIONS
+                    <Popover placement="top" content='dumy'>
+                            <span className="helping_txt"><Icon type="info-circle" /></span>
+                        </Popover>
+                    </span>),
+                dataIndex: 'permission',
+                key: 'permission',
+                className: 'row'
+            },
+            {
+                title: 'STATUS',
+                dataIndex: 'policy_status',
+                key: 'policy_status',
             },
             {
                 title: (
@@ -77,14 +98,14 @@ class Policy extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Policy Note"
+                        placeholder="Policy Command"
                     />
                 ),
                 dataIndex: 'policy_note',
                 className: '',
                 children: [
                     {
-                        title: 'POLICY NOTE',
+                        title: 'POLICY COMMAND',
                         align: "center",
                         className: '',
                         dataIndex: 'policy_note',
@@ -97,6 +118,13 @@ class Policy extends Component {
                     }
                 ]
             },
+
+            {
+                title: 'DEFAULT',
+                dataIndex: 'default_policy',
+                key: 'default_policy',
+            },
+
 
         ];
         this.state = {
@@ -141,12 +169,14 @@ class Policy extends Component {
                     policies={this.props.policies}
                 />
                 <Modal
+                    maskClosable={false}
                     width="700px"
                     className="policy_popup"
                     visible={this.state.policyModal}
                     title="Add Policy"
                     onOk={() => this.handlePolicyModal(false)}
                     onCancel={() => this.handlePolicyModal(false)}
+                    okText="Save"
 
                 >
                     <AddPolicy

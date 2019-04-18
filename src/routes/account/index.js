@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from "react";
 // import {Route, Switch} from "react-router-dom";
-import { connect, } from "react-redux";
+import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { Link } from 'react-router-dom';
 import styles from './account.css'
 import {
     importCSV,
@@ -15,6 +16,7 @@ import {
     getChatIDs,
     getPGPEmails
 } from "../../appRedux/actions/Devices";
+import { relative } from "path";
 
 
 class Account extends Component {
@@ -207,6 +209,25 @@ class Account extends Component {
         }
     }
 
+    showModal = () => {
+        this.setState({
+            visible1: true,
+        });
+    }
+
+    handleOk = (e) => {
+        console.log(e);
+        this.setState({
+            visible1: false,
+        });
+    }
+
+    handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+            visible1: false,
+        });
+    }
     render() {
 
         if (this.props.showMsg) {
@@ -245,6 +266,7 @@ class Account extends Component {
             fileList: (file === null) ? null : [file]
         };
 
+
         return (
 
             <div>
@@ -254,7 +276,42 @@ class Account extends Component {
                     <Row>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <Card style={{ borderRadius: 12 }}>
+                                <Link to="#" onClick={this.showModal}>
+                                    <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                        <div>
+                                            <h2 style={{ textAlign: "center" }}>Manage Data</h2>
+                                            <Divider className="mb-0" />
+                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                <Col span={7} className="" style={{ padding: 0, textAlign: "center" }}>
+                                                    <Icon type="form" className="and_icon" />
+                                                </Col>
+                                                <Col span={16} style={{ padding: 0 }} className="crd_txt">
+                                                    <p style={{}}><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
+                                                    <p style={{}}><span className="diamond_icon">&#9670;</span>Upload/View/Edit your data</p>
+                                                    <p style={{ position: "relative", right: 20 }}><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
+                                                    <p style={{ position: "relative", right: 60 }} className="more_txt">and more...</p>
+                                                </Col>
+                                            </Row>
+                                            <Row justify='center'>
+                                                <Col span={6} >
+
+                                                </Col>
+                                                <Col span={12} style={{}}>
+                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
+                                                </Col>
+                                            </Row>
+
+                                        </div>
+                                    </Card>
+                                </Link>
+                                <Modal
+                                    className="manage_data"
+                                    width="450px"
+                                    title="Manage Data"
+                                    visible={this.state.visible1}
+                                    onOk={this.handleOk}
+                                    onCancel={this.handleCancel}
+                                >
                                     <div className="profile_table">
                                         <Fragment>
                                             <Modal
@@ -553,14 +610,15 @@ class Account extends Component {
                                             </Modal>
                                             <Row>
                                                 <div className="col-md-12 ac_card">
-                                                    <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                                    <Card style={{ borderRadius: 12 }}>
                                                         <div>
-                                                            <h2 style={{ textAlign: "center" }}><a href="#"><Icon type="form" /></a> Manage Data</h2>
-                                                            <Divider className="mb-0" />
+                                                            {/* <h2 style={{ textAlign: "center" }}><a href="#"></a> Manage Data</h2>
+                                                            <Divider className="mb-0" /> */}
                                                             <Row style={{ padding: '16px' }}>
                                                                 <div className="inline_b">
                                                                     <span className="headings">PGP Emails</span>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'pgp_emails', 'PGP Emails') }} size='small' className="pull-right exp_btn">View</Button>
+                                                                    <Button size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                    <Button onClick={() => { this.showViewmodal(true, 'pgp_emails', 'PGP Emails') }} size='small' className="pull-right imp_btn">View</Button>
                                                                     <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
                                                                         this.exportCSV('pgp_emails');
                                                                     }} >Export</Button>
@@ -571,10 +629,12 @@ class Account extends Component {
                                                                         <Button size='small' className="pull-right imp_btn" type="dashed">Sample</Button>
                                                                     </a>
 
+
                                                                 </div>
                                                                 <div className="inline_b">
                                                                     <span className="headings">Chat IDs</span>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'chat_ids', 'Chat IDs') }} size='small' className="pull-right exp_btn">View</Button>
+                                                                    <Button size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                    <Button onClick={() => { this.showViewmodal(true, 'chat_ids', 'Chat IDs') }} size='small' className="pull-right imp_btn">View</Button>
                                                                     <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
                                                                         this.exportCSV('chat_ids');
                                                                     }} >Export</Button>
@@ -588,7 +648,8 @@ class Account extends Component {
                                                                 </div>
                                                                 <div className="inline_b">
                                                                     <span className="headings">SIM IDs</span>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'sim_ids', 'Sim IDs') }} size='small' className="pull-right exp_btn mb-0">View</Button>
+                                                                    <Button size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                    <Button onClick={() => { this.showViewmodal(true, 'sim_ids', 'Sim IDs') }} size='small' className="pull-right imp_btn mb-0">View</Button>
                                                                     <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
                                                                         this.exportCSV('sim_ids');
                                                                     }} >Export</Button>
@@ -602,41 +663,34 @@ class Account extends Component {
 
                                                                 </div>
                                                             </Row>
-
                                                         </div>
                                                     </Card>
-
                                                 </div>
-
-
                                             </Row>
 
                                         </Fragment>
                                     </div>
-                                </Card>
+
+                                </Modal>
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
                                     <a href="javascript:void(0)" >
-                                        <Card style={{ borderRadius: 12 }}>
+                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <Card className="manage_ac" style={{ borderRadius: 12 }}>
-                                                                <div>
-                                                                    <h2 style={{ textAlign: "center" }}> <a href="#"><Icon type="branches" /> </a> Manage Tokens</h2>
-                                                                    <Divider className="mb-0" />
-                                                                    <div className="token_txt">
-                                                                        <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
-                                                                        <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
-                                                                        <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
-                                                                        <p className="more_txt">and more...</p>
-                                                                    </div>
-                                                                </div>
-                                                            </Card>
+                                                            <h2 style={{ textAlign: "center" }}> <a href="#"><Icon type="branches" /> </a> Manage Tokens</h2>
+                                                            <Divider className="mb-0" />
+                                                            <div className="crd_txt">
+                                                                <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
+                                                                <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
+                                                                <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
+                                                                <p className="more_txt">and more...</p>
+                                                            </div>
                                                         </div>
                                                     </Row>
                                                 </Fragment>
@@ -653,21 +707,19 @@ class Account extends Component {
                             <div>
                                 <div className="contenar">
                                     <a href="javascript:void(0)">
-                                        <Card style={{ borderRadius: 12 }}>
+                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <Card className="manage_ac" style={{ borderRadius: 12 }}>
-                                                                <h2 style={{ textAlign: "center" }}><a href="#"> <Icon type="credit-card" /></a> Payment Gateway</h2>
-                                                                <Divider className="mb-0" />
-                                                                <div className="token_txt">
-                                                                    <p><span className="diamond_icon">&#9670;</span>Add/edit payment gateway</p>
-                                                                    <p><span className="diamond_icon">&#9670;</span>Set permissions</p>
-                                                                    <p><span className="diamond_icon">&#9670;</span>Customize prices and packages</p>
-                                                                    <p className="more_txt">and more...</p>
-                                                                </div>
-                                                            </Card>
+                                                            <h2 style={{ textAlign: "center" }}><a href="#"> <Icon type="credit-card" /></a> Payment Gateway</h2>
+                                                            <Divider className="mb-0" />
+                                                            <div className="crd_txt">
+                                                                <p><span className="diamond_icon">&#9670;</span>Add/edit payment gateway</p>
+                                                                <p><span className="diamond_icon">&#9670;</span>Set permissions</p>
+                                                                <p><span className="diamond_icon">&#9670;</span>Customize prices and packages</p>
+                                                                <p className="more_txt">and more...</p>
+                                                            </div>
                                                         </div>
                                                     </Row>
                                                 </Fragment>
@@ -683,7 +735,7 @@ class Account extends Component {
                     </Row>
                 </div>
 
-            </div>
+            </div >
 
 
         );
