@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch } from "antd";
+import update from 'react-addons-update';
+
 import PolicyInfo from './policy_info';
 
 class PolicyList extends Component {
@@ -10,7 +12,8 @@ class PolicyList extends Component {
         super(props)
         this.state = {
             expandedRowKeys: [],
-            expandTabSelected: '1'
+            expandTabSelected: [],
+            expandedByCustom:[]
 
         }
     }
@@ -27,10 +30,16 @@ class PolicyList extends Component {
 
     }
 
-    expandRow = (rowId, btnof) => {
-
-        console.log('btn is', btnof)
-
+    expandRow = (rowId, btnof, expandedByCustom=false) => {
+        //  console.log('btn is', btnof)
+        // this.setState({
+        //     expandedByCustom:expandedByCustom
+        // })
+        const expandedCustomArray = [...this.state.expandedByCustom];
+        expandedCustomArray[rowId] = expandedByCustom;
+        this.setState({
+            expandedByCustom:expandedCustomArray
+        });
         if (this.state.expandedRowKeys.includes(rowId)) {
             var index = this.state.expandedRowKeys.indexOf(rowId);
             if (index !== -1) this.state.expandedRowKeys.splice(index, 1);
@@ -42,13 +51,19 @@ class PolicyList extends Component {
         }
         else {
             this.state.expandedRowKeys.push(rowId);
+            
+            const newItems = [...this.state.expandTabSelected];
+            newItems[rowId] = (btnof == 'info') ? '1' : '6';
+            // this.setState({ items:newItems });
+            // console.log("new Items", newItems);
             this.setState({
                 expandedRowKeys: this.state.expandedRowKeys,
-                expandTabSelected: (btnof == 'info') ? '1' : '6'
-
+                expandTabSelected: newItems
             })
+            // console.log("updated state", this.state.expandTabSelected);
+            // this.forceUpdate()
         }
-
+        
     }
 
     renderList(list) {
@@ -58,6 +73,9 @@ class PolicyList extends Component {
             // }
         })
         return policy_list.map((policy, index) => {
+            // this.state.expandTabSelected[index]='1';
+            // this.state.expandedByCustom[index]=false;
+            
             return {
                 action:
                     (<Fragment>
@@ -80,7 +98,7 @@ class PolicyList extends Component {
                 policy_info:
                     <div>
                         <a onClick={() =>
-                            this.expandRow(index, 'info')
+                            this.expandRow(index, 'info', true)
                             // console.log('table cosn', this.refs.policy_table)
                             // this.refs.policy_table.props.onExpand()  
                         }><Icon type="arrow-down" size={28} /></a> <span className="exp_txt">EXPAND</span></div>
@@ -105,28 +123,59 @@ class PolicyList extends Component {
     }
 
     customExpandIcon(props) {
-        console.log('proops, ', props)
-        if (props.expanded) {
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                // props.onExpand(props.record, e);
-                //    this.expandRow(props.record.rowKey, 'permission');
-                this.expandRow(props.record.rowKey, 'permission')
-            }}><Icon type="caret-down" /></a>
-        } else {
+        console.log('rowKey, ',props.record.rowKey)
 
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                // props.onExpand(props.record, e);
-                //this.expandRow(props.record.rowKey, 'permission');
-                this.expandRow(props.record.rowKey, 'permission')
-            }}><Icon type="caret-right" /></a>
+        // this.setState({
+        //     expandedByCustom:true
+        // });
+
+        if (props.expanded) {
+            if(this.state.expandedByCustom[props.record.rowKey]){
+                return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                    // props.onExpand(props.record, e);
+                    //    this.expandRow(props.record.rowKey, 'permission');
+                    this.expandRow(props.record.rowKey, 'permission', false)
+                }}><Icon type="caret-right" /></a>
+            } else {
+                return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                    // props.onExpand(props.record, e);
+                    //    this.expandRow(props.record.rowKey, 'permission');
+                    this.expandRow(props.record.rowKey, 'permission', false)
+                }}><Icon type="caret-down" /></a>
+            }
+        } else {
+            if(this.state.expandedByCustom[props.record.rowKey] ){
+                return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                    // props.onExpand(props.record, e);
+                    //this.expandRow(props.record.rowKey, 'permission');
+                    this.expandRow(props.record.rowKey, 'permission', false)
+                }}><Icon type="caret-right" /></a>
+            } else {
+                    return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                        // props.onExpand(props.record, e);
+                        //this.expandRow(props.record.rowKey, 'permission');
+                        this.expandRow(props.record.rowKey, 'permission', false)
+                    }}><Icon type="caret-right" /></a>
+
+            }
         }
     }
 
 
     componentDidMount() {
-
+        this.props.policies.map((policy, index)=>{
+            this.state.expandTabSelected[index]='1';
+            this.state.expandedByCustom[index]=false;
+        });
     }
-
+    componentWillReceiveProps(preProps){
+        if(preProps.policies.length !== this.props.policies.length){
+            this.props.policies.map((policy, index)=>{
+                this.state.expandTabSelected[index]='1';
+                this.state.expandedByCustom[index]=false
+            }); 
+        }
+    }
     render() {
         // console.log(this.props.policies)
         return (
@@ -137,9 +186,10 @@ class PolicyList extends Component {
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            //  console.log("table row", record);
+                            console.log("expandTabSelected", this.state.expandTabSelected);
+                            console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
-                                <PolicyInfo selected={this.state.expandTabSelected} />
+                                <PolicyInfo selected={this.state.expandTabSelected[record.rowKey]} />
                             )
 
                         }}

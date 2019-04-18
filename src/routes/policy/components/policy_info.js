@@ -17,10 +17,10 @@ export default class PolicyInfo extends Component {
         })
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            console.log('revire', prevProps)
-            this.setState({ selected: this.props.selected })
+    componentWillReceiveProps(prevProps) {
+        if (this.props.selected !== prevProps.selected) {
+            // console.log('revire', prevProps)
+            this.setState({ selected: prevProps.selected })
         }
     }
 
