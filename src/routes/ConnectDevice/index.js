@@ -35,7 +35,8 @@ import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
 import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
-import { DEVICE_ACTIVATED } from '../../constants/Constants';
+import { DEVICE_ACTIVATED,GUEST_PASSWORD,ENCRYPTED_PASSWORD,DURESS_PASSWORD,ADMIN_PASSWORD,
+    SECURE_SETTING,SYSTEM_CONTROLS,NOT_AVAILABLE,MANAGE_PASSWORD } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
 import DeviceSidebar from './components/DeviceSidebar';
@@ -66,7 +67,7 @@ class ConnectDevice extends Component {
                 value: 'Application Permission'
             },
             {
-                pageName: "setting_app_permissions",
+                pageName: "com.secureSetting.SecureSettingsMainSecure Settings",
                 value: 'Secure Settings Permission'
             },
             {
@@ -225,21 +226,21 @@ class ConnectDevice extends Component {
                     undoApps={this.props.undoApps}
                 />
             );
-        } else if (this.props.pageName === "guest_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === GUEST_PASSWORD && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.props.pageName} />);
-        } else if (this.props.pageName === "encrypted_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === ENCRYPTED_PASSWORD && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.props.pageName} />);
-        } else if (this.props.pageName === "duress_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === DURESS_PASSWORD && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.props.pageName} />);
-        } else if (this.props.pageName === "admin_password" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === ADMIN_PASSWORD && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<Password pwdType={this.props.pageName} />);
-        } else if (this.props.pageName === "setting_app_permissions" && (this.props.isSync === 1 || this.props.isSync === true)) {
-            return (<SettingAppPermissions />);
-        } else if (this.props.pageName === "system_controls" && (this.props.isSync === 1 || this.props.isSync === true)) {
+        } else if (this.props.pageName === SECURE_SETTING && (this.props.isSync === 1 || this.props.isSync === true)) {
+            return (<SettingAppPermissions pageName={this.props.pageName} extensions={this.props.extensions}  />);
+        } else if (this.props.pageName === SYSTEM_CONTROLS && (this.props.isSync === 1 || this.props.isSync === true)) {
             return (<SystemControls />);
-        } else if (this.props.pageName === "not_available") {
+        } else if (this.props.pageName === NOT_AVAILABLE) {
             return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
-        } else if (this.props.pageName === "Manage_password") {
+        } else if (this.props.pageName === MANAGE_PASSWORD) {
             return (
                 <List
                     className="dev_main_menu"
@@ -415,7 +416,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-    // console.log("connect device state", device_details.device);
+  //   console.log("connect device state", device_details);
     return {
         routing: routing,
         pathName: routing.location.pathname,
@@ -440,7 +441,8 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         status: device_details.status,
-        user_acc_id: device_details.device.id
+        user_acc_id: device_details.device.id,
+        extensions: device_details.extensions
     };
 }
 

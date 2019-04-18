@@ -97,6 +97,7 @@ const initialState = {
     duressCPwd: '',
 
     apk_list: [],
+    extensions: []
 };
 
 export default (state = initialState, action) => {
@@ -235,6 +236,7 @@ export default (state = initialState, action) => {
                 ...state,
                 // isloading: true,
                 app_list: action.payload,
+                extensions: action.extensions,
                 // guestAll: guestAll,
                 // encryptedAll: encryptedAll,
                 // enableAll: enableAll

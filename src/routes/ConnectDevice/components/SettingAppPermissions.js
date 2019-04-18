@@ -40,17 +40,57 @@ const columns = [{
   key: 'name',
 }, {
   title: 'Guest',
-  dataIndex: 'age',
-  key: 'age',
+  dataIndex: 'guest',
+  key: 'guest',
 }, {
   title: 'Encrypted',
-  dataIndex: 'address',
-  key: 'address',
+  dataIndex: 'encrypted',
+  key: 'encrypted',
 }];
-
-
+ 
 export default class SettingAppPermissions extends Component {
+
+  constructor(props){
+    super(props)
+    this.state={
+      extension:[],
+    }
+  }
+
+  componentDidMount(){
+    console.log('did mounted is called');
+    let objIndex = this.props.extensions.findIndex((obj => obj.uniqueName === this.props.pageName));
+    if(objIndex !== -1 && objIndex === undefined)
+    console.log(objIndex,'ext', this.props.extensions[objIndex]);
+    this.state.extension.push(this.props.extensions[objIndex]);
+
+    this.setState({extension:this.state.extension })
+    console.log(objIndex,'ext', this.props.extensions[objIndex]);
+    
+  }
   render() {
+    console.log('app list if extensin', this.props.extensions);
+    const {extensions} = this.props;
+
+    const renderApps = (extensions)=> {
+      console.log('extens rte', this.state.extension);
+      let data = this.state.extension;
+      console.log('data is ', this.state.extension.subExtension)
+      console.log('length', this.state.extension.length)
+
+      if( this.state.extension.length !== 0){
+        console.log('length 12',this.state.extension[0])
+        return this.state.extension[0].subExtension.map((ext, index)=> {
+          return{
+            "key": index,
+            "name": ext.label,
+            "guest": <Switch defaultChecked={ext.guest === 1 ? true: false} size="small" />,
+            "encrypted": <Switch defaultChecked={ext.encrypted === 1 ? true: false} size="small" />
+          }
+        })
+      }
+     
+    }
     return (
       <Fragment>
         <Row className="first_head">
@@ -63,17 +103,17 @@ export default class SettingAppPermissions extends Component {
         </Row>
         <Row className="sec_head">
           <Col span={8}>
-            <span>Guest </span> <Switch defaultChecked size="small" />
+            <span>Guest </span> <Switch defaultChecked={extensions[0].guest === 1 ? true: false} size="small" />
           </Col>
           <Col span={8}>
-            <span>Encrypt </span> <Switch defaultChecked size="small" />
+            <span>Encrypt </span> <Switch defaultChecked={extensions[0].encrypted === 1 ? true: false} size="small" />
           </Col>
           <Col span={8}>
-            <span>Enable </span> <Switch defaultChecked size="small" />
+            <span>Enable </span> <Switch defaultChecked={extensions[0].enable === 1 ? true: false} size="small" />
           </Col>
         </Row>
         <div className="sec_set_table">
-          <Table dataSource={dataSource} columns={columns} pagination={false} scroll={{ y: 263 }} />
+          <Table dataSource={renderApps(extensions)} columns={columns} pagination={false} scroll={{ y: 263 }} />
         </div>
 
       </Fragment>

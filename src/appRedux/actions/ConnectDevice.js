@@ -71,11 +71,14 @@ export function getDeviceDetails(deviceId) {
 export function getDeviceApps(deviceId) {
     return (dispatch) => {
         RestService.getDeviceApps(deviceId).then((response) => {
+            // console.log('dat form sercer', response.data)
             if (RestService.checkAuth(response.data)) {
+                // console.log('dat form sercer', response.data)
                 if (response.data.status) {
                     dispatch({
                         type: GET_DEVICE_APPS,
-                        payload: response.data.app_list
+                        payload: response.data.app_list,
+                        extensions: response.data.extensions
                     })
                 }
 
