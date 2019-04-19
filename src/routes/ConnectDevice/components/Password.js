@@ -118,7 +118,7 @@ class Password extends Component {
                 </Form.Item>
 
                 <Form.Item {...this.formItemLayout} className="pwdinput">
-                    <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>Set password</Button>
+                    <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>Set Password</Button>
                 </Form.Item>
             </Form>
         )
