@@ -56,16 +56,11 @@ class ConnectDevice extends Component {
     this.state = {
       device_id: '',
       pageName: MAIN_MENU,
-      // apply: true,
-      // undo: true,
-      // redo: true,
-      // clear: false,
-      // syncStatus: false
     }
     // console.log("hello every body", this.props);
     this.mainMenu = [
       {
-        pageName: "apps",
+        pageName: APPS,
         value: 'Application Permission'
       },
       {
@@ -104,9 +99,8 @@ class ConnectDevice extends Component {
         value: 'Change Admin Panel Code'
       },
     ]
-
-
   }
+  
   changePage = (pageName) => {
     if(this.props.device_details.finalStatus === DEVICE_ACTIVATED){
       this.props.changePage(pageName);
@@ -154,8 +148,6 @@ class ConnectDevice extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.pathName !== nextProps.pathName) {
-      // alert("hello");
-      // alert("hello");
       // this.setState({
       //     pageName: nextProps.pageName
       // });
@@ -403,7 +395,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-  //   console.log("connect device state", device_details);
+    console.log("connect device state", device_details);
   return {
     routing: routing,
     pathName: routing.location.pathname,
