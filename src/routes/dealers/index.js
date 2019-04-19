@@ -16,8 +16,6 @@ import { componentSearch, getDealerStatus } from '../utils/commonUtils';
 
 var coppydealers = [];
 var status = true;
-let data = [];
-const confirm = Modal.confirm;
 class Dealers extends Component {
 
     constructor(props) {
@@ -50,15 +48,8 @@ class Dealers extends Component {
                     title: 'DEALER ID',
                     dataIndex: 'dealer_id',
                     key: 'dealer_id',
-                    sortDirections: ['ascend', 'descend'],
-                    // sorter: (a, b) => {
-                    //     console.log(a);
-                    //     // console.log(b);
-                    //     return a.dealer_id.length;
-                    // },
-
-                    sorter: (a, b) => a.dealer_id - b.dealer_id,
                     align: 'center',
+                    sorter: (a, b) => a.dealer_id - b.dealer_id,
                     sortDirections: ['ascend', 'descend'],
                     className: '',
                 }

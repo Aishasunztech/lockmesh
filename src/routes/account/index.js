@@ -258,12 +258,12 @@ class Account extends Component {
         this.setState({ selectedRowKeys });
     }
     showConfirm = (msg, _this, pageName, id = 0) => {
-        if (_this.state.selectedRowKeys.length > 0 || id != 0) {
+        if (_this.state.selectedRowKeys.length > 0 || id !== 0) {
             confirm({
                 title: 'WARNNING!' + msg,
                 okText: "Confirm",
                 onOk() {
-                    if (id != 0) {
+                    if (id !== 0) {
                         _this.props.releaseCSV(pageName, [id]);
                     }
                     else if (_this.state.selectedRowKeys.length > 0) {

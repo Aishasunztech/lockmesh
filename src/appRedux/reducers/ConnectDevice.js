@@ -116,11 +116,6 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case CHANGE_PAGE: {
-            // console.log(CHANGE_PAGE);
-            // console.log({
-            //     ...state,
-            //     pageName: action.payload
-            // });
 
             return {
                 ...state,
@@ -129,9 +124,6 @@ export default (state = initialState, action) => {
         }
         case GET_DEVICE_DETAILS: {
             let device = action.payload;
-            //
-
-            //    console.log(action.payload,'reducer detail')
             if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
                 let status = null;
 
@@ -199,9 +191,6 @@ export default (state = initialState, action) => {
                 message.error(action.response.msg);
 
             }
-            let device = state.device;
-
-            // console.log('action done ', state.device)
             return {
                 ...state,
                 isloading: false,
@@ -255,71 +244,65 @@ export default (state = initialState, action) => {
                 ...check
             }
         }
-        case GET_PROFILES:
-            {
-                //  console.log('GET_PROFILES');
-                // console.log({
-                //     ...state,
-                //     isloading: true,
-                //     profiles: action.payload
-                // });
-                return {
-                    ...state,
-                    isloading: true,
-                    profiles: action.payload
-                }
+        case GET_PROFILES: {
+            //  console.log('GET_PROFILES');
+            // console.log({
+            //     ...state,
+            //     isloading: true,
+            //     profiles: action.payload
+            // });
+            return {
+                ...state,
+                isloading: true,
+                profiles: action.payload
             }
+        }
 
-        case GET_POLICIES:
-            {
-                //  console.log('GET_PROFILES');
-                // console.log({
-                //     ...state,
-                //     isloading: true,
-                //     profiles: action.payload
-                // });
-                return {
-                    ...state,
-                    isloading: true,
-                    policies: action.payload
-                }
+        case GET_POLICIES: {
+            //  console.log('GET_PROFILES');
+            // console.log({
+            //     ...state,
+            //     isloading: true,
+            //     profiles: action.payload
+            // });
+            return {
+                ...state,
+                isloading: true,
+                policies: action.payload
             }
+        }
 
+        case GET_USER_ACC_ID: {
+            //  console.log('GET_USER_ACC_ID',action.response.user_acount_id);
 
-        case GET_USER_ACC_ID:
-            {
-                //  console.log('GET_USER_ACC_ID',action.response.user_acount_id);
-
-                return {
-                    ...state,
-                    isloading: true,
-                    user_acc_id: action.response.user_acount_id
-                }
+            return {
+                ...state,
+                isloading: true,
+                user_acc_id: action.response.user_acount_id
             }
-        case GET_DEVICE_HISTORIES:
-            {
+        }
+        case GET_DEVICE_HISTORIES: {
 
-                // console.log(GET_PROFILES);
-                // console.log({
-                //     ...state,
-                //     isloading: true,
-                //     device_histories: action.payload
-                // });
-                return {
-                    ...state,
-                    isloading: true,
-                    device_histories: action.payload
-                }
+            // console.log(GET_PROFILES);
+            // console.log({
+            //     ...state,
+            //     isloading: true,
+            //     device_histories: action.payload
+            // });
+            return {
+                ...state,
+                isloading: true,
+                device_histories: action.payload
             }
-        case PUSH_APPS:
-            {
-                // console.log(PUSH_APPS);
-                state.undoApps.push(action.payload);
+        }
+        case PUSH_APPS: {
+            // console.log(PUSH_APPS);
+            state.undoApps.push(action.payload);
 
-                return {
-                    ...state
-                }
+            return {
+                ...state
             }
+        }
         case UNDO_APPS: {
 
             // console.log(UNDO_APPS);
