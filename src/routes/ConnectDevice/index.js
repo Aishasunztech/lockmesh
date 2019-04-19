@@ -224,7 +224,6 @@ class ConnectDevice extends Component {
       return (
         <SettingAppPermissions 
           pageName={this.props.pageName} 
-          // extensions={this.props.extensions} 
         />
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
