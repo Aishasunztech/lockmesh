@@ -55,7 +55,7 @@ class ConnectDevice extends Component {
     super(props);
     this.state = {
       device_id: '',
-      pageName: "main_menu",
+      pageName: MAIN_MENU,
       // apply: true,
       // undo: true,
       // redo: true,
@@ -69,16 +69,16 @@ class ConnectDevice extends Component {
         value: 'Application Permission'
       },
       {
-        pageName: "com.secureSetting.SecureSettingsMainSecure Settings",
+        pageName: SECURE_SETTING,
         value: 'Secure Settings Permission'
       },
       {
-        pageName: "system_controls",
+        pageName: SYSTEM_CONTROLS,
         value: 'System Permission'
       },
 
       {
-        pageName: "Manage_password",
+        pageName: MANAGE_PASSWORD,
         value: 'Manage Passwords'
       },
 
@@ -87,20 +87,20 @@ class ConnectDevice extends Component {
     this.subMenu = [
 
       {
-        pageName: "guest_password",
+        pageName: GUEST_PASSWORD,
         value: 'Set Guest Password'
       },
       {
-        pageName: "encrypted_password",
+        pageName: ENCRYPTED_PASSWORD,
         value: 'Set Encrypted Password'
       },
       {
-        pageName: "duress_password",
+        pageName: DURESS_PASSWORD,
         value: 'Set Duress Password'
       },
 
       {
-        pageName: "admin_password",
+        pageName: ADMIN_PASSWORD,
         value: 'Change Admin Panel Code'
       },
     ]
@@ -108,23 +108,21 @@ class ConnectDevice extends Component {
 
   }
   changePage = (pageName) => {
-    this.props.changePage(pageName);
-
+    if(this.props.device_details.finalStatus === DEVICE_ACTIVATED){
+      this.props.changePage(pageName);
+    }
   }
   onBackHandler = () => {
-    // console.log("device details", this.props.device_details);
     if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
-      if (this.props.pageName === "guest_password" || this.props.pageName === "encrypted_password" || this.props.pageName === "duress_password" || this.props.pageName === "admin_password") {
-        this.props.changePage("Manage_password");
-
-      } else if (this.props.pageName === "Manage_password") {
-        this.props.changePage("main_menu");
+      if (this.props.pageName === GUEST_PASSWORD || this.props.pageName === ENCRYPTED_PASSWORD || this.props.pageName === DURESS_PASSWORD || this.props.pageName === ADMIN_PASSWORD) {
+        this.props.changePage(MANAGE_PASSWORD);
+      } else if (this.props.pageName === MANAGE_PASSWORD) {
+        this.props.changePage(MAIN_MENU);
       } else {
-        this.props.changePage("main_menu");
+        this.props.changePage(MAIN_MENU);
       }
     }
   }
-  // console.log("hello every body", this.props);
 
   componentDidMount() {
     this.props.startLoading();
@@ -333,16 +331,14 @@ class ConnectDevice extends Component {
                   <Button type="default" icon="left" className="nav_btn" onClick={() => {
                     this.onBackHandler();
                   }} />
-                  <Button type="default" className="nav_btn" />
-                  <Button type="default" icon="border" className="nav_btn" />
+                  <Button type="default" className="nav_btn" onClick={() => {
+                    this.changePage("main_menu")
+                  }} />
+                  {/* <Button type="default" icon="border" className="nav_btn" /> */}
                 </Button.Group>
 
               </div>
               <DeviceActions
-                // apply={this.state.apply}
-                // undo={this.state.undo}
-                // redo={this.state.redo}
-                // clear={this.state.clear}
                 app_list={this.props.app_list}
                 undoApplications={this.props.undoApplications}
                 redoApplications={this.props.redoApplications}
