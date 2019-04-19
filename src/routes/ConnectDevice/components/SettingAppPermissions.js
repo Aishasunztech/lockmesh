@@ -126,7 +126,7 @@ class SettingAppPermissions extends Component {
   render() {
     // console.log('app list if extensin', this.props.extensions);
     const { extension, isExtension } = this.props;
-    if(isExtension){
+    if (isExtension) {
       return (
         <Fragment>
           <ExtensionDropdown
@@ -157,15 +157,17 @@ class SettingAppPermissions extends Component {
           <div className="sec_set_table">
             <Table dataSource={this.renderApps()} columns={columns} pagination={false} scroll={{ y: 263 }} />
           </div>
-  
+
         </Fragment>
       )
     } else {
-      return (<Fragment>
-        Extension Not Available
-      </Fragment>)
+      return (
+        <Fragment>
+          <h1 class="not_syn_txt"><a>Secure Settings <br></br> Not Available</a></h1>
+        </Fragment>
+      )
     }
-    
+
   }
 }
 
