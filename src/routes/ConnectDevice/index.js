@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message } from "antd";
+import { Card, Row, Col, List, Button, message, Modal } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import { editDevice } from "../../appRedux/actions/Devices";
 
@@ -56,6 +56,7 @@ class ConnectDevice extends Component {
     this.state = {
       device_id: '',
       pageName: MAIN_MENU,
+      showChangesModal: false
     }
     // console.log("hello every body", this.props);
     this.mainMenu = [
@@ -242,17 +243,25 @@ class ConnectDevice extends Component {
     }
   }
 
-  applyActionButton = () => {
+  applyActionButton = (visible=true) => {
+    this.setState({
+      showChangesModal: visible
+    })
+  }
+  applyActions = () => {
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
-    this.props.applySetting(this.props.app_list,
-      {
+    this.props.applySetting(
+        this.props.app_list, {
         adminPwd: this.props.adminPwd,
         guestPwd: this.props.guestPwd,
         encryptedPwd: this.props.encryptedPwd,
         duressPwd: this.props.duressPwd,
-      }
-      , this.state.device_id, this.props.user_acc_id, null, null, this.props.extensions[objIndex].subExtension);
-    // 
+      }, 
+      this.state.device_id, 
+      this.props.user_acc_id, 
+      null, null, 
+      this.props.extensions[objIndex].subExtension
+    ); 
   }
   componentWillUnmount() {
     this.onBackHandler();
@@ -328,9 +337,9 @@ class ConnectDevice extends Component {
 
               </div>
               <DeviceActions
-                undoApplications={this.props.undoApplications}
-                redoApplications={this.props.redoApplications}
-                applyActionButton={this.applyActionButton}
+                undoApplications = {this.props.undoApplications}
+                redoApplications = {this.props.redoApplications}
+                applyActionButton = {this.applyActionButton}
                 applyBtn = {this.props.applyBtn}
                 undoBtn = {this.props.undoBtn}
                 redoBtn = {this.props.redoBtn}
@@ -361,6 +370,13 @@ class ConnectDevice extends Component {
 
           </Col>
         </Row>
+        <Modal
+          title="Changes For Apply"
+          visible={this.state.showChangesModal}
+          onOk={this.applyActions}
+          onCancel={this.onCancel}
+        >
+        </Modal>
       </div>
     )
   }

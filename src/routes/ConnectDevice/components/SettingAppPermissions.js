@@ -62,11 +62,6 @@ class SettingAppPermissions extends Component {
 
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      // console.log('this props.........', this.props)
-    }
-  }
 
   handleChecked = (e, key, app_id) => {
     this.props.handleCheckExtension(e, key, app_id, this.props.pageName);
