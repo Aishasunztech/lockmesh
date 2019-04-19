@@ -18,7 +18,7 @@ import {
     POST_PAGINATION,
     GET_PAGINATION,
     PRE_ACTIVATE_DEVICE,
-    DELETE_UNLINK_DEVICE
+    DELETE_UNLINK_DEVICE,
 } from "../../constants/ActionTypes";
 import { message } from 'antd';
 import { stat } from "fs";
@@ -33,9 +33,6 @@ const initialState = {
     sim_ids: [],
     chat_ids: [],
     pgp_emails: [],
-    used_pgp_emails: [],
-    used_sim_ids: [],
-    used_chat_ids: [],
     options: ["DEVICE ID", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
 };
@@ -248,27 +245,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pgp_emails: action.payload
-            }
-        }
-        case GET_USED_PGP_EMAILS: {
-            // alert("hello");
-            return {
-                ...state,
-                used_pgp_emails: action.payload
-            }
-        }
-        case GET_USED_CHAT_IDS: {
-            // alert("hello");
-            return {
-                ...state,
-                used_chat_ids: action.payload
-            }
-        }
-        case GET_USED_SIM_IDS: {
-            // alert("hello");
-            return {
-                ...state,
-                used_sim_ids: action.payload
             }
         }
         case REJECT_DEVICE: {
