@@ -100,7 +100,7 @@ class ConnectDevice extends Component {
       },
     ]
   }
-  
+
   changePage = (pageName) => {
     if(this.props.device_details.finalStatus === DEVICE_ACTIVATED){
       this.props.changePage(pageName);
@@ -395,7 +395,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-    console.log("connect device state", device_details);
+    // console.log("connect device state", device_details);
   return {
     routing: routing,
     pathName: routing.location.pathname,

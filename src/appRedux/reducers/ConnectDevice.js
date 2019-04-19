@@ -512,8 +512,8 @@ export default (state = initialState, action) => {
             }
 
         case HANDLE_CHECK_EXTENSION: {
-            let changedExtensions = state.extensions;
-            let applications = state.extensions;
+            // let changedExtensions = state.extensions;
+            // let applications = state.extensions;
             //  console.log(action.payload.ext, 'reducer ', changedExtensions);
             state.extensions.forEach(extension => {
                 // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
@@ -521,21 +521,19 @@ export default (state = initialState, action) => {
                     let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
                     //   console.log(action.payload.value, 'chenged item', extension.subExtension[objIndex][action.payload.key])
                     if (objIndex > -1)
-                        extension.subExtension[objIndex][action.payload.key] = action.payload.value == true ? 1 : 0;
+                        extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                 }
             });
-            // state.undoApps.push(changedApps);
-            //  let check = handleCheckedAll(applications);
             let check = '';
 
             return {
                 ...state,
                 extensions: [...state.extensions],
-                // checked_app_id: {
-                //     id: action.payload.app_id,
-                //     key: action.payload.key,
-                //     value: action.payload.value
-                // },
+                checked_app_id: {
+                    id: action.payload.app_id,
+                    key: action.payload.key,
+                    value: action.payload.value
+                },
                 applyBtn: true,
                 undoBtn: true,
                 ...check
@@ -563,7 +561,7 @@ export default (state = initialState, action) => {
             });
             // state.undoApps.push(changedApps);
             //  let check = handleCheckedAll(applications);
-            let check = '';
+            // let check = '';
 
             return {
                 ...state,
@@ -571,7 +569,7 @@ export default (state = initialState, action) => {
 
                 applyBtn: true,
                 undoBtn: true,
-                ...check
+                // ...check
             }
         }
 

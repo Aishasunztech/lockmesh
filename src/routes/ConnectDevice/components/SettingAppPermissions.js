@@ -50,12 +50,9 @@ class SettingAppPermissions extends Component {
   }
 
   componentWillReceiveProps(nextprops) {
-    // alert("hello will");
-
-    // console.log('component will recieve is called', nextprops)
-    //  console.log('index', objIndex);
+    
     if (this.props.isExtension) {
-
+      // alert("hello");
       this.setState({
         extension: nextprops.extension,
         encryptedAllExt: nextprops.encryptedAllExt,
@@ -112,7 +109,6 @@ class SettingAppPermissions extends Component {
     }
   }
   render() {
-    // console.log('app list if extensin', this.props.extensions);
     const { extension, isExtension } = this.props;
     if (isExtension) {
       return (
@@ -183,6 +179,7 @@ var mapStateToProps = ({ device_details }, ownProps) => {
       extension: extension,
       guestAllExt: device_details.guestAllExt,
       encryptedAllExt: device_details.encryptedAllExt,
+      checked_app_id: device_details.checked_app_id,
     }
   } else {
     return {
