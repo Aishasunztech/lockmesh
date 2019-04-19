@@ -2,16 +2,17 @@ import React, {Component} from "react";
 import {Layout} from "antd";
 
 import Sidebar from "../Sidebar/index";
-import HorizontalDefault from "../Topbar/HorizontalDefault/index";
-import HorizontalDark from "../Topbar/HorizontalDark/index";
-import InsideHeader from "../Topbar/InsideHeader/index";
-import AboveHeader from "../Topbar/AboveHeader/index";
-import BelowHeader from "../Topbar/BelowHeader/index";
 
-import Topbar from "../Topbar/index";
+// import HorizontalDefault from "../Topbar/HorizontalDefault/index";
+// import HorizontalDark from "../Topbar/HorizontalDark/index";
+// import InsideHeader from "../Topbar/InsideHeader/index";
+// import AboveHeader from "../Topbar/AboveHeader/index";
+// import BelowHeader from "../Topbar/BelowHeader/index";
+// import Topbar from "../Topbar/index";
+// import Customizer from "routes/myProfile/components/Customizer";
+
 import {footerText} from "util/config";
 import App from "routes/index";
-import Customizer from "routes/myProfile/components/Customizer";
 import {connect} from "react-redux";
 import {
   NAV_STYLE_ABOVE_HEADER,

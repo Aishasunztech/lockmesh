@@ -49,7 +49,7 @@ export function getDropdown(pageName) {
                     //  console.log("action selected options", JSON.parse(response.data.data));
                     let res = response.data.data;
                     // console.log(res);
-                    if(res == undefined || res == 'undefined')
+                    if(res === undefined || res === 'undefined')
                     {
                         
                         res = [];

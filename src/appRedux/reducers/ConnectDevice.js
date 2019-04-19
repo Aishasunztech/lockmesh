@@ -36,12 +36,18 @@ import {
     HANDLE_CHECK_EXTENSION,
     HANDLE_CHECK_ALL_EXTENSION
 } from "../../constants/ActionTypes";
+
+import {
+    NOT_AVAILABLE, MAIN_MENU
+} from '../../constants/Constants';
+
 import {
     message, Modal
 } from 'antd';
-import { stat } from "fs";
+
 const confirm = Modal.confirm;
 const actions = require("../../appRedux/actions/ConnectDevice")
+
 const initialState = {
     isLoading: false,
 
@@ -49,7 +55,7 @@ const initialState = {
     messageType: '',
     showMessage: false,
 
-    pageName: "main_menu",
+    pageName: MAIN_MENU,
     status: '',
 
     syncStatus: false,
@@ -110,11 +116,6 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case CHANGE_PAGE: {
-            // console.log(CHANGE_PAGE);
-            // console.log({
-            //     ...state,
-            //     pageName: action.payload
-            // });
 
             return {
                 ...state,
@@ -123,9 +124,6 @@ export default (state = initialState, action) => {
         }
         case GET_DEVICE_DETAILS: {
             let device = action.payload;
-            //
-
-            //    console.log(action.payload,'reducer detail')
             if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
                 let status = null;
 
@@ -144,7 +142,7 @@ export default (state = initialState, action) => {
                     undoBtn: false,
                     redoBtn: false,
                     clearBtn: false,
-                    pageName: 'not_available',
+                    pageName: NOT_AVAILABLE,
                     status: status
                 }
             } else {
@@ -174,6 +172,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
+                pageName: NOT_AVAILABLE
             }
 
         }
@@ -185,16 +184,13 @@ export default (state = initialState, action) => {
                 state.device = action.response.data;
                 // state.device.account_status = 'suspended';
                 // state.device.finalStatus = 'Suspended';
-                state.pageName = 'not_available';
+                state.pageName = NOT_AVAILABLE;
                 state.status = 'Suspended';
                 message.success(action.response.msg);
             } else {
                 message.error(action.response.msg);
 
             }
-            let device = state.device;
-
-            // console.log('action done ', state.device)
             return {
                 ...state,
                 isloading: false,
@@ -248,71 +244,65 @@ export default (state = initialState, action) => {
                 ...check
             }
         }
-        case GET_PROFILES:
-            {
-                //  console.log('GET_PROFILES');
-                // console.log({
-                //     ...state,
-                //     isloading: true,
-                //     profiles: action.payload
-                // });
-                return {
-                    ...state,
-                    isloading: true,
-                    profiles: action.payload
-                }
+        case GET_PROFILES: {
+            //  console.log('GET_PROFILES');
+            // console.log({
+            //     ...state,
+            //     isloading: true,
+            //     profiles: action.payload
+            // });
+            return {
+                ...state,
+                isloading: true,
+                profiles: action.payload
             }
+        }
 
-        case GET_POLICIES:
-            {
-                //  console.log('GET_PROFILES');
-                // console.log({
-                //     ...state,
-                //     isloading: true,
-                //     profiles: action.payload
-                // });
-                return {
-                    ...state,
-                    isloading: true,
-                    policies: action.payload
-                }
+        case GET_POLICIES: {
+            //  console.log('GET_PROFILES');
+            // console.log({
+            //     ...state,
+            //     isloading: true,
+            //     profiles: action.payload
+            // });
+            return {
+                ...state,
+                isloading: true,
+                policies: action.payload
             }
+        }
 
+        case GET_USER_ACC_ID: {
+            //  console.log('GET_USER_ACC_ID',action.response.user_acount_id);
 
-        case GET_USER_ACC_ID:
-            {
-                //  console.log('GET_USER_ACC_ID',action.response.user_acount_id);
-
-                return {
-                    ...state,
-                    isloading: true,
-                    user_acc_id: action.response.user_acount_id
-                }
+            return {
+                ...state,
+                isloading: true,
+                user_acc_id: action.response.user_acount_id
             }
-        case GET_DEVICE_HISTORIES:
-            {
+        }
+        case GET_DEVICE_HISTORIES: {
 
-                // console.log(GET_PROFILES);
-                // console.log({
-                //     ...state,
-                //     isloading: true,
-                //     device_histories: action.payload
-                // });
-                return {
-                    ...state,
-                    isloading: true,
-                    device_histories: action.payload
-                }
+            // console.log(GET_PROFILES);
+            // console.log({
+            //     ...state,
+            //     isloading: true,
+            //     device_histories: action.payload
+            // });
+            return {
+                ...state,
+                isloading: true,
+                device_histories: action.payload
             }
-        case PUSH_APPS:
-            {
-                // console.log(PUSH_APPS);
-                state.undoApps.push(action.payload);
+        }
+        case PUSH_APPS: {
+            // console.log(PUSH_APPS);
+            state.undoApps.push(action.payload);
 
-                return {
-                    ...state
-                }
+            return {
+                ...state
             }
+        }
         case UNDO_APPS: {
 
             // console.log(UNDO_APPS);
@@ -524,14 +514,14 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_EXTENSION: {
             let changedExtensions = state.extensions;
             let applications = state.extensions;
-          //  console.log(action.payload.ext, 'reducer ', changedExtensions);
-          state.extensions.forEach(extension => {
-               // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
+            //  console.log(action.payload.ext, 'reducer ', changedExtensions);
+            state.extensions.forEach(extension => {
+                // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
                 if (extension.uniqueName === action.payload.uniqueName) {
                     let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
-                 //   console.log(action.payload.value, 'chenged item', extension.subExtension[objIndex][action.payload.key])
-                   if(objIndex > -1)
-                    extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
+                    //   console.log(action.payload.value, 'chenged item', extension.subExtension[objIndex][action.payload.key])
+                    if (objIndex > -1)
+                        extension.subExtension[objIndex][action.payload.key] = action.payload.value == true ? 1 : 0;
                 }
             });
             // state.undoApps.push(changedApps);
@@ -556,19 +546,19 @@ export default (state = initialState, action) => {
             console.log('reducer is called', action.payload.uniqueName)
             let changedExtensions = state.extensions;
             let applications = state.extensions;
-          //  console.log(action.payload.ext, 'reducer ', changedExtensions);
-          state[action.payload.keyAll] = action.payload.value;
+            //  console.log(action.payload.ext, 'reducer ', changedExtensions);
+            state[action.payload.keyAll] = action.payload.value;
             changedExtensions.forEach(extension => {
-               // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
+                // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
                 if (extension.uniqueName === action.payload.uniqueName) {
-                    for(let subExt of extension.subExtension){
-                        subExt[action.payload.key] = action.payload.value== true ? 1:0;
+                    for (let subExt of extension.subExtension) {
+                        subExt[action.payload.key] = action.payload.value == true ? 1 : 0;
 
                     }
-                   // let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
+                    // let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
                     console.log('chenged item', extension.subExtension)
-                //    if(objIndex > -1)
-                //     extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
+                    //    if(objIndex > -1)
+                    //     extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
                 }
             });
             // state.undoApps.push(changedApps);
@@ -578,7 +568,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 extensions: changedExtensions,
-              
+
                 applyBtn: true,
                 undoBtn: true,
                 ...check

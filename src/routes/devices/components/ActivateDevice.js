@@ -1,6 +1,3 @@
-
-
-
 import { Modal } from 'antd';
 
 import React, { Component } from 'react'

@@ -165,7 +165,7 @@ th.device_info {
 }
 
 .deviceImg .ant-input-affix-wrapper {
-    margin-bottom: 15px;
+    margin-bottom: 4px;
 }
 
 .deviceImg .ant-input {
@@ -177,7 +177,7 @@ th.device_info {
     border-bottom: 1px solid;
     border-color: #ccc !important;
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 0;
     height: 26px;
 }
 
@@ -186,8 +186,18 @@ th.device_info {
     box-shadow: 0 0 0 2px rgba(23, 23, 23, 0);
 }
 
+.anticon-eye {
+    font-size: 20px;
+    color: #ccc;
+}
+
+.anticon-eye-invisible {
+    font-size: 20px;
+    color: #ccc;
+}
+
 .deviceImg .ant-form-item-control-wrapper {
-    margin-top: 20px;
+    margin-top: 16px;
 }
 
 .left_bar .ant-card-body {

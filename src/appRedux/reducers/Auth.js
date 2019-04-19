@@ -25,7 +25,7 @@ const INIT_STATE = {
   initURL: '',
   socket: io,
   isAllowed: false,
-  isRequested:false,
+  isRequested: false,
   authUser: {
     id: localStorage.getItem('id'),
     connected_devices: localStorage.getItem('connected_devices'),
@@ -62,7 +62,7 @@ export default (state = INIT_STATE, action) => {
       }
     }
     case LOGIN_FAILED: {
-     
+
       return {
         ...state,
         alertMessage: action.payload.msg,
@@ -113,7 +113,6 @@ export default (state = INIT_STATE, action) => {
 
       }
     }
-      break;
 
     case INVALID_TOKEN: {
       RestService.authLogOut();
@@ -171,7 +170,7 @@ export default (state = INIT_STATE, action) => {
         ...state,
         isAllowed: action.payload.ComponentAllowed,
         isRequested: true,
-        authUser:{
+        authUser: {
           id: action.payload.id,
           connected_dealer: action.payload.connected_dealer,
           connected_devices: action.payload.connected_devices,
