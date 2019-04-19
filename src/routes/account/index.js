@@ -8,6 +8,9 @@ import {
     importCSV,
     exportCSV,
     releaseCSV,
+    getUsedPGPEmails,
+    getUsedChatIds,
+    getUsedSimIds,
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -16,10 +19,6 @@ import {
     getSimIDs,
     getChatIDs,
     getPGPEmails,
-    getUsedPGPEmails,
-    getUsedChatIds,
-    getUsedSimIds,
-
 } from "../../appRedux/actions/Devices";
 const confirm = Modal.confirm;
 
@@ -229,6 +228,14 @@ class Account extends Component {
             this.setState({
                 used_pgp_emails_page: e
             });
+        } else if (dataName === "used_chat_ids") {
+            this.setState({
+                used_chat_ids_page: e
+            });
+        } else if (dataName === "used_sim_ids") {
+            this.setState({
+                used_sim_ids_page: e
+            });
         }
     }
 
@@ -239,7 +246,7 @@ class Account extends Component {
     }
 
     handleOk = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible1: false,
             selectedRowKeys: []
@@ -247,14 +254,14 @@ class Account extends Component {
     }
 
     handleCancel = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible1: false,
             selectedRowKeys: []
         });
     }
     onSelectChange = (selectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        // console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
     }
     showConfirm = (msg, _this, pageName, id = 0) => {
@@ -416,6 +423,11 @@ class Account extends Component {
                                                 title={`${this.state.dataFieldTitle}`}
                                                 // onOk={this.handleOk}
                                                 onCancel={
+                                                    () => {
+                                                        this.showViewmodal(false);
+                                                    }
+                                                }
+                                                onOk={
                                                     () => {
                                                         this.showViewmodal(false);
                                                     }
@@ -699,7 +711,7 @@ class Account extends Component {
                                                                         rowSelection={rowSelection}
                                                                         columns={[
                                                                             {
-                                                                                title: <Button onClick={() => { this.showConfirm("Do you really want to Release all pgp emails.", this, 'pgp_email') }}>Release selected</Button>,
+                                                                                title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all pgp emails.", this, 'pgp_email') }}>Release selected</Button>,
                                                                                 align: "center",
                                                                                 dataIndex: 'action',
                                                                                 key: "action",
@@ -723,7 +735,7 @@ class Account extends Component {
                                                                                 return {
                                                                                     key: email.id,
                                                                                     used_pgp_email: email.pgp_email,
-                                                                                    action: <Button onClick={() => { this.showConfirm("Do you really want to Release this pgp email.", this, "pgp_email", email.id) }}>Release</Button>
+                                                                                    action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this pgp email.", this, "pgp_email", email.id) }}>Release</Button>
 
                                                                                 }
                                                                             })
@@ -772,7 +784,7 @@ class Account extends Component {
                                                                             rowSelection={rowSelection}
                                                                             columns={[
                                                                                 {
-                                                                                    title: <Button onClick={() => { this.showConfirm("Do you really want to Release all sim ids.", this, 'sim_id') }}>Release selected</Button>,
+                                                                                    title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all sim ids.", this, 'sim_id') }}>Release selected</Button>,
                                                                                     align: "center",
                                                                                     dataIndex: 'action',
                                                                                     key: "action",
@@ -796,7 +808,7 @@ class Account extends Component {
                                                                                     return {
                                                                                         key: email.id,
                                                                                         used_sim_ids: email.sim_id,
-                                                                                        action: <Button onClick={() => { this.showConfirm("Do you really want to Release this sim id.", this, "sim_id", email.id) }}>Release</Button>
+                                                                                        action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this sim id.", this, "sim_id", email.id) }}>Release</Button>
 
                                                                                     }
                                                                                 })
@@ -845,7 +857,7 @@ class Account extends Component {
                                                                                 rowSelection={rowSelection}
                                                                                 columns={[
                                                                                     {
-                                                                                        title: <Button onClick={() => { this.showConfirm("Do you really want to Release all Chat ids.", this, 'chat_id') }}>Release selected</Button>,
+                                                                                        title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all Chat ids.", this, 'chat_id') }}>Release selected</Button>,
                                                                                         align: "center",
                                                                                         dataIndex: 'action',
                                                                                         key: "action",
@@ -863,13 +875,12 @@ class Account extends Component {
                                                                                     },
 
                                                                                 ]}
-
                                                                                 dataSource={
                                                                                     this.state.used_chat_ids.map(email => {
                                                                                         return {
                                                                                             key: email.id,
                                                                                             used_chat_ids: email.chat_id,
-                                                                                            action: <Button onClick={() => { this.showConfirm("Do you really want to Release this Chat id.", this, "chat_id", email.id) }}>Release</Button>
+                                                                                            action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this Chat id.", this, "chat_id", email.id) }}>Release</Button>
 
                                                                                         }
                                                                                     })
@@ -1033,18 +1044,18 @@ function mapDispatchToProps(dispatch) {
 var mapStateToProps = ({ account, devices }) => {
     // console.log("sim_ids", devices.sim_ids);
     // console.log("chat_ids", devices.chat_ids);
-    console.log("used_pgp_emails", devices.used_pgp_emails);
-    console.log("used_caht", devices.used_chat_ids);
-    console.log("used_sadas", devices.used_sim_ids);
+    // console.log("used_pgp_emails", devices.used_pgp_emails);
+    // console.log("used_caht", devices.used_chat_ids);
+    // console.log("used_sadas", devices.used_sim_ids);
     return {
         msg: account.msg,
         showMsg: account.showMsg,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
         pgp_emails: devices.pgp_emails,
-        used_pgp_emails: devices.used_pgp_emails,
-        used_chat_ids: devices.used_chat_ids,
-        used_sim_ids: devices.used_sim_ids,
+        used_pgp_emails: account.used_pgp_emails,
+        used_chat_ids: account.used_chat_ids,
+        used_sim_ids: account.used_sim_ids,
     };
 }
 
