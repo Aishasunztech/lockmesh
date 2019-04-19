@@ -199,9 +199,7 @@ class ConnectDevice extends Component {
     } else if (this.props.pageName === APPS && isSync) {
       return (
         <AppList
-          app_list={this.props.app_list}
-          // pushApps={this.props.pushApps}
-          undoApps={this.props.undoApps}
+          isHistory={false}
         />
       );
     } else if (this.props.pageName === GUEST_PASSWORD && isSync) {

@@ -8,7 +8,7 @@ import {
 
 import { BASE_URL } from '../../../constants/Application';
 
-import { Table, Switch, } from "antd";
+import { Table, Switch, Avatar } from "antd";
 import AppDropdown from "./AppDropdown";
 
 
@@ -69,14 +69,8 @@ class AppList extends Component {
         })
     }
 
-    // componentDidUpdate(prevProps, prevState, snapshot) {
-    //     // alert("componentDidUpdate");
-    //     // console.log("component did update", prevProps);
-    // }
-
     handleCheckedAll = (key, value) => {
 
-        // console.log("handleCheckedAll");
         if (key === "guestAll") {
             this.checkAll(key,'guest', value);
         } else if (key === "encryptedAll") {
@@ -92,20 +86,7 @@ class AppList extends Component {
     }
 
     checkAll = (keyAll, key, value) => {
-        // this.state.app_list.map((app) => {
-        //     app[key] = value;
-        // });
         this.props.handleCheckAll(keyAll, key, value);
-
-        // let applications = this.state.app_list;
-        // applications.forEach(app => {
-        //     app[key] = value;
-        // })
-        // this.setState({
-        //     app_list: applications
-        // });
-
-        // this.props.pushApps(this.state.app_list);
     }
 
     renderApps = () => {
@@ -116,7 +97,11 @@ class AppList extends Component {
                 key: app.app_id,
                 app_name:
                     <div>
-                        <img src={`${BASE_URL}users/getFile/${app.icon}`} style={{ width: "30px", height: "30px" }} />
+                        <Avatar
+                            size={"small"} 
+                            src={`${BASE_URL}users/getFile/${app.icon}`} 
+                            // style={{ width: "30px", height: "30px" }} 
+                        />
                         <br />
                         <div className="line_break">{app.label}</div>
                     </div>,
