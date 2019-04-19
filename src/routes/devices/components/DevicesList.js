@@ -329,6 +329,14 @@ class DevicesList extends Component {
         });
     }
 
+    resetSeletedRows = () => {
+     //   console.log('table ref', this.refs.tablelist)
+        this.setState({
+            selectedRowKeys: [],
+            selectedRows: [],
+        })
+    }
+
     // componentWillReceiveProps() {
     //     this.setState({
     //         devices: this.props.devices,
@@ -337,12 +345,9 @@ class DevicesList extends Component {
 
     // }
 
-
-
-
-
     render() {
 
+       // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
 
         const { activateDevice, suspendDevice } = this.props;
         const components = {
@@ -352,11 +357,11 @@ class DevicesList extends Component {
             },
         };
         let rowSelection;
-        if (this.props.tabselect == '5' && this.props.user.type !== 'admin') {
+        if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
-                    //  console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                      console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
                     disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -369,6 +374,8 @@ class DevicesList extends Component {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
+                    console.log(`selectedRowKeys 3: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                    
                     //  console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
@@ -392,6 +399,7 @@ class DevicesList extends Component {
                 <Card>
 
                     <Table
+                        ref='tablelist'
                         className="devices"
                         components={components}
                         rowSelection={rowSelection}
@@ -544,18 +552,22 @@ export default class Tab extends Component {
 
         }
     }
+
     callback = (key) => {
         // alert('callback');
         // console.log(key);
         this.props.handleChangetab(key);
+       
     }
 
     deleteAllUnlinkedDevice = () => {
         this.refs.devciesList1.deleteAllUnlinkedDevice()
     }
     deleteAllPreActivedDevice = () => {
+
         this.refs.devciesList2.deleteAllUnlinkedDevice()
     }
+
     handlePagination = (value) => {
         this.refs.devciesList.handlePagination(value);
     }
@@ -681,6 +693,7 @@ export default class Tab extends Component {
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
                         handlePagination={this.props.handlePagination}
+                        deleteUnlinkDevice={this.props.deleteUnlinkDevice}
                         tabselect={this.state.tabselect}
                         user={this.props.user}
                     />
