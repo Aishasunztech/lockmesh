@@ -234,17 +234,6 @@ var mapStateToProps = ({ device_details },ownProps) => {
             isHistory: ownProps.isHistory
         }
     }else{
-        // console.log("applist mapStateToProps", {
-        //     app_list: device_details.app_list,
-        //     undoApps: device_details.undoApps,
-        //     redoApps: device_details.redoApps,
-        //     checked_app_id: device_details.checked_app_id,
-        //     guestAll: device_details.guestAll,
-        //     encryptedAll: device_details.encryptedAll,
-        //     enableAll: device_details.enableAll
-        // });
-        
-        // alert("apps not from history");
         return {
             app_list: device_details.app_list,
             undoApps: device_details.undoApps,
@@ -255,7 +244,6 @@ var mapStateToProps = ({ device_details },ownProps) => {
             enableAll: device_details.enableAll
         };
     }
-    // console.log("applist", device_details.app_list);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppList);
