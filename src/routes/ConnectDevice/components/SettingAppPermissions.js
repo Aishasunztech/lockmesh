@@ -149,9 +149,11 @@ class SettingAppPermissions extends Component {
         </Fragment>
       )
     } else {
-      return (<Fragment>
-        Extension Not Available
-      </Fragment>)
+      return (
+        <Fragment>
+          <h1 class="not_syn_txt"><a>Secure Settings <br></br> Not Available</a></h1>
+        </Fragment>
+      )
     }
 
   }
