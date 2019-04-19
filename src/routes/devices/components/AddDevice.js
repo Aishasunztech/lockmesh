@@ -44,8 +44,6 @@ export default class AddDevice extends Component {
             });
         }
         device.start_date = this.createdDate();
-
-
     }
 
 
