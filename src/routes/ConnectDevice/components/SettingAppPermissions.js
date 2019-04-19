@@ -50,7 +50,7 @@ class SettingAppPermissions extends Component {
   }
 
   componentWillReceiveProps(nextprops) {
-    alert("hello will");
+    // alert("hello will");
 
     // console.log('component will recieve is called', nextprops)
     //  console.log('index', objIndex);
@@ -85,7 +85,7 @@ class SettingAppPermissions extends Component {
     }
   }
   renderApps = () => {
-    
+
     let extension = this.state.extension;
     console.log("render list extension", extension);
 
