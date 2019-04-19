@@ -328,10 +328,13 @@ class ConnectDevice extends Component {
 
               </div>
               <DeviceActions
-                app_list={this.props.app_list}
                 undoApplications={this.props.undoApplications}
                 redoApplications={this.props.redoApplications}
                 applyActionButton={this.applyActionButton}
+                applyBtn = {this.props.applyBtn}
+                undoBtn = {this.props.undoBtn}
+                redoBtn = {this.props.redoBtn}
+                clearBtn = {this.props.clearBtn}
               />
             </Card>
           </Col>
@@ -419,7 +422,11 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     adminCPwd: device_details.adminCPwd,
     status: device_details.status,
     user_acc_id: device_details.device.id,
-    extensions: device_details.extensions
+    extensions: device_details.extensions,
+    applyBtn: device_details.applyBtn,
+    redoBtn: device_details.redoBtn,
+    undoBtn: device_details.undoBtn,
+    clearBtn: device_details.clearBtn
   };
 }
 

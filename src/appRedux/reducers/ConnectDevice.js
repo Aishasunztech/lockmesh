@@ -307,14 +307,27 @@ export default (state = initialState, action) => {
 
             // console.log(UNDO_APPS);
             if (state.undoApps.length > 1) {
+
                 let apps = state.undoApps[state.undoApps.length - 1];
+                // console.log("apps to undo", apps);
+
                 state.undoApps.pop();
                 state.redoApps.push(apps);
-                return {
-                    ...state,
-                    redoBtn: true,
-                    app_list: state.undoApps[state.undoApps.length - 1]
-                };
+
+                if (state.undoApps.length === 1) {
+                    return {
+                        ...state,
+                        undoBtn: false,
+                        redoBtn: true,
+                        app_list: state.undoApps[state.undoApps.length - 1]
+                    };
+                } else {
+                    return {
+                        ...state,
+                        redoBtn: true,
+                        app_list: state.undoApps[state.undoApps.length - 1]
+                    };
+                }
             } else {
                 return {
                     ...state,
@@ -322,22 +335,36 @@ export default (state = initialState, action) => {
                 };
             }
         }
-        case REDO_APPS:
-            {
-                // console.log(UNDO_APPS);
-                if (state.redoApps.length > 0) {
-                    let apps = state.redoApps[state.redoApps.length - 1];
-                    state.redoApps.pop();
-                    state.undoApps.push(apps);
+        case REDO_APPS: {
+            // console.log(UNDO_APPS);
+            if (state.redoApps.length > 0) {
+                console.log("redo apps", state.redoApps);
+
+                let apps = state.redoApps[state.redoApps.length - 1];
+                state.redoApps.pop();
+                state.undoApps.push(apps);
+                if (state.redoApps.length === 0) {
+                    return {
+                        ...state,
+                        app_list: apps,
+                        undoBtn: true,
+                        redoBtn: false
+                    };
+                } else {
                     return {
                         ...state,
                         app_list: apps,
                         undoBtn: true
                     };
-                } else {
-                    return state;
+
                 }
+            } else {
+                return {
+                    ...state,
+                    redoBtn: false
+                };
             }
+        }
         case LOAD_PROFILE:
             {
                 // console.log(LOAD_PROFILE);
@@ -578,10 +605,12 @@ export default (state = initialState, action) => {
             let applications = state.app_list;
             changedApps.forEach(app => {
                 if (app.app_id === action.payload.app_id) {
+                    app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
                 }
             });
-            state.undoApps.push(changedApps);
+            state.undoApps.push(JSON.parse(JSON.stringify(changedApps)));
+            console.log("undo push_apps", state.undoApps);
             let check = handleCheckedAll(applications);
 
             return {
@@ -597,10 +626,12 @@ export default (state = initialState, action) => {
                 ...check
             }
         }
+
         case HANDLE_CHECK_ALL: {
             let applications = state.app_list;
             applications.forEach(app => {
                 app[action.payload.key] = action.payload.value;
+                app.isChanged = true;
             })
             state[action.payload.keyAll] = action.payload.value;
             state.undoApps.push(applications);

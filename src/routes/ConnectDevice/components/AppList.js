@@ -114,13 +114,7 @@ class AppList extends Component {
                         ref={`guest_${app.app_id}`}
                         name={`guest_${app.app_id}`}
                         value={app.guest}
-
-                        // defaultChecked={(app.guest === true || app.guest === 1) ? true : false}
                         checked={(app.guest === true || app.guest === 1) ? true : false}
-                        // onChange={(e) => {
-                        //     this.handleChecked(e, "guest", app.app_id);
-                        // }}
-
                         onClick={(e) => {
                             this.handleChecked(e, "guest", app.app_id);
                         }}
@@ -133,15 +127,8 @@ class AppList extends Component {
                         size="small"
                         ref={`encrypted_${app.app_id}`}
                         name={`encrypted_${app.app_id}`}
-                        value={app.encrypted}
-
-                        // defaultChecked={(app.encrypted === true || app.encrypted === 1) ? true : false} 
+                        value={app.encrypted} 
                         checked={(app.encrypted === true || app.encrypted === 1) ? true : false}
-                        // defaultChecked= {app.encrypted}
-                        // checked = {app.encrypted}
-                        // onChange={(e) => {
-                        //     this.handleChecked(e, "encrypted", app.app_id);
-                        // }}
                         onClick={(e) => {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app.app_id);
@@ -155,13 +142,8 @@ class AppList extends Component {
                         size="small"
                         ref={`enable_${app.app_id}`}
                         name={`enable_${app.app_id}`}
-                        value={app.enable}
-
-                        // defaultChecked={((app.enable == true) || (app.enable == 1)) ? true : false} 
+                        value={app.enable} 
                         checked={((app.enable === true) || (app.enable === 1)) ? true : false}
-                        // onChange={(e) => {
-                        //     this.handleChecked(e, "enable", app.app_id);
-                        // }}
                         onClick={(e) => {
                             this.handleChecked(e, "enable", app.app_id);
                         }}
