@@ -36,12 +36,18 @@ import {
     HANDLE_CHECK_EXTENSION,
     HANDLE_CHECK_ALL_EXTENSION
 } from "../../constants/ActionTypes";
+
+import {
+    NOT_AVAILABLE, MAIN_MENU
+} from '../../constants/Constants';
+
 import {
     message, Modal
 } from 'antd';
-import { stat } from "fs";
+
 const confirm = Modal.confirm;
 const actions = require("../../appRedux/actions/ConnectDevice")
+
 const initialState = {
     isLoading: false,
 
@@ -49,7 +55,7 @@ const initialState = {
     messageType: '',
     showMessage: false,
 
-    pageName: "main_menu",
+    pageName: MAIN_MENU,
     status: '',
 
     syncStatus: false,
@@ -144,7 +150,7 @@ export default (state = initialState, action) => {
                     undoBtn: false,
                     redoBtn: false,
                     clearBtn: false,
-                    pageName: 'not_available',
+                    pageName: NOT_AVAILABLE,
                     status: status
                 }
             } else {
@@ -174,6 +180,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
+                pageName: NOT_AVAILABLE
             }
 
         }
@@ -185,7 +192,7 @@ export default (state = initialState, action) => {
                 state.device = action.response.data;
                 // state.device.account_status = 'suspended';
                 // state.device.finalStatus = 'Suspended';
-                state.pageName = 'not_available';
+                state.pageName = NOT_AVAILABLE;
                 state.status = 'Suspended';
                 message.success(action.response.msg);
             } else {
@@ -524,14 +531,14 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_EXTENSION: {
             let changedExtensions = state.extensions;
             let applications = state.extensions;
-          //  console.log(action.payload.ext, 'reducer ', changedExtensions);
-          state.extensions.forEach(extension => {
-               // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
+            //  console.log(action.payload.ext, 'reducer ', changedExtensions);
+            state.extensions.forEach(extension => {
+                // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
                 if (extension.uniqueName === action.payload.uniqueName) {
                     let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
-                 //   console.log(action.payload.value, 'chenged item', extension.subExtension[objIndex][action.payload.key])
-                   if(objIndex > -1)
-                    extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
+                    //   console.log(action.payload.value, 'chenged item', extension.subExtension[objIndex][action.payload.key])
+                    if (objIndex > -1)
+                        extension.subExtension[objIndex][action.payload.key] = action.payload.value == true ? 1 : 0;
                 }
             });
             // state.undoApps.push(changedApps);
@@ -556,19 +563,19 @@ export default (state = initialState, action) => {
             console.log('reducer is called', action.payload.uniqueName)
             let changedExtensions = state.extensions;
             let applications = state.extensions;
-          //  console.log(action.payload.ext, 'reducer ', changedExtensions);
-          state[action.payload.keyAll] = action.payload.value;
+            //  console.log(action.payload.ext, 'reducer ', changedExtensions);
+            state[action.payload.keyAll] = action.payload.value;
             changedExtensions.forEach(extension => {
-               // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
+                // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
                 if (extension.uniqueName === action.payload.uniqueName) {
-                    for(let subExt of extension.subExtension){
-                        subExt[action.payload.key] = action.payload.value== true ? 1:0;
+                    for (let subExt of extension.subExtension) {
+                        subExt[action.payload.key] = action.payload.value == true ? 1 : 0;
 
                     }
-                   // let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
+                    // let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
                     console.log('chenged item', extension.subExtension)
-                //    if(objIndex > -1)
-                //     extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
+                    //    if(objIndex > -1)
+                    //     extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
                 }
             });
             // state.undoApps.push(changedApps);
@@ -578,7 +585,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 extensions: changedExtensions,
-              
+
                 applyBtn: true,
                 undoBtn: true,
                 ...check
