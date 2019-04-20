@@ -285,7 +285,23 @@ class ConnectDevice extends Component {
       this.props.endLoading();
     }, 2000);
   }
+  undoAction = () => {
+    let pageName = this.props.pageName;
 
+    if(pageName === APPS){
+      this.props.undoApplications()
+    } else if (pageName === SECURE_SETTING) {
+
+    }
+  }
+  redoAction = () => {
+    let pageName = this.props.pageName;
+    if(pageName === APPS){
+      this.props.redoApplications()
+    } else if (pageName === SECURE_SETTING) {
+
+    }
+  }
   render() {
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
@@ -337,8 +353,8 @@ class ConnectDevice extends Component {
 
               </div>
               <DeviceActions
-                undoApplications = {this.props.undoApplications}
-                redoApplications = {this.props.redoApplications}
+                undoApplications = {this.undoAction}
+                redoApplications = {this.redoAction}
                 applyActionButton = {this.applyActionButton}
                 applyBtn = {this.props.applyBtn}
                 undoBtn = {this.props.undoBtn}

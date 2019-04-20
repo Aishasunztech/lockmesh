@@ -40,7 +40,7 @@ class SettingAppPermissions extends Component {
     if (this.props.isExtension) {
       // this.state.extension = [];
       // this.state.extension.push(this.props.extension);
-      console.log("component Did mount", this.props.extension);
+      // console.log("component Did mount", this.props.extension);
       this.setState({
         extension: this.props.extension,
         pageName: this.props.pageName
@@ -79,7 +79,7 @@ class SettingAppPermissions extends Component {
   renderApps = () => {
 
     let extension = this.state.extension;
-    console.log("render list extension", extension);
+    // console.log("render list extension", extension);
 
     if (this.state.extension !== undefined && this.state.extension !== null && Object.keys(extension).length) {
 
@@ -162,11 +162,11 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }, ownProps) => {
-  console.log(device_details, "applist ownprops", ownProps);
+  // console.log(device_details, "applist ownprops", ownProps);
   const pageName = ownProps.pageName;
 
   let extension = device_details.extensions.find(o => o.uniqueName === pageName);
-  console.log("extensions_", extension);
+  // console.log("extensions_", extension);
 
   if (extension !== undefined) {
     return {

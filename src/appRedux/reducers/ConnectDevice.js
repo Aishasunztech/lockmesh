@@ -177,13 +177,11 @@ export default (state = initialState, action) => {
 
         }
 
-        case FLAG_DEVICE:
+        case FLAG_DEVICE: {
 
             if (action.response.status) {
 
                 state.device = action.response.data;
-                // state.device.account_status = 'suspended';
-                // state.device.finalStatus = 'Suspended';
                 state.pageName = NOT_AVAILABLE;
                 state.status = 'Suspended';
                 message.success(action.response.msg);
@@ -195,6 +193,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: false,
             }
+        }
 
         case UNFLAG_DEVICE:
             console.log(action.response.msg);
@@ -259,12 +258,6 @@ export default (state = initialState, action) => {
         }
 
         case GET_POLICIES: {
-            //  console.log('GET_PROFILES');
-            // console.log({
-            //     ...state,
-            //     isloading: true,
-            //     profiles: action.payload
-            // });
             return {
                 ...state,
                 isloading: true,
@@ -296,8 +289,8 @@ export default (state = initialState, action) => {
             }
         }
         case PUSH_APPS: {
-            // console.log(PUSH_APPS);
-            state.undoApps.push(action.payload);
+            // state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
+            // console.log("undo apps", state.undoApps);
 
             return {
                 ...state
@@ -305,21 +298,21 @@ export default (state = initialState, action) => {
         }
         case UNDO_APPS: {
 
-            // console.log(UNDO_APPS);
             if (state.undoApps.length > 1) {
 
                 let apps = state.undoApps[state.undoApps.length - 1];
-                // console.log("apps to undo", apps);
-
+                console.log("undo apps", state.undoApps);
                 state.undoApps.pop();
-                state.redoApps.push(apps);
+
+                state.redoApps.push(JSON.parse(JSON.stringify(apps)));
+                console.log("undo apps", state.undoApps);
 
                 if (state.undoApps.length === 1) {
                     return {
                         ...state,
                         undoBtn: false,
                         redoBtn: true,
-                        app_list: state.undoApps[state.undoApps.length - 1]
+                        app_list: JSON.parse(JSON.stringify(state.undoApps[state.undoApps.length - 1]))
                     };
                 } else {
                     return {
@@ -336,13 +329,12 @@ export default (state = initialState, action) => {
             }
         }
         case REDO_APPS: {
-            // console.log(UNDO_APPS);
             if (state.redoApps.length > 0) {
-                console.log("redo apps", state.redoApps);
 
                 let apps = state.redoApps[state.redoApps.length - 1];
                 state.redoApps.pop();
-                state.undoApps.push(apps);
+                state.undoApps.push(JSON.parse(JSON.stringify(apps)));
+
                 if (state.redoApps.length === 0) {
                     return {
                         ...state,
@@ -365,89 +357,85 @@ export default (state = initialState, action) => {
                 };
             }
         }
-        case LOAD_PROFILE:
-            {
-                // console.log(LOAD_PROFILE);
-                state.undoApps.push(action.payload);
-                let check = handleCheckedAll(action.payload);
-                return {
-                    ...state,
-                    app_list: action.payload,
-                    ...check
-                }
+        case LOAD_PROFILE: {
+            // console.log(LOAD_PROFILE);
+            state.undoApps.push(action.payload);
+            let check = handleCheckedAll(action.payload);
+            return {
+                ...state,
+                app_list: action.payload,
+                ...check
             }
-        case SETTINGS_APPLIED:
-            {
-                // console.log(SETTINGS_APPLIED);
-                // console.log(action.payload);
-                return {
-                    ...state,
-                }
+        }
+        case SETTINGS_APPLIED: {
+            // console.log(SETTINGS_APPLIED);
+            // console.log(action.payload);
+            return {
+                ...state,
             }
-        case START_LOADING:
-            {
-                return {
-                    ...state,
-                    isLoading: true
-                }
+        }
+        case START_LOADING: {
+            return {
+                ...state,
+                isLoading: true
             }
-        case SHOW_HISTORY_MODAL:
-            {
-                // console.log(SHOW_HISTORY_MODAL);
-                // console.log({
-                //     ...state,
-                //     historyType: action.payload.ProfileType,
-                //     historyModal: action.payload.visible
-                // })
-                // console.log(action.payload.profileType, action.payload.visible, 'ok')
-                return {
-                    ...state,
-                    historyType: action.payload.profileType,
-                    historyModal: action.payload.visible
-                }
+        }
+
+        case SHOW_HISTORY_MODAL: {
+            // console.log(SHOW_HISTORY_MODAL);
+            // console.log({
+            //     ...state,
+            //     historyType: action.payload.ProfileType,
+            //     historyModal: action.payload.visible
+            // })
+            // console.log(action.payload.profileType, action.payload.visible, 'ok')
+            return {
+                ...state,
+                historyType: action.payload.profileType,
+                historyModal: action.payload.visible
             }
-        case END_LOADING:
-            {
+        }
 
-                return {
-                    ...state,
-                    isLoading: false
-                }
+        case END_LOADING: {
+
+            return {
+                ...state,
+                isLoading: false
             }
-        case SHOW_MESSAGE:
-            {
+        }
 
-                return {
-                    ...state,
-                    showMessage: action.payload.showMessage,
-                    messageType: action.payload.messageType,
-                    messageText: action.payload.messageText
-                }
+        case SHOW_MESSAGE: {
+
+            return {
+                ...state,
+                showMessage: action.payload.showMessage,
+                messageType: action.payload.messageType,
+                messageText: action.payload.messageText
+            }
+        }
+
+        case ACTIVATE_DEVICE2: {
+
+            //  console.log(state.device, 'active device done', action.payload.device);
+            if (action.response.status) {
+
+                state.device = action.response.data;
+                state.status = '';
+                state.pageName = 'main_menu'
+
+                message.success(action.response.msg);
+            } else {
+                message.error(action.response.msg);
+
             }
 
-        case ACTIVATE_DEVICE2:
-            {
-
-                //  console.log(state.device, 'active device done', action.payload.device);
-                if (action.response.status) {
-
-                    state.device = action.response.data;
-                    state.status = '';
-                    state.pageName = 'main_menu'
-
-                    message.success(action.response.msg);
-                } else {
-                    message.error(action.response.msg);
-
-                }
-
-                // console.log('action done ', state.device)
-                return {
-                    ...state,
-                    device: state.device,
-                    isloading: true
-                }
+            // console.log('action done ', state.device)
+            return {
+                ...state,
+                device: state.device,
+                isloading: true
             }
+        }
 
         case UNLINK_DEVICE: {
             if (action.response.status) {
@@ -462,33 +450,31 @@ export default (state = initialState, action) => {
 
             }
         }
-        case GUEST_PASSWORD:
-            {
-                // console.log(GUEST_PASSWORD);
-                // console.log(action.payload);
-                return {
-                    ...state,
-                    guestPwd: action.payload.pwd,
-                    guestCPwd: action.payload.confirm,
-                    isGuestPwd: true,
-                    applyBtn: true
-                }
-            }
-        case ENCRYPTED_PASSWORD:
-            {
-                // console.log(ENCRYPTED_PASSWORD);
-                // console.log(action.payload);
-                return {
-                    ...state,
-                    encryptedPwd: action.payload.pwd,
-                    encryptedCPwd: action.payload.confirm,
-                    isEncryptedPwd: true,
-                    applyBtn: true
-                }
-            }
-        case DURESS_PASSWORD: {
-            // console.log(DURESS_PASSWORD);
+        case GUEST_PASSWORD: {
+            // console.log(GUEST_PASSWORD);
             // console.log(action.payload);
+            return {
+                ...state,
+                guestPwd: action.payload.pwd,
+                guestCPwd: action.payload.confirm,
+                isGuestPwd: true,
+                applyBtn: true
+            }
+        }
+
+        case ENCRYPTED_PASSWORD: {
+            // console.log(ENCRYPTED_PASSWORD);
+            // console.log(action.payload);
+            return {
+                ...state,
+                encryptedPwd: action.payload.pwd,
+                encryptedCPwd: action.payload.confirm,
+                isEncryptedPwd: true,
+                applyBtn: true
+            }
+        }
+
+        case DURESS_PASSWORD: {
             return {
                 ...state,
                 duressPwd: action.payload.pwd,
@@ -498,8 +484,6 @@ export default (state = initialState, action) => {
             }
         }
         case ADMIN_PASSWORD: {
-            // console.log(ADMIN_PASSWORD);
-            // console.log(action.payload);
             return {
                 ...state,
                 adminPwd: action.payload.pwd,
@@ -529,14 +513,13 @@ export default (state = initialState, action) => {
                 profileName: action.payload
             }
         }
-        case SHOW_SAVE_PROFILE_MODAL:
-            {
-                return {
-                    ...state,
-                    saveProfileModal: action.payload.visible,
-                    saveProfileType: action.payload.profileType
-                }
+        case SHOW_SAVE_PROFILE_MODAL: {
+            return {
+                ...state,
+                saveProfileModal: action.payload.visible,
+                saveProfileType: action.payload.profileType
             }
+        }
 
         case HANDLE_CHECK_EXTENSION: {
             // let changedExtensions = state.extensions;
@@ -601,21 +584,21 @@ export default (state = initialState, action) => {
         }
 
         case HANDLE_CHECK_APP: {
-            let changedApps = state.app_list;
-            let applications = state.app_list;
+            let changedApps = JSON.parse(JSON.stringify(state.app_list));
             changedApps.forEach(app => {
                 if (app.app_id === action.payload.app_id) {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
                 }
             });
-            state.undoApps.push(JSON.parse(JSON.stringify(changedApps)));
-            console.log("undo push_apps", state.undoApps);
-            let check = handleCheckedAll(applications);
 
+            state.app_list = JSON.parse(JSON.stringify(changedApps));
+            let applications = state.app_list;
+            state.undoApps.push(JSON.parse(JSON.stringify(changedApps)));
+            let check = handleCheckedAll(applications);
             return {
                 ...state,
-                app_list: changedApps,
+                // app_list: changedApps,
                 checked_app_id: {
                     id: action.payload.app_id,
                     key: action.payload.key,
@@ -634,7 +617,9 @@ export default (state = initialState, action) => {
                 app.isChanged = true;
             })
             state[action.payload.keyAll] = action.payload.value;
-            state.undoApps.push(applications);
+            state.undoApps.push(JSON.parse(JSON.stringify(applications)));
+            // console.log("undo apps", state.undoApps);
+
             return {
                 ...state,
                 app_list: applications,
