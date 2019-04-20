@@ -38,9 +38,6 @@ class SettingAppPermissions extends Component {
 
   componentDidMount() {
     if (this.props.isExtension) {
-      // this.state.extension = [];
-      // this.state.extension.push(this.props.extension);
-      // console.log("component Did mount", this.props.extension);
       this.setState({
         extension: this.props.extension,
         pageName: this.props.pageName

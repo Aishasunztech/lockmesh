@@ -34,7 +34,9 @@ import {
     CHECKPASS,
     GET_DEALER_APPS,
     HANDLE_CHECK_EXTENSION,
-    HANDLE_CHECK_ALL_EXTENSION
+    HANDLE_CHECK_ALL_EXTENSION,
+    UNDO_EXTENSIONS,
+    REDO_EXTENSIONS
 } from "../../constants/ActionTypes";
 
 import {
@@ -70,9 +72,6 @@ const initialState = {
     encryptedAll: false,
     enableAll: false,
 
-    guestAllExt: false,
-    encryptedAllExt: false,
-
     applyBtn: false,
     undoBtn: false,
     redoBtn: false,
@@ -80,8 +79,10 @@ const initialState = {
 
     profiles: [],
     policies: [],
-    device_histories: [],
+
     historyModal: false,
+    device_histories: [],
+    
     saveProfileModal: false,
     historyType: "history",
     saveProfileType: '',
@@ -108,7 +109,14 @@ const initialState = {
     duressCPwd: '',
 
     apk_list: [],
-    extensions: []
+    
+    extensions: [],
+    
+    undoExtensions: [],
+    redoExtensions: [],
+    
+    guestAllExt: false,
+    encryptedAllExt: false,
 };
 
 export default (state = initialState, action) => {
@@ -155,7 +163,6 @@ export default (state = initialState, action) => {
 
         }
         case SUSPEND_DEVICE2: {
-            // console.log('reducer suspend')
             if (action.response.status) {
 
                 state.device = action.response.data;
@@ -166,9 +173,7 @@ export default (state = initialState, action) => {
                 message.error(action.response.msg);
 
             }
-            let device = state.device;
-
-            // console.log('action done ', state.device)
+            // let device = state.device;
             return {
                 ...state,
                 isloading: false,
@@ -196,7 +201,7 @@ export default (state = initialState, action) => {
         }
 
         case UNFLAG_DEVICE:
-            console.log(action.response.msg);
+            // console.log(action.response.msg);
             if (action.response.status) {
                 message.success(action.response.msg);
             } else {
@@ -223,33 +228,17 @@ export default (state = initialState, action) => {
             }
 
         case GET_DEVICE_APPS: {
-            // console.log(GET_DEVICE_APPS);
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             let applications = action.payload;
             let check = handleCheckedAll(applications);
-            // console.log({
-            //     ...state,
-            //     isloading: true,
-            //     app_list: action.payload
-            // });
             return {
                 ...state,
-                // isloading: true,
                 app_list: action.payload,
                 extensions: action.extensions,
-                // guestAll: guestAll,
-                // encryptedAll: encryptedAll,
-                // enableAll: enableAll
                 ...check
             }
         }
         case GET_PROFILES: {
-            //  console.log('GET_PROFILES');
-            // console.log({
-            //     ...state,
-            //     isloading: true,
-            //     profiles: action.payload
-            // });
             return {
                 ...state,
                 isloading: true,
@@ -266,7 +255,6 @@ export default (state = initialState, action) => {
         }
 
         case GET_USER_ACC_ID: {
-            //  console.log('GET_USER_ACC_ID',action.response.user_acount_id);
 
             return {
                 ...state,
@@ -296,67 +284,7 @@ export default (state = initialState, action) => {
                 ...state
             }
         }
-        case UNDO_APPS: {
-
-            if (state.undoApps.length > 1) {
-
-                let apps = state.undoApps[state.undoApps.length - 1];
-                console.log("undo apps", state.undoApps);
-                state.undoApps.pop();
-
-                state.redoApps.push(JSON.parse(JSON.stringify(apps)));
-                console.log("undo apps", state.undoApps);
-
-                if (state.undoApps.length === 1) {
-                    return {
-                        ...state,
-                        undoBtn: false,
-                        redoBtn: true,
-                        app_list: JSON.parse(JSON.stringify(state.undoApps[state.undoApps.length - 1]))
-                    };
-                } else {
-                    return {
-                        ...state,
-                        redoBtn: true,
-                        app_list: state.undoApps[state.undoApps.length - 1]
-                    };
-                }
-            } else {
-                return {
-                    ...state,
-                    undoBtn: false
-                };
-            }
-        }
-        case REDO_APPS: {
-            if (state.redoApps.length > 0) {
-
-                let apps = state.redoApps[state.redoApps.length - 1];
-                state.redoApps.pop();
-                state.undoApps.push(JSON.parse(JSON.stringify(apps)));
-
-                if (state.redoApps.length === 0) {
-                    return {
-                        ...state,
-                        app_list: apps,
-                        undoBtn: true,
-                        redoBtn: false
-                    };
-                } else {
-                    return {
-                        ...state,
-                        app_list: apps,
-                        undoBtn: true
-                    };
-
-                }
-            } else {
-                return {
-                    ...state,
-                    redoBtn: false
-                };
-            }
-        }
+        
         case LOAD_PROFILE: {
             // console.log(LOAD_PROFILE);
             state.undoApps.push(action.payload);
@@ -463,8 +391,6 @@ export default (state = initialState, action) => {
         }
 
         case ENCRYPTED_PASSWORD: {
-            // console.log(ENCRYPTED_PASSWORD);
-            // console.log(action.payload);
             return {
                 ...state,
                 encryptedPwd: action.payload.pwd,
@@ -522,19 +448,23 @@ export default (state = initialState, action) => {
         }
 
         case HANDLE_CHECK_EXTENSION: {
-            // let changedExtensions = state.extensions;
-            // let applications = state.extensions;
-            //  console.log(action.payload.ext, 'reducer ', changedExtensions);
-            state.extensions.forEach(extension => {
-                // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
+
+            let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
+
+            changedExtensions.forEach(extension => {
                 if (extension.uniqueName === action.payload.uniqueName) {
                     let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
-                    //   console.log(action.payload.value, 'chenged item', extension.subExtension[objIndex][action.payload.key])
-                    if (objIndex > -1)
+                    if (objIndex > -1){
                         extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                        extension.subExtension[objIndex].isChanged = true;
+                    }
                 }
             });
-            let check = '';
+
+            state.extensions = JSON.parse(JSON.stringify(changedExtensions));
+            let extensions = state.extensions;
+            state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
+            let check = handleCheckedAllExts(extensions);
 
             return {
                 ...state,
@@ -551,38 +481,85 @@ export default (state = initialState, action) => {
         }
 
         case HANDLE_CHECK_ALL_EXTENSION: {
-            console.log('reducer is called', action.payload.uniqueName)
-            let changedExtensions = state.extensions;
-            let applications = state.extensions;
-            //  console.log(action.payload.ext, 'reducer ', changedExtensions);
+            let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
             state[action.payload.keyAll] = action.payload.value;
             changedExtensions.forEach(extension => {
-                // console.log(extension.uniqueName, 'name compare', action.payload.uniqueName)
                 if (extension.uniqueName === action.payload.uniqueName) {
                     for (let subExt of extension.subExtension) {
                         subExt[action.payload.key] = action.payload.value == true ? 1 : 0;
-
+                        subExt.isChanged = true;
                     }
-                    // let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
-                    console.log('chenged item', extension.subExtension)
-                    //    if(objIndex > -1)
-                    //     extension.subExtension[objIndex][action.payload.key] = action.payload.value== true ? 1:0;
                 }
             });
-            // state.undoApps.push(changedApps);
-            //  let check = handleCheckedAll(applications);
-            // let check = '';
+            state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));            
 
             return {
                 ...state,
                 extensions: changedExtensions,
-
                 applyBtn: true,
                 undoBtn: true,
                 // ...check
             }
         }
+        case UNDO_EXTENSIONS: {
 
+            if (state.undoExtensions.length > 1) {
+
+                // let apps = state.undoApps[state.undoApps.length - 1];
+                // state.undoApps.pop();
+
+                // state.redoApps.push(JSON.parse(JSON.stringify(apps)));
+
+                if (state.undoExtensions.length === 1) {
+                    return {
+                        ...state,
+                        undoBtn: false,
+                        redoBtn: true,
+                        // extensions: JSON.parse(JSON.stringify(state.undoApps[state.undoApps.length - 1]))
+                    };
+                } else {
+                    return {
+                        ...state,
+                        redoBtn: true,
+                        // app_list: state.undoApps[state.undoApps.length - 1]
+                    };
+                }
+            } else {
+                return {
+                    ...state,
+                    undoBtn: false
+                };
+            }
+        }
+        case REDO_EXTENSIONS: {
+            if (state.redoExtensions.length > 0) {
+
+                // let apps = state.redoApps[state.redoApps.length - 1];
+                // state.redoApps.pop();
+                // state.undoApps.push(JSON.parse(JSON.stringify(apps)));
+
+                if (state.redoExtensions.length === 0) {
+                    return {
+                        ...state,
+                        // app_list: apps,
+                        undoBtn: true,
+                        redoBtn: false
+                    };
+                } else {
+                    return {
+                        ...state,
+                        // app_list: apps,
+                        undoBtn: true
+                    };
+
+                }
+            } else {
+                return {
+                    ...state,
+                    redoBtn: false
+                };
+            }
+        }
         case HANDLE_CHECK_APP: {
             let changedApps = JSON.parse(JSON.stringify(state.app_list));
             changedApps.forEach(app => {
@@ -609,16 +586,14 @@ export default (state = initialState, action) => {
                 ...check
             }
         }
-
         case HANDLE_CHECK_ALL: {
-            let applications = state.app_list;
+            let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
                 app[action.payload.key] = action.payload.value;
                 app.isChanged = true;
             })
             state[action.payload.keyAll] = action.payload.value;
             state.undoApps.push(JSON.parse(JSON.stringify(applications)));
-            // console.log("undo apps", state.undoApps);
 
             return {
                 ...state,
@@ -629,6 +604,65 @@ export default (state = initialState, action) => {
                 },
                 applyBtn: true,
                 undoBtn: true
+            }
+        }
+        case UNDO_APPS: {
+
+            if (state.undoApps.length > 1) {
+
+                let apps = state.undoApps[state.undoApps.length - 1];
+                state.undoApps.pop();
+
+                state.redoApps.push(JSON.parse(JSON.stringify(apps)));
+
+                if (state.undoApps.length === 1) {
+                    return {
+                        ...state,
+                        undoBtn: false,
+                        redoBtn: true,
+                        app_list: JSON.parse(JSON.stringify(state.undoApps[state.undoApps.length - 1]))
+                    };
+                } else {
+                    return {
+                        ...state,
+                        redoBtn: true,
+                        app_list: state.undoApps[state.undoApps.length - 1]
+                    };
+                }
+            } else {
+                return {
+                    ...state,
+                    undoBtn: false
+                };
+            }
+        }
+        case REDO_APPS: {
+            if (state.redoApps.length > 0) {
+
+                let apps = state.redoApps[state.redoApps.length - 1];
+                state.redoApps.pop();
+                state.undoApps.push(JSON.parse(JSON.stringify(apps)));
+
+                if (state.redoApps.length === 0) {
+                    return {
+                        ...state,
+                        app_list: apps,
+                        undoBtn: true,
+                        redoBtn: false
+                    };
+                } else {
+                    return {
+                        ...state,
+                        app_list: apps,
+                        undoBtn: true
+                    };
+
+                }
+            } else {
+                return {
+                    ...state,
+                    redoBtn: false
+                };
             }
         }
         case GET_DEALER_APPS: {
@@ -685,6 +719,44 @@ function handleCheckedAll(applications) {
         enableAll: enableAll
     }
 }
+
+function handleCheckedAllExts(extensions){
+    let guestCount = 0;
+    let encryptedCount = 0;
+    let enableCount = 0;
+
+    let guestAll = false;
+    let encryptedAll = false;
+
+    extensions.forEach(app => {
+        if (app.guest === true || app.guest === 1) {
+            guestCount = guestCount + 1;
+        }
+
+        if (app.encrypted === true || app.encrypted === 1) {
+            encryptedCount = encryptedCount + 1;
+        }
+
+        if (app.enable === true || app.enable === 1) {
+            enableCount = enableCount + 1;
+        }
+
+    })
+
+    if (guestCount === extensions.length) {
+        guestAll = true;
+    }
+
+    if (encryptedCount === extensions.length) {
+        encryptedAll = true;
+    }
+
+    return {
+        guestAllExt: guestAll,
+        encryptedAllExt: encryptedAll,
+    }
+}
+
 function showConfirm1(device, msg) {
     confirm({
         title: 'WARNNING!',
