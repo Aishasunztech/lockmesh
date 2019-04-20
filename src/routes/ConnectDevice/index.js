@@ -103,7 +103,7 @@ class ConnectDevice extends Component {
   }
 
   changePage = (pageName) => {
-    if(this.props.device_details.finalStatus === DEVICE_ACTIVATED){
+    if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
       this.props.changePage(pageName);
     }
   }
@@ -213,8 +213,8 @@ class ConnectDevice extends Component {
       return (<Password pwdType={this.props.pageName} />);
     } else if (this.props.pageName === SECURE_SETTING && isSync) {
       return (
-        <SettingAppPermissions 
-          pageName={this.props.pageName} 
+        <SettingAppPermissions
+          pageName={this.props.pageName}
         />
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
@@ -243,7 +243,7 @@ class ConnectDevice extends Component {
     }
   }
 
-  applyActionButton = (visible=true) => {
+  applyActionButton = (visible = true) => {
     this.setState({
       showChangesModal: visible
     })
@@ -251,17 +251,17 @@ class ConnectDevice extends Component {
   applyActions = () => {
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
     this.props.applySetting(
-        this.props.app_list, {
+      this.props.app_list, {
         adminPwd: this.props.adminPwd,
         guestPwd: this.props.guestPwd,
         encryptedPwd: this.props.encryptedPwd,
         duressPwd: this.props.duressPwd,
-      }, 
-      this.state.device_id, 
-      this.props.user_acc_id, 
-      null, null, 
+      },
+      this.state.device_id,
+      this.props.user_acc_id,
+      null, null,
       this.props.extensions[objIndex].subExtension
-    ); 
+    );
   }
   componentWillUnmount() {
     this.onBackHandler();
@@ -337,13 +337,13 @@ class ConnectDevice extends Component {
 
               </div>
               <DeviceActions
-                undoApplications = {this.props.undoApplications}
-                redoApplications = {this.props.redoApplications}
-                applyActionButton = {this.applyActionButton}
-                applyBtn = {this.props.applyBtn}
-                undoBtn = {this.props.undoBtn}
-                redoBtn = {this.props.redoBtn}
-                clearBtn = {this.props.clearBtn}
+                undoApplications={this.props.undoApplications}
+                redoApplications={this.props.redoApplications}
+                applyActionButton={this.applyActionButton}
+                applyBtn={this.props.applyBtn}
+                undoBtn={this.props.undoBtn}
+                redoBtn={this.props.redoBtn}
+                clearBtn={this.props.clearBtn}
               />
             </Card>
           </Col>
@@ -412,7 +412,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-    // console.log("connect device state", device_details);
+  // console.log("connect device state", device_details);
   return {
     routing: routing,
     pathName: routing.location.pathname,
