@@ -294,8 +294,8 @@ class ConnectDevice extends Component {
       this.props.undoApplications()
     } else if (pageName === SECURE_SETTING) {
 
-    } else if (pageName === SYSTEM_CONTROLS){
-      
+    } else if (pageName === SYSTEM_CONTROLS) {
+
     }
   }
   redoAction = () => {
@@ -304,7 +304,7 @@ class ConnectDevice extends Component {
       this.props.redoApplications()
     } else if (pageName === SECURE_SETTING) {
 
-    } else if (pageName === SYSTEM_CONTROLS){
+    } else if (pageName === SYSTEM_CONTROLS) {
 
     }
   }
