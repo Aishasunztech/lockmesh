@@ -301,7 +301,7 @@ class Account extends Component {
 
 
         const { file, selectedRowKeys, } = this.state
-        // console.log(file);
+        console.log(selectedRowKeys);
         let self = this;
         const props = {
             name: 'file',
@@ -431,11 +431,17 @@ class Account extends Component {
                                                 onCancel={
                                                     () => {
                                                         this.showViewmodal(false);
+                                                        this.setState({
+                                                            selectedRowKeys: []
+                                                        })
                                                     }
                                                 }
                                                 onOk={
                                                     () => {
                                                         this.showViewmodal(false);
+                                                        this.setState({
+                                                            selectedRowKeys: []
+                                                        })
                                                     }
                                                 }
                                             >
