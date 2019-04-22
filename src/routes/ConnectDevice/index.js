@@ -405,11 +405,11 @@ class ConnectDevice extends Component {
           </Col>
         </Row>
         <Modal
-          title="Changes For Apply"
+          title="Confirm new Settings to be sent to Device"
           visible={this.state.showChangesModal}
           onOk={this.applyActions}
           onCancel={this.onCancel}
-          okText='Save'
+          okText='Apply'
         >
         <DeviceSettings
           app_list={this.props.app_list}

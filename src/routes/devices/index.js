@@ -1013,7 +1013,7 @@ class Devices extends Component {
 
     handlePagination = (value) => {
         //  alert(value);
-        // console.log('pagination value of ', value)
+        //  console.log('pagination value of ', value)
         this.refs.devcieList.handlePagination(value);
         this.props.postPagination(value, 'devices');
     }
