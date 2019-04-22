@@ -30,7 +30,9 @@ import {
   unflagged,
   flagged,
   wipe,
-  checkPass
+  checkPass,
+  undoExtensions,
+  redoExtensions
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -105,7 +107,7 @@ class ConnectDevice extends Component {
   }
 
   changePage = (pageName) => {
-    if(this.props.device_details.finalStatus === DEVICE_ACTIVATED){
+    if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
       this.props.changePage(pageName);
     }
   }
@@ -226,8 +228,8 @@ class ConnectDevice extends Component {
       return (<Password pwdType={this.props.pageName} />);
     } else if (this.props.pageName === SECURE_SETTING && isSync) {
       return (
-        <SettingAppPermissions 
-          pageName={this.props.pageName} 
+        <SettingAppPermissions
+          pageName={this.props.pageName}
         />
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
@@ -256,7 +258,7 @@ class ConnectDevice extends Component {
     }
   }
 
-  applyActionButton = (visible=true) => {
+  applyActionButton = (visible = true) => {
     this.setState({
       showChangesModal: visible
     })
@@ -264,15 +266,15 @@ class ConnectDevice extends Component {
   applyActions = () => {
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
     this.props.applySetting(
-        this.props.app_list, {
+      this.props.app_list, {
         adminPwd: this.props.adminPwd,
         guestPwd: this.props.guestPwd,
         encryptedPwd: this.props.encryptedPwd,
         duressPwd: this.props.duressPwd,
-      }, 
-      this.state.device_id, 
-      this.props.user_acc_id, 
-      null, null, 
+      },
+      this.state.device_id,
+      this.props.user_acc_id,
+      null, null,
       this.props.extensions[objIndex].subExtension
     ); 
     this.onCancel()
@@ -302,17 +304,21 @@ class ConnectDevice extends Component {
   undoAction = () => {
     let pageName = this.props.pageName;
 
-    if(pageName === APPS){
+    if (pageName === APPS) {
       this.props.undoApplications()
     } else if (pageName === SECURE_SETTING) {
+
+    } else if (pageName === SYSTEM_CONTROLS) {
 
     }
   }
   redoAction = () => {
     let pageName = this.props.pageName;
-    if(pageName === APPS){
+    if (pageName === APPS) {
       this.props.redoApplications()
     } else if (pageName === SECURE_SETTING) {
+
+    } else if (pageName === SYSTEM_CONTROLS) {
 
     }
   }
@@ -371,13 +377,13 @@ class ConnectDevice extends Component {
 
               </div>
               <DeviceActions
-                undoApplications = {this.undoAction}
-                redoApplications = {this.redoAction}
-                applyActionButton = {this.applyActionButton}
-                applyBtn = {this.props.applyBtn}
-                undoBtn = {this.props.undoBtn}
-                redoBtn = {this.props.redoBtn}
-                clearBtn = {this.props.clearBtn}
+                undoApplications={this.undoAction}
+                redoApplications={this.redoAction}
+                applyActionButton={this.applyActionButton}
+                applyBtn={this.props.applyBtn}
+                undoBtn={this.props.undoBtn}
+                redoBtn={this.props.redoBtn}
+                clearBtn={this.props.clearBtn}
               />
             </Card>
           </Col>
@@ -441,6 +447,8 @@ function mapDispatchToProps(dispatch) {
     endLoading: endLoading,
     undoApplications: undoApps,
     redoApplications: redoApps,
+    undoExtensions: undoExtensions,
+    redoExtensions: redoExtensions,
     applySetting: applySetting,
     changePage: changePage,
     suspendDevice2: suspendDevice2,
@@ -457,7 +465,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-    // console.log("connect device state", device_details);
+  // console.log("connect device state", device_details);
   return {
     routing: routing,
     pathName: routing.location.pathname,
