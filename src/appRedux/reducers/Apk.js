@@ -18,7 +18,7 @@ const initialState = {
 	apk_list: [],
 	selectedOptions: [],
 	DisplayPages: '10',
-	options: ['APP STATUS', 'APK', 'APP NAME', 'APP LOGO']
+	options: ['SHOW ON DEVICE', 'APK', 'APP NAME', 'APP LOGO']
 };
 
 export default (state = initialState, action) => {
