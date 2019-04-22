@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Table, Divider, Badge } from "antd";
+import React, { Component, Fragment } from 'react'
+import { Table, Divider, Badge, } from "antd";
 import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS} from '../../../constants/Constants';
 
 // import AppList from "./AppList";
@@ -11,6 +11,7 @@ export default class TableHistory extends Component {
             appColumns: [],
             applist: [],
             extensions: [],
+            controls: {}
         }
 
         this.appsColumns = [
@@ -49,8 +50,50 @@ export default class TableHistory extends Component {
                 key: '3',
             }
         ];
-
+        this.controlColumns = [
+            {
+                title: 'PERMISSION NAME',
+                dataIndex: 'label',
+                key: '1',
+                render: text => <a href="javascript:;">{text}</a>,
+            }, {
+                title: 'STATUS',
+                dataIndex: 'status',
+                key: '2',
+            }
+        ];
     }
+
+    cotrolsValues = ()=> {
+        if(this.state.controls.length){
+            return(
+                [
+                    {
+                        label: 'Wifi',
+                        status: this.state.controls.wifi_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                    },
+                    {
+                        label: 'Bluetooth',
+                        status: this.state.controls.bluetooth_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                    },
+                    {
+                        label: 'Hotspot',
+                        status: this.state.controls.hotspot_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                    },
+                    {
+                        label: 'Screenshots',
+                        status: this.state.controls.screenshot_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                    },
+                    {
+                        label: 'Block Calls',
+                        status: this.state.controls.call_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                    }
+                ]
+        
+            )
+        }
+      
+    } 
 
     filterAppList = () => {
         let data = this.props.app_list;
@@ -83,12 +126,16 @@ export default class TableHistory extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
+            this.setState({
+                controls: this.props.controls
+            })
             this.filterAppList()
             this.filterExtensions()
         }
     }
 
     componentDidMount() {
+        this.setState({controls: this.props.controls})
         this.filterAppList();
         this.filterExtensions();
     }
@@ -147,6 +194,23 @@ export default class TableHistory extends Component {
 
                             /></div> 
                             {/* : false} */}
+                            
+                            <div>
+                            <Divider> {SYSTEM_PERMISSION}</Divider>
+
+                            <Table
+                                style={{ margin: 0, padding: 0 }}
+                                size='small'
+                                bordered={false}
+                                columns={this.controlColumns}
+                                align='center'
+                                dataSource={this.cotrolsValues()}
+                                pagination={false}
+
+                            /> 
+                    
+                            </div> 
+
                            <Divider> {MANAGE_PASSWORDS} </Divider>
                 {
                     this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false

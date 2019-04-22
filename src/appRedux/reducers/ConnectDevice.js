@@ -36,11 +36,14 @@ import {
     HANDLE_CHECK_EXTENSION,
     HANDLE_CHECK_ALL_EXTENSION,
     UNDO_EXTENSIONS,
-    REDO_EXTENSIONS
+    REDO_EXTENSIONS,
+    HANDLE_CHECK_CONTROL,
+    UNDO_CONTROLS,
+    REDO_CONTROLS
 } from "../../constants/ActionTypes";
 
 import {
-    NOT_AVAILABLE, MAIN_MENU
+    NOT_AVAILABLE, MAIN_MENU,
 } from '../../constants/Constants';
 
 import {
@@ -82,7 +85,7 @@ const initialState = {
 
     historyModal: false,
     device_histories: [],
-    
+
     saveProfileModal: false,
     historyType: "history",
     saveProfileType: '',
@@ -109,12 +112,15 @@ const initialState = {
     duressCPwd: '',
 
     apk_list: [],
-    
+
     extensions: [],
-    
+
     undoExtensions: [],
     redoExtensions: [],
-    
+    controls: {},
+    undoControls: [],
+    redoControls: [],
+
     guestAllExt: false,
     encryptedAllExt: false,
 };
@@ -229,12 +235,16 @@ export default (state = initialState, action) => {
 
         case GET_DEVICE_APPS: {
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
+            state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
+            state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
+
             let applications = action.payload;
             let check = handleCheckedAll(applications);
             return {
                 ...state,
                 app_list: action.payload,
                 extensions: action.extensions,
+                controls: action.controls,
                 ...check
             }
         }
@@ -284,7 +294,7 @@ export default (state = initialState, action) => {
                 ...state
             }
         }
-        
+
         case LOAD_PROFILE: {
             // console.log(LOAD_PROFILE);
             state.undoApps.push(action.payload);
@@ -447,6 +457,91 @@ export default (state = initialState, action) => {
             }
         }
 
+        case HANDLE_CHECK_CONTROL: {
+            let changedControls = JSON.parse(JSON.stringify(state.controls));
+
+            changedControls[action.payload.key] = action.payload.value;
+            state.controls = JSON.parse(JSON.stringify(changedControls));
+            let controls = state.controls;
+            state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
+            console.log('reduver aongds', state.controls);
+
+            return {
+                ...state,
+                controls: state.controls,
+                // checked_app_id: {
+                //     id: action.payload.app_id,
+                //     key: action.payload.key,
+                //     value: action.payload.value
+                // },
+                applyBtn: true,
+                undoBtn: true
+                //  ...check
+            }
+
+        }
+
+        case UNDO_CONTROLS: {
+
+            if (state.undoControls.length > 1) {
+
+                let controls = state.undoControls[state.undoControls.length - 1];
+                state.undoControls.pop();
+
+                state.redoControls.push(JSON.parse(JSON.stringify(controls)));
+
+                if (state.undoControls.length === 1) {
+                    return {
+                        ...state,
+                        undoBtn: false,
+                        redoBtn: true,
+                        controls: JSON.parse(JSON.stringify(state.undoControls[state.undoControls.length - 1]))
+                    };
+                } else {
+                    return {
+                        ...state,
+                        redoBtn: true,
+                        controls: state.undoControls[state.undoControls.length - 1]
+                    };
+                }
+            } else {
+                return {
+                    ...state,
+                    undoBtn: false
+                };
+            }
+        }
+
+        case REDO_CONTROLS: {
+            if (state.redoControls.length > 0) {
+
+                let controls = state.redoControls[state.redoControls.length - 1];
+                state.redoControls.pop();
+                state.undoControls.push(JSON.parse(JSON.stringify(controls)));
+
+                if (state.redoControls.length === 0) {
+                    return {
+                        ...state,
+                        controls: controls,
+                        undoBtn: true,
+                        redoBtn: false
+                    };
+                } else {
+                    return {
+                        ...state,
+                        controls: controls,
+                        undoBtn: true
+                    };
+
+                }
+            } else {
+                return {
+                    ...state,
+                    redoBtn: false
+                };
+            }
+        }
+
         case HANDLE_CHECK_EXTENSION: {
 
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
@@ -454,7 +549,7 @@ export default (state = initialState, action) => {
             changedExtensions.forEach(extension => {
                 if (extension.uniqueName === action.payload.uniqueName) {
                     let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
-                    if (objIndex > -1){
+                    if (objIndex > -1) {
                         extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                         extension.subExtension[objIndex].isChanged = true;
                     }
@@ -465,6 +560,7 @@ export default (state = initialState, action) => {
             let extensions = state.extensions;
             state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
             let check = handleCheckedAllExts(extensions);
+
 
             return {
                 ...state,
@@ -491,7 +587,7 @@ export default (state = initialState, action) => {
                     }
                 }
             });
-            state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));            
+            state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
 
             return {
                 ...state,
@@ -505,23 +601,24 @@ export default (state = initialState, action) => {
 
             if (state.undoExtensions.length > 1) {
 
-                // let apps = state.undoApps[state.undoApps.length - 1];
-                // state.undoApps.pop();
+                let exten = state.undoExtensions[state.undoExtensions.length - 1];
+                state.undoExtensions.pop();
 
-                // state.redoApps.push(JSON.parse(JSON.stringify(apps)));
+                state.redoExtensions.push(JSON.parse(JSON.stringify(exten)));
 
                 if (state.undoExtensions.length === 1) {
                     return {
                         ...state,
+
                         undoBtn: false,
                         redoBtn: true,
-                        // extensions: JSON.parse(JSON.stringify(state.undoApps[state.undoApps.length - 1]))
+                        extensions: JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]))
                     };
                 } else {
                     return {
                         ...state,
                         redoBtn: true,
-                        // app_list: state.undoApps[state.undoApps.length - 1]
+                        extensions: state.undoExtensions[state.undoApps.length - 1]
                     };
                 }
             } else {
@@ -532,23 +629,25 @@ export default (state = initialState, action) => {
             }
         }
         case REDO_EXTENSIONS: {
+            console.log('REDUCER UNDO');
             if (state.redoExtensions.length > 0) {
 
-                // let apps = state.redoApps[state.redoApps.length - 1];
-                // state.redoApps.pop();
-                // state.undoApps.push(JSON.parse(JSON.stringify(apps)));
+                let extensions = state.redoExtensions[state.redoExtensions.length - 1];
+                console.log('if exist ex', extensions)
+                state.redoExtensions.pop();
+                state.undoExtensions.push(JSON.parse(JSON.stringify(extensions)));
 
                 if (state.redoExtensions.length === 0) {
                     return {
                         ...state,
-                        // app_list: apps,
+                        extensions: extensions,
                         undoBtn: true,
                         redoBtn: false
                     };
                 } else {
                     return {
                         ...state,
-                        // app_list: apps,
+                        extensions: extensions,
                         undoBtn: true
                     };
 
@@ -720,7 +819,7 @@ function handleCheckedAll(applications) {
     }
 }
 
-function handleCheckedAllExts(extensions){
+function handleCheckedAllExts(extensions) {
     let guestCount = 0;
     let encryptedCount = 0;
     let enableCount = 0;
