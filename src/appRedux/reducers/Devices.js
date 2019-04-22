@@ -164,11 +164,12 @@ export default (state = initialState, action) => {
             break;
 
         case PRE_ACTIVATE_DEVICE:
-
+            let devices = [...state.devices]
             if (action.response.status) {
-                console.log('pre activated device', action.response.data.data[0])
-                state.devices.push(action.response.data.data[0])
-                message.success(action.response.data.msg);
+                // console.log('pre activated device', action.response.data.data)
+                // state.devices.push(action.response.data.data)
+                message.success(action.response.data.msg, 5);
+                devices = [...action.response.data.data, ...state.devices]
                 // message.success('done');
             }
             else {
@@ -177,7 +178,7 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                devices: [...state.devices],
+                devices: devices,
                 //    selectedOptions: [...state.selectedOptions],
                 options: state.options,
                 isloading: false,
