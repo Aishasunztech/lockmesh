@@ -108,7 +108,7 @@ export default class ListApk extends Component {
             return {
                 'apk_id': app.apk_id,
                 'action': (
-                    <div>
+                    <Fragment>
                         <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
                             onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
                         <Button type="danger" size="small" style={{ margin: '0px', width: '60px' }} onClick={(e) => {
@@ -125,7 +125,7 @@ export default class ListApk extends Component {
                             {/* <Table columns={columns} dataSource={data} /> */}
                         </Modal>
 
-                    </div>
+                    </Fragment>
                 ),
                 'permission': <span style={{fontSize:15, fontWeight:400}}>{app.permission_count}</span>,
                 "permissions": app.permissions,

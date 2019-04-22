@@ -28,8 +28,12 @@ import {
     CHECKPASS,
     GET_DEALER_APPS,
     HANDLE_CHECK_EXTENSION,
-    HANDLE_CHECK_ALL_EXTENSION
+    HANDLE_CHECK_ALL_EXTENSION,
+    UNDO_EXTENSIONS,
+    REDO_EXTENSIONS
+
 } from "../../constants/ActionTypes"
+
 import {
     message
 } from 'antd';
@@ -310,7 +314,7 @@ export function loadDeviceProfile(app_list) {
 }
 
 export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null,extensions ) {
-   console.log('apply Settings', extensions);
+//    console.log('apply Settings', extensions);
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -322,7 +326,7 @@ export function applySetting(app_list, passwords, device_id, usr_acc_id, type = 
             },
             controls: {}
         }
-     console.log('my test is ', extensions)
+    //  console.log('my test is ', extensions)
         RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id, extensions).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -368,6 +372,21 @@ export function redoApps() {
     return (dispatch) => {
         dispatch({
             type: REDO_APPS
+        })
+    }
+}
+
+export function undoExtensions(){
+    return (dispatch) => {
+        dispatch({
+            type: UNDO_EXTENSIONS
+        })
+    }
+}
+export function redoExtensions(){
+    return (dispatch) => {
+        dispatch({
+            type: REDO_EXTENSIONS
         })
     }
 }
@@ -532,7 +551,7 @@ export function saveProfile(app_list, passwords = null, profileType, profileName
             passwords: pwd,
             controls: {}
         }
-        console.log("applist save profile", device_setting);
+        // console.log("applist save profile", device_setting);
         RestService.applySettings(device_setting, null, profileType, profileName, null, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({

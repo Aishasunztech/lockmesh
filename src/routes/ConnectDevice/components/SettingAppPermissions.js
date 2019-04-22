@@ -29,7 +29,7 @@ class SettingAppPermissions extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      extension: [],
+      extension: {},
       uniqueName: '',
       guestAllExt: false,
       encryptedAllExt: false
@@ -37,20 +37,21 @@ class SettingAppPermissions extends Component {
   }
 
   componentDidMount() {
-    // console.log("component props", this.props);
-    this.setProps('did');
+    if (this.props.isExtension) {
+      this.setState({
+        extension: this.props.extension,
+        pageName: this.props.pageName
+      })
+    }
 
   }
 
   componentWillReceiveProps(nextprops) {
-    // console.log('component will recieve is called', nextprops)
-    //  console.log('index', objIndex);
+    
     if (this.props.isExtension) {
-
-      this.state.extension = [];
-      this.state.extension.push(this.props.extension);
+      // alert("hello");
       this.setState({
-        extension: this.state.extension,
+        extension: nextprops.extension,
         encryptedAllExt: nextprops.encryptedAllExt,
         guestAllExt: nextprops.guestAllExt
       })
@@ -58,33 +59,6 @@ class SettingAppPermissions extends Component {
 
   }
 
-  setProps = (type, nextprops) => {
-    if (this.props.isExtension) {
-      this.state.extension = [];
-      this.state.extension.push(this.props.extension);
-      if (type === 'did') {
-        this.setState({
-          extension: this.state.extension,
-          pageName: this.props.pageName
-        })
-      }
-      else {
-        console.log('update function is called')
-        this.setState({
-          extension: nextprops.extension,
-          encryptedAllExt: nextprops.encryptedAllExt,
-          guestAllExt: nextprops.guestAllExt
-        })
-      }
-    }
-  }
-
-
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      // console.log('this props.........', this.props)
-    }
-  }
 
   handleChecked = (e, key, app_id) => {
     this.props.handleCheckExtension(e, key, app_id, this.props.pageName);
@@ -100,20 +74,23 @@ class SettingAppPermissions extends Component {
     }
   }
   renderApps = () => {
-    let data = this.state.extension;
-    if (this.state.extension.length !== 0) {
-      console.log('length 12', this.state.extension[0].subExtension)
-      return this.state.extension[0].subExtension.map((ext, index) => {
+
+    let extension = this.state.extension;
+    // console.log("render list extension", extension);
+
+    if (this.state.extension !== undefined && this.state.extension !== null && Object.keys(extension).length) {
+
+      return this.state.extension.subExtension.map((ext, index) => {
         return {
-          "key": index,
-          "name": ext.label,
-          "guest": <Switch checked={ext.guest === 1 ? true : false} size="small"
+          key: index,
+          name: ext.label,
+          guest: <Switch checked={ext.guest === 1 ? true : false} size="small"
             onClick={(e) => {
               // console.log("guest", e);
               this.handleChecked(e, "guest", ext.app_id);
             }}
           />,
-          "encrypted": <Switch checked={ext.encrypted === 1 ? true : false} size="small"
+          encrypted: <Switch checked={ext.encrypted === 1 ? true : false} size="small"
             onClick={(e) => {
               // console.log("guest", e);
               this.handleChecked(e, "encrypted", ext.app_id);
@@ -124,7 +101,6 @@ class SettingAppPermissions extends Component {
     }
   }
   render() {
-    // console.log('app list if extensin', this.props.extensions);
     const { extension, isExtension } = this.props;
     if (isExtension) {
       return (
@@ -183,17 +159,19 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }, ownProps) => {
-  console.log(device_details, "applist ownprops", ownProps);
+  // console.log(device_details, "applist ownprops", ownProps);
   const pageName = ownProps.pageName;
 
   let extension = device_details.extensions.find(o => o.uniqueName === pageName);
   // console.log("extensions_", extension);
+
   if (extension !== undefined) {
     return {
       isExtension: true,
       extension: extension,
       guestAllExt: device_details.guestAllExt,
       encryptedAllExt: device_details.encryptedAllExt,
+      checked_app_id: device_details.checked_app_id,
     }
   } else {
     return {

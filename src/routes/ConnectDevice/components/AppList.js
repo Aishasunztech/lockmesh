@@ -8,7 +8,7 @@ import {
 
 import { BASE_URL } from '../../../constants/Application';
 
-import { Table, Switch, } from "antd";
+import { Table, Switch, Avatar } from "antd";
 import AppDropdown from "./AppDropdown";
 
 
@@ -69,14 +69,8 @@ class AppList extends Component {
         })
     }
 
-    // componentDidUpdate(prevProps, prevState, snapshot) {
-    //     // alert("componentDidUpdate");
-    //     // console.log("component did update", prevProps);
-    // }
-
     handleCheckedAll = (key, value) => {
 
-        // console.log("handleCheckedAll");
         if (key === "guestAll") {
             this.checkAll(key,'guest', value);
         } else if (key === "encryptedAll") {
@@ -92,20 +86,7 @@ class AppList extends Component {
     }
 
     checkAll = (keyAll, key, value) => {
-        // this.state.app_list.map((app) => {
-        //     app[key] = value;
-        // });
         this.props.handleCheckAll(keyAll, key, value);
-
-        // let applications = this.state.app_list;
-        // applications.forEach(app => {
-        //     app[key] = value;
-        // })
-        // this.setState({
-        //     app_list: applications
-        // });
-
-        // this.props.pushApps(this.state.app_list);
     }
 
     renderApps = () => {
@@ -116,7 +97,11 @@ class AppList extends Component {
                 key: app.app_id,
                 app_name:
                     <div>
-                        <img src={`${BASE_URL}users/getFile/${app.icon}`} style={{ width: "30px", height: "30px" }} />
+                        <Avatar
+                            size={"small"} 
+                            src={`${BASE_URL}users/getFile/${app.icon}`} 
+                            // style={{ width: "30px", height: "30px" }} 
+                        />
                         <br />
                         <div className="line_break">{app.label}</div>
                     </div>,
@@ -129,13 +114,7 @@ class AppList extends Component {
                         ref={`guest_${app.app_id}`}
                         name={`guest_${app.app_id}`}
                         value={app.guest}
-
-                        // defaultChecked={(app.guest === true || app.guest === 1) ? true : false}
                         checked={(app.guest === true || app.guest === 1) ? true : false}
-                        // onChange={(e) => {
-                        //     this.handleChecked(e, "guest", app.app_id);
-                        // }}
-
                         onClick={(e) => {
                             this.handleChecked(e, "guest", app.app_id);
                         }}
@@ -148,15 +127,8 @@ class AppList extends Component {
                         size="small"
                         ref={`encrypted_${app.app_id}`}
                         name={`encrypted_${app.app_id}`}
-                        value={app.encrypted}
-
-                        // defaultChecked={(app.encrypted === true || app.encrypted === 1) ? true : false} 
+                        value={app.encrypted} 
                         checked={(app.encrypted === true || app.encrypted === 1) ? true : false}
-                        // defaultChecked= {app.encrypted}
-                        // checked = {app.encrypted}
-                        // onChange={(e) => {
-                        //     this.handleChecked(e, "encrypted", app.app_id);
-                        // }}
                         onClick={(e) => {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app.app_id);
@@ -170,13 +142,8 @@ class AppList extends Component {
                         size="small"
                         ref={`enable_${app.app_id}`}
                         name={`enable_${app.app_id}`}
-                        value={app.enable}
-
-                        // defaultChecked={((app.enable == true) || (app.enable == 1)) ? true : false} 
+                        value={app.enable} 
                         checked={((app.enable === true) || (app.enable === 1)) ? true : false}
-                        // onChange={(e) => {
-                        //     this.handleChecked(e, "enable", app.app_id);
-                        // }}
                         onClick={(e) => {
                             this.handleChecked(e, "enable", app.app_id);
                         }}

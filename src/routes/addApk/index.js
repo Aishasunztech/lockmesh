@@ -12,7 +12,7 @@ import { addApk ,getApkList } from "../../appRedux/actions/Apk";
 import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message } from 'antd';
 
 // import asyncComponent from "util/asyncComponent";
-let token = localStorage.getItem('token');
+
 // console.log('token', token);
 let logo = '';
 let apk = '';
@@ -25,8 +25,6 @@ class AddApk extends Component {
         }
 
     }
-
-
 
     render() {
 
@@ -114,7 +112,7 @@ class AddApkForm extends Component {
             },
         };
         const Dragger = Upload.Dragger;
-
+        let token = localStorage.getItem('token');
         const props = {
             name: 'logo',
             multiple: false,
