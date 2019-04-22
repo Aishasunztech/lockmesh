@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select, InputNumber } from 'antd';
 import { checkValue } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
+import {
+    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION
+} from '../../../constants/Constants';
 
 class EditDevice extends Component {
 
@@ -21,8 +24,9 @@ class EditDevice extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                // console.log("Device List", values)
+                console.log("Device List", values)
                 values.prevPGP = this.props.device.pgp_email;
+                values.finalStatus = this.props.device.finalStatus;
                 // console.log("Device Details ", values)
                 this.props.editDeviceFunc(values);
                 this.props.hideModal();
@@ -76,8 +80,9 @@ class EditDevice extends Component {
     }
 
     render() {
+
         //  alert(this.props.device.device_id);
-        // console.log('props of coming', this.props.device);
+        console.log('props of coming', this.props.device);
         const { visible, loading } = this.state;
 
         return (
@@ -149,11 +154,13 @@ class EditDevice extends Component {
                         initialValue: this.props.device.account_email,
                         rules: [{
                             type: 'email', message: 'The input is not valid E-mail!',
-                        }, {
-                            required: true, message: 'Account Email is Required !',
-                        }],
+                        },
+                        (this.props.device.finalStatus == 'Pre-activated') ? {} :
+                            {
+                                required: true, message: 'Account Email is Required !',
+                            }],
                     })(
-                        <Input disabled />
+                        <Input disabled={(this.props.device.finalStatus == 'Pre-activated') ? false : true} />
                     )}
                 </Form.Item>
 
@@ -287,7 +294,7 @@ class EditDevice extends Component {
 
                             style={{ width: '100%' }}
                         >
-                            {(this.props.device.finalStatus === 'Trial') ? <Select.Option value={0}>Trial (7 days)</Select.Option> : null}
+                            {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>Trial (7 days)</Select.Option> : null}
                             {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={1}>1 Month</Select.Option> : null}
                             {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={3}>3 Months</Select.Option> : null}
                             {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={6}>6 Months</Select.Option> : null}
@@ -297,49 +304,89 @@ class EditDevice extends Component {
 
                 </Form.Item>
 
-                <Form.Item
-                    label="Dealer Pin "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    <Input value={this.props.device.link_code} disabled />
+                {(this.props.device.finalStatus == DEVICE_PRE_ACTIVATION) ?
+                    <Fragment>
 
-                </Form.Item>
+                        <Form.Item
+                            label="NOTE "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            {this.props.form.getFieldDecorator('note', {
+                                initialValue: this.props.device.note,
+                                rules: [{
+                                    required: true, message: 'Note is required',
+                                }],
+                            })(
+                                <Input />
+                            )}
 
-                <Form.Item
-                    label="IMEI 1 "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
+                        </Form.Item>
+                        <Form.Item
+                            label="VALID FOR(DAYS)"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            {this.props.form.getFieldDecorator('validity', {
+                                initialValue: this.props.device.validity,
+                                rules: [{
+                                    required: true, message: 'Valid days required',
+                                }],
+                            })(
+                                <InputNumber />
+                            )}
 
-                    <Input type='text' value={this.props.device.imei} disabled />
+                        </Form.Item>
 
-                </Form.Item>
-                <Form.Item
-                    label="SIM 1 "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    <Input value={this.props.device.simno} disabled />
+                    </Fragment>
+                    :
+                    <Fragment>
+                        <Form.Item
+                            label="Dealer Pin "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            <Input value={this.props.device.link_code} disabled />
 
-                </Form.Item>
-                <Form.Item
-                    label="IMEI 2 "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
+                        </Form.Item>
 
-                    <Input value={this.props.device.imei2} disabled />
+                        <Form.Item
+                            label="IMEI 1 "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
 
-                </Form.Item>
-                <Form.Item
-                    label="SIM 2 "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    <Input value={this.props.device.simno2} disabled />
+                            <Input type='text' value={this.props.device.imei} disabled />
 
-                </Form.Item>
+                        </Form.Item>
+                        <Form.Item
+                            label="SIM 1 "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            <Input value={this.props.device.simno} disabled />
+
+                        </Form.Item>
+                        <Form.Item
+                            label="IMEI 2 "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+
+                            <Input value={this.props.device.imei2} disabled />
+
+                        </Form.Item>
+                        <Form.Item
+                            label="SIM 2 "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            <Input value={this.props.device.simno2} disabled />
+
+                        </Form.Item>
+                    </Fragment>
+
+                }
 
                 <Form.Item className="edit_ftr_btn"
                     wrapperCol={{

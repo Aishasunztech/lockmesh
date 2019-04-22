@@ -21,6 +21,7 @@ export default (state = initialState, action) => {
 
         case IMPORT_CSV:
             return {
+                ...state,
                 msg: action.payload.msg,
                 showMsg: action.showMsg,
             }
@@ -47,7 +48,7 @@ export default (state = initialState, action) => {
         }
         case RELEASE_CSV: {
             // alert("hello");
-            console.log(action.payload);
+            // console.log(action.payload);
             if (action.payload.status) {
                 message.success(action.payload.msg)
             }

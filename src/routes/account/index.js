@@ -60,6 +60,7 @@ class Account extends Component {
     }
 
     showViewmodal = (dataVisible, dataFieldName = "", dataFieldTitle = "") => {
+        console.log(dataFieldName);
         this.setState({
             dataVisible: dataVisible,
             dataFieldName: dataFieldName,
@@ -74,6 +75,10 @@ class Account extends Component {
             this.props.getChatIDs();
         } else if (dataFieldName === "used_pgp_emails") {
             this.props.getUsedPGPEmails();
+        } else if (dataFieldName === "used_chat_ids") {
+            this.props.getUsedChatIds();
+        } else if (dataFieldName === "used_sim_ids") {
+            this.props.getUsedSimIds();
         }
     }
 
@@ -212,6 +217,7 @@ class Account extends Component {
     }
 
     handlePagination = (e, dataName) => {
+        console.log(e, dataName);
         if (dataName === "sim_ids") {
             this.setState({
                 sim_ids_page: e
@@ -230,11 +236,11 @@ class Account extends Component {
             });
         } else if (dataName === "used_chat_ids") {
             this.setState({
-                used_chat_ids_page: e
+                used_chat_id_page: e
             });
         } else if (dataName === "used_sim_ids") {
             this.setState({
-                used_sim_ids_page: e
+                used_sim_id_page: e
             });
         }
     }
@@ -741,7 +747,7 @@ class Account extends Component {
                                                                             })
                                                                         }
 
-                                                                        pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                                                        pagination={{ pageSize: Number(this.state.used_pgp_emails_page), size: "middle" }}
                                                                     />
                                                                 </Fragment> : (this.state.dataFieldName === "used_sim_ids") ?
                                                                     <Fragment>
@@ -814,7 +820,7 @@ class Account extends Component {
                                                                                 })
                                                                             }
 
-                                                                            pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                                                            pagination={{ pageSize: Number(this.state.used_sim_ids_page), size: "middle" }}
                                                                         />
                                                                     </Fragment> : (this.state.dataFieldName === "used_chat_ids") ?
                                                                         <Fragment>
@@ -886,7 +892,7 @@ class Account extends Component {
                                                                                     })
                                                                                 }
 
-                                                                                pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                                                                pagination={{ pageSize: Number(this.state.used_chat_id_page), size: "middle" }}
                                                                             />
                                                                         </Fragment> : null
                                                 }
@@ -1044,9 +1050,9 @@ function mapDispatchToProps(dispatch) {
 var mapStateToProps = ({ account, devices }) => {
     // console.log("sim_ids", devices.sim_ids);
     // console.log("chat_ids", devices.chat_ids);
-    // console.log("used_pgp_emails", devices.used_pgp_emails);
-    // console.log("used_caht", devices.used_chat_ids);
-    // console.log("used_sadas", devices.used_sim_ids);
+    console.log("used_pgp_emails", account.used_pgp_emails);
+    console.log("used_caht", account.used_chat_ids);
+    console.log("used_sadas", account.used_sim_ids);
     return {
         msg: account.msg,
         showMsg: account.showMsg,

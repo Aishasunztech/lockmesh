@@ -364,7 +364,7 @@ class AddDevice extends Component {
                                         required: true, message: 'Valid days required',
                                     }],
                                 })(
-                                    <InputNumber />
+                                    <InputNumber min={1} />
                                 )}
 
                             </Form.Item>
@@ -382,7 +382,7 @@ class AddDevice extends Component {
                                     required: true, message: 'Number of Duplicate devices required',
                                 }],
                             })(
-                                <InputNumber />
+                                <InputNumber min={2} />
                             )}
                         </Form.Item> : null
                     }

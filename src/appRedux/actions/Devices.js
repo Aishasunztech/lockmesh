@@ -70,13 +70,12 @@ export function editDevice(formData) {
     }
 }
 
-export function deleteUnlinkDevice(devices) {
-    console.log('at action file  for save history abaid: ', devices)
+export function deleteUnlinkDevice(action, devices) {
     return (dispatch) => {
         // alert("hello");
-        RestService.deleteUnlinkDevice(devices).then((response) => {
+        RestService.deleteUnlinkDevice(action, devices).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log('successfully ', response.data);
+                // console.log('successfully ', response.data);
                 dispatch({
                     type: DELETE_UNLINK_DEVICE,
                     response: response.data,

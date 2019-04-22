@@ -129,11 +129,11 @@ class DevicesList extends Component {
         };
         this.renderList = this.renderList.bind(this);
     }
-    deleteUnlinkedDevice = (device) => {
+    deleteUnlinkedDevice = (action, device) => {
         let arr = [];
         arr.push(device);
         let title = ' Are you sure, you want to delete the device';
-        this.confirmDelete(arr, title);
+        this.confirmDelete(action, arr, title);
     }
     // renderList
     renderList(list) {
@@ -163,13 +163,13 @@ class DevicesList extends Component {
 
             let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)} > Suspend</Button>;
             let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}  >Suspend</Button>;
-            let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button>
+            let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >Delete</Button>
             let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
             let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
             let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
             let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> Accept </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>Decline</Button>
-            let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)}>Delete</Button>
+            let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>Delete</Button>
 
 
             return {
@@ -285,6 +285,7 @@ class DevicesList extends Component {
     }
 
     deleteAllUnlinkedDevice = (type) => {
+        // console.log(type);
         if (this.state.selectedRows.length) {
             let title = ' Are you sure, you want to delete All these devices';
             let arr = [];
@@ -297,20 +298,21 @@ class DevicesList extends Component {
                 }
             }
             // console.log('object of ', arr);
-            this.confirmDelete(arr, title);
+            this.confirmDelete(type, arr, title);
         }
 
         //  console.log('DELETE ALL 1', this.state.selectedRows);
 
     }
 
-    confirmDelete = (devices, title) => {
-        console.log(devices);
+    confirmDelete = (action, devices, title) => {
+        // console.log(action);
+        // console.log(devices);
         this.confirm({
             title: title,
             content: '',
             onOk: (() => {
-                this.props.deleteUnlinkDevice(devices);
+                this.props.deleteUnlinkDevice(action, devices);
                 //    this.props.resetTabSelected()
                 // this.props.refreshComponent();
                 //  this.props.resetTabSelected()
@@ -330,7 +332,7 @@ class DevicesList extends Component {
     }
 
     resetSeletedRows = () => {
-     //   console.log('table ref', this.refs.tablelist)
+        //   console.log('table ref', this.refs.tablelist)
         this.setState({
             selectedRowKeys: [],
             selectedRows: [],
@@ -347,7 +349,7 @@ class DevicesList extends Component {
 
     render() {
 
-       // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
+        // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
 
         const { activateDevice, suspendDevice } = this.props;
         const components = {
@@ -361,7 +363,7 @@ class DevicesList extends Component {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
-                      console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                    // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
                     disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -374,8 +376,8 @@ class DevicesList extends Component {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
-                    console.log(`selectedRowKeys 3: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-                    
+                    // console.log(`selectedRowKeys 3: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+
                     //  console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
@@ -557,15 +559,16 @@ export default class Tab extends Component {
         // alert('callback');
         // console.log(key);
         this.props.handleChangetab(key);
-       
+
     }
 
-    deleteAllUnlinkedDevice = () => {
-        this.refs.devciesList1.deleteAllUnlinkedDevice()
+    deleteAllUnlinkedDevice = (type) => {
+        console.log(type);
+        this.refs.devciesList1.deleteAllUnlinkedDevice(type)
     }
-    deleteAllPreActivedDevice = () => {
+    deleteAllPreActivedDevice = (type) => {
 
-        this.refs.devciesList2.deleteAllUnlinkedDevice()
+        this.refs.devciesList2.deleteAllUnlinkedDevice(type)
     }
 
     handlePagination = (value) => {
