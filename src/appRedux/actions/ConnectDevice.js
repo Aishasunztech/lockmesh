@@ -30,7 +30,10 @@ import {
     HANDLE_CHECK_EXTENSION,
     HANDLE_CHECK_ALL_EXTENSION,
     UNDO_EXTENSIONS,
-    REDO_EXTENSIONS
+    REDO_EXTENSIONS,
+    HANDLE_CHECK_CONTROL,
+    UNDO_CONTROLS,
+    REDO_CONTROLS
 
 } from "../../constants/ActionTypes"
 
@@ -84,7 +87,8 @@ export function getDeviceApps(deviceId) {
                     dispatch({
                         type: GET_DEVICE_APPS,
                         payload: response.data.app_list,
-                        extensions: response.data.extensions
+                        extensions: response.data.extensions,
+                        controls: response.data.controls
                     })
                 }
 
@@ -313,7 +317,7 @@ export function loadDeviceProfile(app_list) {
     };
 }
 
-export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null,extensions ) {
+export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null,extensions, controls ) {
 //    console.log('apply Settings', extensions);
     return (dispatch) => {
         let device_setting = {
@@ -324,10 +328,11 @@ export function applySetting(app_list, passwords, device_id, usr_acc_id, type = 
                 encrypted_password: (passwords.encryptedPwd === '') ? null : passwords.encryptedPwd,
                 duress_password: (passwords.duressPwd === '') ? null : passwords.duressPwd
             },
-            controls: {}
+            controls: controls,
+            extensions: extensions
         }
     //  console.log('my test is ', extensions)
-        RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id, extensions).then((response) => {
+        RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id, extensions, controls).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
@@ -376,6 +381,22 @@ export function redoApps() {
     }
 }
 
+export function undoControls() {
+    return (dispatch) => {
+        dispatch({
+            type: UNDO_CONTROLS
+        })
+    }
+}
+
+export function redoControls() {
+    return (dispatch) => {
+        dispatch({
+            type: REDO_CONTROLS
+        })
+    }
+}
+
 export function undoExtensions(){
     return (dispatch) => {
         dispatch({
@@ -384,6 +405,7 @@ export function undoExtensions(){
     }
 }
 export function redoExtensions(){
+    console.log('redo ex action')
     return (dispatch) => {
         dispatch({
             type: REDO_EXTENSIONS
@@ -425,6 +447,20 @@ export function showMessage(show, message, type) {
     // })
 }
 
+
+
+export function handleControlCheck(e, key ) {
+     console.log('name in action', e, key)
+     return (dispatch) => {
+         dispatch({
+             type: HANDLE_CHECK_CONTROL,
+             payload: {
+                 value: e,
+                 key: key,
+             }
+         })
+     }
+ }
 
 export function handleCheckExtension(e, key, app_id, uniqueName) {
    // console.log('name in action', uniqueName)
