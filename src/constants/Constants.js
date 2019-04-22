@@ -20,3 +20,8 @@ export const NOT_AVAILABLE =  'not_available';
 export const MANAGE_PASSWORD =  'Manage_password';
 export const MAIN_MENU =  'main_menu';
 export const APPS =  'apps';
+export const APPLICATION_PERMISION = 'Application Permission';
+export const SECURE_SETTING_PERMISSION = 'Secure Settings Permission';
+export const SYSTEM_PERMISSION = 'System Permission';
+export const MANAGE_PASSWORDS = 'Manage Passwords';
+
