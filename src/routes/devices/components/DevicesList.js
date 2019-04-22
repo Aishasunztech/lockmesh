@@ -573,6 +573,15 @@ export default class Tab extends Component {
 
     handlePagination = (value) => {
         this.refs.devciesList.handlePagination(value);
+        this.refs.devciesList2.handlePagination(value);
+        this.refs.devciesList3.handlePagination(value);
+        this.refs.devciesList6.handlePagination(value);
+        this.refs.devciesList7.handlePagination(value);
+        this.refs.devciesList5.handlePagination(value);
+        this.refs.devciesList9.handlePagination(value);
+        this.refs.devciesList1.handlePagination(value);
+
+
     }
 
     componentDidUpdate(prevProps) {
@@ -619,7 +628,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        //   ref="devciesList"
+                           ref="devciesList1"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -637,7 +646,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        // ref="devciesList"
+                         ref="devciesList6"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -654,7 +663,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        // ref="devciesList1"
+                         ref="devciesList9"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -675,7 +684,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        //  ref="devciesList"
+                          ref="devciesList7"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -710,7 +719,7 @@ export default class Tab extends Component {
                         columns={this.props.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.state.selectedOptions}
-                        //   ref="devciesList"
+                           ref="devciesList3"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -746,7 +755,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        ref="devciesList1"
+                        ref="devciesList5"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}

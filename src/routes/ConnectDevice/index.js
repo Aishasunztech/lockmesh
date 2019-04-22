@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Modal } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import { editDevice } from "../../appRedux/actions/Devices";
+import DeviceSettings from './components/DeviceSettings';
 
 
 import {
@@ -29,7 +30,9 @@ import {
   unflagged,
   flagged,
   wipe,
-  checkPass
+  checkPass,
+  undoExtensions,
+  redoExtensions
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -37,7 +40,8 @@ import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
 import {
   DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
-  SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS
+  SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
+  APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -62,20 +66,20 @@ class ConnectDevice extends Component {
     this.mainMenu = [
       {
         pageName: APPS,
-        value: 'Application Permission'
+        value: APPLICATION_PERMISION
       },
       {
         pageName: SECURE_SETTING,
-        value: 'Secure Settings Permission'
+        value: SECURE_SETTING_PERMISSION
       },
       {
         pageName: SYSTEM_CONTROLS,
-        value: 'System Permission'
+        value: SYSTEM_PERMISSION
       },
 
       {
         pageName: MANAGE_PASSWORD,
-        value: 'Manage Passwords'
+        value: MANAGE_PASSWORDS
       },
 
     ]
@@ -142,10 +146,21 @@ class ConnectDevice extends Component {
       // })
     }
 
+    
+    
+    
+
     // this.props.endLoading();
     setTimeout(() => {
       this.props.endLoading();
     }, 2000);
+  }
+
+  componentDidUpdate(prevProps){
+      
+    if(this.props !== prevProps){
+    //  console.log('update data is ', this.props.app_list)
+    }
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.pathName !== nextProps.pathName) {
@@ -261,7 +276,8 @@ class ConnectDevice extends Component {
       this.props.user_acc_id,
       null, null,
       this.props.extensions[objIndex].subExtension
-    );
+    ); 
+    this.onCancel()
   }
   componentWillUnmount() {
     this.onBackHandler();
@@ -285,7 +301,31 @@ class ConnectDevice extends Component {
       this.props.endLoading();
     }, 2000);
   }
+  undoAction = () => {
+    let pageName = this.props.pageName;
 
+    if (pageName === APPS) {
+      this.props.undoApplications()
+    } else if (pageName === SECURE_SETTING) {
+
+    } else if (pageName === SYSTEM_CONTROLS) {
+
+    }
+  }
+  redoAction = () => {
+    let pageName = this.props.pageName;
+    if (pageName === APPS) {
+      this.props.redoApplications()
+    } else if (pageName === SECURE_SETTING) {
+
+    } else if (pageName === SYSTEM_CONTROLS) {
+
+    }
+  }
+
+  onCancel = () => {
+    this.setState({ showChangesModal: false });
+  }
   render() {
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
@@ -337,8 +377,8 @@ class ConnectDevice extends Component {
 
               </div>
               <DeviceActions
-                undoApplications={this.props.undoApplications}
-                redoApplications={this.props.redoApplications}
+                undoApplications={this.undoAction}
+                redoApplications={this.redoAction}
                 applyActionButton={this.applyActionButton}
                 applyBtn={this.props.applyBtn}
                 undoBtn={this.props.undoBtn}
@@ -371,11 +411,22 @@ class ConnectDevice extends Component {
           </Col>
         </Row>
         <Modal
-          title="Changes For Apply"
+          title="Confirm new Settings to be sent to Device"
           visible={this.state.showChangesModal}
           onOk={this.applyActions}
           onCancel={this.onCancel}
+          okText='Apply'
         >
+        <DeviceSettings
+          app_list={this.props.app_list}
+          extensions={this.props.extensions}
+          extensionUniqueName={SECURE_SETTING}
+          isAdminPwd={this.props.isAdminPwd}
+          isDuressPwd={this.props.isDuressPwd}
+          isEncryptedPwd={this.props.isEncryptedPwd}
+          isGuestPwd={this.props.isGuestPwd}
+        
+        />
         </Modal>
       </div>
     )
@@ -396,6 +447,8 @@ function mapDispatchToProps(dispatch) {
     endLoading: endLoading,
     undoApplications: undoApps,
     redoApplications: redoApps,
+    undoExtensions: undoExtensions,
+    redoExtensions: redoExtensions,
     applySetting: applySetting,
     changePage: changePage,
     suspendDevice2: suspendDevice2,
@@ -442,7 +495,11 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     applyBtn: device_details.applyBtn,
     redoBtn: device_details.redoBtn,
     undoBtn: device_details.undoBtn,
-    clearBtn: device_details.clearBtn
+    clearBtn: device_details.clearBtn,
+    isAdminPwd: device_details.isAdminPwd,
+    isGuestPwd: device_details.isGuestPwd,
+    isEncryptedPwd: device_details.isEncryptedPwd,
+    isDuressPwd: device_details.isDuressPwd
   };
 }
 

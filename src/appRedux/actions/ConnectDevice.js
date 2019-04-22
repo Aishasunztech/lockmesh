@@ -28,8 +28,12 @@ import {
     CHECKPASS,
     GET_DEALER_APPS,
     HANDLE_CHECK_EXTENSION,
-    HANDLE_CHECK_ALL_EXTENSION
+    HANDLE_CHECK_ALL_EXTENSION,
+    UNDO_EXTENSIONS,
+    REDO_EXTENSIONS
+
 } from "../../constants/ActionTypes"
+
 import {
     message
 } from 'antd';
@@ -368,6 +372,21 @@ export function redoApps() {
     return (dispatch) => {
         dispatch({
             type: REDO_APPS
+        })
+    }
+}
+
+export function undoExtensions(){
+    return (dispatch) => {
+        dispatch({
+            type: UNDO_EXTENSIONS
+        })
+    }
+}
+export function redoExtensions(){
+    return (dispatch) => {
+        dispatch({
+            type: REDO_EXTENSIONS
         })
     }
 }

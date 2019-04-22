@@ -72,7 +72,7 @@ class AppFilter extends Component {
     }
 
     handlePagination(value) {
-        //  alert(value);
+        //   alert(value);
         this.setState({ DisplayPages: value })
         this.props.handlePagination(value);
     }
