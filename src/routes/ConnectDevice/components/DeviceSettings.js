@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Table, Divider } from "antd";
+import { Table, Divider, Badge } from "antd";
+import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS} from '../../../constants/Constants';
 
 // import AppList from "./AppList";
 
@@ -100,9 +101,9 @@ export default class TableHistory extends Component {
                     return {
                         key: item.app_id,
                         label: item.label,
-                        guest: (item.guest == 1 || item.guest === true) ? <p>On</p> : <p>Off</p>,
-                        encrypted: (item.encrypted == 1 || item.encrypted) === true ? <p>On</p> : <p>Off</p>,
-                        enable: (item.enable == 1 || item.enable === true) ? <p>On</p> : <p>Off</p>
+                        guest: (item.guest == 1 || item.guest === true) ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>,
+                        encrypted: (item.encrypted == 1 || item.encrypted) === true ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>,
+                        enable: (item.enable == 1 || item.enable === true) ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
                     }
                 })
             )
@@ -113,11 +114,11 @@ export default class TableHistory extends Component {
         console.log(this.props.extensions, 'data li s t of exte')
         return (
             <div>
-                {
-                    this.state.applist.length ?
+                {/* {
+                    this.state.applist.length ? */}
 
                         <div>
-                            <Divider > Changed Apps </Divider>
+                            <Divider >{APPLICATION_PERMISION} </Divider>
                             <Table
                                 style={{ margin: 0, padding: 0 }}
                                 size='small'
@@ -129,11 +130,11 @@ export default class TableHistory extends Component {
 
                             />
                         </div>
-                        : false}
-                {
-                    this.state.extensions.length ?
+                         {/* : false}
+                 { */}
+                     {/* this.state.extensions.length ? */}
                         <div>
-                            <Divider> Changed Extensions </Divider>
+                            <Divider> {SECURE_SETTING_PERMISSION}</Divider>
 
                             <Table
                                 style={{ margin: 0, padding: 0 }}
@@ -144,19 +145,17 @@ export default class TableHistory extends Component {
                                 dataSource={this.renderData(this.state.extensions)}
                                 pagination={false}
 
-                            /></div> : false}
-
+                            /></div> 
+                            {/* : false} */}
+                           <Divider> {MANAGE_PASSWORDS} </Divider>
                 {
-                    this.props.isAdminPwd ? <div> <Divider> Admin Password </Divider><p>Admin Password is changed</p> </div> : false
+                    this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
                 }{
-                    this.props.isEncryptedPwd ? <div> <Divider> Encrypted Password </Divider><p>Encrypted Password is changed</p> </div> : false
-
+                    this.props.isEncryptedPwd ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
                 }{
-                    this.props.isGuestPwd ? <div> <Divider> Guest Password </Divider><p>Guest Password is changed</p> </div> : false
-                   
+                    this.props.isGuestPwd ? <div><p></p> <Badge status="processing" text='Guest Password is changed' /></div> : false  
                 }{
-                    this.props.isDuressPwd ? <div> <Divider> Duress Password </Divider><p>Duress Password is changed</p> </div> : false
-                   
+                    this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false 
                 }
 
             </div>

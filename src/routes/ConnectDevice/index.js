@@ -38,7 +38,8 @@ import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
 import {
   DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
-  SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS
+  SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
+  APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -63,20 +64,20 @@ class ConnectDevice extends Component {
     this.mainMenu = [
       {
         pageName: APPS,
-        value: 'Application Permission'
+        value: APPLICATION_PERMISION
       },
       {
         pageName: SECURE_SETTING,
-        value: 'Secure Settings Permission'
+        value: SECURE_SETTING_PERMISSION
       },
       {
         pageName: SYSTEM_CONTROLS,
-        value: 'System Permission'
+        value: SYSTEM_PERMISSION
       },
 
       {
         pageName: MANAGE_PASSWORD,
-        value: 'Manage Passwords'
+        value: MANAGE_PASSWORDS
       },
 
     ]
