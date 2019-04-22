@@ -32,7 +32,9 @@ import {
   wipe,
   checkPass,
   undoExtensions,
-  redoExtensions
+  redoExtensions,
+  undoControls,
+  redoControls
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -233,7 +235,7 @@ class ConnectDevice extends Component {
         />
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
-      return (<SystemControls />);
+      return (<SystemControls  />);
     } else if (this.props.pageName === MANAGE_PASSWORD) {
       return (
         <List
@@ -265,6 +267,7 @@ class ConnectDevice extends Component {
   }
   applyActions = () => {
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
+    console.log('index of ex', objIndex)
     this.props.applySetting(
       this.props.app_list, {
         adminPwd: this.props.adminPwd,
@@ -275,7 +278,8 @@ class ConnectDevice extends Component {
       this.state.device_id,
       this.props.user_acc_id,
       null, null,
-      this.props.extensions[objIndex].subExtension
+      (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
+      this.props.controls
     ); 
     this.onCancel()
   }
@@ -303,23 +307,27 @@ class ConnectDevice extends Component {
   }
   undoAction = () => {
     let pageName = this.props.pageName;
+    console.log('undo ext', pageName)
 
     if (pageName === APPS) {
       this.props.undoApplications()
     } else if (pageName === SECURE_SETTING) {
-
+      this.props.undoExtensions()
     } else if (pageName === SYSTEM_CONTROLS) {
-
+      this.props.undoControls()
     }
   }
+
   redoAction = () => {
+  
     let pageName = this.props.pageName;
+    console.log('redo', pageName)
     if (pageName === APPS) {
       this.props.redoApplications()
     } else if (pageName === SECURE_SETTING) {
-
+      this.props.redoExtensions()
     } else if (pageName === SYSTEM_CONTROLS) {
-
+      this.props.redoControls()
     }
   }
 
@@ -425,6 +433,7 @@ class ConnectDevice extends Component {
           isDuressPwd={this.props.isDuressPwd}
           isEncryptedPwd={this.props.isEncryptedPwd}
           isGuestPwd={this.props.isGuestPwd}
+          controls={this.props.controls}
         
         />
         </Modal>
@@ -449,6 +458,8 @@ function mapDispatchToProps(dispatch) {
     redoApplications: redoApps,
     undoExtensions: undoExtensions,
     redoExtensions: redoExtensions,
+    undoControls: undoControls,
+    redoControls: redoControls,
     applySetting: applySetting,
     changePage: changePage,
     suspendDevice2: suspendDevice2,
@@ -499,7 +510,8 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     isAdminPwd: device_details.isAdminPwd,
     isGuestPwd: device_details.isGuestPwd,
     isEncryptedPwd: device_details.isEncryptedPwd,
-    isDuressPwd: device_details.isDuressPwd
+    isDuressPwd: device_details.isDuressPwd,
+    controls: device_details.controls
   };
 }
 
