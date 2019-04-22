@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Modal } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import { editDevice } from "../../appRedux/actions/Devices";
+import DeviceSettings from './components/DeviceSettings';
 
 
 import {
@@ -144,10 +145,21 @@ class ConnectDevice extends Component {
       // })
     }
 
+    
+    
+    
+
     // this.props.endLoading();
     setTimeout(() => {
       this.props.endLoading();
     }, 2000);
+  }
+
+  componentDidUpdate(prevProps){
+      
+    if(this.props !== prevProps){
+    //  console.log('update data is ', this.props.app_list)
+    }
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.pathName !== nextProps.pathName) {
@@ -263,7 +275,8 @@ class ConnectDevice extends Component {
       this.props.user_acc_id,
       null, null,
       this.props.extensions[objIndex].subExtension
-    );
+    ); 
+    this.onCancel()
   }
   componentWillUnmount() {
     this.onBackHandler();
@@ -307,6 +320,10 @@ class ConnectDevice extends Component {
     } else if (pageName === SYSTEM_CONTROLS) {
 
     }
+  }
+
+  onCancel = () => {
+    this.setState({ showChangesModal: false });
   }
   render() {
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
@@ -397,7 +414,18 @@ class ConnectDevice extends Component {
           visible={this.state.showChangesModal}
           onOk={this.applyActions}
           onCancel={this.onCancel}
+          okText='Save'
         >
+        <DeviceSettings
+          app_list={this.props.app_list}
+          extensions={this.props.extensions}
+          extensionUniqueName={SECURE_SETTING}
+          isAdminPwd={this.props.isAdminPwd}
+          isDuressPwd={this.props.isDuressPwd}
+          isEncryptedPwd={this.props.isEncryptedPwd}
+          isGuestPwd={this.props.isGuestPwd}
+        
+        />
         </Modal>
       </div>
     )
@@ -466,7 +494,11 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     applyBtn: device_details.applyBtn,
     redoBtn: device_details.redoBtn,
     undoBtn: device_details.undoBtn,
-    clearBtn: device_details.clearBtn
+    clearBtn: device_details.clearBtn,
+    isAdminPwd: device_details.isAdminPwd,
+    isGuestPwd: device_details.isGuestPwd,
+    isEncryptedPwd: device_details.isEncryptedPwd,
+    isDuressPwd: device_details.isDuressPwd
   };
 }
 
