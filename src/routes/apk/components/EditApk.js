@@ -198,10 +198,10 @@ class EditApkForm extends Component {
                        
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
-                            packageName = info.file.response.packageName;
-                            versionCode = info.file.response.versionCode;
-                            versionName = info.file.response.versionName;
-                            details = info.file.response.details;
+                            // packageName = info.file.response.packageName;
+                            // versionCode = info.file.response.versionCode;
+                            // versionName = info.file.response.versionName;
+                            // details = info.file.response.details;
                            // console.log('apk name', apk);
                         }
                         message.success('file added Successfully ');

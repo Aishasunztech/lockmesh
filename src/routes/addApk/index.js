@@ -80,11 +80,7 @@ class AddApkForm extends Component {
                 form_data = { 
                     'logo': logo, 
                     'apk': apk, 
-                    'name': values.name, 
-                    'versionName': versionName,
-                    'versionCode' : versionCode,
-                    'packageName' :packageName,
-                    'details': details
+                    'name': values.name,
                 }
                 // console.log('hisory',this.props.go_back);
                 this.props.addApk(form_data);
@@ -180,9 +176,9 @@ class AddApkForm extends Component {
                             apk = info.file.response.fileName;
                             // console.log('apk name', apk);
                             packageName = info.file.response.packageName;
-                            versionCode = info.file.response.versionCode;
-                            versionName = info.file.response.versionName;
-                            details = info.file.response.details;
+                            // versionCode = info.file.response.versionCode;
+                            // versionName = info.file.response.versionName;
+                            // details = info.file.response.details;
 
                         }
                         message.success('file added Successfully ');
