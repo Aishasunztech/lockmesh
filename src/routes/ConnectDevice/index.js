@@ -34,7 +34,8 @@ import {
   undoExtensions,
   redoExtensions,
   undoControls,
-  redoControls
+  redoControls,
+  getImeiHistory
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -143,14 +144,15 @@ class ConnectDevice extends Component {
       this.props.getProfiles(device_id);
       this.props.getPolicies(device_id);
       this.props.getDeviceHistories(device_id);
+      this.props.getImeiHistory(device_id);
       // this.setState({
       //     syncStatus: this.props.device_details.is_sync
       // })
     }
 
-    
-    
-    
+
+
+
 
     // this.props.endLoading();
     setTimeout(() => {
@@ -158,10 +160,10 @@ class ConnectDevice extends Component {
     }, 2000);
   }
 
-  componentDidUpdate(prevProps){
-      
-    if(this.props !== prevProps){
-    //  console.log('update data is ', this.props.app_list)
+  componentDidUpdate(prevProps) {
+
+    if (this.props !== prevProps) {
+      //  console.log('update data is ', this.props.app_list)
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -235,7 +237,7 @@ class ConnectDevice extends Component {
         />
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
-      return (<SystemControls  />);
+      return (<SystemControls />);
     } else if (this.props.pageName === MANAGE_PASSWORD) {
       return (
         <List
@@ -280,7 +282,7 @@ class ConnectDevice extends Component {
       null, null,
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
       this.props.controls
-    ); 
+    );
     this.onCancel()
   }
   componentWillUnmount() {
@@ -300,6 +302,7 @@ class ConnectDevice extends Component {
     this.props.getProfiles(deviceId);
     this.props.getPolicies(deviceId);
     this.props.getDeviceHistories(deviceId);
+    this.props.getImeiHistory(deviceId);
     this.onBackHandler();
     setTimeout(() => {
       this.props.endLoading();
@@ -319,7 +322,7 @@ class ConnectDevice extends Component {
   }
 
   redoAction = () => {
-  
+
     let pageName = this.props.pageName;
     console.log('redo', pageName)
     if (pageName === APPS) {
@@ -413,6 +416,7 @@ class ConnectDevice extends Component {
               history={this.props.history}
               getDevicesList={this.props.getDevicesList}
               refreshDevice={this.refreshDevice}
+              imei_list={this.props.imei_list}
 
             />
 
@@ -425,17 +429,17 @@ class ConnectDevice extends Component {
           onCancel={this.onCancel}
           okText='Apply'
         >
-        <DeviceSettings
-          app_list={this.props.app_list}
-          extensions={this.props.extensions}
-          extensionUniqueName={SECURE_SETTING}
-          isAdminPwd={this.props.isAdminPwd}
-          isDuressPwd={this.props.isDuressPwd}
-          isEncryptedPwd={this.props.isEncryptedPwd}
-          isGuestPwd={this.props.isGuestPwd}
-          controls={this.props.controls}
-        
-        />
+          <DeviceSettings
+            app_list={this.props.app_list}
+            extensions={this.props.extensions}
+            extensionUniqueName={SECURE_SETTING}
+            isAdminPwd={this.props.isAdminPwd}
+            isDuressPwd={this.props.isDuressPwd}
+            isEncryptedPwd={this.props.isEncryptedPwd}
+            isGuestPwd={this.props.isGuestPwd}
+            controls={this.props.controls}
+
+          />
         </Modal>
       </div>
     )
@@ -473,10 +477,11 @@ function mapDispatchToProps(dispatch) {
     unflagged: unflagged,
     wipe: wipe,
     checkPass: checkPass,
+    getImeiHistory: getImeiHistory
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-  // console.log("connect device state", device_details);
+  // console.log("connect device state", device_details.imei_list);
   return {
     routing: routing,
     pathName: routing.location.pathname,
@@ -511,7 +516,8 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     isGuestPwd: device_details.isGuestPwd,
     isEncryptedPwd: device_details.isEncryptedPwd,
     isDuressPwd: device_details.isDuressPwd,
-    controls: device_details.controls
+    controls: device_details.controls,
+    imei_list: device_details.imei_list
   };
 }
 
