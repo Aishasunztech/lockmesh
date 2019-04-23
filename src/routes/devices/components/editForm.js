@@ -82,7 +82,7 @@ class EditDevice extends Component {
     render() {
 
         //  alert(this.props.device.device_id);
-        console.log('props of coming', this.props.device);
+        // console.log('props of coming', this.props.device);
         const { visible, loading } = this.state;
 
         return (
@@ -91,7 +91,8 @@ class EditDevice extends Component {
                 <p>(*)- Required Fields</p>
 
                 <Form.Item
-                    label="Device ID "
+
+                    label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? "Device ID " : null}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
@@ -99,7 +100,7 @@ class EditDevice extends Component {
                         initialValue: this.props.device.device_id,
                     })(
 
-                        <Input disabled />
+                        <Input type={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? 'hidden' : ''} disabled />
                     )}
                 </Form.Item>
                 <Form.Item
@@ -130,7 +131,7 @@ class EditDevice extends Component {
                     )}
                 </Form.Item>
                 <Form.Item
-                    label="Device Name "
+                    label="Name "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
@@ -256,17 +257,19 @@ class EditDevice extends Component {
                         </Select>,
                     )}
                 </Form.Item>
-                <Form.Item
-                    label="Model"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('model', {
-                        initialValue: checkValue(this.props.device.model),
-                    })(
-                        <Input />
-                    )}
-                </Form.Item>
+                {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
+                    <Form.Item
+                        label="Model"
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('model', {
+                            initialValue: checkValue(this.props.device.model),
+                        })(
+                            <Input />
+                        )}
+                    </Form.Item>
+                }
                 <Form.Item
                     label="Start Date "
                     labelCol={{ span: 8 }}
