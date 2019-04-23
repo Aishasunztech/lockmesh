@@ -16,14 +16,14 @@ class AppList extends Component {
     constructor(props) {
         super(props);
 
-        // this.state = {
-        //     guestAll: false,
-        //     encryptedAll: false,
-        //     enableAll: false,
-        //     app_list: [],
-        //     rerender: false,
-        //     app_list_count: 0,
-        // }
+        this.state = {
+            guestAll: false,
+            encryptedAll: false,
+            enableAll: false,
+            app_list: [],
+            rerender: false,
+            app_list_count: 0,
+        }
 
         this.appsColumns = [
             {
@@ -45,34 +45,51 @@ class AppList extends Component {
                 key: '4',
             }
         ];
+
+        this.extensionColumns = [
+            {
+                title: 'APP NAME',
+                dataIndex: 'app_name',
+                key: '1',
+                render: text => <a href="javascript:;">{text}</a>,
+            }, {
+                title: 'GUEST',
+                dataIndex: 'guest',
+                key: '2',
+            }, {
+                title: 'ENCRYPTED',
+                dataIndex: 'encrypted',
+                key: '3',
+            }
+        ];
     }
 
     componentDidMount() {
-        // this.setState({
-        //     app_list: this.props.app_list,
-        //     app_list_count: this.props.length,
-        //     guestAll: this.props.guestAll,
-        //     encryptedAll: this.props.encryptedAll,
-        //     enableAll: this.props.enableAll
-        // });
+        this.setState({
+            apk_list: this.props.apk_list,
+            // app_list_count: this.props.length,
+            // guestAll: this.props.guestAll,
+            // encryptedAll: this.props.encryptedAll,
+            // enableAll: this.props.enableAll
+        });
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log("app list, nextProps", nextProps);
+        console.log("app list in list, nextProps", nextProps);
         // alert("componentWillReceiveProps");
-        // this.setState({
-        //     app_list: nextProps.app_list,
-        //     // app_list_count: this.props.length,
-        //     guestAll: nextProps.guestAll,
-        //     encryptedAll: nextProps.encryptedAll,
-        //     enableAll: nextProps.enableAll
-        // })
+        this.setState({
+            apk_list: nextProps.apk_list,
+            // app_list_count: this.props.length,
+            // guestAll: nextProps.guestAll,
+            // encryptedAll: nextProps.encryptedAll,
+            // enableAll: nextProps.enableAll
+        })
     }
 
-    // componentDidUpdate(prevProps, prevState, snapshot) {
-    //     // alert("componentDidUpdate");
-    //     // console.log("component did update", prevProps);
-    // }
+    componentDidUpdate(nextProps, prevState, snapshot) {
+        // alert("componentDidUpdate");
+        console.log("component did update", nextProps);
+    }
 
     handleCheckedAll = (key, value) => {
 
@@ -110,7 +127,7 @@ class AppList extends Component {
     }
 
     renderSingleApp = (app) => {
-        // console.log("this app", app);
+        console.log("this app", app);
         let app_id = (app.apk_id !== undefined) ? app.apk_id : app.app_id;
         let guest = (app.guest !== undefined) ? app.guest : false;
         let encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
@@ -167,16 +184,73 @@ class AppList extends Component {
         });
     }
 
+    renderExtensionsApp = (app) => {
+        console.log("this app", app);
+        let app_id = (app.apk_id !== undefined) ? app.app_id : app.app_id;
+        let guest = (app.guest !== undefined) ? app.guest : false;
+        let encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
+        let enable = (app.enable !== undefined) ? app.enable : false;
+        let label = (app.label !== undefined) ? app.label : app.apk_name;
+        let icon = (app.logo !== undefined) ? app.logo : app.icon;
+        // alert(guest);
+
+        return ({
+            key: app_id,
+            app_name:
+                <Fragment>
+                    <img src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
+                    <br />
+                    <div className="line_break">{label}</div>
+                </Fragment>,
+            guest:
+                <Switch
+                    size="small"
+                    ref={`guest_${app_id}`}
+                    name={`guest_${app_id}`}
+                    value={guest}
+                    checked={(guest === true || guest === 1) ? true : false}
+
+                    onClick={(e) => {
+                        this.handleChecked(e, "guest", app_id);
+                    }}
+                />,
+            encrypted:
+                <Switch
+                    size="small"
+                    ref={`encrypted_${app_id}`}
+                    name={`encrypted_${app_id}`}
+                    value={encrypted}
+
+                    checked={(encrypted === true || encrypted === 1) ? true : false}
+                    onClick={(e) => {
+                        // console.log("encrypted", e);
+                        this.handleChecked(e, "encrypted", app_id);
+                    }}
+                />
+
+        });
+    }
+
     renderApps = () => {
+        console.log('props is', this.state.apk_list)
         if (this.props.apk_list) {
             return this.props.apk_list.map(app => {
                 return this.renderSingleApp(app)
             })
-        } else {
-            return this.props.app_list.map(app => {
-                return this.renderSingleApp(app)
-            })
         }
+        else if (this.props.allExtensions) {
+            if(this.props.allExtensions.length){
+                return this.props.allExtensions[0]['subExtension'].map(app => {
+                    return this.renderExtensionsApp(app)
+                })
+            }
+           
+        }
+        // else {
+        //     return this.props.app_list.map(app => {
+        //         return this.renderSingleApp(app)
+        //     })
+        // }
 
     }
     renderDropdown() {
@@ -207,7 +281,7 @@ class AppList extends Component {
                     size='small'
                     scroll={this.props.isHistory ? {} : { y: 297 }}
                     bordered={false}
-                    columns={this.appsColumns}
+                    columns={ this.props.allExtensions ? this.extensionColumns: this.appsColumns}
                     align='center'
                     dataSource={
                         this.renderApps()

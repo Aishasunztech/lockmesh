@@ -39,7 +39,8 @@ import {
     REDO_EXTENSIONS,
     HANDLE_CHECK_CONTROL,
     UNDO_CONTROLS,
-    REDO_CONTROLS
+    REDO_CONTROLS,
+    GET_APPS_PERMISSIONS
 } from "../../constants/ActionTypes";
 
 import {
@@ -62,9 +63,11 @@ const initialState = {
 
     pageName: MAIN_MENU,
     status: '',
+    appPermissions: [],
 
     syncStatus: false,
     device: {},
+    allExtensions: [],
 
     checked_app_id: {},
     app_list: [],
@@ -456,6 +459,18 @@ export default (state = initialState, action) => {
                 saveProfileType: action.payload.profileType
             }
         }
+
+
+        case GET_APPS_PERMISSIONS: {
+            console.log('data permissions', action.payload)
+            return {
+                ...state,
+                appPermissions: action.payload.appPermissions,
+                allExtensions: action.payload.extensions
+
+            }
+        }
+
 
         case HANDLE_CHECK_CONTROL: {
             let changedControls = JSON.parse(JSON.stringify(state.controls));

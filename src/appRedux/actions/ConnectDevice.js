@@ -33,7 +33,8 @@ import {
     REDO_EXTENSIONS,
     HANDLE_CHECK_CONTROL,
     UNDO_CONTROLS,
-    REDO_CONTROLS
+    REDO_CONTROLS,
+    GET_APPS_PERMISSIONS
 
 } from "../../constants/ActionTypes"
 
@@ -110,6 +111,27 @@ export function getProfiles(device_id) {
                     dispatch({
                         type: GET_PROFILES,
                         payload: response.data.profiles
+                    })
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
+
+export function getAppPermissions(device_id) {
+    return (dispatch) => {
+        RestService.getAppPermissions(device_id).then((response) => {
+
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    dispatch({
+                        type: GET_APPS_PERMISSIONS,
+                        payload: response.data
                     })
                 }
 
@@ -715,9 +737,12 @@ export const checkPass = (user) => {
 }
 
 export const getDealerApps = () => {
+    console.log('get dealer action id')
     return (dispatch) => {
+        console.log('in return of fucntion')
         RestService.getDealerApps().then((response) => {
             if (RestService.checkAuth(response.data)) {
+                console.log('get dealer apps resoo', response.data)
                 dispatch({
                     type: GET_DEALER_APPS,
                     payload: response.data.list

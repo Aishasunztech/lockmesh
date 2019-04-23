@@ -69,6 +69,7 @@ export const GET_DEVICE_APPS = 'GET_DEVICE_APPS';
 export const GET_PROFILES = 'GET_PROFILES';
 export const GET_DEVICE_HISTORIES = 'GET_DEVICE_HISTORIES';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const GET_APPS_PERMISSIONS = 'GET_APPS_PERMISSIONS';
 
 export const SUBMIT_PASSWORD = 'SUBMIT_PASSWORD';
 export const GUEST_PASSWORD = 'guest_password';
