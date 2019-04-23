@@ -117,6 +117,9 @@ module.exports = {
             });
         })
         return foundDevices;
+    },
+    initCap: (str) =>{
+        return str.replace(/^\w/, function (chr) { return chr.toUpperCase()})
     }
 
 }

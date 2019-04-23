@@ -8,12 +8,11 @@ import AddPolicy from "./components/AddPolicy";
 
 import {
     getPolicies,
-    getDefaultApps
 } from "../../appRedux/actions/Policy";
 
 import {
-    getApkList,
-} from "../../appRedux/actions/Apk";
+    getDealerApps
+} from "../../appRedux/actions/ConnectDevice";
 
 class Policy extends Component {
     constructor(props) {
@@ -135,8 +134,8 @@ class Policy extends Component {
     }
     componentDidMount() {
         this.props.getPolicies();
-        this.props.getApkList();
-        this.props.getDefaultApps();
+        // this.props.getApkList();
+        // this.props.getDefaultApps();
     }
 
     handlePolicyModal = (visible) => {
@@ -192,8 +191,8 @@ class Policy extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getPolicies: getPolicies,
-        getApkList: getApkList,
-        getDefaultApps: getDefaultApps
+        // getApkList: getApkList,
+        // getDefaultApps: getDefaultApps
     }, dispatch);
 }
 var mapStateToProps = ({ policies }) => {
