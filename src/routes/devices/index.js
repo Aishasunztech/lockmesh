@@ -46,6 +46,13 @@ class Devices extends Component {
     constructor(props) {
         super(props);
         const columns = [
+            // {
+            //     // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
+            //     dataIndex: 'tableid',
+            //     align: 'center',
+            //     className: 'row',
+            //     width: 800,
+            // },
             {
                 // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
                 dataIndex: 'action',
