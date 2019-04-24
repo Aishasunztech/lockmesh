@@ -156,12 +156,12 @@ class EditDevice extends Component {
                         rules: [{
                             type: 'email', message: 'The input is not valid E-mail!',
                         },
-                        (this.props.device.finalStatus == 'Pre-activated') ? {} :
+                        (this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? {} :
                             {
                                 required: true, message: 'Account Email is Required !',
                             }],
                     })(
-                        <Input disabled={(this.props.device.finalStatus == 'Pre-activated') ? false : true} />
+                        <Input disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? false : true} />
                     )}
                 </Form.Item>
 
