@@ -121,6 +121,13 @@ module.exports = {
     initCap: (str) =>{
         return str.replace(/^\w/, function (chr) { return chr.toUpperCase()})
     },
+    titleCase: (str) =>{
+        var wordsArray = str.toLowerCase().split(/\s+/);
+        var upperCased = wordsArray.map(function(word) {
+          return word.charAt(0).toUpperCase() + word.substr(1);
+        });
+        return upperCased.join(" ");
+    },
     checkRemainDays: function (createDate, validity) {
         var validDays = 0; 
             if (!validity) {
