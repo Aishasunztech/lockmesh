@@ -118,8 +118,18 @@ module.exports = {
         })
         return foundDevices;
     },
-    initCap: (str) =>{
-        return str.replace(/^\w/, function (chr) { return chr.toUpperCase()})
+    initCap: (str) => {
+        return str.replace(/^\w/, function (chr) { return chr.toUpperCase() })
+    },
+    checkRemainDays: function (createDate, validity) {
+        var validDays = 0, createdDateTime, today, days;
+        if (validity != null) validDays = validity;
+        createdDateTime = new Date(createDate);
+        createdDateTime.setDate(createdDateTime.getDate() + validDays);
+        today = new Date();
+        days = today.getDate() - createdDateTime.getDate();
+
+        if (days <= 0) return "Expire"; else return days;
     }
 
 }

@@ -17,7 +17,9 @@ class Permissions extends Component {
       dealer_ids: [],
       dealerList: [],
       permissions: [],
-      hideDefaultSelections: false
+      hideDefaultSelections: false,
+      removeSelectedDealersModal: false,
+      addSelectedDealersModal: false
     }
 
     this.addDealerCols = [
@@ -245,6 +247,14 @@ class Permissions extends Component {
     }
   }
 
+  showPermissionedDealersModal = (visible) => {
+    this.setState({
+      removeSelectedDealersModal: visible,
+      dealer_ids: [],
+      selectedRowKeys: []
+    })
+  }
+
   showDealersModal = (visible) => {
     this.setState({
       showDealersModal: visible,
@@ -252,6 +262,31 @@ class Permissions extends Component {
       selectedRowKeys: []
     })
   }
+
+  addSelectedDealersModal = (visible) => {
+    this.setState({
+      addSelectedDealersModal: visible,
+      dealer_ids: [],
+      selectedRowKeys: []
+    })
+  }
+
+  addSelectedDealers = () => {
+    let permissions = this.state.permissions;
+    let selectedRows = this.state.selectedRowKeys;
+    var dList = this.state.dealerList;
+    var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
+    var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
+    var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
+    permissions= [...permissions , ...addUnSelected_IDs];
+
+    this.setState({ 
+      permissions, 
+      addSelectedDealersModal: false 
+    })
+    this.props.savePermission(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
+  }
+
   saveAllDealers = () => {
     let dealer_ids = []
     this.props.dealerList.map((dealer) => {
@@ -418,6 +453,27 @@ class Permissions extends Component {
     //   console.log(dealer);
     // })
   }
+
+  removeSelectedDealersModal = (visible) => {
+    this.setState({
+      removeSelectedDealersModal: visible
+    })
+  }
+
+  removeSelectedDealers = () => {
+    let permittedDealers = this.state.permissions;
+    let selectedRows = this.state.selectedRowKeys;
+    var remove_ids = permittedDealers.filter(e => !selectedRows.includes(e));
+    
+    this.setState({
+      removeSelectedDealersModal: false,
+      dealer_ids: [],
+      permissions: selectedRows
+    })
+
+    this.props.savePermission(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
+  }
+
   renderDealer(list, permitted = false) {
     let data = [];
     console.log(list);
@@ -463,10 +519,16 @@ class Permissions extends Component {
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
+          </Col>
+          <Col className="gutter-row" span={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
+          </Col>
+          <Col className="gutter-row" span={2}>
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
           </Col>
           <Col className="gutter-row" span={4}>
             <div className="gutter-box search_heading">
@@ -505,6 +567,56 @@ class Permissions extends Component {
           okText="Save"
           onCancel={() => {
             this.showDealersModal(false)
+          }}
+        >
+          <DealerList
+            columns={this.addDealerCols}
+            dealers={this.renderDealer(this.state.dealerList)}
+            onSelectChange={this.onSelectChange}
+            hideDefaultSelections={this.state.hideDefaultSelections}
+            selectedRows={this.state.dealer_ids}
+            selectedRowKeys={this.state.selectedRowKeys}
+          // selectedDealers={[]}
+          />
+        </Modal>
+
+        {/*  remove except selected */}
+        <Modal
+          width='665px'
+          className="permiss_tabl"
+          title="Remove Dealers from permissions list for this App"
+          visible={this.state.removeSelectedDealersModal}
+          onOk={() => {
+            this.removeSelectedDealers()
+          }}
+          okText="Delete Except Selected"
+          onCancel={() => {
+            this.removeSelectedDealersModal(false)
+          }}
+        >
+          <DealerList
+            columns={this.addDealerCols}
+            dealers={this.renderDealer(this.state.dealerList, true)}
+            onSelectChange={this.onSelectChange}
+            hideDefaultSelections={this.state.hideDefaultSelections}
+            selectedRows={this.state.dealer_ids}
+            selectedRowKeys={this.state.selectedRowKeys}
+          // selectedDealers={[]}
+          />
+        </Modal>
+
+         {/*  Add Except selected */}
+         <Modal
+          width='665px'
+          className="permiss_tabl"
+          title="Add Dealers to permissions list for this App"
+          visible={this.state.addSelectedDealersModal}
+          onOk={() => {
+            this.addSelectedDealers()
+          }}
+          okText="Add Except Selected"
+          onCancel={() => {
+            this.addSelectedDealersModal(false)
           }}
         >
           <DealerList

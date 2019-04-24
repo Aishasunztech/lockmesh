@@ -82,17 +82,17 @@ class AppFilter extends Component {
     }
 
     render() {
-        // console.log(" Current State", this.state.DisplayPages)
+        console.log(" Current State", this.props)
         let fullScreenClass1 = "";
         let fullScreenClass2 = "";
-       
-            if (this.props.isAddButton === false) {
-                fullScreenClass1 = "col-md-3";
-                fullScreenClass2 = "col-md-3";
-            } else {
-                fullScreenClass1 = "col-md-3";
-                fullScreenClass2 = "col-md-2";
-            }
+
+        if (this.props.isAddButton === false) {
+            fullScreenClass1 = "col-md-3";
+            fullScreenClass2 = "col-md-3";
+        } else {
+            fullScreenClass1 = "col-md-3";
+            fullScreenClass2 = "col-md-2";
+        }
 
         // console.log(this.props.options);
         const Search = Input.Search;
@@ -212,44 +212,47 @@ class AppFilter extends Component {
                     <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
                         <div className="gutter-box">
                             {
-                                 (this.props.isAddButton === true) ?
-                                        (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
+                                (this.props.isAddButton === true) ?
+                                    (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
+
+                                        <Button
+                                            type="primary"
+                                            disabled={(this.props.disableAddButton == true) ? true : false}
+                                            style={{ width: '100%' }}
+                                        >
+                                            <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
+                                        </Button>
+
+                                        :
+                                        (this.props.AddDeviceModal) ?
                                             <Button
                                                 type="primary"
                                                 disabled={(this.props.disableAddButton == true) ? true : false}
                                                 style={{ width: '100%' }}
+                                                onClick={() => this.props.handleDeviceModal(true)}
                                             >
-                                                <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
+                                                {this.props.addButtonText}
                                             </Button>
                                             :
-                                            (this.props.AddDeviceModal) ?
+                                            (this.props.AddPolicyModel) ?
                                                 <Button
                                                     type="primary"
                                                     disabled={(this.props.disableAddButton == true) ? true : false}
                                                     style={{ width: '100%' }}
-                                                    onClick={() => this.props.handleDeviceModal(true)}
+                                                    onClick={() => this.props.handlePolicyModal(true)}
                                                 >
                                                     {this.props.addButtonText}
-                                                </Button> :
-                                                (this.props.AddPolicyModel) ?
-                                                    <Button
-                                                        type="primary"
-                                                        disabled={(this.props.disableAddButton == true) ? true : false}
-                                                        style={{ width: '100%' }}
-                                                        onClick={() => this.props.handlePolicyModal(true)}
-                                                    >
-                                                        {this.props.addButtonText}
-                                                    </Button>
-                                                    :
-                                                    <Button
-                                                        type="primary"
-                                                        disabled={(this.props.disableAddButton == true) ? true : false}
-                                                        style={{ width: '100%' }}
-                                                    >
-                                                        {this.props.addButtonText}
-                                                    </Button>
-                                        : null
-
+                                                </Button>
+                                                :
+                                                <Button
+                                                    type="primary"
+                                                    disabled={(this.props.disableAddButton == true) ? true : false}
+                                                    style={{ width: '100%' }}
+                                                    onClick={() => this.props.handleUserModal()}
+                                                >
+                                                    {this.props.addButtonText}
+                                                </Button>
+                                    : null
                             }
                         </div>
                     </Col>

@@ -85,6 +85,11 @@ class SidebarContent extends Component {
                 </i>
                 <IntlMessages id="sidebar.devices" /></Link>
             </Menu.Item>
+            <Menu.Item key="users">
+              <Link to="/users">
+                <i className="icon icon-avatar" />
+                <IntlMessages id="sidebar.users" /></Link>
+            </Menu.Item>
             {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
               <Link to="/dealer/dealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.dealers" /></Link>
             </Menu.Item> : null}
