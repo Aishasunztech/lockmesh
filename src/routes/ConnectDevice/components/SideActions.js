@@ -9,8 +9,9 @@ import {
     saveProfile,
     hanldeProfileInput,
     transferDeviceProfile,
-    getDealerApps
+    getDealerApps,
 } from "../../../appRedux/actions/ConnectDevice";
+
 
 import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip } from "antd";
 import TableHistory from "./TableHistory";
@@ -19,6 +20,7 @@ import ActivateDevcie from '../../devices/components/ActivateDevice';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
+import ImeiView from '../../ConnectDevice/components/ImeiView';
 import DealerApps from "./DealerApps";
 
 
@@ -45,6 +47,7 @@ class SideActions extends Component {
     componentDidMount() {
         // console.log(this.props.historyType, 'did')
         this.props.getDealerApps();
+        // this.props.getImeiHistory()
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
@@ -156,7 +159,7 @@ class SideActions extends Component {
         }
     }
     render() {
-        // console.log(this.props.authUser);
+        // console.log(this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';
@@ -202,7 +205,7 @@ class SideActions extends Component {
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button> */}
                                 <Tooltip title="Coming Soon" placement="left">
-                                    <Button type="default" style={{ width: "100%", marginBottom: 15 }} >IMEI</Button>
+                                    <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 15 }} >IMEI</Button>
                                 </Tooltip>
                             </Col>
 
@@ -319,6 +322,14 @@ class SideActions extends Component {
                 // go_back={this.props.history.goBack}
                 // getDevice={this.props.getDevicesList}
                 />
+                <ImeiView
+                    ref='imeiView'
+                    device={this.props.device}
+                    imei_list={this.props.imei_list}
+                // getImeiHistory={this.props.getImeiHistory}
+                // go_back={this.props.history.goBack}
+                // getDevice={this.props.getDevicesList}
+                />
             </div>
         )
     }
@@ -364,7 +375,7 @@ var mapStateToProps = ({ device_details, auth }) => {
         adminCPwd: device_details.adminCPwd,
         device_id: device_details.device.device_id,
         usr_acc_id: device_details.device.id,
-        apk_list: device_details.apk_list
+        apk_list: device_details.apk_list,
     };
 }
 

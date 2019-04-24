@@ -82,7 +82,7 @@ class EditDevice extends Component {
     render() {
 
         //  alert(this.props.device.device_id);
-        console.log('props of coming', this.props.device);
+        // console.log('props of coming', this.props.device);
         const { visible, loading } = this.state;
 
         return (
@@ -91,7 +91,8 @@ class EditDevice extends Component {
                 <p>(*)- Required Fields</p>
 
                 <Form.Item
-                    label="Device ID "
+
+                    label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? "Device ID " : null}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
@@ -99,7 +100,7 @@ class EditDevice extends Component {
                         initialValue: this.props.device.device_id,
                     })(
 
-                        <Input disabled />
+                        <Input type={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? 'hidden' : ''} disabled />
                     )}
                 </Form.Item>
                 <Form.Item
@@ -130,7 +131,7 @@ class EditDevice extends Component {
                     )}
                 </Form.Item>
                 <Form.Item
-                    label="Device Name "
+                    label="Name "
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
@@ -155,12 +156,12 @@ class EditDevice extends Component {
                         rules: [{
                             type: 'email', message: 'The input is not valid E-mail!',
                         },
-                        (this.props.device.finalStatus == 'Pre-activated') ? {} :
+                        (this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? {} :
                             {
                                 required: true, message: 'Account Email is Required !',
                             }],
                     })(
-                        <Input disabled={(this.props.device.finalStatus == 'Pre-activated') ? false : true} />
+                        <Input disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? false : true} />
                     )}
                 </Form.Item>
 
@@ -256,17 +257,19 @@ class EditDevice extends Component {
                         </Select>,
                     )}
                 </Form.Item>
-                <Form.Item
-                    label="Model"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('model', {
-                        initialValue: checkValue(this.props.device.model),
-                    })(
-                        <Input />
-                    )}
-                </Form.Item>
+                {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
+                    <Form.Item
+                        label="Model"
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('model', {
+                            initialValue: checkValue(this.props.device.model),
+                        })(
+                            <Input />
+                        )}
+                    </Form.Item>
+                }
                 <Form.Item
                     label="Start Date "
                     labelCol={{ span: 8 }}
@@ -314,9 +317,6 @@ class EditDevice extends Component {
                         >
                             {this.props.form.getFieldDecorator('note', {
                                 initialValue: this.props.device.note,
-                                rules: [{
-                                    required: true, message: 'Note is required',
-                                }],
                             })(
                                 <Input />
                             )}
@@ -333,7 +333,7 @@ class EditDevice extends Component {
                                     required: true, message: 'Valid days required',
                                 }],
                             })(
-                                <InputNumber />
+                                <InputNumber min={1} />
                             )}
 
                         </Form.Item>

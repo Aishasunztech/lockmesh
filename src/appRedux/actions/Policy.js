@@ -1,6 +1,7 @@
 import {
     GET_POLICIES,
-    INVALID_TOKEN
+    INVALID_TOKEN,
+    HANDLE_CHECK_APP_POLICY
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -35,5 +36,19 @@ export function getDefaultApps() {
                 })
             }
         });
+    }
+}
+
+
+export function handleCheckAppPolicy(e, key, app_id) {
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_APP_POLICY,
+            payload: {
+                value: e,
+                key: key,
+                app_id: app_id
+            }
+        })
     }
 }

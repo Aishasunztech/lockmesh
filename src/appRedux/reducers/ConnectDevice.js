@@ -41,7 +41,8 @@ import {
     UNDO_CONTROLS,
     REDO_CONTROLS,
     GET_APPS_PERMISSIONS,
-    HANDLE_CHECK_APP_POLICY
+    HANDLE_CHECK_APP_POLICY,
+    GET_IMIE_HISTORY
 } from "../../constants/ActionTypes";
 
 import {
@@ -127,6 +128,8 @@ const initialState = {
 
     guestAllExt: false,
     encryptedAllExt: false,
+
+    imei_list: [],
 };
 
 export default (state = initialState, action) => {
@@ -789,6 +792,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 apk_list: action.payload,
+            }
+        }
+        case GET_IMIE_HISTORY: {
+            // console.log(action.payload);
+            return {
+                ...state,
+                imei_list: action.payload,
             }
         }
         default:

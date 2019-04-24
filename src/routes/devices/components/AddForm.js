@@ -287,18 +287,18 @@ class AddDevice extends Component {
                         </Select>,
                     )}
                 </Form.Item> */}
-
-                            <Form.Item
-                                label="Model"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('model', {
-                                    initialValue: this.props.new ? "" : this.props.device.model,
-                                })(
-                                    <Input />
-                                )}
-                            </Form.Item> </Fragment> : null}
+                            {(this.props.preActive) ? null :
+                                <Form.Item
+                                    label="Model"
+                                    labelCol={{ span: 8 }}
+                                    wrapperCol={{ span: 14 }}
+                                >
+                                    {this.props.form.getFieldDecorator('model', {
+                                        initialValue: this.props.new ? "" : this.props.device.model,
+                                    })(
+                                        <Input />
+                                    )}
+                                </Form.Item>} </Fragment> : null}
                     <Form.Item
                         label="Start Date "
                         labelCol={{ span: 8 }}
@@ -345,9 +345,6 @@ class AddDevice extends Component {
                             >
                                 {this.props.form.getFieldDecorator('note', {
                                     initialValue: '',
-                                    rules: [{
-                                        required: true, message: 'Note is required',
-                                    }],
                                 })(
                                     <Input />
                                 )}

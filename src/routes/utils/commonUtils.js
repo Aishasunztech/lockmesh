@@ -120,6 +120,17 @@ module.exports = {
     },
     initCap: (str) =>{
         return str.replace(/^\w/, function (chr) { return chr.toUpperCase()})
+    },
+    checkRemainDays: function (createDate, validity) {
+        var validDays = 0; 
+            if (!validity) {
+                validDays = validity;
+            }
+
+        var createdDateTime = new Date(createDate);
+        createdDateTime.setDate(createdDateTime.getDate() + validDays);
+        var today = new Date();
+        return today.getDate() - createdDateTime.getDate();
     }
 
 }

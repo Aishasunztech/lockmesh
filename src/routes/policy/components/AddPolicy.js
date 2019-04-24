@@ -3,8 +3,8 @@ import { Card, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, mes
 import AppList from "./AppList";
 import { connect } from "react-redux";
 import {SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION} from '../../../constants/Constants';
-import styles from './policy.css'
-import { bindActionCreators } from 'C:/Users/Arfan/AppData/Local/Microsoft/TypeScript/3.4.3/node_modules/redux';
+import styles from './policy.css';
+import { bindActionCreators } from "redux";
 import { getDealerApps, getAppPermissions } from '../../../appRedux/actions/ConnectDevice';
 
 const TextArea = Input;

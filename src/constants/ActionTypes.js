@@ -128,6 +128,7 @@ export const GET_USED_PGP_EMAILS = 'GET_USED_PGP_EMAILS';
 export const GET_USED_CHAT_IDS = 'GET_USED_CHAT_IDS';
 export const GET_USED_SIM_IDS = 'GET_USED_SIM_IDS';
 export const RELEASE_CSV = 'RELEASE_CSV';
+export const GET_IMIE_HISTORY = 'GET_IMIE_HISTORY';
 
 // Policy consts
 export const GET_POLICIES = 'GET_POLICIES'

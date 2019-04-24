@@ -463,6 +463,10 @@ const RestService = {
     flagged(device_id, data) {
         return axios.post(BASE_URL + 'users/flagDevice/' + device_id, { data }, RestService.getHeader());
 
-    }
+    },
+    getImeiHistory: (device_id) => {
+        return axios.get(BASE_URL + "users/get_imei_history/" + device_id, RestService.getHeader());
+    },
+
 }
 export default RestService;
