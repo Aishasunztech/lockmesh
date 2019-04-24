@@ -200,7 +200,7 @@ var mapStateToProps = ({ policies }) => {
     return {
         policies: policies.policies,
         apk_list: policies.apk_list,
-        app_list: policies.app_list
+        app_list: policies.app_list,
     };
 }
 

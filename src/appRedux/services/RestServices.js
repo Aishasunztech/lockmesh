@@ -191,7 +191,14 @@ const RestService = {
 
     // connect devices for dealer dash.
     getDealerApps: () => {
+     
         return axios.get(BASE_URL + "users/get_dealer_apps", RestService.getHeader());
+    },
+
+      // connect devices for dealer dash.
+      getAppPermissions: () => {
+      
+        return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
     },
 
     getDeviceApps: (device_id) => {

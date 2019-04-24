@@ -1,7 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import { Card, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
+import { connect } from "react-redux";
+import {SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION} from '../../../constants/Constants';
 import styles from './policy.css'
+import { bindActionCreators } from 'C:/Users/Arfan/AppData/Local/Microsoft/TypeScript/3.4.3/node_modules/redux';
+import { getDealerApps, getAppPermissions } from '../../../appRedux/actions/ConnectDevice';
 
 const TextArea = Input;
 const columns = [{
@@ -41,42 +45,99 @@ const data = [
         key: 4,
     }
 ];
-export default class AddPolicy extends Component {
+
+ class AddPolicy extends Component {
     constructor(props) {
         super(props);
         this.state = {
             current: 0,
+            dealerApps: [],
+            steps: [],
+            allExtensions: []
         };
 
-        this.steps = [{
+        console.log('stat is ', this.state.dealerApps)
+       
+    }
+
+
+    componentDidMount(){
+        console.log('did mount called')
+        this.props.getDealerApps();
+        this.props.getAppPermissions();
+        this.setState({
+            dealerApps: this.props.dealerApps,
+            appPermissions: this.props.appPermissions,
+            allExtensions: this.props.allExtensions
+
+        })
+    }
+
+
+    // componentWillReceiveProps(prevProps){
+    //     console.log(this.props.dealerApps,'object', prevProps.dealerApps)
+    //     if(this.props !== prevProps){
+    //         this.setState({dealerApps: this.props.dealerApps})
+    //     }
+    // }
+
+    componentDidUpdate(prevProps){
+         console.log(this.props.dealerApps, 'add policy page data is ', prevProps.dealerApps);
+        if(this.props !== prevProps){
+            this.setState({
+                dealerApps: this.props.dealerApps,
+                appPermissions: this.props.appPermissions,
+                allExtensions: this.props.allExtensions
+            });
+      
+        }
+    }
+
+    next() {
+        const current = this.state.current + 1;
+        this.setState({ current });
+    }
+
+    prev() {
+        const current = this.state.current - 1;
+        this.setState({ current });
+    }
+
+    render() {
+        const { current } = this.state;
+         console.log('console the applist', this.state.dealerApps);
+         this.steps = [{
             title: 'SELECT APPS',
             Icon: <span className="step_counting">1</span>,
             content: (
                 <AppList
-                    apk_list={this.props.apk_list}
+                    apk_list={this.state.dealerApps}
                 />
             ),
         }, {
-            title: 'SET APP PERMISSIONS',
+            title: 'SET '+ APPLICATION_PERMISION.toUpperCase(),
             Icon: <span className="step_counting">2</span>,
             content: (
                 <AppList
-                    app_list={this.props.app_list}
+                    apk_list={this.state.appPermissions}
                 />
             ),
         }, {
-            title: 'SET SECURE SETTINGS PERMISSIONS',
+            title: 'SET '+ SECURE_SETTING_PERMISSION.toUpperCase(),
             Icon: <span className="step_counting">3</span>,
             content: (
-                <Table
-                    pagination={false}
-                    dataSource={data}
-                    size="small"
-                    columns={columns}>
-                </Table>
+                <AppList
+                allExtensions={this.state.allExtensions}
+            />
+                // <Table
+                //     pagination={false}
+                //     dataSource={data}
+                //     size="small"
+                //     columns={columns}>
+                // </Table>
             ),
         }, {
-            title: 'SET SYSTEM CONTROLS PERMISSIONS',
+            title: 'SET '+ SYSTEM_PERMISSION.toUpperCase(),
             Icon: <span className="step_counting">4</span>,
             content: (
                 <Table
@@ -107,20 +168,6 @@ export default class AddPolicy extends Component {
             )
         }
         ];
-    }
-
-    next() {
-        const current = this.state.current + 1;
-        this.setState({ current });
-    }
-
-    prev() {
-        const current = this.state.current - 1;
-        this.setState({ current });
-    }
-
-    render() {
-        const { current } = this.state;
         return (
             <Fragment>
                 <div className="policy_steps">
@@ -152,6 +199,23 @@ export default class AddPolicy extends Component {
             </Fragment>
         );
     }
+}
 
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({
+        getDealerApps: getDealerApps,
+        getAppPermissions: getAppPermissions
+    }, dispatch)
+}
+
+var mapStateToProps = ({device_details}) =>{
+    console.log('DEALER APPS LIST ', device_details)
+return{
+    dealerApps: device_details.apk_list,
+    appPermissions: device_details.appPermissions,
+    allExtensions: device_details.allExtensions
 
 }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddPolicy);
