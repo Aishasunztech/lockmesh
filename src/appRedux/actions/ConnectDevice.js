@@ -34,7 +34,8 @@ import {
     HANDLE_CHECK_CONTROL,
     UNDO_CONTROLS,
     REDO_CONTROLS,
-    GET_APPS_PERMISSIONS
+    GET_APPS_PERMISSIONS,
+    GET_IMIE_HISTORY
 
 } from "../../constants/ActionTypes"
 
@@ -75,7 +76,6 @@ export function getDeviceDetails(deviceId) {
         });
 
     };
-
 }
 
 export function getDeviceApps(deviceId) {
@@ -339,8 +339,8 @@ export function loadDeviceProfile(app_list) {
     };
 }
 
-export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null,extensions, controls ) {
-//    console.log('apply Settings', extensions);
+export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null, extensions, controls) {
+    //    console.log('apply Settings', extensions);
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -353,7 +353,7 @@ export function applySetting(app_list, passwords, device_id, usr_acc_id, type = 
             controls: controls,
             extensions: extensions
         }
-    //  console.log('my test is ', extensions)
+        //  console.log('my test is ', extensions)
         RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id, extensions, controls).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -419,14 +419,14 @@ export function redoControls() {
     }
 }
 
-export function undoExtensions(){
+export function undoExtensions() {
     return (dispatch) => {
         dispatch({
             type: UNDO_EXTENSIONS
         })
     }
 }
-export function redoExtensions(){
+export function redoExtensions() {
     console.log('redo ex action')
     return (dispatch) => {
         dispatch({
@@ -471,21 +471,21 @@ export function showMessage(show, message, type) {
 
 
 
-export function handleControlCheck(e, key ) {
-     console.log('name in action', e, key)
-     return (dispatch) => {
-         dispatch({
-             type: HANDLE_CHECK_CONTROL,
-             payload: {
-                 value: e,
-                 key: key,
-             }
-         })
-     }
- }
+export function handleControlCheck(e, key) {
+    console.log('name in action', e, key)
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_CONTROL,
+            payload: {
+                value: e,
+                key: key,
+            }
+        })
+    }
+}
 
 export function handleCheckExtension(e, key, app_id, uniqueName) {
-   // console.log('name in action', uniqueName)
+    // console.log('name in action', uniqueName)
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_EXTENSION,
@@ -493,7 +493,7 @@ export function handleCheckExtension(e, key, app_id, uniqueName) {
                 value: e,
                 key: key,
                 app_id: app_id,
-                uniqueName:uniqueName
+                uniqueName: uniqueName
             }
         })
     }
@@ -525,7 +525,7 @@ export function handleCheckAll(keyAll, key, value) {
     }
 }
 
-export function handleCheckAllExtension(keyAll, key, value,uniqueName) {
+export function handleCheckAllExtension(keyAll, key, value, uniqueName) {
     console.log('actoin is called')
     return (dispatch) => {
         dispatch({
@@ -746,6 +746,23 @@ export const getDealerApps = () => {
                 dispatch({
                     type: GET_DEALER_APPS,
                     payload: response.data.list
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export const getImeiHistory = (device_id) => {
+    // console.log(device_id)
+    return (dispatch) => {
+        RestService.getImeiHistory(device_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_IMIE_HISTORY,
+                    payload: response.data.data
                 })
             } else {
                 dispatch({
