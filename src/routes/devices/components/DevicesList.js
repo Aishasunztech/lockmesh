@@ -4,7 +4,7 @@ import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
@@ -18,6 +18,7 @@ import {
     DEVICE_TRIAL,
     ADMIN
 } from '../../../constants/Constants'
+import { isNull } from 'util';
 
 const TabPane = Tabs.TabPane;
 
@@ -139,6 +140,10 @@ class DevicesList extends Component {
     renderList(list) {
         let i = 0;
         return list.map((device, index) => {
+
+            var remainDays = checkRemainDays(device.created_at, device.validity)
+            // console.log('Remain Days are: ', remainDays);   
+
             //  console.log(this.props.user.type, 'lkslkdflk');
             // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             // const device_status =  "SUSPEND";
@@ -240,7 +245,7 @@ class DevicesList extends Component {
 
                 status: (<span style={color} > {status}</span >),
                 flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
-                device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (!device.validity) ? "N/A" : `${device.validity}`,
 
                 name: checkValue(device.name),
                 account_email: checkValue(device.account_email),

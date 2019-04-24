@@ -774,6 +774,8 @@ class Devices extends Component {
 
         else if (value == '3') {
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+            this.state.columns[1]['title'] = 'Remaining Days '
+        
         }
         else {
             this.state.columns[0]['title'] = ''
@@ -863,6 +865,8 @@ class Devices extends Component {
         }
         else if (value == '3') {
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+            this.state.columns[1]['children'][0].title ='Remaining days'
+            this.state.columns[1]['title'] ='Remaining days'
         }
         else {
             this.state.columns[0]['title'] = ''
