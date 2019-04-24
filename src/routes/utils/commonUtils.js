@@ -117,6 +117,18 @@ module.exports = {
             });
         })
         return foundDevices;
+    },
+
+    checkRemainDays: function (createDate, validity) {
+        var validDays = 0, createdDateTime, today, days;
+            if (validity != null) validDays = validity;
+            
+        createdDateTime = new Date(createDate);
+        createdDateTime.setDate(createdDateTime.getDate() + validDays);
+        today = new Date();
+        days = today.getDate() - createdDateTime.getDate();
+
+        if (days <= 0) return "Expire"; else return days;
     }
 
 }
