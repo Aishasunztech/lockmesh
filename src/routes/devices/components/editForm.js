@@ -317,9 +317,6 @@ class EditDevice extends Component {
                         >
                             {this.props.form.getFieldDecorator('note', {
                                 initialValue: this.props.device.note,
-                                rules: [{
-                                    required: true, message: 'Note is required',
-                                }],
                             })(
                                 <Input />
                             )}
@@ -336,7 +333,7 @@ class EditDevice extends Component {
                                     required: true, message: 'Valid days required',
                                 }],
                             })(
-                                <InputNumber />
+                                <InputNumber min={1} />
                             )}
 
                         </Form.Item>

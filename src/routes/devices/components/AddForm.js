@@ -345,9 +345,6 @@ class AddDevice extends Component {
                             >
                                 {this.props.form.getFieldDecorator('note', {
                                     initialValue: '',
-                                    rules: [{
-                                        required: true, message: 'Note is required',
-                                    }],
                                 })(
                                     <Input />
                                 )}
