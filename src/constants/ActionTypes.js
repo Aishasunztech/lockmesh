@@ -130,3 +130,8 @@ export const GET_IMIE_HISTORY = 'GET_IMIE_HISTORY';
 
 // Policy consts
 export const GET_POLICIES = 'GET_POLICIES'
+
+
+// Users consts
+export const SAVE_USERS = 'SAVE_USERS'
+export const USERS_LIST = 'USERS_LIST'

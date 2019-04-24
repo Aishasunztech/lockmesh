@@ -8,6 +8,7 @@ import Apk_List from "./Apk";
 import ConnectDevice from "./ConnectDevice";
 import Account from "./Account"
 import Policy from "./Policy";
+import Users from "./Users";
 
 
 const reducers = combineReducers({
@@ -19,7 +20,8 @@ const reducers = combineReducers({
   apk_list: Apk_List,
   device_details: ConnectDevice,
   account: Account,
-  policies: Policy
+  policies: Policy,
+  users: Users
 });
 
 export default reducers;

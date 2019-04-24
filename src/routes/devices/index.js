@@ -10,7 +10,7 @@ import {
     rejectDevice,
     addDevice,
     preActiveDevice,
-    deleteUnlinkDevice
+    deleteUnlinkDevice,
 } from "../../appRedux/actions/Devices";
 import {
     DEVICE_ACTIVATED,
@@ -38,6 +38,7 @@ import { getStatus, componentSearch } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import { stat } from "fs";
 import AddDevice from './components/AddDevice';
+
 
 var coppyDevices = [];
 var status = true;
@@ -774,6 +775,12 @@ class Devices extends Component {
 
         else if (value == '3') {
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+            this.state.columns.splice(1, 0, {
+                dataIndex: 'action',
+                align: 'center',
+                className: 'row',
+                width: 800,
+            })
         }
         else {
             this.state.columns[0]['title'] = ''
@@ -1109,7 +1116,6 @@ class Devices extends Component {
                 {
                     this.props.isloading ? <CircularProgress /> :
                         <Fragment>
-
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
@@ -1122,6 +1128,7 @@ class Devices extends Component {
                                 disableAddButton={this.props.user.type === ADMIN}
                                 // toLink="add-device"
                                 handleDeviceModal={this.handleDeviceModal}
+                                handleUserModal={this.handleUserModal}
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
@@ -1228,7 +1235,7 @@ function mapDispatchToProps(dispatch) {
         postPagination: postPagination,
         getPagination: getPagination,
         getNotification: getNotification,
-        deleteUnlinkDevice: deleteUnlinkDevice
+        deleteUnlinkDevice: deleteUnlinkDevice,
     }, dispatch);
 }
 

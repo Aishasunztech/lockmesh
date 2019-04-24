@@ -449,16 +449,28 @@ const RestService = {
         // this.authtoken(this.response);
         // return this.response;
     },
+    //Unflagg Device
     unflagged(device_id) {
         // alert("dadsada")
         return axios.post(BASE_URL + 'users/UnflagDevice/' + device_id, {}, RestService.getHeader());
     },
+    //flag Device
     flagged(device_id, data) {
         return axios.post(BASE_URL + 'users/flagDevice/' + device_id, { data }, RestService.getHeader());
 
     },
+    //GET IMEI History
     getImeiHistory: (device_id) => {
         return axios.get(BASE_URL + "users/get_imei_history/" + device_id, RestService.getHeader());
+    },
+    //GET User List
+    userList: () => {
+        return axios.get(BASE_URL + 'users/userList',
+            RestService.getHeader()
+        )
+    },
+    addUser: (user) => {
+        return axios.post(BASE_URL + 'users/add/user', user, RestService.getHeader())
     },
 
 }
