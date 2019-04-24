@@ -14,7 +14,7 @@ class Apk extends Component {
             <div>
                 <Row justify='center' style={{ backgroundColor: '#012346', height: 110, paddingTop: 20, display: 'flex', justifyContent: 'flex-end' }}>
                     <p className="hidden-xs" style={{ color: '#fff', lineHeight: '30px' }}>Download latest version of the App here</p>
-                    <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk">
+                    <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.63.apk">
                         <Button type="primary" size="default" style={{ margin: '0 16px', height: 30, lineHeight: '30px' }}> ScreenLocker apk (v4.45)</Button>
                     </a>
                 </Row>
