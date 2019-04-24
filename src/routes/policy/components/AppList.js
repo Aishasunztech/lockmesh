@@ -8,7 +8,7 @@ import {
 
 import { BASE_URL } from '../../../constants/Application';
 
-import { Table, Switch, Popover, Checkbox, Icon } from "antd";
+import { Table, Switch, Popover, Checkbox, Icon, Avatar } from "antd";
 import AppDropdown from "./AppDropdown";
 
 
@@ -140,7 +140,7 @@ class AppList extends Component {
             key: app_id,
             app_name:
                 <Fragment>
-                    <img src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
+                    <Avatar src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
                     <br />
                     <div className="line_break">{label}</div>
                 </Fragment>,
