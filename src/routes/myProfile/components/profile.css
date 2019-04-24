@@ -24,3 +24,9 @@
     margin-left: 8px;
     font-size: 12px;
 }
+
+@media (max-width: 992px) {
+    .manage_sec_pro .ant-card-body {
+        height: auto;
+    }
+}
