@@ -40,7 +40,8 @@ import {
     HANDLE_CHECK_CONTROL,
     UNDO_CONTROLS,
     REDO_CONTROLS,
-    GET_APPS_PERMISSIONS
+    GET_APPS_PERMISSIONS,
+    HANDLE_CHECK_APP_POLICY
 } from "../../constants/ActionTypes";
 
 import {
@@ -469,6 +470,10 @@ export default (state = initialState, action) => {
                 allExtensions: action.payload.extensions
 
             }
+        }
+
+        case HANDLE_CHECK_APP_POLICY: {
+            console.log('reducer', action.payload);
         }
 
 

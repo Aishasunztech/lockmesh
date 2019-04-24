@@ -34,7 +34,8 @@ import {
     HANDLE_CHECK_CONTROL,
     UNDO_CONTROLS,
     REDO_CONTROLS,
-    GET_APPS_PERMISSIONS
+    GET_APPS_PERMISSIONS,
+    HANDLE_CHECK_APP_POLICY
 
 } from "../../constants/ActionTypes"
 
@@ -503,6 +504,20 @@ export function handleCheckApp(e, key, app_id) {
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_APP,
+            payload: {
+                value: e,
+                key: key,
+                app_id: app_id
+            }
+        })
+    }
+}
+
+
+export function handleCheckAppPolicy(e, key, app_id) {
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_APP_POLICY,
             payload: {
                 value: e,
                 key: key,

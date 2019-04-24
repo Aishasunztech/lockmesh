@@ -104,9 +104,12 @@ class AppList extends Component {
     }
 
     handleChecked = (e, key, app_id) => {
-        // this.props.handleCheckApp(e,key,app_id);
 
-
+        console.log(e,key,app_id);
+        if(this.props.apps) this.props.handleCheckApp(e,key,app_id, this.props.apps)
+        else if(this.props.appPermissions) this.props.handleCheckApp(e,key,app_id, this.props.appPermissions)
+        else if(this.props.secureSettings) this.props.handleCheckApp(e,key,app_id, this.props.secureSettings)
+        
     }
 
     checkAll = (keyAll, key, value) => {
@@ -134,6 +137,9 @@ class AppList extends Component {
         let enable = (app.enable !== undefined) ? app.enable : false;
         let label = (app.apk_name !== undefined) ? app.apk_name : app.label;
         let icon = (app.logo !== undefined) ? app.logo : app.icon;
+        if(this.props.appPermissions){
+            app_id = app.id
+        }
         // alert(guest);
 
         return ({
@@ -153,7 +159,8 @@ class AppList extends Component {
                     checked={(guest === true || guest === 1) ? true : false}
 
                     onClick={(e) => {
-                        this.handleChecked(e, "guest", app_id);
+                       this.handleChecked(e, "guest", app_id)
+                          
                     }}
                 />,
             encrypted:

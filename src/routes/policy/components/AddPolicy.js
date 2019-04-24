@@ -60,6 +60,11 @@ const data = [
        
     }
 
+    handleCheckApp = (value, key, id, arrayOf)=> {
+        // this.props.handleCheckApp()
+        console.log(value, key, id, arrayOf, 'data is');
+    }
+
 
     componentDidMount(){
         console.log('did mount called')
@@ -112,6 +117,8 @@ const data = [
             content: (
                 <AppList
                     apk_list={this.state.dealerApps}
+                    handleCheckApp={this.handleCheckApp}
+                    apps='dealerApps'
                 />
             ),
         }, {
@@ -120,6 +127,8 @@ const data = [
             content: (
                 <AppList
                     apk_list={this.state.appPermissions}
+                    handleCheckApp={this.handleCheckApp}
+                    appPermissions='appPermissions'
                 />
             ),
         }, {
@@ -128,13 +137,9 @@ const data = [
             content: (
                 <AppList
                 allExtensions={this.state.allExtensions}
+                handleCheckApp={this.handleCheckApp}
+                secureSettings = 'allExtensions'
             />
-                // <Table
-                //     pagination={false}
-                //     dataSource={data}
-                //     size="small"
-                //     columns={columns}>
-                // </Table>
             ),
         }, {
             title: 'SET '+ SYSTEM_PERMISSION.toUpperCase(),
