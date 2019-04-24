@@ -256,8 +256,8 @@ class AppList extends Component {
     renderDropdown() {
         return (
             <div className="applist_menu">
-                <Checkbox>Turn on Guests All</Checkbox><br></br>
-                <Checkbox>Turn On Encrypted All</Checkbox><br></br>
+                <Checkbox>Guests All</Checkbox><br></br>
+                <Checkbox>Encrypted All</Checkbox><br></br>
                 <Checkbox>Enable All</Checkbox>
             </div>
         );
