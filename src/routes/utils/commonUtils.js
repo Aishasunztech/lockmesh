@@ -120,15 +120,15 @@ module.exports = {
     },
 
     checkRemainDays: function (createDate, validity) {
-        var validDays = 0; 
-            if (!validity) {
-                validDays = validity;
-            }
-
-        var createdDateTime = new Date(createDate);
+        var validDays = 0, createdDateTime, today, days;
+            if (validity != null) validDays = validity;
+            
+        createdDateTime = new Date(createDate);
         createdDateTime.setDate(createdDateTime.getDate() + validDays);
-        var today = new Date();
-        return today.getDate() - createdDateTime.getDate();
+        today = new Date();
+        days = today.getDate() - createdDateTime.getDate();
+
+        if (days <= 0) return "Expire"; else return days;
     }
 
 }

@@ -138,11 +138,11 @@ class DevicesList extends Component {
     }
     // renderList
     renderList(list) {
-        let i = 0;
         return list.map((device, index) => {
+            // console.log('tab Select is: ', this.props.tabselect)
 
             var remainDays = checkRemainDays(device.created_at, device.validity)
-            // console.log('Remain Days are: ', remainDays);   
+            console.log('Remain Days are: ', remainDays);   
 
             //  console.log(this.props.user.type, 'lkslkdflk');
             // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
@@ -176,14 +176,14 @@ class DevicesList extends Component {
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>Decline</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>Delete</Button>
 
-            i++;
+
             return {
                 // sortOrder: <span style={{ display: 'none' }}>{order}</span>,
                 // sortOrder: (<span id="order">{order}</span>),
                 // sortOrder: {order},
                 rowKey: index,
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                // tableid: i,
+                counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
@@ -243,10 +243,12 @@ class DevicesList extends Component {
 
                 //     </Fragment>)
 
+                
                 status: (<span style={color} > {status}</span >),
                 flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
-                device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (!device.validity) ? "N/A" : `${device.validity}`,
-
+                device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+                remain_days: `${remainDays}`,
                 name: checkValue(device.name),
                 account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
@@ -392,6 +394,7 @@ class DevicesList extends Component {
                 }),
                 //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
+            
         } else {
             rowSelection = null
         }
@@ -634,7 +637,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        ref="devciesList1"
+                           ref="devciesList1"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -652,7 +655,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        ref="devciesList6"
+                         ref="devciesList6"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -669,7 +672,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        ref="devciesList9"
+                         ref="devciesList9"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -690,7 +693,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                        ref="devciesList7"
+                          ref="devciesList7"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -725,7 +728,7 @@ export default class Tab extends Component {
                         columns={this.props.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.state.selectedOptions}
-                        ref="devciesList3"
+                           ref="devciesList3"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
