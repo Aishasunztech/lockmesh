@@ -75,7 +75,7 @@ class AppList extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("app list in list, nextProps", nextProps);
+        // console.log("app list in list, nextProps", nextProps);
         // alert("componentWillReceiveProps");
         this.setState({
             apk_list: nextProps.apk_list,
@@ -88,7 +88,7 @@ class AppList extends Component {
 
     componentDidUpdate(nextProps, prevState, snapshot) {
         // alert("componentDidUpdate");
-        console.log("component did update", nextProps);
+        // console.log("component did update", nextProps);
     }
 
     handleCheckedAll = (key, value) => {
@@ -105,7 +105,7 @@ class AppList extends Component {
 
     handleChecked = (e, key, app_id) => {
 
-        console.log(e,key,app_id);
+        // console.log(e,key,app_id);
         if(this.props.apps) this.props.handleCheckApp(e,key,app_id, this.props.apps)
         else if(this.props.appPermissions) this.props.handleCheckApp(e,key,app_id, this.props.appPermissions)
         else if(this.props.secureSettings) this.props.handleCheckApp(e,key,app_id, this.props.secureSettings)
@@ -130,7 +130,7 @@ class AppList extends Component {
     }
 
     renderSingleApp = (app) => {
-        console.log("this app", app);
+        // console.log("this app", app);
         let app_id = (app.apk_id !== undefined) ? app.apk_id : app.app_id;
         let guest = (app.guest !== undefined) ? app.guest : false;
         let encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
@@ -192,7 +192,7 @@ class AppList extends Component {
     }
 
     renderExtensionsApp = (app) => {
-        console.log("this app", app);
+        // console.log("this app", app);
         let app_id = (app.apk_id !== undefined) ? app.app_id : app.app_id;
         let guest = (app.guest !== undefined) ? app.guest : false;
         let encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
@@ -239,7 +239,7 @@ class AppList extends Component {
     }
 
     renderApps = () => {
-        console.log('props is', this.state.apk_list)
+        // console.log('props is', this.state.apk_list)
         if (this.props.apk_list) {
             return this.props.apk_list.map(app => {
                 return this.renderSingleApp(app)

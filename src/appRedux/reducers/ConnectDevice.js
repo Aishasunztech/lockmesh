@@ -41,7 +41,6 @@ import {
     UNDO_CONTROLS,
     REDO_CONTROLS,
     GET_APPS_PERMISSIONS,
-    HANDLE_CHECK_APP_POLICY,
     GET_IMIE_HISTORY
 } from "../../constants/ActionTypes";
 
@@ -475,9 +474,7 @@ export default (state = initialState, action) => {
             }
         }
 
-        case HANDLE_CHECK_APP_POLICY: {
-            console.log('reducer', action.payload);
-        }
+ 
 
 
         case HANDLE_CHECK_CONTROL: {

@@ -191,7 +191,6 @@ class PolicyList extends Component {
                             return (
                                 <PolicyInfo selected={this.state.expandTabSelected[record.rowKey]} />
                             )
-
                         }}
                         // expandIconColumnIndex={1}         
                         expandIconColumnIndex={2}

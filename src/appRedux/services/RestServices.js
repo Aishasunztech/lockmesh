@@ -189,6 +189,11 @@ const RestService = {
         return axios.get(BASE_URL + 'users/connect/' + device_id, RestService.getHeader());
     },
 
+    savePolicy: (data) => {
+        //console.log('rest apoi')
+        return axios.post(BASE_URL + 'users/save_policy', {data}, RestService.getHeader());
+    },
+
     // connect devices for dealer dash.
     getDealerApps: () => {
      
@@ -197,7 +202,7 @@ const RestService = {
 
       // connect devices for dealer dash.
       getAppPermissions: () => {
-      
+      console.log('api called ')
         return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
     },
 

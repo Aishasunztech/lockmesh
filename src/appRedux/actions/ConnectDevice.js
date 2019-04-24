@@ -124,26 +124,26 @@ export function getProfiles(device_id) {
     }
 }
 
-export function getAppPermissions(device_id) {
-    return (dispatch) => {
-        RestService.getAppPermissions(device_id).then((response) => {
+// export function getAppPermissions(device_id) {
+//     return (dispatch) => {
+//         RestService.getAppPermissions(device_id).then((response) => {
 
-            if (RestService.checkAuth(response.data)) {
-                if (response.data.status) {
-                    dispatch({
-                        type: GET_APPS_PERMISSIONS,
-                        payload: response.data
-                    })
-                }
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+//                     dispatch({
+//                         type: GET_APPS_PERMISSIONS,
+//                         payload: response.data
+//                     })
+//                 }
 
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                })
-            }
-        });
-    }
-}
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 })
+//             }
+//         });
+//     }
+// }
 
 export function getPolicies(device_id) {
     return (dispatch) => {
@@ -318,6 +318,9 @@ export function activateDevice2(device) {
     }
 
 }
+
+
+
 
 export function saveDeviceProfile(profileName, deviceSettings) {
 }
@@ -611,6 +614,7 @@ export function saveProfile(app_list, passwords = null, profileType, profileName
             passwords: pwd,
             controls: {}
         }
+
         // console.log("applist save profile", device_setting);
         RestService.applySettings(device_setting, null, profileType, profileName, null, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
