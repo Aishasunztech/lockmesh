@@ -135,7 +135,7 @@ class Apk extends Component {
     }
 }
 var mapStateToProps = ({ auth }) => {
-    console.log('devices AUTH', auth.authUser);
+    // console.log('devices AUTH', auth.authUser);
     //  console.log('devices is', devices);
     return {
         user: auth.authUser,
