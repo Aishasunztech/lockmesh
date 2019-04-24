@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form, Input, Icon, Col, message,Upload,Row } from 'antd';
 import { BASE_URL } from "../../../constants/Application";
-let token = localStorage.getItem('token');
+
+
 let logo = '';
 let apk = '';
+let versionCode = '';
+let versionName = '';
+let packageName = '';
+let details = '';
+
 let form_data = '';
 let edit_func= '';
 export default class EditApk extends Component {
@@ -93,7 +99,16 @@ class EditApkForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                form_data = { 'apk_id': this.props.app.apk_id, 'logo': logo, 'apk': apk, 'name': values.name }
+                form_data = { 
+                    'apk_id': this.props.app.apk_id, 
+                    'logo': logo, 
+                    'apk': apk, 
+                    'name': values.name,
+                    'versionName': versionName,
+                    'versionCode' : versionCode,
+                    'packageName' :packageName,
+                    'details': details
+                }
                 // console.log(form_data);
                 this.props.editApk(form_data);
                 disableLogo = false;
@@ -123,6 +138,7 @@ class EditApkForm extends Component {
             },
         };
         const Dragger = Upload.Dragger;
+        let token = localStorage.getItem('token');
 
         const props = {
             name: 'logo',
@@ -140,7 +156,7 @@ class EditApkForm extends Component {
                 }
                 if (status === 'done') {
 
-                    if (info.file.response !== 'Error while Uploading') {
+                    if (info.file.response.status !== false) {
                         disableLogo = true;
 
                         if (info.file.response.fileName !== '') {
@@ -159,6 +175,7 @@ class EditApkForm extends Component {
                 }
             },
         };
+
         const props2 = {
             name: 'apk',
             multiple: false,
@@ -175,12 +192,16 @@ class EditApkForm extends Component {
                 }
                 if (status === 'done') {
 
-                    if (info.file.response !== 'Error while Uploading') {
+                    if (info.file.response.status !== false) {
                       
                         disableApk = true;
                        
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
+                            // packageName = info.file.response.packageName;
+                            // versionCode = info.file.response.versionCode;
+                            // versionName = info.file.response.versionName;
+                            // details = info.file.response.details;
                            // console.log('apk name', apk);
                         }
                         message.success('file added Successfully ');
