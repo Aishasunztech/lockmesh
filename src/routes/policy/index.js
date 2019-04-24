@@ -10,6 +10,13 @@ import {
     getPolicies,
 } from "../../appRedux/actions/Policy";
 
+import { 
+    getDropdown, 
+    postDropdown, 
+    postPagination, 
+    getPagination 
+} from '../../appRedux/actions/Common';
+
 import {
     getDealerApps
 } from "../../appRedux/actions/ConnectDevice";
@@ -134,8 +141,16 @@ class Policy extends Component {
     }
     componentDidMount() {
         this.props.getPolicies();
+        this.props.getPagination('devices');
         // this.props.getApkList();
         // this.props.getDefaultApps();
+    }
+
+    handlePagination = (value) => {
+        //  alert(value);
+        //  console.log('pagination value of ', value)
+        // this.refs.devcieList.handlePagination(value);
+        this.props.postPagination(value, 'policies');
     }
 
     handlePolicyModal = (visible) => {
@@ -191,6 +206,9 @@ class Policy extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getPolicies: getPolicies,
+        // postDropdown: postDropdown,
+        postPagination: postPagination,
+        getPagination: getPagination,
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);

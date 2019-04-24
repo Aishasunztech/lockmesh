@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import styles from './app.css'
 import { connect } from "react-redux";
 
-
-
 class Apk extends Component {
 
     render() {

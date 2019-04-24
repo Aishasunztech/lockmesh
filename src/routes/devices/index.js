@@ -12,6 +12,7 @@ import {
     preActiveDevice,
     deleteUnlinkDevice
 } from "../../appRedux/actions/Devices";
+
 import {
     DEVICE_ACTIVATED,
     DEVICE_EXPIRED,
@@ -23,11 +24,17 @@ import {
     DEVICE_TRIAL
 } from '../../constants/Constants'
 
+import { 
+    getDropdown, 
+    postDropdown, 
+    postPagination, 
+    getPagination 
+} from '../../appRedux/actions/Common';
+
 import {
     getNotification
 } from "../../appRedux/actions/Socket";
 
-import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 
 import { bindActionCreators } from "redux";
 import AppFilter from '../../components/AppFilter';
@@ -1025,7 +1032,7 @@ class Devices extends Component {
     handlePagination = (value) => {
         //  alert(value);
         //  console.log('pagination value of ', value)
-        this.refs.devcieList.handlePagination(value);
+        // this.refs.devcieList.handlePagination(value);
         this.props.postPagination(value, 'devices');
     }
     componentDidMount() {
