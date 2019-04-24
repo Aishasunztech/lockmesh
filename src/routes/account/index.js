@@ -196,20 +196,17 @@ class Account extends Component {
             });
         } else if (dataName === "chat_ids") {
             let searchedData = this.searchField(this.props.chat_ids, fieldName, fieldValue);
-            // console.log(searchedData);
             this.setState({
                 chat_ids: searchedData
             });
         } else if (dataName === "pgp_emails") {
             let searchedData = this.searchField(this.props.pgp_emails, fieldName, fieldValue);
-            // console.log(searchedData);
             this.setState({
                 pgp_emails: searchedData
             });
         } else if (dataName === "used_pgp_emails") {
             console.log(this.props.used_pgp_emails, fieldName, fieldValue)
             let searchedData = this.searchField(this.props.used_pgp_emails, fieldName, fieldValue);
-            console.log(searchedData);
             this.setState({
                 used_pgp_emails: searchedData
             });
