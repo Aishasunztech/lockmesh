@@ -383,11 +383,6 @@ class Apk extends React.Component {
 
 // export default Apk;
 const mapStateToProps = ({ apk_list, auth }) => {
-    // console.log("mapStateToProps apk");
-    // console.log(apk_list);
-    // console.log("apk_list", auth);
-    // console.log("apk_list", apk_list.selectedOptions);
-    // console.log("APK LIST", apk_list)
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,

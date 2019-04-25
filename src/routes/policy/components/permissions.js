@@ -240,7 +240,7 @@ class Permissions extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.record.apk_id !== nextProps.record.apk_id) {
+    if (this.props.record.policy_id !== nextProps.record.policy_id) {
       this.props.getAllDealers();
       this.setState({
         dealerList: this.props.dealerList,
@@ -291,7 +291,7 @@ class Permissions extends Component {
       permissions, 
       addSelectedDealersModal: false 
     })
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
+    this.props.savePermission(this.props.record.policy_id, JSON.stringify(addUnSelected_IDs), 'save');
   }
 
   saveAllDealers = () => {
@@ -301,7 +301,7 @@ class Permissions extends Component {
     });
     this.setState({ permissions: dealer_ids })
 
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify(dealer_ids), 'save');
+    this.props.savePermission(this.props.record.policy_id, JSON.stringify(dealer_ids), 'save');
 
     // this.setState({
     //   dealer_ids: dealer_ids
@@ -328,7 +328,7 @@ class Permissions extends Component {
       })
 
       console.log(this.state.selectedRowKeys);
-      this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
+      this.props.savePermission(this.props.record.policy_id, JSON.stringify(this.state.selectedRowKeys), 'save');
 
       this.showDealersModal(false);
 
@@ -442,7 +442,7 @@ class Permissions extends Component {
       dealers.splice(index, 1);
     }
     // console.log("permissions",dealers);
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify([dealer_id]), 'delete');
+    this.props.savePermission(this.props.record.policy_id, JSON.stringify([dealer_id]), 'delete');
     this.setState({
       dealerList: this.props.dealerList
     })
@@ -455,7 +455,7 @@ class Permissions extends Component {
     this.setState({
       permissions: []
     })
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify(permittedDealers), 'delete');
+    this.props.savePermission(this.props.record.policy_id, JSON.stringify(permittedDealers), 'delete');
     // this.state.dealerList.map((dealer)=>{
     //   console.log(dealer);
     // })
@@ -478,7 +478,7 @@ class Permissions extends Component {
       permissions: selectedRows
     })
 
-    this.props.savePermission(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
+    this.props.savePermission(this.props.record.policy_id, JSON.stringify(remove_ids), 'delete');
   }
 
   renderDealer(list, permitted = false) {
