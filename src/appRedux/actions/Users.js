@@ -9,10 +9,6 @@ import RestService from '../services/RestServices';
 
 export function getUserList() {
     return (dispatch) => {
-        dispatch({
-            type: LOADING,
-            isloading: true
-        });
         RestService.userList().then((response) => {
             // console.log("data form server");
             // console.log(response.data);
@@ -39,7 +35,7 @@ export function addUser(user) {
     return (dispatch) => {
         RestService.addUser(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log('action done ', response.data);
+                // console.log('action done ', response.data);
                 dispatch({
                     type: SAVE_USERS,
                     response: response.data,

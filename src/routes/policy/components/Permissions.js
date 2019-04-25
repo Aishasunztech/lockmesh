@@ -13,7 +13,7 @@ import {
 import DealerList from "../../apk/components/DealerList";
 
 import CircularProgress from "components/CircularProgress/index";
-import { titleCase } from '../../utils/commonUtils';
+import { titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
 import {
   DEALER_ID,
   DEALER_NAME,
@@ -71,6 +71,17 @@ class Permissions extends Component {
             className: '',
           }
         ]
+      },
+      {
+        title: DEALER_ID,
+        dataIndex: 'dealer_id',
+        key: 'dealer_id',
+        sortDirections: ['ascend', 'descend'],
+
+        sorter: (a, b) => a.dealer_id - b.dealer_id,
+        align: 'center',
+        sortDirections: ['ascend', 'descend'],
+        className: '',
       },
       {
         title: (

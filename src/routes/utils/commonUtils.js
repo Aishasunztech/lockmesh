@@ -1,25 +1,31 @@
-// import {
-//     DEVICE_ACTIVATED,
-//     DEVICE_EXPIRED,
-//     DEVICE_PENDING_ACTIVATION,
-//     DEVICE_PRE_ACTIVATION,
-//     DEVICE_SUSPENDED,
-//     DEVICE_UNLINKED
-// } from '../../constants/Constants'
+import {
+    DEVICE_ACTIVATED,
+    DEVICE_EXPIRED,
+    DEVICE_PENDING_ACTIVATION,
+    DEVICE_PRE_ACTIVATION,
+    DEVICE_SUSPENDED,
+    DEVICE_UNLINKED,
+    DEVICE_TRIAL
+} from '../../constants/Constants'
 
-const DEALER_SUSPENDED = "suspended";
-const DEALER_UNLINKED = "unlinked";
-const DEVICE_ACTIVATED = "Active";
-const DEVICE_SUSPENDED = "Suspended";
-const DEVICE_EXPIRED = "Expired";
-const DEVICE_UNLINKED = "Unlinked";
-const DEVICE_PENDING_ACTIVATION = "Pending activation";
-const DEVICE_PRE_ACTIVATION = "Pre-activated";
-const DEVICE_TRIAL = "Trial";
+import {
+    DEALER_ID,
+    DEALER_NAME,
+    DEALER_EMAIL,
+    DEALER_PIN,
+    DEALER_DEVICES,
+    DEALER_TOKENS,
+    DEALER_ACTION
+  } from '../../constants/DealerConstants';
 
-module.exports = {
+  
 
-    getStatus: function (status, account_status, unlink_status, device_status, activation_status) {
+import React, { Component }  from 'react';
+import { Input }  from 'antd';
+import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../constants/DeviceConstants';
+
+
+    export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
 
         if (status === 'active' && (account_status === '' || account_status === null) && unlink_status === 0 && (device_status === 1 || device_status === '1')) {
             return DEVICE_ACTIVATED;
@@ -37,9 +43,9 @@ module.exports = {
         } else {
             return 'N/A';
         }
-    },
+    }
 
-    getColor: function (status) {
+    export function getColor(status) {
         switch (status) {
             case DEVICE_ACTIVATED:
                 return { color: "#008000" };
@@ -61,8 +67,8 @@ module.exports = {
             default:
                 return {};
         }
-    },
-    getSortOrder: function (status) {
+    }
+    export function getSortOrder(status) {
         switch (status) {
             case DEVICE_ACTIVATED:
                 return '1';
@@ -79,16 +85,16 @@ module.exports = {
             default:
                 return
         }
-    },
+    }
 
-    checkValue: function (value) {
+    export function checkValue(value) {
         if (value !== undefined && value !== '' && value != null && value !== 'undefined' && value !== 'null') {
             return value;
         } else {
             return 'N/A';
         }
-    },
-    getDealerStatus: function (unlink_status, account_status) {
+    }
+    export function getDealerStatus(unlink_status, account_status) {
         if (unlink_status === 1) {
             return "unlinked";
         } else if ((account_status === '' || account_status === null) && (unlink_status === 0)) {
@@ -98,9 +104,9 @@ module.exports = {
         } else {
             return 'N/A';
         }
-    },
+    }
 
-    componentSearch: function (arr, search) {
+    export function componentSearch(arr, search) {
         let foundDevices = [];
         let obks = Object.keys(arr[0]);
         arr.map((el) => {
@@ -117,18 +123,18 @@ module.exports = {
             });
         })
         return foundDevices;
-    },
-    initCap: (str) =>{
+    }
+    export function initCap(str) {
         return str.replace(/^\w/, function (chr) { return chr.toUpperCase()})
-    },
-    titleCase: (str) =>{
+    }
+    export function titleCase(str) {
         var wordsArray = str.toLowerCase().split(/\s+/);
         var upperCased = wordsArray.map(function(word) {
           return word.charAt(0).toUpperCase() + word.substr(1);
         });
         return upperCased.join(" ");
-    },
-    checkRemainDays: function (createDate, validity) {
+    }
+    export function checkRemainDays(createDate, validity) {
         var validDays = 0, createdDateTime, today, days;
         if (validity != null) validDays = validity;
         createdDateTime = new Date(createDate);
@@ -139,4 +145,159 @@ module.exports = {
         if (days <= 0) return "Expire"; else return days;
     }
 
-}
+    export function dealerColsWithSearch(searchBar = false, callBack) {
+
+var searchInput = [
+     {
+        title: (
+          <Input.Search
+            name="dealer_id"
+            key="dealer_id"
+            id="dealer_id"
+            className="search_heading"
+            autoComplete="new-password"
+            placeholder= {titleCase(DEALER_ID)}
+            onKeyUp={
+              (e) => {
+                callBack(e)
+              }
+            }
+
+          />
+        ),
+        dataIndex: 'dealer_id',
+        className: '',
+        children: []
+      },
+           {
+              title: (
+                <Input.Search
+                  name="link_code"
+                  key="link_code"
+                  id="link_code"
+                  className="search_heading"
+                  autoComplete="new-password"
+                  placeholder= {titleCase(DEALER_PIN)}
+                  onKeyUp={
+                    (e) => {
+                      callBack(e)
+                    }
+                  }
+      
+                />
+              ),
+              dataIndex: 'link_code',
+              className: '',
+              children: []
+            },
+            {
+              title: (
+                <Input.Search
+                  name="dealer_name"
+                  key="dealer_name"
+                  id="dealer_name"
+                  className="search_heading"
+                  autoComplete="new-password"
+                  placeholder= {titleCase(DEALER_NAME)}
+                  onKeyUp={
+                    (e) => {
+                      callBack(e)
+                    }
+                  }
+      
+                />
+              ),
+              dataIndex: 'dealer_name',
+              className: '',
+              children: []
+            },
+            {
+              title: (
+                <Input.Search
+                  name="dealer_email"
+                  key="dealer_email"
+                  id="dealer_email"
+                  className="search_heading"
+                  autoComplete="new-password"
+                  placeholder= {titleCase(DEALER_EMAIL)}
+                  onKeyUp={
+                    (e) => {
+                      callBack(e)
+                    }
+                  }
+      
+                />
+              ),
+              dataIndex: 'dealer_email',
+              className: '',
+              children: []
+            },
+]
+    
+
+        var child = [
+            {
+              title: DEALER_ID,
+              dataIndex: 'dealer_id',
+              key: 'dealer_id',      
+              sorter: (a, b) => a.dealer_id - b.dealer_id,
+              align: 'center',
+              sortDirections: ['ascend', 'descend'],
+              className: '',
+            },
+            {
+              title: DEALER_PIN,
+              dataIndex: 'link_code',
+              key: 'link_code',
+              sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+              align: 'center',
+              sortDirections: ['ascend', 'descend'],
+              className: '',
+            },
+            {
+              title: DEALER_NAME,
+              dataIndex: 'dealer_name',
+              key: 'dealer_name',
+              sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+              align: 'center',
+              sortDirections: ['ascend', 'descend'],
+              className: '',
+            },
+            {
+              title: DEALER_EMAIL,
+              dataIndex: 'dealer_email',
+              key: 'dealer_email',
+              sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+              align: 'center',
+              sortDirections: ['ascend', 'descend'],
+              className: '',
+            },
+            {
+              title: DEALER_ACTION,
+              dataIndex: 'action',
+              key: 'action',
+              align: 'center',
+              className: '',
+            },
+      
+          ];
+
+          if(searchBar) {
+               var result = searchInput.map((item,index) => {
+                let flag= true;              
+                for (var i in child) {
+                    if (child[i].dataIndex == item.dataIndex) {
+                       item.children = [child[i]];
+                       flag = false;
+                       return item;
+                    }
+                  }
+                  if(flag == true) {
+                      return item;
+                  }
+            })
+                return result;
+            }else {
+                return child;
+            }
+    }

@@ -26,7 +26,8 @@ export default (state = initialState, action) => {
                 users: [],
             }
         case SAVE_USERS:
-            console.log('item added is:', action.response)
+            console.log('item added is:', action.response.user)
+
             if (action.response.status) {
                 message.success(action.response.msg)
             }
@@ -36,18 +37,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
-                users: [],
+                users_list: [...state.users_list, ...action.response.user],
             }
 
         case USERS_LIST:
-            console.log('item added is:', action.payload)
+            // console.log('item added is:', action.payload.users_list)
             return {
                 ...state,
                 isloading: false,
                 users_list: action.payload.users_list,
             }
-
-
         default:
             return state;
 
