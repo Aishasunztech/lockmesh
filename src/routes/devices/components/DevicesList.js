@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Card, Tag, Form, Input, Popconfirm, Empty } from "antd";
+import { Table, Button, Card, Tag, Form, Input, Popconfirm, Empty, Icon } from "antd";
 import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
@@ -130,6 +130,20 @@ class DevicesList extends Component {
         };
         this.renderList = this.renderList.bind(this);
     }
+
+    customExpandIcon(props) {
+        if (props.expanded) {
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-down" /></a>
+        } else {
+
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-right" /></a>
+        }
+    }
+    
     deleteUnlinkedDevice = (action, device) => {
         let arr = [];
         arr.push(device);
@@ -203,47 +217,7 @@ class DevicesList extends Component {
                                                 : false
 
 
-                ),
-                // action: (device.activation_status === 0 || device.activation_status === null ) ?
-                //     ((status === DEVICE_UNLINKED && this.props.user.type !== 'admin') ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice(device)} >Delete</Button> : false)
-                //     :
-
-                //     (<Fragment>
-                //         {(status === DEVICE_PENDING_ACTIVATION) ?
-                //             <Fragment>
-                //                 <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>Decline</Button>
-                //                 <Button
-                //                     type="primary"
-                //                     size="small"
-                //                     style={{ margin: '0 8px 0 8px' }}
-                //                     onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}>
-                //                     Accept
-                //         </Button>
-                //             </Fragment>
-                //             :
-                //             <Fragment>
-                //                 {((device.flagged === '' || device.flagged === null || device.flagged === 'null') && (status !== DEVICE_SUSPENDED)) ?
-                //                     <Button
-                //                         type={button_type}
-                //                         size="small"
-                //                         style={style}
-                //                         onClick={() => (device_status === "ACTIVATE") ? this.handleActivateDevice(device) : this.handleSuspendDevice(device)}
-                //                     >
-                //                         {(device.account_status === '') ? <Fragment> {device_status}</Fragment> : <Fragment> {device_status}</Fragment>}
-                //                     </Button>
-                //                     : ''
-                //                 }
-
-                //                 {(device.device_status === 1) ? <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button> : null}
-                //                 {(status !== DEVICE_UNLINKED) ? <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
-                //                     : ''}
-                //             </Fragment>
-
-                //         }
-
-                //     </Fragment>)
-
-                
+                ),                
                 status: (<span style={color} > {status}</span >),
                 flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
                 device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
@@ -425,6 +399,8 @@ class DevicesList extends Component {
                             x: 500,
                             // y: 600 
                         }}
+                        
+                        expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             let showRecord = [];
                             let showRecord2 = [];

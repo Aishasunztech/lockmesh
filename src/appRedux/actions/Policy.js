@@ -4,7 +4,8 @@ import {
     HANDLE_CHECK_APP_POLICY,
     GET_APPS_PERMISSIONS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
-    SAVE_POLICY
+    SAVE_POLICY,
+    PERMSSION_SAVED
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -118,4 +119,29 @@ export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName='
             }
         })
     }
+}
+
+export function savePermission(policy_id, dealers, action) {
+    alert(policy_id);
+    
+    return (dispatch) => {
+        RestService.savePolicyPermissions(policy_id, dealers, action).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: PERMSSION_SAVED,
+                    payload: response.data.msg,
+                    permission_count: response.data.permission_count,
+                    policy_id: policy_id,
+                    dealers: dealers
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
 }
