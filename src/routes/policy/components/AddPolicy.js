@@ -82,7 +82,8 @@ const data = [
         }
 
         this.props.savePolicy(data);
-        this.props.handlePolicyModal(false)
+        this.props.handlePolicyModal(false);
+        this.props.getPolicies()
     }
 
 
@@ -136,12 +137,12 @@ const data = [
     }
 
     next() {
-        const current = this.state.current + 1;
+         const current = this.state.current + 1;
         this.setState({ current });
     }
 
     prev() {
-        const current = this.state.current - 1;
+         const current = this.state.current - 1;
         this.setState({ current });
     }
 
@@ -201,9 +202,9 @@ const data = [
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-2 pr-0 "><label>Command:</label></div>
+                        <div className="col-md-2 pr-0 "><label>Policy Note:</label></div>
                         <div className="col-md-8">
-                            <textarea placeholder="Command" onChange={(e)=> this.setState({command: e.target.value})} class="ant-input"></textarea>
+                            <textarea placeholder="Policy Note" onChange={(e)=> this.setState({command: e.target.value})} class="ant-input"></textarea>
                         </div>
                     </div>
                 </div>
@@ -228,7 +229,7 @@ const data = [
                         }
                         {
                             current === this.steps.length - 1
-                            && <Button type="primary" onClick={() => this.savePolicy()}>Done</Button>
+                            && <Button type="primary" onClick={() => this.savePolicy()}>Save</Button>
                         }
                         {
                             current < this.steps.length - 1

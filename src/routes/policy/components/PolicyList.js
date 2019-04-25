@@ -69,7 +69,7 @@ class PolicyList extends Component {
             // }
         })
         return policy_list.map((policy, index) => {
-            console.log(policy);
+            // console.log(policy);
 
             return {
                 rowKey: index,
@@ -108,6 +108,7 @@ class PolicyList extends Component {
 
                 }} />),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
+                policy_command: (policy.command_name) ? `${policy.command_name}` : "N/A",
                 policy_name: (policy.policy_name) ? `${policy.policy_name}` : "N/A",
                 push_apps: policy.push_apps,
                 app_list: policy.app_list,
@@ -176,7 +177,7 @@ class PolicyList extends Component {
         }
     }
     render() {
-        // console.log(this.props.policies)
+         console.log('POLICY LIST',this.props.policies)
         return (
             <Fragment>
                 <Card>
