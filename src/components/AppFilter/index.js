@@ -217,7 +217,7 @@ class AppFilter extends Component {
 
                                         <Button
                                             type="primary"
-                                            disabled={(this.props.disableAddButton == true) ? true : false}
+                                            disabled={(this.props.disableAddButton === true) ? true : false}
                                             style={{ width: '100%' }}
                                         >
                                             <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
@@ -227,7 +227,7 @@ class AppFilter extends Component {
                                         (this.props.AddDeviceModal) ?
                                             <Button
                                                 type="primary"
-                                                disabled={(this.props.disableAddButton == true) ? true : false}
+                                                disabled={(this.props.disableAddButton === true) ? true : false}
                                                 style={{ width: '100%' }}
                                                 onClick={() => this.props.handleDeviceModal(true)}
                                             >
@@ -237,7 +237,7 @@ class AppFilter extends Component {
                                             (this.props.AddPolicyModel) ?
                                                 <Button
                                                     type="primary"
-                                                    disabled={(this.props.disableAddButton == true) ? true : false}
+                                                    disabled={(this.props.disableAddButton === true) ? true : false}
                                                     style={{ width: '100%' }}
                                                     onClick={() => this.props.handlePolicyModal(true)}
                                                 >
@@ -246,7 +246,7 @@ class AppFilter extends Component {
                                                 :
                                                 <Button
                                                     type="primary"
-                                                    disabled={(this.props.disableAddButton == true) ? true : false}
+                                                    disabled={(this.props.disableAddButton === true) ? true : false}
                                                     style={{ width: '100%' }}
                                                     onClick={() => this.props.handleUserModal()}
                                                 >

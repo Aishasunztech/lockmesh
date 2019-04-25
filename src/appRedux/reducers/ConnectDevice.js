@@ -143,6 +143,7 @@ export default (state = initialState, action) => {
             }
         }
         case GET_DEVICE_DETAILS: {
+            
             let device = action.payload;
             if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
                 let status = null;

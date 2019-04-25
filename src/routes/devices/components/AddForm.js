@@ -6,6 +6,10 @@ import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon }
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 import { getProfiles } from "../../../appRedux/actions/ConnectDevice";
+import {
+    addUser,
+    getUserList
+} from "../../../appRedux/actions/Users";
 const confirm = Modal.confirm;
 class AddDevice extends Component {
 
@@ -38,6 +42,7 @@ class AddDevice extends Component {
         this.props.getChatIDs();
         this.props.getPGPEmails();
         this.props.getProfiles();
+        this.props.getUserList();
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.pgp_emails !== nextProps.pgp_emails) {
@@ -46,12 +51,12 @@ class AddDevice extends Component {
         }
     }
 
-
     handleReset = () => {
 
         this.props.getSimIDs();
         this.props.getChatIDs();
         this.props.getPGPEmails();
+        // this.props.getUserList();
         this.props.form.resetFields();
     }
 
@@ -69,7 +74,6 @@ class AddDevice extends Component {
     }
 
     render() {
-        //   console.log('props of coming', this.props.device);
         //  alert(this.props.device.device_id);
         const { visible, loading } = this.state;
         // console.log(this.state.type);
@@ -464,18 +468,20 @@ function mapDispatchToProps(dispatch) {
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs,
         getPGPEmails: getPGPEmails,
-        getProfiles: getProfiles
+        getProfiles: getProfiles,
+        addUser: addUser,
+        getUserList: getUserList
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, device_details }) => {
-    //  console.log("sdfsaf", device_details.profiles,);
+var mapStateToProps = ({ routing, devices, device_details, users }) => {
+    console.log("sdfsaf", users.users_list);
     return {
         routing: routing,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
         pgp_emails: devices.pgp_emails,
-        policies: device_details.profiles
-
+        policies: device_details.profiles,
+        users_list: users.users_list
     };
 }
 

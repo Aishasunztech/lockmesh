@@ -307,7 +307,7 @@ class EditDevice extends Component {
 
                 </Form.Item>
 
-                {(this.props.device.finalStatus == DEVICE_PRE_ACTIVATION) ?
+                {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
                     <Fragment>
 
                         <Form.Item

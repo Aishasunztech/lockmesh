@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch } from "antd";
 import update from 'react-addons-update';
 
-import PolicyInfo from './policy_info';
+import PolicyInfo from './PolicyInfo';
 
 class PolicyList extends Component {
 
@@ -73,6 +73,7 @@ class PolicyList extends Component {
 
             return {
                 rowKey: index,
+                policy_id: policy.id,
                 action:
                     (<Fragment>
                         <Button
@@ -101,7 +102,8 @@ class PolicyList extends Component {
 
 
                 ,
-                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>4</span>,
+                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
+                permissions: (policy.dealer_permission!==undefined || policy.dealer_permission !=null)?policy.dealer_permission:[],
                 policy_status: (<Switch defaultChecked={true} onChange={(e) => {
 
                 }} />),
@@ -110,7 +112,7 @@ class PolicyList extends Component {
                 push_apps: policy.push_apps,
                 app_list: policy.app_list,
                 controls: policy.controls,
-                secure_apps: policy.permissions,
+                secure_apps: policy.secure_apps,
                 default_policy: (
                     <Switch defaultChecked={true} onChange={(e) => {}} />
                 ),
