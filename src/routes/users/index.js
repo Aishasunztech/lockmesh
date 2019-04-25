@@ -22,6 +22,7 @@ import {
 } from "../../appRedux/actions/Users";
 
 import AddUser from './components/AddUser';
+import { throws } from 'assert';
 class Users extends Component {
     constructor(props) {
         super(props);
@@ -92,6 +93,7 @@ class Users extends Component {
         }
 
     }
+    
     componentDidMount() {
         this.props.getUserList();
         // this.props.getApkList();
@@ -121,7 +123,7 @@ class Users extends Component {
                 <AddUser ref="add_user" />
                 <UserList
                     columns={this.columns}
-                    users={[]}
+                    users={this.props.users_list}
                 />
                 {/* <UserList/> */}
             </Fragment>
@@ -138,7 +140,7 @@ function mapDispatchToProps(dispatch) {
 var mapStateToProps = ({ auth, users }) => {
     return {
         user: auth.authUser,
-        users_list: users.users_list
+        users_list: users.users_list,
     };
 }
 

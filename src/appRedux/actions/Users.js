@@ -22,8 +22,6 @@ export function getUserList() {
                     dispatch({
                         type: USERS_LIST,
                         payload: response.data.data,
-                        response: response.data,
-
                     });
                 }
             } else {

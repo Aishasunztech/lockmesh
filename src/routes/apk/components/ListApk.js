@@ -105,36 +105,48 @@ export default class ListApk extends Component {
     renderList(list) {
 
         return list.map((app) => {
-            return {
-                'apk_id': app.apk_id,
-                'action': (
-                    <Fragment>
-                        <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
-                            onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
-                        <Button type="danger" size="small" style={{ margin: '0px', width: '60px' }} onClick={(e) => {
-                            this.props.handleConfirmDelete(app.apk_id);
-                        }}>DELETE</Button>
-                        {/* <Button type="primary" size="small" style={{ margin: '0px', marginLeft: "8px" }}
-                            onClick={this.showModal} >Permission</Button> */}
-                        <Modal
-                            title="Dealers"
-                            visible={this.state.visible}
-                            onOk={this.handleOk}
-                            onCancel={this.handleCancel}
-                        >
-                            {/* <Table columns={columns} dataSource={data} /> */}
-                        </Modal>
+            if (app.deleteable) {
+                return {
+                    'apk_id': app.apk_id,
+                    'action': (
+                        <Fragment>
+                            <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
+                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
+                            <Button type="danger" size="small" style={{ margin: '0px', width: '60px' }} onClick={(e) => {
+                                this.props.handleConfirmDelete(app.apk_id);
+                            }}>DELETE</Button>
 
-                    </Fragment>
-                ),
-                'permission': <span style={{fontSize:15, fontWeight:400}}>{app.permission_count}</span>,
-                "permissions": app.permissions,
-                'apk_status': (<Switch defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                    this.props.handleStatusChange(e, app.apk_id);
-                }} />),
-                'apk': app.apk ? app.apk : 'N/A',
-                'apk_name': app.apk_name ? app.apk_name : 'N/A',
-                'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                        </Fragment>
+                    ),
+                    'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
+                    "permissions": app.permissions,
+                    'apk_status': (<Switch defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                        this.props.handleStatusChange(e, app.apk_id);
+                    }} />),
+                    'apk': app.apk ? app.apk : 'N/A',
+                    'apk_name': app.apk_name ? app.apk_name : 'N/A',
+                    'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                }
+
+            } else {
+                return {
+                    'apk_id': app.apk_id,
+                    'action': (
+                        <Fragment>
+                            <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
+                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
+
+                        </Fragment>
+                    ),
+                    'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
+                    "permissions": app.permissions,
+                    'apk_status': (<Switch disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                        this.props.handleStatusChange(e, app.apk_id);
+                    }} />),
+                    'apk': app.apk ? app.apk : 'N/A',
+                    'apk_name': app.apk_name ? app.apk_name : 'N/A',
+                    'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                }
             }
         });
     }
