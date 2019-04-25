@@ -290,10 +290,8 @@ const RestService = {
         }, RestService.getHeader());
 
     },
-    getPolicies: (device_id = "") => {
-        return axios.post(BASE_URL + 'users/get_policies', {
-            device_id: device_id
-        }, RestService.getHeader());
+    getPolicies: () => {
+        return axios.get(BASE_URL + 'users/get_policies', RestService.getHeader());
 
     },
 

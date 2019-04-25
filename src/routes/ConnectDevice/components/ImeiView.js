@@ -88,46 +88,59 @@ export default class ImeiView extends Component {
     }
     renderList = () => {
         var i = 0;
-        let data = this.props.imei_list.map((device, index) => {
-            if (this.state.dataFieldName === 'IMEI 1') {
-                if (device.orignal_imei1 === device.imei1) {
-                    i++
-                    return {
-                        key: index,
-                        tableIndex: i,
-                        imei: device.imei1 + ' (ORIGNAL)',
-                        changed_time: device.created_at
-                    }
-                } else {
-                    i++
-                    return {
-                        key: index,
-                        tableIndex: i,
-                        imei: device.imei1,
-                        changed_time: device.created_at
-                    }
+        let dumyImei1List = []
+        let dumyImei2List = []
+
+        var imei1List = this.props.imei_list.filter(item => {
+            if (dumyImei1List.includes(item.imei1) == false) {
+                dumyImei1List.push(item.imei1)
+                return item
+            }
+        })
+        var imei2List = this.props.imei_list.filter(item => {
+            if (dumyImei2List.includes(item.imei2) == false) {
+                dumyImei2List.push(item.imei2)
+                return item
+            }
+        })
+        let data = (this.state.dataFieldName === 'IMEI 1') ? imei1List.map((device, index) => {
+            if (device.orignal_imei1 === device.imei1) {
+                i++
+                return {
+                    key: index,
+                    tableIndex: i,
+                    imei: device.imei1 + ' (ORIGNAL)',
+                    changed_time: device.created_at
                 }
             } else {
-                if (device.orignal_imei2 === device.imei2) {
-                    i++
-                    return {
-                        key: index,
-                        tableIndex: i,
-                        imei: device.imei2 + ' (ORIGNAL)',
-                        changed_time: device.created_at
-                    }
-                } else {
-                    i++
-                    return {
-                        key: index,
-                        tableIndex: i,
-                        imei: device.imei2,
-                        changed_time: device.created_at
-                    }
+                i++
+                return {
+                    key: index,
+                    tableIndex: i,
+                    imei: device.imei1,
+                    changed_time: device.created_at
+                }
+            }
+        }) : imei2List.map((device, index) => {
+            if (device.orignal_imei2 === device.imei2) {
+                i++
+                return {
+                    key: index,
+                    tableIndex: i,
+                    imei: device.imei2 + ' (ORIGNAL)',
+                    changed_time: device.created_at
+                }
+            } else {
+                i++
+                return {
+                    key: index,
+                    tableIndex: i,
+                    imei: device.imei2,
+                    changed_time: device.created_at
                 }
             }
         })
-        return data
+        return data;
     }
 
 

@@ -122,7 +122,7 @@ export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName='
 }
 
 export function savePermission(policy_id, dealers, action) {
-    alert(policy_id);
+    // alert(policy_id);
     
     return (dispatch) => {
         RestService.savePolicyPermissions(policy_id, dealers, action).then((response) => {

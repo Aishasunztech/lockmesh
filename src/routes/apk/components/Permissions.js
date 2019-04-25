@@ -7,6 +7,18 @@ import { savePermission } from "../../../appRedux/actions/Apk";
 import DealerList from "./DealerList";
 import CircularProgress from "components/CircularProgress/index";
 
+import { titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
+
+import {
+  DEALER_ID,
+  DEALER_NAME,
+  DEALER_EMAIL,
+  DEALER_PIN,
+  DEALER_DEVICES,
+  DEALER_TOKENS,
+  DEALER_ACTION
+} from '../../../constants/DealerConstants';
+
 
 // export default 
 class Permissions extends Component {
@@ -21,206 +33,9 @@ class Permissions extends Component {
       removeSelectedDealersModal: false,
       addSelectedDealersModal: false
     }
-
-    this.addDealerCols = [
-      {
-        title: (
-          <Input.Search
-            name="dealer_id"
-            key="dealer_id"
-            id="dealer_id"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder="Device ID"
-            onKeyUp={
-              (e) => {
-                this.handleSearch(e)
-              }
-            }
-
-          />
-        ),
-        dataIndex: 'dealer_id',
-        className: '',
-        children: [
-          {
-            title: 'DEALER ID',
-            dataIndex: 'dealer_id',
-            key: 'dealer_id',
-            sortDirections: ['ascend', 'descend'],
-            sorter: (a, b) => a.dealer_id - b.dealer_id,
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-      {
-        title: (
-          <Input.Search
-            name="link_code"
-            key="link_code"
-            id="link_code"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder="Dealer Pin"
-            onKeyUp={
-              (e) => {
-                this.handleSearch(e)
-              }
-            }
-
-          />
-        ),
-        dataIndex: 'link_code',
-        className: '',
-        children: [
-          {
-            title: 'DEALER PIN',
-            dataIndex: 'link_code',
-            key: 'link_code',
-
-            sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-      {
-        title: (
-          <Input.Search
-            name="dealer_name"
-            key="dealer_name"
-            id="dealer_name"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder="Dealer Name"
-            onKeyUp={
-              (e) => {
-                this.handleSearch(e)
-              }
-            }
-
-          />
-        ),
-        dataIndex: 'dealer_name',
-        className: '',
-        children: [
-          {
-            title: 'DEALER NAME',
-            dataIndex: 'dealer_name',
-            key: 'dealer_name',
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.dealer_name.length;
-            // },
-            sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-      {
-        title: (
-          <Input.Search
-            name="dealer_email"
-            key="dealer_email"
-            id="dealer_email"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder="Dealer Email"
-            onKeyUp={
-              (e) => {
-                this.handleSearch(e)
-              }
-            }
-
-          />
-        ),
-        dataIndex: 'dealer_email',
-        className: '',
-        children: [
-          {
-            title: 'DEALER EMAIL',
-            dataIndex: 'dealer_email',
-            key: 'dealer_email',
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.dealer_email.length;
-            // },
-            sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-
-    ]
-
-    this.listDealerCols = [
-      {
-        title: 'DEALER ID',
-        dataIndex: 'dealer_id',
-        key: 'dealer_id',
-        sortDirections: ['ascend', 'descend'],
-
-        sorter: (a, b) => a.dealer_id - b.dealer_id,
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-      {
-        title: 'DEALER PIN',
-        dataIndex: 'link_code',
-        key: 'link_code',
-
-        sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-      {
-        title: 'DEALER NAME',
-        dataIndex: 'dealer_name',
-        key: 'dealer_name',
-
-        sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-      {
-        title: 'DEALER EMAIL',
-        dataIndex: 'dealer_email',
-        key: 'dealer_email',
-
-        sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-      {
-        title: 'ACTION',
-        dataIndex: 'action',
-        key: 'action',
-        // sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-        align: 'center',
-        // sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-
-    ]
+    
+    this.addDealerCols = dealerColsWithSearch(true, this.handleSearch)
+    this.listDealerCols = dealerColsWithSearch();
 
   }
 
@@ -278,11 +93,11 @@ class Permissions extends Component {
     var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
     var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
     var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
-    permissions= [...permissions , ...addUnSelected_IDs];
+    permissions = [...permissions, ...addUnSelected_IDs];
 
-    this.setState({ 
-      permissions, 
-      addSelectedDealersModal: false 
+    this.setState({
+      permissions,
+      addSelectedDealersModal: false
     })
     this.props.savePermission(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
   }
@@ -464,7 +279,7 @@ class Permissions extends Component {
     let permittedDealers = this.state.permissions;
     let selectedRows = this.state.selectedRowKeys;
     var remove_ids = permittedDealers.filter(e => !selectedRows.includes(e));
-    
+
     this.setState({
       removeSelectedDealersModal: false,
       dealer_ids: [],
@@ -512,25 +327,25 @@ class Permissions extends Component {
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" span={4}>
+          <Col className="gutter-row">
             <div className="gutter-box"><h2>Permission List</h2> </div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row">
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
-          </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row">
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row">
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
+          </Col>
+          <Col className="gutter-row">
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row">
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
           </Col>
-          <Col className="gutter-row" span={4}>
+          <Col className="gutter-row">
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
@@ -605,8 +420,8 @@ class Permissions extends Component {
           />
         </Modal>
 
-         {/*  Add Except selected */}
-         <Modal
+        {/*  Add Except selected */}
+        <Modal
           width='665px'
           className="permiss_tabl"
           title="Add Dealers to permissions list for this App"

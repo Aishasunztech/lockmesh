@@ -70,7 +70,7 @@ import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch, titleCase } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import { stat } from "fs";
 import AddDevice from './components/AddDevice';
@@ -463,7 +463,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {DEVICE_DEALER_PIN}
+                        placeholder= {titleCase(DEVICE_DEALER_PIN)}
                     />
                 ),
                 dataIndex: 'dealer_pin',
@@ -1184,9 +1184,10 @@ class Devices extends Component {
         this.props.history.push('/devices');
     }
     render() {
-
+        // dealerColsWithSearch();
         return (
             <Fragment>
+                {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
                 {
                     this.props.isloading ? <CircularProgress /> :
                         <Fragment>
