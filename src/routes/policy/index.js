@@ -8,12 +8,31 @@ import AddPolicy from "./components/AddPolicy";
 
 import {
     getPolicies,
-    getDefaultApps
 } from "../../appRedux/actions/Policy";
 
+import { 
+    getDropdown, 
+    postDropdown, 
+    postPagination, 
+    getPagination 
+} from '../../appRedux/actions/Common';
+
 import {
-    getApkList,
-} from "../../appRedux/actions/Apk";
+    getDealerApps
+} from "../../appRedux/actions/ConnectDevice";
+
+import {
+    POLICY_NAME,
+    POLICY_PERMISSIONS,
+    POLICY_STATUS,
+    POLICY_COMMAND,
+    POLICY_INFO,
+    POLICY_NOTE
+} from "../../constants/PolicyConstants";
+
+import {
+    titleCase
+} from '../utils/commonUtils';
 
 class Policy extends Component {
     constructor(props) {
@@ -36,7 +55,7 @@ class Policy extends Component {
             {
                 title: (
                     <span>
-                        POLICY INFO
+                        {POLICY_INFO}
                     {/* <Popover placement="top" content='dumy'>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover> */}
@@ -48,8 +67,8 @@ class Policy extends Component {
             {
                 title: (
                     <span>
-                        PERMISSIONS
-                    <Popover placement="top" content='dumy'>
+                        {POLICY_PERMISSIONS}
+                        <Popover placement="top" content='dumy'>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover>
                     </span>),
@@ -58,7 +77,7 @@ class Policy extends Component {
                 className: 'row'
             },
             {
-                title: 'STATUS',
+                title: POLICY_STATUS,
                 dataIndex: 'policy_status',
                 key: 'policy_status',
             },
@@ -71,14 +90,14 @@ class Policy extends Component {
                         className="search_heading"
                         // onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Policy Name"
+                        placeholder={titleCase(POLICY_NAME)}
                     />
                 ),
                 dataIndex: 'policy_name',
                 className: '',
                 children: [
                     {
-                        title: 'POLICY NAME',
+                        title: POLICY_NAME,
                         align: "center",
                         dataIndex: 'policy_name',
                         key: "policy_name",
@@ -86,8 +105,34 @@ class Policy extends Component {
                         sorter: (a, b) => { return a.policy_name.localeCompare(b.policy_name) },
                     }
                 ],
-
                 sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="policy_command"
+                        key="policy_command"
+                        id="policy_command"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(POLICY_COMMAND)}
+                    />
+                ),
+                dataIndex: 'policy_command',
+                className: '',
+                children: [
+                    {
+                        title: POLICY_COMMAND,
+                        align: "center",
+                        className: '',
+                        dataIndex: 'policy_command',
+                        key: 'policy_command',
+                        sorter: (a, b) => { return a.policy_command.localeCompare(b.policy_command) },
+
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
             },
             {
                 title: (
@@ -98,19 +143,18 @@ class Policy extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Policy Command"
+                        placeholder={titleCase(POLICY_NOTE)}
                     />
                 ),
                 dataIndex: 'policy_note',
                 className: '',
                 children: [
                     {
-                        title: 'POLICY COMMAND',
+                        title: POLICY_NOTE,
                         align: "center",
                         className: '',
                         dataIndex: 'policy_note',
                         key: 'policy_note',
-
                         // ...this.getColumnSearchProps('status'),
                         sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
 
@@ -135,8 +179,16 @@ class Policy extends Component {
     }
     componentDidMount() {
         this.props.getPolicies();
-        this.props.getApkList();
-        this.props.getDefaultApps();
+        this.props.getPagination('policies');
+        // this.props.getApkList();
+        // this.props.getDefaultApps();
+    }
+
+    handlePagination = (value) => {
+        //  alert(value);
+        //  console.log('pagination value of ', value)
+        // this.refs.devcieList.handlePagination(value);
+        this.props.postPagination(value, 'policies');
     }
 
     handlePolicyModal = (visible) => {
@@ -182,6 +234,7 @@ class Policy extends Component {
                     <AddPolicy
                         apk_list={this.props.apk_list}
                         app_list={this.props.app_list}
+                        handlePolicyModal={this.handlePolicyModal}
                     />
                 </Modal>
             </Fragment>
@@ -192,8 +245,11 @@ class Policy extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getPolicies: getPolicies,
-        getApkList: getApkList,
-        getDefaultApps: getDefaultApps
+        // postDropdown: postDropdown,
+        postPagination: postPagination,
+        getPagination: getPagination,
+        // getApkList: getApkList,
+        // getDefaultApps: getDefaultApps
     }, dispatch);
 }
 var mapStateToProps = ({ policies }) => {
@@ -201,7 +257,7 @@ var mapStateToProps = ({ policies }) => {
     return {
         policies: policies.policies,
         apk_list: policies.apk_list,
-        app_list: policies.app_list
+        app_list: policies.app_list,
     };
 }
 

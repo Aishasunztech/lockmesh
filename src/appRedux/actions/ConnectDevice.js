@@ -34,6 +34,8 @@ import {
     HANDLE_CHECK_CONTROL,
     UNDO_CONTROLS,
     REDO_CONTROLS,
+    GET_APPS_PERMISSIONS,
+    HANDLE_CHECK_APP_POLICY,
     GET_IMIE_HISTORY
 
 } from "../../constants/ActionTypes"
@@ -121,6 +123,27 @@ export function getProfiles(device_id) {
         });
     }
 }
+
+// export function getAppPermissions(device_id) {
+//     return (dispatch) => {
+//         RestService.getAppPermissions(device_id).then((response) => {
+
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+//                     dispatch({
+//                         type: GET_APPS_PERMISSIONS,
+//                         payload: response.data
+//                     })
+//                 }
+
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 })
+//             }
+//         });
+//     }
+// }
 
 export function getPolicies(device_id) {
     return (dispatch) => {
@@ -295,6 +318,9 @@ export function activateDevice2(device) {
     }
 
 }
+
+
+
 
 export function saveDeviceProfile(profileName, deviceSettings) {
 }
@@ -490,6 +516,7 @@ export function handleCheckApp(e, key, app_id) {
     }
 }
 
+
 export function handleCheckAll(keyAll, key, value) {
     return (dispatch) => {
         dispatch({
@@ -587,6 +614,7 @@ export function saveProfile(app_list, passwords = null, profileType, profileName
             passwords: pwd,
             controls: {}
         }
+
         // console.log("applist save profile", device_setting);
         RestService.applySettings(device_setting, null, profileType, profileName, null, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -715,9 +743,12 @@ export const checkPass = (user) => {
 }
 
 export const getDealerApps = () => {
+    console.log('get dealer action id')
     return (dispatch) => {
+        console.log('in return of fucntion')
         RestService.getDealerApps().then((response) => {
             if (RestService.checkAuth(response.data)) {
+                console.log('get dealer apps resoo', response.data)
                 dispatch({
                     type: GET_DEALER_APPS,
                     payload: response.data.list

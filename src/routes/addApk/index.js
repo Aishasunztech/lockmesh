@@ -16,15 +16,13 @@ import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message } f
 // console.log('token', token);
 let logo = '';
 let apk = '';
+let versionCode = '';
+let versionName = '';
+let packageName = '';
+let details = '';
+
 let form_data = '';
 class AddApk extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-
-    }
 
     render() {
 
@@ -79,7 +77,11 @@ class AddApkForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 
-                form_data = { 'logo': logo, 'apk': apk, 'name': values.name }
+                form_data = { 
+                    'logo': logo, 
+                    'apk': apk, 
+                    'name': values.name,
+                }
                 // console.log('hisory',this.props.go_back);
                 this.props.addApk(form_data);
                 disableLogo = false;    
@@ -128,8 +130,9 @@ class AddApkForm extends Component {
                     // console.log(info.file, info.fileList);
                 }
                 if (status === 'done') {
-
-                    if (info.file.response !== 'Error while Uploading') {
+                    console.log(info.file.response);
+                    
+                    if (info.file.response.status !== false) {
                         disableLogo = true;
 
                         if (info.file.response.fileName !== '') {
@@ -163,14 +166,20 @@ class AddApkForm extends Component {
                     // console.log(info.file, info.fileList);
                 }
                 if (status === 'done') {
-
-                    if (info.file.response !== 'Error while Uploading') {
+                    
+                    if (info.file.response.status !== false) {
+                        console.log(info.file.response);
 
                         disableApk = true;
 
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
                             // console.log('apk name', apk);
+                            packageName = info.file.response.packageName;
+                            // versionCode = info.file.response.versionCode;
+                            // versionName = info.file.response.versionName;
+                            // details = info.file.response.details;
+
                         }
                         message.success('file added Successfully ');
                     }
@@ -276,4 +285,10 @@ const mapStateToProps = ({ apk_list }) => {
     };
 }
 
-export default connect(mapStateToProps, { addApk, getApkList })(AddApk);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        addApk: addApk, 
+        getApkList: getApkList
+    }, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AddApk);

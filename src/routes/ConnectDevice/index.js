@@ -39,7 +39,6 @@ import {
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
-import styles from './ConnectDevice.css';
 // import { BASE_URL } from '../../constants/Application';
 import {
   DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
@@ -55,6 +54,8 @@ import Password from "./components/Password"
 import { getColor } from "../utils/commonUtils"
 import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
+import styles from './ConnectDevice.css';
+
 
 class ConnectDevice extends Component {
 

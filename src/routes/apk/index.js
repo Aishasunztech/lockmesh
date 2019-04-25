@@ -18,7 +18,16 @@ import AppFilter from "../../components/AppFilter";
 // import { BASE_URL } from '../../constants/Application';
 import ListApk from './components/ListApk';
 
-import { componentSearch } from "../utils/commonUtils";
+import {
+	APK_SHOW_ON_DEVICE,
+	APK,
+	APK_APP_NAME,
+    APK_APP_LOGO,
+    APK_PERMISSION,
+    APK_ACTION
+} from '../../constants/ApkConstants';
+
+import { componentSearch, titleCase } from "../utils/commonUtils";
 
 const question_txt = (
     <div>
@@ -37,7 +46,7 @@ class Apk extends React.Component {
             apk_list: [],
             columns: [
                 {
-                    title: 'ACTION',
+                    title: APK_ACTION,
                     dataIndex: 'action',
                     key: 'action',
                     className: 'row'
@@ -45,7 +54,7 @@ class Apk extends React.Component {
                 {
                     title: (
                         <span>
-                            PERMISSION
+                            {APK_PERMISSION}
                         <Popover placement="top" content={question_txt}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
@@ -55,17 +64,18 @@ class Apk extends React.Component {
                     className: 'row'
                 },
                 {
-                    title: 'SHOW ON DEVICE',
+                    title: APK_SHOW_ON_DEVICE,
+                    // title: 'SHOW ON DEVICE',
                     dataIndex: 'apk_status',
                     key: 'apk_status',
                 },
                 {
-                    title: 'APK',
+                    title: APK,
                     dataIndex: 'apk',
                     key: 'apk',
                 },
                 {
-                    title: 'APP NAME',
+                    title: APK_APP_NAME,
                     dataIndex: 'apk_name',
                     width: "100",
                     key: 'apk_name',
@@ -81,7 +91,7 @@ class Apk extends React.Component {
                     defaultSortOrder: "ascend"
                 },
                 {
-                    title: 'APP LOGO',
+                    title: APK_APP_LOGO,
                     dataIndex: 'apk_logo',
                     key: 'apk_logo',
                 },

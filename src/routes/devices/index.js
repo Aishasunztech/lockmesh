@@ -12,6 +12,7 @@ import {
     preActiveDevice,
     deleteUnlinkDevice,
 } from "../../appRedux/actions/Devices";
+
 import {
     DEVICE_ACTIVATED,
     DEVICE_EXPIRED,
@@ -24,17 +25,52 @@ import {
 } from '../../constants/Constants'
 
 import {
+    DEVICE_ID,
+    DEVICE_REMAINING_DAYS,
+    DEVICE_FLAGGED,
+    DEVICE_STATUS,
+    DEVICE_MODE,
+    DEVICE_NAME,
+    DEVICE_ACTIVATION_CODE,
+    DEVICE_ACCOUNT_EMAIL,
+    DEVICE_PGP_EMAIL,
+    DEVICE_CHAT_ID,
+    DEVICE_CLIENT_ID,
+    DEVICE_DEALER_ID,
+    DEVICE_DEALER_PIN,
+    DEVICE_MAC_ADDRESS,
+    DEVICE_SIM_ID,
+    DEVICE_IMEI_1,
+    DEVICE_SIM_1,
+    DEVICE_IMEI_2,
+    DEVICE_SIM_2,
+    DEVICE_SERIAL_NUMBER,
+    DEVICE_MODEL,
+    DEVICE_START_DATE,
+    DEVICE_EXPIRY_DATE,
+    DEVICE_DEALER_NAME,
+    DEVICE_S_DEALER,
+    DEVICE_S_DEALER_NAME
+} from '../../constants/DeviceConstants';
+
+import { 
+    getDropdown, 
+    postDropdown, 
+    postPagination, 
+    getPagination 
+} from '../../appRedux/actions/Common';
+
+import {
     getNotification
 } from "../../appRedux/actions/Socket";
 
-import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 
 import { bindActionCreators } from "redux";
 import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import { stat } from "fs";
 import AddDevice from './components/AddDevice';
@@ -81,14 +117,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Remaining Days"
+                        placeholder= {titleCase(DEVICE_REMAINING_DAYS)}
                     />
                 ),
                 dataIndex: 'remain_days',
                 className: 'hide',
                 children: [
                     {
-                        title: 'REMAINING DAYS',
+                        title: DEVICE_REMAINING_DAYS,
                         align: "center",
                         dataIndex: 'remain_days',
                         key: "remain_days",
@@ -107,14 +143,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Device ID"
+                        placeholder= {titleCase(DEVICE_ID)}
                     />
                 ),
                 dataIndex: 'device_id',
                 className: '',
                 children: [
                     {
-                        title: 'DEVICE ID',
+                        title: DEVICE_ID,
                         align: "center",
                         dataIndex: 'device_id',
                         key: "device_id",
@@ -133,7 +169,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Status"
+                        placeholder= {titleCase(DEVICE_STATUS)}
                     />
                 ),
                 dataIndex: 'status',
@@ -141,7 +177,7 @@ class Devices extends Component {
 
                 children: [
                     {
-                        title: 'STATUS',
+                        title: DEVICE_STATUS,
                         align: "center",
                         className: '',
                         dataIndex: 'status',
@@ -161,14 +197,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Online"
+                        placeholder= {titleCase(DEVICE_MODE)}
                     />
                 ),
                 dataIndex: 'online',
                 className: '',
                 children: [
                     {
-                        title: 'MODE',
+                        title: DEVICE_MODE,
                         align: "center",
                         className: '',
                         dataIndex: 'online',
@@ -188,7 +224,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Flagged"
+                        placeholder= {titleCase(DEVICE_FLAGGED)}
                     />
                 ),
                 dataIndex: 'flagged',
@@ -196,7 +232,7 @@ class Devices extends Component {
 
                 children: [
                     {
-                        title: 'FLAGGED',
+                        title: DEVICE_FLAGGED,
                         align: "center",
                         className: '',
                         dataIndex: 'flagged',
@@ -216,7 +252,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Device Name"
+                        placeholder= {titleCase(DEVICE_NAME)}
 
                     />
                 ),
@@ -225,8 +261,8 @@ class Devices extends Component {
                 editable: true,
                 children: [
                     {
+                        title: DEVICE_NAME,
                         align: "center",
-                        title: 'DEVICE NAME',
                         dataIndex: 'name',
                         key: 'name',
                         className: '',
@@ -246,14 +282,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Account Email"
+                        placeholder= {titleCase(DEVICE_ACCOUNT_EMAIL)}
                     />
                 ),
                 dataIndex: 'account_email',
                 className: '',
                 children: [
                     {
-                        title: 'ACCOUNT EMAIL',
+                        title: DEVICE_ACCOUNT_EMAIL,
                         align: "center",
                         dataIndex: 'account_email',
                         key: 'account_email',
@@ -273,14 +309,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="PGP Email"
+                        placeholder= {titleCase(DEVICE_PGP_EMAIL)}
                     />
                 ),
                 dataIndex: 'pgp_email',
                 className: '',
                 children: [
                     {
-                        title: 'PGP EMAIL',
+                        title: DEVICE_PGP_EMAIL,
                         align: "center",
                         dataIndex: 'pgp_email',
                         className: '',
@@ -298,14 +334,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="ACTIVATION CODE"
+                        placeholder= {titleCase(DEVICE_ACTIVATION_CODE)}
                     />
                 ),
                 dataIndex: 'activation_code',
                 className: '',
                 children: [
                     {
-                        title: 'ACTIVATION CODE',
+                        title: DEVICE_ACTIVATION_CODE,
                         align: "center",
                         dataIndex: 'activation_code',
                         className: '',
@@ -323,14 +359,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Chat ID"
+                        placeholder= {titleCase(DEVICE_CHAT_ID)}
                     />
                 ),
                 dataIndex: 'chat_id',
                 className: '',
                 children: [
                     {
-                        title: 'CHAT ID',
+                        title: DEVICE_CHAT_ID,
                         align: "center",
                         dataIndex: 'chat_id',
                         key: 'chat_id',
@@ -350,14 +386,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Client ID"
+                        placeholder= {titleCase(DEVICE_CLIENT_ID)}
                     />
                 ),
                 dataIndex: 'client_id',
                 className: '',
                 children: [
                     {
-                        title: 'CLIENT ID',
+                        title: DEVICE_CLIENT_ID,
                         align: "center",
                         dataIndex: 'client_id',
                         key: 'client_id',
@@ -376,14 +412,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Dealer ID"
+                        placeholder= {titleCase(DEVICE_DEALER_ID)}
                     />
                 ),
                 dataIndex: 'dealer_id',
                 className: '',
                 children: [
                     {
-                        title: 'DEALER ID',
+                        title: DEVICE_DEALER_ID,
                         align: "center",
                         dataIndex: 'dealer_id',
                         className: '',
@@ -401,14 +437,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Dealer Name"
+                        placeholder= {titleCase(DEVICE_DEALER_NAME)}
                     />
                 ),
                 dataIndex: 'dealer_name',
                 className: '',
                 children: [
                     {
-                        title: 'DEALER NAME',
+                        title: DEVICE_DEALER_NAME,
                         align: "center",
                         className: '',
                         dataIndex: 'dealer_name',
@@ -427,14 +463,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Dealer Pin"
+                        placeholder= {DEVICE_DEALER_PIN}
                     />
                 ),
                 dataIndex: 'dealer_pin',
                 className: '',
                 children: [
                     {
-                        title: 'DEALER PIN',
+                        title: DEVICE_DEALER_PIN,
                         align: "center",
                         dataIndex: 'dealer_pin',
                         key: 'dealer_pin',
@@ -453,14 +489,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Mac Address"
+                        placeholder= {titleCase(DEVICE_MAC_ADDRESS)}
                     />
                 ),
                 dataIndex: 'mac_address',
                 className: '',
                 children: [
                     {
-                        title: 'MAC ADDRESS',
+                        title: DEVICE_MAC_ADDRESS,
                         align: "center",
                         className: '',
                         dataIndex: 'mac_address',
@@ -479,14 +515,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Sim ID"
+                        placeholder= {titleCase(DEVICE_SIM_ID)}
                     />
                 ),
                 dataIndex: 'sim_id',
                 className: '',
                 children: [
                     {
-                        title: 'SIM ID',
+                        title: DEVICE_SIM_ID,
                         align: "center",
                         dataIndex: 'sim_id',
                         key: 'sim_id',
@@ -504,7 +540,7 @@ class Devices extends Component {
                         id="imei"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder="IMEI 1"
+                        placeholder= {titleCase(DEVICE_IMEI_1)}
                         onKeyUp={this.handleSearch}
                     />
                 ),
@@ -512,7 +548,7 @@ class Devices extends Component {
                 className: '',
                 children: [
                     {
-                        title: 'IMEI 1',
+                        title: DEVICE_IMEI_1,
                         align: "center",
                         className: '',
                         dataIndex: 'imei_1',
@@ -531,15 +567,15 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Sim 1"
+                        placeholder= {titleCase(DEVICE_SIM_1)}
                     />
                 ),
                 className: '',
                 dataIndex: 'sim_1',
                 children: [
                     {
+                        title: DEVICE_SIM_1,
                         align: "center",
-                        title: 'SIM 1',
                         className: '',
                         dataIndex: 'sim_1',
                         key: 'sim_1',
@@ -557,7 +593,7 @@ class Devices extends Component {
                         id="imei2"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder="IMEI 2"
+                        placeholder= {titleCase(DEVICE_IMEI_2)}
                         onKeyUp={this.handleSearch}
                     />
                 ),
@@ -565,7 +601,7 @@ class Devices extends Component {
                 className: '',
                 children: [
                     {
-                        title: 'IMEI 2',
+                        title: DEVICE_IMEI_2,
                         align: "center",
                         dataIndex: 'imei_2',
                         key: 'imei_2',
@@ -584,14 +620,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Sim 2"
+                        placeholder= {titleCase(DEVICE_SIM_2)}
                     />
                 ),
                 dataIndex: 'sim_2',
                 className: '',
                 children: [
                     {
-                        title: 'SIM 2',
+                        title: DEVICE_SIM_2,
                         align: "center",
                         dataIndex: 'sim_2',
                         key: 'sim_2',
@@ -610,14 +646,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Serial Number"
+                        placeholder= {titleCase(DEVICE_SERIAL_NUMBER)}
                     />
                 ),
                 dataIndex: 'serial_number',
                 className: '',
                 children: [
                     {
-                        title: 'SERIAL NUMBER',
+                        title: DEVICE_SERIAL_NUMBER,
                         align: "center",
                         dataIndex: 'serial_number',
                         key: 'serial_number',
@@ -637,14 +673,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Model"
+                        placeholder= {titleCase(DEVICE_MODEL)}
                     />
                 ),
                 dataIndex: 'model',
                 className: '',
                 children: [
                     {
-                        title: 'MODEL',
+                        title: DEVICE_MODEL,
                         align: "center",
                         className: '',
                         dataIndex: 'model',
@@ -664,14 +700,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="S Dealer"
+                        placeholder= {titleCase(DEVICE_S_DEALER)}
                     />
                 ),
                 dataIndex: 's_dealer',
                 className: '',
                 children: [
                     {
-                        title: 'S-DEALER',
+                        title: DEVICE_S_DEALER,
                         align: "center",
                         className: '',
                         dataIndex: 's_dealer',
@@ -690,14 +726,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="S-Dealer Name"
+                        placeholder= {titleCase(DEVICE_S_DEALER_NAME)}
                     />
                 ),
                 dataIndex: 's_dealer_name',
                 className: '',
                 children: [
                     {
-                        title: 'S-DEALER NAME',
+                        title: DEVICE_S_DEALER_NAME,
                         align: "center",
                         className: '',
                         dataIndex: 's_dealer_name',
@@ -715,14 +751,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Start Date"
+                        placeholder= {titleCase(DEVICE_START_DATE)}
                     />
                 ),
                 dataIndex: 'start_date',
                 className: '',
                 children: [
                     {
-                        title: 'START DATE',
+                        title: DEVICE_START_DATE,
                         align: "center",
                         className: '',
                         dataIndex: 'start_date',
@@ -740,14 +776,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Expiry Date"
+                        placeholder= {titleCase(DEVICE_EXPIRY_DATE)}
                     />
                 ),
                 dataIndex: 'expiry_date',
                 className: '',
                 children: [
                     {
-                        title: 'EXPIRY DATE',
+                        title: DEVICE_EXPIRY_DATE,
                         align: "center",
                         className: '',
                         dataIndex: 'expiry_date',
@@ -1066,7 +1102,7 @@ class Devices extends Component {
     handlePagination = (value) => {
         //  alert(value);
         //  console.log('pagination value of ', value)
-        this.refs.devcieList.handlePagination(value);
+        // this.refs.devcieList.handlePagination(value);
         this.props.postPagination(value, 'devices');
     }
     componentDidMount() {

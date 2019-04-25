@@ -189,9 +189,21 @@ const RestService = {
         return axios.get(BASE_URL + 'users/connect/' + device_id, RestService.getHeader());
     },
 
+    savePolicy: (data) => {
+        //console.log('rest apoi')
+        return axios.post(BASE_URL + 'users/save_policy', {data}, RestService.getHeader());
+    },
+
     // connect devices for dealer dash.
     getDealerApps: () => {
+     
         return axios.get(BASE_URL + "users/get_dealer_apps", RestService.getHeader());
+    },
+
+      // connect devices for dealer dash.
+      getAppPermissions: () => {
+      console.log('api called ')
+        return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
     },
 
     getDeviceApps: (device_id) => {
@@ -206,9 +218,18 @@ const RestService = {
         // console.log('rest ser')
         return axios.get(BASE_URL + "users/get_usr_acc_id/" + d, RestService.getHeader());
     },
-    savePermissions: (apkId, dealers, action) => {
-        return axios.post(BASE_URL + 'users/save_permissions', {
+    saveAPKPermissions: (apkId, dealers, action) => {
+        return axios.post(BASE_URL + 'users/save_apk_permissions', {
             apkId: apkId,
+            dealers: dealers,
+            action: action
+        },
+            RestService.getHeader()
+        );
+    },
+    savePolicyPermissions: (policyId, dealers, action) => {
+        return axios.post(BASE_URL + 'users/save_policy_permissions', {
+            policyId: policyId,
             dealers: dealers,
             action: action
         },
