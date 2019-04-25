@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch } from "antd";
-import update from 'react-addons-update';
-import users from '..';
+import UserDeviceList from './UserDeviceList'
 
 class UserList extends Component {
 
@@ -37,8 +36,8 @@ class UserList extends Component {
                     </Fragment>)
                 ,
                 user_id: <span style={{ fontSize: 15, fontWeight: 400 }}>{user.user_id}</span>,
-                device: <span style={{ fontSize: 15, fontWeight: 400 }}>{4}</span>,
-                devices: '',
+                devices: <span style={{ fontSize: 15, fontWeight: 400 }}>{(user.devicesList) ? user.devicesList.length : 0}</span>,
+                devicesList: user.devicesList,
                 user_name: <span style={{ fontSize: 15, fontWeight: 400 }}>{user.user_name}</span>,
                 user_email: <span style={{ fontSize: 15, fontWeight: 400 }}>{user.email}</span>,
                 token: <span style={{ fontSize: 15, fontWeight: 400 }}>{user.email}</span>,
@@ -94,10 +93,10 @@ class UserList extends Component {
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            // console.log("table row", record);
+                            console.log("table row", record);
                             return (
-                                <h1>Hello</h1>
-                                // <Permissions record={record} />
+                                <UserDeviceList
+                                    record={record} />
                             );
                         }}
                         expandIconColumnIndex={2}

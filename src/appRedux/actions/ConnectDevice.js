@@ -61,7 +61,7 @@ export function getDeviceDetails(deviceId) {
         RestService.getDeviceDetails(deviceId).then((response) => {
             // console.log("slkdflaskdfjlasf", response.data);
             if (RestService.checkAuth(response.data.status)) {
-                //    console.log("slkdflaskdfjlasf", response.data);
+                // console.log("slkdflaskdfjlasf", response.data);
                 if (response.data) {
                     dispatch({
                         type: GET_DEVICE_DETAILS,
