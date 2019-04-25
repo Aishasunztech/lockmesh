@@ -278,11 +278,11 @@ class Permissions extends Component {
     var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
     var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
     var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
-    permissions= [...permissions , ...addUnSelected_IDs];
+    permissions = [...permissions, ...addUnSelected_IDs];
 
-    this.setState({ 
-      permissions, 
-      addSelectedDealersModal: false 
+    this.setState({
+      permissions,
+      addSelectedDealersModal: false
     })
     this.props.savePermission(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
   }
@@ -464,7 +464,7 @@ class Permissions extends Component {
     let permittedDealers = this.state.permissions;
     let selectedRows = this.state.selectedRowKeys;
     var remove_ids = permittedDealers.filter(e => !selectedRows.includes(e));
-    
+
     this.setState({
       removeSelectedDealersModal: false,
       dealer_ids: [],
@@ -512,25 +512,25 @@ class Permissions extends Component {
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" span={4}>
+          <Col className="gutter-row">
             <div className="gutter-box"><h2>Permission List</h2> </div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row">
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
-          </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row">
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row">
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
+          </Col>
+          <Col className="gutter-row">
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row">
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
           </Col>
-          <Col className="gutter-row" span={4}>
+          <Col className="gutter-row">
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
@@ -605,8 +605,8 @@ class Permissions extends Component {
           />
         </Modal>
 
-         {/*  Add Except selected */}
-         <Modal
+        {/*  Add Except selected */}
+        <Modal
           width='665px'
           className="permiss_tabl"
           title="Add Dealers to permissions list for this App"

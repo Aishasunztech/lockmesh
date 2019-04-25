@@ -268,3 +268,13 @@
 .text2 {
     line-height: 228px;
 }
+
+@media (max-width: 992px) {
+    .manage_ac .ant-card-body {
+        height: auto;
+    }
+
+    .text {
+        line-height: 200px;
+    }
+}

@@ -130,8 +130,7 @@ module.exports = {
     },
     checkRemainDays: function (createDate, validity) {
         var validDays = 0, createdDateTime, today, days;
-            if (validity != null) validDays = validity;
-            
+        if (validity != null) validDays = validity;
         createdDateTime = new Date(createDate);
         createdDateTime.setDate(createdDateTime.getDate() + validDays);
         today = new Date();
