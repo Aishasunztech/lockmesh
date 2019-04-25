@@ -105,20 +105,20 @@ export default class ListApk extends Component {
     renderList(list) {
 
         return list.map((app) => {
-            if(app.deleteable){
+            if (app.deleteable) {
                 return {
                     'apk_id': app.apk_id,
                     'action': (
                         <Fragment>
-                            <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
+                            <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
                                 onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
-                            <Button type="danger" size="small" style={{ margin: '0px', width: '60px' }} onClick={(e) => {
+                            <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
                                 this.props.handleConfirmDelete(app.apk_id);
                             }}>DELETE</Button>
-                    
+
                         </Fragment>
                     ),
-                    'permission': <span style={{fontSize:15, fontWeight:400}}>{app.permission_count}</span>,
+                    'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
                     "permissions": app.permissions,
                     'apk_status': (<Switch defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                         this.props.handleStatusChange(e, app.apk_id);
@@ -135,10 +135,10 @@ export default class ListApk extends Component {
                         <Fragment>
                             <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
                                 onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
-                        
+
                         </Fragment>
                     ),
-                    'permission': <span style={{fontSize:15, fontWeight:400}}>{app.permission_count}</span>,
+                    'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
                     "permissions": app.permissions,
                     'apk_status': (<Switch disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                         this.props.handleStatusChange(e, app.apk_id);
