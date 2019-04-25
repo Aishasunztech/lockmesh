@@ -5,7 +5,8 @@ import {
     GET_APPS_PERMISSIONS,
     GET_DEALER_APPS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
-    SAVE_POLICY
+    SAVE_POLICY,
+    PERMSSION_SAVED
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -188,6 +189,19 @@ export default (state = initialState, action) => {
            
         }
 
+        case PERMSSION_SAVED: {
+			message.success(action.payload);
+			let dealers = JSON.parse(action.dealers)
+			console.log(dealers.length ,'itrititt',action.apk_id);
+			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
+			state.apk_list[objIndex].permission_count = action.permission_count;
+			
+			return {
+				...state,
+				apk_list: [...state.apk_list]
+			}
+        }
+        
         default: {
 
             return state;

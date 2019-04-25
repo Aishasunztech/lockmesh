@@ -6,9 +6,9 @@ import {
   getAllDealers 
 } from "../../../appRedux/actions/Dealers";
 
-// import { 
-//   savePermission 
-// } from "../../../appRedux/actions/Apk";
+import { 
+  savePermission 
+} from "../../../appRedux/actions/Policy";
 
 import DealerList from "../../apk/components/DealerList";
 

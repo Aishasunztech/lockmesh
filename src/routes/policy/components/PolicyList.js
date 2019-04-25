@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch } from "antd";
 import update from 'react-addons-update';
 
-import PolicyInfo from './policy_info';
+import PolicyInfo from './PolicyInfo';
 
 class PolicyList extends Component {
 
