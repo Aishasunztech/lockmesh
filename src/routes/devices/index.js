@@ -10,7 +10,7 @@ import {
     rejectDevice,
     addDevice,
     preActiveDevice,
-    deleteUnlinkDevice
+    deleteUnlinkDevice,
 } from "../../appRedux/actions/Devices";
 
 import {
@@ -46,6 +46,7 @@ import CircularProgress from "components/CircularProgress/index";
 import { stat } from "fs";
 import AddDevice from './components/AddDevice';
 
+
 var coppyDevices = [];
 var status = true;
 
@@ -53,13 +54,13 @@ class Devices extends Component {
     constructor(props) {
         super(props);
         const columns = [
-            // {
-            //     // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
-            //     dataIndex: 'tableid',
-            //     align: 'center',
-            //     className: 'row',
-            //     width: 800,
-            // },
+            {
+                title: '#',
+                dataIndex: 'counter',
+                align: 'center',
+                className: 'row',
+                width: 800,
+            },
             {
                 // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
                 dataIndex: 'action',
@@ -77,6 +78,33 @@ class Devices extends Component {
             //     // sortDirections: ['ascend', 'descend'],
             //     defaultSortOrder: 'ascend'
             // },
+            
+            {
+                title: (
+                    <Input.Search
+                        name="remain_days"
+                        key="remain_days"
+                        id="remain_days"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Remaining Days"
+                    />
+                ),
+                dataIndex: 'remain_days',
+                className: 'hide',
+                children: [
+                    {
+                        title: 'REMAINING DAYS',
+                        align: "center",
+                        dataIndex: 'remain_days',
+                        key: "remain_days",
+                        className: 'hide',
+                        sorter: (a, b) => { return a.remain_days.localeCompare(b.remain_days) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ],
+            },
             {
                 title: (
                     <Input.Search
@@ -780,12 +808,15 @@ class Devices extends Component {
         }
 
         else if (value == '3') {
-            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
-            this.state.columns[1]['title'] = 'Remaining Days '
-        
+            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+            this.state.columns[2].className = '';
+            this.state.columns[2].children[0].className = '';
         }
         else {
-            this.state.columns[0]['title'] = ''
+            this.state.columns[1]['title'] = ''
+            this.state.columns[2].className = 'hide';
+            this.state.columns[2].children[0].className = 'hide';
+
         }
 
         switch (value) {
@@ -871,12 +902,14 @@ class Devices extends Component {
             this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>
         }
         else if (value == '3') {
-            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
-            this.state.columns[1]['children'][0].title ='Remaining days'
-            this.state.columns[1]['title'] ='Remaining days'
+            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+            this.state.columns[2].className = '';
+            this.state.columns[2].children[0].className = '';
         }
         else {
-            this.state.columns[0]['title'] = ''
+            this.state.columns[1]['title'] = ''
+            this.state.columns[2].className = 'hide';
+            this.state.columns[2].children[0].className = 'hide';
         }
 
         switch (value) {
@@ -982,12 +1015,20 @@ class Devices extends Component {
                     dumydata[index].children[0].className = 'hide';
                     // dumydata[]
                 }
-
+                // console.log(this.state.tabselect)
                 values.map((value) => {
                     if (column.className !== 'row') {
                         if (column.children[0].title === value) {
-                            dumydata[index].className = '';
-                            dumydata[index].children[0].className = '';
+                            if(this.state.tabselect !== '3'){
+                            if(column.children[0].title !== 'REMAINING DAYS'){
+                                    dumydata[index].className = '';
+                                    dumydata[index].children[0].className = '';
+                            }
+                        }
+                            else{
+                                dumydata[index].className = '';
+                                dumydata[index].children[0].className = '';
+                            }
                         }
                     }
 
@@ -1120,7 +1161,6 @@ class Devices extends Component {
                 {
                     this.props.isloading ? <CircularProgress /> :
                         <Fragment>
-
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
@@ -1133,6 +1173,7 @@ class Devices extends Component {
                                 disableAddButton={this.props.user.type === ADMIN}
                                 // toLink="add-device"
                                 handleDeviceModal={this.handleDeviceModal}
+                                handleUserModal={this.handleUserModal}
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
@@ -1239,7 +1280,7 @@ function mapDispatchToProps(dispatch) {
         postPagination: postPagination,
         getPagination: getPagination,
         getNotification: getNotification,
-        deleteUnlinkDevice: deleteUnlinkDevice
+        deleteUnlinkDevice: deleteUnlinkDevice,
     }, dispatch);
 }
 
