@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
-import Permissions from "./permissions";
-
+import Permissions from "./Permissions";
 
 const TabPane = Tabs.TabPane;
 
