@@ -20,6 +20,36 @@ import {
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
 } from "../../constants/ActionTypes";
+
+import {
+    DEVICE_ID,
+    DEVICE_REMAINING_DAYS,
+    DEVICE_FLAGGED,
+    DEVICE_STATUS,
+    DEVICE_MODE,
+    DEVICE_NAME,
+    DEVICE_ACTIVATION_CODE,
+    DEVICE_ACCOUNT_EMAIL,
+    DEVICE_PGP_EMAIL,
+    DEVICE_CHAT_ID,
+    DEVICE_CLIENT_ID,
+    DEVICE_DEALER_ID,
+    DEVICE_DEALER_PIN,
+    DEVICE_MAC_ADDRESS,
+    DEVICE_SIM_ID,
+    DEVICE_IMEI_1,
+    DEVICE_SIM_1,
+    DEVICE_IMEI_2,
+    DEVICE_SIM_2,
+    DEVICE_SERIAL_NUMBER,
+    DEVICE_MODEL,
+    DEVICE_START_DATE,
+    DEVICE_EXPIRY_DATE,
+    DEVICE_DEALER_NAME,
+    DEVICE_S_DEALER,
+    DEVICE_S_DEALER_NAME
+} from '../../constants/DeviceConstants';
+
 import { message } from 'antd';
 import { stat } from "fs";
 
@@ -33,7 +63,35 @@ const initialState = {
     sim_ids: [],
     chat_ids: [],
     pgp_emails: [],
-    options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
+    options: [ 
+        DEVICE_ID,
+        DEVICE_REMAINING_DAYS,
+        DEVICE_FLAGGED,
+        DEVICE_STATUS,
+        DEVICE_MODE,
+        DEVICE_NAME,
+        DEVICE_ACTIVATION_CODE,
+        DEVICE_ACCOUNT_EMAIL,
+        DEVICE_PGP_EMAIL,
+        DEVICE_CHAT_ID,
+        DEVICE_CLIENT_ID,
+        DEVICE_DEALER_ID,
+        DEVICE_DEALER_PIN,
+        DEVICE_MAC_ADDRESS,
+        DEVICE_SIM_ID,
+        DEVICE_IMEI_1,
+        DEVICE_SIM_1,
+        DEVICE_IMEI_2,
+        DEVICE_SIM_2,
+        DEVICE_SERIAL_NUMBER,
+        DEVICE_MODEL,
+        DEVICE_START_DATE,
+        DEVICE_EXPIRY_DATE,
+        DEVICE_DEALER_NAME,
+        DEVICE_S_DEALER,
+        DEVICE_S_DEALER_NAME 
+    ],
+    // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
 };
 

@@ -10,6 +10,13 @@ import {
 	GET_PAGINATION,
 	PERMSSION_SAVED
 } from "constants/ActionTypes";
+
+import {
+	APK_SHOW_ON_DEVICE,
+	APK,
+	APK_APP_NAME,
+	APK_APP_LOGO
+} from '../../constants/ApkConstants';
 import { message } from 'antd';
 import { DEALERS_LIST } from "../../constants/ActionTypes";
 
@@ -18,7 +25,13 @@ const initialState = {
 	apk_list: [],
 	selectedOptions: [],
 	DisplayPages: '10',
-	options: ['SHOW ON DEVICE', 'APK', 'APP NAME', 'APP LOGO']
+	options: [
+		APK_SHOW_ON_DEVICE,
+		APK,
+		APK_APP_NAME,
+		APK_APP_LOGO
+	]
+	// options: ['SHOW ON DEVICE', 'APK', 'APP NAME', 'APP LOGO']
 };
 
 export default (state = initialState, action) => {
