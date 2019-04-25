@@ -13,6 +13,15 @@ import {
     GET_PAGINATION,
     SPIN_lOADING
 } from "constants/ActionTypes";
+
+import {
+    DEALER_ID,
+    DEALER_NAME,
+    DEALER_EMAIL,
+    DEALER_PIN,
+    DEALER_DEVICES,
+    DEALER_TOKENS
+} from '../../constants/DealerConstants';
 import { message } from 'antd';
 
 const initialState = {
@@ -23,7 +32,15 @@ const initialState = {
     action: '',
     msg: 'no message',
     selectedOptions: [],
-    options: ["DEALER ID", "DEALER NAME", "DEALER EMAIL", "DEALER PIN", "DEVICES", "TOKENS"],
+    options: [
+        DEALER_ID,
+        DEALER_NAME,
+        DEALER_EMAIL,
+        DEALER_PIN,
+        DEALER_DEVICES,
+        DEALER_TOKENS
+    ],
+    // options: ["DEALER ID", "DEALER NAME", "DEALER EMAIL", "DEALER PIN", "DEVICES", "TOKENS"],
 
 };
 

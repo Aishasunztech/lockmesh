@@ -13,6 +13,16 @@ import {
 import DealerList from "../../apk/components/DealerList";
 
 import CircularProgress from "components/CircularProgress/index";
+import { titleCase } from '../../utils/commonUtils';
+import {
+  DEALER_ID,
+  DEALER_NAME,
+  DEALER_EMAIL,
+  DEALER_PIN,
+  DEALER_DEVICES,
+  DEALER_TOKENS,
+  DEALER_ACTION
+} from '../../../constants/DealerConstants';
 
 
 // export default 
@@ -38,7 +48,7 @@ class Permissions extends Component {
             id="dealer_id"
             className="search_heading"
             autoComplete="new-password"
-            placeholder="Device ID"
+            placeholder= {titleCase(DEALER_ID)}
             onKeyUp={
               (e) => {
                 this.handleSearch(e)
@@ -51,7 +61,7 @@ class Permissions extends Component {
         className: '',
         children: [
           {
-            title: 'DEALER ID',
+            title: DEALER_ID,
             dataIndex: 'dealer_id',
             key: 'dealer_id',
             sortDirections: ['ascend', 'descend'],
@@ -70,7 +80,7 @@ class Permissions extends Component {
             id="link_code"
             className="search_heading"
             autoComplete="new-password"
-            placeholder="Dealer Pin"
+            placeholder= {titleCase(DEALER_PIN)}
             onKeyUp={
               (e) => {
                 this.handleSearch(e)
@@ -83,7 +93,7 @@ class Permissions extends Component {
         className: '',
         children: [
           {
-            title: 'DEALER PIN',
+            title: DEALER_PIN,
             dataIndex: 'link_code',
             key: 'link_code',
 
@@ -103,7 +113,7 @@ class Permissions extends Component {
             id="dealer_name"
             className="search_heading"
             autoComplete="new-password"
-            placeholder="Dealer Name"
+            placeholder= {titleCase(DEALER_NAME)}
             onKeyUp={
               (e) => {
                 this.handleSearch(e)
@@ -116,7 +126,7 @@ class Permissions extends Component {
         className: '',
         children: [
           {
-            title: 'DEALER NAME',
+            title: DEALER_NAME,
             dataIndex: 'dealer_name',
             key: 'dealer_name',
             // sorter: (a, b) => {
@@ -140,7 +150,7 @@ class Permissions extends Component {
             id="dealer_email"
             className="search_heading"
             autoComplete="new-password"
-            placeholder="Dealer Email"
+            placeholder= {titleCase(DEALER_EMAIL)}
             onKeyUp={
               (e) => {
                 this.handleSearch(e)
@@ -153,7 +163,7 @@ class Permissions extends Component {
         className: '',
         children: [
           {
-            title: 'DEALER EMAIL',
+            title: DEALER_EMAIL,
             dataIndex: 'dealer_email',
             key: 'dealer_email',
             // sorter: (a, b) => {
@@ -174,7 +184,7 @@ class Permissions extends Component {
 
     this.listDealerCols = [
       {
-        title: 'DEALER ID',
+        title: DEALER_ID,
         dataIndex: 'dealer_id',
         key: 'dealer_id',
         sortDirections: ['ascend', 'descend'],
@@ -185,7 +195,7 @@ class Permissions extends Component {
         className: '',
       },
       {
-        title: 'DEALER PIN',
+        title: DEALER_PIN,
         dataIndex: 'link_code',
         key: 'link_code',
 
@@ -196,7 +206,7 @@ class Permissions extends Component {
         className: '',
       },
       {
-        title: 'DEALER NAME',
+        title: DEALER_NAME,
         dataIndex: 'dealer_name',
         key: 'dealer_name',
 
@@ -207,7 +217,7 @@ class Permissions extends Component {
         className: '',
       },
       {
-        title: 'DEALER EMAIL',
+        title: DEALER_EMAIL,
         dataIndex: 'dealer_email',
         key: 'dealer_email',
 
@@ -218,7 +228,7 @@ class Permissions extends Component {
         className: '',
       },
       {
-        title: 'ACTION',
+        title: DEALER_ACTION,
         dataIndex: 'action',
         key: 'action',
         // sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
