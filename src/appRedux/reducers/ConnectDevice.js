@@ -474,6 +474,8 @@ export default (state = initialState, action) => {
             }
         }
 
+ 
+
 
         case HANDLE_CHECK_CONTROL: {
             let changedControls = JSON.parse(JSON.stringify(state.controls));

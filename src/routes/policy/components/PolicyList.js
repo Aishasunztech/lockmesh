@@ -191,7 +191,6 @@ class PolicyList extends Component {
                                     policy={record} 
                                 />
                             )
-
                         }}
                         // expandIconColumnIndex={1}         
                         expandIconColumnIndex={2}

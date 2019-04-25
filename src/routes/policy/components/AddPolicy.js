@@ -2,10 +2,11 @@ import React, { Component, Fragment } from 'react'
 import { Card, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
 import { connect } from "react-redux";
-import {SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION} from '../../../constants/Constants';
+import {SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING} from '../../../constants/Constants';
 import styles from './policy.css';
 import { bindActionCreators } from "redux";
-import { getDealerApps, getAppPermissions } from '../../../appRedux/actions/ConnectDevice';
+import { getDealerApps,  } from '../../../appRedux/actions/ConnectDevice';
+import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy } from '../../../appRedux/actions/Policy';
 
 const TextArea = Input;
 const columns = [{
@@ -53,11 +54,35 @@ const data = [
             current: 0,
             dealerApps: [],
             steps: [],
-            allExtensions: []
+            allExtensions: [],
+            systemPermissions: [],
+            policy_name: '',
+            command: ''
+
         };
 
-        console.log('stat is ', this.state.dealerApps)
+        // console.log('stat is ', this.state.dealerApps)
        
+    }
+
+    handleCheckApp = (value, key, id, arrayOf)=> {
+         this.props.handleCheckAppPolicy(value, key, id, arrayOf, SECURE_SETTING)
+        // console.log(value, key, id, arrayOf, 'data is');
+    }
+
+    savePolicy = () => {
+        let data = {
+            policy_name: this.state.policy_name,
+            policy_note: this.state.command,
+            push_apps: this.state.dealerApps,
+            app_list: this.state.appPermissions,
+            secure_apps: this.state.allExtensions,
+            system_permissions: this.state.systemPermissions
+
+        }
+
+        this.props.savePolicy(data);
+        this.props.handlePolicyModal(false)
     }
 
 
@@ -68,7 +93,8 @@ const data = [
         this.setState({
             dealerApps: this.props.dealerApps,
             appPermissions: this.props.appPermissions,
-            allExtensions: this.props.allExtensions
+            allExtensions: this.props.allExtensions,
+            systemPermissions: this.props.systemPermissions
 
         })
     }
@@ -82,14 +108,30 @@ const data = [
     // }
 
     componentDidUpdate(prevProps){
-         console.log(this.props.dealerApps, 'add policy page data is ', prevProps.dealerApps);
+          console.log(this.props.allExtensions, 'add policy page data is ', prevProps.allExtensions);
         if(this.props !== prevProps){
             this.setState({
                 dealerApps: this.props.dealerApps,
                 appPermissions: this.props.appPermissions,
-                allExtensions: this.props.allExtensions
+                allExtensions: this.props.allExtensions,
+                systemPermissions: this.props.systemPermissions
             });
       
+        }
+    }
+
+    renderSystemPermissions = ()=> {
+        console.log(this.state.systemPermissions, 'permissions')
+        if(this.state.systemPermissions.length){
+            return this.state.systemPermissions.map((item, index)=> {
+                console.log('object, ', item)
+                return{
+                    rowKey: index,
+                    name: item.name,
+                    action: <Switch checked={item.value} onClick={(e)=>this.props.handleChekSystemPermission(e, item.name)} size="small" />
+                }
+               
+            })
         }
     }
 
@@ -112,6 +154,8 @@ const data = [
             content: (
                 <AppList
                     apk_list={this.state.dealerApps}
+                    handleCheckApp={this.handleCheckApp}
+                    apps='dealerApps'
                 />
             ),
         }, {
@@ -120,6 +164,8 @@ const data = [
             content: (
                 <AppList
                     apk_list={this.state.appPermissions}
+                    handleCheckApp={this.handleCheckApp}
+                    appPermissions='appPermissions'
                 />
             ),
         }, {
@@ -128,13 +174,9 @@ const data = [
             content: (
                 <AppList
                 allExtensions={this.state.allExtensions}
+                handleCheckApp={this.handleCheckApp}
+                secureSettings = 'allExtensions'
             />
-                // <Table
-                //     pagination={false}
-                //     dataSource={data}
-                //     size="small"
-                //     columns={columns}>
-                // </Table>
             ),
         }, {
             title: 'SET '+ SYSTEM_PERMISSION.toUpperCase(),
@@ -142,7 +184,7 @@ const data = [
             content: (
                 <Table
                     pagination={false}
-                    dataSource={data}
+                    dataSource={this.renderSystemPermissions()}
                     size="small"
                     columns={columns}>
                 </Table>
@@ -155,13 +197,13 @@ const data = [
                     <div className="row">
                         <div className="col-md-2 pr-0 "><label>Name:</label></div>
                         <div className="col-md-8">
-                            <Input placeholder="Name" className="pol_inp" />
+                            <Input placeholder="Name" onChange={(e)=> this.setState({policy_name: e.target.value})} className="pol_inp" />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-md-2 pr-0 "><label>Command:</label></div>
                         <div className="col-md-8">
-                            <textarea placeholder="Command" class="ant-input"></textarea>
+                            <textarea placeholder="Command" onChange={(e)=> this.setState({command: e.target.value})} class="ant-input"></textarea>
                         </div>
                     </div>
                 </div>
@@ -183,11 +225,10 @@ const data = [
                                     Previous
                             </Button>
                             )
-
                         }
                         {
                             current === this.steps.length - 1
-                            && <Button type="primary" onClick={() => message.success('Processing complete!')}>Done</Button>
+                            && <Button type="primary" onClick={() => this.savePolicy()}>Done</Button>
                         }
                         {
                             current < this.steps.length - 1
@@ -204,16 +245,20 @@ const data = [
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
         getDealerApps: getDealerApps,
-        getAppPermissions: getAppPermissions
+        getAppPermissions: getAppPermissions,
+        handleCheckAppPolicy: handleCheckAppPolicy,
+        handleChekSystemPermission: handleChekSystemPermission,
+        savePolicy: savePolicy
     }, dispatch)
 }
 
-var mapStateToProps = ({device_details}) =>{
-    console.log('DEALER APPS LIST ', device_details)
+var mapStateToProps = ({device_details, policies}) =>{
+     console.log('DEALER APPS LIST ', policies.systemPermissions)
 return{
-    dealerApps: device_details.apk_list,
-    appPermissions: device_details.appPermissions,
-    allExtensions: device_details.allExtensions
+    dealerApps: policies.dealer_apk_list,
+    appPermissions: policies.appPermissions,
+    allExtensions: policies.allExtensions,
+    systemPermissions: policies.systemPermissions
 
 }
 }

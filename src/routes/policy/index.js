@@ -234,6 +234,7 @@ class Policy extends Component {
                     <AddPolicy
                         apk_list={this.props.apk_list}
                         app_list={this.props.app_list}
+                        handlePolicyModal={this.handlePolicyModal}
                     />
                 </Modal>
             </Fragment>
