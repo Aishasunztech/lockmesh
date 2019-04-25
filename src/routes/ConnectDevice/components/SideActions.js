@@ -12,6 +12,9 @@ import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
 import ImeiView from '../../ConnectDevice/components/ImeiView';
 import DealerApps from "./DealerApps";
+import {
+    ADMIN, DEALER, SDEALER
+} from "../../../constants/Constants";
 
 import {
     showHistoryModal,
@@ -20,8 +23,8 @@ import {
     hanldeProfileInput,
     transferDeviceProfile,
     getDealerApps,
+    loadDeviceProfile
 } from "../../../appRedux/actions/ConnectDevice";
-
 
 const confirm = Modal.confirm;
 
@@ -194,8 +197,8 @@ class SideActions extends Component {
                                 <Tooltip placement="bottom" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 15 }} > <Icon type='download' /> Pull</Button>
                                 </Tooltip>
-                                {(localStorage.getItem("type") === "admin") ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{ fontSize: "14px" }} /> Save Policy</Button> : null}
-                                {(localStorage.getItem("type") === "admin" || localStorage.getItem("type") === "dealer") ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
+                                {(this.props.authUser.type === ADMIN) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{ fontSize: "14px" }} /> Save Policy</Button> : null}
+                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
                                 {/* <Button type="default " disabled style={{ width: "100%", marginBottom: 15}} >N/A</Button>
@@ -248,13 +251,25 @@ class SideActions extends Component {
                     onCancel={() => this.showHistoryModal(false, '')}
                 >
                     {(this.state.historyType === "history") ?
-                        <TableHistory showHistoryModal={this.props.showHistoryModal} histories={this.props.histories} type={this.state.historyType} />
+                        <TableHistory 
+                            showHistoryModal={this.props.showHistoryModal} 
+                            histories={this.props.histories} 
+                            type={this.state.historyType} 
+                        />
                         :
                         (this.state.historyType === "profile") ?
-                            <TableHistory showHistoryModal={this.props.showHistoryModal} histories={this.props.profiles} type={this.state.historyType} />
+                            <TableHistory 
+                                showHistoryModal={this.props.showHistoryModal} 
+                                histories={this.props.profiles} 
+                                type={this.state.historyType} 
+                            />
                             :
                             (this.state.historyType === "policy") ?
-                                <TableHistory showHistoryModal={this.props.showHistoryModal} histories={this.props.policies} type={this.state.historyType} />
+                                <TableHistory 
+                                    showHistoryModal={this.props.showHistoryModal} 
+                                    histories={this.props.policies} 
+                                    type={this.state.historyType} 
+                                />
                                 :
                                 (this.state.historyType === undefined) ?
                                     <p>{this.state.historyType}</p> : null
@@ -350,13 +365,14 @@ function mapDispatchToProps(dispatch) {
         saveProfile: saveProfile,
         hanldeProfileInput: hanldeProfileInput,
         transferDeviceProfile: transferDeviceProfile,
-        getDealerApps: getDealerApps
+        getDealerApps: getDealerApps,
+        loadDeviceProfile: loadDeviceProfile
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }) => {
-    const { authUser } = auth;
+    
     return {
-        authUser,
+        authUser: auth.authUser,
         historyModal: device_details.historyModal,
         saveProfileModal: device_details.saveProfileModal,
         historyType: device_details.historyType,
