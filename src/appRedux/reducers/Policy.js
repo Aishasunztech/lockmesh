@@ -7,6 +7,13 @@ import {
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
     SAVE_POLICY
 } from "../../constants/ActionTypes";
+import {
+    POLICY_NAME,
+    POLICY_INFO,
+    POLICY_NOTE,
+    POLICY_COMMAND
+} from "../../constants/PolicyConstants";
+
 import { message } from "antd";
 
 const initialState = {
@@ -18,7 +25,7 @@ const initialState = {
     showMsg: false,
     isloading: true,
     selectedOptions: [],
-    options: [ "POLICY NAME", "POLICY NOTE" ],
+    options: [ POLICY_NAME, POLICY_NOTE ],
     allExtensions: [],
     appPermissions: [],
     systemPermissions: [
