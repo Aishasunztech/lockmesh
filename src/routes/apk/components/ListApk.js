@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Row, Col, Input } from "antd";
 import { BASE_URL } from '../../../constants/Application';
-import Permissions from './permissions';
+import Permissions from './Permissions';
 
 import EditApk from './EditApk';
 

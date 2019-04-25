@@ -2,18 +2,13 @@ import React, { Component, Fragment } from 'react'
 import { Table, Button, Modal, Row, Col, Spin, Input } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { 
-  getAllDealers 
-} from "../../../appRedux/actions/Dealers";
-
-// import { 
-//   savePermission 
-// } from "../../../appRedux/actions/Apk";
-
-import DealerList from "../../apk/components/DealerList";
-
+import { getAllDealers } from "../../../appRedux/actions/Dealers";
+import { savePermission } from "../../../appRedux/actions/Apk";
+import DealerList from "./DealerList";
 import CircularProgress from "components/CircularProgress/index";
-import { titleCase } from '../../utils/commonUtils';
+
+import { titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
+
 import {
   DEALER_ID,
   DEALER_NAME,
@@ -38,206 +33,9 @@ class Permissions extends Component {
       removeSelectedDealersModal: false,
       addSelectedDealersModal: false
     }
-
-    this.addDealerCols = [
-      {
-        title: (
-          <Input.Search
-            name="dealer_id"
-            key="dealer_id"
-            id="dealer_id"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder= {titleCase(DEALER_ID)}
-            onKeyUp={
-              (e) => {
-                this.handleSearch(e)
-              }
-            }
-
-          />
-        ),
-        dataIndex: 'dealer_id',
-        className: '',
-        children: [
-          {
-            title: DEALER_ID,
-            dataIndex: 'dealer_id',
-            key: 'dealer_id',
-            sortDirections: ['ascend', 'descend'],
-            sorter: (a, b) => a.dealer_id - b.dealer_id,
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-      {
-        title: (
-          <Input.Search
-            name="link_code"
-            key="link_code"
-            id="link_code"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder= {titleCase(DEALER_PIN)}
-            onKeyUp={
-              (e) => {
-                this.handleSearch(e)
-              }
-            }
-
-          />
-        ),
-        dataIndex: 'link_code',
-        className: '',
-        children: [
-          {
-            title: DEALER_PIN,
-            dataIndex: 'link_code',
-            key: 'link_code',
-
-            sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-      {
-        title: (
-          <Input.Search
-            name="dealer_name"
-            key="dealer_name"
-            id="dealer_name"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder= {titleCase(DEALER_NAME)}
-            onKeyUp={
-              (e) => {
-                this.handleSearch(e)
-              }
-            }
-
-          />
-        ),
-        dataIndex: 'dealer_name',
-        className: '',
-        children: [
-          {
-            title: DEALER_NAME,
-            dataIndex: 'dealer_name',
-            key: 'dealer_name',
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.dealer_name.length;
-            // },
-            sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-      {
-        title: (
-          <Input.Search
-            name="dealer_email"
-            key="dealer_email"
-            id="dealer_email"
-            className="search_heading"
-            autoComplete="new-password"
-            placeholder= {titleCase(DEALER_EMAIL)}
-            onKeyUp={
-              (e) => {
-                this.handleSearch(e)
-              }
-            }
-
-          />
-        ),
-        dataIndex: 'dealer_email',
-        className: '',
-        children: [
-          {
-            title: DEALER_EMAIL,
-            dataIndex: 'dealer_email',
-            key: 'dealer_email',
-            // sorter: (a, b) => {
-            //     console.log(a);
-            //     // console.log(b);
-            //     return a.dealer_email.length;
-            // },
-            sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-
-            align: 'center',
-            sortDirections: ['ascend', 'descend'],
-            className: '',
-          }
-        ]
-      },
-
-    ]
-
-    this.listDealerCols = [
-      {
-        title: DEALER_ID,
-        dataIndex: 'dealer_id',
-        key: 'dealer_id',
-        sortDirections: ['ascend', 'descend'],
-
-        sorter: (a, b) => a.dealer_id - b.dealer_id,
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-      {
-        title: DEALER_PIN,
-        dataIndex: 'link_code',
-        key: 'link_code',
-
-        sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-      {
-        title: DEALER_NAME,
-        dataIndex: 'dealer_name',
-        key: 'dealer_name',
-
-        sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-      {
-        title: DEALER_EMAIL,
-        dataIndex: 'dealer_email',
-        key: 'dealer_email',
-
-        sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-
-        align: 'center',
-        sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-      {
-        title: DEALER_ACTION,
-        dataIndex: 'action',
-        key: 'action',
-        // sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-        align: 'center',
-        // sortDirections: ['ascend', 'descend'],
-        className: '',
-      },
-
-    ]
+    
+    this.addDealerCols = dealerColsWithSearch(true, this.handleSearch)
+    this.listDealerCols = dealerColsWithSearch();
 
   }
 
