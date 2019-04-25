@@ -16,7 +16,7 @@ import {
 //     this.props.showHistoryModal(false, '');
 // }
 
-const renderList= (histories, type) => {
+const renderList= (histories, type, callback ) => {
     return histories.map((history) => {
         console.log("list", history.app_list);
 
@@ -27,7 +27,10 @@ const renderList= (histories, type) => {
                 <Button
                     size="small"
                     className="mb-0"
-                // onClick={()=>{ this.applyProfile(history.app_list)}} 
+                onClick={()=>{ 
+                    callback(history.id);
+                    // this.applyProfile(history.app_list)
+                }} 
                 > Apply
                 </Button>
             ),
@@ -70,7 +73,7 @@ const TableHistory = (props) => {
             bordered={false}
             columns={renderColumn(props.type)}
             align='center'
-            dataSource={renderList(props.histories, props.type)}
+            dataSource={renderList(props.histories, props.type, props.applyHistory)}
             pagination={false}
             expandedRowRender={record => {
                 console.log("record", record);

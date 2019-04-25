@@ -160,6 +160,18 @@ class SideActions extends Component {
             this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
         }
     }
+
+    applyHistory = (historyId) => {
+        const historyType = this.state.historyType;
+        if(historyType === 'history'){
+
+        } else if (historyType === "profile") {
+
+        } else if (historyType === "policy"){
+            alert(historyId);
+        }
+    }
+    
     render() {
         // console.log(this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
@@ -252,23 +264,23 @@ class SideActions extends Component {
                 >
                     {(this.state.historyType === "history") ?
                         <TableHistory 
-                            showHistoryModal={this.props.showHistoryModal} 
                             histories={this.props.histories} 
                             type={this.state.historyType} 
+                            applyHistory = {this.applyHistory}
                         />
                         :
                         (this.state.historyType === "profile") ?
-                            <TableHistory 
-                                showHistoryModal={this.props.showHistoryModal} 
+                            <TableHistory  
                                 histories={this.props.profiles} 
                                 type={this.state.historyType} 
+                                applyHistory = {this.applyHistory}
                             />
                             :
                             (this.state.historyType === "policy") ?
-                                <TableHistory 
-                                    showHistoryModal={this.props.showHistoryModal} 
+                                <TableHistory  
                                     histories={this.props.policies} 
                                     type={this.state.historyType} 
+                                    applyHistory = {this.applyHistory}
                                 />
                                 :
                                 (this.state.historyType === undefined) ?
