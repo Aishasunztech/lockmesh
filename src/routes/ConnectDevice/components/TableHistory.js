@@ -18,6 +18,8 @@ import {
 
 const renderList= (histories, type) => {
     return histories.map((history) => {
+        console.log("list", history.app_list);
+
         return ({
             key: history.id,
             history_date: (type === "history")?history.created_at : (type === "policy")?history.policy_name:(type === "profile")?history.profile_name:null,
@@ -30,7 +32,8 @@ const renderList= (histories, type) => {
                 </Button>
             ),
             app_list: history.app_list,
-            controls: history.controls
+            controls: history.controls,
+            secure_apps: history.secure_apps
         })
     })
 }
