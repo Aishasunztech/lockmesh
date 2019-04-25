@@ -3,17 +3,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import {
-    showHistoryModal,
-    showSaveProfileModal,
-    saveProfile,
-    hanldeProfileInput,
-    transferDeviceProfile,
-    getDealerApps,
-} from "../../../appRedux/actions/ConnectDevice";
-
-
-import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip } from "antd";
+import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
@@ -22,6 +12,15 @@ import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
 import ImeiView from '../../ConnectDevice/components/ImeiView';
 import DealerApps from "./DealerApps";
+
+import {
+    showHistoryModal,
+    showSaveProfileModal,
+    saveProfile,
+    hanldeProfileInput,
+    transferDeviceProfile,
+    getDealerApps,
+} from "../../../appRedux/actions/ConnectDevice";
 
 
 const confirm = Modal.confirm;
