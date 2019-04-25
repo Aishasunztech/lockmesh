@@ -229,10 +229,10 @@ const RestService = {
     },
     savePolicyPermissions: (policyId, dealers, action) => {
         return axios.post(BASE_URL + 'users/save_policy_permissions', {
-            policyId: policyId,
-            dealers: dealers,
-            action: action
-        },
+                policyId: policyId,
+                dealers: dealers,
+                action: action
+            },
             RestService.getHeader()
         );
     },

@@ -110,6 +110,7 @@ class Permissions extends Component {
               }
             }
 
+            
           />
         ),
         dataIndex: 'dealer_name',
