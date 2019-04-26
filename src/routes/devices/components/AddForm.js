@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import AddUser from '../../users/components/AddUser';
 
-import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon } from 'antd';
+import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col } from 'antd';
+import { withRouter, Redirect, Link } from 'react-router-dom';
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 import { getProfiles } from "../../../appRedux/actions/ConnectDevice";
@@ -73,6 +75,11 @@ class AddDevice extends Component {
         return new Date().toJSON().slice(0, 10).replace(/-/g, '/')
     }
 
+    handleUserModal = () => {
+        let handleSubmit = this.props.addUser;
+        this.refs.add_user.showModal(handleSubmit);
+    }
+
     render() {
         //  alert(this.props.device.device_id);
         const { visible, loading } = this.state;
@@ -112,7 +119,12 @@ class AddDevice extends Component {
                                     initialValue: this.props.new ? "" : this.props.device.chat_id,
                                 })(
                                     // <Input />
-                                    <Select
+                                  
+
+                                    <Row gutter={8}>
+                                        <Col span={12}>
+                                        
+                                        <Select
                                         showSearch
                                         placeholder="Select User ID"
                                         optionFilterProp="children"
@@ -126,6 +138,22 @@ class AddDevice extends Component {
                                             return (<Select.Option key={index} value={item.user_id}>{item.user_id}</Select.Option>)
                                         })}
                                     </Select>
+                                        
+                                        </Col>
+                                        <Col span={12}>
+                                        {/* <Button>Add Device</Button> */}
+                                        <Button
+                                                    type="primary"
+                                                    // disabled={(this.props.disableAddButton === true) ? true : false}
+                                                    style={{ width: '100%' }}
+                                                    onClick={() => this.handleUserModal()}
+                                                >
+                                                Add User
+                                                </Button>
+                                        </Col>
+                                    </Row>
+                                   
+
                                 )}
                             </Form.Item>
                             <Form.Item
@@ -477,6 +505,7 @@ class AddDevice extends Component {
                         <Button type="primary" htmlType="submit">Submit</Button>
                     </Form.Item>
                 </Form>
+                <AddUser ref="add_user" />
             </div>
         )
 
@@ -510,7 +539,7 @@ var mapStateToProps = ({ routing, devices, device_details, users }) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedAddDeviceForm);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WrappedAddDeviceForm));
 function showConfirm(_this, values) {
     confirm({
         title: "Do You Really want to duplicate " + values.duplicate + " devices with same settings.",
