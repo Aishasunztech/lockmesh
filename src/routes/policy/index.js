@@ -10,11 +10,11 @@ import {
     getPolicies,
 } from "../../appRedux/actions/Policy";
 
-import { 
-    getDropdown, 
-    postDropdown, 
-    postPagination, 
-    getPagination 
+import {
+    getDropdown,
+    postDropdown,
+    postPagination,
+    getPagination
 } from '../../appRedux/actions/Common';
 
 import {
@@ -56,7 +56,7 @@ class Policy extends Component {
                 title: (
                     <span>
                         {POLICY_INFO}
-                    {/* <Popover placement="top" content='dumy'>
+                        {/* <Popover placement="top" content='dumy'>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover> */}
                     </span>),
@@ -173,7 +173,8 @@ class Policy extends Component {
         ];
         this.state = {
             policyModal: false,
-            policies: (this.props.policies) ? this.props.policies : []
+            policies: (this.props.policies) ? this.props.policies : [],
+            current: 0
         }
 
     }
@@ -229,12 +230,15 @@ class Policy extends Component {
                     onOk={() => this.handlePolicyModal(false)}
                     onCancel={() => this.handlePolicyModal(false)}
                     okText="Save"
+                    footer={null}
 
                 >
                     <AddPolicy
                         apk_list={this.props.apk_list}
                         app_list={this.props.app_list}
                         handlePolicyModal={this.handlePolicyModal}
+                        getPolicies={this.props.getPolicies}
+                        ref='addPolicy'
                     />
                 </Modal>
             </Fragment>

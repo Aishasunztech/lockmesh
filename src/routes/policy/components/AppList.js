@@ -137,6 +137,8 @@ class AppList extends Component {
         let enable = (app.enable !== undefined) ? app.enable : false;
         let label = (app.apk_name !== undefined) ? app.apk_name : app.label;
         let icon = (app.logo !== undefined) ? app.logo : app.icon;
+        let Off = 'Off';
+        let On = 'On';
         if(this.props.appPermissions){
             app_id = app.id
         }
@@ -151,6 +153,7 @@ class AppList extends Component {
                     <div className="line_break">{label}</div>
                 </Fragment>,
             guest:
+            this.props.isSwitch ?
                 <Switch
                     size="small"
                     ref={`guest_${app_id}`}
@@ -162,8 +165,9 @@ class AppList extends Component {
                        this.handleChecked(e, "guest", app_id)
                           
                     }}
-                />,
+                    />: <span  style={{color: (guest === true || guest === 1) ? 'green' : 'red'}}>{(guest === true || guest === 1) ? On : Off}</span>,
             encrypted:
+            this.props.isSwitch ?
                 <Switch
                     size="small"
                     ref={`encrypted_${app_id}`}
@@ -175,8 +179,9 @@ class AppList extends Component {
                         // console.log("encrypted", e);
                         this.handleChecked(e, "encrypted", app_id);
                     }}
-                />,
+                />: <span style={{color: (encrypted === true || encrypted === 1) ? 'green' : 'red'}} >{(encrypted === true || encrypted === 1) ? On : Off}</span>,
             enable:
+            this.props.isSwitch ?
                 <Switch
                     size="small"
                     ref={`enable_${app_id}`}
@@ -187,7 +192,7 @@ class AppList extends Component {
                     onClick={(e) => {
                         this.handleChecked(e, "enable", app_id);
                     }}
-                />
+                    />: <span style={{color: (enable === true || enable === 1) ? 'green' : 'red'}} >{(enable === true || enable === 1) ? On : Off}</span>,
         });
     }
 
@@ -210,6 +215,7 @@ class AppList extends Component {
                     <div className="line_break">{label}</div>
                 </Fragment>,
             guest:
+            this.props.isSwitch ?
                 <Switch
                     size="small"
                     ref={`guest_${app_id}`}
@@ -220,8 +226,9 @@ class AppList extends Component {
                     onClick={(e) => {
                         this.handleChecked(e, "guest", app_id);
                     }}
-                />,
+                    />: <span style={{color: (guest === true || guest === 1) ? 'green' : 'red'}} >{(guest === true || guest === 1) ? 'On' : 'Off'}</span>,
             encrypted:
+            this.props.isSwitch ?
                 <Switch
                     size="small"
                     ref={`encrypted_${app_id}`}
@@ -233,7 +240,7 @@ class AppList extends Component {
                         // console.log("encrypted", e);
                         this.handleChecked(e, "encrypted", app_id);
                     }}
-                />
+                    />: <span style={{color: (encrypted === true || encrypted === 1) ? 'green' : 'red'}} >{(encrypted === true || encrypted === 1) ? 'On' : 'Off'}</span>,
 
         });
     }
@@ -241,9 +248,12 @@ class AppList extends Component {
     renderApps = () => {
         // console.log('props is', this.state.apk_list)
         if (this.props.apk_list) {
-            return this.props.apk_list.map(app => {
-                return this.renderSingleApp(app)
-            })
+            if(this.props.apk_list.length){
+                return this.props.apk_list.map(app => {
+                    return this.renderSingleApp(app)
+                })
+            }
+         
         }
         else if (this.props.allExtensions) {
             if(this.props.allExtensions.length){

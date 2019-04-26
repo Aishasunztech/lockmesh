@@ -24,4 +24,5 @@ export const APPLICATION_PERMISION = 'Application Permission';
 export const SECURE_SETTING_PERMISSION = 'Secure Settings Permission';
 export const SYSTEM_PERMISSION = 'System Permission';
 export const MANAGE_PASSWORDS = 'Manage Passwords';
+export const POLICY_DETAILS = 'Policy Details';
 

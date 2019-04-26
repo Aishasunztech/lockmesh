@@ -4,7 +4,7 @@ import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder,checkRemainDays} from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
@@ -156,7 +156,7 @@ class DevicesList extends Component {
             // console.log('tab Select is: ', this.props.tabselect)
 
             var remainDays = checkRemainDays(device.created_at, device.validity)
-            console.log('Remain Days are: ', remainDays);   
+            // console.log('Remain Days are: ', remainDays);   
 
             //  console.log(this.props.user.type, 'lkslkdflk');
             // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
@@ -196,7 +196,7 @@ class DevicesList extends Component {
                 // sortOrder: (<span id="order">{order}</span>),
                 // sortOrder: {order},
                 rowKey: index,
-                key: device.device_id ? `${device.device_id}` : "N/A",
+                key: device.device_id ? `${device.device_id}` : `N/A ${index}`,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
