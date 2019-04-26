@@ -140,7 +140,13 @@ import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../c
         createdDateTime = new Date(createDate);
         createdDateTime.setDate(createdDateTime.getDate() + validDays);
         today = new Date();
-        days = today.getDate() - createdDateTime.getDate();
+        var difference_ms =  createdDateTime.getTime() - today.getTime();
+
+        //Get 1 day in milliseconds
+        var one_day=1000*60*60*24;
+          
+        // Convert back to days and return
+        days = Math.round(difference_ms/one_day); 
 
         if (days <= 0) return "Expire"; else return days;
     }

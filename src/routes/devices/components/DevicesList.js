@@ -196,7 +196,7 @@ class DevicesList extends Component {
                 // sortOrder: (<span id="order">{order}</span>),
                 // sortOrder: {order},
                 rowKey: index,
-                key: device.device_id ? `${device.device_id}` : "N/A",
+                key: device.device_id ? `${device.device_id}` : `N/A ${index}`,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)

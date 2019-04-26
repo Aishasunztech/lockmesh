@@ -104,6 +104,31 @@ class AddDevice extends Component {
                                 )}
                             </Form.Item>
                             <Form.Item
+                                label="USER ID"
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                {this.props.form.getFieldDecorator('user_id', {
+                                    initialValue: this.props.new ? "" : this.props.device.chat_id,
+                                })(
+                                    // <Input />
+                                    <Select
+                                        showSearch
+                                        placeholder="Select User ID"
+                                        optionFilterProp="children"
+                                        // onChange={handleChange}
+                                        // onFocus={handleFocus}
+                                        // onBlur={handleBlur}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                        <Select.Option value="">Select User ID</Select.Option>
+                                        {this.props.users_list.map((item, index) => {
+                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id}</Select.Option>)
+                                        })}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                            <Form.Item
                             >
                                 {this.props.form.getFieldDecorator('dealer_id', {
                                     initialValue: this.props.new ? "" : this.props.device.dealer_id,
