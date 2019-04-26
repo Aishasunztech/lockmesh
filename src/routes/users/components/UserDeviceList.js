@@ -117,6 +117,32 @@ class UserDeviceList extends Component {
             }, {
                 title: (
                     <Input.Search
+                        name="expiry_date"
+                        key="expiry_date"
+                        id="expiry_date"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(DEVICE_EXPIRY_DATE)}
+                    />
+                ),
+                dataIndex: 'expiry_date',
+                className: '',
+                children: [
+                    {
+                        title: DEVICE_EXPIRY_DATE,
+                        align: "center",
+                        className: '',
+                        dataIndex: 'expiry_date',
+                        key: 'expiry_date',
+                        sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
                         name="pgp_email"
                         key="pgp_email"
                         id="pgp_email"
@@ -236,31 +262,6 @@ class UserDeviceList extends Component {
                         key: 'imei_2',
                         className: '',
                         sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            }, {
-                title: (
-                    <Input.Search
-                        name="expiry_date"
-                        key="expiry_date"
-                        id="expiry_date"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_EXPIRY_DATE)}
-                    />
-                ),
-                dataIndex: 'expiry_date',
-                className: '',
-                children: [
-                    {
-                        title: DEVICE_EXPIRY_DATE,
-                        align: "center",
-                        className: '',
-                        dataIndex: 'expiry_date',
-                        key: 'expiry_date',
-                        sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
