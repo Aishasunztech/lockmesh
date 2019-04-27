@@ -4,7 +4,7 @@ import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder,checkRemainDays} from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
@@ -143,7 +143,7 @@ class DevicesList extends Component {
             }}><Icon type="caret-right" /></a>
         }
     }
-    
+
     deleteUnlinkedDevice = (action, device) => {
         let arr = [];
         arr.push(device);
@@ -196,7 +196,7 @@ class DevicesList extends Component {
                 // sortOrder: (<span id="order">{order}</span>),
                 // sortOrder: {order},
                 rowKey: index,
-                key: device.device_id ? `${device.device_id}` : `N/A ${index}`,
+                key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
@@ -217,7 +217,7 @@ class DevicesList extends Component {
                                                 : false
 
 
-                ),                
+                ),
                 status: (<span style={color} > {status}</span >),
                 flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
                 device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
@@ -271,10 +271,11 @@ class DevicesList extends Component {
         if (this.state.selectedRows.length) {
             let title = ' Are you sure, you want to delete All these devices';
             let arr = [];
-            //  console.log('delete the device', this.state.selectedRowKeys);
+            // console.log('delete the device', this.state.selectedRowKeys);
             for (let id of this.state.selectedRowKeys) {
                 for (let device of this.props.devices) {
-                    if (id == device.device_id) {
+                    // console.log(id, device);
+                    if (id == device.usr_device_id) {
                         arr.push(device)
                     }
                 }
@@ -288,6 +289,7 @@ class DevicesList extends Component {
     }
 
     confirmDelete = (action, devices, title) => {
+
         // console.log(action);
         // console.log(devices);
         this.confirm({
@@ -368,7 +370,7 @@ class DevicesList extends Component {
                 }),
                 //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
-            
+
         } else {
             rowSelection = null
         }
@@ -399,7 +401,7 @@ class DevicesList extends Component {
                             x: 500,
                             // y: 600 
                         }}
-                        
+
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             let showRecord = [];
@@ -613,7 +615,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                           ref="devciesList1"
+                        ref="devciesList1"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -631,7 +633,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                         ref="devciesList6"
+                        ref="devciesList6"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -648,7 +650,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                         ref="devciesList9"
+                        ref="devciesList9"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -669,7 +671,7 @@ export default class Tab extends Component {
                         columns={this.state.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.props.selectedOptions}
-                          ref="devciesList7"
+                        ref="devciesList7"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
@@ -704,7 +706,7 @@ export default class Tab extends Component {
                         columns={this.props.columns}
                         rejectDevice={this.props.rejectDevice}
                         selectedOptions={this.state.selectedOptions}
-                           ref="devciesList3"
+                        ref="devciesList3"
                         pagination={this.props.pagination}
                         addDevice={this.props.addDevice}
                         editDevice={this.props.editDevice}
