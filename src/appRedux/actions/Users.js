@@ -1,5 +1,6 @@
 import {
     SAVE_USERS,
+    LOAD_USER,
     INVALID_TOKEN,
     USERS_LIST,
     LOADING
@@ -33,6 +34,11 @@ export function getUserList() {
 export function addUser(user) {
     // console.log("action called", data);
     return (dispatch) => {
+
+        dispatch({
+            type: LOAD_USER,
+        });
+
         RestService.addUser(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('action done ', response.data);

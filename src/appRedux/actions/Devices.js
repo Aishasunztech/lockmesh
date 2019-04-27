@@ -73,6 +73,7 @@ export function editDevice(formData) {
 export function deleteUnlinkDevice(action, devices) {
     return (dispatch) => {
         // alert("hello");
+        console.log(devices);
         RestService.deleteUnlinkDevice(action, devices).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('successfully ', response.data);

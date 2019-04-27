@@ -82,7 +82,7 @@ class AppFilter extends Component {
     }
 
     render() {
-        console.log(" Current State", this.props)
+        // console.log(" Current State", this.props)
         let fullScreenClass1 = "";
         let fullScreenClass2 = "";
 
