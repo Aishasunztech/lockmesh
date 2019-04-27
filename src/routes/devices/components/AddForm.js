@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import AddUser from '../../users/components/AddUser';
 
-import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col } from 'antd';
+import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
@@ -20,6 +20,9 @@ class AddDevice extends Component {
         this.state = {
             visible: false,
             type: 0,
+            addNewUserModal: false,
+            isloading: false,
+            addNewUserValue: "",
         }
     }
 
@@ -47,6 +50,11 @@ class AddDevice extends Component {
         this.props.getUserList();
     }
     componentWillReceiveProps(nextProps) {
+        if (nextProps.isloading) {
+            this.setState({ addNewUserModal: true })
+        }
+        this.setState({ isloading: nextProps.isloading })
+
         if (this.props.pgp_emails !== nextProps.pgp_emails) {
             // nextProps.getSimIDs();
             // console.log('next', nextProps.pgp_emails)
@@ -68,7 +76,12 @@ class AddDevice extends Component {
     }
     handleChange = (e) => {
         // console.log(e.target);
-        this.setState({ type: e.target.value });
+        this.setState({ type: e.target.value});
+    }
+
+    handleUserChange = (e) => {
+        console.log(e)
+        this.setState({ addNewUserValue: e});
     }
 
     createdDate = () => {
@@ -78,26 +91,14 @@ class AddDevice extends Component {
     handleUserModal = () => {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
+        
+       
     }
 
     render() {
-        //  alert(this.props.device.device_id);
-        const { visible, loading } = this.state;
+        const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
-        // console.log('user list: ', users_list);
-        // console.log('last inex val is: ', users_list[users_list.length - 1].user_id)
-    //     console.log('total length is: ', users_list.length);
-    //    console.log(users_list[users_list.length - 1]);
-       var lastObject = users_list[users_list.length - 1]
-      console.log(lastObject)
-       if (lastObject !== undefined){
-        console.log('user id');
-           console.log(lastObject.user_id)
-       }else {
-           console.log('undefine')
-           console.log(lastObject, 'is id ');
-       }
-        // console.log(this.state.type);
+        var lastObject = users_list[users_list.length - 1]
         return (
             <div>
                 {(this.props.preActive) ?
@@ -124,11 +125,22 @@ class AddDevice extends Component {
                                     <Input disabled />
                                 )}
                             </Form.Item>
+
+                        {(isloading ?
+
+                            <div className="addUserSpin">
+                                <Spin />
+                            </div>
+                            :
+                                
                             <Form.Item
                                 label="USER ID"
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
+                            
+                            
+
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.props.new ? "" : this.props.device.chat_id,
                                 })(
@@ -136,46 +148,38 @@ class AddDevice extends Component {
                                   
 
                                     <Row gutter={8}>
-                                        <Col span={12}>
+                                        <Col span={16}>
                                         
                                         <Select
-                                        
-                                         defaultValue= {lastObject.user_id}
-                                        // defaultValue= { (lastObject != undefined) ? `${lastObject.user_id}` : ""}
-                                        // defaultValue= { (lastObject != undefined) ? "'"+ lastObject.user_id +"'" : ""}
-                                        // defaultActiveFirstOption={true}
+                                        value = { this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
                                         placeholder="Select User ID"
                                         optionFilterProp="children"
-                                        // firstActiveValue='ID477653'
-                                        // onChange={handleChange}
-                                        // onFocus={handleFocus}
-                                        // onBlur={handleBlur}
+                                        onChange={this.handleUserChange}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     >
                                         <Select.Option value="">Select User ID</Select.Option>
                                         {users_list.map((item, index) => {
-                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id}</Select.Option>)
+                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id + " (" + item.user_name + ")"}</Select.Option>)
                                         })}
                                     </Select>
                                         
                                         </Col>
-                                        <Col span={12}>
-                                        {/* <Button>Add Device</Button> */}
-                                        <Button
-                                                    type="primary"
-                                                    // disabled={(this.props.disableAddButton === true) ? true : false}
-                                                    style={{ width: '100%' }}
-                                                    onClick={() => this.handleUserModal()}
-                                                >
-                                                Add User
-                                                </Button>
+                                        <Col span={8}>
+                                            <Button
+                                                type="primary"
+                                                style={{ width: '100%' }}
+                                                onClick={() => this.handleUserModal()}
+                                            >
+                                            Add User
+                                            </Button>
                                         </Col>
                                     </Row>
                                    
 
                                 )}
                             </Form.Item>
+                        )}
                             <Form.Item
                             >
                                 {this.props.form.getFieldDecorator('dealer_id', {
@@ -548,14 +552,15 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users }) => {
-    console.log("sdfsaf", users.users_list);
+    // console.log("sdfsaf", users.users_list);
     return {
         routing: routing,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
         pgp_emails: devices.pgp_emails,
         policies: device_details.profiles,
-        users_list: users.users_list
+        users_list: users.users_list,
+        isloading: users.addUserFlag
     };
 }
 

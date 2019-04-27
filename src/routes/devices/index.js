@@ -851,7 +851,7 @@ class Devices extends Component {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')}>Delete Selected</Button>
         }
 
-        else if (value == '3') {
+        else if (value == DEVICE_PRE_ACTIVATION) {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
             this.state.columns[2].className = '';
             this.state.columns[2].children[0].className = '';
