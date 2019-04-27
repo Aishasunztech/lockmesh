@@ -83,6 +83,20 @@ class AddDevice extends Component {
     render() {
         //  alert(this.props.device.device_id);
         const { visible, loading } = this.state;
+        const { users_list } = this.props;
+        // console.log('user list: ', users_list);
+        // console.log('last inex val is: ', users_list[users_list.length - 1].user_id)
+    //     console.log('total length is: ', users_list.length);
+    //    console.log(users_list[users_list.length - 1]);
+       var lastObject = users_list[users_list.length - 1]
+      console.log(lastObject)
+       if (lastObject !== undefined){
+        console.log('user id');
+           console.log(lastObject.user_id)
+       }else {
+           console.log('undefine')
+           console.log(lastObject);
+       }
         // console.log(this.state.type);
         return (
             <div>
@@ -125,6 +139,10 @@ class AddDevice extends Component {
                                         <Col span={12}>
                                         
                                         <Select
+                                        defaultValue= { (lastObject !== undefined) ? "ID189093": ""}
+                                        // defaultValue= { (lastObject != undefined) ? `${lastObject.user_id}` : ""}
+                                        // defaultValue= { (lastObject != undefined) ? "'"+ lastObject.user_id +"'" : ""}
+
                                         showSearch
                                         placeholder="Select User ID"
                                         optionFilterProp="children"
@@ -134,7 +152,7 @@ class AddDevice extends Component {
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     >
                                         <Select.Option value="">Select User ID</Select.Option>
-                                        {this.props.users_list.map((item, index) => {
+                                        {users_list.map((item, index) => {
                                             return (<Select.Option key={index} value={item.user_id}>{item.user_id}</Select.Option>)
                                         })}
                                     </Select>

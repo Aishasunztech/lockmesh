@@ -833,7 +833,7 @@ class Devices extends Component {
 
         // console.log('clollolol',this.state.columns);
         if (value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
-            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')}>Delete Selected</Button>
+            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')}>Delete Selected</Button>
         }
 
         else if (value == '3') {
@@ -928,7 +928,7 @@ class Devices extends Component {
         // let type = value.toLowerCase();
 
         if (value == '5' && (this.props.user.type !== ADMIN)) {
-            this.state.columns[0]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>
+            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>
         }
         else if (value == '3') {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
