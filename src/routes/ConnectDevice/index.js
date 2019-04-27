@@ -482,7 +482,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-  // console.log("connect device state", device_details.imei_list);
+  console.log("connect device state", device_details);
   return {
     routing: routing,
     pathName: routing.location.pathname,

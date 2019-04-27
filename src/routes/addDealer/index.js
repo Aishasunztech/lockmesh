@@ -4,6 +4,7 @@ import { Row, Card, Button, Divider, Form, Input, Select } from 'antd';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 import { getDealerList, addDealer } from "../../appRedux/actions/Dealers";
+import { ADMIN, DEALER, SDEALER} from "../../constants/Constants";
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -80,7 +81,7 @@ class AddDealer extends Component {
                                 <Divider />            
                                 <Form style={{ marginTop: 50 }} >
                                     {
-                                        ((dealer_type !== 'dealer') && (dealer_type === 'sdealer') && (localStorage.getItem('type') === 'admin' )) ?
+                                        ((dealer_type !== DEALER) && (dealer_type === SDEALER) && (this.props.profile.type === ADMIN )) ?
 
                                             <Form.Item
                                                 {...formItemLayout}
@@ -92,7 +93,7 @@ class AddDealer extends Component {
                                                 })(
                                                     <Select placeholder="Select Dealer Name">
                                                      {this.props.dealersList.map((dealer,index) => {
-                                                           return(<Option key={index} value={dealer.dealer_id} >{dealer.dealer_name}</Option>)
+                                                           return(<Option key={index} value={dealer.dealer_id} ><strong>{dealer.dealer_name}</strong> ({dealer.dealer_email})</Option>)
                                                         })
                                                     }
 
