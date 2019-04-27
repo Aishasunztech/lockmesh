@@ -65,7 +65,7 @@ export default class TableHistory extends Component {
     }
 
     cotrolsValues = ()=> {
-        if(this.state.controls.length){
+        if(Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object){
             return(
                 [
                     {

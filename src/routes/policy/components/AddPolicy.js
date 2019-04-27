@@ -157,6 +157,7 @@ const data = [
                     apk_list={this.state.dealerApps}
                     handleCheckApp={this.handleCheckApp}
                     apps='dealerApps'
+                    isSwitch={true}
                 />
             ),
         }, {
@@ -167,6 +168,7 @@ const data = [
                     apk_list={this.state.appPermissions}
                     handleCheckApp={this.handleCheckApp}
                     appPermissions='appPermissions'
+                    isSwitch={true}
                 />
             ),
         }, {
@@ -177,6 +179,7 @@ const data = [
                 allExtensions={this.state.allExtensions}
                 handleCheckApp={this.handleCheckApp}
                 secureSettings = 'allExtensions'
+                isSwitch={true}
             />
             ),
         }, {

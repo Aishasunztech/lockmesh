@@ -830,13 +830,28 @@ class Devices extends Component {
         // alert('value');
         // alert(value);
         // value = value.toLowerCase();
-
+        if(value == DEVICE_UNLINKED){
+            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
+           if(indx > 0){ this.state.columns.splice(indx, 1)}
+           
+        }else{
+            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
+            if(indx < 0 )
+            {
+                this.state.columns.splice(1, 0,{
+                    dataIndex: 'action',
+                    align: 'center',
+                    className: 'row',
+                    width: 800,
+                })
+            }
+        }
         // console.log('clollolol',this.state.columns);
         if (value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')}>Delete Selected</Button>
         }
 
-        else if (value == '3') {
+        else if (value == DEVICE_PRE_ACTIVATION) {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
             this.state.columns[2].className = '';
             this.state.columns[2].children[0].className = '';
@@ -926,19 +941,43 @@ class Devices extends Component {
 
         // console.log('selsect', this.props.selectedOptions)
         // let type = value.toLowerCase();
+      
+     
+        if(value == '5'){
+            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
+           if(indx > 0){ this.state.columns.splice(indx, 1)}
+           
+        }else{
+            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
+            if(indx < 0 )
+            {
+                this.state.columns.splice(1, 0,{
+                    dataIndex: 'action',
+                    align: 'center',
+                    className: 'row',
+                    width: 800,
+                })
+            }
+            // console.log('this.state colusmd', this.state.columns)    
+        }
 
         if (value == '5' && (this.props.user.type !== ADMIN)) {
+            
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>
+            this.state.columns[1]['dataIndex'] = 'actionshide'
         }
         else if (value == '3') {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
             this.state.columns[2].className = '';
             this.state.columns[2].children[0].className = '';
         }
+    
         else {
             this.state.columns[1]['title'] = ''
             this.state.columns[2].className = 'hide';
             this.state.columns[2].children[0].className = 'hide';
+
+           
         }
 
         switch (value) {

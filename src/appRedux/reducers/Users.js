@@ -1,12 +1,14 @@
 import {
     SAVE_USERS,
+    LOAD_USER,
     LOADING,
     USERS_LIST
-} from "constants/ActionTypes";
+} from "../../constants/ActionTypes";
 import { message } from 'antd';
 
 const initialState = {
     isloading: false,
+    addUserFlag: false,
     subIsloading: false,
     users_list: [],
     action: '',
@@ -26,7 +28,7 @@ export default (state = initialState, action) => {
                 users: [],
             }
         case SAVE_USERS:
-            console.log('item added is:', action.response.user)
+            // console.log('item added is:', action.response.user)
 
             if (action.response.status) {
                 message.success(action.response.msg)
@@ -37,7 +39,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
+                addUserFlag: false,
                 users_list: [...state.users_list, ...action.response.user],
+            }
+        case LOAD_USER: 
+            return {
+                ...state,
+                addUserFlag: true,
             }
 
         case USERS_LIST:

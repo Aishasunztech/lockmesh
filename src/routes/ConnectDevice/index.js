@@ -284,7 +284,9 @@ class ConnectDevice extends Component {
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
       this.props.controls
     );
-    this.onCancel()
+    this.onCancel();
+   let deviceId = atob(this.props.match.params.device_id);
+    this.props.getDeviceApps(deviceId)
   }
   componentWillUnmount() {
     this.onBackHandler();
