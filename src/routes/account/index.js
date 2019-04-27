@@ -60,13 +60,7 @@ class Account extends Component {
     }
 
     showViewmodal = (dataVisible, dataFieldName = "", dataFieldTitle = "") => {
-        console.log(dataFieldName);
-        this.setState({
-            dataVisible: dataVisible,
-            dataFieldName: dataFieldName,
-            dataFieldTitle: dataFieldTitle
-        });
-
+        // console.log(dataFieldName);
         if (dataFieldName === "sim_ids") {
             this.props.getSimIDs();
         } else if (dataFieldName === "pgp_emails") {
@@ -80,6 +74,11 @@ class Account extends Component {
         } else if (dataFieldName === "used_sim_ids") {
             this.props.getUsedSimIds();
         }
+        this.setState({
+            dataVisible: dataVisible,
+            dataFieldName: dataFieldName,
+            dataFieldTitle: dataFieldTitle
+        });
     }
 
     componentDidMount() {
@@ -159,7 +158,7 @@ class Account extends Component {
         let demoData = [];
         if (value.length) {
             originalData.forEach((data) => {
-                console.log(data);
+                // console.log(data);
                 if (data[fieldName] !== undefined) {
                     if ((typeof data[fieldName]) === 'string') {
 
@@ -205,7 +204,7 @@ class Account extends Component {
                 pgp_emails: searchedData
             });
         } else if (dataName === "used_pgp_emails") {
-            console.log(this.props.used_pgp_emails, fieldName, fieldValue)
+            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
             let searchedData = this.searchField(this.props.used_pgp_emails, fieldName, fieldValue);
             this.setState({
                 used_pgp_emails: searchedData
@@ -214,7 +213,7 @@ class Account extends Component {
     }
 
     handlePagination = (e, dataName) => {
-        console.log(e, dataName);
+        // console.log(e, dataName);
         if (dataName === "sim_ids") {
             this.setState({
                 sim_ids_page: e
@@ -233,11 +232,11 @@ class Account extends Component {
             });
         } else if (dataName === "used_chat_ids") {
             this.setState({
-                used_chat_id_page: e
+                used_chat_ids_page: e
             });
         } else if (dataName === "used_sim_ids") {
             this.setState({
-                used_sim_id_page: e
+                used_sim_ids_page: e
             });
         }
     }
@@ -1053,9 +1052,9 @@ function mapDispatchToProps(dispatch) {
 var mapStateToProps = ({ account, devices }) => {
     // console.log("sim_ids", devices.sim_ids);
     // console.log("chat_ids", devices.chat_ids);
-    console.log("used_pgp_emails", account.used_pgp_emails);
-    console.log("used_caht", account.used_chat_ids);
-    console.log("used_sadas", account.used_sim_ids);
+    // console.log("used_pgp_emails", account.used_pgp_emails);
+    // console.log("used_caht", account.used_chat_ids);
+    // console.log("used_sadas", account.used_sim_ids);
     return {
         msg: account.msg,
         showMsg: account.showMsg,

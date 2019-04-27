@@ -11,12 +11,13 @@ import { BASE_URL } from "../../constants/Application"
 class UserProfile extends Component {
 
   showNotification = () => {
+    this.props.getNewDevicesList()
     this.refs.new_device.showModal();
     // alert('its working');
   }
   componentDidMount() {
     // console.log('get new device', this.props.getNewDevicesList())
-     this.props.getNewDevicesList();
+    this.props.getNewDevicesList();
     let token = "token=" + localStorage.getItem('token') + "&isWeb=true";
     // console.log("this token", token);
     // const socket = socketIOClient(BASE_URL, { 
@@ -25,7 +26,7 @@ class UserProfile extends Component {
   }
   componentWillReceiveProps(nextprops) {
     if (this.props.pathname !== nextprops.pathname) {
-     this.props.getNewDevicesList();
+      this.props.getNewDevicesList();
     }
   }
   render() {

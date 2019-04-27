@@ -7,7 +7,8 @@ export default class NewDevices extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false
+            visible: false,
+            NewDevices: []
         }
 
     }
@@ -32,7 +33,23 @@ export default class NewDevices extends Component {
             visible: false,
         });
     }
+    componentDidMount() {
+        this.setState({
+            NewDevices: this.props.devices
+        })
+    }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.devices.length !== nextProps.devices.length) {
+            this.setState({
+                NewDevices: nextProps.devices
+            });
+        }
+    }
+    rejectDevice(device) {
+        this.props.rejectDevice(device);
+        this.setState({ visible: false })
 
+    }
     renderList(list) {
 
         return list.map((device) => {
@@ -55,7 +72,7 @@ export default class NewDevices extends Component {
 
             return {
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.props.rejectDevice(device) }}>decline</Button>
+                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>decline</Button>
                     <Button
                         type="primary"
                         size="small"
@@ -90,7 +107,7 @@ export default class NewDevices extends Component {
                         bordered
                         columns={columns}
                         style={{ marginTop: 20 }}
-                        dataSource={this.renderList(this.props.devices)}
+                        dataSource={this.renderList(this.state.NewDevices)}
 
                     />
                 </Modal>
