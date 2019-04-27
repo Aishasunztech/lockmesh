@@ -63,7 +63,7 @@ const initialState = {
     sim_ids: [],
     chat_ids: [],
     pgp_emails: [],
-    options: [ 
+    options: [
         DEVICE_ID,
         DEVICE_REMAINING_DAYS,
         DEVICE_FLAGGED,
@@ -89,7 +89,7 @@ const initialState = {
         DEVICE_EXPIRY_DATE,
         DEVICE_DEALER_NAME,
         DEVICE_S_DEALER,
-        DEVICE_S_DEALER_NAME 
+        DEVICE_S_DEALER_NAME
     ],
     // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
