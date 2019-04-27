@@ -155,7 +155,7 @@ class DevicesList extends Component {
         return list.map((device, index) => {
             // console.log('tab Select is: ', this.props.tabselect)
 
-            var remainDays = checkRemainDays(device.created_at, device.validity)
+            // var remainDays = checkRemainDays(device.created_at, device.validity)
             // console.log('Remain Days are: ', remainDays);   
 
             //  console.log(this.props.user.type, 'lkslkdflk');
@@ -222,7 +222,7 @@ class DevicesList extends Component {
                 flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
                 device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-                remain_days: `${remainDays}`,
+                remain_days: checkValue(device.validity),
                 name: checkValue(device.name),
                 account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
