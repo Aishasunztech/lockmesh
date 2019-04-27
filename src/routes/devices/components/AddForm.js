@@ -95,7 +95,7 @@ class AddDevice extends Component {
            console.log(lastObject.user_id)
        }else {
            console.log('undefine')
-           console.log(lastObject);
+           console.log(lastObject, 'is id ');
        }
         // console.log(this.state.type);
         return (
@@ -110,7 +110,7 @@ class AddDevice extends Component {
                     : null}
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p>(*)- Required Fields</p>
-                    {(this.state.type == 0) ?
+                    {(this.state.type == 0 && lastObject) ?
                         <Fragment>
                             <Form.Item
                                 label="Device ID "
@@ -139,13 +139,15 @@ class AddDevice extends Component {
                                         <Col span={12}>
                                         
                                         <Select
-                                        defaultValue= { (lastObject !== undefined) ? "ID189093": ""}
+                                        
+                                         defaultValue= {lastObject.user_id}
                                         // defaultValue= { (lastObject != undefined) ? `${lastObject.user_id}` : ""}
                                         // defaultValue= { (lastObject != undefined) ? "'"+ lastObject.user_id +"'" : ""}
-
+                                        // defaultActiveFirstOption={true}
                                         showSearch
                                         placeholder="Select User ID"
                                         optionFilterProp="children"
+                                        // firstActiveValue='ID477653'
                                         // onChange={handleChange}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
