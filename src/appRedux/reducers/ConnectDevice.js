@@ -252,6 +252,11 @@ export default (state = initialState, action) => {
                 app_list: action.payload,
                 extensions: action.extensions,
                 controls: action.controls,
+                isAdminPwd: false,
+                isDuressPwd: false,
+                isEncryptedPwd: false,
+                isGuestPwd: false,
+                applyBtn: false,
                 ...check
             }
         }

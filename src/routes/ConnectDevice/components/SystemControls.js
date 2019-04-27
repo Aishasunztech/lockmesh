@@ -13,7 +13,7 @@ class SystemControls extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      controls: [],
+      controls: {},
     }
   }
 
@@ -45,11 +45,9 @@ class SystemControls extends Component {
     this.props.handleControlCheck(value, controlName)
   }
 
-
-
   render() {
     return (
-      this.state.controls.length ?
+      Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object ?
         <Fragment>
           <div>
             <List>
@@ -146,7 +144,7 @@ class SystemControls extends Component {
           </div>
         </Fragment> :
         <Fragment>
-          <h1 class="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> Not Available</a></h1>
+          <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> Not Available</a></h1>
         </Fragment>
     )
   }
