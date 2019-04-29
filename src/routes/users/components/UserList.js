@@ -10,8 +10,17 @@ class UserList extends Component {
         super(props)
         this.state = {
             columns: [],
+            pagination: this.props.pagination,
 
         }
+    }
+    handlePagination = (value) => {
+        // alert('sub child');
+        // console.log(value)
+        var x = Number(value)
+        this.setState({
+            pagination: x,
+        });
     }
     renderList(list) {
         let user_list = list.filter((data) => {
@@ -72,7 +81,6 @@ class UserList extends Component {
         }
     }
     componentDidMount() {
-
     }
 
     componentDidUpdate(prevProps) {
@@ -84,7 +92,7 @@ class UserList extends Component {
         }
     }
     render() {
-        // console.log(this.props.users)
+        console.log(this.state.pagination)
         return (
             <Fragment>
                 <Card>
@@ -93,7 +101,7 @@ class UserList extends Component {
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            console.log("table row", record);
+                            // console.log("table row", record);
                             return (
                                 <UserDeviceList
                                     record={record} />
@@ -103,7 +111,7 @@ class UserList extends Component {
                         expandIconAsCell={false}
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.users)}
-                        pagination={{ pageSize: 10, size: "midddle" }}
+                        pagination={{ pageSize: this.state.pagination, size: "midddle" }}
                         rowKey="user_list"
                         ref='user_table'
                     />

@@ -52,6 +52,7 @@ class UserDeviceList extends Component {
         this.state = {
             devicesList: this.props.record.devicesList ? this.props.record.devicesList : [],
             permissions: [],
+            
         }
         this.listdeviceCols = [
             {
@@ -425,7 +426,7 @@ class UserDeviceList extends Component {
         });
     }
     render() {
-        // console.log('dealer state', this.props.record.devicesList);
+        console.log('dealer state', this.state.pagination);
         return (
 
 
@@ -434,6 +435,7 @@ class UserDeviceList extends Component {
                     <Table
                         columns={this.listdeviceCols}
                         dataSource={this.renderDevices(this.state.devicesList)}
+                        
                     />
                 </Card>
             </Fragment >

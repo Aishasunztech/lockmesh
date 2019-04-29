@@ -21,8 +21,14 @@ import {
     getUserList
 } from "../../appRedux/actions/Users";
 
+import {
+    postPagination,
+    getPagination
+
+} from "../../appRedux/actions/Common";
+
 import AddUser from './components/AddUser';
-import { throws } from 'assert';
+
 class Users extends Component {
     constructor(props) {
         super(props);
@@ -93,11 +99,35 @@ class Users extends Component {
         }
 
     }
-    
+
     componentDidMount() {
         this.props.getUserList();
+        this.props.getPagination('users');
+        this.setState({
+            users: this.props.users_list
+        })
         // this.props.getApkList();
         // this.props.getDefaultApps();
+    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.users_list !== this.props.users_list) {
+            this.setState({
+                defaultPagingValue: this.props.DisplayPages,
+                users: nextProps.users_list
+            })
+        }
+    }
+    componentDidUpdate(prevProps) {
+        if (this.props !== prevProps) {
+            // console.log('this.props ', this.props.DisplayPages);
+            this.setState({
+                defaultPagingValue: this.props.DisplayPages,
+            })
+        }
+    }
+    handlePagination = (value) => {
+        this.refs.userList.handlePagination(value);
+        this.props.postPagination(value, 'users');
     }
     handleUserModal = () => {
         let handleSubmit = this.props.addUser;
@@ -105,11 +135,12 @@ class Users extends Component {
     }
 
     render() {
+        // console.log(this.props.DisplayPages);
         return (
             <Fragment>
                 <AppFilter
                     searchPlaceholder="Search User"
-                    defaultPagingValue={10}
+                    defaultPagingValue={this.state.defaultPagingValue}
                     addButtonText={"Add User"}
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
@@ -123,7 +154,9 @@ class Users extends Component {
                 <AddUser ref="add_user" />
                 <UserList
                     columns={this.columns}
-                    users={this.props.users_list}
+                    users={this.state.users}
+                    pagination={this.props.DisplayPages}
+                    ref="userList"
                 />
                 {/* <UserList/> */}
             </Fragment>
@@ -134,13 +167,17 @@ class Users extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addUser: addUser,
-        getUserList: getUserList
+        getUserList: getUserList,
+        postPagination: postPagination,
+        getPagination: getPagination
     }, dispatch);
 }
-var mapStateToProps = ({ auth, users }) => {
+var mapStateToProps = ({ auth, users, devices }) => {
+    console.log(users.users_list);
     return {
         user: auth.authUser,
         users_list: users.users_list,
+        DisplayPages: devices.DisplayPages,
     };
 }
 
