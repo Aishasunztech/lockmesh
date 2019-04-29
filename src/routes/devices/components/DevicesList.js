@@ -190,13 +190,15 @@ class DevicesList extends Component {
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>Decline</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>Delete</Button>
 
-
+            // console.log(device.usr_device_id,'key', device.device_id)
+            // console.log('end', device)
             return {
                 // sortOrder: <span style={{ display: 'none' }}>{order}</span>,
                 // sortOrder: (<span id="order">{order}</span>),
                 // sortOrder: {order},
                 rowKey: index,
-                key: device.device_id ? `${device.device_id}` : device.usr_device_id,
+                // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
+                key: device.id,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
@@ -267,15 +269,15 @@ class DevicesList extends Component {
     }
 
     deleteAllUnlinkedDevice = (type) => {
-        // console.log(type);
-        if (this.state.selectedRows.length) {
+         console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
+        if (this.state.selectedRowKeys.length) {
             let title = ' Are you sure, you want to delete All these devices';
             let arr = [];
-            // console.log('delete the device', this.state.selectedRowKeys);
+            console.log('delete the device', this.state.selectedRowKeys);
             for (let id of this.state.selectedRowKeys) {
                 for (let device of this.props.devices) {
-                    // console.log(id, device);
-                    if (id == device.usr_device_id) {
+                    // console.log(id, device.id);
+                    if (id == device.id) {
                         arr.push(device)
                     }
                 }
@@ -283,7 +285,6 @@ class DevicesList extends Component {
             // console.log('object of ', arr);
             this.confirmDelete(type, arr, title);
         }
-
         //  console.log('DELETE ALL 1', this.state.selectedRows);
 
     }
@@ -299,7 +300,8 @@ class DevicesList extends Component {
                 this.props.deleteUnlinkDevice(action, devices);
                 //    this.props.resetTabSelected()
                 // this.props.refreshComponent();
-                //  this.props.resetTabSelected()
+                   this.resetSeletedRows()
+                   this.refs.tablelist.props.rowSelection.selectedRowKeys=[]
             }),
             onCancel() { },
         });
@@ -316,7 +318,7 @@ class DevicesList extends Component {
     }
 
     resetSeletedRows = () => {
-        //   console.log('table ref', this.refs.tablelist)
+          console.log('table ref', this.refs.tablelist)
         this.setState({
             selectedRowKeys: [],
             selectedRows: [],
@@ -336,13 +338,13 @@ class DevicesList extends Component {
         // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
 
         const { activateDevice, suspendDevice } = this.props;
-        
+
         let rowSelection;
         if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
-                    // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                     console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
                     disabled: record.name === 'Disabled User', // Column configuration not to be checked
@@ -363,10 +365,12 @@ class DevicesList extends Component {
                     disabled: record.name === 'Disabled User', // Column configuration not to be checked
                     name: record.name,
                 }),
+                selectedRowKeys: this.state.selectedRowKeys,
                 //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
 
         } else {
+            // console.log('asdkjadl')
             rowSelection = null
         }
 
@@ -544,8 +548,7 @@ export default class Tab extends Component {
     }
 
     deleteAllUnlinkedDevice = (type) => {
-        console.log(type);
-        this.refs.devciesList1.deleteAllUnlinkedDevice(type)
+        this.refs.devciesList5.deleteAllUnlinkedDevice(type)
     }
     deleteAllPreActivedDevice = (type) => {
 

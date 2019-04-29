@@ -93,6 +93,7 @@ class Devices extends Component {
             {
                 // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
                 dataIndex: 'action',
+                // title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
                 align: 'center',
                 className: 'row',
                 width: 800,
@@ -944,42 +945,44 @@ class Devices extends Component {
         // let type = value.toLowerCase();
       
      
-        if(value == '5'){
+        if(value == '5' && this.props.user.type == ADMIN){
             let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
-           if(indx > 0){ this.state.columns.splice(indx, 1)}
+           if(indx >= 0){ this.state.columns.splice(indx, 1)}
            
         }else{
             let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
             if(indx < 0 )
             {
                 this.state.columns.splice(1, 0,{
+                    title : <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
                     dataIndex: 'action',
                     align: 'center',
                     className: 'row',
                     width: 800,
+
                 })
-            }
-            // console.log('this.state colusmd', this.state.columns)    
+            }    
         }
 
-        if (value == '5' && (this.props.user.type !== ADMIN)) {
-            
-            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>
-            this.state.columns[1]['dataIndex'] = 'actionshide'
+        if (value == '5' && (this.props.user.type != ADMIN)) {
+            // console.log('tab 5', this.state.columns);
+            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
+
         }
         else if (value == '3') {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
             this.state.columns[2].className = '';
             this.state.columns[2].children[0].className = '';
         }
-    
         else {
+            // console.log('else is called');
             this.state.columns[1]['title'] = ''
             this.state.columns[2].className = 'hide';
             this.state.columns[2].children[0].className = 'hide';
 
-           
         }
+
+        // console.log(this.state.columns, 'colll')
 
         switch (value) {
             case '4':
@@ -1142,7 +1145,7 @@ class Devices extends Component {
     handlePagination = (value) => {
         //  alert(value);
         //  console.log('pagination value of ', value)
-        // this.refs.devcieList.handlePagination(value);
+         this.refs.devcieList.handlePagination(value);
         this.props.postPagination(value, 'devices');
     }
     componentDidMount() {
