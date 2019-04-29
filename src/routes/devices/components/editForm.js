@@ -2,13 +2,18 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Button, Form, Input, Select, InputNumber } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Spin } from 'antd';
 import { checkValue } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION
 } from '../../../constants/Constants';
+import AddUser from '../../users/components/AddUser';
+import {
+    addUser,
+    getUserList
+} from "../../../appRedux/actions/Users";
 
 class EditDevice extends Component {
 
@@ -16,7 +21,14 @@ class EditDevice extends Component {
         super(props);
         this.state = {
             visible: false,
+            addNewUserModal: false,
+            isloading: false,
+            addNewUserValue: "",
         }
+    }
+    handleUserChange = (e) => {
+        // console.log(e)
+        this.setState({ addNewUserValue: e });
     }
 
     handleSubmit = (e) => {
@@ -40,14 +52,22 @@ class EditDevice extends Component {
         this.props.getSimIDs();
         this.props.getChatIDs();
         this.props.getPGPEmails();
+        this.props.getUserList();
+        if (this.state.addNewUserValue !== this.props.device.user_id) {
+            this.setState({
+                addNewUserValue: this.props.device.user_id
+            })
+        }
     }
     componentWillReceiveProps(nextProps) {
+        if (nextProps.isloading) {
+            this.setState({ addNewUserModal: true })
+        }
+        this.setState({ isloading: nextProps.isloading })
         if (this.props !== nextProps) {
             // nextProps.getSimIDs();
         }
     }
-
-
     handleReset = () => {
         this.props.form.resetFields();
     }
@@ -72,6 +92,7 @@ class EditDevice extends Component {
     }
 
     handleCancel = () => {
+        this.handleReset();
         this.setState({ visible: false });
     }
 
@@ -80,10 +101,10 @@ class EditDevice extends Component {
     }
 
     render() {
-
-        //  alert(this.props.device.device_id);
         // console.log('props of coming', this.props.device);
-        const { visible, loading } = this.state;
+        const { visible, loading, isloading, addNewUserValue } = this.state;
+        const { users_list } = this.props;
+        var lastObject = users_list[0]
 
         return (
 
@@ -91,7 +112,6 @@ class EditDevice extends Component {
                 <p>(*)- Required Fields</p>
 
                 <Form.Item
-
                     label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? "Device ID " : null}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
@@ -103,6 +123,65 @@ class EditDevice extends Component {
                         <Input type={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? 'hidden' : ''} disabled />
                     )}
                 </Form.Item>
+                {(isloading ?
+
+                    <div className="addUserSpin">
+                        <Spin />
+                    </div>
+                    :
+                    <Fragment>
+                        <Form.Item
+                            label="USER ID"
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+
+
+
+                            {this.props.form.getFieldDecorator('user_id', {
+                                initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
+                                rules: [{
+                                    required: true, message: 'User ID is Required !',
+                                }]
+                            })(
+                                <Select
+                                    setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
+                                    showSearch
+                                    placeholder="Select User ID"
+                                    optionFilterProp="children"
+                                    onChange={this.handleUserChange}
+                                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                >
+                                    <Select.Option value="">Select User ID</Select.Option>
+                                    {users_list.map((item, index) => {
+                                        return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
+                                    })}
+                                </Select>
+                                // {/* <Button
+                                //     type="primary"
+                                //     style={{ width: '100%' }}
+                                //     onClick={() => this.handleUserModal()}
+                                // >
+                                //     Add User
+                                // </Button> */}
+                            )}
+                        </Form.Item>
+                        <Form.Item
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            <Button
+                                type="primary"
+                                style={{ width: '100%' }}
+                                onClick={() => this.handleUserModal()}
+                            >
+                                Add User
+                         </Button>
+                        </Form.Item>
+                    </Fragment>
+                )}
+
+
                 <Form.Item
                 >
                     {this.props.form.getFieldDecorator('dealer_id', {
@@ -311,7 +390,7 @@ class EditDevice extends Component {
                     <Fragment>
 
                         <Form.Item
-                            label="NOTE "
+                            label="NOTE"
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                         >
@@ -414,17 +493,20 @@ function mapDispatchToProps(dispatch) {
         // importCSV: importCSV
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs,
-        getPGPEmails: getPGPEmails
+        getPGPEmails: getPGPEmails,
+        getUserList: getUserList
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices }) => {
+var mapStateToProps = ({ routing, devices, users }) => {
     // console.log("sdfsaf", devices);
 
     return {
         routing: routing,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
-        pgp_emails: devices.pgp_emails
+        pgp_emails: devices.pgp_emails,
+        users_list: users.users_list,
+        isloading: users.addUserFlag
     };
 }
 

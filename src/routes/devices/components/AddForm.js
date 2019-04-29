@@ -100,9 +100,10 @@ class AddDevice extends Component {
     }
 
     render() {
+        console.log(this.props.device);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
-        var lastObject = users_list[users_list.length - 1]
+        var lastObject = users_list[0]
         return (
             <div>
                 {(this.props.preActive) ?
@@ -147,6 +148,9 @@ class AddDevice extends Component {
 
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : addNewUserValue,
+                                    rules: [{
+                                        required: true, message: 'User ID is Required !',
+                                    }]
                                 })(
                                     <Select
                                         className="pos_rel"
@@ -432,9 +436,6 @@ class AddDevice extends Component {
                             >
                                 {this.props.form.getFieldDecorator('note', {
                                     initialValue: '',
-                                    rules: [{
-                                        required: true, message: 'Note is required',
-                                    }],
                                 })(
                                     <Input />
                                 )}
