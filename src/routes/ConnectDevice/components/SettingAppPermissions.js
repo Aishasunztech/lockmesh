@@ -47,7 +47,7 @@ class SettingAppPermissions extends Component {
   }
 
   componentWillReceiveProps(nextprops) {
-    
+
     if (this.props.isExtension) {
       // alert("hello");
       this.setState({
@@ -60,7 +60,7 @@ class SettingAppPermissions extends Component {
   }
 
 
-  handleChecked = (e, key, app_id) => {
+  handleChecked = (e, key, app_id = '000') => {
     this.props.handleCheckExtension(e, key, app_id, this.props.pageName);
   }
 
@@ -102,6 +102,7 @@ class SettingAppPermissions extends Component {
   }
   render() {
     const { extension, isExtension } = this.props;
+    console.log('extenion ate is', extension)
     if (isExtension) {
       return (
         <Fragment>
@@ -121,13 +122,22 @@ class SettingAppPermissions extends Component {
           </Row>
           <Row className="sec_head">
             <Col span={8}>
-              <span>Guest </span> <Switch defaultChecked={extension.guest === 1 ? true : false} size="small" />
+              <span>Guest </span> <Switch onClick={(e) => {
+                // console.log("guest", e);
+                this.handleChecked(e, "guest");
+              }} checked={extension.guest === 1 ? true : false} size="small" />
             </Col>
             <Col span={8}>
-              <span>Encrypt </span> <Switch defaultChecked={extension.encrypted === 1 ? true : false} size="small" />
+              <span>Encrypt </span> <Switch onClick={(e) => {
+                // console.log("guest", e);
+                this.handleChecked(e, "encrypted");
+              }} checked={extension.encrypted === 1 ? true : false} size="small" />
             </Col>
             <Col span={8}>
-              <span>Enable </span> <Switch defaultChecked={extension.enable === 1 ? true : false} size="small" />
+              <span>Enable </span> <Switch onClick={(e) => {
+                // console.log("guest", e);
+                this.handleChecked(e, "enable");
+              }} checked={extension.enable === 1 ? true : false} size="small" />
             </Col>
           </Row>
           <div className="sec_set_table">
@@ -163,7 +173,7 @@ var mapStateToProps = ({ device_details }, ownProps) => {
   const pageName = ownProps.pageName;
 
   let extension = device_details.extensions.find(o => o.uniqueName === pageName);
-  // console.log("extensions_", extension);
+   console.log("extensions_",  device_details.secureSettingsMain,);
 
   if (extension !== undefined) {
     return {
@@ -172,6 +182,7 @@ var mapStateToProps = ({ device_details }, ownProps) => {
       guestAllExt: device_details.guestAllExt,
       encryptedAllExt: device_details.encryptedAllExt,
       checked_app_id: device_details.checked_app_id,
+  
     }
   } else {
     return {

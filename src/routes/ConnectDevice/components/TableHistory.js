@@ -78,9 +78,9 @@ const TableHistory = (props) => {
             expandedRowRender={record => {
                 console.log("record", record);
 
-                let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? JSON.parse(record.app_list) : [];
-                let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? JSON.parse(record.secure_apps) : [];
-                let controls = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? JSON.parse(record.controls) : [];
+                let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
+                let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
+                let controls = (Object.entries(record.controls).length > 0 && record.controls.constructor === Object && record.controls !== undefined && record.controls !== null && record.controls !== '') ? record.controls : [];
                 console.log("app_list: ", app_list);
                 console.log("extensions: ", extensions);
                 console.log("controls: ", controls);
@@ -94,6 +94,7 @@ const TableHistory = (props) => {
                         // isDuressPwd={this.props.isDuressPwd}
                         // isEncryptedPwd={this.props.isEncryptedPwd}
                         // isGuestPwd={this.props.isGuestPwd}
+                        show_all_apps={true}
                         controls={controls}
                     />
                 );
