@@ -176,7 +176,7 @@ export default (state = initialState, action) => {
         case DELETE_UNLINK_DEVICE:
             if (action.response.status) {
                 for (let id of action.response.data) {
-                    let objIndex = state.devices.findIndex((obj => obj.usr_device_id === id));
+                    let objIndex = state.devices.findIndex((obj => obj.id === id));
                     state.devices.splice(objIndex, 1);
                 }
                 message.success(action.response.msg);

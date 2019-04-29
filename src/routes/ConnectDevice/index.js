@@ -296,7 +296,7 @@ class ConnectDevice extends Component {
       this.props.user_acc_id,
       null, null,
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      this.props.controls
+      this.props.controls.controls
     );
     this.onCancel();
    let deviceId = atob(this.props.match.params.device_id);
