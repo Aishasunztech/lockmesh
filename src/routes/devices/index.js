@@ -2,6 +2,9 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
 import { Input, Button, Icon, Select } from "antd";
+
+import { bindActionCreators } from "redux";
+
 import {
     getDevicesList,
     suspendDevice,
@@ -64,15 +67,12 @@ import {
     getNotification
 } from "../../appRedux/actions/Socket";
 
-
-import { bindActionCreators } from "redux";
 import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
 import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
-import { stat } from "fs";
 import AddDevice from './components/AddDevice';
 
 
@@ -794,6 +794,7 @@ class Devices extends Component {
                 ]
             },
         ];
+        
         this.state = {
             columns: columns,
             searchText: '',
