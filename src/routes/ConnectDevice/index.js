@@ -35,7 +35,10 @@ import {
   redoExtensions,
   undoControls,
   redoControls,
-  getImeiHistory
+  getImeiHistory,
+  handleMainSettingCheck,
+  handleControlCheck,
+  handleCheckAllExtension
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -64,7 +67,8 @@ class ConnectDevice extends Component {
     this.state = {
       device_id: '',
       pageName: MAIN_MENU,
-      showChangesModal: false
+      showChangesModal: false,
+      controls: []
     }
     // console.log("hello every body", this.props);
     this.mainMenu = [
@@ -132,7 +136,8 @@ class ConnectDevice extends Component {
 
     this.setState({
       pageName: this.props.pageName,
-      device_id: atob(this.props.match.params.device_id)
+      device_id: atob(this.props.match.params.device_id),
+      controls: this.props.controls
     });
 
     const device_id = atob(this.props.match.params.device_id);
@@ -162,13 +167,20 @@ class ConnectDevice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-
-    if (this.props !== prevProps) {
+// console.log(prevProps, 'comp', this.props)
+    if (this.props.controls.controls !== prevProps.controls.controls) {
+      this.setState({
+        controls: this.props.controls
+      })
       //  console.log('update data is ', this.props.app_list)
     }
   }
+  
   componentWillReceiveProps(nextProps) {
-    if (this.props.pathName !== nextProps.pathName) {
+    if (this.props.controls !== nextProps.controls) {
+      this.setState({
+        controls: nextProps.controls
+      })
       // this.setState({
       //     pageName: nextProps.pageName
       // });
@@ -238,7 +250,17 @@ class ConnectDevice extends Component {
         />
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
-      return (<SystemControls />);
+      return (<SystemControls 
+        controls={this.state.controls} 
+        handleCheckAllExtension={this.props.handleCheckAllExtension}
+        handleControlCheck={this.props.handleControlCheck}
+        handleMainSettingCheck={this.props.handleMainSettingCheck}
+        guestAllExt={ this.props.guestAllExt}
+        encryptedAllExt= {this.props.encryptedAllExt}
+        checked_app_id={this.props.checked_app_id}
+        secureSettingsMain={ this.props.secureSettingsMain}
+        
+        />);
     } else if (this.props.pageName === MANAGE_PASSWORD) {
       return (
         <List
@@ -285,6 +307,7 @@ class ConnectDevice extends Component {
       // app_list.push(obData);
       // app_list.push(this.props.controls.settings)
     }
+    console.log("hello", this.props.controls.controls);
     this.props.applySetting(
       app_list, {
         adminPwd: this.props.adminPwd,
@@ -296,7 +319,8 @@ class ConnectDevice extends Component {
       this.props.user_acc_id,
       null, null,
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      this.props.controls.controls
+      this.props.controls.controls[0]
+
     );
     this.onCancel();
    let deviceId = atob(this.props.match.params.device_id);
@@ -496,11 +520,14 @@ function mapDispatchToProps(dispatch) {
     unflagged: unflagged,
     wipe: wipe,
     checkPass: checkPass,
-    getImeiHistory: getImeiHistory
+    getImeiHistory: getImeiHistory,
+    handleControlCheck: handleControlCheck,
+    handleCheckAllExtension: handleCheckAllExtension,
+    handleMainSettingCheck: handleMainSettingCheck,
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-  console.log("connect device state", device_details);
+  // console.log("connect device state", device_details.controls);
   return {
     routing: routing,
     pathName: routing.location.pathname,
@@ -536,7 +563,11 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     isEncryptedPwd: device_details.isEncryptedPwd,
     isDuressPwd: device_details.isDuressPwd,
     controls: device_details.controls,
-    imei_list: device_details.imei_list
+    imei_list: device_details.imei_list,
+    guestAllExt: device_details.guestAllExt,
+    encryptedAllExt: device_details.encryptedAllExt,
+    checked_app_id: device_details.checked_app_id,
+    secureSettingsMain: device_details.secureSettingsMain,
   };
 }
 
