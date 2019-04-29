@@ -367,13 +367,12 @@ class EditDevice extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('expiry_date', {
-
+                        initialValue: this.props.device.expiry_date,
                         rules: [{
                             required: true, message: 'Expiry Date is Required !',
                         }],
                     })(
                         <Select
-
                             style={{ width: '100%' }}
                         >
                             {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>Trial (7 days)</Select.Option> : null}

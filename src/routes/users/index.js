@@ -110,7 +110,7 @@ class Users extends Component {
         // this.props.getDefaultApps();
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.users_list.length !== this.props.users_list.length) {
+        if (nextProps.users_list !== this.props.users_list) {
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 users: nextProps.users_list
