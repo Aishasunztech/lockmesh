@@ -98,17 +98,25 @@ export default class TableHistory extends Component {
     filterAppList = () => {
         let data = this.props.app_list;
         let applist = [];
-        for (let obj of data) {
-            if (obj.isChanged !== undefined && obj.isChanged === true) {
-                applist.push(obj);
+        if(this.props.show_all_apps){
+            this.setState({ applist: data })
+        }else{
+            for (let obj of data) {
+                if (obj.isChanged !== undefined && obj.isChanged === true) {
+                    applist.push(obj);
+                }
             }
+            this.setState({ applist: applist })
         }
-        this.setState({ applist: applist })
+
     }
 
     filterExtensions = () => {
         let data = this.props.extensions;
         let extensions = [];
+        if(this.props.show_all_apps){
+            this.setState({ extensions: data })
+        }else{
         if (data.length) {
             for (let obj of data) {
                 if (obj.uniqueName == this.props.extensionUniqueName) {
@@ -121,6 +129,7 @@ export default class TableHistory extends Component {
             }
             this.setState({ extensions: extensions })
         }
+    }
 
     }
 
