@@ -111,25 +111,25 @@ class Devices extends Component {
             {
                 title: (
                     <Input.Search
-                        name="remain_days"
-                        key="remain_days"
-                        id="remain_days"
+                        name="validity"
+                        key="validity"
+                        id="validity"
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder= {titleCase(DEVICE_REMAINING_DAYS)}
                     />
                 ),
-                dataIndex: 'remain_days',
+                dataIndex: 'validity',
                 className: 'hide',
                 children: [
                     {
                         title: DEVICE_REMAINING_DAYS,
                         align: "center",
-                        dataIndex: 'remain_days',
-                        key: "remain_days",
+                        dataIndex: 'validity',
+                        key: "validity",
                         className: 'hide',
-                        sorter: (a, b) => { return a.remain_days.localeCompare(b.remain_days) },
+                        sorter: (a, b) => { return a.validity.localeCompare(b.validity) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -1284,6 +1284,8 @@ class Devices extends Component {
 
 
     handleSearch = (e) => {
+        console.log('============ check search value ========')
+        console.log(e.target.name);
 
         let demoDevices = [];
         if (status) {
