@@ -29,20 +29,22 @@ export default (state = initialState, action) => {
             }
         case SAVE_USERS:
             // console.log('item added is:', action.response.user)
-
+            let result = []
             if (action.response.status) {
                 message.success(action.response.msg)
+                result = [...state.users_list, ...action.response.user]
             }
             else {
                 message.error(action.response.msg)
+                result = state.users_list
             }
             return {
                 ...state,
                 isloading: false,
                 addUserFlag: false,
-                users_list: [...state.users_list, ...action.response.user],
+                users_list: result,
             }
-        case LOAD_USER: 
+        case LOAD_USER:
             return {
                 ...state,
                 addUserFlag: true,

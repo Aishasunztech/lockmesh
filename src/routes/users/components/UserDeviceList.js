@@ -406,7 +406,7 @@ class UserDeviceList extends Component {
                 // sortOrder: (<span id="order">{order}</span>),
                 // sortOrder: {order},
                 rowKey: index,
-                key: device.device_id ? `${device.device_id}` : "N/A",
+                key: device.device_id ? `${device.device_id}` : device.user_device_id,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL || status === DEVICE_SUSPENDED) ?
                     (<Fragment>{ConnectBtn}</Fragment>) : false

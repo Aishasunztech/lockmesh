@@ -76,12 +76,12 @@ class AddDevice extends Component {
     }
     handleChange = (e) => {
         // console.log(e.target);
-        this.setState({ type: e.target.value});
+        this.setState({ type: e.target.value });
     }
 
     handleUserChange = (e) => {
-        console.log(e)
-        this.setState({ addNewUserValue: e});
+        // console.log(e)
+        this.setState({ addNewUserValue: e });
     }
 
     createdDate = () => {
@@ -91,8 +91,6 @@ class AddDevice extends Component {
     handleUserModal = () => {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
-        
-       
     }
 
     render() {
@@ -111,47 +109,40 @@ class AddDevice extends Component {
                     : null}
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p>(*)- Required Fields</p>
-                    {(this.state.type == 0 && lastObject) ?
+                    {(this.state.type == 0) ?
+                        <Form.Item
+                            label="Device ID "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            {this.props.form.getFieldDecorator('device_id', {
+                                initialValue: this.props.new ? "" : this.props.device.device_id,
+                            })(
+
+                                <Input disabled />
+                            )}
+                        </Form.Item> : null
+                    }
+                    {(isloading ?
+
+                        <div className="addUserSpin">
+                            <Spin />
+                        </div>
+                        :
                         <Fragment>
-                            <Form.Item
-                                label="Device ID "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('device_id', {
-                                    initialValue: this.props.new ? "" : this.props.device.device_id,
-                                })(
-
-                                    <Input disabled />
-                                )}
-                            </Form.Item>
-
-                        {(isloading ?
-
-                            <div className="addUserSpin">
-                                <Spin />
-                            </div>
-                            :
-                                
                             <Form.Item
                                 label="USER ID"
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
-                            
-                            
+
+
 
                                 {this.props.form.getFieldDecorator('user_id', {
-                                    initialValue: this.props.new ? "" : this.props.device.chat_id,
+                                    initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : addNewUserValue,
                                 })(
-                                    // <Input />
-                                  
-
-                                    <Row gutter={8}>
-                                        <Col span={16}>
-                                        
-                                        <Select
-                                        value = { this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
+                                    <Select
+                                        setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
                                         placeholder="Select User ID"
                                         optionFilterProp="children"
@@ -160,26 +151,34 @@ class AddDevice extends Component {
                                     >
                                         <Select.Option value="">Select User ID</Select.Option>
                                         {users_list.map((item, index) => {
-                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id + " (" + item.user_name + ")"}</Select.Option>)
+                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
                                         })}
                                     </Select>
-                                        
-                                        </Col>
-                                        <Col span={8}>
-                                            <Button
-                                                type="primary"
-                                                style={{ width: '100%' }}
-                                                onClick={() => this.handleUserModal()}
-                                            >
-                                            Add User
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                   
-
+                                    // {/* <Button
+                                    //     type="primary"
+                                    //     style={{ width: '100%' }}
+                                    //     onClick={() => this.handleUserModal()}
+                                    // >
+                                    //     Add User
+                                    // </Button> */}
                                 )}
                             </Form.Item>
-                        )}
+                            <Form.Item
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                <Button
+                                    type="primary"
+                                    style={{ width: '100%' }}
+                                    onClick={() => this.handleUserModal()}
+                                >
+                                    Add User
+                                </Button>
+                            </Form.Item>
+                        </Fragment>
+                    )}
+                    {(this.state.type == 0 && lastObject) ?
+                        <Fragment>
                             <Form.Item
                             >
                                 {this.props.form.getFieldDecorator('dealer_id', {
