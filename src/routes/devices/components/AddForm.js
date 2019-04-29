@@ -13,6 +13,12 @@ import {
     getUserList
 } from "../../../appRedux/actions/Users";
 const confirm = Modal.confirm;
+
+const duplicate_txt = (
+    <div>
+        <p>Generate multiple activation <br /> codes with same settings</p>
+    </div>
+);
 class AddDevice extends Component {
 
     constructor(props) {
@@ -76,12 +82,12 @@ class AddDevice extends Component {
     }
     handleChange = (e) => {
         // console.log(e.target);
-        this.setState({ type: e.target.value});
+        this.setState({ type: e.target.value });
     }
 
     handleUserChange = (e) => {
-        console.log(e)
-        this.setState({ addNewUserValue: e});
+        // console.log(e)
+        this.setState({ addNewUserValue: e });
     }
 
     createdDate = () => {
@@ -91,8 +97,6 @@ class AddDevice extends Component {
     handleUserModal = () => {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
-        
-       
     }
 
     render() {
@@ -102,56 +106,51 @@ class AddDevice extends Component {
         return (
             <div>
                 {(this.props.preActive) ?
-                    <Radio.Group onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
-                        <Radio.Button value="0">Single Device</Radio.Button>
-                        <Radio.Button value="1"><Popover content="Generate multiple activation codes with same settings" placement="rightTop">
-                            <a>Duplicate Devices  <Icon type="info-circle" /></a>
-                        </Popover></Radio.Button>
+                    <Radio.Group className="width_100" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
+                        <Radio.Button className="dev_radio_btn" value="0">Single Device</Radio.Button>
+                        <Radio.Button className="dev_radio_btn" value="1">
+                            <a>Duplicate Devices</a>
+                            <Popover content={duplicate_txt} placement="bottomRight">
+                                <Icon type="info-circle" />
+                            </Popover>
+                        </Radio.Button>
                     </Radio.Group>
                     : null}
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p>(*)- Required Fields</p>
-                    {(this.state.type == 0 && lastObject) ?
+                    {(this.state.type == 0) ?
+                        <Form.Item
+                            label="Device ID "
+                            labelCol={{ span: 8 }}
+                            wrapperCol={{ span: 14 }}
+                        >
+                            {this.props.form.getFieldDecorator('device_id', {
+                                initialValue: this.props.new ? "" : this.props.device.device_id,
+                            })(
+
+                                <Input disabled />
+                            )}
+                        </Form.Item> : null
+                    }
+                    {(isloading ?
+
+                        <div className="addUserSpin">
+                            <Spin />
+                        </div>
+                        :
                         <Fragment>
-                            <Form.Item
-                                label="Device ID "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('device_id', {
-                                    initialValue: this.props.new ? "" : this.props.device.device_id,
-                                })(
-
-                                    <Input disabled />
-                                )}
-                            </Form.Item>
-
-                        {(isloading ?
-
-                            <div className="addUserSpin">
-                                <Spin />
-                            </div>
-                            :
-                                
                             <Form.Item
                                 label="USER ID"
                                 labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                wrapperCol={{ span: 8 }}
                             >
-                            
-                            
 
                                 {this.props.form.getFieldDecorator('user_id', {
-                                    initialValue: this.props.new ? "" : this.props.device.chat_id,
+                                    initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : addNewUserValue,
                                 })(
-                                    // <Input />
-                                  
-
-                                    <Row gutter={8}>
-                                        <Col span={16}>
-                                        
-                                        <Select
-                                        value = { this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
+                                    <Select
+                                        className="pos_rel"
+                                        setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
                                         placeholder="Select User ID"
                                         optionFilterProp="children"
@@ -160,26 +159,33 @@ class AddDevice extends Component {
                                     >
                                         <Select.Option value="">Select User ID</Select.Option>
                                         {users_list.map((item, index) => {
-                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id + " (" + item.user_name + ")"}</Select.Option>)
+                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
                                         })}
                                     </Select>
-                                        
-                                        </Col>
-                                        <Col span={8}>
-                                            <Button
-                                                type="primary"
-                                                style={{ width: '100%' }}
-                                                onClick={() => this.handleUserModal()}
-                                            >
-                                            Add User
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                   
 
+
+                                    // {/* <Button
+                                    //     type="primary"
+                                    //     style={{ width: '100%' }}
+                                    //     onClick={() => this.handleUserModal()}
+                                    // >
+                                    //     Add User
+                                    // </Button> */}
                                 )}
+                                <Button
+                                    className="add_user_btn"
+                                    type="primary"
+                                    onClick={() => this.handleUserModal()}
+                                >
+                                    Add User
+                                </Button>
+
                             </Form.Item>
-                        )}
+
+                        </Fragment>
+                    )}
+                    {(this.state.type == 0 && lastObject) ?
+                        <Fragment>
                             <Form.Item
                             >
                                 {this.props.form.getFieldDecorator('dealer_id', {
