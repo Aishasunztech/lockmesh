@@ -2,6 +2,9 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
 import { Input, Button, Icon, Select } from "antd";
+
+import { bindActionCreators } from "redux";
+
 import {
     getDevicesList,
     suspendDevice,
@@ -64,15 +67,12 @@ import {
     getNotification
 } from "../../appRedux/actions/Socket";
 
-
-import { bindActionCreators } from "redux";
 import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
 import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
-import { stat } from "fs";
 import AddDevice from './components/AddDevice';
 
 
@@ -794,6 +794,7 @@ class Devices extends Component {
                 ]
             },
         ];
+        
         this.state = {
             columns: columns,
             searchText: '',
@@ -851,7 +852,7 @@ class Devices extends Component {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')}>Delete Selected</Button>
         }
 
-        else if (value == '3') {
+        else if (value == DEVICE_PRE_ACTIVATION) {
             this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
             this.state.columns[2].className = '';
             this.state.columns[2].children[0].className = '';

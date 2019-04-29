@@ -140,4 +140,5 @@ export const GET_POLICIES = 'GET_POLICIES'
 
 // Users consts
 export const SAVE_USERS = 'SAVE_USERS'
+export const LOAD_USER = 'LOAD_USER'
 export const USERS_LIST = 'USERS_LIST'
