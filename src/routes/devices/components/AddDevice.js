@@ -79,6 +79,7 @@ export default class AddDevice extends Component {
         return (
             <div>
                 <Modal
+                    width="600px"
                     visible={visible}
                     title="Add Device"
                     onOk={this.handleOk}

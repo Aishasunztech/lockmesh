@@ -16,7 +16,7 @@ const confirm = Modal.confirm;
 
 const duplicate_txt = (
     <div>
-        <p>Generate multiple activation <br /> codes with same settings</p>
+        <span>Generate multiple activation <br /> codes with same settings</span>
     </div>
 );
 class AddDevice extends Component {
@@ -106,18 +106,18 @@ class AddDevice extends Component {
         return (
             <div>
                 {(this.props.preActive) ?
-                    <Radio.Group className="width_100" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
+                    <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
                         <Radio.Button className="dev_radio_btn" value="0">Single Device</Radio.Button>
                         <Radio.Button className="dev_radio_btn" value="1">
                             <a>Duplicate Devices</a>
                             <Popover content={duplicate_txt} placement="bottomRight">
-                                <Icon type="info-circle" />
+                                <Icon type="info-circle" style={{ marginLeft: 8 }} />
                             </Popover>
                         </Radio.Button>
                     </Radio.Group>
                     : null}
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                    <p>(*)- Required Fields</p>
+                    <p style={{ marginLeft: 36 }}>(*)- Required Fields</p>
                     {(this.state.type == 0) ?
                         <Form.Item
                             label="Device ID "
@@ -142,8 +142,9 @@ class AddDevice extends Component {
                             <Form.Item
                                 label="USER ID"
                                 labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 8 }}
+                                wrapperCol={{ span: 10 }}
                             >
+
 
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : addNewUserValue,

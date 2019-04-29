@@ -230,17 +230,25 @@
 
 .add_user_btn {
     position: absolute;
-    left: 154px;
+    left: 230px;
     top: -9px;
-    width: 80%
+    width: 40%;
+    padding: 0;
 }
 
 .dev_radio_btn {
-    width: 50%;
+    width: 35%;
     text-align: center;
     margin-bottom: 16px !important;
 }
 
 .ant-radio-button-wrapper-checked a {
     color: #fff !important;
+}
+
+@media screen and (max-width: 768px) {
+    .add_user_btn {
+        left: 120px;
+    }
+
 }
