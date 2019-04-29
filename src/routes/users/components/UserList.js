@@ -101,7 +101,7 @@ class UserList extends Component {
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            console.log("table row", record);
+                            // console.log("table row", record);
                             return (
                                 <UserDeviceList
                                     record={record} />
@@ -111,7 +111,7 @@ class UserList extends Component {
                         expandIconAsCell={false}
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.users)}
-                        pagination={{ pageSize: 50, size: "midddle" }}
+                        pagination={{ pageSize: this.state.pagination, size: "midddle" }}
                         rowKey="user_list"
                         ref='user_table'
                     />

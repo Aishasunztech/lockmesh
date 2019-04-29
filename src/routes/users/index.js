@@ -126,6 +126,7 @@ class Users extends Component {
         }
     }
     handlePagination = (value) => {
+        this.refs.userList.handlePagination(value);
         this.props.postPagination(value, 'users');
     }
     handleUserModal = () => {
@@ -155,6 +156,7 @@ class Users extends Component {
                     columns={this.columns}
                     users={this.state.users}
                     pagination={this.props.DisplayPages}
+                    ref="userList"
                 />
                 {/* <UserList/> */}
             </Fragment>
