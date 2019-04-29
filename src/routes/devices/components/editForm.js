@@ -68,6 +68,10 @@ class EditDevice extends Component {
             // nextProps.getSimIDs();
         }
     }
+    handleUserModal = () => {
+        let handleSubmit = this.props.addUser;
+        this.refs.add_user.showModal(handleSubmit);
+    }
     handleReset = () => {
         this.props.form.resetFields();
     }
@@ -107,376 +111,369 @@ class EditDevice extends Component {
         var lastObject = users_list[0]
 
         return (
+            <div>
 
-            <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                <p>(*)- Required Fields</p>
-
-                <Form.Item
-                    label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? "Device ID " : null}
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('device_id', {
-                        initialValue: this.props.device.device_id,
-                    })(
-
-                        <Input type={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? 'hidden' : ''} disabled />
-                    )}
-                </Form.Item>
-                {(isloading ?
-
-                    <div className="addUserSpin">
-                        <Spin />
-                    </div>
-                    :
-                    <Fragment>
-                        <Form.Item
-                            label="USER ID"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                        >
-
-
-
-                            {this.props.form.getFieldDecorator('user_id', {
-                                initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
-                                rules: [{
-                                    required: true, message: 'User ID is Required !',
-                                }]
-                            })(
-                                <Select
-                                    setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
-                                    showSearch
-                                    placeholder="Select User ID"
-                                    optionFilterProp="children"
-                                    onChange={this.handleUserChange}
-                                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                >
-                                    <Select.Option value="">Select User ID</Select.Option>
-                                    {users_list.map((item, index) => {
-                                        return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
-                                    })}
-                                </Select>
-                                // {/* <Button
-                                //     type="primary"
-                                //     style={{ width: '100%' }}
-                                //     onClick={() => this.handleUserModal()}
-                                // >
-                                //     Add User
-                                // </Button> */}
-                            )}
-                        </Form.Item>
-                        <Form.Item
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                        >
-                            <Button
-                                type="primary"
-                                style={{ width: '100%' }}
-                                onClick={() => this.handleUserModal()}
-                            >
-                                Add User
-                         </Button>
-                        </Form.Item>
-                    </Fragment>
-                )}
-
-
-                <Form.Item
-                >
-                    {this.props.form.getFieldDecorator('dealer_id', {
-                        initialValue: this.props.device.dealer_id,
-                    })(
-
-                        <Input type='hidden' disabled />
-                    )}
-                </Form.Item>
-                <Form.Item
-                >
-                    {this.props.form.getFieldDecorator('usr_device_id', {
-                        initialValue: this.props.new ? "" : this.props.device.usr_device_id,
-                    })(
-
-                        <Input type='hidden' disabled />
-                    )}
-                </Form.Item>
-                <Form.Item
-                >
-                    {this.props.form.getFieldDecorator('usr_acc_id', {
-                        initialValue: this.props.new ? "" : this.props.device.id,
-                    })(
-
-                        <Input type='hidden' disabled />
-                    )}
-                </Form.Item>
-                <Form.Item
-                    label="Name "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('name', {
-                        initialValue: checkValue(this.props.device.name),
-                        rules: [{
-
-                            required: true, message: 'Device Name is Required !',
-                        }],
-                    })(
-                        <Input autoComplete="new-password" />
-                    )}
-                </Form.Item>
-                <Form.Item
-
-                    label="Account Email "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('email', {
-                        initialValue: this.props.device.account_email,
-                        rules: [{
-                            type: 'email', message: 'The input is not valid E-mail!',
-                        },
-                        (this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? {} :
-                            {
-                                required: true, message: 'Account Email is Required !',
-                            }],
-                    })(
-                        <Input disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? false : true} />
-                    )}
-                </Form.Item>
-
-                <Form.Item
-                    label="PGP Email "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('pgp_email', {
-                        initialValue: this.props.device.pgp_email,
-                        rules: [{
-                            type: 'email', message: 'The input is not valid E-mail!',
-                        }, {
-                            required: true, message: 'PGP Email is Required !',
-                        }],
-                    })(
-                        <Select
-                            showSearch
-                            placeholder="Select PGP Emails"
-                            optionFilterProp="children"
-                            // onChange={handleChange}
-                            // onFocus={handleFocus}
-                            // onBlur={handleBlur}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
-                            <Select.Option value="">Select PGP Email</Select.Option>
-                            {this.props.pgp_emails.map((pgp_email) => {
-                                return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
-                            })}
-                        </Select>
-                        // <Input disabled />
-                    )}
-                </Form.Item>
-                <Form.Item
-                    label="Client ID "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('client_id', {
-
-                        initialValue: checkValue(this.props.device.client_id),
-                    })(
-                        <Input />
-                    )}
-                </Form.Item>
-                <Form.Item
-                    label="Chat ID"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('chat_id', {
-                        initialValue: this.props.device.chat_id,
-                    })(
-                        // <Input />
-                        <Select
-                            showSearch
-                            placeholder="Select Chat ID"
-                            optionFilterProp="children"
-                            // onChange={handleChange}
-                            // onFocus={handleFocus}
-                            // onBlur={handleBlur}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
-                            <Select.Option value="">Select Chat ID</Select.Option>
-                            {this.props.chat_ids.map((chat_id, index) => {
-                                return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
-                            })}
-                        </Select>
-                    )}
-                </Form.Item>
-
-                <Form.Item
-                    label="Sim ID "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('sim_id', {
-                        initialValue: this.props.device.sim_id,
-                    })(
-                        <Select
-                            showSearch
-                            placeholder="Select Sim ID"
-                            optionFilterProp="children"
-                            // onChange={handleChange}
-                            // onFocus={handleFocus}
-                            // onBlur={handleBlur}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
-                            <Select.Option value="">Select Sim ID</Select.Option>
-                            {this.props.sim_ids.map((sim_id, index) => {
-                                return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
-                            })}
-                        </Select>,
-                    )}
-                </Form.Item>
-                {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
+                <Form onSubmit={this.handleSubmit} autoComplete="new-password">
+                    <p>(*)- Required Fields</p>
                     <Form.Item
-                        label="Model"
+                        label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? "Device ID " : null}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
-                        {this.props.form.getFieldDecorator('model', {
-                            initialValue: checkValue(this.props.device.model),
+                        {this.props.form.getFieldDecorator('device_id', {
+                            initialValue: this.props.device.device_id,
+                        })(
+
+                            <Input type={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? 'hidden' : ''} disabled />
+                        )}
+                    </Form.Item>
+                    {(isloading ?
+
+                        <div className="addUserSpin">
+                            <Spin />
+                        </div>
+                        :
+                        <Fragment>
+                            <Form.Item
+                                label="USER ID"
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 10 }}
+                            >
+                                {this.props.form.getFieldDecorator('user_id', {
+                                    initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
+                                    rules: [{
+                                        required: true, message: 'User ID is Required !',
+                                    }]
+                                })(
+                                    <Select
+                                        className="pos_rel"
+                                        setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
+                                        showSearch
+                                        placeholder="Select User ID"
+                                        optionFilterProp="children"
+                                        onChange={this.handleUserChange}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                        <Select.Option value="">Select User ID</Select.Option>
+                                        {users_list.map((item, index) => {
+                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
+                                        })}
+                                    </Select>
+                                    // {/* <Button
+                                    //     type="primary"
+                                    //     style={{ width: '100%' }}
+                                    //     onClick={() => this.handleUserModal()}
+                                    // >
+                                    //     Add User
+                                    // </Button> */}
+                                )}
+                                <Button
+                                    className="add_user_btn"
+                                    type="primary"
+                                    onClick={() => this.handleUserModal()}
+                                >
+                                    Add User
+                         </Button>
+                            </Form.Item>
+                        </Fragment>
+                    )}
+                    <Form.Item style={{ marginBottom: 0 }}
+                    >
+                        {this.props.form.getFieldDecorator('dealer_id', {
+                            initialValue: this.props.device.dealer_id,
+                        })(
+
+                            <Input type='hidden' disabled />
+                        )}
+                    </Form.Item>
+                    <Form.Item style={{ marginBottom: 0 }}
+                    >
+                        {this.props.form.getFieldDecorator('usr_device_id', {
+                            initialValue: this.props.new ? "" : this.props.device.usr_device_id,
+                        })(
+
+                            <Input type='hidden' disabled />
+                        )}
+                    </Form.Item>
+                    <Form.Item style={{ marginBottom: 0 }}
+                    >
+                        {this.props.form.getFieldDecorator('usr_acc_id', {
+                            initialValue: this.props.new ? "" : this.props.device.id,
+                        })(
+
+                            <Input type='hidden' disabled />
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        label="Name "
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('name', {
+                            initialValue: checkValue(this.props.device.name),
+                            rules: [{
+
+                                required: true, message: 'Device Name is Required !',
+                            }],
+                        })(
+                            <Input autoComplete="new-password" />
+                        )}
+                    </Form.Item>
+                    <Form.Item
+
+                        label="Account Email "
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('email', {
+                            initialValue: this.props.device.account_email,
+                            rules: [{
+                                type: 'email', message: 'The input is not valid E-mail!',
+                            },
+                            (this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? {} :
+                                {
+                                    required: true, message: 'Account Email is Required !',
+                                }],
+                        })(
+                            <Input disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? false : true} />
+                        )}
+                    </Form.Item>
+
+                    <Form.Item
+                        label="PGP Email "
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('pgp_email', {
+                            initialValue: this.props.device.pgp_email,
+                            rules: [{
+                                type: 'email', message: 'The input is not valid E-mail!',
+                            }, {
+                                required: true, message: 'PGP Email is Required !',
+                            }],
+                        })(
+                            <Select
+                                showSearch
+                                placeholder="Select PGP Emails"
+                                optionFilterProp="children"
+                                // onChange={handleChange}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                                <Select.Option value="">Select PGP Email</Select.Option>
+                                {this.props.pgp_emails.map((pgp_email) => {
+                                    return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
+                                })}
+                            </Select>
+                            // <Input disabled />
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        label="Client ID "
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('client_id', {
+
+                            initialValue: checkValue(this.props.device.client_id),
                         })(
                             <Input />
                         )}
                     </Form.Item>
-                }
-                <Form.Item
-                    label="Start Date "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('start_date', {
-                        initialValue: (this.props.device.start_date) ? this.props.device.start_date : this.createdDate()
-                    })(
+                    <Form.Item
+                        label="Chat ID"
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('chat_id', {
+                            initialValue: this.props.device.chat_id,
+                        })(
+                            // <Input />
+                            <Select
+                                showSearch
+                                placeholder="Select Chat ID"
+                                optionFilterProp="children"
+                                // onChange={handleChange}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                                <Select.Option value="">Select Chat ID</Select.Option>
+                                {this.props.chat_ids.map((chat_id, index) => {
+                                    return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
+                                })}
+                            </Select>
+                        )}
+                    </Form.Item>
 
-                        <Input disabled />
-                    )}
-                </Form.Item>
-                <Form.Item
-                    label="Expiry Date "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('expiry_date', {
-                        initialValue: this.props.device.expiry_date,
-                        rules: [{
-                            required: true, message: 'Expiry Date is Required !',
-                        }],
-                    })(
-                        <Select
-                            style={{ width: '100%' }}
-                        >
-                            {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>Trial (7 days)</Select.Option> : null}
-                            {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={1}>1 Month</Select.Option> : null}
-                            {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={3}>3 Months</Select.Option> : null}
-                            {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={6}>6 Months</Select.Option> : null}
-                            {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={12}>12 Months</Select.Option> : null}
-                        </Select>
-                    )}
-
-                </Form.Item>
-
-                {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
-                    <Fragment>
-
+                    <Form.Item
+                        label="Sim ID "
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('sim_id', {
+                            initialValue: this.props.device.sim_id,
+                        })(
+                            <Select
+                                showSearch
+                                placeholder="Select Sim ID"
+                                optionFilterProp="children"
+                                // onChange={handleChange}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                                <Select.Option value="">Select Sim ID</Select.Option>
+                                {this.props.sim_ids.map((sim_id, index) => {
+                                    return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                })}
+                            </Select>,
+                        )}
+                    </Form.Item>
+                    {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
                         <Form.Item
-                            label="NOTE"
+                            label="Model"
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                         >
-                            {this.props.form.getFieldDecorator('note', {
-                                initialValue: this.props.device.note,
+                            {this.props.form.getFieldDecorator('model', {
+                                initialValue: checkValue(this.props.device.model),
                             })(
                                 <Input />
                             )}
-
                         </Form.Item>
-                        <Form.Item
-                            label="VALID FOR(DAYS)"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                        >
-                            {this.props.form.getFieldDecorator('validity', {
-                                initialValue: this.props.device.validity,
-                                rules: [{
-                                    required: true, message: 'Valid days required',
-                                }],
-                            })(
-                                <InputNumber min={1} />
-                            )}
+                    }
+                    <Form.Item
+                        label="Start Date "
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('start_date', {
+                            initialValue: (this.props.device.start_date) ? this.props.device.start_date : this.createdDate()
+                        })(
 
-                        </Form.Item>
+                            <Input disabled />
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        label="Expiry Date "
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('expiry_date', {
+                            initialValue: this.props.device.expiry_date,
+                            rules: [{
+                                required: true, message: 'Expiry Date is Required !',
+                            }],
+                        })(
+                            <Select
+                                style={{ width: '100%' }}
+                            >
+                                {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>Trial (7 days)</Select.Option> : null}
+                                {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={1}>1 Month</Select.Option> : null}
+                                {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={3}>3 Months</Select.Option> : null}
+                                {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={6}>6 Months</Select.Option> : null}
+                                {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={12}>12 Months</Select.Option> : null}
+                            </Select>
+                        )}
 
-                    </Fragment>
-                    :
-                    <Fragment>
-                        <Form.Item
-                            label="Dealer Pin "
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                        >
-                            <Input value={this.props.device.link_code} disabled />
+                    </Form.Item>
 
-                        </Form.Item>
+                    {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ?
+                        <Fragment>
 
-                        <Form.Item
-                            label="IMEI 1 "
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                        >
+                            <Form.Item
+                                label="NOTE"
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                {this.props.form.getFieldDecorator('note', {
+                                    initialValue: this.props.device.note,
+                                })(
+                                    <Input />
+                                )}
 
-                            <Input type='text' value={this.props.device.imei} disabled />
+                            </Form.Item>
+                            <Form.Item
+                                label="VALID FOR(DAYS)"
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                {this.props.form.getFieldDecorator('validity', {
+                                    initialValue: this.props.device.validity,
+                                    rules: [{
+                                        required: true, message: 'Valid days required',
+                                    }],
+                                })(
+                                    <InputNumber min={1} />
+                                )}
 
-                        </Form.Item>
-                        <Form.Item
-                            label="SIM 1 "
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                        >
-                            <Input value={this.props.device.simno} disabled />
+                            </Form.Item>
 
-                        </Form.Item>
-                        <Form.Item
-                            label="IMEI 2 "
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                        >
+                        </Fragment>
+                        :
+                        <Fragment>
+                            <Form.Item
+                                label="Dealer Pin "
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                <Input value={this.props.device.link_code} disabled />
 
-                            <Input value={this.props.device.imei2} disabled />
+                            </Form.Item>
 
-                        </Form.Item>
-                        <Form.Item
-                            label="SIM 2 "
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
-                        >
-                            <Input value={this.props.device.simno2} disabled />
+                            <Form.Item
+                                label="IMEI 1 "
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
 
-                        </Form.Item>
-                    </Fragment>
+                                <Input type='text' value={this.props.device.imei} disabled />
 
-                }
+                            </Form.Item>
+                            <Form.Item
+                                label="SIM 1 "
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                <Input value={this.props.device.simno} disabled />
 
-                <Form.Item className="edit_ftr_btn"
-                    wrapperCol={{
-                        xs: { span: 24, offset: 0 },
-                        sm: { span: 24, offset: 0 },
-                    }}
-                >
-                    <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button>
-                    <Button type="primary" htmlType="submit">Submit</Button>
-                </Form.Item>
+                            </Form.Item>
+                            <Form.Item
+                                label="IMEI 2 "
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
 
-            </Form>
+                                <Input value={this.props.device.imei2} disabled />
+
+                            </Form.Item>
+                            <Form.Item
+                                label="SIM 2 "
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                <Input value={this.props.device.simno2} disabled />
+
+                            </Form.Item>
+                        </Fragment>
+
+                    }
+
+                    <Form.Item className="edit_ftr_btn"
+                        wrapperCol={{
+                            xs: { span: 24, offset: 0 },
+                            sm: { span: 24, offset: 0 },
+                        }}
+                    >
+                        <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button>
+                        <Button type="primary" htmlType="submit">Submit</Button>
+                    </Form.Item>
+
+                </Form>
+                <AddUser ref="add_user" />
+            </div>
 
         )
 
@@ -493,7 +490,8 @@ function mapDispatchToProps(dispatch) {
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs,
         getPGPEmails: getPGPEmails,
-        getUserList: getUserList
+        getUserList: getUserList,
+        addUser: addUser,
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, users }) => {

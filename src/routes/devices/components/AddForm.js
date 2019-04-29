@@ -191,7 +191,7 @@ class AddDevice extends Component {
                     )}
                     {(this.state.type == 0 && lastObject) ?
                         <Fragment>
-                            <Form.Item
+                            <Form.Item style={{ marginBottom: 0 }}
                             >
                                 {this.props.form.getFieldDecorator('dealer_id', {
                                     initialValue: this.props.new ? "" : this.props.device.dealer_id,
@@ -200,7 +200,7 @@ class AddDevice extends Component {
                                     <Input type='hidden' disabled />
                                 )}
                             </Form.Item>
-                            <Form.Item
+                            <Form.Item style={{ marginBottom: 0 }}
                             >
                                 {this.props.form.getFieldDecorator('usr_device_id', {
                                     initialValue: this.props.new ? "" : this.props.device.usr_device_id,
@@ -209,7 +209,7 @@ class AddDevice extends Component {
                                     <Input type='hidden' disabled />
                                 )}
                             </Form.Item>
-                            <Form.Item
+                            <Form.Item style={{ marginBottom: 0 }}
                             >
                                 {this.props.form.getFieldDecorator('usr_acc_id', {
                                     initialValue: this.props.new ? "" : this.props.device.id,
@@ -218,7 +218,7 @@ class AddDevice extends Component {
                                     <Input type='hidden' disabled />
                                 )}
                             </Form.Item>
-                            <Form.Item
+                            <Form.Item style={{ marginBottom: 0 }}
                             >
                                 {this.props.form.getFieldDecorator('connected_dealer', {
                                     initialValue: this.props.new ? "" : this.props.device.connected_dealer,
