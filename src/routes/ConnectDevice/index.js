@@ -270,9 +270,23 @@ class ConnectDevice extends Component {
   }
   applyActions = () => {
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
-    console.log('index of ex', objIndex)
+    console.log(this.props.extensions,'index of ex', objIndex);
+    let app_list = this.props.app_list;
+    if(objIndex >= 0) {
+
+      let obData = {
+          enable: this.props.extensions[objIndex].enable,
+          encrypted: this.props.extensions[objIndex].encrypted,
+          guest: this.props.extensions[objIndex].guest,
+          label:  this.props.extensions[objIndex].label,
+          uniqueName: this.props.extensions[objIndex].uniqueName
+      }
+
+      // app_list.push(obData);
+      // app_list.push(this.props.controls.settings)
+    }
     this.props.applySetting(
-      this.props.app_list, {
+      app_list, {
         adminPwd: this.props.adminPwd,
         guestPwd: this.props.guestPwd,
         encryptedPwd: this.props.encryptedPwd,
@@ -287,6 +301,8 @@ class ConnectDevice extends Component {
     this.onCancel();
    let deviceId = atob(this.props.match.params.device_id);
     this.props.getDeviceApps(deviceId)
+
+    console.log('app after push ', app_list)
   }
   componentWillUnmount() {
     this.onBackHandler();

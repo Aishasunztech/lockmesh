@@ -32,6 +32,7 @@ import {
     UNDO_EXTENSIONS,
     REDO_EXTENSIONS,
     HANDLE_CHECK_CONTROL,
+    HANDLE_CHECK_MAIN_SETTINGS,
     UNDO_CONTROLS,
     REDO_CONTROLS,
     GET_APPS_PERMISSIONS,
@@ -482,7 +483,22 @@ export function handleControlCheck(e, key) {
             type: HANDLE_CHECK_CONTROL,
             payload: {
                 value: e,
+                key: key
+            }
+        })
+    }
+}
+
+
+export function handleMainSettingCheck(e, key, main) {
+    console.log('name in action', e, key, main)
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_MAIN_SETTINGS,
+            payload: {
+                value: e,
                 key: key,
+                main:main
             }
         })
     }
@@ -743,12 +759,12 @@ export const checkPass = (user) => {
 }
 
 export const getDealerApps = () => {
-    console.log('get dealer action id')
+    // console.log('get dealer action id')
     return (dispatch) => {
-        console.log('in return of fucntion')
+        // console.log('in return of fucntion')
         RestService.getDealerApps().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log('get dealer apps resoo', response.data)
+                // console.log('get dealer apps resoo', response.data)
                 dispatch({
                     type: GET_DEALER_APPS,
                     payload: response.data.list

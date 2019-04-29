@@ -2,18 +2,22 @@ import React, { Component, Fragment, Typography } from 'react';
 import { List, Switch, Col, Row } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {SYSTEM_PERMISSION} from '../../../constants/Constants';
+import { SYSTEM_PERMISSION } from '../../../constants/Constants';
 import {
   handleControlCheck,
-  handleCheckAllExtension
+  handleCheckAllExtension,
+  handleMainSettingCheck
 
 } from "../../../appRedux/actions/ConnectDevice";
+
+import {Main_SETTINGS } from '../../../constants/Constants';
 
 class SystemControls extends Component {
   constructor(props) {
     super(props)
     this.state = {
       controls: {},
+      settings: [],
     }
   }
 
@@ -22,18 +26,22 @@ class SystemControls extends Component {
     if (this.props.controls) {
       this.setState({
         controls: this.props.controls,
-        pageName: this.props.pageName
+        settings: this.props.controls.settings,
+        pageName: this.props.pageName,
+        // secureSettingsMain: this.props.secureSettingsMain
       })
     }
-
   }
 
   componentWillReceiveProps(nextprops) {
 
     if (this.props.controls && (this.props.controls !== nextprops.controls)) {
       // alert("hello");
+      // console.log(nextprops.secureSettingsMain, 'secureSettingsMain')
       this.setState({
         controls: nextprops.controls,
+        settings: nextprops.controls.settings,
+        // secureSettingsMain: nextprops.secureSettingsMain
         // encryptedAllExt: nextprops.encryptedAllExt,
         // guestAllExt: nextprops.guestAllExt
       })
@@ -41,11 +49,18 @@ class SystemControls extends Component {
 
   }
 
-  handleChecked = (value, controlName) => {
-    this.props.handleControlCheck(value, controlName)
+  handleChecked = (value, controlName, main=null) => {
+    this.props.handleControlCheck(value, controlName, main)
+  }
+
+  handleMainSettingCheck = (value, controlName) => {
+    this.props.handleMainSettingCheck(value, controlName,Main_SETTINGS )
+
   }
 
   render() {
+    console.log('consroslss sdfsd fsd ', this.state.settings);
+    let objindex = this.state.settings.findIndex(item => item.uniqueName == Main_SETTINGS)
     return (
       Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object ?
         <Fragment>
@@ -54,15 +69,24 @@ class SystemControls extends Component {
               <div className="row width_100 m-0 sec_head1">
                 <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                   <span>Guest</span>
-                  <Switch defaultChecked size="small" />
+                  <Switch onClick={(e) => {
+                     console.log("guest", e , this.state.settings[objindex]);
+                    this.handleMainSettingCheck(e, "guest");
+                  }} checked={this.state.settings[objindex].guest === 1 || this.state.settings[objindex].guest === true ? true : false} size="small" />
                 </div>
                 <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                   <span>Encrypt</span>
-                  <Switch size="small" />
+                  <Switch onClick={(e) => {
+                    // console.log("guest", e);
+                    this.handleMainSettingCheck(e, "encrypted");
+                  }} checked={this.state.settings[objindex].encrypted === 1 || this.state.settings[objindex].encrypted === true ? true : false} size="small" />
                 </div>
                 <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                   <span>Enable</span>
-                  <Switch defaultChecked size="small" />
+                  <Switch onClick={(e) => {
+                    // console.log("guest", e);
+                    this.handleMainSettingCheck(e, "enable");
+                  }} checked={this.state.settings[objindex].enable === 1 || this.state.settings[objindex].enable === true ? true : false} size="small" />
                 </div>
               </div>
               <List.Item>
@@ -155,7 +179,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     // showHistoryModal: showHistoryModal
     handleControlCheck: handleControlCheck,
-    handleCheckAllExtension: handleCheckAllExtension
+    handleCheckAllExtension: handleCheckAllExtension,
+    handleMainSettingCheck: handleMainSettingCheck,
     // handleCheckAll: handleCheckAll
   }, dispatch);
 }
@@ -175,6 +200,7 @@ var mapStateToProps = ({ device_details }, ownProps) => {
       guestAllExt: device_details.guestAllExt,
       encryptedAllExt: device_details.encryptedAllExt,
       checked_app_id: device_details.checked_app_id,
+      secureSettingsMain: device_details.secureSettingsMain,
     }
   } else {
     return {

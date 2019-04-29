@@ -41,6 +41,7 @@ import {
     UNDO_CONTROLS,
     REDO_CONTROLS,
     GET_APPS_PERMISSIONS,
+    HANDLE_CHECK_MAIN_SETTINGS,
     GET_IMIE_HISTORY
 } from "../../constants/ActionTypes";
 
@@ -118,6 +119,7 @@ const initialState = {
     apk_list: [],
 
     extensions: [],
+    secureSettingsMain: [],
 
     undoExtensions: [],
     redoExtensions: [],
@@ -244,7 +246,7 @@ export default (state = initialState, action) => {
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
             state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
-
+//  console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
             return {
@@ -252,6 +254,7 @@ export default (state = initialState, action) => {
                 app_list: action.payload,
                 extensions: action.extensions,
                 controls: action.controls,
+                // secureSettingsMain: action.controls.settings,
                 isAdminPwd: false,
                 isDuressPwd: false,
                 isEncryptedPwd: false,
@@ -322,6 +325,9 @@ export default (state = initialState, action) => {
             // console.log(action.payload);
             return {
                 ...state,
+                // applyBtn: false,
+                // undoBtn: false,
+                // redoBtn: false,
             }
         }
         case START_LOADING: {
@@ -494,15 +500,32 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                controls: state.controls,
-                // checked_app_id: {
-                //     id: action.payload.app_id,
-                //     key: action.payload.key,
-                //     value: action.payload.value
-                // },
+                controls: state.controls,   
                 applyBtn: true,
                 undoBtn: true
-                //  ...check
+            }
+
+        }
+
+        case HANDLE_CHECK_MAIN_SETTINGS: {
+
+            let changedControls = JSON.parse(JSON.stringify(state.controls));
+             let objIndex = changedControls.settings.findIndex(item => item.uniqueName === action.payload.main);
+            console.log(action.payload.main,' obj index is', objIndex)
+             if(objIndex > -1){
+                changedControls.settings[objIndex][action.payload.key] = action.payload.value;
+                // console.log(changedSettings[objIndex], 'app is the ', changedSettings[objIndex][action.payload.key])
+             }
+           
+            state.controls = JSON.parse(JSON.stringify(changedControls));
+            state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
+            // console.log('reduver aongds', state.controls);
+
+            return {
+                ...state,
+                controls: state.controls,
+                applyBtn: true,
+                undoBtn: true
             }
 
         }
@@ -571,13 +594,18 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_EXTENSION: {
 
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
+           
 
             changedExtensions.forEach(extension => {
                 if (extension.uniqueName === action.payload.uniqueName) {
-                    let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
-                    if (objIndex > -1) {
-                        extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
-                        extension.subExtension[objIndex].isChanged = true;
+                    if(action.payload.app_id === '000'){
+                        extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;   
+                    }else{
+                        let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
+                        if (objIndex > -1) {
+                            extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                            extension.subExtension[objIndex].isChanged = true;
+                        }
                     }
                 }
             });

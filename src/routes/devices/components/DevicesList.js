@@ -336,12 +336,7 @@ class DevicesList extends Component {
         // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
 
         const { activateDevice, suspendDevice } = this.props;
-        const components = {
-            body: {
-                row: EditableFormRow,
-                cell: EditableCell,
-            },
-        };
+        
         let rowSelection;
         if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {
             rowSelection = {
@@ -388,7 +383,6 @@ class DevicesList extends Component {
                     <Table
                         ref='tablelist'
                         className="devices"
-                        components={components}
                         rowSelection={rowSelection}
                         rowClassName={() => 'editable-row'}
                         size="middle"

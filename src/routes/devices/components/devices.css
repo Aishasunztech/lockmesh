@@ -218,8 +218,29 @@
 
 .addUserSpin {
     text-align: center;
-    background: rgba(0,0,0,0.05);
+    background: rgba(0, 0, 0, 0.05);
     border-radius: 4px;
     padding-top: 10px;
     margin: 10px 0;
-  }
+}
+
+.pos_rel {
+    position: relative;
+}
+
+.add_user_btn {
+    position: absolute;
+    left: 154px;
+    top: -9px;
+    width: 80%
+}
+
+.dev_radio_btn {
+    width: 50%;
+    text-align: center;
+    margin-bottom: 16px !important;
+}
+
+.ant-radio-button-wrapper-checked a {
+    color: #fff !important;
+}
