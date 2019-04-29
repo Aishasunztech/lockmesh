@@ -13,6 +13,12 @@ import {
     getUserList
 } from "../../../appRedux/actions/Users";
 const confirm = Modal.confirm;
+
+const duplicate_txt = (
+    <div>
+        <p>Generate multiple activation <br /> codes with same settings</p>
+    </div>
+);
 class AddDevice extends Component {
 
     constructor(props) {
@@ -100,11 +106,14 @@ class AddDevice extends Component {
         return (
             <div>
                 {(this.props.preActive) ?
-                    <Radio.Group onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
-                        <Radio.Button value="0">Single Device</Radio.Button>
-                        <Radio.Button value="1"><Popover content="Generate multiple activation codes with same settings" placement="rightTop">
-                            <a>Duplicate Devices  <Icon type="info-circle" /></a>
-                        </Popover></Radio.Button>
+                    <Radio.Group className="width_100" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
+                        <Radio.Button className="dev_radio_btn" value="0">Single Device</Radio.Button>
+                        <Radio.Button className="dev_radio_btn" value="1">
+                            <a>Duplicate Devices</a>
+                            <Popover content={duplicate_txt} placement="bottomRight">
+                                <Icon type="info-circle" />
+                            </Popover>
+                        </Radio.Button>
                     </Radio.Group>
                     : null}
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
@@ -133,15 +142,14 @@ class AddDevice extends Component {
                             <Form.Item
                                 label="USER ID"
                                 labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                wrapperCol={{ span: 8 }}
                             >
-
-
 
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : addNewUserValue,
                                 })(
                                     <Select
+                                        className="pos_rel"
                                         setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
                                         placeholder="Select User ID"
@@ -154,6 +162,8 @@ class AddDevice extends Component {
                                             return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
                                         })}
                                     </Select>
+
+
                                     // {/* <Button
                                     //     type="primary"
                                     //     style={{ width: '100%' }}
@@ -162,19 +172,16 @@ class AddDevice extends Component {
                                     //     Add User
                                     // </Button> */}
                                 )}
-                            </Form.Item>
-                            <Form.Item
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
                                 <Button
+                                    className="add_user_btn"
                                     type="primary"
-                                    style={{ width: '100%' }}
                                     onClick={() => this.handleUserModal()}
                                 >
                                     Add User
                                 </Button>
+
                             </Form.Item>
+
                         </Fragment>
                     )}
                     {(this.state.type == 0 && lastObject) ?
