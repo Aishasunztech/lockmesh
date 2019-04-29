@@ -130,9 +130,21 @@ import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../c
     export function titleCase(str) {
         var wordsArray = str.toLowerCase().split(/\s+/);
         var upperCased = wordsArray.map(function(word) {
-          return word.charAt(0).toUpperCase() + word.substr(1);
+        var dashWords = word.split("-");
+          if (dashWords.length > 1) {
+           return dashWords.map((dWord, index) => {
+             var char = (++index !== dashWords.length) ? "-" : "";
+              return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
+            })
+          } else {
+            if (word == "id") {
+              return word.toUpperCase();
+            } else {
+              return word.charAt(0).toUpperCase() + word.substr(1);
+            }
+          }
         });
-        return upperCased.join(" ");
+        return upperCased.join(" ").toString().replace(",", "");
     }
     export function checkRemainDays(createDate, validity) {
         var validDays = 0, createdDateTime, today, days;
