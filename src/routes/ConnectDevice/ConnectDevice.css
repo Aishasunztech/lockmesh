@@ -78,7 +78,7 @@
 }
 
 .deviceImg .ant-table-scroll {
-    width: 294px;
+    width: 295px;
     margin: 23px auto 0;
     border-radius: 0px;
 }
@@ -287,5 +287,8 @@ th.device_info {
         padding: 0 4px 0 4px !important;
         font-size: 12px;
         width: 20%;
+    }
+    .sec_head {
+        margin: 4px 0px 6px;
     }
 }
