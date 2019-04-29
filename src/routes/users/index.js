@@ -103,6 +103,9 @@ class Users extends Component {
     componentDidMount() {
         this.props.getUserList();
         this.props.getPagination('users');
+        this.setState({
+            users: this.props.users_list
+        })
         // this.props.getApkList();
         // this.props.getDefaultApps();
     }
