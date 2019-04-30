@@ -72,17 +72,17 @@ class AppList extends Component {
     handleCheckedAll = (key, value) => {
 
         if (key === "guestAll") {
-            this.checkAll(key,'guest', value);
+            this.checkAll(key, 'guest', value);
         } else if (key === "encryptedAll") {
-            this.checkAll(key,'encrypted', value);
+            this.checkAll(key, 'encrypted', value);
         } else if (key === "enableAll") {
             this.checkAll(key, 'enable', value);
         }
     }
 
     handleChecked = (e, key, app_id) => {
-        this.props.handleCheckApp(e,key,app_id);
-        
+        this.props.handleCheckApp(e, key, app_id);
+
     }
 
     checkAll = (keyAll, key, value) => {
@@ -92,15 +92,15 @@ class AppList extends Component {
     renderApps = () => {
 
         return this.state.app_list.map(app => {
-
+            // console.log(app.default_app);
             return ({
                 key: app.app_id,
                 app_name:
                     <div>
                         <Avatar
-                            size={"small"} 
-                            src={`${BASE_URL}users/getFile/${app.icon}`} 
-                            // style={{ width: "30px", height: "30px" }} 
+                            size={"small"}
+                            src={`${BASE_URL}users/getFile/${app.icon}`}
+                        // style={{ width: "30px", height: "30px" }} 
                         />
                         <br />
                         <div className="line_break">{app.label}</div>
@@ -127,14 +127,14 @@ class AppList extends Component {
                         size="small"
                         ref={`encrypted_${app.app_id}`}
                         name={`encrypted_${app.app_id}`}
-                        value={app.encrypted} 
+                        value={app.encrypted}
                         checked={(app.encrypted === true || app.encrypted === 1) ? true : false}
                         onClick={(e) => {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app.app_id);
                         }}
                     />,
-                enable:  app.default_app == 1 ? '' : (this.props.isHistory === true) ?
+                enable: app.default_app == 1 ? '' : (this.props.isHistory === true) ?
                     (app.enable === 1 || app.enable === true) ?
                         (<span style={{ color: "green" }}>On</span>) :
                         (<span style={{ color: "red" }}>On</span>) :
@@ -142,7 +142,7 @@ class AppList extends Component {
                         size="small"
                         ref={`enable_${app.app_id}`}
                         name={`enable_${app.app_id}`}
-                        value={app.enable} 
+                        value={app.enable}
                         checked={((app.enable === true) || (app.enable === 1)) ? true : false}
                         onClick={(e) => {
                             this.handleChecked(e, "enable", app.app_id);
@@ -157,11 +157,11 @@ class AppList extends Component {
             <div>
                 {
                     this.props.isHistory ? null : (
-                        <AppDropdown 
-                            checked_app_id={this.props.checked_app_id} 
-                            enableAll={this.state.enableAll} 
-                            encryptedAll={this.state.encryptedAll} 
-                            guestAll={this.state.guestAll} handleCheckedAll={this.handleCheckedAll} 
+                        <AppDropdown
+                            checked_app_id={this.props.checked_app_id}
+                            enableAll={this.state.enableAll}
+                            encryptedAll={this.state.encryptedAll}
+                            guestAll={this.state.guestAll} handleCheckedAll={this.handleCheckedAll}
                         />
                     )
                 }
@@ -193,14 +193,14 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-var mapStateToProps = ({ device_details },ownProps) => {
-     console.log(device_details.app_list,"applist ownprops", ownProps);
-    if(ownProps.isHistory !== undefined && ownProps.isHistory === true){
+var mapStateToProps = ({ device_details }, ownProps) => {
+    console.log(device_details.app_list, "applist ownprops", ownProps);
+    if (ownProps.isHistory !== undefined && ownProps.isHistory === true) {
         return {
             app_list: ownProps.app_list,
             isHistory: ownProps.isHistory
         }
-    }else{
+    } else {
         return {
             app_list: device_details.app_list,
             undoApps: device_details.undoApps,

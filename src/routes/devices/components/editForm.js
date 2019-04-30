@@ -29,6 +29,7 @@ class EditDevice extends Component {
     handleUserChange = (e) => {
         // console.log(e)
         this.setState({ addNewUserValue: e });
+
     }
 
     handleSubmit = (e) => {
