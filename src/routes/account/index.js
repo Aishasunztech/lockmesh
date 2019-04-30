@@ -147,8 +147,6 @@ class Account extends Component {
             this.state.file = null
             this.props.importCSV(formData, this.state.fieldName);
             this.showImportModal(false);
-
-
         }
     }
     exportCSV = (fieldName) => {
@@ -209,11 +207,23 @@ class Account extends Component {
             this.setState({
                 used_pgp_emails: searchedData
             });
+        } else if (dataName === "used_chat_ids") {
+            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
+            let searchedData = this.searchField(this.props.used_chat_ids, fieldName, fieldValue);
+            // console.log(searchedData);
+            this.setState({
+                used_chat_ids: searchedData
+            });
+        } else if (dataName === "used_sim_ids") {
+            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
+            let searchedData = this.searchField(this.props.used_sim_ids, fieldName, fieldValue);
+            this.setState({
+                used_sim_ids: searchedData
+            });
         }
     }
 
     handlePagination = (e, dataName) => {
-        // console.log(e, dataName);
         if (dataName === "sim_ids") {
             this.setState({
                 sim_ids_page: e
@@ -226,15 +236,15 @@ class Account extends Component {
             this.setState({
                 pgp_emails_page: e
             });
-        } else if (dataName === "used_pgp_emails") {
+        } else if (dataName == "used_pgp_emails") {
             this.setState({
                 used_pgp_emails_page: e
             });
-        } else if (dataName === "used_chat_ids") {
+        } else if (dataName == "used_chat_ids") {
             this.setState({
                 used_chat_ids_page: e
             });
-        } else if (dataName === "used_sim_ids") {
+        } else if (dataName == "used_sim_ids") {
             this.setState({
                 used_sim_ids_page: e
             });
@@ -259,7 +269,7 @@ class Account extends Component {
         // console.log(e);
         this.setState({
             visible1: false,
-            selectedRowKeys: []
+            selectedRowKeys: [],
         });
     }
     onSelectChange = (selectedRowKeys) => {
@@ -269,7 +279,7 @@ class Account extends Component {
     showConfirm = (msg, _this, pageName, id = 0) => {
         if (_this.state.selectedRowKeys.length > 0 || id !== 0) {
             confirm({
-                title: 'WARNNING!' + msg,
+                title: 'WARNNING! ' + msg,
                 okText: "Confirm",
                 onOk() {
                     if (id !== 0) {
@@ -286,6 +296,7 @@ class Account extends Component {
         }
     }
     render() {
+
         if (this.props.showMsg) {
             if (this.props.msg === "imported successfully") {
                 message.success(this.props.msg);
@@ -297,7 +308,7 @@ class Account extends Component {
 
 
         const { file, selectedRowKeys, } = this.state
-        console.log(selectedRowKeys);
+        // console.log(this.state.used_chat_ids_page);
         let self = this;
         const props = {
             name: 'file',
@@ -428,7 +439,10 @@ class Account extends Component {
                                                     () => {
                                                         this.showViewmodal(false);
                                                         this.setState({
-                                                            selectedRowKeys: []
+                                                            selectedRowKeys: [],
+                                                            used_chat_ids: this.props.used_chat_ids,
+                                                            used_sim_ids: this.props.used_sim_ids,
+                                                            used_pgp_emails: this.props.used_pgp_emails,
                                                         })
                                                     }
                                                 }
@@ -436,7 +450,10 @@ class Account extends Component {
                                                     () => {
                                                         this.showViewmodal(false);
                                                         this.setState({
-                                                            selectedRowKeys: []
+                                                            selectedRowKeys: [],
+                                                            used_chat_ids: this.props.used_chat_ids,
+                                                            used_sim_ids: this.props.used_sim_ids,
+                                                            used_pgp_emails: this.props.used_pgp_emails,
                                                         })
                                                     }
                                                 }
@@ -845,7 +862,7 @@ class Account extends Component {
                                                                                 </div>
                                                                                 <div className="col-md-6 pl-8">
                                                                                     <Input.Search
-                                                                                        name="chat_ids"
+                                                                                        name="chat_id"
                                                                                         key="used_chat_ids"
                                                                                         id="used_chat_ids"
                                                                                         className="search_heading1"
@@ -894,7 +911,7 @@ class Account extends Component {
                                                                                     })
                                                                                 }
 
-                                                                                pagination={{ pageSize: Number(this.state.used_chat_id_page), size: "middle" }}
+                                                                                pagination={{ pageSize: Number(this.state.used_chat_ids_page), size: "middle" }}
                                                                             />
                                                                         </Fragment> : null
                                                 }

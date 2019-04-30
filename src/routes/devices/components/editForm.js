@@ -27,7 +27,7 @@ class EditDevice extends Component {
         }
     }
     handleUserChange = (e) => {
-        // console.log(e)
+        console.log(e)
         this.setState({ addNewUserValue: e });
 
     }
@@ -54,11 +54,10 @@ class EditDevice extends Component {
         this.props.getChatIDs();
         this.props.getPGPEmails();
         this.props.getUserList();
-        if (this.state.addNewUserValue !== this.props.device.user_id) {
-            this.setState({
-                addNewUserValue: this.props.device.user_id
-            })
-        }
+        // this.setState({
+        //     addNewUserModal: false
+        // })
+
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.isloading) {
@@ -96,9 +95,12 @@ class EditDevice extends Component {
         return current_date;
     }
 
-    handleCancel = () => {
-        this.handleReset();
-        this.setState({ visible: false });
+    handleCancelForm = () => {
+        this.setState({
+            visible: false,
+            addNewUserModal: false,
+            addNewUserValue: ''
+        });
     }
 
     createdDate = () => {
@@ -140,6 +142,8 @@ class EditDevice extends Component {
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 10 }}
                             >
+
+
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
                                     rules: [{
@@ -160,6 +164,8 @@ class EditDevice extends Component {
                                             return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
                                         })}
                                     </Select>
+
+
                                     // {/* <Button
                                     //     type="primary"
                                     //     style={{ width: '100%' }}
@@ -174,8 +180,10 @@ class EditDevice extends Component {
                                     onClick={() => this.handleUserModal()}
                                 >
                                     Add User
-                         </Button>
+                                </Button>
+
                             </Form.Item>
+
                         </Fragment>
                     )}
                     <Form.Item style={{ marginBottom: 0 }}
@@ -468,7 +476,7 @@ class EditDevice extends Component {
                             sm: { span: 24, offset: 0 },
                         }}
                     >
-                        <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button>
+                        <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} >Cancel</Button>
                         <Button type="primary" htmlType="submit">Submit</Button>
                     </Form.Item>
 
@@ -508,4 +516,4 @@ var mapStateToProps = ({ routing, devices, users }) => {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedEditDeviceForm);
+export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(WrappedEditDeviceForm);

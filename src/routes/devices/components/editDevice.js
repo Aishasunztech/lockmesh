@@ -50,9 +50,12 @@ export default class EditDealer extends Component {
     }
 
     handleCancel = () => {
-        this.setState({ visible: false });
-    }
+        this.refs.editForm.getWrappedInstance().resetFields();
+        this.setState({
+            visible: false
 
+        });
+    }
     render() {
         const { visible, loading } = this.state;
 
@@ -69,6 +72,7 @@ export default class EditDealer extends Component {
                 >
 
                     <EditForm
+                        ref='editForm'
                         device={this.state.device}
                         hideModal={this.handleCancel}
                         editDeviceFunc={this.state.func}
