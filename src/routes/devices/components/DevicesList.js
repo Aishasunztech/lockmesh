@@ -192,13 +192,14 @@ class DevicesList extends Component {
 
             // console.log(device.usr_device_id,'key', device.device_id)
             // console.log('end', device)
+            // console.log(device.id, 'ids')
             return {
                 // sortOrder: <span style={{ display: 'none' }}>{order}</span>,
                 // sortOrder: (<span id="order">{order}</span>),
                 // sortOrder: {order},
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-                key: device.id,
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
@@ -270,6 +271,7 @@ class DevicesList extends Component {
 
     deleteAllUnlinkedDevice = (type) => {
         console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
+
         if (this.state.selectedRowKeys.length) {
             let title = ' Are you sure, you want to delete All these devices';
             let arr = [];
@@ -301,7 +303,7 @@ class DevicesList extends Component {
                 //    this.props.resetTabSelected()
                 // this.props.refreshComponent();
                 console.log('this.refs.tablelist.props.rowSelection', this.refs.tablelist.props.rowSelection)
-                this.resetSeletedRows()
+                this.resetSeletedRows();
                 if (this.refs.tablelist.props.rowSelection !== null) {
                     this.refs.tablelist.props.rowSelection.selectedRowKeys = []
                 }
