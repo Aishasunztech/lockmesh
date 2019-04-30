@@ -59,6 +59,7 @@ export default class EditDealer extends Component {
         return (
             <div>
                 <Modal
+                    width="600px"
                     visible={visible}
                     title="Edit Device"
                     onOk={this.handleOk}

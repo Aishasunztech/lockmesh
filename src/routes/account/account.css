@@ -161,15 +161,6 @@
     width: 50%;
 }
 
-@media screen and (max-width: 992px) {
-    .ac_card {
-        width: 100%;
-    }
-
-    .p-0 {
-        padding: 0 16px;
-    }
-}
 
 .m_d_pop .ant-modal-body {
     padding: 16px 16px;
@@ -269,7 +260,15 @@
     line-height: 228px;
 }
 
-@media (max-width: 992px) {
+@media screen and (max-width: 992px) {
+    .ac_card {
+        width: 100%;
+    }
+
+    .p-0 {
+        padding: 0 16px;
+    }
+
     .manage_ac .ant-card-body {
         height: auto;
     }
