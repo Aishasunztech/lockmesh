@@ -163,15 +163,15 @@ class SideActions extends Component {
 
     applyHistory = (historyId) => {
         const historyType = this.state.historyType;
-        if(historyType === 'history'){
+        if (historyType === 'history') {
 
         } else if (historyType === "profile") {
 
-        } else if (historyType === "policy"){
+        } else if (historyType === "policy") {
             alert(historyId);
         }
     }
-    
+
     render() {
         // console.log(this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
@@ -207,13 +207,16 @@ class SideActions extends Component {
                                 justify="center"
                             >
                                 <Tooltip placement="bottom" title="Coming Soon">
-                                    <Button type="default " style={{ width: "100%", marginBottom: 16 }} > <Icon type='download' /> Pull</Button>
+                                    <Button type="default " style={{ width: "100%", marginBottom: 16 }} > <Icon type='download' />Pull</Button>
                                 </Tooltip>
-                                {(this.props.authUser.type === ADMIN) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{ fontSize: "14px" }} /> Save Policy</Button> : null}
+                                <Tooltip placement="left" title="Coming Soon">
+                                    <Button type="default " style={{ width: "100%", marginBottom: 16 }} >Activity</Button>
+                                </Tooltip>
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
                                 {/* <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
+                                {(this.props.authUser.type === ADMIN) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{ fontSize: "14px" }} /> Save Policy</Button> : null}
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
                                 <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
@@ -263,24 +266,24 @@ class SideActions extends Component {
                     onCancel={() => this.showHistoryModal(false, '')}
                 >
                     {(this.state.historyType === "history") ?
-                        <TableHistory 
-                            histories={this.props.histories} 
-                            type={this.state.historyType} 
-                            applyHistory = {this.applyHistory}
+                        <TableHistory
+                            histories={this.props.histories}
+                            type={this.state.historyType}
+                            applyHistory={this.applyHistory}
                         />
                         :
                         (this.state.historyType === "profile") ?
-                            <TableHistory  
-                                histories={this.props.profiles} 
-                                type={this.state.historyType} 
-                                applyHistory = {this.applyHistory}
+                            <TableHistory
+                                histories={this.props.profiles}
+                                type={this.state.historyType}
+                                applyHistory={this.applyHistory}
                             />
                             :
                             (this.state.historyType === "policy") ?
-                                <TableHistory  
-                                    histories={this.props.policies} 
-                                    type={this.state.historyType} 
-                                    applyHistory = {this.applyHistory}
+                                <TableHistory
+                                    histories={this.props.policies}
+                                    type={this.state.historyType}
+                                    applyHistory={this.applyHistory}
                                 />
                                 :
                                 (this.state.historyType === undefined) ?
@@ -382,7 +385,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }) => {
-    
+
     return {
         authUser: auth.authUser,
         historyModal: device_details.historyModal,
