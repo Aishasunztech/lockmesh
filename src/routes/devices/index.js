@@ -277,7 +277,7 @@ class Devices extends Component {
             {
                 title: (
                     <Input.Search
-                        name="email"
+                        name="account_email"
                         key="account_email"
                         id="account_email"
                         className="search_heading"
@@ -1165,7 +1165,6 @@ class Devices extends Component {
 
 
     handleComponentSearch = (value) => {
-
         try {
             if (value.length) {
 
@@ -1297,30 +1296,30 @@ class Devices extends Component {
 
     handleSearch = (e) => {
         console.log('============ check search value ========')
-        console.log(e.target.name);
+        console.log(e.target.name , e.target.value);
 
         let demoDevices = [];
         if (status) {
             coppyDevices = this.state.devices;
             status = false;
         }
-        //  console.log("devices", coppyDevices);
+          console.log("devices", coppyDevices);
 
         if (e.target.value.length) {
             // console.log("keyname", e.target.name);
             // console.log("value", e.target.value);
             // console.log(this.state.devices);
             coppyDevices.forEach((device) => {
-                // console.log("device", device);
+                 console.log("device", device[e.target.name] !== undefined);
 
                 if (device[e.target.name] !== undefined) {
                     if ((typeof device[e.target.name]) === 'string') {
-                        // console.log("lsdjfls", device[e.target.name])
+                         console.log("string check", device[e.target.name])
                         if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
                     } else if (device[e.target.name] != null) {
-                        // console.log("else lsdjfls", device[e.target.name])
+                         console.log("else null check", device[e.target.name])
                         if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
@@ -1331,7 +1330,7 @@ class Devices extends Component {
                     demoDevices.push(device);
                 }
             });
-            // console.log("searched value", demoDevices);
+             console.log("searched value", demoDevices);
             this.setState({
                 devices: demoDevices
             })

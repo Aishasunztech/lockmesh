@@ -4,6 +4,8 @@ import { bindActionCreators } from "redux";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../utils/commonUtils';
+
 
 import {
     DEVICE_ACTIVATED,
@@ -26,9 +28,9 @@ import {
     getPagination
 
 } from "../../appRedux/actions/Common";
-
 import AddUser from './components/AddUser';
-
+var coppyDevices = [];
+var status = true;
 class Users extends Component {
     constructor(props) {
         super(props);
@@ -125,6 +127,45 @@ class Users extends Component {
             })
         }
     }
+
+    
+    handleComponentSearch = (value) => {
+    //    console.log('values sr', value)
+
+        try {
+            if (value.length) {
+            
+                // console.log('length')
+
+                if (status) {
+                    // console.log('status')
+                    coppyDevices = this.state.users;
+                    status = false;
+                }
+                // console.log(this.state.users,'coppy de', coppyDevices)
+                let foundDevices = componentSearch(coppyDevices, value);
+                // console.log('found devics', foundDevices)
+                if (foundDevices.length) {
+                    this.setState({
+                        users: foundDevices,
+                    })
+                } else {
+                    this.setState({
+                        users: []
+                    })
+                }
+            } else {
+                status = true;
+
+                this.setState({
+                    users: coppyDevices,
+                })
+            }
+        } catch (error) {
+            // alert("hello");
+        }
+    }
+
     handlePagination = (value) => {
         this.refs.userList.handlePagination(value);
         this.props.postPagination(value, 'users');
