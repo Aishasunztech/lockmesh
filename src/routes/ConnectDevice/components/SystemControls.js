@@ -11,8 +11,8 @@ import {
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {Main_SETTINGS } from '../../../constants/Constants';
-
-class SystemControls extends Component {
+ 
+export default class SystemControls extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -25,7 +25,7 @@ class SystemControls extends Component {
   componentDidMount() {
     if (this.props.controls) {
       this.setState({
-        controls: this.props.controls,
+        controls: this.props.controls.controls,
         settings: this.props.controls.settings,
         pageName: this.props.pageName,
         // secureSettingsMain: this.props.secureSettingsMain
@@ -33,20 +33,29 @@ class SystemControls extends Component {
     }
   }
 
-  componentWillReceiveProps(nextprops) {
+  componentDidUpdate(prevProps){
+    console.log(prevProps.controls, 'testig sdf')
+    if(this.props !== prevProps){
+      this.setState({
+        controls: this.props.controls.controls,
+        settings: this.props.controls.settings,
+      })
+    }
+  }
 
+  componentWillReceiveProps(nextprops) {
+console.log('new props', nextprops)
     if (this.props.controls && (this.props.controls !== nextprops.controls)) {
       // alert("hello");
       // console.log(nextprops.secureSettingsMain, 'secureSettingsMain')
       this.setState({
-        controls: nextprops.controls,
+        controls: nextprops.controls.controls,
         settings: nextprops.controls.settings,
         // secureSettingsMain: nextprops.secureSettingsMain
         // encryptedAllExt: nextprops.encryptedAllExt,
         // guestAllExt: nextprops.guestAllExt
       })
     }
-
   }
 
   handleChecked = (value, controlName, main=null) => {
@@ -59,7 +68,7 @@ class SystemControls extends Component {
   }
 
   render() {
-    console.log('consroslss sdfsd fsd ', this.state.settings);
+    console.log('consroslss sdfsd fsd ', this.state.controls);
     let objindex = this.state.settings.findIndex(item => item.uniqueName == Main_SETTINGS)
     return (
       Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object ?
@@ -95,7 +104,7 @@ class SystemControls extends Component {
                     <span>Wifi</span>
                   </div>
                   <div className="col-md-2 col-sm-2 col-xs-2">
-                    <Switch checked={this.state.controls.wifi_status} size="small"
+                    <Switch checked={this.state.controls.wifi_status == 1 || this.state.controls.wifi_status == true ? true : false} size="small"
                       onClick={(e) => {
                         // console.log("guest", e);
                         this.handleChecked(e, "wifi_status");
@@ -110,7 +119,7 @@ class SystemControls extends Component {
                     <span>Bluetooth</span>
                   </div>
                   <div className="col-md-2 col-sm-2 col-xs-2">
-                    <Switch checked={this.state.controls.bluetooth_status} size="small"
+                    <Switch checked={this.state.controls.bluetooth_status == 1 || this.state.controls.bluetooth_status == true ? true : false} size="small"
                       onClick={(e) => {
                         // console.log("guest", e);
                         this.handleChecked(e, "bluetooth_status");
@@ -125,7 +134,7 @@ class SystemControls extends Component {
                     <span>Hotspot</span>
                   </div>
                   <div className="col-md-2 col-sm-2 col-xs-2">
-                    <Switch checked={this.state.controls.hotspot_status} size="small"
+                    <Switch checked={this.state.controls.hotspot_status == 1 || this.state.controls.hotspot_status == true ? true : false} size="small"
                       onClick={(e) => {
                         // console.log("guest", e);
                         this.handleChecked(e, "hotspot_status");
@@ -140,7 +149,7 @@ class SystemControls extends Component {
                     <span>Screenshots</span>
                   </div>
                   <div className="col-md-2 col-sm-2 col-xs-2">
-                    <Switch checked={this.state.controls.screenshot_status} size="small"
+                    <Switch checked={this.state.controls.screenshot_status == 1 || this.state.controls.screenshot_status == true ? true : false} size="small"
                       onClick={(e) => {
                         // console.log("guest", e);
                         this.handleChecked(e, "screenshot_status");
@@ -155,7 +164,7 @@ class SystemControls extends Component {
                     <span>Block Calls</span>
                   </div>
                   <div className="col-md-2 col-sm-2 col-xs-2">
-                    <Switch checked={this.state.controls.call_status} size="small"
+                    <Switch checked={this.state.controls.call_status == 1 || this.state.controls.call_status == true ? true : false} size="small"
                       onClick={(e) => {
                         // console.log("guest", e);
                         this.handleChecked(e, "call_status");
@@ -175,39 +184,32 @@ class SystemControls extends Component {
 }
 
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    // showHistoryModal: showHistoryModal
-    handleControlCheck: handleControlCheck,
-    handleCheckAllExtension: handleCheckAllExtension,
-    handleMainSettingCheck: handleMainSettingCheck,
-    // handleCheckAll: handleCheckAll
-  }, dispatch);
-}
+// function mapDispatchToProps(dispatch) {
+//   return bindActionCreators({
+//     // showHistoryModal: showHistoryModal
+//     handleControlCheck: handleControlCheck,
+//     handleCheckAllExtension: handleCheckAllExtension,
+//     handleMainSettingCheck: handleMainSettingCheck,
+//     // handleCheckAll: handleCheckAll
+//   }, dispatch);
+// }
 
 
-var mapStateToProps = ({ device_details }, ownProps) => {
-  // console.log(device_details, "applist ownprops", ownProps);
-  const pageName = ownProps.pageName;
+// var mapStateToProps = ({ device_details }, ownProps) => {
+//   // console.log(device_details, "applist ownprops", ownProps);
+//   const pageName = ownProps.pageName;
 
-  let controls = device_details.controls;
-  console.log("controls are", controls);
+//   let controls = device_details.controls;
+//   console.log("controls are", controls);
 
-  if (controls !== undefined) {
-    return {
-      isExtension: true,
-      controls: controls,
-      guestAllExt: device_details.guestAllExt,
-      encryptedAllExt: device_details.encryptedAllExt,
-      checked_app_id: device_details.checked_app_id,
-      secureSettingsMain: device_details.secureSettingsMain,
-    }
-  } else {
-    return {
-      isExtension: false
-    }
-  }
+//     return {
+//       controls: controls,
+//       guestAllExt: device_details.guestAllExt,
+//       encryptedAllExt: device_details.encryptedAllExt,
+//       checked_app_id: device_details.checked_app_id,
+//       secureSettingsMain: device_details.secureSettingsMain,
+//     }
 
-}
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SystemControls);
+// export default connect(mapStateToProps, mapDispatchToProps)(SystemControls);

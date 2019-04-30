@@ -490,10 +490,10 @@ export default (state = initialState, action) => {
 
 
         case HANDLE_CHECK_CONTROL: {
-            let changedControls = JSON.parse(JSON.stringify(state.controls));
+            let changedControls = JSON.parse(JSON.stringify(state.controls.controls));
 
             changedControls[action.payload.key] = action.payload.value;
-            state.controls = JSON.parse(JSON.stringify(changedControls));
+            state.controls.controls = JSON.parse(JSON.stringify(changedControls));
             let controls = state.controls;
             state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
             console.log('reduver aongds', state.controls);

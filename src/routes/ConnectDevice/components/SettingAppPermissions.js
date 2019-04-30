@@ -116,7 +116,7 @@ class SettingAppPermissions extends Component {
             <Col span={7} className="pr-0">
               <img src={require("assets/images/setting.png")} />
             </Col>
-            <Col span={17}>
+            <Col span={17} className="pl-6">
               <h5>Secure Settings Permission</h5>
             </Col>
           </Row>
@@ -141,7 +141,7 @@ class SettingAppPermissions extends Component {
             </Col>
           </Row>
           <div className="sec_set_table">
-            <Table dataSource={this.renderApps()} columns={columns} pagination={false} scroll={{ y: 263 }} />
+            <Table dataSource={this.renderApps()} columns={columns} pagination={false} scroll={{ y: 274 }} />
           </div>
 
         </Fragment>
@@ -173,7 +173,7 @@ var mapStateToProps = ({ device_details }, ownProps) => {
   const pageName = ownProps.pageName;
 
   let extension = device_details.extensions.find(o => o.uniqueName === pageName);
-   console.log("extensions_",  device_details.secureSettingsMain,);
+  console.log("extensions_", device_details.secureSettingsMain);
 
   if (extension !== undefined) {
     return {
@@ -182,7 +182,7 @@ var mapStateToProps = ({ device_details }, ownProps) => {
       guestAllExt: device_details.guestAllExt,
       encryptedAllExt: device_details.encryptedAllExt,
       checked_app_id: device_details.checked_app_id,
-  
+
     }
   } else {
     return {
