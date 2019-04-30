@@ -277,7 +277,7 @@ class Devices extends Component {
             {
                 title: (
                     <Input.Search
-                        name="email"
+                        name="account_email"
                         key="account_email"
                         id="account_email"
                         className="search_heading"
@@ -970,9 +970,17 @@ class Devices extends Component {
 
         }
         else if (value == '3') {
-            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
-            this.state.columns[2].className = '';
-            this.state.columns[2].children[0].className = '';
+            let indx = this.state.columns.findIndex(k => k.title == DEVICE_REMAINING_DAYS);
+            let indx2 = this.state.columns.findIndex(k => k.dataIndex == 'action');
+            console.log(indx,'index ro 3', indx2)
+            if( indx2 >= 0){
+                this.state.columns[indx2]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+            }
+            if(indx >= 0 ){
+                this.state.columns[indx].className = '';
+                this.state.columns[indx].children[0].className = '';
+            }
+      
         }
         else {
             // console.log('else is called');
@@ -1157,7 +1165,6 @@ class Devices extends Component {
 
 
     handleComponentSearch = (value) => {
-
         try {
             if (value.length) {
 
@@ -1289,30 +1296,30 @@ class Devices extends Component {
 
     handleSearch = (e) => {
         console.log('============ check search value ========')
-        console.log(e.target.name);
+        console.log(e.target.name , e.target.value);
 
         let demoDevices = [];
         if (status) {
             coppyDevices = this.state.devices;
             status = false;
         }
-        //  console.log("devices", coppyDevices);
+          console.log("devices", coppyDevices);
 
         if (e.target.value.length) {
             // console.log("keyname", e.target.name);
             // console.log("value", e.target.value);
             // console.log(this.state.devices);
             coppyDevices.forEach((device) => {
-                // console.log("device", device);
+                 console.log("device", device[e.target.name] !== undefined);
 
                 if (device[e.target.name] !== undefined) {
                     if ((typeof device[e.target.name]) === 'string') {
-                        // console.log("lsdjfls", device[e.target.name])
+                         console.log("string check", device[e.target.name])
                         if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
                     } else if (device[e.target.name] != null) {
-                        // console.log("else lsdjfls", device[e.target.name])
+                         console.log("else null check", device[e.target.name])
                         if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
@@ -1323,7 +1330,7 @@ class Devices extends Component {
                     demoDevices.push(device);
                 }
             });
-            // console.log("searched value", demoDevices);
+             console.log("searched value", demoDevices);
             this.setState({
                 devices: demoDevices
             })
