@@ -75,7 +75,6 @@ import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 
-
 var coppyDevices = [];
 var status = true;
 
@@ -945,42 +944,42 @@ class Devices extends Component {
         // let type = value.toLowerCase();
       
      
-        if(value == '5' && this.props.user.type == ADMIN){
-            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
-           if(indx >= 0){ this.state.columns.splice(indx, 1)}
+        // if(value == '5' && this.props.user.type == ADMIN){
+        //     let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
+        //    if(indx >= 0){ this.state.columns.splice(indx, 1)}
            
-        }else{
-            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
-            if(indx < 0 )
-            {
-                this.state.columns.splice(1, 0,{
-                    title : <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
-                    dataIndex: 'action',
-                    align: 'center',
-                    className: 'row',
-                    width: 800,
+        // }else{
+        //     let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
+        //     if(indx < 0 )
+        //     {
+        //         this.state.columns.splice(1, 0,{
+        //             title : <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
+        //             dataIndex: 'action',
+        //             align: 'center',
+        //             className: 'row',
+        //             width: 800,
 
-                })
-            }    
-        }
+        //         })
+        //     }    
+        // }
 
-        if (value == '5' && (this.props.user.type != ADMIN)) {
-            // console.log('tab 5', this.state.columns);
-            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
+        // if (value == '5' && (this.props.user.type != ADMIN)) {
+        //     // console.log('tab 5', this.state.columns);
+        //     this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
 
-        }
-        else if (value == '3') {
-            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
-            this.state.columns[2].className = '';
-            this.state.columns[2].children[0].className = '';
-        }
-        else {
-            // console.log('else is called');
-            this.state.columns[1]['title'] = ''
-            this.state.columns[2].className = 'hide';
-            this.state.columns[2].children[0].className = 'hide';
+        // }
+        // // else if (value == '3') {
+        // //     this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+        // //     this.state.columns[2].className = '';
+        // //     this.state.columns[2].children[0].className = '';
+        // // }
+        // else {
+        //     // console.log('else is called');
+        //     this.state.columns[1]['title'] = ''
+        //     this.state.columns[2].className = 'hide';
+        //     this.state.columns[2].children[0].className = 'hide';
 
-        }
+        // }
 
         // console.log(this.state.columns, 'colll')
 
