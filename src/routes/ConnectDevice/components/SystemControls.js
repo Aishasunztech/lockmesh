@@ -116,7 +116,7 @@ export default class SystemControls extends Component {
                       <span>Wifi</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
-                      <Switch checked={this.state.controls.wifi_status == 1 || this.state.controls.wifi_status == true ? true : false} size="small"
+                      <Switch disabled checked={this.state.controls.wifi_status == 1 || this.state.controls.wifi_status == true ? true : false} size="small"
                         onClick={(e) => {
                           // console.log("guest", e);
                           this.handleChecked(e, "wifi_status");

@@ -70,23 +70,23 @@ export default class TableHistory extends Component {
                 [
                     {
                         label: 'Wifi',
-                        status: this.state.controls.wifi_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.wifi_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
                     },
                     {
                         label: 'Bluetooth',
-                        status: this.state.controls.bluetooth_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.bluetooth_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
                     },
                     {
                         label: 'Hotspot',
-                        status: this.state.controls.hotspot_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.hotspot_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
                     },
                     {
                         label: 'Screenshots',
-                        status: this.state.controls.screenshot_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.screenshot_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
                     },
                     {
                         label: 'Block Calls',
-                        status: this.state.controls.call_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.call_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
                     }
                 ]
         

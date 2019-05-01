@@ -477,7 +477,7 @@ export function showMessage(show, message, type) {
 
 
 export function handleControlCheck(e, key) {
-    console.log('name in action', e, key)
+    // console.log('name in action', e, key)
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_CONTROL,
@@ -491,7 +491,7 @@ export function handleControlCheck(e, key) {
 
 
 export function handleMainSettingCheck(e, key, main) {
-    console.log('name in action', e, key, main)
+    // console.log('name in action', e, key, main)
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_MAIN_SETTINGS,

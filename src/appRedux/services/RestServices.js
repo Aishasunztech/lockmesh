@@ -202,7 +202,7 @@ const RestService = {
 
       // connect devices for dealer dash.
       getAppPermissions: () => {
-      console.log('api called ')
+    //   console.log('api called ')
         return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
     },
 

@@ -168,46 +168,44 @@ class ConnectDevice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-// console.log(prevProps, 'comp', this.props)
-    if (this.props.controls.controls !== prevProps.controls.controls) {
+    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls) {
       this.setState({
         controls: this.props.controls
       })
-      //  console.log('update data is ', this.props.app_list)
     }
   }
   
-  componentWillReceiveProps(nextProps) {
-    if (this.props.controls !== nextProps.controls) {
-      this.setState({
-        controls: nextProps.controls
-      })
-      // this.setState({
-      //     pageName: nextProps.pageName
-      // });
+  // componentWillReceiveProps(nextProps) {
+  //   // if (this.props.controls !== nextProps.controls) {
+  //   //   this.setState({
+  //   //     controls: nextProps.controls
+  //   //   })
+  //     // this.setState({
+  //     //     pageName: nextProps.pageName
+  //     // });
 
-      // nextProps.showMessage(false);
+  //     // nextProps.showMessage(false);
 
-      // this.setState({
-      //     device_id: nextProps.match.params.device_id
-      // });
-      // const device_id = nextProps.match.params.device_id;
-      // if (device_id != '') {
+  //     // this.setState({
+  //     //     device_id: nextProps.match.params.device_id
+  //     // });
+  //     // const device_id = nextProps.match.params.device_id;
+  //     // if (device_id != '') {
 
-      //     nextProps.getDeviceDetails(device_id);
-      //     nextProps.getDeviceApps(device_id);
-      //     nextProps.getProfiles();
-      //     nextProps.getDeviceHistories(device_id);
-      //     this.setState({
-      //         syncStatus: this.props.device_details.is_sync
-      //     })
-      // }
-      // this.props.endLoading();
-      // setTimeout(() => {
-      //     this.props.endLoading();
-      // }, 2000);
-    }
-  }
+  //     //     nextProps.getDeviceDetails(device_id);
+  //     //     nextProps.getDeviceApps(device_id);
+  //     //     nextProps.getProfiles();
+  //     //     nextProps.getDeviceHistories(device_id);
+  //     //     this.setState({
+  //     //         syncStatus: this.props.device_details.is_sync
+  //     //     })
+  //     // }
+  //     // this.props.endLoading();
+  //     // setTimeout(() => {
+  //     //     this.props.endLoading();
+  //     // }, 2000);
+  //   }
+  // }
 
   renderScreen = () => {
     const isSync = (this.props.isSync === 1 || this.props.isSync === true) ? true : false;
@@ -252,6 +250,7 @@ class ConnectDevice extends Component {
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
       return (<SystemControls 
+
         controls={this.state.controls} 
         handleCheckAllExtension={this.props.handleCheckAllExtension}
         handleControlCheck={this.props.handleControlCheck}
@@ -482,7 +481,7 @@ class ConnectDevice extends Component {
             isDuressPwd={this.props.isDuressPwd}
             isEncryptedPwd={this.props.isEncryptedPwd}
             isGuestPwd={this.props.isGuestPwd}
-            controls={this.props.controls}
+            controls={this.state.controls}
 
           />
         </Modal>
@@ -571,6 +570,7 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     encryptedAllExt: device_details.encryptedAllExt,
     checked_app_id: device_details.checked_app_id,
     secureSettingsMain: device_details.secureSettingsMain,
+    forceUpdate: device_details.forceUpdate,
   };
 }
 

@@ -58,7 +58,7 @@ const actions = require("../../appRedux/actions/ConnectDevice")
 
 const initialState = {
     isLoading: false,
-
+    forceUpdate: 0,
     messageText: '',
     messageType: '',
     showMessage: false,
@@ -325,6 +325,8 @@ export default (state = initialState, action) => {
             // console.log(action.payload);
             return {
                 ...state,
+                pageName: MAIN_MENU,
+                showMessage: false,
                 // applyBtn: false,
                 // undoBtn: false,
                 // redoBtn: false,
@@ -491,20 +493,24 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_CONTROL: {
             let changedControls = JSON.parse(JSON.stringify(state.controls.controls));
-
-            changedControls[action.payload.key] = action.payload.value;
+            if(action.payload.key == 'wifi_status'){
+                changedControls[action.payload.key] = true;
+            }else{
+                changedControls[action.payload.key] = action.payload.value;
+            }
+           
             state.controls.controls = JSON.parse(JSON.stringify(changedControls));
             let controls = state.controls;
             state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
-            console.log('reduver aongds', state.controls);
+            // console.log('reduver aongds', state.controls);
 
             return {
                 ...state,
                 controls: state.controls,   
+                forceUpdate: state.forceUpdate + 1,
                 applyBtn: true,
                 undoBtn: true
             }
-
         }
 
         case HANDLE_CHECK_MAIN_SETTINGS: {
@@ -742,8 +748,14 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_ALL: {
             let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
-                app[action.payload.key] = action.payload.value;
-                app.isChanged = true;
+                // console.log(app[action.payload.key], 'kkkkkk', 'guest')
+                if(app.default_app != 1){
+                    app[action.payload.key] = action.payload.value;
+                    app.isChanged = true;
+                }else if(app.default_app == 1 && action.payload.key == 'guest'){
+                    app.isChanged = true;
+                    app[action.payload.key] = action.payload.value;
+                }
             })
             state[action.payload.keyAll] = action.payload.value;
             state.undoApps.push(JSON.parse(JSON.stringify(applications)));

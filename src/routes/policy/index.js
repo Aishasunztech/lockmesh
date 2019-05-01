@@ -179,6 +179,7 @@ class Policy extends Component {
 
     }
     componentDidMount() {
+        console.log(this.props, 'his')
         this.props.getPolicies();
         this.props.getPagination('policies');
         // this.props.getApkList();
@@ -237,7 +238,7 @@ class Policy extends Component {
                         apk_list={this.props.apk_list}
                         app_list={this.props.app_list}
                         handlePolicyModal={this.handlePolicyModal}
-                        getPolicies={this.props.getPolicies}
+                        getPolicies={this.props.getPolicies}    
                         ref='addPolicy'
                     />
                 </Modal>
