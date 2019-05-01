@@ -40,7 +40,7 @@ class Apk extends Component {
                                                     <Col>
                                                         <h5 style={{ position: 'relative', right: 1 }}><span className="diamond_icon">&#9670;</span>Upload apk</h5>
                                                         <h5 style={{ position: 'relative', left: 12 }}><span className="diamond_icon">&#9670;</span>Manage apk's</h5>
-                                                        <h5 style={{ position: 'relative', right: 35 }} className="more_txt">and more...</h5>
+                                                        <h5 style={{ position: 'relative', left: 10 }} className="more_txt">and more...</h5>
                                                     </Col>}
                                             </Row>
                                             <Row justify='center'>
@@ -48,7 +48,7 @@ class Apk extends Component {
 
                                                 </Col>
                                                 <Col span={12} style={{}}>
-                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
+                                                    <Button type="primary" size="small" style={{ width: "100%", marginTop: 46 }}>Open</Button>
                                                 </Col>
                                             </Row>
 
