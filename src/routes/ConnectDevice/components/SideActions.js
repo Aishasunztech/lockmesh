@@ -155,8 +155,7 @@ class SideActions extends Component {
     handleFlag(flagged) {
         if (flagged == 'Unflag') {
             showConfirm(this.props.device, this.props.unflagged, this, "Do you really want to unflag the device ", 'flagged')
-        }
-        else {
+        } else {
             this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
         }
     }

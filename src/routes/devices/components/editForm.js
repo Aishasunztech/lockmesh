@@ -157,11 +157,17 @@ class EditDevice extends Component {
                                         placeholder="Select User ID"
                                         optionFilterProp="children"
                                         onChange={this.handleUserChange}
-                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        filterOption={
+                                            (input, option) => {
+                                                // console.log("searching: ",input," from:", option.props);
+                                                // return null;
+                                                return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
+                                            }
+                                        }
                                     >
                                         <Select.Option value="">Select User ID</Select.Option>
                                         {users_list.map((item, index) => {
-                                            return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
+                                            return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
                                         })}
                                     </Select>
 
@@ -252,6 +258,7 @@ class EditDevice extends Component {
                         label="PGP Email "
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
+                        showSearch
                     >
                         {this.props.form.getFieldDecorator('pgp_email', {
                             initialValue: this.props.device.pgp_email,
@@ -294,6 +301,7 @@ class EditDevice extends Component {
                         label="Chat ID"
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
+                        showSearch
                     >
                         {this.props.form.getFieldDecorator('chat_id', {
                             initialValue: this.props.device.chat_id,
@@ -320,6 +328,7 @@ class EditDevice extends Component {
                         label="Sim ID "
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
+                        showSearch
                     >
                         {this.props.form.getFieldDecorator('sim_id', {
                             initialValue: this.props.device.sim_id,
