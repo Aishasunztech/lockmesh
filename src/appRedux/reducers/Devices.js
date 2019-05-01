@@ -23,6 +23,7 @@ import {
 
 import {
     DEVICE_ID,
+    USER_ID,
     DEVICE_REMAINING_DAYS,
     DEVICE_FLAGGED,
     DEVICE_STATUS,
@@ -65,6 +66,7 @@ const initialState = {
     pgp_emails: [],
     options: [
         DEVICE_ID,
+        USER_ID,
         DEVICE_REMAINING_DAYS,
         DEVICE_FLAGGED,
         DEVICE_STATUS,

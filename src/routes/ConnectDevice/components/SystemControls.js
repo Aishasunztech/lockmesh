@@ -10,8 +10,8 @@ import {
 
 } from "../../../appRedux/actions/ConnectDevice";
 
-import {Main_SETTINGS } from '../../../constants/Constants';
- 
+import { Main_SETTINGS } from '../../../constants/Constants';
+
 export default class SystemControls extends Component {
   constructor(props) {
     super(props)
@@ -33,9 +33,9 @@ export default class SystemControls extends Component {
     }
   }
 
-  componentDidUpdate(prevProps){
+  componentDidUpdate(prevProps) {
     // console.log(prevProps.controls, 'testig sdf')
-    if(this.props !== prevProps){
+    if (this.props !== prevProps) {
       this.setState({
         controls: this.props.controls.controls,
         settings: this.props.controls.settings,
@@ -58,12 +58,12 @@ export default class SystemControls extends Component {
     }
   }
 
-  handleChecked = (value, controlName, main=null) => {
+  handleChecked = (value, controlName, main = null) => {
     this.props.handleControlCheck(value, controlName, main)
   }
 
   handleMainSettingCheck = (value, controlName) => {
-    this.props.handleMainSettingCheck(value, controlName,Main_SETTINGS )
+    this.props.handleMainSettingCheck(value, controlName, Main_SETTINGS)
 
   }
 
@@ -71,36 +71,45 @@ export default class SystemControls extends Component {
     // console.log('consroslss sdfsd fsd ', this.state.controls);
     let objindex = 0;
     // console.log('object settings', this.state.settings)
-    if(this.state.settings !== undefined && this.state.settings && this.state.controls.length){
-      let objindex = this.state.settings.findIndex(item => item.uniqueName == Main_SETTINGS)
+    // if(this.state.settings !== undefined && this.state.settings && this.state.controls.length){
+    if (this.state.settings !== undefined && this.state.settings && this.state.settings !== []) {
+      objindex = this.state.settings.findIndex(item => item.uniqueName == Main_SETTINGS)
+    }
+    if (this.state.controls) {
+
       return (
         Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object ?
           <Fragment>
             <div>
               <List>
-                <div className="row width_100 m-0 sec_head1">
-                  <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
-                    <span>Guest</span>
-                    <Switch onClick={(e) => {
-                      //  console.log("guest", e , this.state.settings[objindex]);
-                      this.handleMainSettingCheck(e, "guest");
-                    }} checked={this.state.settings[objindex].guest === 1 || this.state.settings[objindex].guest === true ? true : false} size="small" />
-                  </div>
-                  <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
-                    <span>Encrypt</span>
-                    <Switch onClick={(e) => {
-                      // console.log("guest", e);
-                      this.handleMainSettingCheck(e, "encrypted");
-                    }} checked={this.state.settings[objindex].encrypted === 1 || this.state.settings[objindex].encrypted === true ? true : false} size="small" />
-                  </div>
-                  <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
-                    <span>Enable</span>
-                    <Switch onClick={(e) => {
-                      // console.log("guest", e);
-                      this.handleMainSettingCheck(e, "enable");
-                    }} checked={this.state.settings[objindex].enable === 1 || this.state.settings[objindex].enable === true ? true : false} size="small" />
-                  </div>
-                </div>
+                {
+                  (this.state.settings !== undefined && this.state.settings && this.state.settings !== []) ?
+                    <div className="row width_100 m-0 sec_head1">
+                      <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                        <span>Guest</span>
+                        <Switch onClick={(e) => {
+                          //  console.log("guest", e , this.state.settings[objindex]);
+                          this.handleMainSettingCheck(e, "guest");
+                        }} checked={this.state.settings[objindex].guest === 1 || this.state.settings[objindex].guest === true ? true : false} size="small" />
+                      </div>
+                      <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                        <span>Encrypt</span>
+                        <Switch onClick={(e) => {
+                          // console.log("guest", e);
+                          this.handleMainSettingCheck(e, "encrypted");
+                        }} checked={this.state.settings[objindex].encrypted === 1 || this.state.settings[objindex].encrypted === true ? true : false} size="small" />
+                      </div>
+                      <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                        <span>Enable</span>
+                        <Switch onClick={(e) => {
+                          // console.log("guest", e);
+                          this.handleMainSettingCheck(e, "enable");
+                        }} checked={this.state.settings[objindex].enable === 1 || this.state.settings[objindex].enable === true ? true : false} size="small" />
+                      </div>
+                    </div>
+                    : false
+                }
+
                 <List.Item>
                   <div className="row width_100">
                     <div className="col-md-10 col-sm-10 col-xs-10">
@@ -184,14 +193,22 @@ export default class SystemControls extends Component {
           </Fragment>
       )
     }
-    else{
-      return(
+    else {
+      return (
         <Fragment>
-            <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> Not Available</a></h1>
-          </Fragment>
+          <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> Not Available</a></h1>
+        </Fragment>
       )
     }
-   
+    // }
+    // else{
+    //   return(
+    //     <Fragment>
+    //         <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> Not Available</a></h1>
+    //       </Fragment>
+    //   )
+    // }
+
   }
 }
 

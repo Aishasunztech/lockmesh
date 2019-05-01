@@ -292,9 +292,13 @@ class Permissions extends Component {
   renderDealer(list, permitted = false) {
     let data = [];
     // console.log(list);
+    let is_included
     list.map((dealer) => {
       // console.log('object recrd', this.props.record.permissions);
-      let is_included = this.state.permissions.includes(dealer.dealer_id);
+      if(this.state.permissions){
+        is_included = this.state.permissions.includes(dealer.dealer_id);
+
+      }
       let common = {
         'key': dealer.dealer_id,
         'row_key': dealer.dealer_id,
