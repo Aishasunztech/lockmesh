@@ -389,10 +389,10 @@ class EditDevice extends Component {
                                 style={{ width: '100%' }}
                             >
                                 {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>Trial (7 days)</Select.Option> : null}
-                                {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={1}>1 Month</Select.Option> : null}
-                                {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={3}>3 Months</Select.Option> : null}
-                                {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={6}>6 Months</Select.Option> : null}
-                                {(this.props.device.finalStatus !== 'Trial') ? <Select.Option value={12}>12 Months</Select.Option> : null}
+                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={1}>1 Month</Select.Option> : null}
+                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={3}>3 Months</Select.Option> : null}
+                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={6}>6 Months</Select.Option> : null}
+                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={12}>12 Months</Select.Option> : null}
                             </Select>
                         )}
 
