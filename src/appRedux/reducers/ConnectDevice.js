@@ -502,7 +502,7 @@ export default (state = initialState, action) => {
             state.controls.controls = JSON.parse(JSON.stringify(changedControls));
             let controls = state.controls;
             state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
-            console.log('reduver aongds', state.controls);
+            // console.log('reduver aongds', state.controls);
 
             return {
                 ...state,
