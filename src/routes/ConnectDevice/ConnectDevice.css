@@ -155,9 +155,13 @@ th.device_info {
 }
 
 .line_break {
-    width: 60px;
-    margin: 0 auto;
-    word-break: break-word;
+    width: auto;
+    margin-left: 8px;
+    display: inline-block;
+}
+
+.line_break .perm_txt {
+    font-size: 12px;
 }
 
 .deviceImg .ant-form {
@@ -263,12 +267,12 @@ th.device_info {
 @media (max-width:1330px) and (min-width:1200px) {
     .deviceImg {
         width: 270px;
-        border: 6px solid #3c3c3c;
+        border: 6px solid #07090b;
         border-bottom: 0;
     }
 
     .deviceImg .dev_main_menu .ant-spin-container {
-        width: 247px !important;
+        width: 258px !important;
     }
 
     .status_bar {
@@ -288,6 +292,7 @@ th.device_info {
         font-size: 12px;
         width: 20%;
     }
+
     .sec_head {
         margin: 4px 0px 6px;
     }

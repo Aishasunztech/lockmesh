@@ -87,13 +87,12 @@ class SettingAppPermissions extends Component {
           name: (
             <Fragment>
               <Avatar
+                className="perm_icons"
                 size={"small"}
                 src={`${BASE_URL}users/getFile/${ext.icon}`}
-                style={{ backgroundColor: 'black' }}
               // style={{ width: "30px", height: "30px" }} 
               />
-              <br />
-              <div className="line_break">{ext.label}</div>
+              <div className="line_break"><a className="perm_txt">{ext.label}</a></div>
             </Fragment>),
           // name: ext.label,
           guest: <Switch checked={ext.guest === 1 ? true : false} size="small"
@@ -153,7 +152,7 @@ class SettingAppPermissions extends Component {
             </Col>
           </Row>
           <div className="sec_set_table">
-            <Table dataSource={this.renderApps()} columns={columns} pagination={false} scroll={{ y: 274 }} />
+            <Table dataSource={this.renderApps()} columns={columns} pagination={false} scroll={{ y: 273 }} />
           </div>
 
         </Fragment>
