@@ -30,7 +30,7 @@ const initialState = {
     allExtensions: [],
     appPermissions: [],
     systemPermissions: [
-    {name: "Wifi", value: false},
+    {name: "Wifi", value: true},
     {name: "Bluetooth", value: false},
     {name: "Screenshot", value: false},
     {name: "Location", value: false},

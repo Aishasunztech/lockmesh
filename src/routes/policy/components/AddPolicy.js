@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react'
 import { Card, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
 import { connect } from "react-redux";
-import {SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING} from '../../../constants/Constants';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING } from '../../../constants/Constants';
 import styles from './policy.css';
 import { bindActionCreators } from "redux";
-import { getDealerApps,  } from '../../../appRedux/actions/ConnectDevice';
+import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
 import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy } from '../../../appRedux/actions/Policy';
 
 const TextArea = Input;
@@ -47,7 +47,7 @@ const data = [
     }
 ];
 
- class AddPolicy extends Component {
+class AddPolicy extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -57,16 +57,20 @@ const data = [
             allExtensions: [],
             systemPermissions: [],
             policy_name: '',
-            command: ''
+            command: '',
+            isCommand: 'success',
+            isPolicy_name: 'success',
+            policy_name_error:'',
+            command_error:''
 
         };
 
         // console.log('stat is ', this.state.dealerApps)
-       
+
     }
 
-    handleCheckApp = (value, key, id, arrayOf)=> {
-         this.props.handleCheckAppPolicy(value, key, id, arrayOf, SECURE_SETTING)
+    handleCheckApp = (value, key, id, arrayOf) => {
+        this.props.handleCheckAppPolicy(value, key, id, arrayOf, SECURE_SETTING)
         // console.log(value, key, id, arrayOf, 'data is');
     }
 
@@ -80,15 +84,39 @@ const data = [
             system_permissions: this.state.systemPermissions
 
         }
+        // console.log('polcy is', this.state.policy_name)
 
-        this.props.savePolicy(data);
-        this.props.handlePolicyModal(false);
-        this.props.getPolicies()
+        if((this.state.policy_name !== '') && this.state.command !== ''){
+            this.props.savePolicy(data);
+            this.props.handlePolicyModal(false);
+            this.props.getPolicies();
+            this.props.getDealerApps();
+            this.props.getAppPermissions();
+            this.setState({
+                current: 0,
+                policy_name: '',
+                command: ''
+            })
+        }
+        else{
+            if(this.state.policy_name === ''){
+                this.setState({
+                    isPolicy_name:'error',
+                     policy_name_error:"Please Input Policy Name"
+                })
+            }
+            if(this.state.command === ''){
+                this.setState({
+                    isCommand: 'error',
+                    command_error: "Please Input Policy Note"
+                })
+            }
+        }
+       
     }
 
 
-    componentDidMount(){
-        // console.log('did mount called')
+    componentDidMount() {
         this.props.getDealerApps();
         this.props.getAppPermissions();
         this.setState({
@@ -108,48 +136,48 @@ const data = [
     //     }
     // }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate(prevProps) {
         //   console.log(this.props.allExtensions, 'add policy page data is ', prevProps.allExtensions);
-        if(this.props !== prevProps){
+        if (this.props !== prevProps) {
             this.setState({
                 dealerApps: this.props.dealerApps,
                 appPermissions: this.props.appPermissions,
                 allExtensions: this.props.allExtensions,
                 systemPermissions: this.props.systemPermissions
             });
-      
+
         }
     }
 
-    renderSystemPermissions = ()=> {
+    renderSystemPermissions = () => {
         // console.log(this.state.systemPermissions, 'permissions')
-        if(this.state.systemPermissions.length){
-            return this.state.systemPermissions.map((item, index)=> {
+        if (this.state.systemPermissions.length) {
+            return this.state.systemPermissions.map((item, index) => {
                 // console.log('object, ', item)
-                return{
+                return {
                     rowKey: index,
                     name: item.name,
-                    action: <Switch checked={item.value} onClick={(e)=>this.props.handleChekSystemPermission(e, item.name)} size="small" />
+                    action: <Switch disabled={item.name == 'Wifi' ? true : false} checked={item.value} onClick={(e) => this.props.handleChekSystemPermission(e, item.name)} size="small" />
                 }
-               
+
             })
         }
     }
 
     next() {
-         const current = this.state.current + 1;
+        const current = this.state.current + 1;
         this.setState({ current });
     }
 
     prev() {
-         const current = this.state.current - 1;
+        const current = this.state.current - 1;
         this.setState({ current });
     }
 
     render() {
         const { current } = this.state;
         //  console.log('console the applist', this.state.dealerApps);
-         this.steps = [{
+        this.steps = [{
             title: 'SELECT APPS',
             Icon: <span className="step_counting">1</span>,
             content: (
@@ -161,7 +189,7 @@ const data = [
                 />
             ),
         }, {
-            title: 'SET '+ APPLICATION_PERMISION.toUpperCase(),
+            title: 'SET ' + APPLICATION_PERMISION.toUpperCase(),
             Icon: <span className="step_counting">2</span>,
             content: (
                 <AppList
@@ -172,18 +200,18 @@ const data = [
                 />
             ),
         }, {
-            title: 'SET '+ SECURE_SETTING_PERMISSION.toUpperCase(),
+            title: 'SET ' + SECURE_SETTING_PERMISSION.toUpperCase(),
             Icon: <span className="step_counting">3</span>,
             content: (
                 <AppList
-                allExtensions={this.state.allExtensions}
-                handleCheckApp={this.handleCheckApp}
-                secureSettings = 'allExtensions'
-                isSwitch={true}
-            />
+                    allExtensions={this.state.allExtensions}
+                    handleCheckApp={this.handleCheckApp}
+                    secureSettings='allExtensions'
+                    isSwitch={true}
+                />
             ),
         }, {
-            title: 'SET '+ SYSTEM_PERMISSION.toUpperCase(),
+            title: 'SET ' + SYSTEM_PERMISSION.toUpperCase(),
             Icon: <span className="step_counting">4</span>,
             content: (
                 <Table
@@ -197,20 +225,42 @@ const data = [
             title: 'SET POLICY DETAILS',
             Icon: <span className="step_counting">5</span>,
             content: (
-                <div className="lst_stp">
-                    <div className="row">
-                        <div className="col-md-2 pr-0 "><label>Name:</label></div>
-                        <div className="col-md-8">
-                            <Input placeholder="Name" onChange={(e)=> this.setState({policy_name: e.target.value})} className="pol_inp" />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-2 pr-0 "><label>Policy Note:</label></div>
-                        <div className="col-md-8">
-                            <textarea placeholder="Policy Note" onChange={(e)=> this.setState({command: e.target.value})} class="ant-input"></textarea>
-                        </div>
-                    </div>
-                </div>
+                <Form className="login-form">
+                    <Form.Item
+
+                        label='Name'
+                        validateStatus={this.state.isPolicy_name}
+                        help= {this.state.policy_name_error} 
+                    >
+
+                        <Input placeholder="Name" onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error:'', isPolicy_name:'success' })} className="pol_inp" />
+
+                    </Form.Item>
+                    <Form.Item
+
+                        label='Policy Note'
+                        validateStatus={this.state.isCommand}
+                        help={this.state.command_error}
+                    >
+
+                        <textarea placeholder="Policy Note" onChange={(e) => this.setState({ command: e.target.value, command_error:'', isCommand: 'success' })} class="ant-input"></textarea>
+
+                    </Form.Item>
+                </Form>
+                // <div className="lst_stp">
+                //     <div className="row">
+                //         <div className="col-md-2 pr-0 "><label>Name:</label></div>
+                //         <div className="col-md-8">
+                //             <Input placeholder="Name" onChange={(e)=> this.setState({policy_name: e.target.value})} className="pol_inp" />
+                //         </div>
+                //     </div>
+                //     <div className="row">
+                //         <div className="col-md-2 pr-0 "><label>Policy Note:</label></div>
+                //         <div className="col-md-8">
+                //             <textarea placeholder="Policy Note" onChange={(e)=> this.setState({command: e.target.value})} class="ant-input"></textarea>
+                //         </div>
+                //     </div>
+                // </div>
             )
         }
         ];
@@ -246,7 +296,7 @@ const data = [
     }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getDealerApps: getDealerApps,
         getAppPermissions: getAppPermissions,
@@ -256,15 +306,15 @@ function mapDispatchToProps(dispatch){
     }, dispatch)
 }
 
-var mapStateToProps = ({device_details, policies}) =>{
-    //  console.log('DEALER APPS LIST ', policies.systemPermissions)
-return{
-    dealerApps: policies.dealer_apk_list,
-    appPermissions: policies.appPermissions,
-    allExtensions: policies.allExtensions,
-    systemPermissions: policies.systemPermissions
+var mapStateToProps = ({ device_details, policies }) => {
+    //   console.log('DEALER APPS LIST ', policies.appPermissions)
+    return {
+        dealerApps: policies.dealer_apk_list,
+        appPermissions: policies.appPermissions,
+        allExtensions: policies.allExtensions,
+        systemPermissions: policies.systemPermissions
 
-}
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPolicy);
