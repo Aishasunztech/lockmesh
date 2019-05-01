@@ -60,8 +60,8 @@ class AddPolicy extends Component {
             command: '',
             isCommand: 'success',
             isPolicy_name: 'success',
-            policy_name_error:'',
-            command_error:''
+            policy_name_error: '',
+            command_error: ''
 
         };
 
@@ -86,7 +86,7 @@ class AddPolicy extends Component {
         }
         // console.log('polcy is', this.state.policy_name)
 
-        if((this.state.policy_name !== '') && this.state.command !== ''){
+        if ((this.state.policy_name !== '') && this.state.command !== '') {
             this.props.savePolicy(data);
             this.props.handlePolicyModal(false);
             this.props.getPolicies();
@@ -98,21 +98,21 @@ class AddPolicy extends Component {
                 command: ''
             })
         }
-        else{
-            if(this.state.policy_name === ''){
+        else {
+            if (this.state.policy_name === '') {
                 this.setState({
-                    isPolicy_name:'error',
-                     policy_name_error:"Please Input Policy Name"
+                    isPolicy_name: 'error',
+                    policy_name_error: "Please Input Policy Name"
                 })
             }
-            if(this.state.command === ''){
+            if (this.state.command === '') {
                 this.setState({
                     isCommand: 'error',
                     command_error: "Please Input Policy Note"
                 })
             }
         }
-       
+
     }
 
 
@@ -150,18 +150,42 @@ class AddPolicy extends Component {
     }
 
     renderSystemPermissions = () => {
-        // console.log(this.state.systemPermissions, 'permissions')
-        if (this.state.systemPermissions.length) {
-            return this.state.systemPermissions.map((item, index) => {
-                // console.log('object, ', item)
-                return {
-                    rowKey: index,
-                    name: item.name,
-                    action: <Switch disabled={item.name == 'Wifi' ? true : false} checked={item.value} onClick={(e) => this.props.handleChekSystemPermission(e, item.name)} size="small" />
-                }
-
-            })
+        if (this.state.systemPermissions) {
+          
+                return [{
+                    rowKey: 'wifi_status',
+                    name: 'Wifi',
+                    action: <Switch disabled checked={this.state.systemPermissions.wifi_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'wifi_status')} size="small" />
+                },{
+                    rowKey: 'bluetooth_status',
+                    name: 'Bluetooth',
+                    action: <Switch checked={this.state.systemPermissions.bluetooth_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'bluetooth_status')} size="small" />
+                },{
+                    rowKey: 'screenshot_status',
+                    name: 'ScreenShot',
+                    action: <Switch checked={this.state.systemPermissions.screenshot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'screenshot_status')} size="small" />
+                },{
+                    rowKey: 'location_status',
+                    name: 'Location',
+                    action: <Switch checked={this.state.systemPermissions.location_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'location_status')} size="small" />
+                },{
+                    rowKey: 'hotspot_status',
+                    name: 'Hotspot',
+                    action: <Switch checked={this.state.systemPermissions.hotspot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'hotspot_status')} size="small" />
+                }]
         }
+        // console.log(this.state.systemPermissions, 'permissions')
+        // if (this.state.systemPermissions.length) {
+        //     return this.state.systemPermissions.map((item, index) => {
+        //         // console.log('object, ', item)
+        //         return {
+        //             rowKey: index,
+        //             name: item.name,
+        //             action: <Switch disabled={item.name == 'Wifi' ? true : false} checked={item.value} onClick={(e) => this.props.handleChekSystemPermission(e, item.name)} size="small" />
+        //         }
+
+        //     })
+        // }
     }
 
     next() {
@@ -176,7 +200,7 @@ class AddPolicy extends Component {
 
     render() {
         const { current } = this.state;
-        //  console.log('console the applist', this.state.dealerApps);
+        console.log('console the applist', this.state.dealerApps);
         this.steps = [{
             title: 'SELECT APPS',
             Icon: <span className="step_counting">1</span>,
@@ -230,10 +254,10 @@ class AddPolicy extends Component {
 
                         label='Name'
                         validateStatus={this.state.isPolicy_name}
-                        help= {this.state.policy_name_error} 
+                        help={this.state.policy_name_error}
                     >
 
-                        <Input placeholder="Name" onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error:'', isPolicy_name:'success' })} className="pol_inp" />
+                        <Input placeholder="Name" onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
 
                     </Form.Item>
                     <Form.Item
@@ -243,7 +267,7 @@ class AddPolicy extends Component {
                         help={this.state.command_error}
                     >
 
-                        <textarea placeholder="Policy Note" onChange={(e) => this.setState({ command: e.target.value, command_error:'', isCommand: 'success' })} class="ant-input"></textarea>
+                        <textarea placeholder="Policy Note" onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
 
                     </Form.Item>
                 </Form>
