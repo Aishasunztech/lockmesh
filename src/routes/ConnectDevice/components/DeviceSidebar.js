@@ -28,7 +28,8 @@ import {
     DEVICE_EXPIRY_DATE,
     DEVICE_DEALER_NAME,
     DEVICE_S_DEALER,
-    DEVICE_S_DEALER_NAME
+    DEVICE_S_DEALER_NAME,
+    USER_ID
 } from '../../../constants/DeviceConstants';
 
 let make_red = 'captilize';
@@ -64,6 +65,11 @@ export default class DeviceSidebar extends Component {
         // }
 
         return [
+            {
+                key:300,
+                name:(<a href="javascript:void(0)" >{USER_ID}:</a>),
+                value: device_details.user_id
+            },
             {
                 key: 10,
                 name: (<a href="javascript:void(0)" >{DEVICE_STATUS}:</a>),
