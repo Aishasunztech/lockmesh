@@ -685,14 +685,14 @@ class Dealers extends Component {
             coppydealers = this.state.dealers;
             status = false;
         }
-        console.log("devices", coppydealers);
+        // console.log("devices", coppydealers);
 
         if (e.target.value.length) {
-            console.log("keyname", e.target.name);
-            console.log("value", e.target.value);
-            console.log(this.state.dealers);
+            // console.log("keyname", e.target.name);
+            // console.log("value", e.target.value);
+            // console.log(this.state.dealers);
             coppydealers.forEach((dealer) => {
-                console.log("device", dealer);
+                // console.log("device", dealer);
 
                 if (dealer[e.target.name] !== undefined) {
                     if ((typeof dealer[e.target.name]) === 'string') {
@@ -710,7 +710,7 @@ class Dealers extends Component {
                     demoDealers.push(dealer);
                 }
             });
-            console.log("searched value", demoDealers);
+            // console.log("searched value", demoDealers);
             this.setState({
                 dealers: demoDealers
             })
@@ -725,7 +725,7 @@ class Dealers extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                // console.log('Received values of form: ', values);
             }
         });
     }

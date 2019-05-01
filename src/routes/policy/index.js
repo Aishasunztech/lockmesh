@@ -179,7 +179,7 @@ class Policy extends Component {
 
     }
     componentDidMount() {
-        console.log(this.props, 'his')
+        // console.log(this.props, 'his')
         this.props.getPolicies();
         this.props.getPagination('policies');
         // this.props.getApkList();

@@ -332,7 +332,7 @@ class ConnectDevice extends Component {
     this.onBackHandler();
   }
   refreshDevice = (deviceId) => {
-    console.log(deviceId);
+    // console.log(deviceId);
     this.props.startLoading();
     // console.log("refreshDevice", this.props);
     //   this.props.getAccIdFromDvcId(deviceId);
