@@ -29,13 +29,9 @@ const initialState = {
     options: [ POLICY_NAME, POLICY_NOTE ],
     allExtensions: [],
     appPermissions: [],
-    systemPermissions: [
-    {name: "Wifi", value: true},
-    {name: "Bluetooth", value: false},
-    {name: "Screenshot", value: false},
-    {name: "Location", value: false},
-    {name: "Hotspot", value: false}]
-};
+    systemPermissions: {"wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false},
+    systemPermissionsdump: {"wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false}
+}
 
 export default (state = initialState, action) => {
 
@@ -61,8 +57,7 @@ export default (state = initialState, action) => {
                 ...state,
                 appPermissions: action.payload.appPermissions,
                 allExtensions: action.payload.extensions,
-                systemPermissions: [...state.systemPermissions]
-
+                systemPermissions: initialState.systemPermissionsdump
             }
         }
 
@@ -83,26 +78,20 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                dealer_apk_list: action.payload,
+                // dealer_apk_list: action.payload,
             }
         }
 
         case HANDLE_CHECK_SYSTEM_PERMISSIONS: {
            
-
             let changedState = state.systemPermissions;
-            // console.log(action.payload,'REDUCER INS PERMISDFAO', changedState)
-            for(let item of changedState){
-                if(item.name === action.payload.key){
-                    item.value = action.payload.value
-                }
-            }
+             console.log(changedState[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
+            changedState[action.payload.key] = action.payload.value
             state.systemPermissions = changedState;
             // console.log(changedState, 'relst')
-
             return {
                 ...state,
-                systemPermissions: [...state.systemPermissions],
+                systemPermissions: {...state.systemPermissions},
             }
         }
 
