@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -96,7 +96,7 @@ class AppList extends Component {
             return ({
                 key: app.app_id,
                 app_name:
-                    <div>
+                    <Fragment>
                         <Avatar
                             size={"small"}
                             src={`${BASE_URL}users/getFile/${app.icon}`}
@@ -104,7 +104,7 @@ class AppList extends Component {
                         />
                         <br />
                         <div className="line_break">{app.label}</div>
-                    </div>,
+                    </Fragment>,
                 guest: (this.props.isHistory === true) ?
                     (app.guest === 1 || app.guest === true) ?
                         (<span style={{ color: "green" }}>On</span>) :

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Col, Row, Switch, Table } from 'antd';
+import { Col, Row, Switch, Table, Avatar } from 'antd';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -7,6 +7,7 @@ import {
   handleCheckAllExtension
 
 } from "../../../appRedux/actions/ConnectDevice";
+import { BASE_URL } from '../../../constants/Application';
 
 import ExtensionDropdown from './ExtensionDropdown';
 
@@ -83,7 +84,18 @@ class SettingAppPermissions extends Component {
       return this.state.extension.subExtension.map((ext, index) => {
         return {
           key: index,
-          name: ext.label,
+          name: (
+            <Fragment>
+              <Avatar
+                size={"small"}
+                src={`${BASE_URL}users/getFile/${ext.icon}`}
+                style={{ backgroundColor: 'black' }}
+              // style={{ width: "30px", height: "30px" }} 
+              />
+              <br />
+              <div className="line_break">{ext.label}</div>
+            </Fragment>),
+          // name: ext.label,
           guest: <Switch checked={ext.guest === 1 ? true : false} size="small"
             onClick={(e) => {
               // console.log("guest", e);
