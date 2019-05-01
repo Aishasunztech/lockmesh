@@ -93,14 +93,6 @@ const RestService = {
         // return this.response;
     },
 
-    getUserType: () => {
-
-    },
-
-    transferDeviceProfile: (device_id) => {
-        return axios.post(BASE_URL + 'users/transfer/device_profile', { device_id: device_id }, RestService.getHeader());
-    },
-
     // getuserType
     getUserType: () => {
 
@@ -116,12 +108,16 @@ const RestService = {
 
     },
 
+    transferDeviceProfile: (device_id) => {
+        return axios.post(BASE_URL + 'users/transfer/device_profile', { device_id: device_id }, RestService.getHeader());
+    },
+
+
     // getDevices
     DeviceList: () => {
         return axios.get(BASE_URL + 'users/devices',
             RestService.getHeader()
         )
-
     },
 
     deleteUnlinkDevice: (action, devices) => {
@@ -187,6 +183,10 @@ const RestService = {
     getDeviceDetails: (device_id) => {
         //console.log('rest apoi')
         return axios.get(BASE_URL + 'users/connect/' + device_id, RestService.getHeader());
+    },
+
+    reSyncDevice: (deviceId) => {
+        return axios.patch(BASE_URL + 'users/sync-device', {device_id:deviceId}, RestService.getHeader());
     },
 
     savePolicy: (data) => {

@@ -794,3 +794,18 @@ export const getImeiHistory = (device_id) => {
         })
     }
 }
+export const reSyncDevice = (deviceId) => {
+    return (dispatch) => {
+        RestService.reSyncDevice(deviceId).then((response) => {
+            if(RestService.checkAuth(response.data)){
+                dispatch({
+                    type: "device_synced"
+                });
+            } else {
+                dispatch({
+                    type:INVALID_TOKEN
+                })
+            }
+        })
+    }
+}

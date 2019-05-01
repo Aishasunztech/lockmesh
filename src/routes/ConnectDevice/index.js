@@ -38,7 +38,8 @@ import {
   getImeiHistory,
   handleMainSettingCheck,
   handleControlCheck,
-  handleCheckAllExtension
+  handleCheckAllExtension,
+  reSyncDevice
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -346,6 +347,7 @@ class ConnectDevice extends Component {
     this.props.getPolicies(deviceId);
     this.props.getDeviceHistories(deviceId);
     this.props.getImeiHistory(deviceId);
+    this.props.reSyncDevice(deviceId);
     this.onBackHandler();
     setTimeout(() => {
       this.props.endLoading();
@@ -524,6 +526,7 @@ function mapDispatchToProps(dispatch) {
     handleControlCheck: handleControlCheck,
     handleCheckAllExtension: handleCheckAllExtension,
     handleMainSettingCheck: handleMainSettingCheck,
+    reSyncDevice: reSyncDevice,
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
