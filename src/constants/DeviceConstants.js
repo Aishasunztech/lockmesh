@@ -24,3 +24,4 @@ export const DEVICE_EXPIRY_DATE = 'EXPIRY DATE';
 export const DEVICE_DEALER_NAME = 'DEALER NAME';
 export const DEVICE_S_DEALER = 'S-DEALER';
 export const DEVICE_S_DEALER_NAME = 'S-DEALER NAME';
+export const USER_ID = 'USER ID';

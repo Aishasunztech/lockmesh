@@ -130,8 +130,7 @@ class Users extends Component {
 
     
     handleComponentSearch = (value) => {
-    //    console.log('values sr', value)
-
+    //    console.log('values sr', value)   
         try {
             if (value.length) {
             

@@ -122,7 +122,7 @@ class Permissions extends Component {
     // });
   }
   savePermission = () => {
-    console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
+    // console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
 
     if (this.state.dealer_ids.length) {
       this.props.dealerList.map((dealer) => {
@@ -141,7 +141,7 @@ class Permissions extends Component {
         })
       })
 
-      console.log(this.state.selectedRowKeys);
+      // console.log(this.state.selectedRowKeys);
       this.props.savePermission(this.props.record.policy_id, JSON.stringify(this.state.selectedRowKeys), 'save');
 
       this.showDealersModal(false);
@@ -152,7 +152,7 @@ class Permissions extends Component {
   }
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRowKeys, 'selected', selectedRows);
+    // console.log(selectedRowKeys, 'selected', selectedRows);
     let dealer_ids = []
     selectedRows.forEach(row => {
       // console.log("selected row", row)
@@ -228,12 +228,12 @@ class Permissions extends Component {
 
     let fieldName = e.target.name;
     let fieldValue = e.target.value;
-    console.log("fieldName", fieldName);
-    console.log("fieldValue", fieldValue);
-    console.log("global", global);
+    // console.log("fieldName", fieldName);
+    // console.log("fieldValue", fieldValue);
+    // console.log("global", global);
     if (global) {
       let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
-      console.log("searchedData", searchedData);
+      // console.log("searchedData", searchedData);
       this.setState({
         dealerList: searchedData
       });

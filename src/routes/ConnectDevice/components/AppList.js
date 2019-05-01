@@ -194,7 +194,7 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }, ownProps) => {
-    console.log(device_details.app_list, "applist ownprops", ownProps);
+    // console.log(device_details.app_list, "applist ownprops", ownProps);
     if (ownProps.isHistory !== undefined && ownProps.isHistory === true) {
         return {
             app_list: ownProps.app_list,

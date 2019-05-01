@@ -88,7 +88,7 @@ const data = [
 
 
     componentDidMount(){
-        console.log('did mount called')
+        // console.log('did mount called')
         this.props.getDealerApps();
         this.props.getAppPermissions();
         this.setState({
@@ -109,7 +109,7 @@ const data = [
     // }
 
     componentDidUpdate(prevProps){
-          console.log(this.props.allExtensions, 'add policy page data is ', prevProps.allExtensions);
+        //   console.log(this.props.allExtensions, 'add policy page data is ', prevProps.allExtensions);
         if(this.props !== prevProps){
             this.setState({
                 dealerApps: this.props.dealerApps,
@@ -122,10 +122,10 @@ const data = [
     }
 
     renderSystemPermissions = ()=> {
-        console.log(this.state.systemPermissions, 'permissions')
+        // console.log(this.state.systemPermissions, 'permissions')
         if(this.state.systemPermissions.length){
             return this.state.systemPermissions.map((item, index)=> {
-                console.log('object, ', item)
+                // console.log('object, ', item)
                 return{
                     rowKey: index,
                     name: item.name,
@@ -148,7 +148,7 @@ const data = [
 
     render() {
         const { current } = this.state;
-         console.log('console the applist', this.state.dealerApps);
+        //  console.log('console the applist', this.state.dealerApps);
          this.steps = [{
             title: 'SELECT APPS',
             Icon: <span className="step_counting">1</span>,
@@ -257,7 +257,7 @@ function mapDispatchToProps(dispatch){
 }
 
 var mapStateToProps = ({device_details, policies}) =>{
-     console.log('DEALER APPS LIST ', policies.systemPermissions)
+    //  console.log('DEALER APPS LIST ', policies.systemPermissions)
 return{
     dealerApps: policies.dealer_apk_list,
     appPermissions: policies.appPermissions,

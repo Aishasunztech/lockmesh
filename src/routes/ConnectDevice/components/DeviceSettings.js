@@ -150,7 +150,7 @@ export default class TableHistory extends Component {
     }
 
     renderData = (datalist) => {
-        console.log(this.props.extensionUniqueName, ' object', this.state.extensions);
+        // console.log(this.props.extensionUniqueName, ' object', this.state.extensions);
         if (datalist.length > 0) {
             return (
                 datalist.map((item, index) => {
@@ -167,7 +167,7 @@ export default class TableHistory extends Component {
     }
 
     render() {
-        console.log(this.props.extensions, 'data li s t of exte')
+        // console.log(this.props.extensions, 'data li s t of exte')
         return (
             <div>
                 {/* {

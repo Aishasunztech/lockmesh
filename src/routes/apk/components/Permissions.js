@@ -116,7 +116,7 @@ class Permissions extends Component {
     // });
   }
   savePermission = () => {
-    console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
+    // console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
 
     if (this.state.dealer_ids.length) {
       this.props.dealerList.map((dealer) => {
@@ -135,7 +135,7 @@ class Permissions extends Component {
         })
       })
 
-      console.log(this.state.selectedRowKeys);
+      // console.log(this.state.selectedRowKeys);
       this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
 
       this.showDealersModal(false);
@@ -146,7 +146,7 @@ class Permissions extends Component {
   }
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRowKeys, 'selected', selectedRows);
+    // console.log(selectedRowKeys, 'selected', selectedRows);
     let dealer_ids = []
     selectedRows.forEach(row => {
       // console.log("selected row", row)
@@ -292,9 +292,13 @@ class Permissions extends Component {
   renderDealer(list, permitted = false) {
     let data = [];
     console.log(list);
+    let is_included
     list.map((dealer) => {
       // console.log('object recrd', this.props.record.permissions);
-      let is_included = this.state.permissions.includes(dealer.dealer_id);
+      if(this.state.permissions){
+        is_included = this.state.permissions.includes(dealer.dealer_id);
+
+      }
       let common = {
         'key': dealer.dealer_id,
         'row_key': dealer.dealer_id,

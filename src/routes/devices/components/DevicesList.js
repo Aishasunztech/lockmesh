@@ -152,6 +152,7 @@ class DevicesList extends Component {
     }
     // renderList
     renderList(list) {
+        // console.log('list of dec', list)
         return list.map((device, index) => {
             // console.log('tab Select is: ', this.props.tabselect)
 
@@ -225,6 +226,7 @@ class DevicesList extends Component {
                 flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
                 device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+                user_id: checkValue(device.user_id),                
                 validity: checkValue(device.validity),
                 name: checkValue(device.name),
                 account_email: checkValue(device.account_email),
@@ -270,12 +272,12 @@ class DevicesList extends Component {
     }
 
     deleteAllUnlinkedDevice = (type) => {
-        console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
+        // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
 
         if (this.state.selectedRowKeys.length) {
             let title = ' Are you sure, you want to delete All these devices';
             let arr = [];
-            console.log('delete the device', this.state.selectedRowKeys);
+            // console.log('delete the device', this.state.selectedRowKeys);
             for (let id of this.state.selectedRowKeys) {
                 for (let device of this.props.devices) {
                     // console.log(id, device.id);
@@ -302,7 +304,7 @@ class DevicesList extends Component {
                 this.props.deleteUnlinkDevice(action, devices);
                 //    this.props.resetTabSelected()
                 // this.props.refreshComponent();
-                console.log('this.refs.tablelist.props.rowSelection', this.refs.tablelist.props.rowSelection)
+                // console.log('this.refs.tablelist.props.rowSelection', this.refs.tablelist.props.rowSelection)
                 this.resetSeletedRows();
                 if (this.refs.tablelist.props.rowSelection !== null) {
                     this.refs.tablelist.props.rowSelection.selectedRowKeys = []
@@ -323,7 +325,7 @@ class DevicesList extends Component {
     }
 
     resetSeletedRows = () => {
-        console.log('table ref', this.refs.tablelist)
+        // console.log('table ref', this.refs.tablelist)
         this.setState({
             selectedRowKeys: [],
             selectedRows: [],
@@ -349,7 +351,7 @@ class DevicesList extends Component {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
-                    console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                    // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 },
                 getCheckboxProps: record => ({
                     disabled: record.name === 'Disabled User', // Column configuration not to be checked

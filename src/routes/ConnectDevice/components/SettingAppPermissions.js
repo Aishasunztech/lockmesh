@@ -66,7 +66,7 @@ class SettingAppPermissions extends Component {
 
   handleCheckedAll = (key, value) => {
 
-    console.log("handleCheckedAll");
+    // console.log("handleCheckedAll");
     if (key === "guestAllExt") {
       this.props.handleCheckAllExtension(key, 'guest', value, this.props.pageName);
     } else if (key === "encryptedAllExt") {
@@ -102,7 +102,7 @@ class SettingAppPermissions extends Component {
   }
   render() {
     const { extension, isExtension } = this.props;
-    console.log('extenion ate is', extension)
+    // console.log('extenion ate is', extension)
     if (isExtension) {
       return (
         <Fragment>
@@ -173,7 +173,7 @@ var mapStateToProps = ({ device_details }, ownProps) => {
   const pageName = ownProps.pageName;
 
   let extension = device_details.extensions.find(o => o.uniqueName === pageName);
-  console.log("extensions_", device_details.secureSettingsMain);
+  // console.log("extensions_", device_details.secureSettingsMain);
 
   if (extension !== undefined) {
     return {

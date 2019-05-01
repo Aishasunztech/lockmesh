@@ -53,14 +53,15 @@ import {
     DEVICE_EXPIRY_DATE,
     DEVICE_DEALER_NAME,
     DEVICE_S_DEALER,
-    DEVICE_S_DEALER_NAME
+    DEVICE_S_DEALER_NAME,
+    USER_ID
 } from '../../constants/DeviceConstants';
 
-import { 
-    getDropdown, 
-    postDropdown, 
-    postPagination, 
-    getPagination 
+import {
+    getDropdown,
+    postDropdown,
+    postPagination,
+    getPagination
 } from '../../appRedux/actions/Common';
 
 import {
@@ -108,7 +109,7 @@ class Devices extends Component {
             //     // sortDirections: ['ascend', 'descend'],
             //     defaultSortOrder: 'ascend'
             // },
-            
+
             {
                 title: (
                     <Input.Search
@@ -118,7 +119,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_REMAINING_DAYS)}
+                        placeholder={titleCase(DEVICE_REMAINING_DAYS)}
                     />
                 ),
                 dataIndex: 'validity',
@@ -144,7 +145,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_ID)}
+                        placeholder={titleCase(DEVICE_ID)}
                     />
                 ),
                 dataIndex: 'device_id',
@@ -160,6 +161,31 @@ class Devices extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],
+            }, {
+                title: (
+                    <Input.Search
+                        name="user_id"
+                        key="user_id"
+                        id="user_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(USER_ID)}
+                    />
+                ),
+                dataIndex: 'user_id',
+                className: '',
+                children: [
+                    {
+                        title: USER_ID,
+                        align: "center",
+                        dataIndex: 'user_id',
+                        key: "user_id",
+                        className: '',
+                        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ],
             },
             {
                 title: (
@@ -170,7 +196,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_STATUS)}
+                        placeholder={titleCase(DEVICE_STATUS)}
                     />
                 ),
                 dataIndex: 'status',
@@ -198,7 +224,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_MODE)}
+                        placeholder={titleCase(DEVICE_MODE)}
                     />
                 ),
                 dataIndex: 'online',
@@ -225,7 +251,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_FLAGGED)}
+                        placeholder={titleCase(DEVICE_FLAGGED)}
                     />
                 ),
                 dataIndex: 'flagged',
@@ -253,7 +279,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_NAME)}
+                        placeholder={titleCase(DEVICE_NAME)}
 
                     />
                 ),
@@ -283,7 +309,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_ACCOUNT_EMAIL)}
+                        placeholder={titleCase(DEVICE_ACCOUNT_EMAIL)}
                     />
                 ),
                 dataIndex: 'account_email',
@@ -310,7 +336,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_PGP_EMAIL)}
+                        placeholder={titleCase(DEVICE_PGP_EMAIL)}
                     />
                 ),
                 dataIndex: 'pgp_email',
@@ -335,7 +361,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_ACTIVATION_CODE)}
+                        placeholder={titleCase(DEVICE_ACTIVATION_CODE)}
                     />
                 ),
                 dataIndex: 'activation_code',
@@ -360,7 +386,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_CHAT_ID)}
+                        placeholder={titleCase(DEVICE_CHAT_ID)}
                     />
                 ),
                 dataIndex: 'chat_id',
@@ -387,7 +413,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_CLIENT_ID)}
+                        placeholder={titleCase(DEVICE_CLIENT_ID)}
                     />
                 ),
                 dataIndex: 'client_id',
@@ -413,7 +439,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_DEALER_ID)}
+                        placeholder={titleCase(DEVICE_DEALER_ID)}
                     />
                 ),
                 dataIndex: 'dealer_id',
@@ -438,7 +464,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_DEALER_NAME)}
+                        placeholder={titleCase(DEVICE_DEALER_NAME)}
                     />
                 ),
                 dataIndex: 'dealer_name',
@@ -464,7 +490,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_DEALER_PIN)}
+                        placeholder={titleCase(DEVICE_DEALER_PIN)}
                     />
                 ),
                 dataIndex: 'dealer_pin',
@@ -490,7 +516,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_MAC_ADDRESS)}
+                        placeholder={titleCase(DEVICE_MAC_ADDRESS)}
                     />
                 ),
                 dataIndex: 'mac_address',
@@ -516,7 +542,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_SIM_ID)}
+                        placeholder={titleCase(DEVICE_SIM_ID)}
                     />
                 ),
                 dataIndex: 'sim_id',
@@ -541,7 +567,7 @@ class Devices extends Component {
                         id="imei"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_IMEI_1)}
+                        placeholder={titleCase(DEVICE_IMEI_1)}
                         onKeyUp={this.handleSearch}
                     />
                 ),
@@ -568,7 +594,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_SIM_1)}
+                        placeholder={titleCase(DEVICE_SIM_1)}
                     />
                 ),
                 className: '',
@@ -594,7 +620,7 @@ class Devices extends Component {
                         id="imei2"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_IMEI_2)}
+                        placeholder={titleCase(DEVICE_IMEI_2)}
                         onKeyUp={this.handleSearch}
                     />
                 ),
@@ -621,7 +647,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_SIM_2)}
+                        placeholder={titleCase(DEVICE_SIM_2)}
                     />
                 ),
                 dataIndex: 'sim_2',
@@ -647,7 +673,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_SERIAL_NUMBER)}
+                        placeholder={titleCase(DEVICE_SERIAL_NUMBER)}
                     />
                 ),
                 dataIndex: 'serial_number',
@@ -674,7 +700,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_MODEL)}
+                        placeholder={titleCase(DEVICE_MODEL)}
                     />
                 ),
                 dataIndex: 'model',
@@ -701,7 +727,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_S_DEALER)}
+                        placeholder={titleCase(DEVICE_S_DEALER)}
                     />
                 ),
                 dataIndex: 's_dealer',
@@ -727,7 +753,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_S_DEALER_NAME)}
+                        placeholder={titleCase(DEVICE_S_DEALER_NAME)}
                     />
                 ),
                 dataIndex: 's_dealer_name',
@@ -752,7 +778,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_START_DATE)}
+                        placeholder={titleCase(DEVICE_START_DATE)}
                     />
                 ),
                 dataIndex: 'start_date',
@@ -777,7 +803,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder= {titleCase(DEVICE_EXPIRY_DATE)}
+                        placeholder={titleCase(DEVICE_EXPIRY_DATE)}
                     />
                 ),
                 dataIndex: 'expiry_date',
@@ -795,7 +821,7 @@ class Devices extends Component {
                 ]
             },
         ];
-        
+
         this.state = {
             columns: columns,
             searchText: '',
@@ -829,40 +855,50 @@ class Devices extends Component {
     }
 
     handleChange(value) {
-        // alert('value');
-        // alert(value);
-        // value = value.toLowerCase();
-        if(value == DEVICE_UNLINKED){
-            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
-           if(indx > 0){ this.state.columns.splice(indx, 1)}
-           
-        }else{
-            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
-            if(indx < 0 )
-            {
-                this.state.columns.splice(1, 0,{
+
+        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+        let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
+        if (value == DEVICE_UNLINKED && this.props.user.type == ADMIN) {
+            //  indx = this.state.columns.findIndex(k => k.dataIndex =='action');
+            if (indxAction >= 0) { this.state.columns.splice(indxAction, 1) }
+            //    console.log('CLGGGG', this.state.columns)
+
+        } else {
+            if (indxAction < 0) {
+                this.state.columns.splice(1, 0, {
+                    title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
                     dataIndex: 'action',
                     align: 'center',
                     className: 'row',
                     width: 800,
+
                 })
             }
         }
-        // console.log('clollolol',this.state.columns);
-        if (value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
-            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')}>Delete Selected</Button>
-        }
 
+        if (value == DEVICE_UNLINKED && (this.props.user.type != ADMIN)) {
+            // console.log('tab 5', this.state.columns);
+            this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
+        }
         else if (value == DEVICE_PRE_ACTIVATION) {
-            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
-            this.state.columns[2].className = '';
-            this.state.columns[2].children[0].className = '';
+        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            // console.log('index of 3 tab', indxRemainingDays)
+            if (indxAction >= 0) {
+                this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+            }
+            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
+                this.state.columns[indxRemainingDays].className = '';
+                this.state.columns[indxRemainingDays].children[0].className = '';
+            }
         }
         else {
-            this.state.columns[1]['title'] = ''
-            this.state.columns[2].className = 'hide';
-            this.state.columns[2].children[0].className = 'hide';
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            this.state.columns[1]['title'] = '';
 
+            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
+                this.state.columns[indxRemainingDays].className = 'hide';
+                this.state.columns[indxRemainingDays].children[0].className = 'hide';
+            }
         }
 
         switch (value) {
@@ -938,56 +974,49 @@ class Devices extends Component {
 
     handleChangetab = (value) => {
 
-        // alert('value');
-        // alert(value);
+        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+        let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
+        if (value == '5' && this.props.user.type == ADMIN) {
+            //  indx = this.state.columns.findIndex(k => k.dataIndex =='action');
+            if (indxAction >= 0) { this.state.columns.splice(indxAction, 1) }
+            //    console.log('CLGGGG', this.state.columns)
 
-        // console.log('selsect', this.props.selectedOptions)
-        // let type = value.toLowerCase();
-      
-     
-        if(value == '5' && this.props.user.type == ADMIN){
-            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
-           if(indx >= 0){ this.state.columns.splice(indx, 1)}
-           
-        }else{
-            let indx = this.state.columns.findIndex(k => k.dataIndex =='action');
-            if(indx < 0 )
-            {
-                this.state.columns.splice(1, 0,{
-                    title : <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
+        } else {
+            if (indxAction < 0) {
+                this.state.columns.splice(1, 0, {
+                    title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
                     dataIndex: 'action',
                     align: 'center',
                     className: 'row',
                     width: 800,
 
                 })
-            }    
+            }
         }
 
         if (value == '5' && (this.props.user.type != ADMIN)) {
             // console.log('tab 5', this.state.columns);
-            this.state.columns[1]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
-
+            this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
         else if (value == '3') {
-            let indx = this.state.columns.findIndex(k => k.title == DEVICE_REMAINING_DAYS);
-            let indx2 = this.state.columns.findIndex(k => k.dataIndex == 'action');
-            console.log(indx,'index ro 3', indx2)
-            if( indx2 >= 0){
-                this.state.columns[indx2]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            // console.log('index of 3 tab', indxRemainingDays)
+            if (indxAction >= 0) {
+                this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
             }
-            if(indx >= 0 ){
-                this.state.columns[indx].className = '';
-                this.state.columns[indx].children[0].className = '';
+            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
+                this.state.columns[indxRemainingDays].className = '';
+                this.state.columns[indxRemainingDays].children[0].className = '';
             }
-      
         }
         else {
-            // console.log('else is called');
-            this.state.columns[1]['title'] = ''
-            this.state.columns[2].className = 'hide';
-            this.state.columns[2].children[0].className = 'hide';
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            this.state.columns[1]['title'] = '';
 
+            if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
+                this.state.columns[indxRemainingDays].className = 'hide';
+                this.state.columns[indxRemainingDays].children[0].className = 'hide';
+            }
         }
 
         // console.log(this.state.columns, 'colll')
@@ -1099,13 +1128,13 @@ class Devices extends Component {
                 values.map((value) => {
                     if (column.className !== 'row') {
                         if (column.children[0].title === value) {
-                            if(this.state.tabselect !== '3'){
-                            if(column.children[0].title !== 'REMAINING DAYS'){
+                            if (this.state.tabselect !== '3') {
+                                if (column.children[0].title !== 'REMAINING DAYS') {
                                     dumydata[index].className = '';
                                     dumydata[index].children[0].className = '';
+                                }
                             }
-                        }
-                            else{
+                            else {
                                 dumydata[index].className = '';
                                 dumydata[index].children[0].className = '';
                             }
@@ -1153,7 +1182,7 @@ class Devices extends Component {
     handlePagination = (value) => {
         //  alert(value);
         //  console.log('pagination value of ', value)
-         this.refs.devcieList.handlePagination(value);
+        this.refs.devcieList.handlePagination(value);
         this.props.postPagination(value, 'devices');
     }
     componentDidMount() {
@@ -1295,31 +1324,31 @@ class Devices extends Component {
 
 
     handleSearch = (e) => {
-        console.log('============ check search value ========')
-        console.log(e.target.name , e.target.value);
+        // console.log('============ check search value ========')
+        // console.log(e.target.name , e.target.value);
 
         let demoDevices = [];
         if (status) {
             coppyDevices = this.state.devices;
             status = false;
         }
-          console.log("devices", coppyDevices);
+        //   console.log("devices", coppyDevices);
 
         if (e.target.value.length) {
             // console.log("keyname", e.target.name);
             // console.log("value", e.target.value);
             // console.log(this.state.devices);
             coppyDevices.forEach((device) => {
-                 console.log("device", device[e.target.name] !== undefined);
+                //  console.log("device", device[e.target.name] !== undefined);
 
                 if (device[e.target.name] !== undefined) {
                     if ((typeof device[e.target.name]) === 'string') {
-                         console.log("string check", device[e.target.name])
+                        console.log("string check", device[e.target.name])
                         if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
                     } else if (device[e.target.name] != null) {
-                         console.log("else null check", device[e.target.name])
+                        console.log("else null check", device[e.target.name])
                         if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
@@ -1330,7 +1359,7 @@ class Devices extends Component {
                     demoDevices.push(device);
                 }
             });
-             console.log("searched value", demoDevices);
+            //  console.log("searched value", demoDevices);
             this.setState({
                 devices: demoDevices
             })
@@ -1368,7 +1397,7 @@ function mapDispatchToProps(dispatch) {
 
 var mapStateToProps = ({ devices, auth }) => {
     //   console.log('devices AUTH', devices.devices);
-    //  console.log('devices is', devices);
+    //   console.log(devices.options,'devices OPTION', devices.selectedOptions);
     return {
         devices: devices.devices,
         msg: devices.msg,

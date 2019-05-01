@@ -292,7 +292,7 @@ class ConnectDevice extends Component {
   }
   applyActions = () => {
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
-    console.log(this.props.extensions,'index of ex', objIndex);
+    // console.log(this.props.extensions,'index of ex', objIndex);
     let app_list = this.props.app_list;
     if(objIndex >= 0) {
 
@@ -307,7 +307,7 @@ class ConnectDevice extends Component {
       // app_list.push(obData);
       // app_list.push(this.props.controls.settings)
     }
-    console.log("hello", this.props.controls.controls);
+    // console.log("hello", this.props.controls.controls);
     this.props.applySetting(
       app_list, {
         adminPwd: this.props.adminPwd,
@@ -326,7 +326,7 @@ class ConnectDevice extends Component {
    let deviceId = atob(this.props.match.params.device_id);
     this.props.getDeviceApps(deviceId)
 
-    console.log('app after push ', app_list)
+    // console.log('app after push ', app_list)
   }
   componentWillUnmount() {
     this.onBackHandler();
@@ -353,7 +353,7 @@ class ConnectDevice extends Component {
   }
   undoAction = () => {
     let pageName = this.props.pageName;
-    console.log('undo ext', pageName)
+    // console.log('undo ext', pageName)
 
     if (pageName === APPS) {
       this.props.undoApplications()
@@ -367,7 +367,7 @@ class ConnectDevice extends Component {
   redoAction = () => {
 
     let pageName = this.props.pageName;
-    console.log('redo', pageName)
+    // console.log('redo', pageName)
     if (pageName === APPS) {
       this.props.redoApplications()
     } else if (pageName === SECURE_SETTING) {
