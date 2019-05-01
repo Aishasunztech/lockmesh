@@ -27,9 +27,8 @@ class EditDevice extends Component {
         }
     }
     handleUserChange = (e) => {
-        console.log(e)
+        // console.log(e)
         this.setState({ addNewUserValue: e });
-
     }
 
     handleSubmit = (e) => {
@@ -37,7 +36,7 @@ class EditDevice extends Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log("Device List", values)
+                // console.log("Device List", values)
                 values.prevPGP = this.props.device.pgp_email;
                 values.finalStatus = this.props.device.finalStatus;
                 // console.log("Device Details ", values)

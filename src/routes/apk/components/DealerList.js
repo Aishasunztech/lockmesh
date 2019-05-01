@@ -6,7 +6,7 @@ import { Input, Modal, Select, Table } from "antd";
 
 const DealerList = (props) => {
     // let selectedDealers = props.selectedDealers;
-    console.log(props.selectedRows);
+    // console.log(props.selectedRows);
     const rowSelection = {
         // selectedDealers,
         onChange: props.onSelectChange,

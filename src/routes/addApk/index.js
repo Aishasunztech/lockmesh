@@ -130,7 +130,7 @@ class AddApkForm extends Component {
                     // console.log(info.file, info.fileList);
                 }
                 if (status === 'done') {
-                    console.log(info.file.response);
+                    // console.log(info.file.response);
                     
                     if (info.file.response.status !== false) {
                         disableLogo = true;
@@ -168,7 +168,7 @@ class AddApkForm extends Component {
                 if (status === 'done') {
                     
                     if (info.file.response.status !== false) {
-                        console.log(info.file.response);
+                        // console.log(info.file.response);
 
                         disableApk = true;
 

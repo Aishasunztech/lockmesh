@@ -34,7 +34,7 @@ export default class SystemControls extends Component {
   }
 
   componentDidUpdate(prevProps){
-    console.log(prevProps.controls, 'testig sdf')
+    // console.log(prevProps.controls, 'testig sdf')
     if(this.props !== prevProps){
       this.setState({
         controls: this.props.controls.controls,
@@ -44,7 +44,7 @@ export default class SystemControls extends Component {
   }
 
   componentWillReceiveProps(nextprops) {
-console.log('new props', nextprops)
+    // console.log('new props', nextprops)
     if (this.props.controls && (this.props.controls !== nextprops.controls)) {
       // alert("hello");
       // console.log(nextprops.secureSettingsMain, 'secureSettingsMain')
@@ -82,7 +82,7 @@ console.log('new props', nextprops)
                   <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                     <span>Guest</span>
                     <Switch onClick={(e) => {
-                       console.log("guest", e , this.state.settings[objindex]);
+                      //  console.log("guest", e , this.state.settings[objindex]);
                       this.handleMainSettingCheck(e, "guest");
                     }} checked={this.state.settings[objindex].guest === 1 || this.state.settings[objindex].guest === true ? true : false} size="small" />
                   </div>

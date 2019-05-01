@@ -56,7 +56,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_APPS_PERMISSIONS: {
-            console.log('data permissions', action.payload)
+            // console.log('data permissions', action.payload)
             return {
                 ...state,
                 appPermissions: action.payload.appPermissions,
@@ -91,14 +91,14 @@ export default (state = initialState, action) => {
            
 
             let changedState = state.systemPermissions;
-            console.log(action.payload,'REDUCER INS PERMISDFAO', changedState)
+            // console.log(action.payload,'REDUCER INS PERMISDFAO', changedState)
             for(let item of changedState){
                 if(item.name === action.payload.key){
                     item.value = action.payload.value
                 }
             }
             state.systemPermissions = changedState;
-            console.log(changedState, 'relst')
+            // console.log(changedState, 'relst')
 
             return {
                 ...state,
@@ -108,13 +108,13 @@ export default (state = initialState, action) => {
 
  
         case HANDLE_CHECK_APP_POLICY: {
-            console.log('reducer', action.payload);
+            // console.log('reducer', action.payload);
             if(action.payload.stateToUpdate === 'allExtensions'){
 
                     let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
         
                     changedExtensions.forEach(extension => {
-                        console.log(extension.uniqueName, '===', action.payload.uniqueName)
+                        // console.log(extension.uniqueName, '===', action.payload.uniqueName)
                         if (extension.uniqueName === action.payload.uniqueName) {
                             let objIndex = extension.subExtension.findIndex((obj => obj.id === action.payload.app_id));
                             if (objIndex > -1) {
@@ -140,7 +140,7 @@ export default (state = initialState, action) => {
             else if(action.payload.stateToUpdate === 'dealerApps'){
                 let changedApps = JSON.parse(JSON.stringify(state.dealer_apk_list));
                 changedApps.forEach(app => {
-                    console.log(app.app_id,'====', action.payload.app_id)
+                    // console.log(app.app_id,'====', action.payload.app_id)
                     if (app.apk_id === action.payload.app_id) {
                         app.isChanged = true;
                         app[action.payload.key] = action.payload.value;
@@ -165,7 +165,7 @@ export default (state = initialState, action) => {
             else if(action.payload.stateToUpdate === 'appPermissions'){
                 let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
                 changedApps.forEach(app => {
-                    console.log(app.id,'====', action.payload.app_id ,app)
+                    // console.log(app.id,'====', action.payload.app_id ,app)
                     if (app.id === action.payload.app_id) {
                         app.isChanged = true;
                         app[action.payload.key] = action.payload.value;
@@ -192,7 +192,7 @@ export default (state = initialState, action) => {
         case PERMSSION_SAVED: {
 			message.success(action.payload);
 			let dealers = JSON.parse(action.dealers)
-			console.log(dealers.length ,'itrititt',action.apk_id);
+			// console.log(dealers.length ,'itrititt',action.apk_id);
 			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
 			state.apk_list[objIndex].permission_count = action.permission_count;
 			

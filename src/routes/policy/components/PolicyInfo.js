@@ -47,7 +47,7 @@ export default class PolicyInfo extends Component {
         if(this.state.policy.controls){
             if(this.state.policy.controls.length){
                 return this.state.policy.controls.map((item, index)=> {
-                    console.log('object, ', item)
+                    // console.log('object, ', item)
                     return{
                         rowKey: index,
                         name: item.name,
@@ -82,7 +82,7 @@ export default class PolicyInfo extends Component {
     }
 
     render() {
-        console.log('info list is ', this.props.policy.push_apps)
+        // console.log('info list is ', this.props.policy.push_apps)
 
         const PolicyDetail = [{
             key:1,

@@ -124,20 +124,20 @@ module.exports = {
         })
         return foundDevices;
     },
-    initCap: (str) =>{
-        return str.replace(/^\w/, function (chr) { return chr.toUpperCase()})
+    initCap: (str) => {
+        return str.replace(/^\w/, function (chr) { return chr.toUpperCase() })
     },
-    titleCase: (str) =>{
+    titleCase: (str) => {
         var wordsArray = str.toLowerCase().split(/\s+/);
-        var upperCased = wordsArray.map(function(word) {
-          return word.charAt(0).toUpperCase() + word.substr(1);
+        var upperCased = wordsArray.map(function (word) {
+            return word.charAt(0).toUpperCase() + word.substr(1);
         });
         return upperCased.join(" ");
     },
     checkRemainDays: (createDate, validity) => {
         var validDays = 0, createdDateTime, today, days;
-            if (validity != null) validDays = validity;
-            
+        if (validity != null) validDays = validity;
+
         createdDateTime = new Date(createDate);
         createdDateTime.setDate(createdDateTime.getDate() + validDays);
         today = new Date();
@@ -146,70 +146,69 @@ module.exports = {
         if (days <= 0) return "Expire"; else return days;
     },
 
-    dealerColsWithSearch: (searchBar = false, Input, method= true) => {
-        console.log("intd", );
-var a = [{
-    //   title: (
-    //     <antd.Input.Search
-    //       name="link_code"
-    //       key="link_code"
-    //       id="link_code"
-    //       className="search_heading"
-    //       autoComplete="new-password"
-    //       placeholder="Dealer Pin"
-
-    //     />
-    //   ),
-    // title: (<h1>hello</h1>),
-      dataIndex: 'link_code',
-      className: '',
-      children: [
-        {
-          title: 'DEALER PIN',
-          dataIndex: 'link_code',
-          key: 'link_code',
-
-          sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
-          align: 'center',
-          sortDirections: ['ascend', 'descend'],
-          className: '',
-        }
-      ]
-    },
-]
-        var addDealerCols = [
-            { 
+    dealerColsWithSearch: (searchBar = false, Input, method = true) => {
+        var a = [{
             //   title: (
-            //     <Input.Search
-            //       name="dealer_id"
-            //       key="dealer_id"
-            //       id="dealer_id"
+            //     <antd.Input.Search
+            //       name="link_code"
+            //       key="link_code"
+            //       id="link_code"
             //       className="search_heading"
             //       autoComplete="new-password"
-            //       placeholder="Device ID"
-            //       onKeyUp={
-            //         (e) => {
-            //           this.handleSearch(e)
-            //         }
-            //       }
-      
+            //       placeholder="Dealer Pin"
+
             //     />
             //   ),
-            //   dataIndex: 'dealer_id',
-            //   className: '',
-            //   children: [
-            //     {
-            //       title: 'DEALER ID',
-            //       dataIndex: 'dealer_id',
-            //       key: 'dealer_id',
-            //       sortDirections: ['ascend', 'descend'],
-            //       sorter: (a, b) => a.dealer_id - b.dealer_id,
-            //       align: 'center',
-            //       sortDirections: ['ascend', 'descend'],
-            //       className: '',
-            //     }
-            //   ]
+            // title: (<h1>hello</h1>),
+            dataIndex: 'link_code',
+            className: '',
+            children: [
+                {
+                    title: 'DEALER PIN',
+                    dataIndex: 'link_code',
+                    key: 'link_code',
+
+                    sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+
+                    align: 'center',
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
+        },
+        ]
+        var addDealerCols = [
+            {
+                //   title: (
+                //     <Input.Search
+                //       name="dealer_id"
+                //       key="dealer_id"
+                //       id="dealer_id"
+                //       className="search_heading"
+                //       autoComplete="new-password"
+                //       placeholder="Device ID"
+                //       onKeyUp={
+                //         (e) => {
+                //           this.handleSearch(e)
+                //         }
+                //       }
+
+                //     />
+                //   ),
+                //   dataIndex: 'dealer_id',
+                //   className: '',
+                //   children: [
+                //     {
+                //       title: 'DEALER ID',
+                //       dataIndex: 'dealer_id',
+                //       key: 'dealer_id',
+                //       sortDirections: ['ascend', 'descend'],
+                //       sorter: (a, b) => a.dealer_id - b.dealer_id,
+                //       align: 'center',
+                //       sortDirections: ['ascend', 'descend'],
+                //       className: '',
+                //     }
+                //   ]
             },
             // {
             //   title: (
@@ -225,7 +224,7 @@ var a = [{
             //           this.handleSearch(e)
             //         }
             //       }
-      
+
             //     />
             //   ),
             //   dataIndex: 'link_code',
@@ -235,9 +234,9 @@ var a = [{
             //       title: 'DEALER PIN',
             //       dataIndex: 'link_code',
             //       key: 'link_code',
-      
+
             //       sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-      
+
             //       align: 'center',
             //       sortDirections: ['ascend', 'descend'],
             //       className: '',
@@ -258,7 +257,7 @@ var a = [{
             //           this.handleSearch(e)
             //         }
             //       }
-      
+
             //     />
             //   ),
             //   dataIndex: 'dealer_name',
@@ -274,7 +273,7 @@ var a = [{
             //       //     return a.dealer_name.length;
             //       // },
             //       sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-      
+
             //       align: 'center',
             //       sortDirections: ['ascend', 'descend'],
             //       className: '',
@@ -295,7 +294,7 @@ var a = [{
             //           this.handleSearch(e)
             //         }
             //       }
-      
+
             //     />
             //   ),
             //   dataIndex: 'dealer_email',
@@ -311,107 +310,107 @@ var a = [{
             //       //     return a.dealer_email.length;
             //       // },
             //       sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-      
+
             //       align: 'center',
             //       sortDirections: ['ascend', 'descend'],
             //       className: '',
             //     }
             //   ]
             // },
-      
-          ]
-    
+
+        ]
+
 
         var listDealerCols = [
             {
-              title: 'DEALER ID',
-              dataIndex: 'dealer_id',
-              key: 'dealer_id',      
-              sorter: (a, b) => a.dealer_id - b.dealer_id,
-              align: 'center',
-              sortDirections: ['ascend', 'descend'],
-              className: '',
+                title: 'DEALER ID',
+                dataIndex: 'dealer_id',
+                key: 'dealer_id',
+                sorter: (a, b) => a.dealer_id - b.dealer_id,
+                align: 'center',
+                sortDirections: ['ascend', 'descend'],
+                className: '',
             },
             {
-              title: 'DEALER PIN',
-              dataIndex: 'link_code',
-              key: 'link_code',
-      
-              sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-      
-              align: 'center',
-              sortDirections: ['ascend', 'descend'],
-              className: '',
+                title: 'DEALER PIN',
+                dataIndex: 'link_code',
+                key: 'link_code',
+
+                sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+
+                align: 'center',
+                sortDirections: ['ascend', 'descend'],
+                className: '',
             },
             {
-              title: 'DEALER NAME',
-              dataIndex: 'dealer_name',
-              key: 'dealer_name',
-      
-              sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-      
-              align: 'center',
-              sortDirections: ['ascend', 'descend'],
-              className: '',
+                title: 'DEALER NAME',
+                dataIndex: 'dealer_name',
+                key: 'dealer_name',
+
+                sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+
+                align: 'center',
+                sortDirections: ['ascend', 'descend'],
+                className: '',
             },
             {
-              title: 'DEALER EMAIL',
-              dataIndex: 'dealer_email',
-              key: 'dealer_email',
-      
-              sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-      
-              align: 'center',
-              sortDirections: ['ascend', 'descend'],
-              className: '',
+                title: 'DEALER EMAIL',
+                dataIndex: 'dealer_email',
+                key: 'dealer_email',
+
+                sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+
+                align: 'center',
+                sortDirections: ['ascend', 'descend'],
+                className: '',
             },
             {
-              title: 'ACTION',
-              dataIndex: 'action',
-              key: 'action',
-              align: 'center',
-              className: '',
+                title: 'ACTION',
+                dataIndex: 'action',
+                key: 'action',
+                align: 'center',
+                className: '',
             },
-      
-          ];
 
-          if(searchBar) {
+        ];
 
-            }else {
-                return listDealerCols;
-            }
+        if (searchBar) {
 
-          console.log('chile Arary')
-          console.log(JSON.stringify(listDealerCols));
+        } else {
+            return listDealerCols;
+        }
+
+        // console.log('chile Arary')
+        // console.log(JSON.stringify(listDealerCols));
 
 
-    //     // if(searchBar){
-    //     //     console.log('with Search');
-    //     //     console.log(JSON.stringify(search))
+        //     // if(searchBar){
+        //     //     console.log('with Search');
+        //     //     console.log(JSON.stringify(search))
 
-    //     //     console.log('child array: ');
-    //     //     console.log(child)
+        //     //     console.log('child array: ');
+        //     //     console.log(child)
 
-    //     //     console.log('after update for search ');
-    //     //     var result = search.map((item,index) => {
-    //     //         let flag= true;              
-    //     //         for (var i in child) {
-    //     //             if (child[i].dataIndex == item.dataIndex) {
-    //     //                item.children = [child[i]];
-    //     //                flag = false;
-    //     //                return item;
-    //     //             }
-    //     //           }
-    //     //           if(flag == true) {
-    //     //               return item;
-    //     //           }
-    //     //     })
+        //     //     console.log('after update for search ');
+        //     //     var result = search.map((item,index) => {
+        //     //         let flag= true;              
+        //     //         for (var i in child) {
+        //     //             if (child[i].dataIndex == item.dataIndex) {
+        //     //                item.children = [child[i]];
+        //     //                flag = false;
+        //     //                return item;
+        //     //             }
+        //     //           }
+        //     //           if(flag == true) {
+        //     //               return item;
+        //     //           }
+        //     //     })
 
-    //     //     console.log('result is: ')
-    //     //     console.log(result);
-    //     // } else {
-    //     //     console.log('search false hai');
-    //     //     console.log(JSON.stringify(child))
-    //     // }
+        //     //     console.log('result is: ')
+        //     //     console.log(result);
+        //     // } else {
+        //     //     console.log('search false hai');
+        //     //     console.log(JSON.stringify(child))
+        //     // }
     },
 }

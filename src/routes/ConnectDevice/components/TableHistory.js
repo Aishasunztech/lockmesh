@@ -18,7 +18,7 @@ import {
 
 const renderList= (histories, type, callback ) => {
     return histories.map((history) => {
-        console.log("list", history.app_list);
+        // console.log("list", history.app_list);
 
         return ({
             key: history.id,
@@ -64,7 +64,7 @@ const renderColumn = (type) => {
 }
 
 const TableHistory = (props) => {
-    console.log("props", props);
+    // console.log("props", props);
     
     return (
         <Table
@@ -76,14 +76,14 @@ const TableHistory = (props) => {
             dataSource={renderList(props.histories, props.type, props.applyHistory)}
             pagination={false}
             expandedRowRender={record => {
-                console.log("record", record);
+                // console.log("record", record);
 
                 let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
                 let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
                 let controls = (Object.entries(record.controls).length > 0 && record.controls.constructor === Object && record.controls !== undefined && record.controls !== null && record.controls !== '') ? record.controls : [];
-                console.log("app_list: ", app_list);
-                console.log("extensions: ", extensions);
-                console.log("controls: ", controls);
+                // console.log("app_list: ", app_list);
+                // console.log("extensions: ", extensions);
+                // console.log("controls: ", controls);
             
                 return (
                     <DeviceSettings

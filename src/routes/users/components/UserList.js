@@ -92,7 +92,7 @@ class UserList extends Component {
         }
     }
     render() {
-        console.log(this.state.pagination)
+        // console.log(this.state.pagination)
         return (
             <Fragment>
                 <Card>

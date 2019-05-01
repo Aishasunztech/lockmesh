@@ -159,9 +159,9 @@ import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../c
           
         // Convert back to days and return
         days = Math.round(difference_ms/one_day); 
-        console.log('checkk days And validity');
-        console.log(days);
-        console.log(validity, 'klkl')
+        // console.log('checkk days And validity');
+        // console.log(days);
+        // console.log(validity, 'klkl')
 
         if (days > 0) return days; else if (days <= 0) return "Expired"; else return "Not Announced";
     }

@@ -35,7 +35,7 @@ class AddDevice extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log('form', values);
+            // console.log('form', values);
             if (!err) {
                 if (this.state.type == 1) {
                     showConfirm(this, values);
@@ -100,7 +100,7 @@ class AddDevice extends Component {
     }
 
     render() {
-        console.log(this.props.device);
+        // console.log(this.props.device);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]

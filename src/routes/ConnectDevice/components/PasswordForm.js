@@ -14,7 +14,7 @@ class PassworForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log(values);
+            // console.log(values);
             if (!err) {
                 this.props.checkPass({ password: values.pass, device: this.props.device });
             }

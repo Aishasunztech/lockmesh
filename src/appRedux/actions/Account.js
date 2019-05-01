@@ -80,7 +80,7 @@ export function exportCSV(fieldName) {
     }
 }
 export function releaseCSV(fieldName, ids) {
-    console.log(fieldName, ids);
+    // console.log(fieldName, ids);
     return (dispatch) => {
         RestService.releaseCSV(fieldName, ids).then((response) => {
             if (RestService.checkAuth(response.data)) {

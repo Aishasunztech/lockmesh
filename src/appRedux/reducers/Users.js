@@ -28,7 +28,7 @@ export default (state = initialState, action) => {
                 users: [],
             }
         case SAVE_USERS:
-            console.log('item added is:', action.response.user)
+            // console.log('item added is:', action.response.user)
             let result = []
             if (action.response.status) {
                 message.success(action.response.msg)

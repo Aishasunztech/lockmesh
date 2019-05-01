@@ -177,7 +177,7 @@ class PolicyList extends Component {
         }
     }
     render() {
-         console.log('POLICY LIST',this.props.policies)
+        //  console.log('POLICY LIST',this.props.policies)
         return (
             <Fragment>
                 <Card>
@@ -186,7 +186,7 @@ class PolicyList extends Component {
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            console.log("expandTabSelected", record);
+                            // console.log("expandTabSelected", record);
                             // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
                                 <PolicyInfo 

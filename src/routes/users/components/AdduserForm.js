@@ -19,7 +19,7 @@ class AddUserForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log('form', values);
+            // console.log('form', values);
             if (!err) {
                 this.props.AddDeviceHandler(values);
                 this.props.handleCancel();

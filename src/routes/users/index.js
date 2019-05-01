@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../utils/commonUtils';
+import { getStatus, componentSearch } from '../utils/commonUtils';
 
 
 import {
@@ -214,7 +214,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ auth, users, devices }) => {
-    console.log(users.users_list);
+    // console.log(users.users_list);
     return {
         user: auth.authUser,
         users_list: users.users_list,

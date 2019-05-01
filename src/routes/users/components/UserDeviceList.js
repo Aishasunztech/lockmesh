@@ -426,7 +426,7 @@ class UserDeviceList extends Component {
         });
     }
     render() {
-        console.log('dealer state', this.state.pagination);
+        // console.log('dealer state', this.state.pagination);
         return (
 
 

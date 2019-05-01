@@ -41,7 +41,7 @@ class Permissions extends Component {
 
     this.addDealerCols = dealerColsWithSearch(true, this.handleSearch)
     this.listDealerCols = dealerColsWithSearch();
-    
+
 
   }
 
@@ -122,7 +122,7 @@ class Permissions extends Component {
     // });
   }
   savePermission = () => {
-    console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
+    // console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
 
     if (this.state.dealer_ids.length) {
       this.props.dealerList.map((dealer) => {
@@ -141,7 +141,7 @@ class Permissions extends Component {
         })
       })
 
-      console.log(this.state.selectedRowKeys);
+      // console.log(this.state.selectedRowKeys);
       this.props.savePermission(this.props.record.policy_id, JSON.stringify(this.state.selectedRowKeys), 'save');
 
       this.showDealersModal(false);
@@ -152,7 +152,7 @@ class Permissions extends Component {
   }
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRowKeys, 'selected', selectedRows);
+    // console.log(selectedRowKeys, 'selected', selectedRows);
     let dealer_ids = []
     selectedRows.forEach(row => {
       // console.log("selected row", row)
@@ -228,19 +228,19 @@ class Permissions extends Component {
 
     let fieldName = e.target.name;
     let fieldValue = e.target.value;
-    console.log("fieldName", fieldName);
-    console.log("fieldValue", fieldValue);
-    console.log("global", global);
+    // console.log("fieldName", fieldName);
+    // console.log("fieldValue", fieldValue);
+    // console.log("global", global);
     if (global) {
       let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
-      console.log("searchedData", searchedData);
+      // console.log("searchedData", searchedData);
       this.setState({
         dealerList: searchedData
       });
     } else {
 
       let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
-      console.log("searchedData", searchedData);
+      // console.log("searchedData", searchedData);
       this.setState({
         dealerList: searchedData
       });
@@ -251,7 +251,7 @@ class Permissions extends Component {
     let dealers = this.state.permissions;
     // console.log("permissions",dealers);
     var index = dealers.indexOf(dealer_id);
-    console.log("array index", index);
+    // console.log("array index", index);
     if (index > -1) {
       dealers.splice(index, 1);
     }
@@ -264,7 +264,7 @@ class Permissions extends Component {
   }
   removeAllDealers = () => {
     let permittedDealers = this.state.permissions;
-    console.log("permitted dealers", permittedDealers);
+    // console.log("permitted dealers", permittedDealers);
 
     this.setState({
       permissions: []
@@ -297,7 +297,7 @@ class Permissions extends Component {
 
   renderDealer(list, permitted = false) {
     let data = [];
-    console.log(list);
+    // console.log(list);
     list.map((dealer) => {
       // console.log('object recrd', this.props.record.permissions);
       let is_included = this.state.permissions.includes(dealer.dealer_id);
@@ -329,7 +329,7 @@ class Permissions extends Component {
     return (data);
   }
   render() {
-    console.log('dealer state', this.state.dealerList);
+    // console.log('dealer state', this.state.dealerList);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
@@ -457,7 +457,7 @@ class Permissions extends Component {
 
 // export default Apk;
 const mapStateToProps = ({ dealers }, props) => {
-  console.log("dealer", dealers);
+  // console.log("dealer", dealers);
   // console.log("permission", props.record);
   return {
     dealerList: dealers.dealers,
