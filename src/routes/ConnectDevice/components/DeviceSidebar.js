@@ -68,7 +68,7 @@ export default class DeviceSidebar extends Component {
             {
                 key:300,
                 name:(<a href="javascript:void(0)" >{titleCase(USER_ID)}:</a>),
-                value: device_details.user_id
+                value: checkValue(device_details.user_id)
             },
             {
                 key: 10,
