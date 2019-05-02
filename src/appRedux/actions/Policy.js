@@ -83,7 +83,7 @@ export function savePolicy(data) {
     // console.log('device', device);
     return (dispatch) => {
         RestService.savePolicy(data).then((response) => {
-             console.log('conect device method call', data);
+            //  console.log('conect device method call', data);
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);
                 if (response.data.status) {

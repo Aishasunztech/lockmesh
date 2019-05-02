@@ -172,9 +172,9 @@ class AppList extends Component {
                     size="small"
                     ref={`encrypted_${app_id}`}
                     name={`encrypted_${app_id}`}
-                    value={encrypted}
-
-                    checked={(encrypted === true || encrypted === 1) ? true : false}
+                    // value={encrypted}
+                    disabled={app.default_app == 1 ? true: false}
+                    checked={app.default_app == 1 ? true : ((encrypted === true || encrypted === 1) ? true : false)}
                     onClick={(e) => {
                         // console.log("encrypted", e);
                         this.handleChecked(e, "encrypted", app_id);
@@ -186,9 +186,9 @@ class AppList extends Component {
                     size="small"
                     ref={`enable_${app_id}`}
                     name={`enable_${app_id}`}
-                    value={enable}
-                    checked={((enable === true) || (enable === 1)) ? true : false}
-
+                    // value={enable}
+                    checked={app.default_app == 1 ? true : (((enable === true) || (enable === 1)) ? true : false)}
+                    disabled={app.default_app == 1 ? true: false}
                     onClick={(e) => {
                         this.handleChecked(e, "enable", app_id);
                     }}

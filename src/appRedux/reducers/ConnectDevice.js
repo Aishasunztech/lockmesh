@@ -229,7 +229,7 @@ export default (state = initialState, action) => {
                 isloading: false,
             }
         case WIPE_DEVICE:
-            console.log(action.response.msg);
+            // console.log(action.response.msg);
             if (action.response.status) {
                 message.success(action.response.msg);
             } else {
@@ -479,7 +479,7 @@ export default (state = initialState, action) => {
 
 
         case GET_APPS_PERMISSIONS: {
-            console.log('data permissions', action.payload)
+            // console.log('data permissions', action.payload)
             return {
                 ...state,
                 appPermissions: action.payload.appPermissions,
@@ -517,7 +517,7 @@ export default (state = initialState, action) => {
 
             let changedControls = JSON.parse(JSON.stringify(state.controls));
              let objIndex = changedControls.settings.findIndex(item => item.uniqueName === action.payload.main);
-            console.log(action.payload.main,' obj index is', objIndex)
+            // console.log(action.payload.main,' obj index is', objIndex)
              if(objIndex > -1){
                 changedControls.settings[objIndex][action.payload.key] = action.payload.value;
                 // console.log(changedSettings[objIndex], 'app is the ', changedSettings[objIndex][action.payload.key])
@@ -689,11 +689,11 @@ export default (state = initialState, action) => {
             }
         }
         case REDO_EXTENSIONS: {
-            console.log('REDUCER UNDO');
+            // console.log('REDUCER UNDO');
             if (state.redoExtensions.length > 0) {
 
                 let extensions = state.redoExtensions[state.redoExtensions.length - 1];
-                console.log('if exist ex', extensions)
+                // console.log('if exist ex', extensions)
                 state.redoExtensions.pop();
                 state.undoExtensions.push(JSON.parse(JSON.stringify(extensions)));
 

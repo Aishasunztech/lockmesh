@@ -305,9 +305,9 @@ class ConnectDevice extends Component {
       }
 
       // app_list.push(obData);
-      // app_list.push(this.props.controls.settings)
+      //  app_list.push(this.props.controls.settings)
     }
-    // console.log("hello", this.props.controls.controls);
+     console.log("hello", this.state.controls.controls);
     this.props.applySetting(
       app_list, {
         adminPwd: this.props.adminPwd,
@@ -319,7 +319,7 @@ class ConnectDevice extends Component {
       this.props.user_acc_id,
       null, null,
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      this.props.controls.controls[0]
+      this.state.controls.controls
 
     );
     this.onCancel();
@@ -332,7 +332,7 @@ class ConnectDevice extends Component {
     this.onBackHandler();
   }
   refreshDevice = (deviceId) => {
-    console.log(deviceId);
+    // console.log(deviceId);
     this.props.startLoading();
     // console.log("refreshDevice", this.props);
     //   this.props.getAccIdFromDvcId(deviceId);

@@ -1343,12 +1343,12 @@ class Devices extends Component {
 
                 if (device[e.target.name] !== undefined) {
                     if ((typeof device[e.target.name]) === 'string') {
-                        console.log("string check", device[e.target.name])
+                        // console.log("string check", device[e.target.name])
                         if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
                     } else if (device[e.target.name] != null) {
-                        console.log("else null check", device[e.target.name])
+                        // console.log("else null check", device[e.target.name])
                         if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }

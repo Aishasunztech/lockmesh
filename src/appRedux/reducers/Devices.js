@@ -134,7 +134,7 @@ export default (state = initialState, action) => {
 
         case SUSPEND_DEVICE:
             if (action.response.status) {
-                console.log('dedlksjaflkj', action.response)
+                // console.log('dedlksjaflkj', action.response)
                 let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.data.device_id));
                 if (objIndex !== -1) {
                     state.devices[objIndex] = action.response.data;
