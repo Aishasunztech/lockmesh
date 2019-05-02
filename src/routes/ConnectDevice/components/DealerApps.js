@@ -4,23 +4,7 @@ import { BASE_URL } from '../../../constants/Application';
 
 const DealerApps = (props)=>{
     const columns = [
-        // {
-        //     title: (
-        //         <span>
-        //             PERMISSION
-        //         <Popover placement="top" content={question_txt}>
-        //                 <span style={{ float: "right", cursor: 'pointer' }}><Icon type="question" /></span>
-        //             </Popover>
-        //          </span>),
-        //     dataIndex: 'permission',
-        //     key: 'permission',
-        //     className: 'row'
-        // },
-        // {
-        //     title: 'APP STATUS',
-        //     dataIndex: 'apk_status',
-        //     key: 'apk_status',
-        // },
+       
         {
             title: 'APK',
             dataIndex: 'apk',
@@ -50,15 +34,16 @@ const DealerApps = (props)=>{
     ];
     const renderApps=(apk_list)=>{
         return apk_list.map((app) => {
+            // console.log("package name", app);
             return {
-                "key": app.apk_id,
-                'apk_id': app.apk_id,
-                // 'permission': <span style={{fontSize:15, fontWeight:400}}>{app.permission_count}</span>,
-                // "permissions": app.permissions,
-                'apk_status': (app.apk_status === "On") ? "true" : false,
-                'apk': app.apk ? app.apk : 'N/A',
-                'apk_name': app.apk_name ? app.apk_name : 'N/A',
-                'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                key: app.apk_id,
+                apk_id: app.apk_id,
+                package_name: app.package_name,
+                version: app.version,
+                apk_status: (app.apk_status === "On") ? true : false,
+                apk: app.apk ? app.apk : 'N/A',
+                apk_name: app.apk_name ? app.apk_name : 'N/A',
+                apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
             }
         });
     }

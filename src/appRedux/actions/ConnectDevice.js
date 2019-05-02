@@ -320,12 +320,6 @@ export function activateDevice2(device) {
 
 }
 
-
-
-
-export function saveDeviceProfile(profileName, deviceSettings) {
-}
-
 export function showHistoryModal(visible, profileType = "") {
 
     return {
@@ -344,8 +338,8 @@ export function loadDeviceProfile(app_list) {
     };
 }
 
-export function applySetting(app_list, passwords, device_id, usr_acc_id, type = "history", name = null, extensions, controls) {
-    //    console.log('apply Settings', extensions);
+export function applySetting(app_list, passwords, extensions, controls, device_id, usr_acc_id) {
+    
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -356,10 +350,11 @@ export function applySetting(app_list, passwords, device_id, usr_acc_id, type = 
                 duress_password: (passwords.duressPwd === '') ? null : passwords.duressPwd
             },
             controls: controls,
-            extensions: extensions
+            subExtensions: extensions
         }
-        //  console.log('my test is ', extensions)
-        RestService.applySettings(device_setting, device_id, type = "history", null, null, usr_acc_id, extensions, controls).then((response) => {
+        console.log("hello setting", device_setting);
+
+        RestService.applySettings(device_setting, device_id, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
                     dispatch({
@@ -440,12 +435,50 @@ export function redoExtensions() {
     }
 }
 
-export function pushApps(app_list) {
+export function pushApps(apps, deviceId, userAccId) {
     // console.log("app_list", app_list);
     return (dispatch) => {
-        dispatch({
-            type: PUSH_APPS,
-            payload: app_list
+        let device_setting = {
+            app_list: [],
+            passwords: {
+                admin_password: null,
+                guest_password: null ,
+                encrypted_password: null,
+                duress_password: null
+            },
+            controls: {},
+            extensions: []
+        }
+
+        RestService.applySettings(device_setting, deviceId, "history", null, null, userAccId).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    dispatch({
+                        type: SHOW_MESSAGE,
+                        payload: {
+                            showMessage: true,
+                            messageType: 'success',
+                            messageText: "settings are applied"
+                        }
+                    })
+                    dispatch({
+                        type: SETTINGS_APPLIED,
+                        payload: response.data
+                    })
+                    dispatch({
+                        type: SHOW_MESSAGE,
+                        payload: {
+                            showMessage: false,
+                            messageType: 'success',
+                            messageText: 'settings are applied'
+                        }
+                    })
+                }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
         })
     }
 

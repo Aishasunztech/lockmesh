@@ -48,7 +48,7 @@ class SideActions extends Component {
 
     componentDidMount() {
         // console.log(this.props.historyType, 'did')
-        this.props.getDealerApps();
+        // this.props.getDealerApps();
         // this.props.getImeiHistory()
         this.setState({
             historyModal: this.props.historyModal,
@@ -140,8 +140,10 @@ class SideActions extends Component {
     }
 
     pushApps = () => {
-        if (this.selectedApps.length) {
-            // console.log("save pushed apps", this.state.selectedApps);
+        if (this.state.selectedApps.length) {
+            console.log("save pushed apps", this.state.selectedApps);
+        } else {
+
         }
     }
 
@@ -195,10 +197,6 @@ class SideActions extends Component {
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
 
-                                {/* <Button type="default" disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
-                                <Button type="default" disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
-                                <Button type="default" disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button> */}
-
                             </Col>
                             <Col
                                 span={12}
@@ -214,12 +212,6 @@ class SideActions extends Component {
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
-                                {/* <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
-                                {(this.props.authUser.type === ADMIN) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'policy') }} ><Icon type="save" style={{ fontSize: "14px" }} /> Save Policy</Button> : null}
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button>
-                                <Button type="default " disabled style={{ width: "100%", marginBottom: 16}} >N/A</Button> */}
                                 <Tooltip title="Coming Soon" placement="left">
                                     <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} >IMEI</Button>
                                 </Tooltip>
@@ -379,11 +371,10 @@ function mapDispatchToProps(dispatch) {
         saveProfile: saveProfile,
         hanldeProfileInput: hanldeProfileInput,
         transferDeviceProfile: transferDeviceProfile,
-        getDealerApps: getDealerApps,
         loadDeviceProfile: loadDeviceProfile
     }, dispatch);
 }
-var mapStateToProps = ({ device_details, auth }) => {
+var mapStateToProps = ({ device_details, auth }, otherProps) => {
 
     return {
         authUser: auth.authUser,
@@ -404,7 +395,7 @@ var mapStateToProps = ({ device_details, auth }) => {
         adminCPwd: device_details.adminCPwd,
         device_id: device_details.device.device_id,
         usr_acc_id: device_details.device.id,
-        apk_list: device_details.apk_list,
+        apk_list: otherProps.apk_list,
     };
 }
 
