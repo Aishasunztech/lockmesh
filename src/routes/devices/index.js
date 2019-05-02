@@ -1019,33 +1019,36 @@ class Devices extends Component {
             }
         }
 
-        // console.log(this.state.columns, 'colll')
-
+        var devices = [];
         switch (value) {
             case '4':
+                devices = this.filterList(DEVICE_ACTIVATED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '4'
                 })
                 break;
             case '9':
+                devices = this.filterList(DEVICE_TRIAL, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_TRIAL, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '9'
                 })
                 break;
             case '7':
+                devices = this.filterList(DEVICE_SUSPENDED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_SUSPENDED, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '7'
                 })
                 break;
             case '6':
+                devices = this.filterList(DEVICE_EXPIRED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_EXPIRED, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '6'
                 })
@@ -1058,22 +1061,25 @@ class Devices extends Component {
                 })
                 break;
             case "5":
+                devices = this.filterList(DEVICE_UNLINKED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_UNLINKED, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '5'
                 })
                 break;
             case "2":
+                devices = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '2'
                 })
                 break;
             case "3":
+                devices = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '3'
                 })
@@ -1093,9 +1099,6 @@ class Devices extends Component {
                 })
                 break;
         }
-
-        // this.handleCheckChange(this.props.selectedOptions)
-
     }
 
 
@@ -1308,7 +1311,6 @@ class Devices extends Component {
                                 refreshComponent={this.refreshComponent}
                                 history={this.props.history}
                             />
-
                             <ShowMsg
                                 msg={this.props.msg}
                                 showMsg={this.props.showMsg}
