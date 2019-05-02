@@ -103,7 +103,7 @@ class Apk extends Component {
                                         <Link to="/#">
                                             <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                                 <div className="image_1">
-                                                    <h2 style={{ textAlign: "center" }}>App Market</h2>
+                                                    <h2 style={{ textAlign: "center" }}>Secure Market</h2>
                                                     <Divider className="mb-0" />
                                                     <Row style={{ padding: '12px 0px 0px' }}>
                                                         <Col span={8} style={{ padding: 0, textAlign: "right" }}>
