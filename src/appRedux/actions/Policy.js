@@ -5,7 +5,8 @@ import {
     GET_APPS_PERMISSIONS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
     SAVE_POLICY,
-    PERMSSION_SAVED
+    PERMSSION_SAVED,
+    HANDLE_CHECK_ALL_APP_POLICY
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -48,6 +49,7 @@ export function getAppPermissions(device_id) {
         });
     }
 }
+
 
 export function getDefaultApps() {
     return (dispatch) => {
@@ -114,6 +116,21 @@ export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName='
                 value: e,
                 key: key,
                 app_id: app_id,
+                stateToUpdate: stateToUpdate,
+                uniqueName: uniqueName
+            }
+        })
+    }
+}
+
+export function handleCheckAllAppPolicy(e, key, stateToUpdate, uniqueName='') {
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_ALL_APP_POLICY,
+            payload: {
+                value: e,
+                key: key,
+                // app_id: app_id,
                 stateToUpdate: stateToUpdate,
                 uniqueName: uniqueName
             }

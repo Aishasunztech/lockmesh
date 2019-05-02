@@ -6,7 +6,7 @@ import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SE
 import styles from './policy.css';
 import { bindActionCreators } from "redux";
 import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
-import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy } from '../../../appRedux/actions/Policy';
+import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy, handleCheckAllAppPolicy } from '../../../appRedux/actions/Policy';
 
 const TextArea = Input;
 const columns = [{
@@ -53,6 +53,7 @@ class AddPolicy extends Component {
         this.state = {
             current: 0,
             dealerApps: [],
+            pushApps: [],
             steps: [],
             allExtensions: [],
             systemPermissions: [],
@@ -61,7 +62,19 @@ class AddPolicy extends Component {
             isCommand: 'success',
             isPolicy_name: 'success',
             policy_name_error: '',
-            command_error: ''
+            command_error: '',
+
+            guestAlldealerApps: false,
+            encryptedAlldealerApps: false,
+            enableAlldealerApps: false,
+
+            guestAllappPermissions: false,
+            encryptedAllappPermissions: false,
+            enableAllappPermissions: false,
+
+            guestAllallExtensions: false,
+            encryptedAllallExtensions: false,
+            enableAllallExtensions: false,
 
         };
 
@@ -74,17 +87,21 @@ class AddPolicy extends Component {
         // console.log(value, key, id, arrayOf, 'data is');
     }
 
+    handleCheckAllAppPolicy = (value, key, arrayOf) => {
+        this.props.handleCheckAllAppPolicy(value, key, arrayOf, SECURE_SETTING)
+    }
+
     savePolicy = () => {
         let data = {
             policy_name: this.state.policy_name,
             policy_note: this.state.command,
-            push_apps: this.state.dealerApps,
+            push_apps: this.state.pushApps,
             app_list: this.state.appPermissions,
             secure_apps: this.state.allExtensions,
             system_permissions: this.state.systemPermissions
 
         }
-        // console.log('polcy is', this.state.policy_name)
+        console.log('polcy is', data);
 
         if ((this.state.policy_name !== '') && this.state.command !== '') {
             this.props.savePolicy(data);
@@ -95,7 +112,19 @@ class AddPolicy extends Component {
             this.setState({
                 current: 0,
                 policy_name: '',
-                command: ''
+                command: '',
+                pushApps: [],
+                guestAlldealerApps: false,
+                encryptedAlldealerApps: false,
+                enableAlldealerApps: false,
+
+                guestAllappPermissions: false,
+                encryptedAllappPermissions: false,
+                enableAllappPermissions: false,
+
+                guestAllallExtensions: false,
+                encryptedAllallExtensions: false,
+                enableAllallExtensions: false,
             })
         }
         else {
@@ -123,9 +152,32 @@ class AddPolicy extends Component {
             dealerApps: this.props.dealerApps,
             appPermissions: this.props.appPermissions,
             allExtensions: this.props.allExtensions,
-            systemPermissions: this.props.systemPermissions
+            systemPermissions: this.props.systemPermissions,
+
+            guestAlldealerApps: this.props.guestAlldealerApps,
+            encryptedAlldealerApps: this.props.encryptedAlldealerApps,
+            enableAlldealerApps: this.props.enableAlldealerApps,
+
+            guestAllappPermissions: this.props.guestAllappPermissions,
+            encryptedAllappPermissions: this.props.encryptedAllappPermissions,
+            enableAllappPermissions: this.props.enableAllappPermissions,
+
+            guestAllallExtensions: this.props.guestAllallExtensions,
+            encryptedAllallExtensions: this.props.encryptedAllallExtensions,
+            enableAllallExtensions: this.props.enableAllallExtensions,
 
         })
+    }
+
+    onSelectChange = (selected) => {
+        this.state.pushApps = [];
+        console.log(this.state.dealerApps, 'guested apps')
+        if (selected.length) {
+            for (let id of selected) {
+                let index = this.state.dealerApps.findIndex(item => item.apk_id == id);
+                this.state.pushApps.push(this.state.dealerApps[index])
+            }
+        }
     }
 
 
@@ -143,7 +195,19 @@ class AddPolicy extends Component {
                 dealerApps: this.props.dealerApps,
                 appPermissions: this.props.appPermissions,
                 allExtensions: this.props.allExtensions,
-                systemPermissions: this.props.systemPermissions
+                systemPermissions: this.props.systemPermissions,
+
+                guestAlldealerApps: this.props.guestAlldealerApps,
+                encryptedAlldealerApps: this.props.encryptedAlldealerApps,
+                enableAlldealerApps: this.props.enableAlldealerApps,
+
+                guestAllappPermissions: this.props.guestAllappPermissions,
+                encryptedAllappPermissions: this.props.encryptedAllappPermissions,
+                enableAllappPermissions: this.props.enableAllappPermissions,
+
+                guestAllallExtensions: this.props.guestAllallExtensions,
+                encryptedAllallExtensions: this.props.encryptedAllallExtensions,
+                enableAllallExtensions: this.props.enableAllallExtensions,
             });
 
         }
@@ -151,28 +215,28 @@ class AddPolicy extends Component {
 
     renderSystemPermissions = () => {
         if (this.state.systemPermissions) {
-          
-                return [{
-                    rowKey: 'wifi_status',
-                    name: 'Wifi',
-                    action: <Switch disabled checked={this.state.systemPermissions.wifi_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'wifi_status')} size="small" />
-                },{
-                    rowKey: 'bluetooth_status',
-                    name: 'Bluetooth',
-                    action: <Switch checked={this.state.systemPermissions.bluetooth_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'bluetooth_status')} size="small" />
-                },{
-                    rowKey: 'screenshot_status',
-                    name: 'ScreenShot',
-                    action: <Switch checked={this.state.systemPermissions.screenshot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'screenshot_status')} size="small" />
-                },{
-                    rowKey: 'location_status',
-                    name: 'Location',
-                    action: <Switch checked={this.state.systemPermissions.location_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'location_status')} size="small" />
-                },{
-                    rowKey: 'hotspot_status',
-                    name: 'Hotspot',
-                    action: <Switch checked={this.state.systemPermissions.hotspot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'hotspot_status')} size="small" />
-                }]
+
+            return [{
+                rowKey: 'wifi_status',
+                name: 'Wifi',
+                action: <Switch disabled checked={this.state.systemPermissions.wifi_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'wifi_status')} size="small" />
+            }, {
+                rowKey: 'bluetooth_status',
+                name: 'Bluetooth',
+                action: <Switch checked={this.state.systemPermissions.bluetooth_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'bluetooth_status')} size="small" />
+            }, {
+                rowKey: 'screenshot_status',
+                name: 'ScreenShot',
+                action: <Switch checked={this.state.systemPermissions.screenshot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'screenshot_status')} size="small" />
+            }, {
+                rowKey: 'location_status',
+                name: 'Location',
+                action: <Switch checked={this.state.systemPermissions.location_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'location_status')} size="small" />
+            }, {
+                rowKey: 'hotspot_status',
+                name: 'Hotspot',
+                action: <Switch checked={this.state.systemPermissions.hotspot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'hotspot_status')} size="small" />
+            }]
         }
         // console.log(this.state.systemPermissions, 'permissions')
         // if (this.state.systemPermissions.length) {
@@ -208,6 +272,11 @@ class AddPolicy extends Component {
                 <AppList
                     apk_list={this.state.dealerApps}
                     handleCheckApp={this.handleCheckApp}
+                    handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
+                    guestAll={this.state.guestAlldealerApps}
+                    encryptedAll={this.state.encryptedAlldealerApps}
+                    enableAll={this.state.enableAlldealerApps}
+                    onSelectChange={this.onSelectChange}
                     apps='dealerApps'
                     isSwitch={true}
                 />
@@ -218,7 +287,11 @@ class AddPolicy extends Component {
             content: (
                 <AppList
                     apk_list={this.state.appPermissions}
+                    handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
                     handleCheckApp={this.handleCheckApp}
+                    guestAll={this.state.guestAllappPermissions}
+                    encryptedAll={this.state.encryptedAllappPermissions}
+                    enableAll={this.state.enableAllappPermissions}
                     appPermissions='appPermissions'
                     isSwitch={true}
                 />
@@ -229,7 +302,11 @@ class AddPolicy extends Component {
             content: (
                 <AppList
                     allExtensions={this.state.allExtensions}
+                    handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
                     handleCheckApp={this.handleCheckApp}
+                    guestAll={this.state.guestAllallExtensions}
+                    encryptedAll={this.state.encryptedAllallExtensions}
+                    enableAll={this.state.enableAllallExtensions}
                     secureSettings='allExtensions'
                     isSwitch={true}
                 />
@@ -326,6 +403,7 @@ function mapDispatchToProps(dispatch) {
         getAppPermissions: getAppPermissions,
         handleCheckAppPolicy: handleCheckAppPolicy,
         handleChekSystemPermission: handleChekSystemPermission,
+        handleCheckAllAppPolicy: handleCheckAllAppPolicy,
         savePolicy: savePolicy
     }, dispatch)
 }
@@ -336,7 +414,19 @@ var mapStateToProps = ({ device_details, policies }) => {
         dealerApps: policies.dealer_apk_list,
         appPermissions: policies.appPermissions,
         allExtensions: policies.allExtensions,
-        systemPermissions: policies.systemPermissions
+        systemPermissions: policies.systemPermissions,
+
+        guestAlldealerApps: policies.guestAlldealerApps,
+        encryptedAlldealerApps: policies.encryptedAlldealerApps,
+        enableAlldealerApps: policies.enableAlldealerApps,
+
+        guestAllappPermissions: policies.guestAllappPermissions,
+        encryptedAllappPermissions: policies.encryptedAllappPermissions,
+        enableAllappPermissions: policies.enableAllappPermissions,
+
+        guestAllallExtensions: policies.guestAllallExtensions,
+        encryptedAllallExtensions: policies.encryptedAllallExtensions,
+        enableAllallExtensions: policies.enableAllallExtensions,
 
     }
 }

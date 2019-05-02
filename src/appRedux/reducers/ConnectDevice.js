@@ -771,6 +771,7 @@ export default (state = initialState, action) => {
                 undoBtn: true
             }
         }
+
         case UNDO_APPS: {
 
             if (state.undoApps.length > 1) {
