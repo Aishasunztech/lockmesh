@@ -79,7 +79,7 @@ class AppList extends Component {
     componentWillReceiveProps(nextProps) {
         // console.log("app list in list, nextProps", nextProps);
         // alert("componentWillReceiveProps");
-        console.log(nextProps.enableAll, 'enable all is')
+        // console.log(nextProps.enableAll, 'enable all is')
 
         this.setState({
             apk_list: nextProps.apk_list,
@@ -97,7 +97,7 @@ class AppList extends Component {
 
     handleCheckedAll = ( value, key) => {
 
-          console.log('check all handling', value,key);
+        //   console.log('check all handling', value,key);
          // console.log("handleCheckedAll");
         if (key === "guestAll") {
             key = 'guest';
@@ -149,10 +149,13 @@ class AppList extends Component {
         let icon = (app.logo !== undefined) ? app.logo : app.icon;
         let Off = 'Off';
         let On = 'On';
+        let isAvailable = (this.state.selectedRowKeys.length)?this.state.selectedRowKeys.find(id => (id === app_id)?true:false): false;
         if(this.props.appPermissions){
-            app_id = app.id
+            app_id = app.id;
+            isAvailable= true
         }
         // alert(guest);
+
 
         return ({
             key: app_id,
@@ -169,8 +172,8 @@ class AppList extends Component {
                     ref={`guest_${app_id}`}
                     name={`guest_${app_id}`}
                     value={guest}
-                    checked={(guest === true || guest === 1) ? true : false}
-
+                    checked={isAvailable ? ((guest === true || guest === 1) ? true : false): false}
+                    disabled={!isAvailable}
                     onClick={(e) => {
                        this.handleChecked(e, "guest", app_id)
                           
@@ -183,8 +186,8 @@ class AppList extends Component {
                     ref={`encrypted_${app_id}`}
                     name={`encrypted_${app_id}`}
                     // value={encrypted}
-                    disabled={app.default_app == 1 ? true: false}
-                    checked={app.default_app == 1 ? true : ((encrypted === true || encrypted === 1) ? true : false)}
+                    disabled={app.default_app == 1 ? true: !isAvailable}
+                    checked={app.default_app == 1 ? true : isAvailable ? ((encrypted === true || encrypted === 1) ? true : false): false}
                     onClick={(e) => {
                         // console.log("encrypted", e);
                         this.handleChecked(e, "encrypted", app_id);
@@ -197,8 +200,8 @@ class AppList extends Component {
                     ref={`enable_${app_id}`}
                     name={`enable_${app_id}`}
                     // value={enable}
-                    checked={app.default_app == 1 ? true : (((enable === true) || (enable === 1)) ? true : false)}
-                    disabled={app.default_app == 1 ? true: false}
+                    checked={app.default_app == 1 ? true : isAvailable ? ((enable === true || enable === 1) ? true : false) : false}
+                    disabled={app.default_app == 1 ? true: !isAvailable}
                     onClick={(e) => {
                         this.handleChecked(e, "enable", app_id);
                     }}
@@ -287,7 +290,7 @@ class AppList extends Component {
             selectedRows: selectedRows
         })
         this.props.onSelectChange(selectedRowKeys);
-        console.log('selected row keys', selectedRowKeys)
+        // console.log('selected row keys', selectedRowKeys)
     }
 
     renderDropdown() {
@@ -299,9 +302,12 @@ class AppList extends Component {
                 <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e.target.checked, "encryptedAll");
                 }}>Encrypted All</Checkbox><br></br>
+                {
+                    this.props.apps || this.props.appPermissions ?
+                
                 <Checkbox checked={this.state.enableAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e.target.checked, "enableAll");
-                }}>Enable All</Checkbox>
+                }}>Enable All</Checkbox> : false }
             </div>
         );
     }

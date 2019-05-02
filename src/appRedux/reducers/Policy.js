@@ -91,6 +91,17 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
+                guestAlldealerApps: false,
+                encryptedAlldealerApps: false,
+                enableAlldealerApps: false,
+            
+                guestAllappPermissions: false,
+                encryptedAllappPermissions: false,
+                enableAllappPermissions: false,
+            
+                guestAllallExtensions: false,
+                encryptedAllallExtensions: false,
+                enableAllallExtensions: false,
                 // dealer_apk_list: action.payload,
             }
         }
@@ -98,7 +109,7 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_SYSTEM_PERMISSIONS: {
            
             let changedState = state.systemPermissions;
-             console.log(changedState[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
+            //  console.log(changedState[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
             changedState[action.payload.key] = action.payload.value
             state.systemPermissions = changedState;
             // console.log(changedState, 'relst')
@@ -194,7 +205,7 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_ALL_APP_POLICY: {
             // console.log('reducer', action.payload);
             if(action.payload.stateToUpdate === 'allExtensions'){
-                console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
+                // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
 
                     let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
                     state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
@@ -224,7 +235,7 @@ export default (state = initialState, action) => {
             
             else if(action.payload.stateToUpdate === 'dealerApps'){
                 let changedApps = JSON.parse(JSON.stringify(state.dealer_apk_list));
-                console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
+                // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
 
                 state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
                 changedApps.forEach(app => {
@@ -249,7 +260,7 @@ export default (state = initialState, action) => {
 
             else if(action.payload.stateToUpdate === 'appPermissions'){
                 let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
-                console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
+                // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
                 state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
                 changedApps.forEach(app => {
                     // console.log(app.id,'====', action.payload.app_id ,app)

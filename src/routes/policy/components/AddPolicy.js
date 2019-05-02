@@ -63,6 +63,7 @@ class AddPolicy extends Component {
             isPolicy_name: 'success',
             policy_name_error: '',
             command_error: '',
+            pushAppsIds:[],
 
             guestAlldealerApps: false,
             encryptedAlldealerApps: false,
@@ -92,6 +93,14 @@ class AddPolicy extends Component {
     }
 
     savePolicy = () => {
+
+        if (this.state.pushAppsIds.length) {
+            for (let id of this.state.pushAppsIds) {
+                let index = this.state.dealerApps.findIndex(item => item.apk_id == id);
+                this.state.pushApps.push(this.state.dealerApps[index])
+            }
+        }
+
         let data = {
             policy_name: this.state.policy_name,
             policy_note: this.state.command,
@@ -101,7 +110,7 @@ class AddPolicy extends Component {
             system_permissions: this.state.systemPermissions
 
         }
-        console.log('polcy is', data);
+        // console.log('polcy is', data);
 
         if ((this.state.policy_name !== '') && this.state.command !== '') {
             this.props.savePolicy(data);
@@ -169,16 +178,6 @@ class AddPolicy extends Component {
         })
     }
 
-    onSelectChange = (selected) => {
-        this.state.pushApps = [];
-        console.log(this.state.dealerApps, 'guested apps')
-        if (selected.length) {
-            for (let id of selected) {
-                let index = this.state.dealerApps.findIndex(item => item.apk_id == id);
-                this.state.pushApps.push(this.state.dealerApps[index])
-            }
-        }
-    }
 
 
     // componentWillReceiveProps(prevProps){
@@ -211,6 +210,13 @@ class AddPolicy extends Component {
             });
 
         }
+    }
+
+    
+    onSelectChange = (selected) => {
+        this.state.pushAppsIds = selected;
+        // console.log(this.state.dealerApps, 'guested apps')
+        
     }
 
     renderSystemPermissions = () => {
@@ -264,7 +270,7 @@ class AddPolicy extends Component {
 
     render() {
         const { current } = this.state;
-        console.log('console the applist', this.state.dealerApps);
+        // console.log('console the applist', this.state.dealerApps);
         this.steps = [{
             title: 'SELECT APPS',
             Icon: <span className="step_counting">1</span>,
