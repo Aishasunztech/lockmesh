@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Modal, message, Radio, Button, Form, Input } from 'antd';
-// import EditForm from './editForm';
-// let editDevice;
+import {
+    PUSH_APPS,
+    WIPE_DEVICE,
+} from "../../../constants/ActionTypes"
+
 class PassworForm extends Component {
 
     constructor(props) {
@@ -16,7 +19,12 @@ class PassworForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log(values);
             if (!err) {
-                this.props.checkPass({ password: values.pass, device: this.props.device });
+                if(this.props.actionType === PUSH_APPS){
+                    this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
+                }else if(this.props.actionType === WIPE_DEVICE){
+                    this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
+
+                }
             }
         });
         this.props.handleCancel();
