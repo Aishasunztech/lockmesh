@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Row, Col, Card, Table, Button, Divider, Icon } from 'antd';
 import { Link } from "react-router-dom";
 import styles from './app.css'
@@ -29,26 +29,35 @@ class Apk extends Component {
                                                 <Col span={8} className="" style={{ padding: 0, textAlign: "right" }}>
                                                     <Icon type="android" className="and_icon" />
                                                 </Col>
-                                                {(this.props.user.type === 'admin') ?
-                                                    <Col>
-                                                        <h5 style={{ position: 'relative', right: 1 }}><span className="diamond_icon">&#9670;</span>Upload apk</h5>
-                                                        <h5 style={{ position: 'relative', left: 12 }}><span className="diamond_icon">&#9670;</span>Manage apk's</h5>
-                                                        <h5 style={{ position: 'relative', left: 10 }}><span className="diamond_icon">&#9670;</span>Activate apk push</h5>
-                                                        <h5 style={{ position: 'relative', right: 4, marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Set apk Dealer permissions</h5>
-                                                        <h5 style={{ position: 'relative', right: 35 }} className="more_txt">and more...</h5>
-                                                    </Col> :
-                                                    <Col>
-                                                        <h5 style={{ position: 'relative', right: 1 }}><span className="diamond_icon">&#9670;</span>Upload apk</h5>
-                                                        <h5 style={{ position: 'relative', left: 12 }}><span className="diamond_icon">&#9670;</span>Manage apk's</h5>
-                                                        <h5 style={{ position: 'relative', left: 10 }} className="more_txt">and more...</h5>
-                                                    </Col>}
+                                                <Col>
+                                                    <h5 style={{ position: 'relative', right: 1 }}><span className="diamond_icon">&#9670;</span>Upload apk</h5>
+                                                    <h5 style={{ position: 'relative', left: 12 }}><span className="diamond_icon">&#9670;</span>Manage apk's</h5>
+                                                    {(this.props.user.type === 'admin') ?
+                                                        (<Fragment>
+                                                            <h5 style={{ position: 'relative', left: 10 }}><span className="diamond_icon">&#9670;</span>Activate apk push</h5>
+                                                            <h5 style={{ position: 'relative', right: 4, marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Set apk Dealer permissions</h5>
+                                                            <h5 style={{ position: 'relative', right: 35 }} className="more_txt">and more...</h5>
+                                                        </Fragment>
+                                                        )
+                                                        :
+                                                        (
+                                                            <Fragment>
+                                                                <h5 style={{ position: 'relative', left: 10 }} className="more_txt">and more...</h5>
+                                                            </Fragment>
+                                                        )
+                                                    }
+                                                </Col>
                                             </Row>
                                             <Row justify='center'>
                                                 <Col span={6} >
 
                                                 </Col>
                                                 <Col span={12} style={{}}>
-                                                    <Button type="primary" size="small" style={{ width: "100%", marginTop: 46 }}>Open</Button>
+                                                    {(this.props.user.type !== "admin") ?
+                                                        (<Button type="primary" size="small" style={{ width: "100%", marginTop: 46 }}>Open</Button>)
+                                                        :
+                                                        (<Button type="primary" size="small" style={{ width: "100%", marginTop: 0 }}>Open</Button>)
+                                                    }
                                                 </Col>
                                             </Row>
 
