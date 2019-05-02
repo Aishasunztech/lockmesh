@@ -881,7 +881,7 @@ class Devices extends Component {
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
         else if (value == DEVICE_PRE_ACTIVATION) {
-        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
@@ -999,7 +999,7 @@ class Devices extends Component {
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
         else if (value == '3') {
-        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
@@ -1306,6 +1306,7 @@ class Devices extends Component {
                                 deleteUnlinkDevice={this.props.deleteUnlinkDevice}
                                 user={this.props.user}
                                 refreshComponent={this.refreshComponent}
+                                history={this.props.history}
                             />
 
                             <ShowMsg
@@ -1396,7 +1397,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ devices, auth }) => {
-    //   console.log('devices AUTH', devices.devices);
+    // console.log('devices AUTH', auth);
     //   console.log(devices.options,'devices OPTION', devices.selectedOptions);
     return {
         devices: devices.devices,

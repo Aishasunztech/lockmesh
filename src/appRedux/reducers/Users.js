@@ -2,7 +2,8 @@ import {
     SAVE_USERS,
     LOAD_USER,
     LOADING,
-    USERS_LIST
+    USERS_LIST,
+    EDIT_USERS
 } from "../../constants/ActionTypes";
 import { message } from 'antd';
 
@@ -45,6 +46,25 @@ export default (state = initialState, action) => {
                 addUserFlag: false,
                 users_list: result,
             }
+        case EDIT_USERS:
+            console.log('item added is:', action.response)
+            if (action.response.status) {
+                let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.userData.user_id));
+                state.users_list[objIndex4] = action.response.user[0];
+
+                message.success(action.response.msg);
+            }
+            else {
+                message.error(action.response.msg)
+            }
+
+            return {
+                ...state,
+                isloading: false,
+                addUserFlag: false,
+                users_list: [...state.users_list]
+            }
+
         case LOAD_USER:
             return {
                 ...state,

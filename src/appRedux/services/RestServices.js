@@ -186,23 +186,23 @@ const RestService = {
     },
 
     reSyncDevice: (deviceId) => {
-        return axios.patch(BASE_URL + 'users/sync-device', {device_id:deviceId}, RestService.getHeader());
+        return axios.patch(BASE_URL + 'users/sync-device', { device_id: deviceId }, RestService.getHeader());
     },
 
     savePolicy: (data) => {
         //console.log('rest apoi')
-        return axios.post(BASE_URL + 'users/save_policy', {data}, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/save_policy', { data }, RestService.getHeader());
     },
 
     // connect devices for dealer dash.
     getDealerApps: () => {
-     
+
         return axios.get(BASE_URL + "users/get_dealer_apps", RestService.getHeader());
     },
 
-      // connect devices for dealer dash.
-      getAppPermissions: () => {
-    //   console.log('api called ')
+    // connect devices for dealer dash.
+    getAppPermissions: () => {
+        //   console.log('api called ')
         return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
     },
 
@@ -229,10 +229,10 @@ const RestService = {
     },
     savePolicyPermissions: (policyId, dealers, action) => {
         return axios.post(BASE_URL + 'users/save_policy_permissions', {
-                policyId: policyId,
-                dealers: dealers,
-                action: action
-            },
+            policyId: policyId,
+            dealers: dealers,
+            action: action
+        },
             RestService.getHeader()
         );
     },
@@ -490,6 +490,9 @@ const RestService = {
     },
     addUser: (user) => {
         return axios.post(BASE_URL + 'users/add/user', user, RestService.getHeader())
+    },
+    editUser: (user) => {
+        return axios.post(BASE_URL + 'users/edit/user', user, RestService.getHeader())
     },
 
 }
