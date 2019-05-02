@@ -8,10 +8,9 @@ export default class AddUser extends Component {
         super(props);
         this.state = {
             visible: false,
-            expiry_date: 1,
-            device: null,
             handleSubmit: null,
-            preActive: false
+            user: null,
+            titleText: ''
         }
     }
 
@@ -20,14 +19,18 @@ export default class AddUser extends Component {
     };
 
 
-    showModal = (handleSubmit) => {
+    showModal = (handleSubmit, user = null, titleText = 'Add User') => {
+        // console.log(user);
         this.setState({
             visible: true,
-            handleSubmit: handleSubmit
+            handleSubmit: handleSubmit,
+            user: user,
+            titleText: titleText,
         });
 
     }
     handleCancel = () => {
+        this.refs.add_user_form.resetFields();
         this.setState({ visible: false });
     }
     render() {
@@ -36,15 +39,17 @@ export default class AddUser extends Component {
             <div>
                 <Modal
                     visible={visible}
-                    title="Add User"
+                    title={this.state.titleText}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
                 >
                     <AddUserForm
-                        AddDeviceHandler={this.state.handleSubmit}
+                        AddUserHandler={this.state.handleSubmit}
                         handleCancel={this.handleCancel}
+                        user={this.state.user}
+                        ref='add_user_form'
                     />
                 </Modal>
             </div>

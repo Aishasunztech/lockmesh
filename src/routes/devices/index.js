@@ -881,7 +881,7 @@ class Devices extends Component {
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
         else if (value == DEVICE_PRE_ACTIVATION) {
-        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
@@ -999,7 +999,7 @@ class Devices extends Component {
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
         else if (value == '3') {
-        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
@@ -1019,33 +1019,36 @@ class Devices extends Component {
             }
         }
 
-        // console.log(this.state.columns, 'colll')
-
+        var devices = [];
         switch (value) {
             case '4':
+                devices = this.filterList(DEVICE_ACTIVATED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '4'
                 })
                 break;
             case '9':
+                devices = this.filterList(DEVICE_TRIAL, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_TRIAL, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '9'
                 })
                 break;
             case '7':
+                devices = this.filterList(DEVICE_SUSPENDED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_SUSPENDED, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '7'
                 })
                 break;
             case '6':
+                devices = this.filterList(DEVICE_EXPIRED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_EXPIRED, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '6'
                 })
@@ -1058,22 +1061,25 @@ class Devices extends Component {
                 })
                 break;
             case "5":
+                devices = this.filterList(DEVICE_UNLINKED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_UNLINKED, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '5'
                 })
                 break;
             case "2":
+                devices = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '2'
                 })
                 break;
             case "3":
+                devices = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices),
+                    devices: devices,
                     column: this.state.columns,
                     tabselect: '3'
                 })
@@ -1093,9 +1099,6 @@ class Devices extends Component {
                 })
                 break;
         }
-
-        // this.handleCheckChange(this.props.selectedOptions)
-
     }
 
 
@@ -1306,8 +1309,8 @@ class Devices extends Component {
                                 deleteUnlinkDevice={this.props.deleteUnlinkDevice}
                                 user={this.props.user}
                                 refreshComponent={this.refreshComponent}
+                                history={this.props.history}
                             />
-
                             <ShowMsg
                                 msg={this.props.msg}
                                 showMsg={this.props.showMsg}
@@ -1396,7 +1399,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 var mapStateToProps = ({ devices, auth }) => {
-    //   console.log('devices AUTH', devices.devices);
+    // console.log('devices AUTH', auth);
     //   console.log(devices.options,'devices OPTION', devices.selectedOptions);
     return {
         devices: devices.devices,

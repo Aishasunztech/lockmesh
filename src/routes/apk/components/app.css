@@ -29,7 +29,6 @@
     vertical-align: middle;
     cursor: pointer;
 }
-
 @media (max-width: 768px) {
     .mob_m_t {
         margin-top: 8px;

@@ -107,7 +107,7 @@ export const PUSH_APPS = 'PUSH_APPS';
 export const UNDO_APPS = "UNDO_APPS";
 export const REDO_APPS = 'REDO_APPS';
 
-export const SAVE_POLICY ='SAVE_POLICY';
+export const SAVE_POLICY = 'SAVE_POLICY';
 
 export const APPLY_SETTINGS = 'APPLY_SETTINGS';
 
@@ -142,5 +142,6 @@ export const GET_POLICIES = 'GET_POLICIES'
 
 // Users consts
 export const SAVE_USERS = 'SAVE_USERS'
+export const EDIT_USERS = 'EDIT_USERS'
 export const LOAD_USER = 'LOAD_USER'
 export const USERS_LIST = 'USERS_LIST'
