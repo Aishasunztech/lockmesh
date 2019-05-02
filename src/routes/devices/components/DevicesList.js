@@ -18,6 +18,7 @@ import {
     DEVICE_TRIAL,
     ADMIN
 } from '../../../constants/Constants'
+import { Redirect } from 'react-router-dom';
 import { isNull } from 'util';
 
 const TabPane = Tabs.TabPane;
@@ -126,7 +127,9 @@ class DevicesList extends Component {
             pagination: this.props.pagination,
             selectedRows: [],
             selectedRowKeys: [],
-            self: this
+            self: this,
+            redirect: false,
+            user_id: ''
         };
         this.renderList = this.renderList.bind(this);
     }
@@ -149,6 +152,14 @@ class DevicesList extends Component {
         arr.push(device);
         let title = ' Are you sure, you want to delete the device';
         this.confirmDelete(action, arr, title);
+    }
+    handleUserId = (user_id) => {
+        if (user_id != 'null' && user_id != null) {
+            this.setState({
+                redirect: true,
+                user_id: user_id
+            })
+        }
     }
     // renderList
     renderList(list) {
@@ -226,7 +237,7 @@ class DevicesList extends Component {
                 flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
                 device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-                user_id: checkValue(device.user_id),                
+                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 validity: checkValue(device.validity),
                 name: checkValue(device.name),
                 account_email: checkValue(device.account_email),
@@ -345,6 +356,13 @@ class DevicesList extends Component {
         // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
 
         const { activateDevice, suspendDevice } = this.props;
+        const { redirect } = this.state
+        if (redirect) {
+            return <Redirect to={{
+                pathname: '/users',
+                state: { id: this.state.user_id }
+            }} />
+        }
 
         let rowSelection;
         if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {
@@ -609,6 +627,7 @@ export default class Tab extends Component {
                         deleteUnlinkDevice={this.props.deleteUnlinkDevice}
                         resetTabSelected={this.resetTabSelected}
                         user={this.props.user}
+                        history={this.props.history}
                     />
                 </TabPane>
                 <TabPane tab={<span className="green">Active</span>} key="4" forceRender={true}>

@@ -21,7 +21,7 @@ class AddUserForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('form', values);
             if (!err) {
-                this.props.AddDeviceHandler(values);
+                this.props.AddUserHandler(values);
                 this.props.handleCancel();
                 this.handleReset();
             }
@@ -50,6 +50,13 @@ class AddUserForm extends Component {
         return (
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                 <p>(*)- Required Fields</p>
+                {(this.props.user) ? <Form.Item>
+                    {this.props.form.getFieldDecorator('user_id', {
+                        initialValue: this.props.user.user_id,
+                    })(
+                        <Input type='hidden' />
+                    )}
+                </Form.Item> : null}
                 <Form.Item
 
                     label="Name"
@@ -57,7 +64,7 @@ class AddUserForm extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('name', {
-                        initialValue: '',
+                        initialValue: this.props.user ? this.props.user.user_name : '',
                         rules: [
                             {
                                 required: true, message: 'Name is Required !',
@@ -73,7 +80,7 @@ class AddUserForm extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('email', {
-                        initialValue: '',
+                        initialValue: this.props.user ? this.props.user.email : '',
                         rules: [{
                             type: 'email', message: 'The input is not valid E-mail!',
                         },

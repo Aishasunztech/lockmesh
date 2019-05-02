@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
-import { getStatus, componentSearch } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase } from '../utils/commonUtils';
 
 
 import {
@@ -17,9 +17,39 @@ import {
     ADMIN,
     DEVICE_TRIAL
 } from '../../constants/Constants'
+import {
+    DEVICE_ID,
+    DEVICE_REMAINING_DAYS,
+    DEVICE_FLAGGED,
+    DEVICE_STATUS,
+    DEVICE_MODE,
+    DEVICE_NAME,
+    DEVICE_ACTIVATION_CODE,
+    DEVICE_ACCOUNT_EMAIL,
+    DEVICE_PGP_EMAIL,
+    DEVICE_CHAT_ID,
+    DEVICE_CLIENT_ID,
+    DEVICE_DEALER_ID,
+    DEVICE_DEALER_PIN,
+    DEVICE_MAC_ADDRESS,
+    DEVICE_SIM_ID,
+    DEVICE_IMEI_1,
+    DEVICE_SIM_1,
+    DEVICE_IMEI_2,
+    DEVICE_SIM_2,
+    DEVICE_SERIAL_NUMBER,
+    DEVICE_MODEL,
+    DEVICE_START_DATE,
+    DEVICE_EXPIRY_DATE,
+    DEVICE_DEALER_NAME,
+    DEVICE_S_DEALER,
+    DEVICE_S_DEALER_NAME,
+    USER_ID
+} from '../../constants/DeviceConstants';
 
 import {
     addUser,
+    editUser,
     getUserList
 } from "../../appRedux/actions/Users";
 
@@ -29,8 +59,13 @@ import {
 
 } from "../../appRedux/actions/Common";
 import AddUser from './components/AddUser';
-var coppyDevices = [];
+var coppyUsers = [];
 var status = true;
+const question_txt = (
+    <div>
+        <p>Press <a style={{ fontSize: 14 }}><Icon type="caret-right" /> </a> to View Devices<br></br> list of this User</p>
+    </div>
+);
 class Users extends Component {
     constructor(props) {
         super(props);
@@ -43,21 +78,35 @@ class Users extends Component {
             },
             {
                 title: (
-                    <span>
-                        User ID
-                    {/* <Popover placement="top" content='dumy'>
-                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                        </Popover> */}
-                    </span>),
+                    <Input.Search
+                        name="user_id"
+                        key="user_id"
+                        id="user_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(USER_ID)}
+                    />
+                ),
                 dataIndex: 'user_id',
-                key: 'user_id',
-                className: 'row'
+                className: '',
+                children: [
+                    {
+                        title: USER_ID,
+                        dataIndex: 'user_id',
+                        align: "center",
+                        key: 'user_id',
+                        className: '',
+                        sorter: (a, b) => { return a.user_id.toString().localeCompare(b.user_id.toString()) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ],
             },
             {
                 title: (
                     <span>
                         DEVICES
-                    <Popover placement="top" content='dumy'>
+                    <Popover placement="top" content={question_txt}>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover>
                     </span>),
@@ -67,27 +116,51 @@ class Users extends Component {
             },
             {
                 title: (
-                    <span>
-                        Name
-                    {/* <Popover placement="top" content='dumy'>
-                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                        </Popover> */}
-                    </span>),
+                    <Input.Search
+                        name="user_name"
+                        key="user_name"
+                        id="user_name"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Name"
+                    />
+                ),
                 dataIndex: 'user_name',
-                key: 'user_name',
-                className: 'row'
+                className: 'row',
+                children: [{
+                    title: 'NAME',
+                    dataIndex: 'user_name',
+                    align: "center",
+                    key: 'user_name',
+                    className: '',
+                    sorter: (a, b) => { return a.user_name.localeCompare(b.user_name.toString()) },
+                    sortDirections: ['ascend', 'descend'],
+                }]
             },
             {
                 title: (
-                    <span>
-                        Email
-                    {/* <Popover placement="top" content='dumy'>
-                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                        </Popover> */}
-                    </span>),
-                dataIndex: 'user_email',
-                key: 'user_email',
-                className: 'row'
+                    <Input.Search
+                        name="email"
+                        key="email"
+                        id="email"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Email"
+                    />
+                ),
+                dataIndex: 'email',
+                className: 'row',
+                children: [{
+                    title: 'EMAIL',
+                    dataIndex: 'email',
+                    align: "center",
+                    key: 'email',
+                    className: '',
+                    sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
+                    sortDirections: ['ascend', 'descend'],
+                }]
             },
             {
                 title: 'TOKENS',
@@ -128,25 +201,25 @@ class Users extends Component {
         }
     }
 
-    
+
     handleComponentSearch = (value) => {
-    //    console.log('values sr', value)   
+        //    console.log('values sr', value)   
         try {
             if (value.length) {
-            
+
                 // console.log('length')
 
                 if (status) {
                     // console.log('status')
-                    coppyDevices = this.state.users;
+                    coppyUsers = this.state.users;
                     status = false;
                 }
                 // console.log(this.state.users,'coppy de', coppyDevices)
-                let foundDevices = componentSearch(coppyDevices, value);
-                // console.log('found devics', foundDevices)
-                if (foundDevices.length) {
+                let foundUsers = componentSearch(coppyUsers, value);
+                // console.log('found devics', foundUsers)
+                if (foundUsers.length) {
                     this.setState({
-                        users: foundDevices,
+                        users: foundUsers,
                     })
                 } else {
                     this.setState({
@@ -157,7 +230,7 @@ class Users extends Component {
                 status = true;
 
                 this.setState({
-                    users: coppyDevices,
+                    users: coppyUsers,
                 })
             }
         } catch (error) {
@@ -173,9 +246,55 @@ class Users extends Component {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
     }
+    handleSearch = (e) => {
+        // console.log('============ check search value ========')
+        // console.log(e.target.name , e.target.value);
+
+        let demoUsers = [];
+        if (status) {
+            coppyUsers = this.state.users;
+            status = false;
+        }
+        //   console.log("devices", coppyDevices);
+
+        if (e.target.value.length) {
+            // console.log("keyname", e.target.name);
+            // console.log("value", e.target.value);
+            // console.log(this.state.devices);
+            coppyUsers.forEach((user) => {
+                //  console.log("user", user[e.target.name] !== undefined);
+
+                if (user[e.target.name] !== undefined) {
+                    if ((typeof user[e.target.name]) === 'string') {
+                        // console.log("string check", user[e.target.name])
+                        if (user[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+                            demoUsers.push(user);
+                        }
+                    } else if (user[e.target.name] != null) {
+                        // console.log("else null check", user[e.target.name])
+                        if (user[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+                            demoUsers.push(user);
+                        }
+                    } else {
+                        // demoUsers.push(user);
+                    }
+                } else {
+                    demoUsers.push(user);
+                }
+            });
+            //  console.log("searched value", demoUsers);
+            this.setState({
+                users: demoUsers
+            })
+        } else {
+            this.setState({
+                users: coppyUsers
+            })
+        }
+    }
 
     render() {
-        // console.log(this.props.DisplayPages);
+        // console.log(this.props.location);
         return (
             <Fragment>
                 <AppFilter
@@ -193,6 +312,8 @@ class Users extends Component {
                 />
                 <AddUser ref="add_user" />
                 <UserList
+                    editUser={this.props.editUser}
+                    location={this.props.location}
                     columns={this.columns}
                     users={this.state.users}
                     pagination={this.props.DisplayPages}
@@ -207,6 +328,7 @@ class Users extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addUser: addUser,
+        editUser: editUser,
         getUserList: getUserList,
         postPagination: postPagination,
         getPagination: getPagination

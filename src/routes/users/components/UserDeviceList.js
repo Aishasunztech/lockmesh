@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Button, Modal, Row, Col, Spin, Input, Card } from "antd";
+import { Table, Button, Modal, Row, Col, Spin, Input, Card, Select } from "antd";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import AppFilter from "../../../components/AppFilter";
 import {
     DEVICE_ID,
     DEVICE_REMAINING_DAYS,
@@ -44,6 +45,7 @@ import { getStatus, componentSearch, titleCase, checkValue, getColor } from '../
 
 var coppyDevices = [];
 var status = true;
+const Search = Input.Search;
 
 // export default 
 class UserDeviceList extends Component {
@@ -52,7 +54,8 @@ class UserDeviceList extends Component {
         this.state = {
             devicesList: this.props.record.devicesList ? this.props.record.devicesList : [],
             permissions: [],
-            
+            pagination: 10
+
         }
         this.listdeviceCols = [
             {
@@ -61,6 +64,7 @@ class UserDeviceList extends Component {
                 align: 'center',
                 className: 'row',
                 width: 800,
+                key: "action"
             },
             {
                 title: (
@@ -344,6 +348,20 @@ class UserDeviceList extends Component {
             return originalData;
         }
     }
+
+
+    handlePagination = (value) => {
+        var x = Number(value)
+        this.setState({
+            pagination: x,
+        });
+    }
+
+
+
+
+
+
     handleSearch = (e) => {
 
         let demoDevices = [];
@@ -401,13 +419,10 @@ class UserDeviceList extends Component {
                 text = "Activate";
             }
             let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
-
+            // console.log(device.usr_device_id);
             return {
-                // sortOrder: <span style={{ display: 'none' }}>{order}</span>,
-                // sortOrder: (<span id="order">{order}</span>),
-                // sortOrder: {order},
                 rowKey: index,
-                key: device.device_id ? `${device.device_id}` : device.user_device_id,
+                key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL || status === DEVICE_SUSPENDED) ?
                     (<Fragment>{ConnectBtn}</Fragment>) : false
@@ -425,17 +440,72 @@ class UserDeviceList extends Component {
             }
         });
     }
+    handleComponentSearch = (value) => {
+        try {
+            if (value.length) {
+
+                if (status) {
+                    coppyDevices = this.state.devicesList;
+                    status = false;
+                }
+                let foundDevices = componentSearch(coppyDevices, value);
+                if (foundDevices.length) {
+                    this.setState({
+                        devicesList: foundDevices,
+                    })
+                } else {
+                    this.setState({
+                        devicesList: []
+                    })
+                }
+            } else {
+                status = true;
+
+                this.setState({
+                    devicesList: coppyDevices,
+                })
+            }
+        } catch (error) {
+            // alert("hello");
+        }
+    }
+
+
     render() {
         // console.log('dealer state', this.state.pagination);
         return (
-
-
             <Fragment>
                 <Card>
+                    <div>
+                        <Search
+
+                            placeholder='Search Device'
+                            onChange={e => this.handleComponentSearch(e.target.value)}
+                            style={{ width: '100%' }}
+                        />
+                    </div>
+                    <div>
+                        <Select
+                            value={this.state.pagination}
+                            //  defaultValue={this.state.DisplayPages}
+                            style={{ width: '100%' }}
+                            // onSelect={value => this.setState({DisplayPages:value})}
+                            onChange={value => this.handlePagination(value)}
+                        >
+                            <Select.Option value="10" >10</Select.Option>
+                            <Select.Option value="20">20</Select.Option>
+                            <Select.Option value="30">30</Select.Option>
+                            <Select.Option value="50">50</Select.Option>
+                            <Select.Option value="100">100</Select.Option>
+                        </Select>
+                    </div>
                     <Table
                         columns={this.listdeviceCols}
                         dataSource={this.renderDevices(this.state.devicesList)}
-                        
+                        scroll={{
+                            x: 500,
+                        }}
+                        pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
                     />
                 </Card>
             </Fragment >
