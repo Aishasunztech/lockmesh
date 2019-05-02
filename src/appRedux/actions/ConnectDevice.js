@@ -37,15 +37,15 @@ import {
     REDO_CONTROLS,
     GET_APPS_PERMISSIONS,
     HANDLE_CHECK_APP_POLICY,
-    GET_IMIE_HISTORY
-
+    GET_IMIE_HISTORY,
+    GET_POLICIES,
+    SHOW_PUSH_APPS_MODAL
 } from "../../constants/ActionTypes"
 
 import {
     message
 } from 'antd';
 import RestService from '../services/RestServices';
-import { GET_POLICIES } from "../../constants/ActionTypes";
 
 // action creaters 
 
@@ -768,26 +768,36 @@ export const flagged = (device_id, data) => {
         })
     }
 }
-export const checkPass = (user) => {
+export const checkPass = (user, actionType) => {
     // console.log(user);
     return (dispatch) => {
         RestService.checkPass(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log(response.data);
-                dispatch({
-                    type: CHECKPASS,
-                    response: response.data,
-                    payload: {
-                        device: user.device,
-                        PasswordMatch: response.data,
-                    }
-                })
+                if(actionType === PUSH_APPS){
+                    dispatch({
+                        type: CHECKPASS,
+                        payload: {
+                            actionType : actionType,
+                            PasswordMatch: response.data,
+                        }
+                    })
+                }else if (actionType === WIPE_DEVICE){
+                    dispatch({
+                        type: CHECKPASS,
+                        payload: {
+                            actionType : actionType,
+                            device: user.device,
+                            PasswordMatch: response.data,
+                        }
+                    })
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
             }
         })
+    
     }
 }
 
@@ -839,6 +849,16 @@ export const reSyncDevice = (deviceId) => {
                     type:INVALID_TOKEN
                 })
             }
+        })
+    }
+}
+
+export const showPushAppsModal = (visible) => {
+    return (dispatch) => {
+        dispatch({
+            type: SHOW_PUSH_APPS_MODAL,
+            payload: visible
+
         })
     }
 }

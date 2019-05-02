@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch } from "antd";
 import UserDeviceList from './UserDeviceList'
+import AddUser from './AddUser';
 
 class UserList extends Component {
 
@@ -11,6 +12,7 @@ class UserList extends Component {
         this.state = {
             columns: [],
             pagination: this.props.pagination,
+            users: []
 
         }
     }
@@ -31,38 +33,26 @@ class UserList extends Component {
         return user_list.map((user, index) => {
             // this.state.expandTabSelected[index]='1';
             // this.state.expandedByCustom[index]=false;
-
             return {
+                key: `${user.user_id}`,
+                rowKey: `${user.user_id}`,
                 action:
                     (<Fragment>
                         <Button
                             type="primary"
                             size="small"
-                            onClick={() => { }}
+                            onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
                         >
                             Edit
                     </Button>
                     </Fragment>)
                 ,
-                user_id: <span style={{ fontSize: 15, fontWeight: 400 }}>{user.user_id}</span>,
-                devices: <span style={{ fontSize: 15, fontWeight: 400 }}>{(user.devicesList) ? user.devicesList.length : 0}</span>,
+                user_id: user.user_id,
+                devices: (user.devicesList) ? user.devicesList.length : 0,
                 devicesList: user.devicesList,
-                user_name: <span style={{ fontSize: 15, fontWeight: 400 }}>{user.user_name}</span>,
-                user_email: <span style={{ fontSize: 15, fontWeight: 400 }}>{user.email}</span>,
-                token: <span style={{ fontSize: 15, fontWeight: 400 }}>{user.email}</span>,
-                //     policy_status: (<Switch defaultChecked={true} onChange={(e) => {
-
-                //     }} />),
-
-                //     rowKey: index,
-                //     policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
-                //     policy_name: (policy.policy_name) ? `${policy.policy_name}` : "N/A",
-
-                //     default_policy: (<Switch defaultChecked={true} onChange={(e) => {
-
-                //     }
-                // } />
-                // ),
+                user_name: user.user_name,
+                email: user.email,
+                token: user.email,
             }
         });
 
@@ -81,13 +71,17 @@ class UserList extends Component {
         }
     }
     componentDidMount() {
+        this.setState({
+            users: this.props.users
+        })
     }
 
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
             this.setState({
-                columns: this.props.columns
+                columns: this.props.columns,
+                users: this.props.users
             })
         }
     }
@@ -99,6 +93,9 @@ class UserList extends Component {
                     <Table className="devices"
                         size="middle"
                         bordered
+                        scroll={{
+                            x: 500,
+                        }}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("table row", record);
@@ -109,13 +106,14 @@ class UserList extends Component {
                         }}
                         expandIconColumnIndex={2}
                         expandIconAsCell={false}
+                        defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                         columns={this.state.columns}
-                        dataSource={this.renderList(this.props.users)}
+                        dataSource={this.renderList(this.state.users)}
                         pagination={{ pageSize: this.state.pagination, size: "midddle" }}
-                        rowKey="user_list"
                         ref='user_table'
                     />
                 </Card>
+                <AddUser ref='edit_user' />
             </Fragment>
         )
     }

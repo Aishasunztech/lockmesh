@@ -15,18 +15,22 @@ import DealerApps from "./DealerApps";
 import PasswordForm from './PasswordForm';
 
 import {
-    ADMIN, DEALER, SDEALER
-} from "../../../constants/Constants";
-
-import {
     showHistoryModal,
     showSaveProfileModal,
     saveProfile,
     hanldeProfileInput,
     transferDeviceProfile,
     getDealerApps,
-    loadDeviceProfile
+    loadDeviceProfile,
+    showPushAppsModal
 } from "../../../appRedux/actions/ConnectDevice";
+
+import {
+    ADMIN, DEALER, SDEALER
+} from "../../../constants/Constants";
+
+
+import { PUSH_APPS } from "../../../constants/ActionTypes"
 
 const confirm = Modal.confirm;
 const DealerAppModal = (props) => {
@@ -65,7 +69,6 @@ const SelectedApps = (props) => {
             visible={props.selectedAppsModal}
             onOk={() => {
                 props.showSelectedAppsModal(false);
-                props.showPwdConfirmModal(true);
             }}
             onCancel={() => props.showSelectedAppsModal(false)}
             okText="Push Apps"
@@ -94,7 +97,11 @@ const PasswordModal = (props) => {
             onCancel={() => props.showPwdConfirmModal(false)}
             okText="Push Apps"
         >
-            <PasswordForm />
+            <PasswordForm 
+                checkPass={props.checkPass}
+                actionType = {PUSH_APPS}
+                handleCancel = {props.showPwdConfirmModal}
+            />
         </Modal>
     )
 }
@@ -280,7 +287,7 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showPushAppsModal(true)} ><Icon type='upload' /> Push</Button>
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showPwdConfirmModal(true)} ><Icon type='upload' /> Push</Button>
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
 
@@ -389,24 +396,27 @@ class SideActions extends Component {
                 </Modal>
 
                 <DealerAppModal
-                    pushAppsModal={this.state.pushAppsModal}
-                    showPushAppsModal={this.showPushAppsModal}
+                    pushAppsModal={this.props.pushAppsModal}
+                    showPushAppsModal={this.props.showPushAppsModal}
                     apk_list={this.props.apk_list}
                     onSelectChange={this.onSelectChange}
                     showSelectedAppsModal={this.showSelectedAppsModal}
                     selectedApps={this.state.selectedApps}
                     handleChecked={this.handleChecked}
                 />
+                
+                <PasswordModal
+                    pwdConfirmModal={this.state.pwdConfirmModal}
+                    showPwdConfirmModal={this.showPwdConfirmModal}
+                    checkPass = {this.props.checkPass}
+                />
+                
                 <SelectedApps
                     selectedAppsModal={this.state.selectedAppsModal}
                     showSelectedAppsModal={this.showSelectedAppsModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     apk_list={this.state.selectedApps}
                     selectedApps={[]}
-                />
-                <PasswordModal
-                    pwdConfirmModal={this.state.pwdConfirmModal}
-                    showPwdConfirmModal={this.showPwdConfirmModal}
                 />
 
                 <ActivateDevcie
@@ -432,16 +442,11 @@ class SideActions extends Component {
                 />
                 <FlagDevice
                     ref='flag_device'
-                // go_back={this.props.history.goBack}
-                // getDevice={this.props.getDevicesList}
                 />
                 <ImeiView
                     ref='imeiView'
                     device={this.props.device}
                     imei_list={this.props.imei_list}
-                // getImeiHistory={this.props.getImeiHistory}
-                // go_back={this.props.history.goBack}
-                // getDevice={this.props.getDevicesList}
                 />
             </div>
         )
@@ -464,7 +469,8 @@ function mapDispatchToProps(dispatch) {
         saveProfile: saveProfile,
         hanldeProfileInput: hanldeProfileInput,
         transferDeviceProfile: transferDeviceProfile,
-        loadDeviceProfile: loadDeviceProfile
+        loadDeviceProfile: loadDeviceProfile,
+        showPushAppsModal: showPushAppsModal
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
@@ -474,6 +480,7 @@ var mapStateToProps = ({ device_details, auth }, otherProps) => {
         historyModal: device_details.historyModal,
         saveProfileModal: device_details.saveProfileModal,
         historyType: device_details.historyType,
+        pushAppsModal: device_details.pushAppsModal,
         saveProfileType: device_details.saveProfileType,
         profileName: device_details.profileName,
         policyName: device_details.policyName,

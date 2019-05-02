@@ -3,7 +3,8 @@ import {
     LOAD_USER,
     INVALID_TOKEN,
     USERS_LIST,
-    LOADING
+    LOADING,
+    EDIT_USERS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -48,6 +49,33 @@ export function addUser(user) {
                     payload: {
                         userData: user,
                         msg: response.data.msg
+                    }
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export function editUser(user) {
+    // console.log("action called", data);
+    return (dispatch) => {
+
+        dispatch({
+            type: LOAD_USER,
+        });
+
+        RestService.editUser(user).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('action done ', response.data);
+                dispatch({
+                    type: EDIT_USERS,
+                    response: response.data,
+                    payload: {
+                        userData: user,
                     }
                 });
 

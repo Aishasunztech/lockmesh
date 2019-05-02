@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react'
-import { Card, Row, Col, Button, message, Icon, Modal, Input, Avatar, Table, Switch } from "antd";
+import React, { Fragment } from 'react'
+import { Avatar, Table, Switch } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 
 const DealerApps = (props) => {

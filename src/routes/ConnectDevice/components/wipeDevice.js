@@ -50,6 +50,7 @@ export default class WipeDevice extends Component {
                         authUser={this.props.authUser}
                         checkPass={this.props.checkPass}
                         handleCancel={this.handleCancel}
+                        actionType = "WIPE_DEVICE"
                     />
                 </Modal>
             </div>

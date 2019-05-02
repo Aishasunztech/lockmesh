@@ -42,7 +42,8 @@ import {
     REDO_CONTROLS,
     GET_APPS_PERMISSIONS,
     HANDLE_CHECK_MAIN_SETTINGS,
-    GET_IMIE_HISTORY
+    GET_IMIE_HISTORY,
+    SHOW_PUSH_APPS_MODAL
 } from "../../constants/ActionTypes";
 
 import {
@@ -131,6 +132,7 @@ const initialState = {
     encryptedAllExt: false,
 
     imei_list: [],
+    pushAppsModal:false,
 };
 
 export default (state = initialState, action) => {
@@ -246,7 +248,7 @@ export default (state = initialState, action) => {
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
             state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
-//  console.log('controls form reduvcer of getdeviceapp', action.controls)
+            //  console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
             return {
@@ -450,7 +452,17 @@ export default (state = initialState, action) => {
         }
         case CHECKPASS: {
             if (action.payload.PasswordMatch.password_matched) {
-                showConfirm1(action.payload.device, "Do You really Want to Wipe the device")
+                // alert(action.payload.actionType);
+
+                if(action.payload.actionType === PUSH_APPS){
+                    return {
+                        ...state,
+                        pushAppsModal: true
+                    }
+                } else if (action.payload.actionType === WIPE_DEVICE){
+
+                    showConfirm1(action.payload.device, "Do You really Want to Wipe the device")
+                }
             }
             else {
                 message.error("Password Did not Match. Please Try again.");
@@ -487,9 +499,6 @@ export default (state = initialState, action) => {
 
             }
         }
-
- 
-
 
         case HANDLE_CHECK_CONTROL: {
             let changedControls = JSON.parse(JSON.stringify(state.controls.controls));
@@ -836,6 +845,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 apk_list: action.payload,
+            }
+        }
+        case SHOW_PUSH_APPS_MODAL: {
+            return {
+                ...state,
+                pushAppsModal: action.payload
             }
         }
         case GET_IMIE_HISTORY: {
