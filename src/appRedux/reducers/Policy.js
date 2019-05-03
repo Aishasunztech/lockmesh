@@ -6,8 +6,12 @@ import {
     GET_DEALER_APPS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
     SAVE_POLICY,
+    PERMSSION_SAVED,
+    HANDLE_CHECK_ALL_APP_POLICY,
+    HANDLE_POLICY_STATUS,
     POLICY_PERMSSION_SAVED,
-    HANDLE_CHECK_ALL_APP_POLICY
+    EDIT_POLICY
+
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -118,6 +122,48 @@ export default (state = initialState, action) => {
                 ...state,
                 systemPermissions: { ...state.systemPermissions },
             }
+        }
+
+        case EDIT_POLICY: {
+           let changedState =  state.policies;
+           let id = action.payload.id;
+           let rowId = action.payload.rowId;
+           let key = action.payload.key;
+           let stateToUpdate= action.payload.stateToUpdate;
+console.log(stateToUpdate,'checknged stae', changedState[rowId][stateToUpdate])
+           let index = changedState[rowId][stateToUpdate].findIndex(item => item.apk_id == id);
+           if(index >= 0){
+            changedState[rowId][stateToUpdate][index][key] = action.payload.value;
+           }
+           console.log(index,'lll')
+
+           state.policies = changedState;
+           return {
+               ...state,
+               policies: [...state.policies],
+           }
+        }
+
+
+        case HANDLE_POLICY_STATUS: {
+
+            let changedState = state.policies;
+            let index = changedState.findIndex((policy) => policy.id == action.payload.id);
+            if(index >= 0){
+                if (action.payload.key == 'delete_status') {
+                    changedState.splice(index, 1);
+                    message.success('Policy Deleted Successfully')
+    
+                } else if (action.payload.key == 'status') {
+                    changedState[index][action.payload.key] = action.payload.value
+                }
+                state.policies = changedState;
+                return {
+                    ...state,
+                    policies: [...state.policies],
+                }
+            }
+           
         }
 
 

@@ -49,8 +49,10 @@
 }
 
 .exp_txt {
-    font-size: 13px;
-    font-weight: 400;
+    font-size: 12px;
+    font-weight: 300;
+    vertical-align: top;
+    margin-left: 2px;
 }
 
 .ant-steps-item-content {

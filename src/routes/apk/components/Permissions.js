@@ -33,7 +33,7 @@ class Permissions extends Component {
       removeSelectedDealersModal: false,
       addSelectedDealersModal: false
     }
-    
+
     this.addDealerCols = dealerColsWithSearch(true, this.handleSearch)
     this.listDealerCols = dealerColsWithSearch();
 
@@ -295,7 +295,7 @@ class Permissions extends Component {
     let is_included
     list.map((dealer) => {
       // console.log('object recrd', this.props.record.permissions);
-      if(this.state.permissions){
+      if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);
 
       }
@@ -331,25 +331,25 @@ class Permissions extends Component {
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row">
+          <Col className="gutter-row" span={4}>
             <div className="gutter-box"><h2>Permission List</h2> </div>
           </Col>
-          <Col className="gutter-row">
+          <Col className="gutter-row" span={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
-          <Col className="gutter-row">
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
-          </Col>
-          <Col className="gutter-row">
+          <Col className="gutter-row" span={3}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
           </Col>
-          <Col className="gutter-row">
+          <Col className="gutter-row" span={2}>
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
+          </Col>
+          <Col className="gutter-row" span={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
           </Col>
-          <Col className="gutter-row">
+          <Col className="gutter-row" span={3}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
           </Col>
-          <Col className="gutter-row">
+          <Col className="gutter-row" span={4}>
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
@@ -364,15 +364,16 @@ class Permissions extends Component {
           </Col>
 
         </Row>
-        <Row gutter={16}>
+        <Row gutter={20}>
 
           {
             this.props.spinloading ? <CircularProgress /> :
-
-              <Table
-                columns={this.listDealerCols}
-                dataSource={this.renderDealer(this.state.dealerList, true)}
-              />
+              <Col className="gutter-row" span={20}>
+                <Table
+                  columns={this.listDealerCols}
+                  dataSource={this.renderDealer(this.state.dealerList, true)}
+                />
+              </Col>
           }
         </Row>
         <Modal

@@ -215,8 +215,7 @@ class AddPolicy extends Component {
     
     onSelectChange = (selected) => {
         this.state.pushAppsIds = selected;
-        // console.log(this.state.dealerApps, 'guested apps')
-        
+        // console.log(this.state.dealerApps, 'guested apps')    
     }
 
     renderSystemPermissions = () => {
