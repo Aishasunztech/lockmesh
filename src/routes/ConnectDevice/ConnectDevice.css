@@ -108,9 +108,15 @@
 }
 
 .deviceImg .ant-table-thead>tr>th {
-    padding: 0 5px 0 3px !important;
-    font-size: 13px;
+    padding: 0 8px 0 0px !important;
+    font-size: 12px;
     width: 60%;
+}
+
+.sec_set_table .ant-table-thead>tr>th {
+    font-size: 13px !important;
+    padding: 0px 6px !important;
+    width: 100% !important;
 }
 
 th.device_info {
@@ -136,7 +142,7 @@ th.device_info {
 }
 
 .deviceImg .ant-spin-container {
-    width: 295px;
+    width: 297px;
     margin: 0px auto;
     padding: 0;
 }
@@ -154,10 +160,18 @@ th.device_info {
     border-bottom: 1px solid #e8e8e8 !important;
 }
 
+.line_break1 {
+    width: 60px;
+    margin: 0 auto;
+    /* display: inline-block; */
+    text-align: center;
+}
+
 .line_break {
     width: auto;
     margin-left: 8px;
     display: inline-block;
+    vertical-align: middle;
 }
 
 .line_break .perm_txt {
@@ -288,9 +302,9 @@ th.device_info {
     }
 
     .deviceImg .ant-table-thead>tr>th {
-        padding: 0 4px 0 4px !important;
-        font-size: 12px;
-        width: 20%;
+        padding: 0 7px 0 5px !important;
+        font-size: 10px;
+        width: 90%;
     }
 
     .sec_head {

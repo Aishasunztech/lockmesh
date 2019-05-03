@@ -98,12 +98,16 @@ class PolicyList extends Component {
                             this.expandRow(index, 'info', true)
                             // console.log('table cosn', this.refs.policy_table)
                             // this.refs.policy_table.props.onExpand()  
-                        }><Icon type="arrow-down" size={28} /></a> <span className="exp_txt">EXPAND</span></div>
+                        }>
+                            <Icon type="arrow-down" style={{ fontSize: 15 }} />
+                        </a>
+                        <span className="exp_txt">Expand</span>
+                    </div>
 
 
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
-                permissions: (policy.dealer_permission!==undefined || policy.dealer_permission !=null)?policy.dealer_permission:[],
+                permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
                 policy_status: (<Switch defaultChecked={true} onChange={(e) => {
 
                 }} />),
@@ -115,7 +119,7 @@ class PolicyList extends Component {
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
                 default_policy: (
-                    <Switch defaultChecked={true} onChange={(e) => {}} />
+                    <Switch defaultChecked={true} onChange={(e) => { }} />
                 ),
             }
         });
@@ -189,9 +193,9 @@ class PolicyList extends Component {
                             // console.log("expandTabSelected", record);
                             // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
-                                <PolicyInfo 
-                                    selected={this.state.expandTabSelected[record.rowKey]} 
-                                    policy={record} 
+                                <PolicyInfo
+                                    selected={this.state.expandTabSelected[record.rowKey]}
+                                    policy={record}
                                 />
                             )
                         }}
