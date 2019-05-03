@@ -42,6 +42,7 @@ import {
     ADMIN
 } from '../../../constants/Constants'
 import { getStatus, componentSearch, titleCase, checkValue, getColor } from '../../utils/commonUtils';
+import styles from './user.css';
 
 var coppyDevices = [];
 var status = true;
@@ -476,35 +477,46 @@ class UserDeviceList extends Component {
         return (
             <Fragment>
                 <Card>
-                    <div>
-                        <Search
+                    <Row>
+                        <Col span={6}>
+                            <div style={{ display: "none" }}>Dummy</div>
+                        </Col>
+                        <Col span={6}>
+                            <div style={{ display: "none" }}>Dummy</div>
+                        </Col>
+                        <Col span={6}>
+                            <div className="search_heading">
+                                <Search
+                                    placeholder='Search Device'
+                                    onChange={e => this.handleComponentSearch(e.target.value)}
+                                    style={{ width: '100%' }}
+                                />
+                            </div>
+                        </Col>
+                        <Col span={6}>
+                            <div className="pagination1">
+                                <Select
+                                    value={this.state.pagination}
+                                    //  defaultValue={this.state.DisplayPages}
+                                    style={{ width: '100%' }}
+                                    // onSelect={value => this.setState({DisplayPages:value})}
+                                    onChange={value => this.handlePagination(value)}
+                                >
+                                    <Select.Option value="10" >10</Select.Option>
+                                    <Select.Option value="20">20</Select.Option>
+                                    <Select.Option value="30">30</Select.Option>
+                                    <Select.Option value="50">50</Select.Option>
+                                    <Select.Option value="100">100</Select.Option>
+                                </Select>
+                            </div>
+                        </Col>
+                    </Row>
 
-                            placeholder='Search Device'
-                            onChange={e => this.handleComponentSearch(e.target.value)}
-                            style={{ width: '100%' }}
-                        />
-                    </div>
-                    <div>
-                        <Select
-                            value={this.state.pagination}
-                            //  defaultValue={this.state.DisplayPages}
-                            style={{ width: '100%' }}
-                            // onSelect={value => this.setState({DisplayPages:value})}
-                            onChange={value => this.handlePagination(value)}
-                        >
-                            <Select.Option value="10" >10</Select.Option>
-                            <Select.Option value="20">20</Select.Option>
-                            <Select.Option value="30">30</Select.Option>
-                            <Select.Option value="50">50</Select.Option>
-                            <Select.Option value="100">100</Select.Option>
-                        </Select>
-                    </div>
+
                     <Table
                         columns={this.listdeviceCols}
                         dataSource={this.renderDevices(this.state.devicesList)}
-                        scroll={{
-                            x: 500,
-                        }}
+                        
                         pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
                     />
                 </Card>
