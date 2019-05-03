@@ -449,8 +449,9 @@ class Devices extends Component {
                         title: DEVICE_DEALER_ID,
                         align: "center",
                         dataIndex: 'dealer_id',
+                        key: 'dealer_id',
                         className: '',
-                        sorter: (a, b) => { return a.dealer_id.localeCompare(b.dealer_id) },
+                        sorter: (a, b) => { return a.dealer_id.toString().localeCompare(b.dealer_id.toString()) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
