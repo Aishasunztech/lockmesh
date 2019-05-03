@@ -129,7 +129,14 @@
     margin: 0 auto;
 }
 
-
+.lock_icon {
+    border-right: 1px solid #ccc;
+    position: absolute;
+    left: 0;
+    top: 4px;
+    padding: 6px 8px 2px 12px;
+    text-align: left !important;
+}
 
 .sec_set_table .ant-table-tbody>tr>td {
     font-size: 13px !important;
