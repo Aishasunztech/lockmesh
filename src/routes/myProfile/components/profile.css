@@ -19,10 +19,14 @@
     height: 253px;
 }
 
-.ant-btn>.anticon+span,
-.ant-btn>span+.anticon {
+.ant-btn>.anticon+span {
     margin-left: 8px;
     font-size: 12px;
+}
+
+.ant-btn>span+.anticon {
+    margin-left: 8px;
+    font-size: 14px;
 }
 
 @media (max-width: 992px) {

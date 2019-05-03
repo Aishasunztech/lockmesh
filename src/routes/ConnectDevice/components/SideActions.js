@@ -22,7 +22,8 @@ import {
     transferDeviceProfile,
     getDealerApps,
     loadDeviceProfile,
-    showPushAppsModal
+    showPushAppsModal,
+    applyPushApps
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -33,6 +34,33 @@ import {
 import { PUSH_APPS } from "../../../constants/ActionTypes"
 
 const confirm = Modal.confirm;
+
+const PasswordModal = (props) => {
+    return (
+        <Modal
+            // closable={false}
+            style={{ top: 20 }}
+            width="330px"
+            className="push_app"
+            title=""
+            visible={props.pwdConfirmModal}
+            footer={false}
+            onOk={() => {
+
+            }}
+            onCancel={() => props.showPwdConfirmModal(false)}
+            okText="Push Apps"
+        >
+            <PasswordForm
+                checkPass={props.checkPass}
+                actionType={PUSH_APPS}
+                handleCancel={props.showPwdConfirmModal}
+            />
+        </Modal>
+    )
+}
+
+
 const DealerAppModal = (props) => {
     return (
         <Modal
@@ -68,6 +96,7 @@ const SelectedApps = (props) => {
             title="Selected Apps"
             visible={props.selectedAppsModal}
             onOk={() => {
+                props.applyPushApps(props.apk_list);
                 props.showSelectedAppsModal(false);
             }}
             onCancel={() => props.showSelectedAppsModal(false)}
@@ -82,29 +111,7 @@ const SelectedApps = (props) => {
     )
 }
 
-const PasswordModal = (props) => {
-    return (
-        <Modal
-            // closable={false}
-            style={{ top: 20 }}
-            width="330px"
-            title=""
-            visible={props.pwdConfirmModal}
-            footer={false}
-            onOk={() => {
 
-            }}
-            onCancel={() => props.showPwdConfirmModal(false)}
-            okText="Push Apps"
-        >
-            <PasswordForm 
-                checkPass={props.checkPass}
-                actionType = {PUSH_APPS}
-                handleCancel = {props.showPwdConfirmModal}
-            />
-        </Modal>
-    )
-}
 
 
 class SideActions extends Component {
@@ -239,17 +246,30 @@ class SideActions extends Component {
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        // console.log("on selection", selectedRows)
+        let selectedApps = selectedRows;
+        selectedApps.map(el=>{
+            if(typeof (el.guest) !== Boolean){
+                el.guest = false
+            }
+
+            if(typeof (el.encrypted) !== Boolean){
+                el.encrypted = false
+            }
+
+            if(typeof (el.enable) !== Boolean){
+                el.enable = false
+            }
+        });
         this.setState({
-            selectedApps: selectedRows
+            selectedApps: selectedApps
         })
     }
     handleChecked = (e, key, app_id) => {
         // console.log("handlechecked", e, key, app_id);
-        this.state.selectedApps.map((el)=>{
-            if(el.apk_id===app_id){
-                el[key]=e;
-            } 
+        this.state.selectedApps.map((el) => {
+            if (el.apk_id === app_id) {
+                el[key] = e;
+            }
         })
     }
     handleFlag(flagged) {
@@ -270,7 +290,9 @@ class SideActions extends Component {
             alert(historyId);
         }
     }
-
+    applyPushApps = () => {
+        this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+    }
     render() {
         // console.log(this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
@@ -287,7 +309,7 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showPwdConfirmModal(true)} ><Icon type='upload' /> Push</Button>
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true)} > <Icon type="lock" /> <Icon type='upload' /> Push</Button>
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
 
@@ -302,7 +324,7 @@ class SideActions extends Component {
                                 justify="center"
                             >
                                 <Tooltip placement="bottom" title="Coming Soon">
-                                    <Button type="default " style={{ width: "100%", marginBottom: 16 }} > <Icon type='download' />Pull</Button>
+                                    <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
                                 </Tooltip>
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 16 }} >Activity</Button>
@@ -404,17 +426,17 @@ class SideActions extends Component {
                     selectedApps={this.state.selectedApps}
                     handleChecked={this.handleChecked}
                 />
-                
+
                 <PasswordModal
                     pwdConfirmModal={this.state.pwdConfirmModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
-                    checkPass = {this.props.checkPass}
+                    checkPass={this.props.checkPass}
                 />
-                
+
                 <SelectedApps
                     selectedAppsModal={this.state.selectedAppsModal}
                     showSelectedAppsModal={this.showSelectedAppsModal}
-                    showPwdConfirmModal={this.showPwdConfirmModal}
+                    applyPushApps = {this.applyPushApps}
                     apk_list={this.state.selectedApps}
                     selectedApps={[]}
                 />
@@ -470,7 +492,8 @@ function mapDispatchToProps(dispatch) {
         hanldeProfileInput: hanldeProfileInput,
         transferDeviceProfile: transferDeviceProfile,
         loadDeviceProfile: loadDeviceProfile,
-        showPushAppsModal: showPushAppsModal
+        showPushAppsModal: showPushAppsModal,
+        applyPushApps: applyPushApps
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {

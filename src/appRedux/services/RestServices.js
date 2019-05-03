@@ -436,6 +436,14 @@ const RestService = {
         }, RestService.getHeader());
 
     },
+    
+    applyPushApps: (push_apps, deviceId, usrAccId) => {
+        return axios.post(BASE_URL + 'users/apply_pushapps/' + deviceId, {
+            push_apps: push_apps,
+            deviceId: deviceId,
+            usrAccId: usrAccId
+        }, RestService.getHeader());
+    },
 
     deleteProfile: (profileId) => {
         // this.setHeaders(this.sessionLogin('token'));
