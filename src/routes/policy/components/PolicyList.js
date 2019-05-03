@@ -19,11 +19,11 @@ class PolicyList extends Component {
     }
 
     editPolicy() {
-        alert("Edit Policy")
+        // alert("Edit Policy")
     }
 
     deletePolicy() {
-        alert("Delete Policy")
+        // alert("Delete Policy")
     }
 
     expandRow = (rowId, btnof, expandedByCustom = false) => {
@@ -103,7 +103,7 @@ class PolicyList extends Component {
 
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
-                permissions: (policy.dealer_permission!==undefined || policy.dealer_permission !=null)?policy.dealer_permission:[],
+                permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
                 policy_status: (<Switch defaultChecked={true} onChange={(e) => {
 
                 }} />),
@@ -115,7 +115,7 @@ class PolicyList extends Component {
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
                 default_policy: (
-                    <Switch defaultChecked={true} onChange={(e) => {}} />
+                    <Switch defaultChecked={true} onChange={(e) => { }} />
                 ),
             }
         });
@@ -189,9 +189,9 @@ class PolicyList extends Component {
                             // console.log("expandTabSelected", record);
                             // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
-                                <PolicyInfo 
-                                    selected={this.state.expandTabSelected[record.rowKey]} 
-                                    policy={record} 
+                                <PolicyInfo
+                                    selected={this.state.expandTabSelected[record.rowKey]}
+                                    policy={record}
                                 />
                             )
                         }}

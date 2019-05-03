@@ -42,22 +42,22 @@ export default class PolicyInfo extends Component {
 
     }
 
-    renderSystemPermissions = ()=> {
-       
-        if(this.state.policy.controls){
-            if(this.state.policy.controls.length){
-                return this.state.policy.controls.map((item, index)=> {
+    renderSystemPermissions = () => {
+
+        if (this.state.policy.controls) {
+            if (this.state.policy.controls.length) {
+                return this.state.policy.controls.map((item, index) => {
                     // console.log('object, ', item)
-                    return{
+                    return {
                         rowKey: index,
                         name: item.name,
-                        action: <span style={{color: (item.value === true || item.value === 1) ? 'green' : 'red'}} >{(item.value === true || item.value === 1) ? 'On' : 'Off'}</span>
+                        action: <span style={{ color: (item.value === true || item.value === 1) ? 'green' : 'red' }} >{(item.value === true || item.value === 1) ? 'On' : 'Off'}</span>
                     }
-                   
+
                 })
             }
         }
-      
+
     }
 
 
@@ -85,13 +85,13 @@ export default class PolicyInfo extends Component {
         // console.log('info list is ', this.props.policy.push_apps)
 
         const PolicyDetail = [{
-            key:1,
+            key: 1,
             name: this.state.policy.policy_name,
             note: this.state.policy.policy_note,
             command: this.state.policy.policy_command,
 
         }]
-
+        console.log(this.state.policy);
         return (
             <div>
                 <Tabs onChange={this.callback} activeKey={this.state.selected} type="card">
@@ -113,7 +113,7 @@ export default class PolicyInfo extends Component {
                     </TabPane>
                     <TabPane tab={SECURE_SETTING_PERMISSION} key="3">
                         <AppList
-                            allExtensions={this.state.policy.permissions}
+                            allExtensions={this.state.policy.secure_apps}
                             handleCheckApp={this.handleCheckApp}
                             secureSettings='allExtensions'
                             isSwitch={false}
@@ -128,12 +128,12 @@ export default class PolicyInfo extends Component {
                         </Table>
                     </TabPane>
                     <TabPane tab={POLICY_DETAILS} key="5">
-                    <Table
+                        <Table
                             pagination={false}
                             dataSource={PolicyDetail}
                             size="small"
                             columns={columnsPolicyDetail}>
-                    </Table>
+                        </Table>
                     </TabPane>
                     <TabPane tab="Dealer Permissions" key="6">
                         <Permissions

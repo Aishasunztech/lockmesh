@@ -5,7 +5,7 @@ import {
     GET_APPS_PERMISSIONS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
     SAVE_POLICY,
-    PERMSSION_SAVED,
+    POLICY_PERMSSION_SAVED,
     HANDLE_CHECK_ALL_APP_POLICY
 } from "../../constants/ActionTypes";
 
@@ -146,7 +146,7 @@ export function savePermission(policy_id, dealers, action) {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
-                    type: PERMSSION_SAVED,
+                    type: POLICY_PERMSSION_SAVED,
                     payload: response.data.msg,
                     permission_count: response.data.permission_count,
                     policy_id: policy_id,

@@ -6,7 +6,7 @@ import {
     GET_DEALER_APPS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
     SAVE_POLICY,
-    PERMSSION_SAVED,
+    POLICY_PERMSSION_SAVED,
     HANDLE_CHECK_ALL_APP_POLICY
 } from "../../constants/ActionTypes";
 import {
@@ -27,11 +27,11 @@ const initialState = {
     showMsg: false,
     isloading: true,
     selectedOptions: [],
-    options: [ POLICY_NAME, POLICY_NOTE ],
+    options: [POLICY_NAME, POLICY_NOTE],
     allExtensions: [],
     appPermissions: [],
-    systemPermissions: {"wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false},
-    systemPermissionsdump: {"wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false},
+    systemPermissions: { "wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
+    systemPermissionsdump: { "wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
 
     guestAlldealerApps: false,
     encryptedAlldealerApps: false,
@@ -51,11 +51,12 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case GET_POLICIES:
+            // console.log(action.payload);
             return {
                 ...state,
                 policies: action.payload
             }
-        
+
         case APK_LIST: {
             return {
                 ...state,
@@ -83,9 +84,9 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY: {
-            if(action.response.status){
+            if (action.response.status) {
                 message.success(action.response.msg)
-            }else{
+            } else {
                 message.error(action.response.msg)
             }
 
@@ -94,11 +95,11 @@ export default (state = initialState, action) => {
                 guestAlldealerApps: false,
                 encryptedAlldealerApps: false,
                 enableAlldealerApps: false,
-            
+
                 guestAllappPermissions: false,
                 encryptedAllappPermissions: false,
                 enableAllappPermissions: false,
-            
+
                 guestAllallExtensions: false,
                 encryptedAllallExtensions: false,
                 enableAllallExtensions: false,
@@ -107,7 +108,7 @@ export default (state = initialState, action) => {
         }
 
         case HANDLE_CHECK_SYSTEM_PERMISSIONS: {
-           
+
             let changedState = state.systemPermissions;
             //  console.log(changedState[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
             changedState[action.payload.key] = action.payload.value
@@ -115,42 +116,42 @@ export default (state = initialState, action) => {
             // console.log(changedState, 'relst')
             return {
                 ...state,
-                systemPermissions: {...state.systemPermissions},
+                systemPermissions: { ...state.systemPermissions },
             }
         }
 
- 
+
         case HANDLE_CHECK_APP_POLICY: {
             // console.log('reducer', action.payload);
-            if(action.payload.stateToUpdate === 'allExtensions'){
+            if (action.payload.stateToUpdate === 'allExtensions') {
 
-                    let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
-        
-                    changedExtensions.forEach(extension => {
-                        // console.log(extension.uniqueName, '===', action.payload.uniqueName)
-                        if (extension.uniqueName === action.payload.uniqueName) {
-                            let objIndex = extension.subExtension.findIndex((obj => obj.id === action.payload.app_id));
-                            if (objIndex > -1) {
-                                extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
-                                extension.subExtension[objIndex].isChanged = true;
-                            }
+                let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
+
+                changedExtensions.forEach(extension => {
+                    // console.log(extension.uniqueName, '===', action.payload.uniqueName)
+                    if (extension.uniqueName === action.payload.uniqueName) {
+                        let objIndex = extension.subExtension.findIndex((obj => obj.id === action.payload.app_id));
+                        if (objIndex > -1) {
+                            extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                            extension.subExtension[objIndex].isChanged = true;
                         }
-                    });
-        
-                    state.allExtensions = JSON.parse(JSON.stringify(changedExtensions));
-        
-                    return {
-                        ...state,
-                        allExtensions: [...state.allExtensions],
-                        // checked_app_id: {
-                        //     id: action.payload.app_id,
-                        //     key: action.payload.key,
-                        //     value: action.payload.value
-                        // },
                     }
+                });
+
+                state.allExtensions = JSON.parse(JSON.stringify(changedExtensions));
+
+                return {
+                    ...state,
+                    allExtensions: [...state.allExtensions],
+                    // checked_app_id: {
+                    //     id: action.payload.app_id,
+                    //     key: action.payload.key,
+                    //     value: action.payload.value
+                    // },
                 }
-            
-            else if(action.payload.stateToUpdate === 'dealerApps'){
+            }
+
+            else if (action.payload.stateToUpdate === 'dealerApps') {
                 let changedApps = JSON.parse(JSON.stringify(state.dealer_apk_list));
                 changedApps.forEach(app => {
                     // console.log(app.app_id,'====', action.payload.app_id)
@@ -159,10 +160,10 @@ export default (state = initialState, action) => {
                         app[action.payload.key] = action.payload.value;
                     }
                 });
-    
+
                 state.dealer_apk_list = JSON.parse(JSON.stringify(changedApps));
                 let applications = state.dealer_apk_list;
-              
+
                 return {
                     ...state,
                     dealer_apk_list: changedApps,
@@ -171,11 +172,11 @@ export default (state = initialState, action) => {
                         key: action.payload.key,
                         value: action.payload.value
                     },
-                  
+
                 }
             }
 
-            else if(action.payload.stateToUpdate === 'appPermissions'){
+            else if (action.payload.stateToUpdate === 'appPermissions') {
                 let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
                 changedApps.forEach(app => {
                     // console.log(app.id,'====', action.payload.app_id ,app)
@@ -184,9 +185,9 @@ export default (state = initialState, action) => {
                         app[action.payload.key] = action.payload.value;
                     }
                 });
-    
+
                 state.appPermissions = JSON.parse(JSON.stringify(changedApps));
-            
+
                 return {
                     ...state,
                     appPermissions: changedApps,
@@ -195,57 +196,57 @@ export default (state = initialState, action) => {
                         key: action.payload.key,
                         value: action.payload.value
                     },
-                  
+
                 }
             }
 
-           
+
         }
 
         case HANDLE_CHECK_ALL_APP_POLICY: {
             // console.log('reducer', action.payload);
-            if(action.payload.stateToUpdate === 'allExtensions'){
+            if (action.payload.stateToUpdate === 'allExtensions') {
                 // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
 
-                    let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
-                    state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
+                let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
+                state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
 
-                    changedExtensions.forEach(extension => {
-                        // console.log(extension.uniqueName, '===', action.payload.uniqueName)
-                        if (extension.uniqueName === action.payload.uniqueName) {
-                           extension.subExtension.forEach(obj => {
+                changedExtensions.forEach(extension => {
+                    // console.log(extension.uniqueName, '===', action.payload.uniqueName)
+                    if (extension.uniqueName === action.payload.uniqueName) {
+                        extension.subExtension.forEach(obj => {
                             obj[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                             obj.isChanged = true;
-                            });
-                        }
-                    });
-        
-                    state.allExtensions = JSON.parse(JSON.stringify(changedExtensions));
-        
-                    return {
-                        ...state,
-                        allExtensions: [...state.allExtensions],
-                        // checked_app_id: {
-                        //     id: action.payload.app_id,
-                        //     key: action.payload.key,
-                        //     value: action.payload.value
-                        // },
+                        });
                     }
+                });
+
+                state.allExtensions = JSON.parse(JSON.stringify(changedExtensions));
+
+                return {
+                    ...state,
+                    allExtensions: [...state.allExtensions],
+                    // checked_app_id: {
+                    //     id: action.payload.app_id,
+                    //     key: action.payload.key,
+                    //     value: action.payload.value
+                    // },
                 }
-            
-            else if(action.payload.stateToUpdate === 'dealerApps'){
+            }
+
+            else if (action.payload.stateToUpdate === 'dealerApps') {
                 let changedApps = JSON.parse(JSON.stringify(state.dealer_apk_list));
                 // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
 
                 state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
                 changedApps.forEach(app => {
                     // console.log(app.app_id,'====', action.payload.app_id)
-                        app.isChanged = true;
-                        app[action.payload.key] = action.payload.value;
+                    app.isChanged = true;
+                    app[action.payload.key] = action.payload.value;
                 });
-    
+
                 state.dealer_apk_list = JSON.parse(JSON.stringify(changedApps));
-               
+
                 return {
                     ...state,
                     dealer_apk_list: changedApps,
@@ -254,22 +255,22 @@ export default (state = initialState, action) => {
                         key: action.payload.key,
                         value: action.payload.value
                     },
-                  
+
                 }
             }
 
-            else if(action.payload.stateToUpdate === 'appPermissions'){
+            else if (action.payload.stateToUpdate === 'appPermissions') {
                 let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
                 // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
                 state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
                 changedApps.forEach(app => {
                     // console.log(app.id,'====', action.payload.app_id ,app)
-                        app.isChanged = true;
-                        app[action.payload.key] = action.payload.value;
+                    app.isChanged = true;
+                    app[action.payload.key] = action.payload.value;
                 });
-    
+
                 state.appPermissions = JSON.parse(JSON.stringify(changedApps));
-            
+
                 return {
                     ...state,
                     appPermissions: changedApps,
@@ -278,24 +279,25 @@ export default (state = initialState, action) => {
                         key: action.payload.key,
                         value: action.payload.value
                     },
-                  
+
                 }
             }
         }
 
-        case PERMSSION_SAVED: {
-			message.success(action.payload);
-			let dealers = JSON.parse(action.dealers)
-			// console.log(dealers.length ,'itrititt',action.apk_id);
-			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
-			state.apk_list[objIndex].permission_count = action.permission_count;
-			
-			return {
-				...state,
-				apk_list: [...state.apk_list]
-			}
+        case POLICY_PERMSSION_SAVED: {
+            // console.log("dasdasdad");
+            message.success(action.payload);
+            let dealers = JSON.parse(action.dealers)
+            // console.log(dealers.length ,'itrititt',action.apk_id);
+            let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
+            state.policies[objIndex].permission_count = action.permission_count;
+
+            return {
+                ...state,
+                policies: [...state.policies]
+            }
         }
-        
+
         default: {
 
             return state;
