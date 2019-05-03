@@ -10,7 +10,7 @@ import {
     HANDLE_CHECK_ALL_APP_POLICY,
     HANDLE_POLICY_STATUS,
     POLICY_PERMSSION_SAVED,
-    HANDLE_CHECK_ALL_APP_POLICY
+
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,

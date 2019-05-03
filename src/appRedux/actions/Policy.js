@@ -10,7 +10,6 @@ import {
     HANDLE_POLICY_STATUS,
     EDIT_POLICY,
     POLICY_PERMSSION_SAVED,
-    HANDLE_CHECK_ALL_APP_POLICY
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
