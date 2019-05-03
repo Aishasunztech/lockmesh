@@ -23,6 +23,8 @@ class AppList extends Component {
             app_list: [],
             rerender: false,
             app_list_count: 0,
+            selectedRowKeys:[],
+            selectedRows: [],
         }
 
         this.appsColumns = [
@@ -68,21 +70,23 @@ class AppList extends Component {
         this.setState({
             apk_list: this.props.apk_list,
             // app_list_count: this.props.length,
-            // guestAll: this.props.guestAll,
-            // encryptedAll: this.props.encryptedAll,
-            // enableAll: this.props.enableAll
+            guestAll: this.props.guestAll,
+            encryptedAll: this.props.encryptedAll,
+            enableAll: this.props.enableAll
         });
     }
 
     componentWillReceiveProps(nextProps) {
         // console.log("app list in list, nextProps", nextProps);
         // alert("componentWillReceiveProps");
+        // console.log(nextProps.enableAll, 'enable all is')
+
         this.setState({
             apk_list: nextProps.apk_list,
             // app_list_count: this.props.length,
-            // guestAll: nextProps.guestAll,
-            // encryptedAll: nextProps.encryptedAll,
-            // enableAll: nextProps.enableAll
+            guestAll: nextProps.guestAll,
+            encryptedAll: nextProps.encryptedAll,
+            enableAll: nextProps.enableAll
         })
     }
 
@@ -91,16 +95,22 @@ class AppList extends Component {
         // console.log("component did update", nextProps);
     }
 
-    handleCheckedAll = (key, value) => {
+    handleCheckedAll = ( value, key) => {
 
-        // console.log("handleCheckedAll");
-        // if (key === "guestAll") {
-        //     this.checkAll(key,'guest', value);
-        // } else if (key === "encryptedAll") {
-        //     this.checkAll(key,'encrypted', value);
-        // } else if (key === "enableAll") {
-        //     this.checkAll(key, 'enable', value);
-        // }
+        //   console.log('check all handling', value,key);
+         // console.log("handleCheckedAll");
+        if (key === "guestAll") {
+            key = 'guest';
+        } else if (key === "encryptedAll") {
+           key = 'encrypted';
+        } else if (key === "enableAll") {
+            key = 'enable';
+        }
+
+         if(this.props.apps) this.props.handleCheckAllAppPolicy(value,key,this.props.apps)
+         else if(this.props.appPermissions) this.props.handleCheckAllAppPolicy(value,key, this.props.appPermissions)
+         else if(this.props.secureSettings) this.props.handleCheckAllAppPolicy(value,key, this.props.secureSettings)
+
     }
 
     handleChecked = (e, key, app_id) => {
@@ -139,10 +149,13 @@ class AppList extends Component {
         let icon = (app.logo !== undefined) ? app.logo : app.icon;
         let Off = 'Off';
         let On = 'On';
+        let isAvailable = (this.state.selectedRowKeys.length)?this.state.selectedRowKeys.find(id => (id === app_id)?true:false): false;
         if(this.props.appPermissions){
-            app_id = app.id
+            app_id = app.id;
+            isAvailable= true
         }
         // alert(guest);
+
 
         return ({
             key: app_id,
@@ -159,8 +172,8 @@ class AppList extends Component {
                     ref={`guest_${app_id}`}
                     name={`guest_${app_id}`}
                     value={guest}
-                    checked={(guest === true || guest === 1) ? true : false}
-
+                    checked={isAvailable ? ((guest === true || guest === 1) ? true : false): false}
+                    disabled={!isAvailable}
                     onClick={(e) => {
                        this.handleChecked(e, "guest", app_id)
                           
@@ -173,8 +186,8 @@ class AppList extends Component {
                     ref={`encrypted_${app_id}`}
                     name={`encrypted_${app_id}`}
                     // value={encrypted}
-                    disabled={app.default_app == 1 ? true: false}
-                    checked={app.default_app == 1 ? true : ((encrypted === true || encrypted === 1) ? true : false)}
+                    disabled={app.default_app == 1 ? true: !isAvailable}
+                    checked={app.default_app == 1 ? true : isAvailable ? ((encrypted === true || encrypted === 1) ? true : false): false}
                     onClick={(e) => {
                         // console.log("encrypted", e);
                         this.handleChecked(e, "encrypted", app_id);
@@ -187,8 +200,8 @@ class AppList extends Component {
                     ref={`enable_${app_id}`}
                     name={`enable_${app_id}`}
                     // value={enable}
-                    checked={app.default_app == 1 ? true : (((enable === true) || (enable === 1)) ? true : false)}
-                    disabled={app.default_app == 1 ? true: false}
+                    checked={app.default_app == 1 ? true : isAvailable ? ((enable === true || enable === 1) ? true : false) : false}
+                    disabled={app.default_app == 1 ? true: !isAvailable}
                     onClick={(e) => {
                         this.handleChecked(e, "enable", app_id);
                     }}
@@ -270,16 +283,49 @@ class AppList extends Component {
         // }
 
     }
+
+    onSelectChange = (selectedRowKeys, selectedRows)=> {
+        this.setState({
+            selectedRowKeys: selectedRowKeys,
+            selectedRows: selectedRows
+        })
+        this.props.onSelectChange(selectedRowKeys);
+        // console.log('selected row keys', selectedRowKeys)
+    }
+
     renderDropdown() {
         return (
             <div className="applist_menu">
-                <Checkbox>Guests All</Checkbox><br></br>
-                <Checkbox>Encrypted All</Checkbox><br></br>
-                <Checkbox>Enable All</Checkbox>
+              <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
+                    this.handleCheckedAll(e.target.checked, "guestAll");
+                }}>Guests All</Checkbox><br></br>
+                <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
+                    this.handleCheckedAll(e.target.checked, "encryptedAll");
+                }}>Encrypted All</Checkbox><br></br>
+                {
+                    this.props.apps || this.props.appPermissions ?
+                
+                <Checkbox checked={this.state.enableAll ? true : false} onChange={(e) => {
+                    this.handleCheckedAll(e.target.checked, "enableAll");
+                }}>Enable All</Checkbox> : false }
             </div>
         );
     }
     render() {
+        const { loading, selectedRowKeys, selectedRows } = this.state;
+        let rowSelection = {
+          selectedRowKeys,
+          selectedRows,
+          onChange: this.onSelectChange,
+        };
+        // const hasSelected = selectedRowKeys.length > 0;
+
+        if(this.props.apps){
+            rowSelection=rowSelection
+        }else{
+            rowSelection=null
+        }
+
         return (
 
             <div>
@@ -291,10 +337,10 @@ class AppList extends Component {
                 /> */}
                 <Popover className="list_p_down" placement="bottomRight" content={this.renderDropdown()} trigger="click">
                     <a><Icon type="ellipsis" /></a>
-
                 </Popover>
                 <Table
                     style={{ margin: 0, padding: 0 }}
+                    rowSelection={rowSelection}
                     size='small'
                     scroll={this.props.isHistory ? {} : { y: 297 }}
                     bordered={false}

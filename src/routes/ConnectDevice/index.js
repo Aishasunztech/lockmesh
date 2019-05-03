@@ -13,7 +13,6 @@ import {
   getProfiles,
   getPolicies,
   getDeviceHistories,
-  saveDeviceProfile,
   loadDeviceProfile,
   pushApps,
   undoApps,
@@ -39,7 +38,8 @@ import {
   handleMainSettingCheck,
   handleControlCheck,
   handleCheckAllExtension,
-  reSyncDevice
+  reSyncDevice,
+  getDealerApps,
 } from "../../appRedux/actions/ConnectDevice";
 import { getDevicesList } from '../../appRedux/actions/Devices';
 import imgUrl from '../../assets/images/mobile.png';
@@ -152,6 +152,7 @@ class ConnectDevice extends Component {
       this.props.getPolicies(device_id);
       this.props.getDeviceHistories(device_id);
       this.props.getImeiHistory(device_id);
+      this.props.getDealerApps();
       // this.setState({
       //     syncStatus: this.props.device_details.is_sync
       // })
@@ -174,7 +175,7 @@ class ConnectDevice extends Component {
       })
     }
   }
-  
+
   // componentWillReceiveProps(nextProps) {
   //   // if (this.props.controls !== nextProps.controls) {
   //   //   this.setState({
@@ -249,18 +250,18 @@ class ConnectDevice extends Component {
         />
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
-      return (<SystemControls 
+      return (<SystemControls
 
-        controls={this.state.controls} 
+        controls={this.state.controls}
         handleCheckAllExtension={this.props.handleCheckAllExtension}
         handleControlCheck={this.props.handleControlCheck}
         handleMainSettingCheck={this.props.handleMainSettingCheck}
-        guestAllExt={ this.props.guestAllExt}
-        encryptedAllExt= {this.props.encryptedAllExt}
+        guestAllExt={this.props.guestAllExt}
+        encryptedAllExt={this.props.encryptedAllExt}
         checked_app_id={this.props.checked_app_id}
-        secureSettingsMain={ this.props.secureSettingsMain}
-        
-        />);
+        secureSettingsMain={this.props.secureSettingsMain}
+
+      />);
     } else if (this.props.pageName === MANAGE_PASSWORD) {
       return (
         <List
@@ -292,22 +293,19 @@ class ConnectDevice extends Component {
   }
   applyActions = () => {
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
-    // console.log(this.props.extensions,'index of ex', objIndex);
+    console.log('index of ex', objIndex);
     let app_list = this.props.app_list;
-    if(objIndex >= 0) {
+    if (objIndex >= 0) {
 
       let obData = {
-          enable: this.props.extensions[objIndex].enable,
-          encrypted: this.props.extensions[objIndex].encrypted,
-          guest: this.props.extensions[objIndex].guest,
-          label:  this.props.extensions[objIndex].label,
-          uniqueName: this.props.extensions[objIndex].uniqueName
+        enable: this.props.extensions[objIndex].enable,
+        encrypted: this.props.extensions[objIndex].encrypted,
+        guest: this.props.extensions[objIndex].guest,
+        label: this.props.extensions[objIndex].label,
+        uniqueName: this.props.extensions[objIndex].uniqueName
       }
-
-      // app_list.push(obData);
-      //  app_list.push(this.props.controls.settings)
     }
-     console.log("hello", this.state.controls.controls);
+
     this.props.applySetting(
       app_list, {
         adminPwd: this.props.adminPwd,
@@ -315,15 +313,15 @@ class ConnectDevice extends Component {
         encryptedPwd: this.props.encryptedPwd,
         duressPwd: this.props.duressPwd,
       },
+      (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
+      this.state.controls.controls,
       this.state.device_id,
       this.props.user_acc_id,
       null, null,
-      (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      this.state.controls.controls
-
     );
+
     this.onCancel();
-   let deviceId = atob(this.props.match.params.device_id);
+    let deviceId = atob(this.props.match.params.device_id);
     this.props.getDeviceApps(deviceId)
 
     // console.log('app after push ', app_list)
@@ -332,11 +330,10 @@ class ConnectDevice extends Component {
     this.onBackHandler();
   }
   refreshDevice = (deviceId) => {
-    // console.log(deviceId);
+
     this.props.startLoading();
-    // console.log("refreshDevice", this.props);
-    //   this.props.getAccIdFromDvcId(deviceId);
-    if (deviceId === undefined) {
+
+    if (deviceId === undefined || deviceId === null) {
       deviceId = atob(this.props.match.params.device_id);
     }
     // console.log('ref', deviceId)
@@ -347,6 +344,7 @@ class ConnectDevice extends Component {
     this.props.getDeviceHistories(deviceId);
     this.props.getImeiHistory(deviceId);
     this.props.reSyncDevice(deviceId);
+    this.props.getDealerApps();
     this.onBackHandler();
     setTimeout(() => {
       this.props.endLoading();
@@ -354,7 +352,6 @@ class ConnectDevice extends Component {
   }
   undoAction = () => {
     let pageName = this.props.pageName;
-    // console.log('undo ext', pageName)
 
     if (pageName === APPS) {
       this.props.undoApplications()
@@ -461,7 +458,8 @@ class ConnectDevice extends Component {
               getDevicesList={this.props.getDevicesList}
               refreshDevice={this.refreshDevice}
               imei_list={this.props.imei_list}
-
+              apk_list={this.props.apk_list}
+            // applySetting = {this.applyActions}
             />
 
           </Col>
@@ -482,7 +480,6 @@ class ConnectDevice extends Component {
             isEncryptedPwd={this.props.isEncryptedPwd}
             isGuestPwd={this.props.isGuestPwd}
             controls={this.state.controls}
-
           />
         </Modal>
       </div>
@@ -497,7 +494,6 @@ function mapDispatchToProps(dispatch) {
     getProfiles: getProfiles,
     getPolicies: getPolicies,
     getDeviceHistories: getDeviceHistories,
-    saveDeviceProfile: saveDeviceProfile,
     loadDeviceProfile: loadDeviceProfile,
     pushApps: pushApps,
     startLoading: startLoading,
@@ -526,6 +522,7 @@ function mapDispatchToProps(dispatch) {
     handleCheckAllExtension: handleCheckAllExtension,
     handleMainSettingCheck: handleMainSettingCheck,
     reSyncDevice: reSyncDevice,
+    getDealerApps: getDealerApps,
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
@@ -571,6 +568,7 @@ var mapStateToProps = ({ routing, device_details, devices }) => {
     checked_app_id: device_details.checked_app_id,
     secureSettingsMain: device_details.secureSettingsMain,
     forceUpdate: device_details.forceUpdate,
+    apk_list: device_details.apk_list,
   };
 }
 

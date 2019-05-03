@@ -6,7 +6,8 @@ import {
     GET_DEALER_APPS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
     SAVE_POLICY,
-    PERMSSION_SAVED
+    PERMSSION_SAVED,
+    HANDLE_CHECK_ALL_APP_POLICY
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -30,7 +31,19 @@ const initialState = {
     allExtensions: [],
     appPermissions: [],
     systemPermissions: {"wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false},
-    systemPermissionsdump: {"wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false}
+    systemPermissionsdump: {"wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false},
+
+    guestAlldealerApps: false,
+    encryptedAlldealerApps: false,
+    enableAlldealerApps: false,
+
+    guestAllappPermissions: false,
+    encryptedAllappPermissions: false,
+    enableAllappPermissions: false,
+
+    guestAllallExtensions: false,
+    encryptedAllallExtensions: false,
+    enableAllallExtensions: false,
 }
 
 export default (state = initialState, action) => {
@@ -78,6 +91,17 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
+                guestAlldealerApps: false,
+                encryptedAlldealerApps: false,
+                enableAlldealerApps: false,
+            
+                guestAllappPermissions: false,
+                encryptedAllappPermissions: false,
+                enableAllappPermissions: false,
+            
+                guestAllallExtensions: false,
+                encryptedAllallExtensions: false,
+                enableAllallExtensions: false,
                 // dealer_apk_list: action.payload,
             }
         }
@@ -85,7 +109,7 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_SYSTEM_PERMISSIONS: {
            
             let changedState = state.systemPermissions;
-             console.log(changedState[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
+            //  console.log(changedState[action.payload.key], 'REDUCER INS PERMISDFAO', action.payload.key)   
             changedState[action.payload.key] = action.payload.value
             state.systemPermissions = changedState;
             // console.log(changedState, 'relst')
@@ -176,6 +200,87 @@ export default (state = initialState, action) => {
             }
 
            
+        }
+
+        case HANDLE_CHECK_ALL_APP_POLICY: {
+            // console.log('reducer', action.payload);
+            if(action.payload.stateToUpdate === 'allExtensions'){
+                // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
+
+                    let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
+                    state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
+
+                    changedExtensions.forEach(extension => {
+                        // console.log(extension.uniqueName, '===', action.payload.uniqueName)
+                        if (extension.uniqueName === action.payload.uniqueName) {
+                           extension.subExtension.forEach(obj => {
+                            obj[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                            obj.isChanged = true;
+                            });
+                        }
+                    });
+        
+                    state.allExtensions = JSON.parse(JSON.stringify(changedExtensions));
+        
+                    return {
+                        ...state,
+                        allExtensions: [...state.allExtensions],
+                        // checked_app_id: {
+                        //     id: action.payload.app_id,
+                        //     key: action.payload.key,
+                        //     value: action.payload.value
+                        // },
+                    }
+                }
+            
+            else if(action.payload.stateToUpdate === 'dealerApps'){
+                let changedApps = JSON.parse(JSON.stringify(state.dealer_apk_list));
+                // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
+
+                state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
+                changedApps.forEach(app => {
+                    // console.log(app.app_id,'====', action.payload.app_id)
+                        app.isChanged = true;
+                        app[action.payload.key] = action.payload.value;
+                });
+    
+                state.dealer_apk_list = JSON.parse(JSON.stringify(changedApps));
+               
+                return {
+                    ...state,
+                    dealer_apk_list: changedApps,
+                    checked_app_id: {
+                        id: action.payload.app_id,
+                        key: action.payload.key,
+                        value: action.payload.value
+                    },
+                  
+                }
+            }
+
+            else if(action.payload.stateToUpdate === 'appPermissions'){
+                let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
+                // console.log(action.payload.key + 'All' + action.payload.stateToUpdate, 'state to update')
+                state[action.payload.key + 'All' + action.payload.stateToUpdate] = action.payload.value;
+                changedApps.forEach(app => {
+                    // console.log(app.id,'====', action.payload.app_id ,app)
+                        app.isChanged = true;
+                        app[action.payload.key] = action.payload.value;
+                });
+    
+                state.appPermissions = JSON.parse(JSON.stringify(changedApps));
+            
+                return {
+                    ...state,
+                    appPermissions: changedApps,
+                    checked_app_id: {
+                        id: action.payload.app_id,
+                        key: action.payload.key,
+                        value: action.payload.value
+                    },
+                  
+                }
+            }
         }
 
         case PERMSSION_SAVED: {

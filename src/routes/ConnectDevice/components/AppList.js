@@ -92,7 +92,7 @@ class AppList extends Component {
     renderApps = () => {
 
         return this.state.app_list.map(app => {
-            // console.log(app.default_app);
+            // console.log(app.app_id);
             return ({
                 key: app.app_id,
                 app_name:
