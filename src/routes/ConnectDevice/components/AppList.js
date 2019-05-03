@@ -103,7 +103,7 @@ class AppList extends Component {
                         // style={{ width: "30px", height: "30px" }} 
                         />
                         <br />
-                        <div className="line_break">{app.label}</div>
+                        <div className="line_break1">{app.label}</div>
                     </Fragment>,
                 guest: (this.props.isHistory === true) ?
                     (app.guest === 1 || app.guest === true) ?

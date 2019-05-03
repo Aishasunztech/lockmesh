@@ -129,17 +129,12 @@
     margin: 0 auto;
 }
 
-.sec_set_table .ant-table-thead>tr>th {
-    font-size: 13px !important;
-    text-align: center !important;
-    padding: 12px 8px !important;
-    width: 100% !important;
-}
+
 
 .sec_set_table .ant-table-tbody>tr>td {
     font-size: 13px !important;
     text-align: left !important;
-    padding: 6px 15px 6px 15px !important;
+    padding: 6px 22px 6px 10px !important;
     width: 100% !important;
 }
 

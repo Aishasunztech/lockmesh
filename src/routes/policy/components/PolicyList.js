@@ -110,7 +110,11 @@ class PolicyList extends Component {
                             this.expandRow(index, 'info', true)
                             // console.log('table cosn', this.refs.policy_table)
                             // this.refs.policy_table.props.onExpand()  
-                        }><Icon type="arrow-down" size={28} /></a> <span className="exp_txt">EXPAND</span></div>
+                        }>
+                            <Icon type="arrow-down" style={{ fontSize: 15 }} />
+                        </a>
+                        <span className="exp_txt">Expand</span>
+                    </div>
 
 
                 ,
