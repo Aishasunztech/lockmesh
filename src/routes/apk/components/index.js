@@ -91,7 +91,7 @@ class Apk extends Component {
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
                                     <div className="contenar">
-                                        <Link to="/#">
+                                        <Link to="/app-market">
                                             <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                                 <div className="image_1">
                                                     <h2 style={{ textAlign: "center" }}>App Market</h2>
@@ -117,9 +117,6 @@ class Apk extends Component {
                                                 </div>
                                             </Card>
                                         </Link>
-                                        <div className="middle">
-                                            <div className="text text2">Coming Soon</div>
-                                        </div>
                                     </div>
                                 </div>
                             </Col>
