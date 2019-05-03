@@ -116,7 +116,7 @@ class PolicyList extends Component {
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
-                policy_status: (<Switch checked={policy.status == 1 || policy.status == true ? true : false}
+                policy_status: (<Switch size='small' checked={policy.status == 1 || policy.status == true ? true : false}
                     onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
                     } />),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
@@ -127,7 +127,7 @@ class PolicyList extends Component {
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
                 default_policy: (
-                    <Switch defaultChecked={true} onChange={(e) => { }} />
+                    <Switch size='small' defaultChecked={true} onChange={(e) => { }} />
                 ),
             }
         });
