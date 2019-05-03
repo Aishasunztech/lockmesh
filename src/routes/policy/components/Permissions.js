@@ -339,7 +339,7 @@ class Permissions extends Component {
           <Col className="gutter-row" span={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row" span={3}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
@@ -348,7 +348,7 @@ class Permissions extends Component {
           <Col className="gutter-row" span={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row" span={3}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
           </Col>
           <Col className="gutter-row" span={4}>
@@ -370,11 +370,12 @@ class Permissions extends Component {
 
           {
             this.props.spinloading ? <CircularProgress /> :
-
-              <Table
-                columns={this.listDealerCols}
-                dataSource={this.renderDealer(this.state.dealerList, true)}
-              />
+              <Col className="gutter-row" span={20}>
+                <Table
+                  columns={this.listDealerCols}
+                  dataSource={this.renderDealer(this.state.dealerList, true)}
+                />
+              </Col>
           }
         </Row>
         <Modal
