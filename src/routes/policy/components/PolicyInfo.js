@@ -99,24 +99,33 @@ export default class PolicyInfo extends Component {
                         <AppList
                             apk_list={this.state.policy.push_apps}
                             handleCheckApp={this.handleCheckApp}
+                            handleEditPolicy={this.props.handleEditPolicy}
                             apps='dealerApps'
-                            isSwitch={false}
+                            isSwitch={this.props.isSwitch}
+                            edit={this.props.edit}
+                            rowId={this.props.rowId}
                         />
                     </TabPane>
                     <TabPane tab={APPLICATION_PERMISION} key="2">
                         <AppList
                             apk_list={this.state.policy.app_list}
+                            handleEditPolicy={this.props.handleEditPolicy}
                             handleCheckApp={this.handleCheckApp}
                             appPermissions='appPermissions'
-                            isSwitch={false}
+                            isSwitch={this.props.isSwitch}
+                            edit={this.props.edit}
+                            rowId={this.props.rowId}
                         />
                     </TabPane>
                     <TabPane tab={SECURE_SETTING_PERMISSION} key="3">
                         <AppList
                             allExtensions={this.state.policy.secure_apps}
+                            handleEditPolicy={this.props.handleEditPolicy}
                             handleCheckApp={this.handleCheckApp}
                             secureSettings='allExtensions'
-                            isSwitch={false}
+                            isSwitch={this.props.isSwitch}
+                            edit={this.props.edit}
+                            rowId={this.props.rowId}
                         />
                     </TabPane>
                     <TabPane tab={SYSTEM_PERMISSION} key="4">

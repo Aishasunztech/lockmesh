@@ -47,12 +47,14 @@ class PolicyList extends Component {
             this.state.expandedRowKeys.push(rowId);
 
             const newItems = [...this.state.expandTabSelected];
-            newItems[rowId] = (btnof == 'info') ? '1' : '6';
+            newItems[rowId] = (btnof == 'info' || btnof == 'edit') ? '1' : '6';
             // this.setState({ items:newItems });
             // console.log("new Items", newItems);
             this.setState({
                 expandedRowKeys: this.state.expandedRowKeys,
-                expandTabSelected: newItems
+                expandTabSelected: newItems,
+                isSwitch: btnof == 'edit' ? true : false
+
             })
             // console.log("updated state", this.state.expandTabSelected);
             // this.forceUpdate()
@@ -60,19 +62,19 @@ class PolicyList extends Component {
 
     }
 
-   deletePolicy = (id)=> {
-       let _this = this
-    confirm({
-        title: 'Do you want to delete this Policy?',
-        onOk() {
-            _this.props.handlePolicyStatus(1, 'delete_status', id)
-        },
-        onCancel() {},
-        okText:'Yes',
-        cancelText: 'No'
+    deletePolicy = (id) => {
+        let _this = this
+        confirm({
+            title: 'Do you want to delete this Policy?',
+            onOk() {
+                _this.props.handlePolicyStatus(1, 'delete_status', id)
+            },
+            onCancel() { },
+            okText: 'Yes',
+            cancelText: 'No'
 
-      });
-   }
+        });
+    }
 
     renderList(list) {
         let policy_list = list.filter((data) => {
@@ -91,7 +93,8 @@ class PolicyList extends Component {
                         <Button
                             type="primary"
                             size="small"
-                            onClick={() => { this.editPolicy(policy.id) }}
+                            onClick={() => { this.expandRow(index, 'edit', true) }}
+                            disabled
                         >
                             Edit
                         </Button>
@@ -115,8 +118,6 @@ class PolicyList extends Component {
                         </a>
                         <span className="exp_txt">Expand</span>
                     </div>
-
-
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
@@ -193,7 +194,7 @@ class PolicyList extends Component {
         }
     }
     render() {
-        // console.log('POLICY LIST', this.props.policies)
+         console.log('POLICY LIST', this.props.policies)
         return (
             <Fragment>
                 <Card>
@@ -203,11 +204,15 @@ class PolicyList extends Component {
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
-                            // console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                             console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
                                 <PolicyInfo
                                     selected={this.state.expandTabSelected[record.rowKey]}
                                     policy={record}
+                                    isSwitch={this.state.isSwitch}
+                                    rowId={this.state.expandTabSelected[record.rowKey]}
+                                    handleEditPolicy={this.props.handleEditPolicy}
+                                    edit={true}
                                 />
                             )
                         }}

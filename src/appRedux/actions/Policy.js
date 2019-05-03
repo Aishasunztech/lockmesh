@@ -152,7 +152,8 @@ export function handlePolicyStatus(e, key, id) {
     }
 }
 
-export function editPolicy(e, key, id) {
+export function handleEditPolicy(e, key, id, stateToUpdate='',rowId, uniqueName='') {
+    console.log('action called', e , key, id, stateToUpdate, uniqueName)
     return (dispatch) => {
         dispatch({
             type: EDIT_POLICY,
@@ -160,6 +161,8 @@ export function editPolicy(e, key, id) {
                 value: e,
                 key: key,
                 id: id,
+                rowId:rowId,
+                stateToUpdate:stateToUpdate
             }
         })
     }

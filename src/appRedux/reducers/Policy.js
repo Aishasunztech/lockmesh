@@ -10,6 +10,7 @@ import {
     HANDLE_CHECK_ALL_APP_POLICY,
     HANDLE_POLICY_STATUS,
     POLICY_PERMSSION_SAVED,
+    EDIT_POLICY
 
 } from "../../constants/ActionTypes";
 import {
@@ -121,6 +122,26 @@ export default (state = initialState, action) => {
                 ...state,
                 systemPermissions: { ...state.systemPermissions },
             }
+        }
+
+        case EDIT_POLICY: {
+           let changedState =  state.policies;
+           let id = action.payload.id;
+           let rowId = action.payload.rowId;
+           let key = action.payload.key;
+           let stateToUpdate= action.payload.stateToUpdate;
+console.log(stateToUpdate,'checknged stae', changedState[rowId][stateToUpdate])
+           let index = changedState[rowId][stateToUpdate].findIndex(item => item.apk_id == id);
+           if(index >= 0){
+            changedState[rowId][stateToUpdate][index][key] = action.payload.value;
+           }
+           console.log(index,'lll')
+
+           state.policies = changedState;
+           return {
+               ...state,
+               policies: [...state.policies],
+           }
         }
 
 
