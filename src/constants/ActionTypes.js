@@ -123,6 +123,8 @@ export const POLICY = 'policy';
 export const PROFILE = 'profile';
 export const SAVE_PROFILE = 'SAVE_PROFILE';
 export const UNLINK_DEVICE = 'UNLINK_DEVICE';
+export const HANDLE_POLICY_STATUS= 'HANDLE_POLICY_STATUS';
+export const EDIT_POLICY= 'EDIT_POLICY';
 // export const SHOW_MESSAGE = 'SHOW_MESSAGE';
 
 export const LOADING = 'LOADING';

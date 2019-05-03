@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Table, Icon, Switch } from "antd";
+import { Card, Row, Col, Modal, Button, message, Table, Icon, Switch } from "antd";
 import update from 'react-addons-update';
 
 import PolicyInfo from './PolicyInfo';
+const confirm = Modal.confirm;
 
 class PolicyList extends Component {
 
@@ -19,12 +20,9 @@ class PolicyList extends Component {
     }
 
     editPolicy() {
-        alert("Edit Policy")
+        // alert("Edit Policy")
     }
 
-    deletePolicy() {
-        alert("Delete Policy")
-    }
 
     expandRow = (rowId, btnof, expandedByCustom = false) => {
         //  console.log('btn is', btnof)
@@ -62,6 +60,20 @@ class PolicyList extends Component {
 
     }
 
+   deletePolicy = (id)=> {
+       let _this = this
+    confirm({
+        title: 'Do you want to delete this Policy?',
+        onOk() {
+            _this.props.handlePolicyStatus(1, 'delete_status', id)
+        },
+        onCancel() {},
+        okText:'Yes',
+        cancelText: 'No'
+
+      });
+   }
+
     renderList(list) {
         let policy_list = list.filter((data) => {
             // if (data.type === "policy") {
@@ -79,14 +91,14 @@ class PolicyList extends Component {
                         <Button
                             type="primary"
                             size="small"
-                            onClick={() => { this.editPolicy() }}
+                            onClick={() => { this.editPolicy(policy.id) }}
                         >
                             Edit
                         </Button>
                         <Button
                             type="danger"
                             size="small"
-                            onClick={() => { this.deletePolicy() }}
+                            onClick={() => { this.deletePolicy(policy.id) }}
                         >
                             Delete
                         </Button>
@@ -103,10 +115,10 @@ class PolicyList extends Component {
 
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
-                permissions: (policy.dealer_permission!==undefined || policy.dealer_permission !=null)?policy.dealer_permission:[],
-                policy_status: (<Switch defaultChecked={true} onChange={(e) => {
-
-                }} />),
+                permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
+                policy_status: (<Switch checked={policy.status == 1 || policy.status == true ? true : false}
+                    onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
+                    } />),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
                 policy_command: (policy.command_name) ? `${policy.command_name}` : "N/A",
                 policy_name: (policy.policy_name) ? `${policy.policy_name}` : "N/A",
@@ -115,7 +127,7 @@ class PolicyList extends Component {
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
                 default_policy: (
-                    <Switch defaultChecked={true} onChange={(e) => {}} />
+                    <Switch defaultChecked={true} onChange={(e) => { }} />
                 ),
             }
         });
@@ -177,7 +189,7 @@ class PolicyList extends Component {
         }
     }
     render() {
-        //  console.log('POLICY LIST',this.props.policies)
+        // console.log('POLICY LIST', this.props.policies)
         return (
             <Fragment>
                 <Card>
@@ -189,9 +201,9 @@ class PolicyList extends Component {
                             // console.log("expandTabSelected", record);
                             // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
-                                <PolicyInfo 
-                                    selected={this.state.expandTabSelected[record.rowKey]} 
-                                    policy={record} 
+                                <PolicyInfo
+                                    selected={this.state.expandTabSelected[record.rowKey]}
+                                    policy={record}
                                 />
                             )
                         }}

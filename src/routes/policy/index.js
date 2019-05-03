@@ -7,7 +7,8 @@ import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
 
 import {
-    getPolicies,
+    getPolicies,handlePolicyStatus,
+     editPolicy
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -221,6 +222,8 @@ class Policy extends Component {
                 <PolicyList
                     columns={this.columns}
                     policies={this.props.policies}
+                    handlePolicyStatus={this.props.handlePolicyStatus}
+                    editPolicy={this.props.editPolicy}
                 />
                 <Modal
                     maskClosable={false}
@@ -253,6 +256,8 @@ function mapDispatchToProps(dispatch) {
         // postDropdown: postDropdown,
         postPagination: postPagination,
         getPagination: getPagination,
+        handlePolicyStatus: handlePolicyStatus,
+        editPolicy: editPolicy
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);

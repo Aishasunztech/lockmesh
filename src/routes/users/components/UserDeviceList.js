@@ -42,7 +42,7 @@ import {
     ADMIN
 } from '../../../constants/Constants'
 import { getStatus, componentSearch, titleCase, checkValue, getColor } from '../../utils/commonUtils';
-import styles from './user.css';
+// import styles from './user.css';
 
 var coppyDevices = [];
 var status = true;
