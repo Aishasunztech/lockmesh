@@ -525,7 +525,6 @@ export default class Tab extends Component {
                     <TabPane tab={<span className="purple">Transfer</span>} key="8" forceRender={true}>
                         <h2 className="coming_s">Coming Soon</h2>
                     </TabPane>
-
                     <TabPane tab={<span className="orange">Unlinked</span>} key="5" forceRender={true}>
                     </TabPane>
 

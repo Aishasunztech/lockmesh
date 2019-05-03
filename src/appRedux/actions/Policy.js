@@ -9,6 +9,8 @@ import {
     HANDLE_CHECK_ALL_APP_POLICY,
     HANDLE_POLICY_STATUS,
     EDIT_POLICY,
+    POLICY_PERMSSION_SAVED,
+    HANDLE_CHECK_ALL_APP_POLICY
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -126,7 +128,7 @@ export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName =
 }
 
 export function handlePolicyStatus(e, key, id) {
-    let data ={ value : e, key: key, id: id}
+    let data = { value: e, key: key, id: id }
     return (dispatch) => {
         RestService.deleteORStatusPolicy(data).then((response) => {
             //  console.log('conect device method call', data);
@@ -141,7 +143,7 @@ export function handlePolicyStatus(e, key, id) {
                             id: id,
                         }
                     })
-                }else{
+                } else {
                     dispatch({
                         type: INVALID_TOKEN
                     });
@@ -151,57 +153,60 @@ export function handlePolicyStatus(e, key, id) {
     }
 }
 
-            export function editPolicy(e, key, id) {
-                return (dispatch) => {
-                    dispatch({
-                        type: EDIT_POLICY,
-                        payload: {
-                            value: e,
-                            key: key,
-                            id: id,
-                        }
-                    })
-                }
+export function editPolicy(e, key, id) {
+    return (dispatch) => {
+        dispatch({
+            type: EDIT_POLICY,
+            payload: {
+                value: e,
+                key: key,
+                id: id,
             }
+        })
+    }
+}
 
 
 
-            export function handleCheckAllAppPolicy(e, key, stateToUpdate, uniqueName = '') {
-                return (dispatch) => {
-                    dispatch({
-                        type: HANDLE_CHECK_ALL_APP_POLICY,
-                        payload: {
-                            value: e,
-                            key: key,
-                            // app_id: app_id,
-                            stateToUpdate: stateToUpdate,
-                            uniqueName: uniqueName
-                        }
-                    })
-                }
+
+
+
+export function handleCheckAllAppPolicy(e, key, stateToUpdate, uniqueName = '') {
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_CHECK_ALL_APP_POLICY,
+            payload: {
+                value: e,
+                key: key,
+                // app_id: app_id,
+                stateToUpdate: stateToUpdate,
+                uniqueName: uniqueName
             }
+        })
+    }
+}
 
-            export function savePermission(policy_id, dealers, action) {
-                // alert(policy_id);
+export function savePermission(policy_id, dealers, action) {
+    // alert(policy_id);
 
-                return (dispatch) => {
-                    RestService.savePolicyPermissions(policy_id, dealers, action).then((response) => {
-                        if (RestService.checkAuth(response.data)) {
+    return (dispatch) => {
+        RestService.savePolicyPermissions(policy_id, dealers, action).then((response) => {
+            if (RestService.checkAuth(response.data)) {
 
-                            dispatch({
-                                type: PERMSSION_SAVED,
-                                payload: response.data.msg,
-                                permission_count: response.data.permission_count,
-                                policy_id: policy_id,
-                                dealers: dealers
-                            })
+                dispatch({
+                    type: POLICY_PERMSSION_SAVED,
+                    payload: response.data.msg,
+                    permission_count: response.data.permission_count,
+                    policy_id: policy_id,
+                    dealers: dealers
+                })
 
-                        } else {
-                            dispatch({
-                                type: INVALID_TOKEN
-                            });
-                        }
-                    })
-                }
-
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
             }
+        })
+    }
+
+}

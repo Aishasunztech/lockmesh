@@ -8,7 +8,9 @@ import {
     SAVE_POLICY,
     PERMSSION_SAVED,
     HANDLE_CHECK_ALL_APP_POLICY,
-    HANDLE_POLICY_STATUS
+    HANDLE_POLICY_STATUS,
+    POLICY_PERMSSION_SAVED,
+    HANDLE_CHECK_ALL_APP_POLICY
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -52,6 +54,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case GET_POLICIES:
+            // console.log(action.payload);
             return {
                 ...state,
                 policies: action.payload
@@ -306,16 +309,17 @@ export default (state = initialState, action) => {
             }
         }
 
-        case PERMSSION_SAVED: {
+        case POLICY_PERMSSION_SAVED: {
+            // console.log("dasdasdad");
             message.success(action.payload);
             let dealers = JSON.parse(action.dealers)
             // console.log(dealers.length ,'itrititt',action.apk_id);
-            let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
-            state.apk_list[objIndex].permission_count = action.permission_count;
+            let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
+            state.policies[objIndex].permission_count = action.permission_count;
 
             return {
                 ...state,
-                apk_list: [...state.apk_list]
+                policies: [...state.policies]
             }
         }
 
