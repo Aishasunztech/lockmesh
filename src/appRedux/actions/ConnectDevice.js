@@ -640,7 +640,7 @@ export function hanldeProfileInput(profileType, profileValue) {
         })
     }
 }
-export function saveProfile(app_list, passwords = null, profileType, profileName, usr_acc_id) {
+export function saveProfile(app_list, passwords = null, profileName, usr_acc_id, controls, extensions) {
     return (dispatch) => {
         let pwd = {};
         if (passwords != null) {
@@ -661,12 +661,13 @@ export function saveProfile(app_list, passwords = null, profileType, profileName
         let device_setting = {
             app_list: app_list,
             passwords: pwd,
-            controls: {}
+            controls: controls,
+            extensions: extensions
         }
 
         // console.log("applist save profile", device_setting);
         RestService.saveProfileCND(device_setting, profileName, usr_acc_id).then((response) => {
-            console.log('action saveProfileCND', device_setting);
+            // console.log('action saveProfileCND', device_setting);
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: SHOW_MESSAGE,

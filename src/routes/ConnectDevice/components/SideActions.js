@@ -196,7 +196,7 @@ class SideActions extends Component {
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
                 duressPwd: this.props.duressPwd,
-            }, this.state.saveProfileType, this.state.profileName, this.props.usr_acc_id);
+            }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, this.props.extensions);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
             this.props.savePolicy(this.props.app_list,
                 {
@@ -478,6 +478,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
+    console.log('device_details.controls', device_details.extensions)
 
     return {
         authUser: auth.authUser,
@@ -500,6 +501,8 @@ var mapStateToProps = ({ device_details, auth }, otherProps) => {
         device_id: device_details.device.device_id,
         usr_acc_id: device_details.device.id,
         apk_list: otherProps.apk_list,
+        controls: device_details.controls,
+        extensions: device_details.extensions,
     };
 }
 
