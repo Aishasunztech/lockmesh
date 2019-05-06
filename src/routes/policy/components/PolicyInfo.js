@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Table } from 'antd';
+import { Tabs, Table, Switch } from 'antd';
 import Permissions from "./Permissions";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, POLICY_DETAILS } from '../../../constants/Constants';
 import AppList from "./AppList";
@@ -42,22 +42,70 @@ export default class PolicyInfo extends Component {
 
     }
 
-    renderSystemPermissions = () => {
+    // renderSystemPermissions = () => {
+    //     if (this.state.policy.controls) {
+    //         if (this.state.policy.controls.length) {
+    //             return this.state.policy.controls.map((item, index) => {
+    //                 // console.log('object, ', item)
+    //                 return {
+    //                     rowKey: index,
+    //                     name: item.name,
+    //                     action: <span style={{ color: (item.value === true || item.value === 1) ? 'green' : 'red' }} >{(item.value === true || item.value === 1) ? 'On' : 'Off'}</span>
+    //                 }
 
-        if (this.state.policy.controls) {
-            if (this.state.policy.controls.length) {
-                return this.state.policy.controls.map((item, index) => {
-                    // console.log('object, ', item)
-                    return {
-                        rowKey: index,
-                        name: item.name,
-                        action: <span style={{ color: (item.value === true || item.value === 1) ? 'green' : 'red' }} >{(item.value === true || item.value === 1) ? 'On' : 'Off'}</span>
-                    }
+    //             })
+    //         }
+    //     }
 
-                })
-            }
+    // }
+
+    renderSystemPermissions = (controls) => {
+        if (controls) {
+
+            return [{
+                rowKey: 'wifi_status',
+                name: 'Wifi',
+                action: this.props.isSwitch ?
+                    <Switch disabled checked={controls.wifi_status} onClick={(e) => this.props.handleEditPolicy(e, 'wifi_status', '', 'push_apps', this.props.rowId)} size="small" />
+                    : <span style={{ color: (controls.wifi_status === true || controls.wifi_status === 1) ? 'green' : 'red' }} >{(controls.wifi_status === true || controls.wifi_status === 1) ? 'On' : 'Off'}</span>
+            }, {
+                rowKey: 'bluetooth_status',
+                name: 'Bluetooth',
+                action: this.props.isSwitch ?
+                    <Switch checked={controls.bluetooth_status} onClick={(e) => this.props.handleEditPolicy(e, 'bluetooth_status', '', 'controls', this.props.rowId)} size="small" />
+                    : <span style={{ color: (controls.bluetooth_status === true || controls.bluetooth_status === 1) ? 'green' : 'red' }} >{(controls.bluetooth_status === true || controls.bluetooth_status === 1) ? 'On' : 'Off'}</span>
+            }, {
+                rowKey: 'screenshot_status',
+                name: 'ScreenShot',
+                action: this.props.isSwitch ? <Switch checked={controls.screenshot_status} onClick={(e) => this.props.handleEditPolicy(e, 'screenshot_status', '', 'controls', this.props.rowId)} size="small" />
+                    : <span style={{ color: (controls.screenshot_status === true || controls.screenshot_status === 1) ? 'green' : 'red' }} >{(controls.screenshot_status === true || controls.screenshot_status === 1) ? 'On' : 'Off'}</span>
+
+            }, {
+                rowKey: 'location_status',
+                name: 'Location',
+                action: this.props.isSwitch ? <Switch checked={controls.location_status} onClick={(e) => this.props.handleEditPolicy(e, 'location_status', '', 'controls', this.props.rowId)} size="small" />
+                    : <span style={{ color: (controls.location_status === true || controls.location_status === 1) ? 'green' : 'red' }} >{(controls.location_status === true || controls.location_status === 1) ? 'On' : 'Off'}</span>
+
+            }, {
+                rowKey: 'hotspot_status',
+                name: 'Hotspot',
+                action: this.props.isSwitch ? <Switch checked={controls.hotspot_status} onClick={(e) => this.props.handleEditPolicy(e, 'hotspot_status', '', 'controls', this.props.rowId)} size="small" />
+                    : <span style={{ color: (controls.hotspot_status === true || controls.hotspot_status === 1) ? 'green' : 'red' }} >{(controls.hotspot_status === true || controls.hotspot_status === 1) ? 'On' : 'Off'}</span>
+
+            }]
         }
+        // console.log(this.state.systemPermissions, 'permissions')
+        // if (this.state.systemPermissions.length) {
+        //     return this.state.systemPermissions.map((item, index) => {
+        //         // console.log('object, ', item)
+        //         return {
+        //             rowKey: index,
+        //             name: item.name,
+        //             action: <Switch disabled={item.name == 'Wifi' ? true : false} checked={item.value} onClick={(e) => this.props.handleChekSystemPermission(e, item.name)} size="small" />
+        //         }
 
+        //     })
+        // }
     }
 
 
@@ -91,7 +139,7 @@ export default class PolicyInfo extends Component {
             command: this.state.policy.policy_command,
 
         }]
-        console.log(this.state.policy);
+        // console.log(this.state.policy);
         return (
             <div>
                 <Tabs onChange={this.callback} activeKey={this.state.selected} type="card">
@@ -131,7 +179,7 @@ export default class PolicyInfo extends Component {
                     <TabPane tab={SYSTEM_PERMISSION} key="4">
                         <Table
                             pagination={false}
-                            dataSource={this.renderSystemPermissions()}
+                            dataSource={this.renderSystemPermissions(this.state.policy.controls)}
                             size="small"
                             columns={columnsSystemPermission}>
                         </Table>
