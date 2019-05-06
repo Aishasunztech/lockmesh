@@ -208,8 +208,22 @@ const RestService = {
 
     deleteORStatusPolicy: (data) => {
         //   console.log('api called ')
-        return axios.post(BASE_URL + "users/deleteORStatusPolicy ",data, RestService.getHeader());
+        return axios.post(BASE_URL + "users/change_policy_status ",data, RestService.getHeader());
     },
+
+    SavePolicyChanges: (record) => {
+        //    console.log('api called ', record);
+           let data= {
+             id : record.policy_id,
+             push_apps : JSON.stringify(record.push_apps) ,
+             controls : JSON.stringify(record.controls),
+             permissions : JSON.stringify(record.secure_apps),
+              app_list : JSON.stringify(record.app_list)
+           }
+        return axios.post(BASE_URL + "users/save_policy_changes ",data, RestService.getHeader());
+    },
+
+    
 
     getDeviceApps: (device_id) => {
         return axios.get(BASE_URL + "users/get_apps/" + device_id, RestService.getHeader());
@@ -438,6 +452,39 @@ const RestService = {
             device_setting,
             usr_acc_id: usr_acc_id,
             device_id:device_id,
+        }, RestService.getHeader());
+
+    },
+
+    saveProfileCND: (device_setting, profileName = null, usr_acc_id) => {
+        //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
+        if (device_setting.app_list !== undefined) {
+            device_setting.app_list.forEach((elem) => {
+                elem.packageName = elem.uniqueName.replace(elem.label, '');
+                if (elem.guest) {
+                    elem.guest = true;
+                } else {
+                    elem.guest = false;
+                }
+                if (elem.encrypted) {
+                    elem.encrypted = true;
+                } else {
+                    elem.encrypted = false;
+                }
+                if (elem.enable) {
+                    elem.enable = true;
+                } else {
+                    elem.enable = false;
+                }
+                delete elem.device_id;
+                delete elem.isChanged;
+            });
+        }
+        return axios.post(BASE_URL + 'users/save/profile', {
+            device_setting,
+            usr_acc_id: usr_acc_id,
+            profileName: profileName,
+            // device_id:device_id,
         }, RestService.getHeader());
 
     },

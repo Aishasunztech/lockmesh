@@ -10,6 +10,7 @@ import {
     HANDLE_POLICY_STATUS,
     EDIT_POLICY,
     POLICY_PERMSSION_SAVED,
+    SAVE_POLICY_CHANGES
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -152,8 +153,33 @@ export function handlePolicyStatus(e, key, id) {
     }
 }
 
+
+export function SavePolicyChanges(record) {
+    return (dispatch) => {
+        RestService.SavePolicyChanges(record).then((response) => {
+            //  console.log('conect device method call', data);
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+                if (response.data.status) {
+                    dispatch({
+                        type: SAVE_POLICY_CHANGES,
+                        payload: {
+                          response: response.data
+                        }
+                    })
+                } else {
+                    dispatch({
+                        type: INVALID_TOKEN
+                    });
+                }
+            }
+        })
+    }
+}
+
+
 export function handleEditPolicy(e, key, id, stateToUpdate='',rowId, uniqueName='') {
-    console.log('action called', e , key, id, stateToUpdate, uniqueName)
+    // console.log('action called', e , key, id, stateToUpdate, uniqueName)
     return (dispatch) => {
         dispatch({
             type: EDIT_POLICY,
@@ -162,7 +188,8 @@ export function handleEditPolicy(e, key, id, stateToUpdate='',rowId, uniqueName=
                 key: key,
                 id: id,
                 rowId:rowId,
-                stateToUpdate:stateToUpdate
+                stateToUpdate:stateToUpdate,
+                uniqueName: uniqueName
             }
         })
     }

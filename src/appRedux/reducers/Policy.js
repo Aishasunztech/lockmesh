@@ -10,7 +10,9 @@ import {
     HANDLE_CHECK_ALL_APP_POLICY,
     HANDLE_POLICY_STATUS,
     POLICY_PERMSSION_SAVED,
-    EDIT_POLICY
+    EDIT_POLICY,
+    SAVE_POLICY_CHANGES,
+    GET_PAGINATION
 
 } from "../../constants/ActionTypes";
 import {
@@ -48,6 +50,7 @@ const initialState = {
     guestAllallExtensions: false,
     encryptedAllallExtensions: false,
     enableAllallExtensions: false,
+    DisplayPages: 10,
 }
 
 export default (state = initialState, action) => {
@@ -76,6 +79,13 @@ export default (state = initialState, action) => {
                 appPermissions: action.payload.appPermissions,
                 allExtensions: action.payload.extensions,
                 systemPermissions: initialState.systemPermissionsdump
+            }
+        }
+
+        case GET_PAGINATION: {
+            return {
+                ...state,
+                DisplayPages: action.payload
             }
         }
 
@@ -124,24 +134,66 @@ export default (state = initialState, action) => {
             }
         }
 
-        case EDIT_POLICY: {
-           let changedState =  state.policies;
-           let id = action.payload.id;
-           let rowId = action.payload.rowId;
-           let key = action.payload.key;
-           let stateToUpdate= action.payload.stateToUpdate;
-console.log(stateToUpdate,'checknged stae', changedState[rowId][stateToUpdate])
-           let index = changedState[rowId][stateToUpdate].findIndex(item => item.apk_id == id);
-           if(index >= 0){
-            changedState[rowId][stateToUpdate][index][key] = action.payload.value;
-           }
-           console.log(index,'lll')
+        case SAVE_POLICY_CHANGES: {
 
-           state.policies = changedState;
-           return {
-               ...state,
-               policies: [...state.policies],
-           }
+            if(action.payload.response.status){
+                message.success(action.payload.response.msg)
+            }else{
+                message.error(action.payload.response.msg)
+            }
+            return {
+                ...state,
+            }
+        }
+
+        case EDIT_POLICY: {
+            let changedState = state.policies;
+            // console.log('changeded state : ', changedState)
+            let id = action.payload.id;
+            let policyId = action.payload.rowId;
+            let key = action.payload.key;
+            let stateToUpdate = action.payload.stateToUpdate;
+            let rowId = changedState.findIndex(item => item.id == policyId);
+            // console.log(policyId, 'row id', rowId)
+
+            if (rowId >= 0) {
+                let index = -1;
+                if (stateToUpdate == 'app_list') {
+                    index = changedState[rowId][stateToUpdate].findIndex(item => item.id == id);
+                    if (index >= 0) {
+                        changedState[rowId][stateToUpdate][index][key] = action.payload.value;
+                    }
+                } else if (stateToUpdate == 'push_apps') {
+                    index = changedState[rowId][stateToUpdate].findIndex(item => item.apk_id == id);
+                    if (index >= 0) {
+                        changedState[rowId][stateToUpdate][index][key] = action.payload.value;
+                    }
+                } else if (stateToUpdate == 'secure_apps') {
+
+                    let permissionIndex = changedState[rowId][stateToUpdate].findIndex(item => item.uniqueName == action.payload.uniqueName);
+                    if (permissionIndex >= 0) {
+                        index = changedState[rowId][stateToUpdate][permissionIndex]['subExtension'].findIndex(item => item.id == id);
+                        if (index >= 0) {
+                            changedState[rowId][stateToUpdate][permissionIndex]['subExtension'][index][key] = action.payload.value;
+                        }
+                    }
+                } else if (stateToUpdate == 'controls') {
+                    changedState[rowId][stateToUpdate][key] = action.payload.value;
+                }
+
+               
+                 changedState[rowId]['isChangedPolicy'] = true;
+              
+                // console.log(index, 'lll')
+            }
+
+
+
+            state.policies = changedState;
+            return {
+                ...state,
+                policies: [...state.policies],
+            }
         }
 
 
@@ -149,11 +201,11 @@ console.log(stateToUpdate,'checknged stae', changedState[rowId][stateToUpdate])
 
             let changedState = state.policies;
             let index = changedState.findIndex((policy) => policy.id == action.payload.id);
-            if(index >= 0){
+            if (index >= 0) {
                 if (action.payload.key == 'delete_status') {
                     changedState.splice(index, 1);
                     message.success('Policy Deleted Successfully')
-    
+
                 } else if (action.payload.key == 'status') {
                     changedState[index][action.payload.key] = action.payload.value
                 }
@@ -163,7 +215,7 @@ console.log(stateToUpdate,'checknged stae', changedState[rowId][stateToUpdate])
                     policies: [...state.policies],
                 }
             }
-           
+
         }
 
 
