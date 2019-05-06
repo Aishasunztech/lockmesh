@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Table, Icon, Switch } from "antd";
+import { Card, Row, Col, Modal, Button, message, Table, Icon, Switch } from "antd";
 import update from 'react-addons-update';
 
 import PolicyInfo from './PolicyInfo';
+const confirm = Modal.confirm;
 
 class PolicyList extends Component {
 
@@ -19,12 +20,9 @@ class PolicyList extends Component {
     }
 
     editPolicy() {
-        alert("Edit Policy")
+        // alert("Edit Policy")
     }
 
-    deletePolicy() {
-        alert("Delete Policy")
-    }
 
     expandRow = (rowId, btnof, expandedByCustom = false) => {
         //  console.log('btn is', btnof)
@@ -49,17 +47,33 @@ class PolicyList extends Component {
             this.state.expandedRowKeys.push(rowId);
 
             const newItems = [...this.state.expandTabSelected];
-            newItems[rowId] = (btnof == 'info') ? '1' : '6';
+            newItems[rowId] = (btnof == 'info' || btnof == 'edit') ? '1' : '6';
             // this.setState({ items:newItems });
             // console.log("new Items", newItems);
             this.setState({
                 expandedRowKeys: this.state.expandedRowKeys,
-                expandTabSelected: newItems
+                expandTabSelected: newItems,
+                isSwitch: btnof == 'edit' ? true : false
+
             })
             // console.log("updated state", this.state.expandTabSelected);
             // this.forceUpdate()
         }
 
+    }
+
+    deletePolicy = (id) => {
+        let _this = this
+        confirm({
+            title: 'Do you want to delete this Policy?',
+            onOk() {
+                _this.props.handlePolicyStatus(1, 'delete_status', id)
+            },
+            onCancel() { },
+            okText: 'Yes',
+            cancelText: 'No'
+
+        });
     }
 
     renderList(list) {
@@ -79,14 +93,15 @@ class PolicyList extends Component {
                         <Button
                             type="primary"
                             size="small"
-                            onClick={() => { this.editPolicy() }}
+                            onClick={() => { this.expandRow(index, 'edit', true) }}
+                            disabled
                         >
                             Edit
                         </Button>
                         <Button
                             type="danger"
                             size="small"
-                            onClick={() => { this.deletePolicy() }}
+                            onClick={() => { this.deletePolicy(policy.id) }}
                         >
                             Delete
                         </Button>
@@ -103,14 +118,12 @@ class PolicyList extends Component {
                         </a>
                         <span className="exp_txt">Expand</span>
                     </div>
-
-
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
-                policy_status: (<Switch defaultChecked={true} onChange={(e) => {
-
-                }} />),
+                policy_status: (<Switch size='small' checked={policy.status == 1 || policy.status == true ? true : false}
+                    onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
+                    } />),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
                 policy_command: (policy.command_name) ? `${policy.command_name}` : "N/A",
                 policy_name: (policy.policy_name) ? `${policy.policy_name}` : "N/A",
@@ -119,7 +132,7 @@ class PolicyList extends Component {
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
                 default_policy: (
-                    <Switch defaultChecked={true} onChange={(e) => { }} />
+                    <Switch size='small' defaultChecked={true} onChange={(e) => { }} />
                 ),
             }
         });
@@ -181,7 +194,7 @@ class PolicyList extends Component {
         }
     }
     render() {
-        //  console.log('POLICY LIST',this.props.policies)
+         console.log('POLICY LIST', this.props.policies)
         return (
             <Fragment>
                 <Card>
@@ -191,11 +204,15 @@ class PolicyList extends Component {
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
-                            // console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                             console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
                                 <PolicyInfo
                                     selected={this.state.expandTabSelected[record.rowKey]}
                                     policy={record}
+                                    isSwitch={this.state.isSwitch}
+                                    rowId={this.state.expandTabSelected[record.rowKey]}
+                                    handleEditPolicy={this.props.handleEditPolicy}
+                                    edit={true}
                                 />
                             )
                         }}

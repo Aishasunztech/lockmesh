@@ -22,7 +22,8 @@ import {
     transferDeviceProfile,
     getDealerApps,
     loadDeviceProfile,
-    showPushAppsModal
+    showPushAppsModal,
+    applyPushApps
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -33,6 +34,33 @@ import {
 import { PUSH_APPS } from "../../../constants/ActionTypes"
 
 const confirm = Modal.confirm;
+
+const PasswordModal = (props) => {
+    return (
+        <Modal
+            // closable={false}
+            style={{ top: 20 }}
+            width="330px"
+            className="push_app"
+            title=""
+            visible={props.pwdConfirmModal}
+            footer={false}
+            onOk={() => {
+
+            }}
+            onCancel={() => props.showPwdConfirmModal(false)}
+            okText="Push Apps"
+        >
+            <PasswordForm
+                checkPass={props.checkPass}
+                actionType={PUSH_APPS}
+                handleCancel={props.showPwdConfirmModal}
+            />
+        </Modal>
+    )
+}
+
+
 const DealerAppModal = (props) => {
     return (
         <Modal
@@ -68,6 +96,7 @@ const SelectedApps = (props) => {
             title="Selected Apps"
             visible={props.selectedAppsModal}
             onOk={() => {
+                props.applyPushApps(props.apk_list);
                 props.showSelectedAppsModal(false);
             }}
             onCancel={() => props.showSelectedAppsModal(false)}
@@ -82,30 +111,7 @@ const SelectedApps = (props) => {
     )
 }
 
-const PasswordModal = (props) => {
-    return (
-        <Modal
-            // closable={false}
-            style={{ top: 20 }}
-            width="330px"
-            className="push_app"
-            title=""
-            visible={props.pwdConfirmModal}
-            footer={false}
-            onOk={() => {
 
-            }}
-            onCancel={() => props.showPwdConfirmModal(false)}
-            okText="Push Apps"
-        >
-            <PasswordForm
-                checkPass={props.checkPass}
-                actionType={PUSH_APPS}
-                handleCancel={props.showPwdConfirmModal}
-            />
-        </Modal>
-    )
-}
 
 
 class SideActions extends Component {
@@ -240,9 +246,22 @@ class SideActions extends Component {
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        // console.log("on selection", selectedRows)
+        let selectedApps = selectedRows;
+        selectedApps.map(el=>{
+            if(typeof (el.guest) !== Boolean){
+                el.guest = false
+            }
+
+            if(typeof (el.encrypted) !== Boolean){
+                el.encrypted = false
+            }
+
+            if(typeof (el.enable) !== Boolean){
+                el.enable = false
+            }
+        });
         this.setState({
-            selectedApps: selectedRows
+            selectedApps: selectedApps
         })
     }
     handleChecked = (e, key, app_id) => {
@@ -271,7 +290,9 @@ class SideActions extends Component {
             alert(historyId);
         }
     }
-
+    applyPushApps = () => {
+        this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+    }
     render() {
         // console.log(this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
@@ -418,7 +439,7 @@ class SideActions extends Component {
                 <SelectedApps
                     selectedAppsModal={this.state.selectedAppsModal}
                     showSelectedAppsModal={this.showSelectedAppsModal}
-                    showPwdConfirmModal={this.showPwdConfirmModal}
+                    applyPushApps = {this.applyPushApps}
                     apk_list={this.state.selectedApps}
                     selectedApps={[]}
                 />
@@ -474,7 +495,8 @@ function mapDispatchToProps(dispatch) {
         hanldeProfileInput: hanldeProfileInput,
         transferDeviceProfile: transferDeviceProfile,
         loadDeviceProfile: loadDeviceProfile,
-        showPushAppsModal: showPushAppsModal
+        showPushAppsModal: showPushAppsModal,
+        applyPushApps: applyPushApps
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {

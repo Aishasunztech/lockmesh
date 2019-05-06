@@ -13,6 +13,7 @@ import AddDealer from './addDealer';
 import Users from './users';
 import InvalidPage from "./InvalidPage";
 import FourOFour from "./404/";
+import AppMarket from "./appMaket/index";
 // import Documents from "./documents/index";
 
 const App = ({ match }) => {
@@ -32,6 +33,7 @@ const App = ({ match }) => {
       <Route path={`${match.url}app`} component={ApkMain} />
       <Route path={`${match.url}upload-apk`} component={AddApk} />
       <Route path={`${match.url}invalid_page`} component={InvalidPage} />
+      <Route path={`${match.url}app-market`} component={AppMarket} />
       <Route path="*" component={FourOFour} />
     </Switch>
   </div>)

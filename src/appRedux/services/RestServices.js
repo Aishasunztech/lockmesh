@@ -206,6 +206,11 @@ const RestService = {
         return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
     },
 
+    deleteORStatusPolicy: (data) => {
+        //   console.log('api called ')
+        return axios.post(BASE_URL + "users/deleteORStatusPolicy ",data, RestService.getHeader());
+    },
+
     getDeviceApps: (device_id) => {
         return axios.get(BASE_URL + "users/get_apps/" + device_id, RestService.getHeader());
 
@@ -435,6 +440,14 @@ const RestService = {
             device_id:device_id,
         }, RestService.getHeader());
 
+    },
+    
+    applyPushApps: (push_apps, deviceId, usrAccId) => {
+        return axios.post(BASE_URL + 'users/apply_pushapps/' + deviceId, {
+            push_apps: push_apps,
+            deviceId: deviceId,
+            usrAccId: usrAccId
+        }, RestService.getHeader());
     },
 
     deleteProfile: (profileId) => {
