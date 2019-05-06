@@ -7,7 +7,7 @@ const RestService = {
     connectSocket: (token) => {
         let makeToken = "token=" + token + "&isWeb=true";
         let socket = io.connect(BASE_URL, {
-            token: makeToken,
+            query: makeToken,
             // reconnectionDelay:1000,
             // reconnection:true,
             // forceNew:true
