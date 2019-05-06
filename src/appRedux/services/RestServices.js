@@ -451,11 +451,11 @@ const RestService = {
         return axios.post(BASE_URL + 'users/apply_settings/' + device_id, {
             device_setting,
             usr_acc_id: usr_acc_id,
-            device_id:device_id,
+            device_id: device_id,
         }, RestService.getHeader());
 
     },
-    
+
     applyPushApps: (push_apps, deviceId, usrAccId) => {
         return axios.post(BASE_URL + 'users/apply_pushapps/' + deviceId, {
             push_apps: push_apps,
@@ -550,6 +550,15 @@ const RestService = {
     editUser: (user) => {
         return axios.post(BASE_URL + 'users/edit/user', user, RestService.getHeader())
     },
+
+    // Transfer Secure market Apps 
+    transferApps: (data) => {
+        return axios.post(BASE_URL + 'users/transferApps', { data }, RestService.getHeader())
+    },
+    getMarketApps: () => {
+        return axios.get(BASE_URL + 'users/marketApplist', RestService.getHeader())
+    },
+
 
 }
 export default RestService;

@@ -149,3 +149,8 @@ export const SAVE_USERS = 'SAVE_USERS'
 export const EDIT_USERS = 'EDIT_USERS'
 export const LOAD_USER = 'LOAD_USER'
 export const USERS_LIST = 'USERS_LIST'
+
+//App Market Constants
+
+export const TRANSFER_APPS = 'TRANSFER_APPS'
+export const GET_MARKET_APPS = 'GET_MARKET_APPS'   
