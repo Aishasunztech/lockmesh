@@ -133,7 +133,7 @@ export default (state = initialState, action) => {
 			// console.log(dealers.length ,'itrititt',action.apk_id);
 			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
 			state.apk_list[objIndex].permission_count = action.permission_count;
-			
+
 			return {
 				...state,
 				apk_list: [...state.apk_list]

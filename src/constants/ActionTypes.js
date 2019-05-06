@@ -124,8 +124,8 @@ export const POLICY = 'policy';
 export const PROFILE = 'profile';
 export const SAVE_PROFILE = 'SAVE_PROFILE';
 export const UNLINK_DEVICE = 'UNLINK_DEVICE';
-export const HANDLE_POLICY_STATUS= 'HANDLE_POLICY_STATUS';
-export const EDIT_POLICY= 'EDIT_POLICY';
+export const HANDLE_POLICY_STATUS = 'HANDLE_POLICY_STATUS';
+export const EDIT_POLICY = 'EDIT_POLICY';
 // export const SHOW_MESSAGE = 'SHOW_MESSAGE';
 
 export const LOADING = 'LOADING';
@@ -148,3 +148,8 @@ export const SAVE_USERS = 'SAVE_USERS'
 export const EDIT_USERS = 'EDIT_USERS'
 export const LOAD_USER = 'LOAD_USER'
 export const USERS_LIST = 'USERS_LIST'
+
+//App Market Constants
+
+export const TRANSFER_APPS = 'TRANSFER_APPS'
+export const GET_MARKET_APPS = 'GET_MARKET_APPS'   
