@@ -532,7 +532,7 @@ class Account extends Component {
                                                                     dataIndex: 'sim_id',
                                                                     key: "sim_id",
                                                                     className: '',
-                                                                    sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
+                                                                    sorter: (a, b) => { return a.sim_id - b.sim_id },
                                                                     sortDirections: ['ascend', 'descend'],
 
                                                                 },
