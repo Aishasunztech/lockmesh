@@ -339,7 +339,7 @@ export function loadDeviceProfile(app_list) {
 }
 
 export function applySetting(app_list, passwords, extensions, controls, device_id, usr_acc_id) {
-    
+
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -442,7 +442,7 @@ export function pushApps(apps, deviceId, userAccId) {
             app_list: [],
             passwords: {
                 admin_password: null,
-                guest_password: null ,
+                guest_password: null,
                 encrypted_password: null,
                 duress_password: null
             },
@@ -531,7 +531,7 @@ export function handleMainSettingCheck(e, key, main) {
             payload: {
                 value: e,
                 key: key,
-                main:main
+                main: main
             }
         })
     }
@@ -834,19 +834,19 @@ export const checkPass = (user, actionType) => {
     return (dispatch) => {
         RestService.checkPass(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                if(actionType === PUSH_APPS){
+                if (actionType === PUSH_APPS) {
                     dispatch({
                         type: CHECKPASS,
                         payload: {
-                            actionType : actionType,
+                            actionType: actionType,
                             PasswordMatch: response.data,
                         }
                     })
-                }else if (actionType === WIPE_DEVICE){
+                } else if (actionType === WIPE_DEVICE) {
                     dispatch({
                         type: CHECKPASS,
                         payload: {
-                            actionType : actionType,
+                            actionType: actionType,
                             device: user.device,
                             PasswordMatch: response.data,
                         }
@@ -858,7 +858,7 @@ export const checkPass = (user, actionType) => {
                 })
             }
         })
-    
+
     }
 }
 
@@ -901,13 +901,13 @@ export const getImeiHistory = (device_id) => {
 export const reSyncDevice = (deviceId) => {
     return (dispatch) => {
         RestService.reSyncDevice(deviceId).then((response) => {
-            if(RestService.checkAuth(response.data)){
+            if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: "device_synced"
                 });
             } else {
                 dispatch({
-                    type:INVALID_TOKEN
+                    type: INVALID_TOKEN
                 })
             }
         })
@@ -920,6 +920,23 @@ export const showPushAppsModal = (visible) => {
             type: SHOW_PUSH_APPS_MODAL,
             payload: visible
 
+        })
+    }
+}
+
+export const applyPushApps = (apps, deviceId, usrAccId) => {
+    console.log("apps", apps);
+    apps.forEach((el) => {
+        delete el.apk_logo;
+        delete el.apk_status;
+    })
+    return (dispatch) => {
+        RestService.applyPushApps(apps, deviceId, usrAccId).then((response) => {
+            if(RestService.checkAuth(response.data)){
+
+            } else {
+
+            }
         })
     }
 }

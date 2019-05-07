@@ -47,11 +47,10 @@ export default (state = INIT_STATE, action) => {
   switch (action.type) {
 
     case LOGIN_USER_SUCCESS: {
-      let socket = RestService.connectSocket(action.payload.token);
+      
       return {
         ...state,
         loader: false,
-        socket: socket,
         authUser: action.payload
       }
     }
@@ -100,8 +99,6 @@ export default (state = INIT_STATE, action) => {
         state.authUser.name = action.response.data.name;
         localStorage.setItem('name', action.response.data.name);
         message.success(action.response.msg);
-        // console.log('user detail',action.response);
-        // console.log('user state',state.authUser);
       }
       else {
         message.error(action.response.msg);
@@ -165,11 +162,12 @@ export default (state = INIT_STATE, action) => {
       }
     }
     case COMPONENT_ALLOWED: {
-      // console.log("dsfsdfsdf",action.payload)
+      let socket = RestService.connectSocket(state.authUser.token);
       return {
         ...state,
         isAllowed: action.payload.ComponentAllowed,
         isRequested: true,
+        socket: socket,
         authUser: {
           id: action.payload.id,
           connected_dealer: action.payload.connected_dealer,

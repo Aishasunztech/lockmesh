@@ -25,7 +25,7 @@
 }
 
 .ant-btn>span+.anticon {
-    margin-left: 8px;
+    margin-left: 0;
     font-size: 14px;
 }
 

@@ -23,7 +23,8 @@ import {
     transferDeviceProfile,
     getDealerApps,
     loadDeviceProfile,
-    showPushAppsModal
+    showPushAppsModal,
+    applyPushApps
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -34,6 +35,33 @@ import {
 import { PUSH_APPS } from "../../../constants/ActionTypes"
 
 const confirm = Modal.confirm;
+
+const PasswordModal = (props) => {
+    return (
+        <Modal
+            // closable={false}
+            style={{ top: 20 }}
+            width="330px"
+            className="push_app"
+            title=""
+            visible={props.pwdConfirmModal}
+            footer={false}
+            onOk={() => {
+
+            }}
+            onCancel={() => props.showPwdConfirmModal(false)}
+            okText="Push Apps"
+        >
+            <PasswordForm
+                checkPass={props.checkPass}
+                actionType={PUSH_APPS}
+                handleCancel={props.showPwdConfirmModal}
+            />
+        </Modal>
+    )
+}
+
+
 const DealerAppModal = (props) => {
     return (
         <Modal
@@ -69,6 +97,7 @@ const SelectedApps = (props) => {
             title="Selected Apps"
             visible={props.selectedAppsModal}
             onOk={() => {
+                props.applyPushApps(props.apk_list);
                 props.showSelectedAppsModal(false);
             }}
             onCancel={() => props.showSelectedAppsModal(false)}
@@ -83,30 +112,7 @@ const SelectedApps = (props) => {
     )
 }
 
-const PasswordModal = (props) => {
-    return (
-        <Modal
-            // closable={false}
-            style={{ top: 20 }}
-            width="330px"
-            className="push_app"
-            title=""
-            visible={props.pwdConfirmModal}
-            footer={false}
-            onOk={() => {
 
-            }}
-            onCancel={() => props.showPwdConfirmModal(false)}
-            okText="Push Apps"
-        >
-            <PasswordForm
-                checkPass={props.checkPass}
-                actionType={PUSH_APPS}
-                handleCancel={props.showPwdConfirmModal}
-            />
-        </Modal>
-    )
-}
 
 
 class SideActions extends Component {
@@ -241,9 +247,22 @@ class SideActions extends Component {
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        // console.log("on selection", selectedRows)
+        let selectedApps = selectedRows;
+        selectedApps.map(el=>{
+            if(typeof (el.guest) !== Boolean){
+                el.guest = false
+            }
+
+            if(typeof (el.encrypted) !== Boolean){
+                el.encrypted = false
+            }
+
+            if(typeof (el.enable) !== Boolean){
+                el.enable = false
+            }
+        });
         this.setState({
-            selectedApps: selectedRows
+            selectedApps: selectedApps
         })
     }
     handleChecked = (e, key, app_id) => {
@@ -272,7 +291,9 @@ class SideActions extends Component {
             alert(historyId);
         }
     }
-
+    applyPushApps = () => {
+        this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+    }
     render() {
         // console.log(this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
@@ -289,7 +310,7 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true)} > <Icon type="lock" /> <Icon type='upload' /> Push</Button>
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true)}   > <Icon type="lock"  className="lock_icon" /> <Icon type='upload' /> Push</Button>
                                 
                                 <Button disabled type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
 
@@ -336,7 +357,7 @@ class SideActions extends Component {
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" /> Wipe Device</Button>
+                                <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" /> Wipe Device</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button style={{ width: "100%", marginBottom: 16, backgroundColor: '#1b1b1b', color: '#fff' }} onClick={() => this.handleFlag(flagged)} ><Icon type="flag" />{flagged}</Button>
@@ -345,7 +366,7 @@ class SideActions extends Component {
 
                             </Col>
                             <Tooltip title="Coming Soon" placement="bottom" >
-                                <Button type="default" style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
+                                <Button type="default" style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" className="lock_icon" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
                             </Tooltip>
                         </Row>
                     </Card>
@@ -417,7 +438,7 @@ class SideActions extends Component {
                 <SelectedApps
                     selectedAppsModal={this.state.selectedAppsModal}
                     showSelectedAppsModal={this.showSelectedAppsModal}
-                    showPwdConfirmModal={this.showPwdConfirmModal}
+                    applyPushApps = {this.applyPushApps}
                     apk_list={this.state.selectedApps}
                     selectedApps={[]}
                 />
@@ -474,6 +495,7 @@ function mapDispatchToProps(dispatch) {
         transferDeviceProfile: transferDeviceProfile,
         loadDeviceProfile: loadDeviceProfile,
         showPushAppsModal: showPushAppsModal,
+        applyPushApps: applyPushApps,
         savePolicy: savePolicy
     }, dispatch);
 }

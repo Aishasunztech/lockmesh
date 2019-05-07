@@ -54,13 +54,14 @@ const DealerApps = (props) => {
                 key: app.apk_id,
                 apk_id: app.apk_id,
                 package_name: app.package_name,
-                version: app.version,
+                version_name: app.version_name,
                 apk_status: (app.apk_status === "On") ? true : false,
                 apk: app.apk ? app.apk : 'N/A',
                 apk_name: app.apk_name ? app.apk_name : 'N/A',
                 apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
                 guest: ((isSwitchable) ?
                     <Switch
+
                         disabled={!isAvailable}
                         size={"small"}
                         onClick={(e) => {
