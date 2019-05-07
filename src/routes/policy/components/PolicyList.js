@@ -59,9 +59,11 @@ class PolicyList extends Component {
                     [rowId]:rowId
                 })
             }else{
+                // console.log('row id is ', this.state[rowId])
                 this.setState({
                     expandedRowKeys: this.state.expandedRowKeys,
                     expandTabSelected: newItems,
+                    [rowId]:null
                     // isSwitch: btnof == 'edit' ? true : false,
                 })
             }
@@ -222,7 +224,7 @@ class PolicyList extends Component {
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
-                               console.log("table row", this.state[record.rowKey]);
+                            //    console.log("table row", this.state[record.rowKey]);
                             return (<div>
                                {this.state.isSwitch && record.isChangedPolicy ? <Button 
                                   type="primary"

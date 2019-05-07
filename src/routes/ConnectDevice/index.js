@@ -526,7 +526,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-  //  console.log("connect device state", device_details.controls);
+    // console.log("connect device state", device_details.app_list);
   return {
     routing: routing,
     pathName: routing.location.pathname,

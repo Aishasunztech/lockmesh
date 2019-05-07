@@ -103,13 +103,20 @@ export default class TableHistory extends Component {
         }else{
             for (let obj of data) {
                 if (obj.isChanged !== undefined && obj.isChanged === true) {
-                    applist.push(obj);
+                    // if(applist.includes(obj)){
+
+                    // }else{
+                        applist.push(obj);
+                      
+                    // }
                 }
             }
             this.setState({ applist: applist })
         }
 
     }
+
+
 
     filterExtensions = () => {
         let data = this.props.extensions;
@@ -150,7 +157,7 @@ export default class TableHistory extends Component {
     }
 
     renderData = (datalist) => {
-         console.log(datalist, ' object', this.state.applist);
+        //  console.log(datalist, ' object', this.state.applist);
          
         if (datalist.length > 0) {
             return (
