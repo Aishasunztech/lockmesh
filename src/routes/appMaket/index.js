@@ -11,7 +11,6 @@ import { transferApps, getMarketApps } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { ADMIN, DEALER } from "../../constants/Constants";
 
-let selectedKeys = [];
 
 class ApkMarket extends React.Component {
     constructor(props) {
@@ -41,8 +40,9 @@ class ApkMarket extends React.Component {
             let data = {
                 key: app.id,
                 title: <Fragment> <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} /><span> {app.app_name} </span> </Fragment>,
-                description: `description of content${index + 1}`,
-                disabled: (this.props.user.type === ADMIN) ? false : app.disabled
+                description: `${app.app_name + index + 1}`,
+                disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
+                className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
             }
             return data
         })
@@ -53,19 +53,8 @@ class ApkMarket extends React.Component {
 
     handleChange = (targetKeys) => {
         let marketApps = targetKeys;
-        // if (this.props.user.type === DEALER) {
-        //     console.log(selectedKeys);
-
-        // } else {
-        // }
         this.props.transferApps(marketApps)
-        this.setState({ targetKeys });
-    }
-    onSelectChange = (sourceSelectedKeys, targetKeys) => {
-        if (sourceSelectedKeys.length) {
-            selectedKeys = sourceSelectedKeys
-        }
-
+        this.setState({ targetKeys, });
     }
 
     handleSearch = (dir, value) => {
@@ -106,7 +95,6 @@ class ApkMarket extends React.Component {
     componentWillMount() {
         this.props.getApkList();
         this.props.getMarketApps()
-
     }
     componentDidMount() {
     }
@@ -121,7 +109,7 @@ class ApkMarket extends React.Component {
                             <Transfer
                                 style={{ margin: 'auto' }}
                                 titles={['AVAILABLE APPS', 'SECURE MARKET']}
-                                dataSource={this.renderList(this.state.availbleAppList, this.state.secureMarketList)}
+                                dataSource={this.renderList(this.props.availbleAppList, this.state.secureMarketList)}
                                 listStyle={{
                                     width: 500,
                                     height: 500,
