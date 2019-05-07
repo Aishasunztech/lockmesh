@@ -499,7 +499,7 @@ function mapDispatchToProps(dispatch) {
         savePolicy: savePolicy
     }, dispatch);
 }
-var mapStateToProps = ({ device_details, auth }, otherProps) => {\
+var mapStateToProps = ({ device_details, auth }, otherProps) => {
 
     return {
         authUser: auth.authUser,
