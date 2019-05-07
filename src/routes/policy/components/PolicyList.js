@@ -14,7 +14,8 @@ class PolicyList extends Component {
         this.state = {
             expandedRowKeys: [],
             expandTabSelected: [],
-            expandedByCustom: []
+            expandedByCustom: [],
+            pagination: this.props.pagination
 
         }
     }
@@ -50,12 +51,21 @@ class PolicyList extends Component {
             newItems[rowId] = (btnof == 'info' || btnof == 'edit') ? '1' : '6';
             // this.setState({ items:newItems });
             // console.log("new Items", newItems);
-            this.setState({
-                expandedRowKeys: this.state.expandedRowKeys,
-                expandTabSelected: newItems,
-                isSwitch: btnof == 'edit' ? true : false
-
-            })
+            if(btnof == 'edit'){
+                this.setState({
+                    expandedRowKeys: this.state.expandedRowKeys,
+                    expandTabSelected: newItems,
+                    isSwitch: btnof == 'edit' ? true : false,
+                    [rowId]:rowId
+                })
+            }else{
+                this.setState({
+                    expandedRowKeys: this.state.expandedRowKeys,
+                    expandTabSelected: newItems,
+                    // isSwitch: btnof == 'edit' ? true : false,
+                })
+            }
+            
             // console.log("updated state", this.state.expandTabSelected);
             // this.forceUpdate()
         }
@@ -87,6 +97,7 @@ class PolicyList extends Component {
 
             return {
                 rowKey: index,
+                isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy: false,
                 policy_id: policy.id,
                 action:
                     (<Fragment>
@@ -94,7 +105,7 @@ class PolicyList extends Component {
                             type="primary"
                             size="small"
                             onClick={() => { this.expandRow(index, 'edit', true) }}
-                            disabled
+                        
                         >
                             Edit
                         </Button>
@@ -177,7 +188,14 @@ class PolicyList extends Component {
             }
         }
     }
-
+    handlePagination = (value) => {
+        // alert('sub child');
+        // console.log(value)
+        var x = Number(value)
+        this.setState({
+            pagination: x,
+        });
+    }
 
     componentDidMount() {
         this.props.policies.map((policy, index) => {
@@ -194,7 +212,7 @@ class PolicyList extends Component {
         }
     }
     render() {
-         console.log('POLICY LIST', this.props.policies)
+        //  console.log('POLICY LIST', this.props.policies)
         return (
             <Fragment>
                 <Card>
@@ -204,16 +222,22 @@ class PolicyList extends Component {
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
-                             console.log("table row", this.state.expandTabSelected[record.rowKey]);
-                            return (
+                               console.log("table row", this.state[record.rowKey]);
+                            return (<div>
+                               {this.state.isSwitch && record.isChangedPolicy ? <Button 
+                                  type="primary"
+                                  size="small"
+                                  onClick={() => { this.props.SavePolicyChanges(record)  }}
+                                   >Save Changes</Button>: false}
                                 <PolicyInfo
                                     selected={this.state.expandTabSelected[record.rowKey]}
                                     policy={record}
-                                    isSwitch={this.state.isSwitch}
-                                    rowId={this.state.expandTabSelected[record.rowKey]}
+                                    isSwitch= {this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
+                                    rowId={record.policy_id}
                                     handleEditPolicy={this.props.handleEditPolicy}
                                     edit={true}
                                 />
+                                </div>
                             )
                         }}
                         // expandIconColumnIndex={1}         
@@ -222,7 +246,7 @@ class PolicyList extends Component {
                         expandIconAsCell={false}
                         columns={this.props.columns}
                         dataSource={this.renderList(this.props.policies)}
-                        pagination={{ pageSize: 10, size: "midddle" }}
+                        pagination={{ pageSize: this.state.pagination, size: "midddle" }}
                         rowKey="policy_list"
                         ref='policy_table'
                     />

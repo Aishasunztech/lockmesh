@@ -640,7 +640,68 @@ export function hanldeProfileInput(profileType, profileValue) {
         })
     }
 }
-export function saveProfile(app_list, passwords = null, profileType, profileName, usr_acc_id) {
+export function saveProfile(app_list, passwords = null, profileName, usr_acc_id, controls, extensions) {
+    return (dispatch) => {
+        let pwd = {};
+        if (passwords != null) {
+            pwd = {
+                admin_password: (passwords.adminPwd === '') ? null : passwords.adminPwd,
+                guest_password: (passwords.guestPwd === '') ? null : passwords.guestPwd,
+                encrypted_password: (passwords.encryptedPwd === '') ? null : passwords.encryptedPwd,
+                duress_password: (passwords.duressPwd === '') ? null : passwords.duressPwd
+            }
+        } else {
+            pwd = {
+                admin_password: null,
+                guest_password: null,
+                encrypted_password: null,
+                duress_password: null
+            }
+        }
+        let device_setting = {
+            app_list: app_list,
+            passwords: pwd,
+            controls: controls,
+            extensions: extensions
+        }
+
+        // console.log("applist save profile", device_setting);
+        RestService.saveProfileCND(device_setting, profileName, usr_acc_id).then((response) => {
+            // console.log('action saveProfileCND', device_setting);
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: SHOW_MESSAGE,
+                    payload: {
+                        showMessage: true,
+                        messageType: (response.data.status === true) ? 'success' : 'error',
+                        messageText: response.data.msg
+                    }
+                })
+                dispatch({
+                    type: SAVE_PROFILE
+                })
+                dispatch({
+                    type: SHOW_MESSAGE,
+                    payload: {
+                        showMessage: false,
+                        messageType: 'success',
+                        messageText: "Profile saved successfully"
+                    }
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+        })
+
+    }
+
+}
+
+export function savePolicy(app_list, passwords = null, profileType, profileName, usr_acc_id) {
     return (dispatch) => {
         let pwd = {};
         if (passwords != null) {

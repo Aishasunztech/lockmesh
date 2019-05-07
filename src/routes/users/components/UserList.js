@@ -42,9 +42,7 @@ class UserList extends Component {
                             type="primary"
                             size="small"
                             onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
-                        >
-                            Edit
-                    </Button>
+                        > EDIT </Button>
                     </Fragment>)
                 ,
                 user_id: user.user_id,

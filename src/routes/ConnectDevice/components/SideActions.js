@@ -18,6 +18,7 @@ import {
     showHistoryModal,
     showSaveProfileModal,
     saveProfile,
+    savePolicy,
     hanldeProfileInput,
     transferDeviceProfile,
     getDealerApps,
@@ -201,9 +202,9 @@ class SideActions extends Component {
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
                 duressPwd: this.props.duressPwd,
-            }, this.state.saveProfileType, this.state.profileName, this.props.usr_acc_id);
+            }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, this.props.extensions);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
-            this.props.saveProfile(this.props.app_list,
+            this.props.savePolicy(this.props.app_list,
                 {
                     adminPwd: this.props.adminPwd,
                     guestPwd: this.props.guestPwd,
@@ -309,13 +310,14 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true)} > <Icon type="lock" /> <Icon type='upload' /> Push</Button>
-
-                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
-
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true)}   > <Icon type="lock"  className="lock_icon" /> <Icon type='upload' /> Push</Button>
+                                
                                 <Button disabled type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
 
-                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
+                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
+                                <Tooltip title="Coming Soon" placement="left">
+                                    <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} >IMEI</Button>
+                                </Tooltip>
 
                             </Col>
                             <Col
@@ -326,15 +328,15 @@ class SideActions extends Component {
                                 <Tooltip placement="bottom" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
                                 </Tooltip>
+                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
+                                    <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
+
+                                    <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
+
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 16 }} >Activity</Button>
                                 </Tooltip>
-                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " disabled style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
-                                    <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
-                                <Tooltip title="Coming Soon" placement="left">
-                                    <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} >IMEI</Button>
-                                </Tooltip>
                             </Col>
 
                         </Row>
@@ -355,7 +357,7 @@ class SideActions extends Component {
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" /> Wipe Device</Button>
+                                <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" /> Wipe Device</Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button style={{ width: "100%", marginBottom: 16, backgroundColor: '#1b1b1b', color: '#fff' }} onClick={() => this.handleFlag(flagged)} ><Icon type="flag" />{flagged}</Button>
@@ -364,7 +366,7 @@ class SideActions extends Component {
 
                             </Col>
                             <Tooltip title="Coming Soon" placement="bottom" >
-                                <Button type="default" style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
+                                <Button type="default" style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" className="lock_icon" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
                             </Tooltip>
                         </Row>
                     </Card>
@@ -493,10 +495,12 @@ function mapDispatchToProps(dispatch) {
         transferDeviceProfile: transferDeviceProfile,
         loadDeviceProfile: loadDeviceProfile,
         showPushAppsModal: showPushAppsModal,
-        applyPushApps: applyPushApps
+        applyPushApps: applyPushApps,
+        savePolicy: savePolicy
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
+    console.log('device_details.controls', device_details.extensions)
 
     return {
         authUser: auth.authUser,
@@ -519,6 +523,8 @@ var mapStateToProps = ({ device_details, auth }, otherProps) => {
         device_id: device_details.device.device_id,
         usr_acc_id: device_details.device.id,
         apk_list: otherProps.apk_list,
+        controls: device_details.controls,
+        extensions: device_details.extensions,
     };
 }
 

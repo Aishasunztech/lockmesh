@@ -5,6 +5,7 @@ import {
     handleCheckApp,
     handleCheckAll
 } from "../../../appRedux/actions/ConnectDevice";
+import {SECURE_SETTING} from '../../../constants/Constants';
 
 import { BASE_URL } from '../../../constants/Application';
 
@@ -115,10 +116,10 @@ class AppList extends Component {
 
     handleChecked = (e, key, app_id) => {
         if (this.props.edit) {
-            console.log('handle checked is called')
+            // console.log(app_id,'handle checked is called', this.props.rowId)
             if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps',this.props.rowId)
-            else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id, this.props.appPermissions)
-            else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id, this.props.secureSettings)
+            else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id,'app_list', this.props.rowId)
+            else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id,'secure_apps', this.props.rowId, SECURE_SETTING)
         } else {
             if (this.props.apps) this.props.handleCheckApp(e, key, app_id, this.props.apps)
             else if (this.props.appPermissions) this.props.handleCheckApp(e, key, app_id, this.props.appPermissions)
@@ -180,8 +181,8 @@ class AppList extends Component {
                         ref={`guest_${app_id}`}
                         name={`guest_${app_id}`}
                         value={guest}
-                        checked={isAvailable ? ((guest === true || guest === 1) ? true : false) : false}
-                        disabled={!isAvailable}
+                        checked={((guest === true || guest === 1) ? true : false)}
+                        // disabled={!isAvailable}
                         onClick={(e) => {
                             this.handleChecked(e, "guest", app_id)
 
@@ -194,8 +195,8 @@ class AppList extends Component {
                         ref={`encrypted_${app_id}`}
                         name={`encrypted_${app_id}`}
                         // value={encrypted}
-                        disabled={app.default_app == 1 ? true : !isAvailable}
-                        checked={app.default_app == 1 ? true : isAvailable ? ((encrypted === true || encrypted === 1) ? true : false) : false}
+                        // disabled={app.default_app == 1 ? true : !isAvailable}
+                        checked={app.default_app == 1 ? true : ((encrypted === true || encrypted === 1) ? true : false)}
                         onClick={(e) => {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app_id);
@@ -208,8 +209,8 @@ class AppList extends Component {
                         ref={`enable_${app_id}`}
                         name={`enable_${app_id}`}
                         // value={enable}
-                        checked={app.default_app == 1 ? true : isAvailable ? ((enable === true || enable === 1) ? true : false) : false}
-                        disabled={app.default_app == 1 ? true : !isAvailable}
+                        checked={app.default_app == 1 ? true :((enable === true || enable === 1) ? true : false)}
+                        // disabled={app.default_app == 1 ? true : !isAvailable}
                         onClick={(e) => {
                             this.handleChecked(e, "enable", app_id);
                         }}
@@ -331,7 +332,7 @@ class AppList extends Component {
         };
         // const hasSelected = selectedRowKeys.length > 0;
 
-        if (this.props.apps) {
+        if (this.props.apps && !this.props.isSwitch) {
             rowSelection = rowSelection
         } else {
             rowSelection = null

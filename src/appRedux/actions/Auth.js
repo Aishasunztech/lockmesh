@@ -58,15 +58,13 @@ export const loginUser = (user) => {
 };
 
 export const checkComponent = (componentUri) => {
-  // console.log("KSDJ")
   return (dispatch) => {
-    // alert("hello");
     dispatch({
       type: BEFORE_COMPONENT_ALLOWED,
       payload: false,
     })
+
     RestService.checkComponent(componentUri).then((resp) => {
-      // console.log('id id ', resp.data.user.connected_devices[0].total);
       if (RestService.checkAuth(resp.data)) {
         if (resp.data.status === true) {
 
