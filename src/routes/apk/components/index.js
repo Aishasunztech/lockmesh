@@ -96,40 +96,39 @@ class Apk extends Component {
                                 </Link>
                             </div>
                         </Col>
-                        {(this.props.user.type === 'admin') ?
-                            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                                <div>
-                                    <div className="contenar">
-                                        <Link to="/app-market">
-                                            <Card className="manage_sec" style={{ borderRadius: 12 }}>
-                                                <div className="image_1">
-                                                    <h2 style={{ textAlign: "center" }}>Secure Market</h2>
-                                                    <Divider className="mb-0" />
-                                                    <Row style={{ padding: '12px 0px 0px' }}>
-                                                        <Col span={8} style={{ padding: 0, textAlign: "right" }}>
-                                                            <Icon type="appstore" className="policy_icon" />
-                                                        </Col>
-                                                        <Col span={15}>
-                                                            <h5 style={{ position: 'relative', right: 12, marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Add/remove apps in </h5>
-                                                            <h5 style={{ position: 'relative', left: 10 }}> Secure Market</h5>
-                                                            <h5 style={{ position: 'relative', right: 2 }}><span className="diamond_icon">&#9670;</span>Set permissions</h5>
-                                                            <h5 style={{ position: 'relative', right: 10 }} className="more_txt">and more...</h5>
-                                                        </Col>
-                                                    </Row>
-                                                    <Row justify='center'>
-                                                        <Col span={6}>
-                                                        </Col>
-                                                        <Col span={12} style={{ marginTop: 28 }}>
-                                                            <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-                                            </Card>
-                                        </Link>
-                                    </div>
+
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <div>
+                                <div className="contenar">
+                                    <Link to="/app-market">
+                                        <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                            <div className="image_1">
+                                                <h2 style={{ textAlign: "center" }}>Secure Market</h2>
+                                                <Divider className="mb-0" />
+                                                <Row style={{ padding: '12px 0px 0px' }}>
+                                                    <Col span={8} style={{ padding: 0, textAlign: "right" }}>
+                                                        <Icon type="appstore" className="policy_icon" />
+                                                    </Col>
+                                                    <Col span={15}>
+                                                        <h5 style={{ position: 'relative', right: 12, marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Add/remove apps in </h5>
+                                                        <h5 style={{ position: 'relative', left: 10 }}> Secure Market</h5>
+                                                        <h5 style={{ position: 'relative', right: 2 }}><span className="diamond_icon">&#9670;</span>Set permissions</h5>
+                                                        <h5 style={{ position: 'relative', right: 10 }} className="more_txt">and more...</h5>
+                                                    </Col>
+                                                </Row>
+                                                <Row justify='center'>
+                                                    <Col span={6}>
+                                                    </Col>
+                                                    <Col span={12} style={{ marginTop: 28 }}>
+                                                        <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Card>
+                                    </Link>
                                 </div>
-                            </Col>
-                            : ''}
+                            </div>
+                        </Col>
 
                     </Row>
                 </div >

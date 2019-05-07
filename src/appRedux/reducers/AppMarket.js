@@ -15,7 +15,8 @@ import { DEALERS_LIST } from "../../constants/ActionTypes";
 const initialState = {
     isloading: false,
     apk_list: [],
-    secureMarketList: []
+    secureMarketList: [],
+    availbleAppList: []
     // options: ['SHOW ON DEVICE', 'APK', 'APP NAME', 'APP LOGO']
 };
 
@@ -32,7 +33,8 @@ export default (state = initialState, action) => {
         case GET_MARKET_APPS:
             return {
                 ...state,
-                secureMarketList: action.payload
+                secureMarketList: action.payload.marketApplist,
+                availbleAppList: action.payload.availableApps
             }
 
         default:
