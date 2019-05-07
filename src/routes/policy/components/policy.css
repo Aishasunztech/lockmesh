@@ -2,6 +2,16 @@
     margin: 4px 0 10px;
 }
 
+.policy_steps .ant-table-tbody {
+    height: 250px;
+    overflow: overlay;
+}
+
+.policy_steps tbody {
+    height: 250px;
+    overflow: overlay;
+}
+
 .policy_steps .ant-table-tbody>tr>td {
     font-size: 12px;
     text-align: center;

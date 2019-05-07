@@ -96,14 +96,14 @@ class PolicyList extends Component {
                             onClick={() => { this.expandRow(index, 'edit', true) }}
                             disabled
                         >
-                            Edit
+                            EDIT
                         </Button>
                         <Button
                             type="danger"
                             size="small"
                             onClick={() => { this.deletePolicy(policy.id) }}
                         >
-                            Delete
+                            DELETE
                         </Button>
                     </Fragment>)
                 ,
@@ -194,17 +194,19 @@ class PolicyList extends Component {
         }
     }
     render() {
-         console.log('POLICY LIST', this.props.policies)
+        console.log('POLICY LIST', this.props.policies)
         return (
             <Fragment>
                 <Card>
-                    <Table className="devices"
-                        size="middle"
+                    <Table
+                        scroll={{ x: 500 }}
+                        className="devices"
+                        size="small"
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
-                             console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                            console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
                                 <PolicyInfo
                                     selected={this.state.expandTabSelected[record.rowKey]}

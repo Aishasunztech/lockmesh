@@ -116,7 +116,7 @@ class AppList extends Component {
     handleChecked = (e, key, app_id) => {
         if (this.props.edit) {
             console.log('handle checked is called')
-            if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps',this.props.rowId)
+            if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps', this.props.rowId)
             else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id, this.props.appPermissions)
             else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id, this.props.secureSettings)
         } else {
@@ -353,7 +353,7 @@ class AppList extends Component {
                     style={{ margin: 0, padding: 0 }}
                     rowSelection={rowSelection}
                     size='small'
-                    scroll={this.props.isHistory ? {} : { y: 297 }}
+                    scroll={this.props.isHistory ? {} : {}}
                     bordered={false}
                     columns={this.props.allExtensions ? this.extensionColumns : this.appsColumns}
                     align='center'
