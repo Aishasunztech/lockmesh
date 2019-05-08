@@ -121,6 +121,7 @@ class ApkMarket extends React.Component {
                                 onSearch={this.handleSearch}
                                 onSelectChange={this.onSelectChange}
                                 render={item => item.title}
+                                locale={{ itemUnit: 'App', itemsUnit: 'Apps' }}
                             />
                         </Card>
                 }

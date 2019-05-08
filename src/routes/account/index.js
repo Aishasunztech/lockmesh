@@ -115,7 +115,7 @@ class Account extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length ) {
+        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length) {
             // if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length) {
             this.setState({
                 sim_ids: nextProps.sim_ids,
@@ -129,12 +129,12 @@ class Account extends Component {
                 duplicate_data_type: nextProps.duplicate_data_type,
                 newData: nextProps.newData
             });
-        }else if(this.props.duplicate_modal_show !== nextProps.duplicate_modal_show){
+        } else if (this.props.duplicate_modal_show !== nextProps.duplicate_modal_show) {
             this.setState({
-            duplicate_modal_show: nextProps.duplicate_modal_show,
-            duplicate_ids: nextProps.duplicate_ids,
-            duplicate_data_type: nextProps.duplicate_data_type,
-            newData: nextProps.newData
+                duplicate_modal_show: nextProps.duplicate_modal_show,
+                duplicate_ids: nextProps.duplicate_ids,
+                duplicate_data_type: nextProps.duplicate_data_type,
+                newData: nextProps.newData
             })
         }
     }
@@ -292,12 +292,12 @@ class Account extends Component {
         this.setState({
             duplicate_modal_show: false
         })
-        this.props.insertNewData({newData: [], submit: false});
+        this.props.insertNewData({ newData: [], submit: false });
     }
 
 
-    InsertNewData=()=> {
-       let data = {
+    InsertNewData = () => {
+        let data = {
             newData: this.state.newData,
             type: this.state.duplicate_data_type,
             submit: true
@@ -380,7 +380,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'sim_id',
                 key: "sim_id",
-                className: this.state.duplicate_data_type=='sim_id' ? '': 'hide',
+                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -389,7 +389,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'start_date',
                 key: "start_date",
-                className: this.state.duplicate_data_type=='sim_id' ? '': 'hide',
+                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -398,7 +398,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'expiry_date',
                 key: "expiry_date",
-                className: this.state.duplicate_data_type=='sim_id' ? '': 'hide',
+                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -406,7 +406,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'chat_id',
                 key: "chat_id",
-                className: this.state.duplicate_data_type=='chat_id' ? '': 'hide',
+                className: this.state.duplicate_data_type == 'chat_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -414,7 +414,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'pgp_email',
                 key: "pgp_email",
-                className: this.state.duplicate_data_type=='pgp_email' ? '': 'hide',
+                className: this.state.duplicate_data_type == 'pgp_email' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             }
         ]
@@ -426,34 +426,35 @@ class Account extends Component {
                 </Row>
                 <div style={{ marginTop: -40 }}>
                     <Row>
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                             <Modal
-                                title="Duplicate Data"
+                                title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! Duplicate Data</span></div>}
                                 visible={this.state.duplicate_modal_show}
                                 onOk={this.InsertNewData}
                                 onCancel={this.handleCancelDuplicate}
                                 okText='Submit'
                                 okButtonProps={{
-                                    disabled:this.state.newData.length ? false : true
+                                    disabled: this.state.newData.length ? false : true
                                 }}
                             >
 
                                 <Table
+                                    bordered
                                     columns={duplicateModalColumns}
                                     dataSource={
                                         this.state.duplicate_ids.map(row => {
-                                            if(this.state.duplicate_data_type == 'chat_id'){
+                                            if (this.state.duplicate_data_type == 'chat_id') {
                                                 return {
                                                     key: row.chat_id,
                                                     chat_id: row.chat_id
                                                 }
-                                            }else if(this.state.duplicate_data_type == 'pgp_email'){
+                                            } else if (this.state.duplicate_data_type == 'pgp_email') {
                                                 return {
                                                     key: row.pgp_email,
                                                     pgp_email: row.pgp_email
                                                 }
                                             }
-                                            else if(this.state.duplicate_data_type == 'sim_id'){
+                                            else if (this.state.duplicate_data_type == 'sim_id') {
                                                 return {
                                                     key: row.id,
                                                     sim_id: row[this.state.duplicate_data_type],
@@ -461,31 +462,35 @@ class Account extends Component {
                                                     expiry_date: row.expiry_date
                                                 }
                                             }
-                                            
+
                                         })
                                     }
 
                                     pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
 
                                 />
+                                <span className="warning_hr">
+                                <hr/>
+                                </span>
                                 <h2>New Data</h2>
 
                                 <Table
+                                    bordered
                                     columns={duplicateModalColumns}
                                     dataSource={
                                         this.state.newData.map(row => {
-                                            if(this.state.duplicate_data_type == 'chat_id'){
+                                            if (this.state.duplicate_data_type == 'chat_id') {
                                                 return {
                                                     key: row.chat_id,
                                                     chat_id: row.chat_id
                                                 }
-                                            }else if(this.state.duplicate_data_type == 'pgp_email'){
+                                            } else if (this.state.duplicate_data_type == 'pgp_email') {
                                                 return {
                                                     key: row.pgp_email,
                                                     pgp_email: row.pgp_email
                                                 }
                                             }
-                                            else if(this.state.duplicate_data_type == 'sim_id'){
+                                            else if (this.state.duplicate_data_type == 'sim_id') {
                                                 return {
                                                     key: row.id,
                                                     sim_id: row[this.state.duplicate_data_type],
@@ -493,7 +498,7 @@ class Account extends Component {
                                                     expiry_date: row.expiry_date
                                                 }
                                             }
-                                            
+
                                         })
                                     }
 
