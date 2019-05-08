@@ -182,8 +182,10 @@
     height: 26px;
 }
 
-.search_heading2 .ant-select-selection--single {
+.pagination1 .ant-select-selection--single {
     height: 26px;
+    font-size: 12px;
+    font-weight: 300;
 }
 
 .search_heading1 .ant-input-affix-wrapper {
@@ -191,7 +193,7 @@
     color: #e8e8e8 !important;
 }
 
-.search_heading2 .ant-select-selection__rendered {
+.pagination1 .ant-select-selection__rendered {
     font-size: 12px;
     display: block;
     margin-left: 11px;
