@@ -2,7 +2,7 @@
     margin: 4px 0 10px;
 }
 
-.policy_steps .ant-table-tbody {
+.policy_steps .ant-table-body {
     height: 250px;
     overflow: overlay;
 }
@@ -70,6 +70,16 @@
     margin-bottom: 4px;
 }
 
+.login-form {
+    justify-content: center;
+    display: grid;
+}
+
+.login-form .h3 {
+    font-size: 16px;
+    font-weight: 500;
+}
+
 .ant-steps-item-process .step_counting {
     color: #fafafa;
     font-size: 18px;
@@ -94,7 +104,7 @@
 }
 
 .pol_inp {
-    margin: 0 0 16px;
+    margin: 0;
 }
 
 .lst_stp label {

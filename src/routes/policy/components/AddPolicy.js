@@ -63,7 +63,7 @@ class AddPolicy extends Component {
             isPolicy_name: 'success',
             policy_name_error: '',
             command_error: '',
-            pushAppsIds:[],
+            pushAppsIds: [],
 
             guestAlldealerApps: false,
             encryptedAlldealerApps: false,
@@ -212,7 +212,7 @@ class AddPolicy extends Component {
         }
     }
 
-    
+
     onSelectChange = (selected) => {
         this.state.pushAppsIds = selected;
         // console.log(this.state.dealerApps, 'guested apps')    
@@ -333,22 +333,17 @@ class AddPolicy extends Component {
             content: (
                 <Form className="login-form">
                     <Form.Item
-
-                        label='Name'
                         validateStatus={this.state.isPolicy_name}
                         help={this.state.policy_name_error}
                     >
-
+                        <span className="h3">Name</span>
                         <Input placeholder="Name" onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
-
                     </Form.Item>
                     <Form.Item
-
-                        label='Policy Note'
                         validateStatus={this.state.isCommand}
                         help={this.state.command_error}
                     >
-
+                        <span className="h3">Policy Note</span>
                         <textarea placeholder="Policy Note" onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
 
                     </Form.Item>
