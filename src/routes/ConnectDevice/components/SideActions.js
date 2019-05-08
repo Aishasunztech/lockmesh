@@ -24,7 +24,8 @@ import {
     getDealerApps,
     loadDeviceProfile,
     showPushAppsModal,
-    applyPushApps
+    applyPushApps,
+    writeImei
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -201,7 +202,7 @@ class SideActions extends Component {
                 adminPwd: this.props.adminPwd,
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
-                duressPwd: this.props.duressPwd, 
+                duressPwd: this.props.duressPwd,
             }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, this.props.extensions);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
             this.props.savePolicy(this.props.app_list,
@@ -326,7 +327,7 @@ class SideActions extends Component {
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " disabled style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
-                                    <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
+                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
 
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 16 }} >Activity</Button>
@@ -462,6 +463,7 @@ class SideActions extends Component {
                     ref='imeiView'
                     device={this.props.device}
                     imei_list={this.props.imei_list}
+                    writeImei={this.props.writeImei}
                 />
             </div>
         )
@@ -487,7 +489,8 @@ function mapDispatchToProps(dispatch) {
         loadDeviceProfile: loadDeviceProfile,
         showPushAppsModal: showPushAppsModal,
         applyPushApps: applyPushApps,
-        savePolicy: savePolicy
+        savePolicy: savePolicy,
+        writeImei: writeImei
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
