@@ -166,9 +166,9 @@ export default class ImeiView extends Component {
                         handleCancel={this.handleCancel}
                     /> */}
                     {/* <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button> */}
+                    {/* <Button style={{ float: 'right' }} type="primary" onClick={this.props.handleCancel}>OK</Button> */}
                     <Button onClick={() => { this.showViewmodal(true, 'IMEI 1') }} type="primary">IMEI 1</Button>
                     <Button onClick={() => { this.showViewmodal(true, 'IMEI 2') }} type="primary">IMEI 2</Button>
-                    {/* <Button style={{ float: 'right' }} type="primary" onClick={this.props.handleCancel}>OK</Button> */}
                 </Modal>
                 <Modal
                     // className="m_d_pop"
