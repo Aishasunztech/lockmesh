@@ -925,7 +925,6 @@ export const showPushAppsModal = (visible) => {
 }
 
 export const applyPushApps = (apps, deviceId, usrAccId) => {
-    console.log("apps", apps);
     apps.forEach((el) => {
         delete el.apk_logo;
         delete el.apk_status;

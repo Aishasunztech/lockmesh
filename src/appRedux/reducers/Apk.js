@@ -8,8 +8,9 @@ import {
 	POST_DROPDOWN,
 	GET_DROPDOWN,
 	GET_PAGINATION,
-	PERMSSION_SAVED
-} from "constants/ActionTypes";
+	PERMSSION_SAVED,
+	DEALERS_LIST
+} from "../../constants/ActionTypes";
 
 import {
 	APK_SHOW_ON_DEVICE,
@@ -18,7 +19,6 @@ import {
 	APK_APP_LOGO
 } from '../../constants/ApkConstants';
 import { message } from 'antd';
-import { DEALERS_LIST } from "../../constants/ActionTypes";
 
 const initialState = {
 	isloading: false,

@@ -3,10 +3,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Modal } from "antd";
 import CircularProgress from "components/CircularProgress/index";
-import { editDevice } from "../../appRedux/actions/Devices";
 import DeviceSettings from './components/DeviceSettings';
-
-
+import io from 'socket.io-client';
 import {
   getDeviceDetails,
   getDeviceApps,
@@ -41,7 +39,10 @@ import {
   reSyncDevice,
   getDealerApps,
 } from "../../appRedux/actions/ConnectDevice";
-import { getDevicesList } from '../../appRedux/actions/Devices';
+
+import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
+import { ackFinishedPushApps } from "../../appRedux/actions/Socket";
+
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
 import {
@@ -142,7 +143,6 @@ class ConnectDevice extends Component {
     });
 
     const device_id = atob(this.props.match.params.device_id);
-    // console.log('ref', device_id)
 
     if (device_id !== '') {
 
@@ -153,9 +153,13 @@ class ConnectDevice extends Component {
       this.props.getDeviceHistories(device_id);
       this.props.getImeiHistory(device_id);
       this.props.getDealerApps();
-      // this.setState({
-      //     syncStatus: this.props.device_details.is_sync
-      // })
+      // this.props.ackFinishedPushApps(this.props.socket, device_id);
+      // console.log('ack_finished_push_apps_' + device_id);
+ 
+      this.props.socket.on('ack_finished_push_apps_', function(response){
+
+        console.log("hello");
+      });
     }
 
 
@@ -527,12 +531,15 @@ function mapDispatchToProps(dispatch) {
     handleMainSettingCheck: handleMainSettingCheck,
     reSyncDevice: reSyncDevice,
     getDealerApps: getDealerApps,
+    ackFinishedPushApps: ackFinishedPushApps
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, devices }) => {
+var mapStateToProps = ({ routing, device_details, auth}) => {
   // console.log("connect device state", device_details.app_list);
-  console.log("device details", device_details.device)
+  console.log("socket io", auth.socket);
   return {
+    auth: auth,
+    socket: auth.socket,
     routing: routing,
     pathName: routing.location.pathname,
     device_details: device_details.device,
