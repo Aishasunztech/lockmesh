@@ -284,6 +284,7 @@ class AddPolicy extends Component {
                     onSelectChange={this.onSelectChange}
                     apps='dealerApps'
                     isSwitch={true}
+                    isCheckbox={true}
                 />
             ),
         }, {

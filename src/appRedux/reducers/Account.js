@@ -4,6 +4,8 @@ import {
     GET_USED_CHAT_IDS,
     GET_USED_SIM_IDS,
     RELEASE_CSV,
+    DUPLICATE_SIM_IDS,
+    NEW_DATA_INSERTED
 } from "constants/ActionTypes";
 import { message } from "antd";
 
@@ -13,6 +15,10 @@ const initialState = {
     used_pgp_emails: [],
     used_sim_ids: [],
     used_chat_ids: [],
+    duplicate_ids:[],
+    duplicate_modal_show: false,
+    duplicate_data_type: '',
+    newData: [],
 };
 
 export default (state = initialState, action) => {
@@ -20,6 +26,8 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case IMPORT_CSV:
+        console.log();
+
             return {
                 ...state,
                 msg: action.payload.msg,
@@ -43,9 +51,38 @@ export default (state = initialState, action) => {
             // alert("hello");
             return {
                 ...state,
-                used_sim_ids: action.payload
+                used_sim_ids: action.payload    
             }
         }
+
+        case NEW_DATA_INSERTED: {
+    
+            if(action.payload.status && action.showMsg){
+                message.success(action.payload.msg)
+            }else if(action.payload.status ==false && action.showMsg){
+                message.error(action.payload.msg)
+            }
+            return{
+                ...state,
+                duplicate_ids: [],
+                duplicate_data_type: '',
+                duplicate_modal_show: false,
+                newData: []
+
+            }
+        }
+
+        case DUPLICATE_SIM_IDS: {
+            console.log('reducer of accrount', action.payload)
+            return{
+                ...state,
+                duplicate_ids: action.payload.duplicateData,
+                duplicate_data_type: action.payload.type,
+                duplicate_modal_show: true,
+                newData: action.payload.newData
+            }
+        }
+
         case RELEASE_CSV: {
             // alert("hello");
             // console.log(action.payload);

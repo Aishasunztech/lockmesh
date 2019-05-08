@@ -827,7 +827,7 @@ class Devices extends Component {
             columns: columns,
             searchText: '',
             devices: [],
-            tabselect: '1'
+            tabselect: '4'
         }
         this.copyDevices = [];
 
