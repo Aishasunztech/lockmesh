@@ -223,6 +223,11 @@ const RestService = {
         return axios.post(BASE_URL + "users/save_policy_changes ",data, RestService.getHeader());
     },
 
+    saveNewData: (data) => {
+        return axios.post(BASE_URL + "users/save_new_data ",data, RestService.getHeader());
+
+    },
+
     
 
     getDeviceApps: (device_id) => {

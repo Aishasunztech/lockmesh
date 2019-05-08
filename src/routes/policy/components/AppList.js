@@ -332,7 +332,7 @@ class AppList extends Component {
         };
         // const hasSelected = selectedRowKeys.length > 0;
 
-        if (this.props.apps && !this.props.isSwitch) {
+        if (this.props.apps && this.props.isSwitch && this.props.isCheckbox) {
             rowSelection = rowSelection
         } else {
             rowSelection = null

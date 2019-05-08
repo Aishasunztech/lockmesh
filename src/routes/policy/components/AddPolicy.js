@@ -63,7 +63,7 @@ class AddPolicy extends Component {
             isPolicy_name: 'success',
             policy_name_error: '',
             command_error: '',
-            pushAppsIds:[],
+            pushAppsIds: [],
 
             guestAlldealerApps: false,
             encryptedAlldealerApps: false,
@@ -212,7 +212,7 @@ class AddPolicy extends Component {
         }
     }
 
-    
+
     onSelectChange = (selected) => {
         this.state.pushAppsIds = selected;
         // console.log(this.state.dealerApps, 'guested apps')    
@@ -284,6 +284,7 @@ class AddPolicy extends Component {
                     onSelectChange={this.onSelectChange}
                     apps='dealerApps'
                     isSwitch={true}
+                    isCheckbox={true}
                 />
             ),
         }, {
