@@ -201,7 +201,7 @@ class SideActions extends Component {
                 adminPwd: this.props.adminPwd,
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
-                duressPwd: this.props.duressPwd,
+                duressPwd: this.props.duressPwd, 
             }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, this.props.extensions);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
             this.props.savePolicy(this.props.app_list,
