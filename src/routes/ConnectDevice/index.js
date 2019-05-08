@@ -385,6 +385,10 @@ class ConnectDevice extends Component {
     let onlineColor = (onlineStatus === 'Offline') ? { color: 'red' } : { color: 'green' }
     return (
       <div className="gutter-example">
+        {/* {this.props.isLoading || this.props.device_details.is_push_apps ?
+          <div className="gx-loader-view">
+            <CircularProgress />
+          </div> : null} */}
         {this.props.isLoading ?
           <div className="gx-loader-view">
             <CircularProgress />
@@ -526,7 +530,8 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, devices }) => {
-    // console.log("connect device state", device_details.app_list);
+  // console.log("connect device state", device_details.app_list);
+  console.log("device details", device_details.device)
   return {
     routing: routing,
     pathName: routing.location.pathname,

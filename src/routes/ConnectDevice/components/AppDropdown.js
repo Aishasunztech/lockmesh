@@ -45,10 +45,10 @@ export default class AppDropdown extends Component {
             <div className="applist_menu">
                 <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "guestAll");
-                }}>Turn on Guests All</Checkbox><br></br>
+                }}>Guests All</Checkbox><br></br>
                 <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "encryptedAll");
-                }}>Turn On Encrypted All</Checkbox><br></br>
+                }}>Encrypted All</Checkbox><br></br>
                 <Checkbox checked={this.state.enableAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "enableAll");
                 }}>Enable All</Checkbox>
