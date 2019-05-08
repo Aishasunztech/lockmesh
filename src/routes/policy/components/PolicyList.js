@@ -220,7 +220,7 @@ class PolicyList extends Component {
                     <Table
                         scroll={{ x: 500 }}
                         className="devices"
-                        size="small"
+                        size="default"
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {

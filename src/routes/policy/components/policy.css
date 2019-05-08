@@ -3,12 +3,7 @@
 }
 
 .policy_steps .ant-table-body {
-    height: 250px;
-    overflow: overlay;
-}
-
-.policy_steps tbody {
-    height: 250px;
+    height: 200px;
     overflow: overlay;
 }
 
@@ -95,12 +90,12 @@
     height: 32px;
 }
 
-.list_p_down {
+.list_p_down1 {
     font-size: 26px;
     margin-right: 6px;
     margin-bottom: 6px;
     position: relative;
-    left: 95%;
+    right: 0;
 }
 
 .pol_inp {
