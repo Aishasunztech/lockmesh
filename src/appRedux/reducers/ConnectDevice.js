@@ -43,7 +43,9 @@ import {
     GET_APPS_PERMISSIONS,
     HANDLE_CHECK_MAIN_SETTINGS,
     GET_IMIE_HISTORY,
-    SHOW_PUSH_APPS_MODAL
+    SHOW_PUSH_APPS_MODAL,
+    SHOW_PULL_APPS_MODAL,
+    PULL_APPS
 } from "../../constants/ActionTypes";
 
 import {
@@ -133,6 +135,7 @@ const initialState = {
 
     imei_list: [],
     pushAppsModal:false,
+    pullAppsModal: false
 };
 
 export default (state = initialState, action) => {
@@ -458,6 +461,11 @@ export default (state = initialState, action) => {
                     return {
                         ...state,
                         pushAppsModal: true
+                    }
+                }else if(action.payload.actionType === PULL_APPS){
+                    return {
+                        ...state,
+                        pullAppsModal: true
                     }
                 } else if (action.payload.actionType === WIPE_DEVICE){
 
@@ -853,6 +861,14 @@ export default (state = initialState, action) => {
                 pushAppsModal: action.payload
             }
         }
+
+        case SHOW_PULL_APPS_MODAL: {
+            return {
+                ...state,
+                pullAppsModal: action.payload
+            }
+        }
+
         case GET_IMIE_HISTORY: {
             // console.log(action.payload);
             return {

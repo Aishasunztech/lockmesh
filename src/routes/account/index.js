@@ -11,6 +11,7 @@ import {
     getUsedPGPEmails,
     getUsedChatIds,
     getUsedSimIds,
+    insertNewData
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -45,7 +46,10 @@ class Account extends Component {
             used_pgp_emails_page: 10,
             used_sim_ids_page: 10,
             used_chat_ids_page: 10,
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            duplicate_ids: [],
+            newData: [],
+            duplicate_modal_show: false
 
         }
     }
@@ -111,7 +115,7 @@ class Account extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length) {
+        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length ) {
             // if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length) {
             this.setState({
                 sim_ids: nextProps.sim_ids,
@@ -119,8 +123,19 @@ class Account extends Component {
                 pgp_emails: nextProps.pgp_emails,
                 used_pgp_emails: nextProps.used_pgp_emails,
                 used_chat_ids: nextProps.used_chat_ids,
-                used_sim_ids: nextProps.used_sim_ids
+                used_sim_ids: nextProps.used_sim_ids,
+                duplicate_modal_show: nextProps.duplicate_modal_show,
+                duplicate_ids: nextProps.duplicate_ids,
+                duplicate_data_type: nextProps.duplicate_data_type,
+                newData: nextProps.newData
             });
+        }else if(this.props.duplicate_modal_show !== nextProps.duplicate_modal_show){
+            this.setState({
+            duplicate_modal_show: nextProps.duplicate_modal_show,
+            duplicate_ids: nextProps.duplicate_ids,
+            duplicate_data_type: nextProps.duplicate_data_type,
+            newData: nextProps.newData
+            })
         }
     }
     uploadFile = (file) => {
@@ -272,6 +287,25 @@ class Account extends Component {
             selectedRowKeys: [],
         });
     }
+
+    handleCancelDuplicate = () => {
+        this.setState({
+            duplicate_modal_show: false
+        })
+        this.props.insertNewData({newData: [], submit: false});
+    }
+
+
+    InsertNewData=()=> {
+       let data = {
+            newData: this.state.newData,
+            type: this.state.duplicate_data_type,
+            submit: true
+        }
+        this.props.insertNewData(data);
+        this.handleCancelDuplicate();
+    }
+
     onSelectChange = (selectedRowKeys) => {
         // console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
@@ -339,6 +373,52 @@ class Account extends Component {
             onChange: this.onSelectChange,
         };
 
+
+        const duplicateModalColumns = [
+            {
+                title: 'SIM ID',
+                align: "center",
+                dataIndex: 'sim_id',
+                key: "sim_id",
+                className: this.state.duplicate_data_type=='sim_id' ? '': 'hide',
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: 'START DATE',
+                align: "center",
+                dataIndex: 'start_date',
+                key: "start_date",
+                className: this.state.duplicate_data_type=='sim_id' ? '': 'hide',
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: 'EXPIRY DATE',
+                align: "center",
+                dataIndex: 'expiry_date',
+                key: "expiry_date",
+                className: this.state.duplicate_data_type=='sim_id' ? '': 'hide',
+                sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: 'CHAT IDS',
+                align: "center",
+                dataIndex: 'chat_id',
+                key: "chat_id",
+                className: this.state.duplicate_data_type=='chat_id' ? '': 'hide',
+                sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: 'PGP EMAILS',
+                align: "center",
+                dataIndex: 'pgp_email',
+                key: "pgp_email",
+                className: this.state.duplicate_data_type=='pgp_email' ? '': 'hide',
+                sortDirections: ['ascend', 'descend'],
+            }
+        ]
+
         return (
 
             <div>
@@ -347,6 +427,80 @@ class Account extends Component {
                 <div style={{ marginTop: -40 }}>
                     <Row>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <Modal
+                                title="Duplicate Data"
+                                visible={this.state.duplicate_modal_show}
+                                onOk={this.InsertNewData}
+                                onCancel={this.handleCancelDuplicate}
+                                okText='Submit'
+                                okButtonProps={{
+                                    disabled:this.state.newData.length ? false : true
+                                }}
+                            >
+
+                                <Table
+                                    columns={duplicateModalColumns}
+                                    dataSource={
+                                        this.state.duplicate_ids.map(row => {
+                                            if(this.state.duplicate_data_type == 'chat_id'){
+                                                return {
+                                                    key: row.chat_id,
+                                                    chat_id: row.chat_id
+                                                }
+                                            }else if(this.state.duplicate_data_type == 'pgp_email'){
+                                                return {
+                                                    key: row.pgp_email,
+                                                    pgp_email: row.pgp_email
+                                                }
+                                            }
+                                            else if(this.state.duplicate_data_type == 'sim_id'){
+                                                return {
+                                                    key: row.id,
+                                                    sim_id: row[this.state.duplicate_data_type],
+                                                    start_date: row.start_date,
+                                                    expiry_date: row.expiry_date
+                                                }
+                                            }
+                                            
+                                        })
+                                    }
+
+                                    pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
+
+                                />
+                                <h2>New Data</h2>
+
+                                <Table
+                                    columns={duplicateModalColumns}
+                                    dataSource={
+                                        this.state.newData.map(row => {
+                                            if(this.state.duplicate_data_type == 'chat_id'){
+                                                return {
+                                                    key: row.chat_id,
+                                                    chat_id: row.chat_id
+                                                }
+                                            }else if(this.state.duplicate_data_type == 'pgp_email'){
+                                                return {
+                                                    key: row.pgp_email,
+                                                    pgp_email: row.pgp_email
+                                                }
+                                            }
+                                            else if(this.state.duplicate_data_type == 'sim_id'){
+                                                return {
+                                                    key: row.id,
+                                                    sim_id: row[this.state.duplicate_data_type],
+                                                    start_date: row.start_date,
+                                                    expiry_date: row.expiry_date
+                                                }
+                                            }
+                                            
+                                        })
+                                    }
+
+                                    pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
+
+                                />
+                            </Modal>
                             <div>
                                 <Link to="#" onClick={this.showModal}>
                                     <Card className="manage_ac" style={{ borderRadius: 12 }}>
@@ -1063,7 +1217,8 @@ function mapDispatchToProps(dispatch) {
         getUsedPGPEmails: getUsedPGPEmails,
         getUsedChatIds: getUsedChatIds,
         getUsedSimIds: getUsedSimIds,
-        releaseCSV: releaseCSV
+        releaseCSV: releaseCSV,
+        insertNewData: insertNewData
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {
@@ -1081,6 +1236,10 @@ var mapStateToProps = ({ account, devices }) => {
         used_pgp_emails: account.used_pgp_emails,
         used_chat_ids: account.used_chat_ids,
         used_sim_ids: account.used_sim_ids,
+        duplicate_data_type: account.duplicate_data_type,
+        duplicate_ids: account.duplicate_ids,
+        duplicate_modal_show: account.duplicate_modal_show,
+        newData: account.newData
     };
 }
 

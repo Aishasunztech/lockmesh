@@ -28,6 +28,8 @@ export const INVALID_RESPONSE = 'INVALID_RESPONSE';
 export const ACCESS_DENIED = 'ACCESS_DENIED';
 export const GET_USER = 'GET_USER';
 export const BEFORE_COMPONENT_ALLOWED = 'BEFORE_COMPONENT_ALLOWED';
+export const DUPLICATE_SIM_IDS = 'DUPLICATE_SIM_IDS';
+export const NEW_DATA_INSERTED = 'NEW_DATA_INSERTED';
 
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
@@ -104,8 +106,10 @@ export const HANDLE_CHECK_APP = 'HANDLE_CHECK_APP';
 export const HANDLE_CHECK_ALL = 'HANDLE_CHECK_ALL';
 
 export const PUSH_APPS = 'PUSH_APPS';
+export const PULL_APPS = 'PULL_APPS';
 export const UNDO_APPS = "UNDO_APPS";
 export const REDO_APPS = 'REDO_APPS';
+export const SHOW_PULL_APPS_MODAL = 'SHOW_PULL_APPS_MODAL';
 
 export const SAVE_POLICY = 'SAVE_POLICY';
 export const POLICY_PERMSSION_SAVED = 'POLICY_PERMSSION_SAVED';
