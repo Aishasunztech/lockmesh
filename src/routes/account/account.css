@@ -204,6 +204,17 @@
     line-height: 25px;
 }
 
+.warning {
+    color: orange;
+    font-size: 20px;
+    vertical-align: sub;
+    margin-right: 4px;
+}
+
+.warning_hr hr {
+    border: 1px solid #e8e8e8;
+}
+
 .pr-8 {
     padding-right: 8px;
 }
