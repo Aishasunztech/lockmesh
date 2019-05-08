@@ -25,7 +25,8 @@ import {
     loadDeviceProfile,
     showPushAppsModal,
     showPullAppsModal,
-    applyPushApps
+    applyPushApps,
+    writeImei
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -512,6 +513,7 @@ class SideActions extends Component {
                     ref='imeiView'
                     device={this.props.device}
                     imei_list={this.props.imei_list}
+                    writeImei={this.props.writeImei}
                 />
             </div>
         )
@@ -538,7 +540,8 @@ function mapDispatchToProps(dispatch) {
         showPushAppsModal: showPushAppsModal,
         showPullAppsModal: showPullAppsModal,
         applyPushApps: applyPushApps,
-        savePolicy: savePolicy
+        savePolicy: savePolicy,
+        writeImei: writeImei
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {

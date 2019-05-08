@@ -41,7 +41,8 @@ import {
     GET_POLICIES,
     SHOW_PUSH_APPS_MODAL,
     SHOW_PULL_APPS_MODAL,
-    PULL_APPS
+    PULL_APPS,
+    WRITE_IMEI
 } from "../../constants/ActionTypes"
 
 import {
@@ -891,6 +892,8 @@ export const getDealerApps = () => {
         })
     }
 }
+
+// Get IMEI history list
 export const getImeiHistory = (device_id) => {
     // console.log(device_id)
     return (dispatch) => {
@@ -908,6 +911,26 @@ export const getImeiHistory = (device_id) => {
         })
     }
 }
+
+
+export const writeImei = (device_id, usrAccId, type, imeiNo) => {
+    return (dispatch) => {
+        RestService.writeImei(device_id, usrAccId, type, imeiNo).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: WRITE_IMEI,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+
 export const reSyncDevice = (deviceId) => {
     return (dispatch) => {
         RestService.reSyncDevice(deviceId).then((response) => {
@@ -951,7 +974,7 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
     })
     return (dispatch) => {
         RestService.applyPushApps(apps, deviceId, usrAccId).then((response) => {
-            if(RestService.checkAuth(response.data)){
+            if (RestService.checkAuth(response.data)) {
 
             } else {
 
