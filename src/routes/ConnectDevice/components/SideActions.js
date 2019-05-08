@@ -248,16 +248,16 @@ class SideActions extends Component {
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
         let selectedApps = selectedRows;
-        selectedApps.map(el=>{
-            if(typeof (el.guest) !== Boolean){
+        selectedApps.map(el => {
+            if (typeof (el.guest) !== Boolean) {
                 el.guest = false
             }
 
-            if(typeof (el.encrypted) !== Boolean){
+            if (typeof (el.encrypted) !== Boolean) {
                 el.encrypted = false
             }
 
-            if(typeof (el.enable) !== Boolean){
+            if (typeof (el.enable) !== Boolean) {
                 el.enable = false
             }
         });
@@ -310,15 +310,10 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true)}   > <Icon type="lock"  className="lock_icon" /> <Icon type='upload' /> Push</Button>
-                                
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true)} > <Icon type="lock" className="lock_icon" /> <Icon type='upload' /> Push</Button>
                                 <Button disabled type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
-
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
-                                <Tooltip title="Coming Soon" placement="left">
-                                    <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} >IMEI</Button>
-                                </Tooltip>
-
+                                <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} ><Icon type="barcode" /> IMEI</Button>
                             </Col>
                             <Col
                                 span={12}
@@ -328,7 +323,7 @@ class SideActions extends Component {
                                 <Tooltip placement="bottom" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
                                 </Tooltip>
-                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
+                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " disabled style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
                                     <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
@@ -336,9 +331,7 @@ class SideActions extends Component {
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 16 }} >Activity</Button>
                                 </Tooltip>
-
                             </Col>
-
                         </Row>
                     </Card>
                     <Card>
@@ -353,7 +346,6 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
                                     disabled={(flagged === 'Unflag') ? 'disabled' : ''}
                                 >
-
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
@@ -363,7 +355,6 @@ class SideActions extends Component {
                                 <Button style={{ width: "100%", marginBottom: 16, backgroundColor: '#1b1b1b', color: '#fff' }} onClick={() => this.handleFlag(flagged)} ><Icon type="flag" />{flagged}</Button>
                                 <Button onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
                                 <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
-
                             </Col>
                             <Tooltip title="Coming Soon" placement="bottom" >
                                 <Button type="default" style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" className="lock_icon" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
@@ -438,7 +429,7 @@ class SideActions extends Component {
                 <SelectedApps
                     selectedAppsModal={this.state.selectedAppsModal}
                     showSelectedAppsModal={this.showSelectedAppsModal}
-                    applyPushApps = {this.applyPushApps}
+                    applyPushApps={this.applyPushApps}
                     apk_list={this.state.selectedApps}
                     selectedApps={[]}
                 />

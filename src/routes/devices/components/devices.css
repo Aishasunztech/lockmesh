@@ -101,6 +101,10 @@
     padding: 8px 8px !important;
 }
 
+.dev_table .ant-card-bordered {
+    border-top: none;
+}
+
 .devices th {
     padding: 8px 8px !important;
 }
@@ -136,6 +140,8 @@
 .mb-0 {
     margin-bottom: 0;
 }
+
+
 
 .ant-tabs-tab-active .green {
     color: #008000
@@ -191,6 +197,10 @@
 
 .gray:hover {
     color: #999999
+}
+
+.ant-tabs-tab-active {
+    font-weight: 400 !important;
 }
 
 .dev_tabs .ant-tabs-tab:hover {
