@@ -39,7 +39,9 @@ import {
     HANDLE_CHECK_APP_POLICY,
     GET_IMIE_HISTORY,
     GET_POLICIES,
-    SHOW_PUSH_APPS_MODAL
+    SHOW_PUSH_APPS_MODAL,
+    SHOW_PULL_APPS_MODAL,
+    PULL_APPS
 } from "../../constants/ActionTypes"
 
 import {
@@ -830,7 +832,7 @@ export const flagged = (device_id, data) => {
     }
 }
 export const checkPass = (user, actionType) => {
-    // console.log(user);
+     console.log(user);
     return (dispatch) => {
         RestService.checkPass(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -851,12 +853,20 @@ export const checkPass = (user, actionType) => {
                             PasswordMatch: response.data,
                         }
                     })
-                }
+                }else if (actionType === PULL_APPS) {
+                dispatch({
+                    type: CHECKPASS,
+                    payload: {
+                        actionType: actionType,
+                        PasswordMatch: response.data,
+                    }
+                })
             } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
             }
+        }
         })
 
     }
@@ -918,6 +928,16 @@ export const showPushAppsModal = (visible) => {
     return (dispatch) => {
         dispatch({
             type: SHOW_PUSH_APPS_MODAL,
+            payload: visible
+
+        })
+    }
+}
+
+export const showPullAppsModal = (visible) => {
+    return (dispatch) => {
+        dispatch({
+            type: SHOW_PULL_APPS_MODAL,
             payload: visible
 
         })

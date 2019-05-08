@@ -372,7 +372,7 @@ class Devices extends Component {
                         align: "center",
                         dataIndex: 'activation_code',
                         className: '',
-                        sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
+                        sorter: (a, b) => { return a.activation_code - b.activation_code },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -451,7 +451,7 @@ class Devices extends Component {
                         dataIndex: 'dealer_id',
                         key: 'dealer_id',
                         className: '',
-                        sorter: (a, b) => { return a.dealer_id.toString().localeCompare(b.dealer_id.toString()) },
+                        sorter: (a, b) => { return a.dealer_id - b.dealer_id },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -503,7 +503,7 @@ class Devices extends Component {
                         dataIndex: 'dealer_pin',
                         key: 'dealer_pin',
                         className: '',
-                        sorter: (a, b) => { return a.dealer_pin.localeCompare(b.dealer_pin) },
+                        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
