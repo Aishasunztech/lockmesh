@@ -61,7 +61,7 @@ class Apk extends React.Component {
                         </span>),
                     dataIndex: 'permission',
                     key: 'permission',
-                    className: 'row'
+                    className: 'row devices1'
                 },
                 {
                     title: APK_SHOW_ON_DEVICE,

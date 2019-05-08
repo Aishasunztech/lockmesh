@@ -5,7 +5,7 @@ import {
     handleCheckApp,
     handleCheckAll
 } from "../../../appRedux/actions/ConnectDevice";
-import {SECURE_SETTING} from '../../../constants/Constants';
+import { SECURE_SETTING } from '../../../constants/Constants';
 
 import { BASE_URL } from '../../../constants/Application';
 
@@ -209,7 +209,7 @@ class AppList extends Component {
                         ref={`enable_${app_id}`}
                         name={`enable_${app_id}`}
                         // value={enable}
-                        checked={app.default_app == 1 ? true :((enable === true || enable === 1) ? true : false)}
+                        checked={app.default_app == 1 ? true : ((enable === true || enable === 1) ? true : false)}
                         // disabled={app.default_app == 1 ? true : !isAvailable}
                         onClick={(e) => {
                             this.handleChecked(e, "enable", app_id);
@@ -347,9 +347,10 @@ class AppList extends Component {
                     encryptedAll={this.state.encryptedAll} 
                     guestAll={this.state.guestAll} handleCheckedAll={this.handleCheckedAll} 
                 /> */}
-                <Popover className="list_p_down" placement="bottomRight" content={this.renderDropdown()} trigger="click">
-                    <a><Icon type="ellipsis" /></a>
-                </Popover>
+                {this.props.isSwitch ?
+                    <Popover className="list_p_down1" placement="bottomRight" content={this.renderDropdown()} trigger="click">
+                        <a><Icon type="ellipsis" /></a>
+                    </Popover> : false}
                 <Table
                     style={{ margin: 0, padding: 0 }}
                     rowSelection={rowSelection}

@@ -75,7 +75,7 @@ class Policy extends Component {
                     </span>),
                 dataIndex: 'permission',
                 key: 'permission',
-                className: 'row'
+                className: 'row devices1'
             },
             {
                 title: POLICY_STATUS,
