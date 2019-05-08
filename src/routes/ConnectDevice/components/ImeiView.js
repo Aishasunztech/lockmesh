@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, message, Button, Table, Input, Select, Col, Row } from 'antd';
+import { Modal, message, Button, Table, Input, Select, Row, Col } from 'antd';
 
 // import EditForm from './editForm';
 let editDevice;
@@ -86,7 +86,7 @@ export default class ImeiView extends Component {
             return originalData;
         }
     }
-    renderList = () => {
+    renderList = (type) => {
         var i = 0;
         let dumyImei1List = []
         let dumyImei2List = []
@@ -103,7 +103,7 @@ export default class ImeiView extends Component {
                 return item
             }
         })
-        let data = (this.state.dataFieldName === 'IMEI 1') ? imei1List.map((device, index) => {
+        let data = (type === 'IMEI 1') ? imei1List.map((device, index) => {
             if (device.orignal_imei1 === device.imei1) {
                 i++
                 return {
@@ -150,9 +150,9 @@ export default class ImeiView extends Component {
         return (
             <div>
                 <Modal
-                    style={{ width: '50%' }}
+                    width='720px'
                     visible={visible}
-                    title="IMEI HISTORY"
+                    title="MANAGE IMEI"
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
@@ -175,8 +175,132 @@ export default class ImeiView extends Component {
                         </Col>
                     </Row>
                     {/* <Button style={{ float: 'right' }} type="primary" onClick={this.props.handleCancel}>OK</Button> */}
+                    <Button onClick={() => { this.showViewmodal(true, 'IMEI 1') }} type="primary">WRITE IMEI 1/2</Button>
+                    {/* <Button onClick={() => { this.showViewmodal(true, 'IMEI 2') }} type="primary">IMEI 2</Button> */}
+                    <Row>
+                        <Col span={12}>
+                            <Fragment>
+                                <h4>IMEI 1</h4>
+                                <div className="row">
+                                    <div className="col-md-6 pr-8">
+                                        <Input.Search
+                                            name="imei"
+                                            key="imei"
+                                            id="imei"
+                                            className="search_heading1"
+                                            onKeyUp={
+                                                (e) => {
+                                                    this.handleSearch(e, 'imei')
+                                                }
+                                            }
+                                            autoComplete="new-password"
+                                            placeholder="IMEI 1 NUMBER"
+                                        />
+                                    </div>
+
+                                </div>
+
+                                <Table
+                                    columns={[
+                                        {
+                                            title: 'No.',
+                                            align: "center",
+                                            dataIndex: 'tableIndex',
+                                            key: "tableIndex",
+                                            className: '',
+                                            sorter: (a, b) => { return a.tableIndex.localeCompare(b.tableIndex) },
+                                            sortDirections: ['ascend', 'descend'],
+
+                                        },
+                                        {
+                                            title: "IMEI 1",
+                                            align: "center",
+                                            dataIndex: 'imei',
+                                            key: "imei",
+                                            className: '',
+                                            sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
+                                            sortDirections: ['ascend', 'descend'],
+
+                                        },
+                                        {
+                                            title: 'Changed Time',
+                                            align: "center",
+                                            dataIndex: 'changed_time',
+                                            key: "changed_time",
+                                            className: '',
+                                            sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
+                                            sortDirections: ['ascend', 'descend'],
+
+                                        },
+                                    ]}
+                                    dataSource={this.renderList('IMEI 1')}
+                                />
+                            </Fragment>
+                        </Col>
+                        <Col span={12}>
+                            <Fragment>
+                                <h4>IMEI 2</h4>
+                                <div className="row">
+                                    <div className="col-md-6 pr-8">
+                                        <Input.Search
+                                            name="imei"
+                                            key="imei"
+                                            id="imei"
+                                            className="search_heading1"
+                                            onKeyUp={
+                                                (e) => {
+                                                    this.handleSearch(e, 'imei')
+                                                }
+                                            }
+                                            autoComplete="new-password"
+                                            placeholder="IMEI 2 NUMBER"
+                                        />
+                                    </div>
+
+                                </div>
+
+                                <Table
+                                    columns={[
+                                        {
+                                            title: 'No.',
+                                            align: "center",
+                                            dataIndex: 'tableIndex',
+                                            key: "tableIndex",
+                                            className: '',
+                                            sorter: (a, b) => { return a.tableIndex.localeCompare(b.tableIndex) },
+                                            sortDirections: ['ascend', 'descend'],
+
+                                        },
+                                        {
+                                            title: 'IMEI 2',
+                                            align: "center",
+                                            dataIndex: 'imei',
+                                            key: "imei",
+                                            className: '',
+                                            sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
+                                            sortDirections: ['ascend', 'descend'],
+
+                                        },
+                                        {
+                                            title: 'Changed Time',
+                                            align: "center",
+                                            dataIndex: 'changed_time',
+                                            key: "changed_time",
+                                            className: '',
+                                            sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
+                                            sortDirections: ['ascend', 'descend'],
+
+                                        },
+                                    ]}
+                                    dataSource={this.renderList('IMEI 2')}
+                                />
+                            </Fragment>
+
+                        </Col>
+                    </Row>
+
                 </Modal>
-                <Modal
+                {/* <Modal
                     // className="m_d_pop"
                     visible={this.state.dataVisible}
                     title={`${this.state.dataFieldName}`}
@@ -276,7 +400,7 @@ export default class ImeiView extends Component {
 
                         />
                     </Fragment>
-                </Modal>
+                </Modal> */}
             </div>
         )
 

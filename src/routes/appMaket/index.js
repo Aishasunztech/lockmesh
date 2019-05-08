@@ -7,40 +7,54 @@ import CircularProgress from "components/CircularProgress/index";
 import { BASE_URL } from '../../constants/Application';
 
 import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
+import { transferApps, getMarketApps } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
+import { ADMIN, DEALER } from "../../constants/Constants";
+
 
 class ApkMarket extends React.Component {
-
     constructor(props) {
         super(props);
         let self = this;
         this.state = {
             apk_list: [],
-            secureApps: [],
+            secureMarketList: [],
+            availbleAppList: [],
+            targetKeys: [],
         }
 
         this.confirm = Modal.confirm;
     }
-    renderList = (appList) => {
-        console.log(appList);
-        let secureApps = [];
-        let apkList = appList.map((app, index) => {
+    renderList = (availbleAppList, secureMarketList) => {
+
+        let combinedList = [...availbleAppList, ...secureMarketList]
+        combinedList.forEach((item) => {
+            if (item.dealer_type === ADMIN) {
+                item.disabled = true
+            }
+            else {
+                item.disabled = false
+            }
+        })
+        let apkList = combinedList.map((app, index) => {
             let data = {
-                key: index.toString(),
-                title: <Fragment> <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} /><span> {app.apk_name} </span> </Fragment>,
-                description: `description of content${index + 1}`,
-            };
+                key: app.id,
+                title: <Fragment> <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} /><span> {app.app_name} </span> </Fragment>,
+                description: `${app.app_name + index + 1}`,
+                disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
+                className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
+            }
             return data
         })
         return apkList
 
     }
-
     filterOption = (inputValue, option) => option.description.indexOf(inputValue) > -1
 
     handleChange = (targetKeys) => {
-        console.log(targetKeys);
-        this.setState({ targetKeys });
+        let marketApps = targetKeys;
+        this.props.transferApps(marketApps)
+        this.setState({ targetKeys, });
     }
 
     handleSearch = (dir, value) => {
@@ -51,28 +65,42 @@ class ApkMarket extends React.Component {
         //  console.log('will recive props');
 
         if (this.props.apk_list !== nextProps.apk_list) {
+            let keys = nextProps.secureMarketList.map((app) => {
+                return app.id
+            })
+            // console.log(keys);
             this.setState({
                 apk_list: nextProps.apk_list,
+                secureMarketList: nextProps.secureMarketList,
+                availbleAppList: nextProps.availbleAppList,
+                targetKeys: keys
             })
         }
     }
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
+            let keys = this.props.secureMarketList.map((app, index) => {
+                return app.id
+            })
+            // console.log(keys);
             this.setState({
-                apk_list: this.props.apk_list
+                apk_list: this.props.apk_list,
+                secureMarketList: this.props.secureMarketList,
+                availbleAppList: this.props.availbleAppList,
+                targetKeys: keys
             })
         }
     }
     componentWillMount() {
         this.props.getApkList();
+        this.props.getMarketApps()
     }
     componentDidMount() {
     }
 
 
     render() {
-        // console.log(this.props.apk_list);
         return (
             <div>
                 {
@@ -80,8 +108,8 @@ class ApkMarket extends React.Component {
                         <Card >
                             <Transfer
                                 style={{ margin: 'auto' }}
-                                titles={['AVAILABLE APPS', 'SECURE MARKET APPS']}
-                                dataSource={this.renderList(this.state.apk_list)}
+                                titles={['AVAILABLE APPS', 'SECURE MARKET']}
+                                dataSource={this.renderList(this.props.availbleAppList, this.state.secureMarketList)}
                                 listStyle={{
                                     width: 500,
                                     height: 500,
@@ -91,6 +119,7 @@ class ApkMarket extends React.Component {
                                 targetKeys={this.state.targetKeys}
                                 onChange={this.handleChange}
                                 onSearch={this.handleSearch}
+                                onSelectChange={this.onSelectChange}
                                 render={item => item.title}
                             />
                         </Card>
@@ -100,14 +129,17 @@ class ApkMarket extends React.Component {
     }
 }
 
-const mapStateToProps = ({ apk_list, auth }) => {
+const mapStateToProps = ({ apk_list, auth, appMarket }) => {
+    // console.log(appMarket.secureMarketList);
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
         options: apk_list.options,
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
-        user: auth.authUser
+        user: auth.authUser,
+        secureMarketList: appMarket.secureMarketList,
+        availbleAppList: appMarket.availbleAppList
     };
 }
 
@@ -120,8 +152,9 @@ function mapDispatchToProps(dispatch) {
         getDropdown: getDropdown,
         postDropdown: postDropdown,
         postPagination: postPagination,
-        getPagination: getPagination
-        //  getDevicesList: getDevicesList
+        getPagination: getPagination,
+        transferApps: transferApps,
+        getMarketApps: getMarketApps
     }, dispatch);
 }
 

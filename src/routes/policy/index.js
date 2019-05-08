@@ -8,7 +8,7 @@ import AddPolicy from "./components/AddPolicy";
 
 import {
     getPolicies,handlePolicyStatus,
-    handleEditPolicy,
+    handleEditPolicy, SavePolicyChanges
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -175,7 +175,8 @@ class Policy extends Component {
         this.state = {
             policyModal: false,
             policies: (this.props.policies) ? this.props.policies : [],
-            current: 0
+            current: 0,
+           
         }
 
     }
@@ -187,10 +188,19 @@ class Policy extends Component {
         // this.props.getDefaultApps();
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props !== prevProps) {
+            // console.log('this.props ', this.props.DisplayPages);
+            this.setState({
+                defaultPagingValue: this.props.DisplayPages,
+            })
+        }
+    }
+
     handlePagination = (value) => {
-        //  alert(value);
+        //   alert(value);
         //  console.log('pagination value of ', value)
-        // this.refs.devcieList.handlePagination(value);
+         this.refs.policyList.handlePagination(value);
         this.props.postPagination(value, 'policies');
     }
 
@@ -206,8 +216,8 @@ class Policy extends Component {
                 <AppFilter
                     handleFilterOptions={this.handleFilterOptions}
                     searchPlaceholder="Search Policy"
-                    defaultPagingValue={10}
                     addButtonText={"Add Policy"}
+                    defaultPagingValue={this.state.defaultPagingValue}
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
                     isAddButton={true}
@@ -224,6 +234,9 @@ class Policy extends Component {
                     policies={this.props.policies}
                     handlePolicyStatus={this.props.handlePolicyStatus}
                     handleEditPolicy={this.props.handleEditPolicy}
+                    SavePolicyChanges={this.props.SavePolicyChanges}
+                    pagination={this.props.DisplayPages}
+                    ref='policyList'
                    
                 />
                 <Modal
@@ -252,6 +265,7 @@ class Policy extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
+   
     return bindActionCreators({
         getPolicies: getPolicies,
         // postDropdown: postDropdown,
@@ -259,16 +273,19 @@ function mapDispatchToProps(dispatch) {
         getPagination: getPagination,
         handlePolicyStatus: handlePolicyStatus,
         handleEditPolicy: handleEditPolicy,
+        SavePolicyChanges : SavePolicyChanges
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);
 }
 var mapStateToProps = ({ policies }) => {
+    console.log('pages to display', policies.DisplayPages)
     //  console.log("policies", policies.policies);
     return {
         policies: policies.policies,
         apk_list: policies.apk_list,
         app_list: policies.app_list,
+        DisplayPages: policies.DisplayPages
     };
 }
 

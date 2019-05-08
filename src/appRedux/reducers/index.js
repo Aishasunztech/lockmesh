@@ -9,6 +9,7 @@ import ConnectDevice from "./ConnectDevice";
 import Account from "./Account"
 import Policy from "./Policy";
 import Users from "./Users";
+import AppMarket from "./AppMarket";
 
 
 const reducers = combineReducers({
@@ -21,7 +22,8 @@ const reducers = combineReducers({
   device_details: ConnectDevice,
   account: Account,
   policies: Policy,
-  users: Users
+  users: Users,
+  appMarket: AppMarket
 });
 
 export default reducers;
