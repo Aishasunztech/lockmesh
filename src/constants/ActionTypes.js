@@ -106,8 +106,10 @@ export const HANDLE_CHECK_APP = 'HANDLE_CHECK_APP';
 export const HANDLE_CHECK_ALL = 'HANDLE_CHECK_ALL';
 
 export const PUSH_APPS = 'PUSH_APPS';
+export const PULL_APPS = 'PULL_APPS';
 export const UNDO_APPS = "UNDO_APPS";
 export const REDO_APPS = 'REDO_APPS';
+export const SHOW_PULL_APPS_MODAL = 'SHOW_PULL_APPS_MODAL';
 
 export const SAVE_POLICY = 'SAVE_POLICY';
 export const POLICY_PERMSSION_SAVED = 'POLICY_PERMSSION_SAVED';
@@ -154,6 +156,9 @@ export const LOAD_USER = 'LOAD_USER'
 export const USERS_LIST = 'USERS_LIST'
 
 //App Market Constants
-
 export const TRANSFER_APPS = 'TRANSFER_APPS'
-export const GET_MARKET_APPS = 'GET_MARKET_APPS'   
+export const GET_MARKET_APPS = 'GET_MARKET_APPS'
+
+
+// Socket Actions
+export const FINISHED_PUSH_APPS = 'FINISHED_PUSH_APPS';

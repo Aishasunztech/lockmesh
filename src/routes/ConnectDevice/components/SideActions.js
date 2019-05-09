@@ -24,6 +24,7 @@ import {
     getDealerApps,
     loadDeviceProfile,
     showPushAppsModal,
+    showPullAppsModal,
     applyPushApps,
     writeImei
 } from "../../../appRedux/actions/ConnectDevice";
@@ -33,11 +34,12 @@ import {
 } from "../../../constants/Constants";
 
 
-import { PUSH_APPS } from "../../../constants/ActionTypes"
+import { PUSH_APPS, PULL_APPS } from "../../../constants/ActionTypes"
 
 const confirm = Modal.confirm;
 
 const PasswordModal = (props) => {
+    // console.log('object,', props.actionType)
     return (
         <Modal
             // closable={false}
@@ -50,12 +52,12 @@ const PasswordModal = (props) => {
             onOk={() => {
 
             }}
-            onCancel={() => props.showPwdConfirmModal(false)}
+            onCancel={() => props.showPwdConfirmModal(false, '')}
             okText="Push Apps"
         >
             <PasswordForm
                 checkPass={props.checkPass}
-                actionType={PUSH_APPS}
+                actionType={props.actionType}
                 handleCancel={props.showPwdConfirmModal}
             />
         </Modal>
@@ -77,6 +79,32 @@ const DealerAppModal = (props) => {
             }}
             onCancel={() => props.showPushAppsModal(false)}
             okText="Push Apps"
+        >
+            <DealerApps
+                apk_list={props.apk_list}
+                onSelectChange={props.onSelectChange}
+                isSwitchable={true}
+                selectedApps={props.selectedApps}
+                handleChecked={props.handleChecked}
+            />
+        </Modal>
+    )
+}
+
+const PullAppModal = (props) => {
+    return (
+        <Modal
+            // closable={false}
+            style={{ top: 20 }}
+            width="650px"
+            title="Select Apps"
+            visible={props.pullAppsModal}
+            onOk={() => {
+                props.showPullAppsModal(false);
+                props.showSelectedAppsModal(true);
+            }}
+            onCancel={() => props.showPullAppsModal(false)}
+            okText="Pull Apps"
         >
             <DealerApps
                 apk_list={props.apk_list}
@@ -122,6 +150,7 @@ class SideActions extends Component {
         super(props);
 
         this.state = {
+            pullAppsModal: false,
             pushAppsModal: false,
             historyModal: false,
             saveProfileModal: false,
@@ -149,14 +178,15 @@ class SideActions extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
-            //  console.log(nextProps.historyType, 'reciceve')
+            //   console.log(nextProps.pullAppsModal, 'reciceve')
             this.setState({
                 historyModal: nextProps.historyModal,
                 saveProfileModal: nextProps.saveProfileModal,
                 historyType: nextProps.historyType,
                 saveProfileType: nextProps.saveProfileType,
                 profileName: nextProps.profileName,
-                policyName: nextProps.policyName
+                policyName: nextProps.policyName,
+                pullAppsModal: nextProps.pullAppsModal
             })
         }
     }
@@ -174,10 +204,11 @@ class SideActions extends Component {
         this.props.showSaveProfileModal(visible, profileType);
     }
 
-    showPwdConfirmModal = (visible) => {
+    showPwdConfirmModal = (visible, actionType = '') => {
         // alert('hello');
         this.setState({
-            pwdConfirmModal: visible
+            pwdConfirmModal: visible,
+            actionType: actionType
         })
     }
 
@@ -236,6 +267,12 @@ class SideActions extends Component {
     showPushAppsModal = (visible) => {
         this.setState({
             pushAppsModal: visible
+        })
+    }
+
+    showPullAppsModal = (visible) => {
+        this.setState({
+            pullAppsModal: visible
         })
     }
 
@@ -311,7 +348,8 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true)} > <Icon type="lock" className="lock_icon" /> <Icon type='upload' /> Push</Button>
+                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)} disabled={this.props.authUser.type == ADMIN ? false : true}   > <Icon type="lock" className="lock_icon" /> <Icon type='upload' /> Push</Button>
+
                                 <Button disabled type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
                                 <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} ><Icon type="barcode" /> IMEI</Button>
@@ -321,10 +359,10 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Tooltip placement="bottom" title="Coming Soon">
-                                    <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
-                                </Tooltip>
-                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " disabled style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
+                                {/* <Tooltip placement="bottom" title="Coming Soon"> */}
+                                    <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} disabled onClick={()=> this.showPwdConfirmModal(true, PULL_APPS)} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
+                                {/* </Tooltip> */}
+                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
@@ -421,10 +459,22 @@ class SideActions extends Component {
                     handleChecked={this.handleChecked}
                 />
 
+                <PullAppModal
+                    pullAppsModal={this.state.pullAppsModal}
+                    showPullAppsModal={this.props.showPullAppsModal}
+                    apk_list={this.props.apk_list}
+                    onSelectChange={this.onSelectChange}
+                    showSelectedAppsModal={this.showSelectedAppsModal}
+                    selectedApps={this.state.selectedApps}
+                    handleChecked={this.handleChecked}
+                />
+
                 <PasswordModal
                     pwdConfirmModal={this.state.pwdConfirmModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
+                    actionType={this.state.actionType}  
+                    
                 />
 
                 <SelectedApps
@@ -488,6 +538,7 @@ function mapDispatchToProps(dispatch) {
         transferDeviceProfile: transferDeviceProfile,
         loadDeviceProfile: loadDeviceProfile,
         showPushAppsModal: showPushAppsModal,
+        showPullAppsModal: showPullAppsModal,
         applyPushApps: applyPushApps,
         savePolicy: savePolicy,
         writeImei: writeImei
@@ -501,6 +552,7 @@ var mapStateToProps = ({ device_details, auth }, otherProps) => {
         saveProfileModal: device_details.saveProfileModal,
         historyType: device_details.historyType,
         pushAppsModal: device_details.pushAppsModal,
+        pullAppsModal: device_details.pullAppsModal,
         saveProfileType: device_details.saveProfileType,
         profileName: device_details.profileName,
         policyName: device_details.policyName,

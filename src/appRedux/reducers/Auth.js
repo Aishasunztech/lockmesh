@@ -163,6 +163,7 @@ export default (state = INIT_STATE, action) => {
     }
     case COMPONENT_ALLOWED: {
       let socket = RestService.connectSocket(state.authUser.token);
+      
       return {
         ...state,
         isAllowed: action.payload.ComponentAllowed,

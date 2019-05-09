@@ -6,3 +6,4 @@ export * from './Apk';
 export * from './ConnectDevice';
 export * from './Account';
 export * from './Policy';
+export * from './Socket';

@@ -40,6 +40,8 @@ import {
     GET_IMIE_HISTORY,
     GET_POLICIES,
     SHOW_PUSH_APPS_MODAL,
+    SHOW_PULL_APPS_MODAL,
+    PULL_APPS,
     WRITE_IMEI
 } from "../../constants/ActionTypes"
 
@@ -831,7 +833,7 @@ export const flagged = (device_id, data) => {
     }
 }
 export const checkPass = (user, actionType) => {
-    // console.log(user);
+     console.log(user);
     return (dispatch) => {
         RestService.checkPass(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -852,12 +854,20 @@ export const checkPass = (user, actionType) => {
                             PasswordMatch: response.data,
                         }
                     })
-                }
+                }else if (actionType === PULL_APPS) {
+                dispatch({
+                    type: CHECKPASS,
+                    payload: {
+                        actionType: actionType,
+                        PasswordMatch: response.data,
+                    }
+                })
             } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
             }
+        }
         })
 
     }
@@ -947,8 +957,17 @@ export const showPushAppsModal = (visible) => {
     }
 }
 
+export const showPullAppsModal = (visible) => {
+    return (dispatch) => {
+        dispatch({
+            type: SHOW_PULL_APPS_MODAL,
+            payload: visible
+
+        })
+    }
+}
+
 export const applyPushApps = (apps, deviceId, usrAccId) => {
-    console.log("apps", apps);
     apps.forEach((el) => {
         delete el.apk_logo;
         delete el.apk_status;

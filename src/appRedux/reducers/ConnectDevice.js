@@ -44,6 +44,8 @@ import {
     HANDLE_CHECK_MAIN_SETTINGS,
     GET_IMIE_HISTORY,
     SHOW_PUSH_APPS_MODAL,
+    SHOW_PULL_APPS_MODAL,
+    PULL_APPS,
     WRITE_IMEI
 } from "../../constants/ActionTypes";
 
@@ -133,7 +135,8 @@ const initialState = {
     encryptedAllExt: false,
 
     imei_list: [],
-    pushAppsModal: false,
+    pushAppsModal:false,
+    pullAppsModal: false
 };
 
 export default (state = initialState, action) => {
@@ -460,7 +463,12 @@ export default (state = initialState, action) => {
                         ...state,
                         pushAppsModal: true
                     }
-                } else if (action.payload.actionType === WIPE_DEVICE) {
+                }else if(action.payload.actionType === PULL_APPS){
+                    return {
+                        ...state,
+                        pullAppsModal: true
+                    }
+                } else if (action.payload.actionType === WIPE_DEVICE){
 
                     showConfirm1(action.payload.device, "Do You really Want to Wipe the device")
                 }
@@ -854,6 +862,14 @@ export default (state = initialState, action) => {
                 pushAppsModal: action.payload
             }
         }
+
+        case SHOW_PULL_APPS_MODAL: {
+            return {
+                ...state,
+                pullAppsModal: action.payload
+            }
+        }
+
         case GET_IMIE_HISTORY: {
             // console.log(action.payload);
             return {
