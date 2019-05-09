@@ -1,8 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, message, Button, Table, Input, Select, Row, Col } from 'antd';
+import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumber } from 'antd';
+import WriteImeiFrom from './WriteImeiForm'
 
 // import EditForm from './editForm';
 let editDevice;
+var imei1List;
+var imei2List;
 export default class ImeiView extends Component {
 
     constructor(props) {
@@ -12,8 +15,8 @@ export default class ImeiView extends Component {
             expiry_date: 1,
             dataVisible: false,
             dataFieldName: '',
-            pagination: 10,
-            device: this.props.device
+            imei1List: [],
+            imei2List: [],
         }
     }
 
@@ -23,42 +26,61 @@ export default class ImeiView extends Component {
 
     showModal = (device, func) => {
 
+        let dumyImei1List = []
+        let dumyImei2List = []
+        let imei1List = this.props.imei_list.filter(item => {
+            if (dumyImei1List.includes(item.imei1) == false) {
+                dumyImei1List.push(item.imei1)
+                return item
+            }
+        })
+        let imei2List = this.props.imei_list.filter(item => {
+            if (dumyImei2List.includes(item.imei2) == false) {
+                dumyImei2List.push(item.imei2)
+                return item
+            }
+        })
+
         editDevice = func;
         this.setState({
-            device: device,
+            imei2List: imei2List,
+            imei1List: imei1List,
             visible: true,
             func: func,
+
         });
     }
-    showViewmodal = (dataVisible, dataFieldName = "") => {
-        // console.log(dataVisible);
-        this.setState({
-            dataVisible: dataVisible,
-            dataFieldName: dataFieldName,
-        });
-    }
+    // showViewmodal = (dataVisible, dataFieldName = "") => {
+    //     // console.log(dataVisible);
+    //     this.setState({
+    //         dataVisible: dataVisible,
+    //         dataFieldName: dataFieldName,
+    //     });
+    // }
 
     handleCancel = () => {
+        this.refs.form1.resetFields();
+        this.refs.form2.resetFields();
         this.setState({ visible: false });
     }
-    handlePagination = (value) => {
-        this.setState({
-            pagination: value
-        })
-    }
+    // handlePagination = (value) => {
+    //     this.setState({
+    //         pagination: value
+    //     })
+    // }
     handleSearch = (e, dataName) => {
 
         let fieldName = e.target.name;
         let fieldValue = e.target.value;
-
-        let searchedData = this.searchField([this.props.device], fieldName, fieldValue);
+        let searchData = (fieldName === 'imei1') ? this.state.imei1List : this.state.imei2List
+        let searchedData = this.searchField(searchData, fieldName, fieldValue);
         this.setState({
-            device: searchedData
+            imei1List: searchedData
         });
-
     }
     searchField = (originalData, fieldName, value) => {
         let demoData = [];
+
         if (value.length) {
             originalData.forEach((data) => {
                 // console.log(data);
@@ -86,24 +108,9 @@ export default class ImeiView extends Component {
             return originalData;
         }
     }
-    renderList = (type) => {
+    renderList = (imei_list, type) => {
         var i = 0;
-        let dumyImei1List = []
-        let dumyImei2List = []
-
-        var imei1List = this.props.imei_list.filter(item => {
-            if (dumyImei1List.includes(item.imei1) == false) {
-                dumyImei1List.push(item.imei1)
-                return item
-            }
-        })
-        var imei2List = this.props.imei_list.filter(item => {
-            if (dumyImei2List.includes(item.imei2) == false) {
-                dumyImei2List.push(item.imei2)
-                return item
-            }
-        })
-        let data = (type === 'IMEI 1') ? imei1List.map((device, index) => {
+        let data = (type === 'IMEI 1') ? imei_list.map((device, index) => {
             if (device.orignal_imei1 === device.imei1) {
                 i++
                 return {
@@ -121,7 +128,7 @@ export default class ImeiView extends Component {
                     changed_time: device.created_at
                 }
             }
-        }) : imei2List.map((device, index) => {
+        }) : imei_list.map((device, index) => {
             if (device.orignal_imei2 === device.imei2) {
                 i++
                 return {
@@ -142,8 +149,6 @@ export default class ImeiView extends Component {
         })
         return data;
     }
-
-
     render() {
         // console.log(this.props.imei_list);
         const { visible, loading } = this.state;
@@ -159,24 +164,28 @@ export default class ImeiView extends Component {
                     className="edit_form"
                 >
 
-                    {/* <EditForm
-                        device={this.state.device}
-                        hideModal={this.handleCancel}
-                        editDeviceFunc={this.state.func}
-                        handleCancel={this.handleCancel}
-                    /> */}
-                    {/* <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button> */}
-                    <Row gutter={24} type="flex" justify="center" align="top">
-                        <Col span={12} className="text-right">
-                            <Button onClick={() => { this.showViewmodal(true, 'IMEI 1') }} type="primary">IMEI 1</Button>
+                    <Row>
+                        <Col span={12}>
+                            <WriteImeiFrom
+                                ref='form1'
+                                buttonText='WRITE IMEI 1'
+                                type='IMEI1'
+                                writeImei={this.props.writeImei}
+                                device={this.props.device}
+                            />
                         </Col>
-                        <Col span={12} className="text-left">
-                            <Button onClick={() => { this.showViewmodal(true, 'IMEI 2') }} type="primary">IMEI 2</Button>
+                        <Col span={12}>
+                            <WriteImeiFrom
+                                ref='form2'
+                                buttonText='WRITE IMEI 2'
+                                type='IMEI2'
+                                writeImei={this.props.writeImei}
+                                device={this.props.device}
+                            />
                         </Col>
+                        <a href='https://dyrk.org/tools/imei/' target='blank'><Button> Generate IMEI number </Button></a>
                     </Row>
-                    {/* <Button style={{ float: 'right' }} type="primary" onClick={this.props.handleCancel}>OK</Button> */}
-                    <Button onClick={() => { this.showViewmodal(true, 'IMEI 1') }} type="primary">WRITE IMEI 1/2</Button>
-                    {/* <Button onClick={() => { this.showViewmodal(true, 'IMEI 2') }} type="primary">IMEI 2</Button> */}
+
                     <Row>
                         <Col span={12}>
                             <Fragment>
@@ -184,13 +193,13 @@ export default class ImeiView extends Component {
                                 <div className="row">
                                     <div className="col-md-6 pr-8">
                                         <Input.Search
-                                            name="imei"
-                                            key="imei"
-                                            id="imei"
+                                            name="imei1"
+                                            key="imei1"
+                                            id="imei1"
                                             className="search_heading1"
                                             onKeyUp={
                                                 (e) => {
-                                                    this.handleSearch(e, 'imei')
+                                                    this.handleSearch(e, 'imei1')
                                                 }
                                             }
                                             autoComplete="new-password"
@@ -233,7 +242,8 @@ export default class ImeiView extends Component {
 
                                         },
                                     ]}
-                                    dataSource={this.renderList('IMEI 1')}
+                                    dataSource={this.renderList(this.state.imei1List, 'IMEI 1')}
+                                    scroll={{ y: 350 }}
                                 />
                             </Fragment>
                         </Col>
@@ -243,13 +253,13 @@ export default class ImeiView extends Component {
                                 <div className="row">
                                     <div className="col-md-6 pr-8">
                                         <Input.Search
-                                            name="imei"
-                                            key="imei"
-                                            id="imei"
+                                            name="imei2"
+                                            key="imei2"
+                                            id="imei2"
                                             className="search_heading1"
                                             onKeyUp={
                                                 (e) => {
-                                                    this.handleSearch(e, 'imei')
+                                                    this.handleSearch(e, 'imei2')
                                                 }
                                             }
                                             autoComplete="new-password"
@@ -292,7 +302,8 @@ export default class ImeiView extends Component {
 
                                         },
                                     ]}
-                                    dataSource={this.renderList('IMEI 2')}
+                                    dataSource={this.renderList(this.state.imei2List, 'IMEI 2')}
+                                    scroll={{ y: 350 }}
                                 />
                             </Fragment>
 
@@ -401,7 +412,7 @@ export default class ImeiView extends Component {
                         />
                     </Fragment>
                 </Modal> */}
-            </div>
+            </div >
         )
 
     }

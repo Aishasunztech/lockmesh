@@ -83,7 +83,6 @@ class ApkMarket extends React.Component {
             let keys = this.props.secureMarketList.map((app, index) => {
                 return app.id
             })
-            // console.log(keys);
             this.setState({
                 apk_list: this.props.apk_list,
                 secureMarketList: this.props.secureMarketList,
