@@ -17,6 +17,18 @@
 
 .manage_sec_pro .ant-card-body {
     height: 253px;
+    position: relative;
+}
+
+.manage_sec_pro img {
+    width: 100px;
+}
+
+.open_btn {
+    width: 40%;
+    position: absolute;
+    bottom: 33px;
+    left: 33%;
 }
 
 .ant-btn>.anticon+span {
@@ -38,7 +50,7 @@
 }
 
 @media (max-width: 992px) {
-    .manage_sec_pro .ant-card-body {
+    /* .manage_sec_pro .ant-card-body {
         height: auto;
-    }
+    } */
 }

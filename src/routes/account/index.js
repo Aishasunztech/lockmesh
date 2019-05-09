@@ -470,7 +470,7 @@ class Account extends Component {
 
                                 />
                                 <span className="warning_hr">
-                                <hr/>
+                                    <hr />
                                 </span>
                                 <h2>New Data</h2>
 
@@ -523,17 +523,9 @@ class Account extends Component {
                                                     <p style={{ position: "relative", right: 60 }} className="more_txt">and more...</p>
                                                 </Col>
                                             </Row>
-                                            <Row justify='center'>
-                                                <Col span={6} >
-
-                                                </Col>
-                                                <Col span={12} style={{}}>
-                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
-                                                </Col>
-                                            </Row>
-
                                         </div>
                                     </Card>
+                                    <Button type="primary" size="small" className="open_btn">Open</Button>
                                 </Link>
                                 <Modal
                                     className="manage_data"
