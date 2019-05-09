@@ -2,6 +2,11 @@
     margin: 4px 0 10px;
 }
 
+.policy_steps .ant-table-body {
+    height: 200px;
+    overflow: overlay;
+}
+
 .policy_steps .ant-table-tbody>tr>td {
     font-size: 12px;
     text-align: center;
@@ -60,6 +65,16 @@
     margin-bottom: 4px;
 }
 
+.login-form {
+    justify-content: center;
+    display: grid;
+}
+
+.login-form .h3 {
+    font-size: 16px;
+    font-weight: 500;
+}
+
 .ant-steps-item-process .step_counting {
     color: #fafafa;
     font-size: 18px;
@@ -75,16 +90,16 @@
     height: 32px;
 }
 
-.list_p_down {
+.list_p_down1 {
     font-size: 26px;
     margin-right: 6px;
     margin-bottom: 6px;
     position: relative;
-    left: 95%;
+    right: 0;
 }
 
 .pol_inp {
-    margin: 0 0 16px;
+    margin: 0;
 }
 
 .lst_stp label {

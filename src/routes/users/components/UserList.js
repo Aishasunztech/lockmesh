@@ -88,7 +88,8 @@ class UserList extends Component {
         return (
             <Fragment>
                 <Card>
-                    <Table className="devices"
+                    <Table
+                        className="devices"
                         size="middle"
                         bordered
                         scroll={{

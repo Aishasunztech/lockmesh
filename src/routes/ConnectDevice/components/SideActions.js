@@ -25,7 +25,8 @@ import {
     loadDeviceProfile,
     showPushAppsModal,
     showPullAppsModal,
-    applyPushApps
+    applyPushApps,
+    writeImei
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -350,12 +351,8 @@ class SideActions extends Component {
                                 <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)} disabled={this.props.authUser.type == ADMIN ? false : true}   > <Icon type="lock" className="lock_icon" /> <Icon type='upload' /> Push</Button>
 
                                 <Button disabled type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
-
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
-                                <Tooltip title="Coming Soon" placement="left">
-                                    <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} >IMEI</Button>
-                                </Tooltip>
-
+                                <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} ><Icon type="barcode" /> IMEI</Button>
                             </Col>
                             <Col
                                 span={12}
@@ -373,9 +370,7 @@ class SideActions extends Component {
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button type="default " style={{ width: "100%", marginBottom: 16 }} >Activity</Button>
                                 </Tooltip>
-
                             </Col>
-
                         </Row>
                     </Card>
                     <Card>
@@ -390,7 +385,6 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
                                     disabled={(flagged === 'Unflag') ? 'disabled' : ''}
                                 >
-
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
@@ -400,7 +394,6 @@ class SideActions extends Component {
                                 <Button style={{ width: "100%", marginBottom: 16, backgroundColor: '#1b1b1b', color: '#fff' }} onClick={() => this.handleFlag(flagged)} ><Icon type="flag" />{flagged}</Button>
                                 <Button onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type='disconnect' />Unlink</Button>
                                 <Button onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)} style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}><Icon type='edit' />Edit</Button>
-
                             </Col>
                             <Tooltip title="Coming Soon" placement="bottom" >
                                 <Button type="default" style={{ width: "46%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} ><Icon type="lock" className="lock_icon" /><Icon type="poweroff" style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }} /></Button>
@@ -520,6 +513,7 @@ class SideActions extends Component {
                     ref='imeiView'
                     device={this.props.device}
                     imei_list={this.props.imei_list}
+                    writeImei={this.props.writeImei}
                 />
             </div>
         )
@@ -546,11 +540,11 @@ function mapDispatchToProps(dispatch) {
         showPushAppsModal: showPushAppsModal,
         showPullAppsModal: showPullAppsModal,
         applyPushApps: applyPushApps,
-        savePolicy: savePolicy
+        savePolicy: savePolicy,
+        writeImei: writeImei
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
-    // console.log('device_details.controls', device_details.extensions)
 
     return {
         authUser: auth.authUser,

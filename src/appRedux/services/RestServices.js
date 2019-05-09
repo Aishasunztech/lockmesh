@@ -208,27 +208,25 @@ const RestService = {
 
     deleteORStatusPolicy: (data) => {
         //   console.log('api called ')
-        return axios.post(BASE_URL + "users/change_policy_status ",data, RestService.getHeader());
+        return axios.post(BASE_URL + "users/change_policy_status ", data, RestService.getHeader());
     },
 
     SavePolicyChanges: (record) => {
         //    console.log('api called ', record);
-           let data= {
-             id : record.policy_id,
-             push_apps : JSON.stringify(record.push_apps) ,
-             controls : JSON.stringify(record.controls),
-             permissions : JSON.stringify(record.secure_apps),
-              app_list : JSON.stringify(record.app_list)
-           }
-        return axios.post(BASE_URL + "users/save_policy_changes ",data, RestService.getHeader());
+        let data = {
+            id: record.policy_id,
+            push_apps: JSON.stringify(record.push_apps),
+            controls: JSON.stringify(record.controls),
+            permissions: JSON.stringify(record.secure_apps),
+            app_list: JSON.stringify(record.app_list)
+        }
+        return axios.post(BASE_URL + "users/save_policy_changes ", data, RestService.getHeader());
     },
 
     saveNewData: (data) => {
         return axios.post(BASE_URL + "users/save_new_data ",data, RestService.getHeader());
 
     },
-
-    
 
     getDeviceApps: (device_id) => {
         return axios.get(BASE_URL + "users/get_apps/" + device_id, RestService.getHeader());
@@ -549,9 +547,17 @@ const RestService = {
             RestService.getHeader()
         )
     },
+
+    writeImei(device_id, usrAccId, type, imeiNo) {
+        return axios.post(BASE_URL + 'users/writeImei/' + device_id, { usrAccId, type, imeiNo }, RestService.getHeader());
+    },
+
+    // ADD new user
     addUser: (user) => {
         return axios.post(BASE_URL + 'users/add/user', user, RestService.getHeader())
     },
+
+    //EDIT user
     editUser: (user) => {
         return axios.post(BASE_URL + 'users/edit/user', user, RestService.getHeader())
     },

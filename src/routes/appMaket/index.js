@@ -9,37 +9,40 @@ import { BASE_URL } from '../../constants/Application';
 import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
 import { transferApps, getMarketApps } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
-import { ADMIN } from "../../constants/Constants";
+import { ADMIN, DEALER } from "../../constants/Constants";
+
 
 class ApkMarket extends React.Component {
-
     constructor(props) {
         super(props);
         let self = this;
         this.state = {
             apk_list: [],
             secureMarketList: [],
-            targetKeys: []
+            availbleAppList: [],
+            targetKeys: [],
         }
 
         this.confirm = Modal.confirm;
     }
-    renderList = (appList) => {
+    renderList = (availbleAppList, secureMarketList) => {
 
-        let apkList = appList.map((app, index) => {
-            let disabled = false;
-            for (let i = 0; i < this.state.secureMarketList.length - 1; i++) {
-                console.log(this.state.secureMarketList[i].id);
-                if (this.state.secureMarketList[i].id === app.apk_id && this.state.secureMarketList[i].dealer_type === ADMIN) {
-                    disabled = true
-                }
+        let combinedList = [...availbleAppList, ...secureMarketList]
+        combinedList.forEach((item) => {
+            if (item.dealer_type === ADMIN) {
+                item.disabled = true
             }
-            // console.log(disabled);
+            else {
+                item.disabled = false
+            }
+        })
+        let apkList = combinedList.map((app, index) => {
             let data = {
-                key: app.apk_id,
-                title: <Fragment> <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} /><span> {app.apk_name} </span> </Fragment>,
-                description: `description of content${index + 1}`,
-                disabled: (this.props.user.type === ADMIN) ? false : disabled
+                key: app.id,
+                title: <Fragment> <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} /><span> {app.app_name} </span> </Fragment>,
+                description: `${app.app_name + index + 1}`,
+                disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
+                className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
             }
             return data
         })
@@ -51,7 +54,7 @@ class ApkMarket extends React.Component {
     handleChange = (targetKeys) => {
         let marketApps = targetKeys;
         this.props.transferApps(marketApps)
-        this.setState({ targetKeys });
+        this.setState({ targetKeys, });
     }
 
     handleSearch = (dir, value) => {
@@ -69,6 +72,7 @@ class ApkMarket extends React.Component {
             this.setState({
                 apk_list: nextProps.apk_list,
                 secureMarketList: nextProps.secureMarketList,
+                availbleAppList: nextProps.availbleAppList,
                 targetKeys: keys
             })
         }
@@ -79,10 +83,10 @@ class ApkMarket extends React.Component {
             let keys = this.props.secureMarketList.map((app, index) => {
                 return app.id
             })
-            // console.log(keys);
             this.setState({
                 apk_list: this.props.apk_list,
                 secureMarketList: this.props.secureMarketList,
+                availbleAppList: this.props.availbleAppList,
                 targetKeys: keys
             })
         }
@@ -90,19 +94,12 @@ class ApkMarket extends React.Component {
     componentWillMount() {
         this.props.getApkList();
         this.props.getMarketApps()
-
     }
     componentDidMount() {
-    }
-    transferApps = () => {
-        // console.log(this.state.targetKeys);
-
-        // alert("Transfer Code will be there");
     }
 
 
     render() {
-        // console.log(this.props.apk_list);
         return (
             <div>
                 {
@@ -111,7 +108,7 @@ class ApkMarket extends React.Component {
                             <Transfer
                                 style={{ margin: 'auto' }}
                                 titles={['AVAILABLE APPS', 'SECURE MARKET']}
-                                dataSource={this.renderList(this.state.apk_list)}
+                                dataSource={this.renderList(this.props.availbleAppList, this.state.secureMarketList)}
                                 listStyle={{
                                     width: 500,
                                     height: 500,
@@ -121,7 +118,9 @@ class ApkMarket extends React.Component {
                                 targetKeys={this.state.targetKeys}
                                 onChange={this.handleChange}
                                 onSearch={this.handleSearch}
+                                onSelectChange={this.onSelectChange}
                                 render={item => item.title}
+                                locale={{ itemUnit: 'App', itemsUnit: 'Apps' }}
                             />
                         </Card>
                 }
@@ -139,7 +138,8 @@ const mapStateToProps = ({ apk_list, auth, appMarket }) => {
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
         user: auth.authUser,
-        secureMarketList: appMarket.secureMarketList
+        secureMarketList: appMarket.secureMarketList,
+        availbleAppList: appMarket.availbleAppList
     };
 }
 

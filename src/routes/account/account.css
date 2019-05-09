@@ -182,8 +182,11 @@
     height: 26px;
 }
 
-.search_heading2 .ant-select-selection--single {
+.search_heading2 .ant-select-selection--single,
+.pagination1 .ant-select-selection--single {
     height: 26px;
+    font-size: 12px;
+    font-weight: 300;
 }
 
 .search_heading1 .ant-input-affix-wrapper {
@@ -191,6 +194,7 @@
     color: #e8e8e8 !important;
 }
 
+.pagination1 .ant-select-selection__rendered,
 .search_heading2 .ant-select-selection__rendered {
     font-size: 12px;
     display: block;
@@ -198,6 +202,17 @@
     margin-right: 11px;
     position: relative;
     line-height: 25px;
+}
+
+.warning {
+    color: orange;
+    font-size: 20px;
+    vertical-align: sub;
+    margin-right: 4px;
+}
+
+.warning_hr hr {
+    border: 1px solid #e8e8e8;
 }
 
 .pr-8 {

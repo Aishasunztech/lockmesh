@@ -120,7 +120,7 @@ export default class ListApk extends Component {
                     ),
                     'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
                     "permissions": app.permissions,
-                    'apk_status': (<Switch defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                    'apk_status': (<Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                         this.props.handleStatusChange(e, app.apk_id);
                     }} />),
                     'apk': app.apk ? app.apk : 'N/A',
@@ -140,7 +140,7 @@ export default class ListApk extends Component {
                     ),
                     'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
                     "permissions": app.permissions,
-                    'apk_status': (<Switch disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                    'apk_status': (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                         this.props.handleStatusChange(e, app.apk_id);
                     }} />),
                     'apk': app.apk ? app.apk : 'N/A',
@@ -196,7 +196,7 @@ export default class ListApk extends Component {
                     columns={this.state.columns}
                     dataSource={this.renderList(this.props.apk_list)}
                     pagination={{ pageSize: Number(this.state.pagination) }}
-
+                    className="devices"
                     scroll={{ x: 500 }}
                     rowKey="apk_id"
                 />

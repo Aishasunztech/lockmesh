@@ -45,7 +45,8 @@ import {
     GET_IMIE_HISTORY,
     SHOW_PUSH_APPS_MODAL,
     SHOW_PULL_APPS_MODAL,
-    PULL_APPS
+    PULL_APPS,
+    WRITE_IMEI
 } from "../../constants/ActionTypes";
 
 import {
@@ -150,7 +151,7 @@ export default (state = initialState, action) => {
             }
         }
         case GET_DEVICE_DETAILS: {
-            
+
             let device = action.payload;
             if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
                 let status = null;
@@ -457,7 +458,7 @@ export default (state = initialState, action) => {
             if (action.payload.PasswordMatch.password_matched) {
                 // alert(action.payload.actionType);
 
-                if(action.payload.actionType === PUSH_APPS){
+                if (action.payload.actionType === PUSH_APPS) {
                     return {
                         ...state,
                         pushAppsModal: true
@@ -510,12 +511,12 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_CONTROL: {
             let changedControls = JSON.parse(JSON.stringify(state.controls.controls));
-            if(action.payload.key == 'wifi_status'){
+            if (action.payload.key == 'wifi_status') {
                 changedControls[action.payload.key] = true;
-            }else{
+            } else {
                 changedControls[action.payload.key] = action.payload.value;
             }
-           
+
             state.controls.controls = JSON.parse(JSON.stringify(changedControls));
             let controls = state.controls;
             state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
@@ -523,7 +524,7 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                controls: state.controls,   
+                controls: state.controls,
                 forceUpdate: state.forceUpdate + 1,
                 applyBtn: true,
                 undoBtn: true
@@ -533,13 +534,13 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_MAIN_SETTINGS: {
 
             let changedControls = JSON.parse(JSON.stringify(state.controls));
-             let objIndex = changedControls.settings.findIndex(item => item.uniqueName === action.payload.main);
+            let objIndex = changedControls.settings.findIndex(item => item.uniqueName === action.payload.main);
             // console.log(action.payload.main,' obj index is', objIndex)
-             if(objIndex > -1){
+            if (objIndex > -1) {
                 changedControls.settings[objIndex][action.payload.key] = action.payload.value;
                 // console.log(changedSettings[objIndex], 'app is the ', changedSettings[objIndex][action.payload.key])
-             }
-           
+            }
+
             state.controls = JSON.parse(JSON.stringify(changedControls));
             state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
             // console.log('reduver aongds', state.controls);
@@ -617,13 +618,13 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_EXTENSION: {
 
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
-           
+
 
             changedExtensions.forEach(extension => {
                 if (extension.uniqueName === action.payload.uniqueName) {
-                    if(action.payload.app_id === '000'){
-                        extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;   
-                    }else{
+                    if (action.payload.app_id === '000') {
+                        extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                    } else {
                         let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
                         if (objIndex > -1) {
                             extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
@@ -766,10 +767,10 @@ export default (state = initialState, action) => {
             let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
                 // console.log(app[action.payload.key], 'kkkkkk', 'guest')
-                if(app.default_app != 1){
+                if (app.default_app != 1) {
                     app[action.payload.key] = action.payload.value;
                     app.isChanged = true;
-                }else if(app.default_app == 1 && action.payload.key == 'guest'){
+                } else if (app.default_app == 1 && action.payload.key == 'guest') {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
                 }
@@ -876,6 +877,19 @@ export default (state = initialState, action) => {
                 imei_list: action.payload,
             }
         }
+
+        case WRITE_IMEI: {
+            if (action.payload.status) {
+                message.success(action.payload.msg)
+            }
+            else {
+                message.error(action.payload.msg)
+            }
+            return {
+                ...state,
+            }
+        }
+
         default:
             return state;
 

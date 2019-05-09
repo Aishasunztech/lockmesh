@@ -516,7 +516,7 @@ class UserDeviceList extends Component {
                     <Table
                         columns={this.listdeviceCols}
                         dataSource={this.renderDevices(this.state.devicesList)}
-                        
+
                         pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
                     />
                 </Card>

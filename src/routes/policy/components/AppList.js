@@ -5,7 +5,7 @@ import {
     handleCheckApp,
     handleCheckAll
 } from "../../../appRedux/actions/ConnectDevice";
-import {SECURE_SETTING} from '../../../constants/Constants';
+import { SECURE_SETTING } from '../../../constants/Constants';
 
 import { BASE_URL } from '../../../constants/Application';
 
@@ -116,10 +116,10 @@ class AppList extends Component {
 
     handleChecked = (e, key, app_id) => {
         if (this.props.edit) {
-            // console.log(app_id,'handle checked is called', this.props.rowId)
-            if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps',this.props.rowId)
-            else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id,'app_list', this.props.rowId)
-            else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id,'secure_apps', this.props.rowId, SECURE_SETTING)
+            console.log('handle checked is called')
+            if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps', this.props.rowId)
+            else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id, this.props.appPermissions)
+            else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id, this.props.secureSettings)
         } else {
             if (this.props.apps) this.props.handleCheckApp(e, key, app_id, this.props.apps)
             else if (this.props.appPermissions) this.props.handleCheckApp(e, key, app_id, this.props.appPermissions)
@@ -347,14 +347,15 @@ class AppList extends Component {
                     encryptedAll={this.state.encryptedAll} 
                     guestAll={this.state.guestAll} handleCheckedAll={this.handleCheckedAll} 
                 /> */}
-                <Popover className="list_p_down" placement="bottomRight" content={this.renderDropdown()} trigger="click">
-                    <a><Icon type="ellipsis" /></a>
-                </Popover>
+                {this.props.isSwitch ?
+                    <Popover className="list_p_down1" placement="bottomRight" content={this.renderDropdown()} trigger="click">
+                        <a><Icon type="ellipsis" /></a>
+                    </Popover> : false}
                 <Table
                     style={{ margin: 0, padding: 0 }}
                     rowSelection={rowSelection}
                     size='small'
-                    scroll={this.props.isHistory ? {} : { y: 297 }}
+                    scroll={this.props.isHistory ? {} : {}}
                     bordered={false}
                     columns={this.props.allExtensions ? this.extensionColumns : this.appsColumns}
                     align='center'

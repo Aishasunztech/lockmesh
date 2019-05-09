@@ -128,9 +128,9 @@ export const POLICY = 'policy';
 export const PROFILE = 'profile';
 export const SAVE_PROFILE = 'SAVE_PROFILE';
 export const UNLINK_DEVICE = 'UNLINK_DEVICE';
-export const HANDLE_POLICY_STATUS= 'HANDLE_POLICY_STATUS';
-export const EDIT_POLICY= 'EDIT_POLICY';
-export const SAVE_POLICY_CHANGES= 'SAVE_POLICY_CHANGES';
+export const HANDLE_POLICY_STATUS = 'HANDLE_POLICY_STATUS';
+export const EDIT_POLICY = 'EDIT_POLICY';
+export const SAVE_POLICY_CHANGES = 'SAVE_POLICY_CHANGES';
 // export const SHOW_MESSAGE = 'SHOW_MESSAGE';
 
 export const LOADING = 'LOADING';
@@ -143,6 +143,7 @@ export const GET_USED_CHAT_IDS = 'GET_USED_CHAT_IDS';
 export const GET_USED_SIM_IDS = 'GET_USED_SIM_IDS';
 export const RELEASE_CSV = 'RELEASE_CSV';
 export const GET_IMIE_HISTORY = 'GET_IMIE_HISTORY';
+export const WRITE_IMEI = 'WRITE_IMEI';
 
 // Policy consts
 export const GET_POLICIES = 'GET_POLICIES'
@@ -155,6 +156,9 @@ export const LOAD_USER = 'LOAD_USER'
 export const USERS_LIST = 'USERS_LIST'
 
 //App Market Constants
-
 export const TRANSFER_APPS = 'TRANSFER_APPS'
-export const GET_MARKET_APPS = 'GET_MARKET_APPS'   
+export const GET_MARKET_APPS = 'GET_MARKET_APPS'
+
+
+// Socket Actions
+export const FINISHED_PUSH_APPS = 'FINISHED_PUSH_APPS';
