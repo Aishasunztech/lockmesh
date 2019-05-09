@@ -218,7 +218,7 @@ export default class ImeiView extends Component {
 
                                         },
                                         {
-                                            title: 'Changed Time',
+                                            title: 'Changed Date',
                                             align: "center",
                                             dataIndex: 'changed_time',
                                             key: "changed_time",
@@ -290,7 +290,7 @@ export default class ImeiView extends Component {
 
                                         },
                                         {
-                                            title: 'Changed Time',
+                                            title: 'Changed Date',
                                             align: "center",
                                             dataIndex: 'changed_time',
                                             key: "changed_time",
@@ -308,6 +308,6 @@ export default class ImeiView extends Component {
                         </Col>
                     </Row>
                 </Modal>
-
+                        
             </div>)
 }}
