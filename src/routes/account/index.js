@@ -1150,7 +1150,7 @@ class Account extends Component {
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> <a href="#"><Icon type="branches" /> </a> Manage Tokens</h2>
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="branches" />  Manage Tokens</h2>
                                                             <Divider className="mb-0" />
                                                             <div className="crd_txt">
                                                                 <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
@@ -1179,7 +1179,7 @@ class Account extends Component {
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}><a href="#"> <Icon type="credit-card" /></a> Payment Gateway</h2>
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="credit-card" /> Payment Gateway</h2>
                                                             <Divider className="mb-0" />
                                                             <div className="crd_txt">
                                                                 <p><span className="diamond_icon">&#9670;</span>Add/edit payment gateway</p>
