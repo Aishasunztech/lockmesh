@@ -44,16 +44,12 @@ class WriteImeiForm extends Component {
                         }
                         ],
                     })(
-                        <span className="numeric_field" >
-                            <Search
-                                type="Number"
-                                placeholder="Enter IMEI Number"
-                                enterButton={<a onClick={this.handleSubmit} type="primary" htmlType="submit">{this.props.buttonText}</a>}
-                            />
-                        </span>
+                        <Search
+                            type="Number"
+                            placeholder="Enter IMEI Number"
+                            enterButton={<a onClick={this.handleSubmit} type="primary">{this.props.buttonText}</a>}
+                        />
                     )}
-
-
                 </Form.Item>
             </Form>
         )

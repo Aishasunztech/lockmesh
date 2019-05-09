@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumber } from 'antd';
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
 import WriteImeiFrom from './WriteImeiForm'
 
 // import EditForm from './editForm';
 let editDevice;
-var imei1List;
-var imei2List;
+var coppyDevices = [];
+var status = true;
 export default class ImeiView extends Component {
 
     constructor(props) {
@@ -78,34 +79,51 @@ export default class ImeiView extends Component {
             imei1List: searchedData
         });
     }
-    searchField = (originalData, fieldName, value) => {
-        let demoData = [];
-
-        if (value.length) {
-            originalData.forEach((data) => {
-                // console.log(data);
-                if (data[fieldName] !== undefined) {
-                    if ((typeof data[fieldName]) === 'string') {
-
-                        if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
-                            demoData.push(data);
-                        }
-                    } else if (data[fieldName] != null) {
-                        if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
-                            demoData.push(data);
-                        }
-                    }
-                    // else {
-                    //     // demoDevices.push(device);
-                    // }
-                } else {
-                    demoData.push(data);
+    handleComponentSearch = (value, type) => {
+        try {
+            if (value.length) {
+                if (status) {
+                    coppyDevices = (type == 'imei1') ? this.state.imei1List : this.state.imei2List;
+                    status = false;
                 }
-            });
+                let foundDevices = componentSearch(coppyDevices, value);
+                console.log(value, coppyDevices, value, foundDevices);
+                if (foundDevices.length) {
+                    if (type == "imei1") {
+                        this.setState({
+                            imei1List: foundDevices,
+                        })
+                    } else {
+                        this.setState({
+                            imei2List: foundDevices,
+                        })
 
-            return demoData;
-        } else {
-            return originalData;
+                    }
+                } else {
+                    if (type == "imei1") {
+                        this.setState({
+                            imei1List: [],
+                        })
+                    } else {
+                        this.setState({
+                            imei2List: [],
+                        })
+                    }
+                }
+            } else {
+                status = true;
+                if (type == "imei1") {
+                    this.setState({
+                        imei1List: coppyDevices,
+                    })
+                } else {
+                    this.setState({
+                        imei2List: coppyDevices,
+                    })
+                }
+            }
+        } catch (error) {
+            // alert("hello");
         }
     }
     renderList = (imei_list, type) => {
@@ -201,7 +219,7 @@ export default class ImeiView extends Component {
                                             className="search_heading1"
                                             onKeyUp={
                                                 (e) => {
-                                                    this.handleSearch(e, 'imei1')
+                                                    this.handleComponentSearch(e, 'imei1')
                                                 }
                                             }
                                             autoComplete="new-password"
@@ -234,7 +252,7 @@ export default class ImeiView extends Component {
 
                                         },
                                         {
-                                            title: 'Changed Time',
+                                            title: 'Changed Date',
                                             align: "center",
                                             dataIndex: 'changed_time',
                                             key: "changed_time",
@@ -265,7 +283,7 @@ export default class ImeiView extends Component {
                                             className="search_heading1"
                                             onKeyUp={
                                                 (e) => {
-                                                    this.handleSearch(e, 'imei2')
+                                                    this.handleComponentSearch(e, 'imei2')
                                                 }
                                             }
                                             autoComplete="new-password"
@@ -298,7 +316,7 @@ export default class ImeiView extends Component {
 
                                         },
                                         {
-                                            title: 'Changed Time',
+                                            title: 'Changed Date',
                                             align: "center",
                                             dataIndex: 'changed_time',
                                             key: "changed_time",
@@ -317,107 +335,6 @@ export default class ImeiView extends Component {
                     </Row>
 
                 </Modal>
-                {/* <Modal
-                    // className="m_d_pop"
-                    visible={this.state.dataVisible}
-                    title={`${this.state.dataFieldName}`}
-                    // onOk={this.handleOk}
-                    onCancel={
-                        () => {
-                            this.showViewmodal(false);
-                        }
-                    }
-                    onOk={
-                        () => {
-                            this.showViewmodal(false);
-                        }
-                    }
-                >
-                    <Fragment>
-                        <div className="row">
-                            <div className="col-md-6">
-                                <Select
-                                    className="search_heading2"
-                                    value={this.state.pagination}
-                                    //  defaultValue={this.state.DisplayPages}
-                                    style={{ width: '100%' }}
-                                    // onSelect={value => this.setState({DisplayPages:value})}
-                                    onChange={value => this.handlePagination(value)}
-                                >
-                                    <Select.Option className="font-12" value="10" >10</Select.Option>
-                                    <Select.Option className="font-12" value="20">20</Select.Option>
-                                    <Select.Option className="font-12" value="30">30</Select.Option>
-                                    <Select.Option className="font-12" value="50">50</Select.Option>
-                                    <Select.Option className="font-12" value="100">100</Select.Option>
-                                </Select>
-                            </div>
-                            <div className="col-md-6">
-                                <Input.Search
-                                    name="imei"
-                                    key="imei"
-                                    id="imei"
-                                    className="search_heading1"
-                                    onKeyUp={
-                                        (e) => {
-                                            this.handleSearch(e, 'imei')
-                                        }
-                                    }
-                                    autoComplete="new-password"
-                                    placeholder="IMEI NUMBER"
-                                />
-                            </div>
-
-                        </div>
-
-                        <Table
-                            columns={[
-                                {
-                                    title: 'No.',
-                                    align: "center",
-                                    dataIndex: 'tableIndex',
-                                    key: "tableIndex",
-                                    className: '',
-                                    sorter: (a, b) => { return a.tableIndex.localeCompare(b.tableIndex) },
-                                    sortDirections: ['ascend', 'descend'],
-
-                                },
-                                {
-                                    title: this.state.dataFieldName,
-                                    align: "center",
-                                    dataIndex: 'imei',
-                                    key: "imei",
-                                    className: '',
-                                    sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
-                                    sortDirections: ['ascend', 'descend'],
-
-                                },
-                                {
-                                    title: 'Changed Time',
-                                    align: "center",
-                                    dataIndex: 'changed_time',
-                                    key: "changed_time",
-                                    className: '',
-                                    sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
-                                    sortDirections: ['ascend', 'descend'],
-
-                                },
-                            ]}
-                            dataSource={this.renderList()}
-                        // this.state.sim_ids.map(sim_id => {
-                        //     return {
-                        //         key: sim_id.id,
-                        //         sim_id: sim_id.sim_id,
-                        //         start_date: sim_id.start_date,
-                        //         expiry_date: sim_id.expiry_date
-                        //     }
-                        // })
-
-
-                        // pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
-
-                        />
-                    </Fragment>
-                </Modal> */}
             </div >
         )
 
