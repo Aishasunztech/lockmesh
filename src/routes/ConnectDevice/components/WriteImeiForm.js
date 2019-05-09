@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Modal, message, Radio, Button, Form, Input } from 'antd';
+import { Modal, message, Radio, Button, Form, Input, Icon } from 'antd';
 import {
 } from "../../../constants/ActionTypes"
 const confirm = Modal.confirm;
-
+const Search = Input.Search;
 class WriteImeiForm extends Component {
 
     constructor(props) {
@@ -44,18 +44,16 @@ class WriteImeiForm extends Component {
                         }
                         ],
                     })(
-                        <Input type='Number' placeholder="Enter IMEI Number" />
+                        <span className="numeric_field" >
+                            <Search
+                                type="Number"
+                                placeholder="Enter IMEI Number"
+                                enterButton={<a onClick={this.handleSubmit} type="primary" htmlType="submit">{this.props.buttonText}</a>}
+                            />
+                        </span>
                     )}
 
 
-                </Form.Item>
-                <Form.Item className="edit_ftr_btn1"
-                    wrapperCol={{
-                        xs: { span: 24, offset: 0 },
-                        sm: { span: 24, offset: 0 },
-                    }}
-                >
-                    <Button type="primary" htmlType="submit">{this.props.buttonText}</Button>
                 </Form.Item>
             </Form>
         )

@@ -159,16 +159,16 @@ class Profile extends Component {
                                                     {/* <h5 className="more_txt">and more...</h5> */}
                                                 </Col>
                                             </Row>
-                                            <Row justify='center'>
+                                            {/* <Row justify='center'>
                                                 <Col span={6}>
                                                 </Col>
                                                 <Col span={12} style={{ padding: "", marginTop: 0 }}>
-                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
                                                 </Col>
-                                            </Row>
+                                            </Row> */}
 
                                         </div>
                                     </Card>
+                                    <Button type="primary" size="small" className="open_btn">Open</Button>
                                 </a>
                             </div>
                             <Modal
