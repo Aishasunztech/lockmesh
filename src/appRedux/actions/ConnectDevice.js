@@ -833,7 +833,7 @@ export const flagged = (device_id, data) => {
     }
 }
 export const checkPass = (user, actionType) => {
-     console.log(user);
+    console.log(user);
     return (dispatch) => {
         RestService.checkPass(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -854,20 +854,20 @@ export const checkPass = (user, actionType) => {
                             PasswordMatch: response.data,
                         }
                     })
-                }else if (actionType === PULL_APPS) {
-                dispatch({
-                    type: CHECKPASS,
-                    payload: {
-                        actionType: actionType,
-                        PasswordMatch: response.data,
-                    }
-                })
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                })
+                } else if (actionType === PULL_APPS) {
+                    dispatch({
+                        type: CHECKPASS,
+                        payload: {
+                            actionType: actionType,
+                            PasswordMatch: response.data,
+                        }
+                    })
+                } else {
+                    dispatch({
+                        type: INVALID_TOKEN
+                    })
+                }
             }
-        }
         })
 
     }
@@ -919,7 +919,10 @@ export const writeImei = (device_id, usrAccId, type, imeiNo) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: WRITE_IMEI,
-                    payload: response.data
+                    payload: response.data,
+                    imeiData: {
+                        device_id, usrAccId, type, imeiNo
+                    }
                 })
             } else {
                 dispatch({
@@ -975,9 +978,15 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
     return (dispatch) => {
         RestService.applyPushApps(apps, deviceId, usrAccId).then((response) => {
             if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: PUSH_APPS,
+                    payload: response.data
 
+                })
             } else {
-
+                dispatch({
+                    type: INVALID_TOKEN
+                })
             }
         })
     }
@@ -995,10 +1004,12 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
                 dispatch({
                     type: PULL_APPS,
                     payload: response.data
-        
+
                 })
             } else {
-
+                dispatch({
+                    type: INVALID_TOKEN
+                })
             }
         })
     }

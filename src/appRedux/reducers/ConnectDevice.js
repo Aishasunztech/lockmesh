@@ -1,3 +1,4 @@
+import React, { Fragment } from 'react'
 import {
     GET_DEVICE_DETAILS,
     GET_DEVICE_APPS,
@@ -136,7 +137,7 @@ const initialState = {
     encryptedAllExt: false,
 
     imei_list: [],
-    pushAppsModal:false,
+    pushAppsModal: false,
     pullAppsModal: false
 };
 
@@ -309,8 +310,15 @@ export default (state = initialState, action) => {
             }
         }
         case PUSH_APPS: {
-            // state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
-            // console.log("undo apps", state.undoApps);
+            if (action.payload.status) {
+                if (action.payload.online) {
+                    message.success(action.payload.msg)
+                } else {
+                    message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                }
+            } else {
+                message.error(action.payload.msg)
+            }
 
             return {
                 ...state
@@ -464,12 +472,12 @@ export default (state = initialState, action) => {
                         ...state,
                         pushAppsModal: true
                     }
-                }else if(action.payload.actionType === PULL_APPS){
+                } else if (action.payload.actionType === PULL_APPS) {
                     return {
                         ...state,
                         pullAppsModal: true
                     }
-                } else if (action.payload.actionType === WIPE_DEVICE){
+                } else if (action.payload.actionType === WIPE_DEVICE) {
 
                     showConfirm1(action.payload.device, "Do You really Want to Wipe the device")
                 }
@@ -500,7 +508,7 @@ export default (state = initialState, action) => {
         }
 
         case PULL_APPS: {
-            return{
+            return {
                 ...state,
                 apk_list: state.apk_list_dump
             }
@@ -889,7 +897,11 @@ export default (state = initialState, action) => {
 
         case WRITE_IMEI: {
             if (action.payload.status) {
-                message.success(action.payload.msg)
+                if (action.payload.online) {
+                    message.success(action.imeiData.imeiNo + "successfully written to " + action.imeiData.type + " on Device!")
+                } else {
+                    message.warning(<Fragment><span>Warning Device Offline</span> <div> {action.imeiData.imeiNo} write to {action.imeiData.type}. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                }
             }
             else {
                 message.error(action.payload.msg)
@@ -898,7 +910,6 @@ export default (state = initialState, action) => {
                 ...state,
             }
         }
-
         default:
             return state;
 
