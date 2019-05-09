@@ -224,7 +224,7 @@ const RestService = {
     },
 
     saveNewData: (data) => {
-        return axios.post(BASE_URL + "users/save_new_data ",data, RestService.getHeader());
+        return axios.post(BASE_URL + "users/save_new_data ", data, RestService.getHeader());
 
     },
 
