@@ -155,7 +155,7 @@ export default class ImeiView extends Component {
         return (
             <div>
                 <Modal
-                    width='720px'
+                    width='850px'
                     visible={visible}
                     title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"> <a href='https://dyrk.org/tools/imei/' target='blank'><Button> Generate IMEI number </Button></a></div></div>}
                     onOk={this.handleOk}
@@ -164,7 +164,7 @@ export default class ImeiView extends Component {
                     className="edit_form"
                 >
                     <Row>
-                        <Col span={12} className="pr-8">
+                        <Col span={11} className="p-16 imei_col_11" >
                             <WriteImeiFrom
                                 ref='form1'
                                 buttonText='WRITE IMEI 1'
@@ -172,21 +172,6 @@ export default class ImeiView extends Component {
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
                             />
-                        </Col>
-                        <Col span={12} className="pl-8">
-                            <WriteImeiFrom
-                                ref='form2'
-                                buttonText='WRITE IMEI 2'
-                                type='IMEI2'
-                                writeImei={this.props.writeImei}
-                                device={this.props.device}
-                            />
-                        </Col>
-
-                    </Row>
-
-                    <Row>
-                        <Col span={12} className="pr-8">
                             <Fragment>
                                 <div className="row">
                                     <div className="col-md-3">
@@ -208,7 +193,6 @@ export default class ImeiView extends Component {
                                             placeholder="IMEI 1 NUMBER"
                                         />
                                     </div>
-
                                 </div>
 
                                 <Table
@@ -244,12 +228,21 @@ export default class ImeiView extends Component {
 
                                         },
                                     ]}
+                                    bordered
                                     dataSource={this.renderList(this.state.imei1List, 'IMEI 1')}
                                     scroll={{ y: 350 }}
                                 />
                             </Fragment>
+
                         </Col>
-                        <Col span={12} className="pl-8">
+                        <Col span={11} className="p-16 imei_col_11">
+                            <WriteImeiFrom
+                                ref='form2'
+                                buttonText='WRITE IMEI 2'
+                                type='IMEI2'
+                                writeImei={this.props.writeImei}
+                                device={this.props.device}
+                            />
                             <Fragment>
 
                                 <div className="row">
@@ -272,7 +265,6 @@ export default class ImeiView extends Component {
                                             placeholder="IMEI 2 NUMBER"
                                         />
                                     </div>
-
                                 </div>
 
                                 <Table
@@ -308,118 +300,14 @@ export default class ImeiView extends Component {
 
                                         },
                                     ]}
+                                    bordered
                                     dataSource={this.renderList(this.state.imei2List, 'IMEI 2')}
                                     scroll={{ y: 350 }}
                                 />
                             </Fragment>
-
                         </Col>
                     </Row>
-
                 </Modal>
-                {/* <Modal
-                    // className="m_d_pop"
-                    visible={this.state.dataVisible}
-                    title={`${this.state.dataFieldName}`}
-                    // onOk={this.handleOk}
-                    onCancel={
-                        () => {
-                            this.showViewmodal(false);
-                        }
-                    }
-                    onOk={
-                        () => {
-                            this.showViewmodal(false);
-                        }
-                    }
-                >
-                    <Fragment>
-                        <div className="row">
-                            <div className="col-md-6">
-                                <Select
-                                    className="search_heading2"
-                                    value={this.state.pagination}
-                                    //  defaultValue={this.state.DisplayPages}
-                                    style={{ width: '100%' }}
-                                    // onSelect={value => this.setState({DisplayPages:value})}
-                                    onChange={value => this.handlePagination(value)}
-                                >
-                                    <Select.Option className="font-12" value="10" >10</Select.Option>
-                                    <Select.Option className="font-12" value="20">20</Select.Option>
-                                    <Select.Option className="font-12" value="30">30</Select.Option>
-                                    <Select.Option className="font-12" value="50">50</Select.Option>
-                                    <Select.Option className="font-12" value="100">100</Select.Option>
-                                </Select>
-                            </div>
-                            <div className="col-md-6">
-                                <Input.Search
-                                    name="imei"
-                                    key="imei"
-                                    id="imei"
-                                    className="search_heading1"
-                                    onKeyUp={
-                                        (e) => {
-                                            this.handleSearch(e, 'imei')
-                                        }
-                                    }
-                                    autoComplete="new-password"
-                                    placeholder="IMEI NUMBER"
-                                />
-                            </div>
 
-                        </div>
-
-                        <Table
-                            columns={[
-                                {
-                                    title: 'No.',
-                                    align: "center",
-                                    dataIndex: 'tableIndex',
-                                    key: "tableIndex",
-                                    className: '',
-                                    sorter: (a, b) => { return a.tableIndex.localeCompare(b.tableIndex) },
-                                    sortDirections: ['ascend', 'descend'],
-
-                                },
-                                {
-                                    title: this.state.dataFieldName,
-                                    align: "center",
-                                    dataIndex: 'imei',
-                                    key: "imei",
-                                    className: '',
-                                    sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
-                                    sortDirections: ['ascend', 'descend'],
-
-                                },
-                                {
-                                    title: 'Changed Time',
-                                    align: "center",
-                                    dataIndex: 'changed_time',
-                                    key: "changed_time",
-                                    className: '',
-                                    sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
-                                    sortDirections: ['ascend', 'descend'],
-
-                                },
-                            ]}
-                            dataSource={this.renderList()}
-                        // this.state.sim_ids.map(sim_id => {
-                        //     return {
-                        //         key: sim_id.id,
-                        //         sim_id: sim_id.sim_id,
-                        //         start_date: sim_id.start_date,
-                        //         expiry_date: sim_id.expiry_date
-                        //     }
-                        // })
-
-
-                        // pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
-
-                        />
-                    </Fragment>
-                </Modal> */}
-            </div >
-        )
-
-    }
-}
+            </div>)
+}}
