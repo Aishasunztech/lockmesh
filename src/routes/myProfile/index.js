@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { updatePassword } from "../../appRedux/actions/Dealers";
 import { updateUserProfile } from "../../appRedux/actions/Auth";
-import { Row, Col, Card, Table, Button, Divider, Icon } from 'antd';
+import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch } from 'antd';
 import ChangePassword from './components/changePassword';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
@@ -17,6 +17,27 @@ import {
 
 class Profile extends Component {
 
+    state = { visible: false }
+    showModal1 = () => {
+        this.setState({
+            visible: true,
+        });
+    }
+
+    handleOk1 = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+
+    handleCancel1 = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+
     callChild = () => {
         this.refs.Customize33.toggleCustomizer();
     }
@@ -28,7 +49,7 @@ class Profile extends Component {
                 key: 1,
                 name: <a>Dealer ID</a>,
                 value: this.props.profile.id,
-            },{
+            }, {
                 key: 2,
                 name: <a>Dealer Pin</a>,
                 value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
@@ -50,15 +71,15 @@ class Profile extends Component {
             }
         ]
 
-        if(this.props.profile.type === SDEALER){
+        if (this.props.profile.type === SDEALER) {
             columnData = {
                 key: 6,
                 name: <a>Parent Dealer</a>,
-                value: (this.props.profile.connected_dealer==0)?"N/A": this.props.profile.connected_dealer,
+                value: (this.props.profile.connected_dealer == 0) ? "N/A" : this.props.profile.connected_dealer,
             }
         }
-        let dataSource=[];
-        if(columnData!=null){
+        let dataSource = [];
+        if (columnData != null) {
 
             dataSource = commonColumns;
             dataSource.push(columnData);
@@ -115,38 +136,64 @@ class Profile extends Component {
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <Card className="manage_sec_pro" style={{ borderRadius: 12 }}>
-                                    <div>
-                                        <Row>
-                                            <Col span={24} style={{ textAlign: "center" }}>
-                                                <h2 style={{ textAlign: "center", marginBottom: 0 }}>Edit Profile  <a style={{ float: "right", fontSize: 15, lineHeight: '25px' }} onClick={() => this.refs.change_profile.showModal()} >Edit</a></h2>
+                                <a onClick={this.showModal1}>
+                                    <Card className="manage_sec_pro" style={{ borderRadius: 12 }}>
+                                        <div>
+                                            <h2 style={{ textAlign: "center" }}>Edit Profile</h2>
+                                            <Divider className="mb-0" />
+                                            <Row style={{ padding: '12px 0px 0px' }}>
+                                                <Col span={8} className="text-center ">
+                                                    {/* <Icon type="file-text" className="policy_icon" /> */}
+                                                    <img src={require("assets/images/profile-image.png")} className="mb-8"></img>
+                                                    <h1 className="mb-0">{this.props.profile.name}</h1>
+                                                    <p>({this.props.profile.type})</p>
+                                                </Col>
+                                                <Col span={16} style={{ padding: 0, marginTop: 12 }}>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Change password</h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Change Email</h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Enable Dual Authentication  </h5>
+                                                    {/* <h5 className="more_txt">and more...</h5> */}
+                                                </Col>
+                                            </Row>
+                                            <Row justify='center'>
+                                                <Col span={6}>
+                                                </Col>
+                                                <Col span={12} style={{ padding: "", marginTop: 0 }}>
+                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
+                                                </Col>
+                                            </Row>
 
-                                            </Col>
-                                        </Row>
-                                        <Divider className="mb-0" />
-                                        <Row style={{ padding: '16px 0' }}>
-                                            <Col span={8} style={{ textAlign: "center" }}>
-                                                <img src={require("../../assets/images/profile-image.png")} style={{ height: 'auto', width: '100%', borderRadius: 50 }} />
-                                            </Col>
-                                            <Col span={16}>
-                                                <h1>{this.props.profile.name}</h1>
-
-                                                <p>({this.props.profile.type})</p>
-                                            </Col>
-                                        </Row>
-                                        <Row justify='center' style={{ marginTop: 45 }}>
-                                            <Col span={12} style={{ padding: "0px 8px 0px 16px" }} className="change_pass">
-                                                <Button type="primary" size="small" style={{ width: "100%" }}
-                                                    onClick={() => this.refs.change_password.showModal()} icon="unlock">Change Password</Button>
-                                            </Col>
-                                            <Col span={12} style={{ padding: "0px 16px 0px 8px" }} className="change_email">
-                                                <Button disabled size="small" type="primary" style={{ width: "100%" }} icon="mail">Change Email</Button>
-                                            </Col>
-                                        </Row>
-
-                                    </div>
-                                </Card>
+                                        </div>
+                                    </Card>
+                                </a>
                             </div>
+                            <Modal
+                                title={<div>Edit Profile <a className="edit_a_tag" onClick={() => this.refs.change_profile.showModal()} >Edit</a></div>}
+                                visible={this.state.visible}
+                                onOk={this.handleOk1}
+                                onCancel={this.handleCancel1}
+                                footer={false}
+                            >
+                                <Row justify='center' style={{}}>
+                                    <Col span={12} style={{ padding: "0 16px 0" }} className="change_pass">
+                                        <Button type="primary" size="small" style={{ width: "100%" }}
+                                            onClick={() => this.refs.change_password.showModal()} icon="unlock">Change Password</Button>
+                                    </Col>
+                                    <Col span={6}></Col>
+                                    <Col span={6}></Col>
+                                    <Col span={12} style={{ padding: "16px 16px 0 " }} className="change_email">
+                                        <Button disabled size="small" type="primary" style={{ width: "100%" }} icon="mail">Change Email</Button>
+                                    </Col>
+                                    <Col span={6}></Col>
+                                    <Col span={6}></Col>
+                                    <Col span={12} style={{ padding: "16px 16px 0 " }}>
+                                        <h3>Login Email Authentication</h3>
+                                    </Col>
+                                    <Col span={6} style={{ padding: "16px 16px 0 " }}>
+                                        <Switch checkedChildren="ON" unCheckedChildren="OFF" />
+                                    </Col>
+                                </Row>
+                            </Modal>
                         </Col>
                         <Customizer1 ref="Customize33" />
                     </Row>
