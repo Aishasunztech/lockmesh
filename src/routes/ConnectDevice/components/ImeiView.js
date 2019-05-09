@@ -157,13 +157,12 @@ export default class ImeiView extends Component {
                 <Modal
                     width='720px'
                     visible={visible}
-                    title="MANAGE IMEI"
+                    title={<div className="text-center"><span style={{ float: "left", lineHeight: "36px" }}>MANAGE IMEI</span> <a className="text-right" href='https://dyrk.org/tools/imei/' target='blank'><Button> Generate IMEI number </Button></a></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
                 >
-
                     <Row>
                         <Col span={12}>
                             <WriteImeiFrom
@@ -183,16 +182,19 @@ export default class ImeiView extends Component {
                                 device={this.props.device}
                             />
                         </Col>
-                        <a href='https://dyrk.org/tools/imei/' target='blank'><Button> Generate IMEI number </Button></a>
+
                     </Row>
 
                     <Row>
                         <Col span={12}>
                             <Fragment>
-                                <h4>IMEI 1</h4>
                                 <div className="row">
-                                    <div className="col-md-6 pr-8">
+                                    <div className="col-md-3">
+                                        <h4 className="imei_heading">IMEI 1</h4>
+                                    </div>
+                                    <div className="col-md-9 pl-0">
                                         <Input.Search
+                                            type="number"
                                             name="imei1"
                                             key="imei1"
                                             id="imei1"
@@ -249,10 +251,14 @@ export default class ImeiView extends Component {
                         </Col>
                         <Col span={12}>
                             <Fragment>
-                                <h4>IMEI 2</h4>
+
                                 <div className="row">
-                                    <div className="col-md-6 pr-8">
+                                    <div className="col-md-3">
+                                        <h4 className="imei_heading">IMEI 2</h4>
+                                    </div>
+                                    <div className="col-md-9 pl-0">
                                         <Input.Search
+                                            type="number"
                                             name="imei2"
                                             key="imei2"
                                             id="imei2"
@@ -329,7 +335,7 @@ export default class ImeiView extends Component {
                 >
                     <Fragment>
                         <div className="row">
-                            <div className="col-md-6 pr-8">
+                            <div className="col-md-6">
                                 <Select
                                     className="search_heading2"
                                     value={this.state.pagination}
@@ -345,7 +351,7 @@ export default class ImeiView extends Component {
                                     <Select.Option className="font-12" value="100">100</Select.Option>
                                 </Select>
                             </div>
-                            <div className="col-md-6 pr-8">
+                            <div className="col-md-6">
                                 <Input.Search
                                     name="imei"
                                     key="imei"

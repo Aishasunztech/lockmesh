@@ -10,8 +10,15 @@
 
 .manage_sec .ant-card-body {
     height: 229px;
+    position: relative;
 }
 
+.manage_sec .open_btn {
+    width: 40%;
+    position: absolute;
+    bottom: 33px;
+    left: 33%;
+}
 
 .permiss_tabl .ant-table-thead>tr>th {
     padding: 8px 8px;
@@ -29,6 +36,7 @@
     vertical-align: middle;
     cursor: pointer;
 }
+
 @media (max-width: 768px) {
     .mob_m_t {
         margin-top: 8px;

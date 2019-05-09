@@ -29,7 +29,7 @@ class Apk extends Component {
                                                 <Col span={8} className="" style={{ padding: 0, textAlign: "right" }}>
                                                     <Icon type="android" className="and_icon" />
                                                 </Col>
-                                                <Col>
+                                                <Col span={16}>
                                                     <h5 style={{ position: 'relative', right: 1 }}><span className="diamond_icon">&#9670;</span>Upload apk</h5>
                                                     <h5 style={{ position: 'relative', left: 12 }}><span className="diamond_icon">&#9670;</span>Manage apk's</h5>
                                                     {(this.props.user.type === 'admin') ?
@@ -48,21 +48,9 @@ class Apk extends Component {
                                                     }
                                                 </Col>
                                             </Row>
-                                            <Row justify='center'>
-                                                <Col span={6} >
-
-                                                </Col>
-                                                <Col span={12} style={{}}>
-                                                    {(this.props.user.type !== "admin") ?
-                                                        (<Button type="primary" size="small" style={{ width: "100%", marginTop: 46 }}>Open</Button>)
-                                                        :
-                                                        (<Button type="primary" size="small" style={{ width: "100%", marginTop: 0 }}>Open</Button>)
-                                                    }
-                                                </Col>
-                                            </Row>
-
                                         </div>
                                     </Card>
+                                    <Button type="primary" size="small" className="open_btn">Open</Button>
                                 </Link>
                             </div>
                         </Col>
@@ -83,23 +71,16 @@ class Apk extends Component {
                                                     <h5 style={{ position: 'relative', right: 4 }} className="more_txt">and more...</h5>
                                                 </Col>
                                             </Row>
-                                            <Row justify='center'>
-                                                <Col span={6}>
-                                                </Col>
-                                                <Col span={12} style={{ marginTop: 46 }}>
-                                                    <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
-                                                </Col>
-                                            </Row>
-
                                         </div>
                                     </Card>
+                                    <Button type="primary" size="small" className="open_btn">Open</Button>
                                 </Link>
                             </div>
                         </Col>
 
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div className="contenar">
+                                <div>
                                     <Link to="/app-market">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div className="image_1">
@@ -116,15 +97,10 @@ class Apk extends Component {
                                                         <h5 style={{ position: 'relative', right: 10 }} className="more_txt">and more...</h5>
                                                     </Col>
                                                 </Row>
-                                                <Row justify='center'>
-                                                    <Col span={6}>
-                                                    </Col>
-                                                    <Col span={12} style={{ marginTop: 28 }}>
-                                                        <Button type="primary" size="small" style={{ width: "100%" }}>Open</Button>
-                                                    </Col>
-                                                </Row>
+
                                             </div>
                                         </Card>
+                                        <Button type="primary" size="small" className="open_btn">Open</Button>
                                     </Link>
                                 </div>
                             </div>
