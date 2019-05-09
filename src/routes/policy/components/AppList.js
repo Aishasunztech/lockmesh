@@ -182,7 +182,7 @@ class AppList extends Component {
                         name={`guest_${app_id}`}
                         value={guest}
                         checked={((guest === true || guest === 1) ? true : false)}
-                        // disabled={!isAvailable}
+                         disabled={this.props.isCheckbox ? !isAvailable: false}
                         onClick={(e) => {
                             this.handleChecked(e, "guest", app_id)
 
@@ -195,8 +195,8 @@ class AppList extends Component {
                         ref={`encrypted_${app_id}`}
                         name={`encrypted_${app_id}`}
                         // value={encrypted}
-                        // disabled={app.default_app == 1 ? true : !isAvailable}
-                        checked={app.default_app == 1 ? true : ((encrypted === true || encrypted === 1) ? true : false)}
+                         disabled={this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable: false}
+                        checked={ app.default_app == 1 ? true : ((encrypted === true || encrypted === 1) ? true : false) }
                         onClick={(e) => {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app_id);
@@ -210,7 +210,7 @@ class AppList extends Component {
                         name={`enable_${app_id}`}
                         // value={enable}
                         checked={app.default_app == 1 ? true :((enable === true || enable === 1) ? true : false)}
-                        // disabled={app.default_app == 1 ? true : !isAvailable}
+                         disabled={this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable :  false}
                         onClick={(e) => {
                             this.handleChecked(e, "enable", app_id);
                         }}
