@@ -11,7 +11,8 @@ import {
   INVALID_TOKEN,
   INVALID_RESPONSE,
   UPDATE_PROFILE,
-  BEFORE_COMPONENT_ALLOWED
+  BEFORE_COMPONENT_ALLOWED,
+  TWO_FACTOR_AUTH
   // ACCESS_DENIED
 } from "../../constants/ActionTypes";
 
@@ -45,7 +46,8 @@ export const loginUser = (user) => {
           token: resp.data.token,
           type: resp.data.user.user_type,
           dealer_pin: resp.data.user.link_code,
-          dealer_token: resp.data.user.token
+          dealer_token: resp.data.user.token,
+          two_factor_auth: resp.data.user.two_factor_auth
         }
         RestService.authLogIn(resp.data)
         dispatch({
@@ -57,6 +59,23 @@ export const loginUser = (user) => {
   }
 };
 
+export const twoFactorAuth = (isEnable)=>{
+  return (dispatch) => {
+    RestService.twoFactorAuth(isEnable).then((response) => {
+      if(RestService.checkAuth(response.data)){
+        dispatch({
+          type: TWO_FACTOR_AUTH,
+          payload: response.data
+        })
+
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+  }
+}
 export const checkComponent = (componentUri) => {
   return (dispatch) => {
     dispatch({
@@ -79,7 +98,8 @@ export const checkComponent = (componentUri) => {
             name: resp.data.user.dealer_name,
             // token: resp.data.token,
             type: resp.data.user.user_type,
-            dealer_pin: resp.data.user.link_code
+            dealer_pin: resp.data.user.link_code,
+            two_factor_auth: resp.data.user.two_factor_auth
           }
           RestService.setUserData(resp.data);
 
@@ -141,10 +161,7 @@ export const logout = () => {
 
 
 export const loginSuccess = (authUser) => {
-  return {
-    type: LOGIN_USER_SUCCESS,
-    payload: authUser
-  }
+  
 };
 
 export const logoutSuccess = () => {

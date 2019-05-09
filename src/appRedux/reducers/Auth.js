@@ -11,7 +11,8 @@ import {
   COMPONENT_ALLOWED,
   ACCESS_DENIED,
   UPDATE_PROFILE,
-  BEFORE_COMPONENT_ALLOWED
+  BEFORE_COMPONENT_ALLOWED,
+  TWO_FACTOR_AUTH
 } from "../../constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
@@ -37,7 +38,8 @@ const INIT_STATE = {
     name: localStorage.getItem("name"),
     token: localStorage.getItem("token"),
     type: localStorage.getItem("type"),
-    dealer_pin: localStorage.getItem("dealer_pin")
+    dealer_pin: localStorage.getItem("dealer_pin"),
+    two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth')
   },
 };
 
@@ -45,9 +47,15 @@ const INIT_STATE = {
 export default (state = INIT_STATE, action) => {
 
   switch (action.type) {
+    case INIT_URL: {
+      return {
+        ...state,
+        initURL: action.payload
+      }
+    }
 
     case LOGIN_USER_SUCCESS: {
-      
+
       return {
         ...state,
         loader: false,
@@ -69,12 +77,7 @@ export default (state = INIT_STATE, action) => {
         loader: false
       }
     }
-    case INIT_URL: {
-      return {
-        ...state,
-        initURL: action.payload
-      }
-    }
+
     case LOGOUT_USER_SUCCESS: {
       return {
         ...state,
@@ -87,7 +90,8 @@ export default (state = INIT_STATE, action) => {
           lastName: null,
           name: null,
           token: null,
-          type: null
+          type: null,
+          two_factor_auth: null
         },
         initURL: '/',
         loader: false
@@ -126,7 +130,8 @@ export default (state = INIT_STATE, action) => {
           lastName: null,
           name: null,
           token: null,
-          type: null
+          type: null,
+          two_factor_auth: null
         },
         initURL: '/',
         loader: false
@@ -163,7 +168,7 @@ export default (state = INIT_STATE, action) => {
     }
     case COMPONENT_ALLOWED: {
       let socket = RestService.connectSocket(state.authUser.token);
-      
+
       return {
         ...state,
         isAllowed: action.payload.ComponentAllowed,
@@ -179,7 +184,8 @@ export default (state = INIT_STATE, action) => {
           lastName: action.payload.lastName,
           name: action.payload.name,
           type: action.payload.type,
-          dealer_pin: action.payload.dealer_pin
+          dealer_pin: action.payload.dealer_pin,
+          two_factor_auth: action.payload.two_factor_auth
         }
       }
       break;
@@ -190,6 +196,17 @@ export default (state = INIT_STATE, action) => {
         initURL: '/invalid_page'
       }
       break;
+    }
+    case TWO_FACTOR_AUTH: {
+      if(action.payload.status){
+        message.success(action.payload.msg)
+        state.authUser.two_factor_auth= action.payload.isEnable
+      } else {
+        message.error(action.payload.msg)
+      }
+      return {
+        ...state
+      }
     }
     default:
       return state;

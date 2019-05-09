@@ -30,6 +30,7 @@ export const GET_USER = 'GET_USER';
 export const BEFORE_COMPONENT_ALLOWED = 'BEFORE_COMPONENT_ALLOWED';
 export const DUPLICATE_SIM_IDS = 'DUPLICATE_SIM_IDS';
 export const NEW_DATA_INSERTED = 'NEW_DATA_INSERTED';
+export const TWO_FACTOR_AUTH = 'TWO_FACTOR_AUTH';
 
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
