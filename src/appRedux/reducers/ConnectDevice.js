@@ -121,6 +121,7 @@ const initialState = {
     duressCPwd: '',
 
     apk_list: [],
+    apk_list_dump: [],
 
     extensions: [],
     secureSettingsMain: [],
@@ -498,6 +499,13 @@ export default (state = initialState, action) => {
             }
         }
 
+        case PULL_APPS: {
+            return{
+                ...state,
+                apk_list: state.apk_list_dump
+            }
+        }
+
 
         case GET_APPS_PERMISSIONS: {
             // console.log('data permissions', action.payload)
@@ -854,6 +862,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 apk_list: action.payload,
+                apk_list_dump: action.payload
             }
         }
         case SHOW_PUSH_APPS_MODAL: {

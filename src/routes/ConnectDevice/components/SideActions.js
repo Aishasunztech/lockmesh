@@ -26,6 +26,7 @@ import {
     showPushAppsModal,
     showPullAppsModal,
     applyPushApps,
+    applyPullApps,
     writeImei
 } from "../../../appRedux/actions/ConnectDevice";
 
@@ -52,7 +53,7 @@ const PasswordModal = (props) => {
             onOk={() => {
 
             }}
-            onCancel={() => props.showPwdConfirmModal(false, '')}
+            onCancel={() => props.showPwdConfirmModal(false, props.actionType)}
             okText="Push Apps"
         >
             <PasswordForm
@@ -126,11 +127,11 @@ const SelectedApps = (props) => {
             title="Selected Apps"
             visible={props.selectedAppsModal}
             onOk={() => {
-                props.applyPushApps(props.apk_list);
+                props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list): props.applyPullApps(props.apk_list);
                 props.showSelectedAppsModal(false);
             }}
             onCancel={() => props.showSelectedAppsModal(false)}
-            okText="Push Apps"
+            okText= {props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps' }
         >
             <DealerApps
                 apk_list={props.apk_list}
@@ -161,6 +162,7 @@ class SideActions extends Component {
             profileName: '',
             policyName: '',
             disabled: false,
+            actionType:PUSH_APPS,
             selectedApps: []
         }
     }
@@ -204,7 +206,7 @@ class SideActions extends Component {
         this.props.showSaveProfileModal(visible, profileType);
     }
 
-    showPwdConfirmModal = (visible, actionType = '') => {
+    showPwdConfirmModal = (visible, actionType = PUSH_APPS) => {
         // alert('hello');
         this.setState({
             pwdConfirmModal: visible,
@@ -214,7 +216,7 @@ class SideActions extends Component {
 
     showSelectedAppsModal = (visible) => {
         this.setState({
-            selectedAppsModal: visible
+            selectedAppsModal: visible,
         })
     }
 
@@ -331,7 +333,14 @@ class SideActions extends Component {
     }
     applyPushApps = () => {
         this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+        this.setState({selectedApps: []})
     }
+
+    applyPullApps = () => {
+        this.props.applyPullApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+        this.setState({selectedApps: []})
+    }
+
     render() {
         // console.log(this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
@@ -360,7 +369,7 @@ class SideActions extends Component {
                                 justify="center"
                             >
                                 {/* <Tooltip placement="bottom" title="Coming Soon"> */}
-                                    <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} disabled onClick={()=> this.showPwdConfirmModal(true, PULL_APPS)} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
+                                    <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={()=> this.showPwdConfirmModal(true, PULL_APPS)} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
                                 {/* </Tooltip> */}
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
@@ -483,6 +492,8 @@ class SideActions extends Component {
                     applyPushApps={this.applyPushApps}
                     apk_list={this.state.selectedApps}
                     selectedApps={[]}
+                    applyPullApps={this.applyPullApps}
+                    actionType={this.state.actionType}
                 />
 
                 <ActivateDevcie
@@ -540,6 +551,7 @@ function mapDispatchToProps(dispatch) {
         showPushAppsModal: showPushAppsModal,
         showPullAppsModal: showPullAppsModal,
         applyPushApps: applyPushApps,
+        applyPullApps: applyPullApps,
         savePolicy: savePolicy,
         writeImei: writeImei
     }, dispatch);
