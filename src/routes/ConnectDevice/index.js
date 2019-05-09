@@ -4,7 +4,6 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Modal } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
-import io from 'socket.io-client';
 import {
   getDeviceDetails,
   getDeviceApps,
@@ -153,13 +152,9 @@ class ConnectDevice extends Component {
       this.props.getDeviceHistories(device_id);
       this.props.getImeiHistory(device_id);
       this.props.getDealerApps();
-      // this.props.ackFinishedPushApps(this.props.socket, device_id);
+      this.props.ackFinishedPushApps(this.props.socket, device_id);
       // console.log('ack_finished_push_apps_' + device_id);
  
-      this.props.socket.on('ack_finished_push_apps_', function(response){
-
-        console.log("hello");
-      });
     }
 
 
@@ -536,7 +531,6 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, device_details, auth}) => {
   // console.log("connect device state", device_details.app_list);
-  console.log("socket io", auth.socket);
   return {
     auth: auth,
     socket: auth.socket,

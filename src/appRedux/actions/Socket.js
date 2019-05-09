@@ -18,7 +18,7 @@ export const getNotification = (socket) => {
 
 export const ackFinishedPushApps = (socket, deviceId) => {
     return (dispatch) => {
-        console.log("socket var",socket);
+        
         socket.on(ACK_FINISHED_PUSH_APPS + deviceId, (response)=>{
             console.log(FINISHED_PUSH_APPS, response);
 
