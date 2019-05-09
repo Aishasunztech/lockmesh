@@ -33,7 +33,7 @@ class PassworForm extends Component {
                 }
             }
         });
-        this.props.handleCancel();
+        this.props.handleCancel(false, this.props.actionType);
     }
 
     render() {

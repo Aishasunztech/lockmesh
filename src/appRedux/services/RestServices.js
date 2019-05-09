@@ -467,6 +467,14 @@ const RestService = {
         }, RestService.getHeader());
     },
 
+    applyPullApps: (pull_apps, deviceId, usrAccId) => {
+        return axios.post(BASE_URL + 'users/apply_pullapps/' + deviceId, {
+            pull_apps: pull_apps,
+            deviceId: deviceId,
+            usrAccId: usrAccId
+        }, RestService.getHeader());
+    },
+
     saveProfileCND: (device_setting, profileName = null, usr_acc_id) => {
         //  console.log('device settings', device_setting, 'device id ', device_id,'name', name, 'type',type );
         if (device_setting.app_list !== undefined) {

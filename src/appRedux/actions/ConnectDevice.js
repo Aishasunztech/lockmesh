@@ -982,3 +982,24 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
         })
     }
 }
+
+export const applyPullApps = (apps, deviceId, usrAccId) => {
+    apps.forEach((el) => {
+        delete el.apk_logo;
+        delete el.apk_status;
+    })
+    return (dispatch) => {
+        RestService.applyPullApps(apps, deviceId, usrAccId).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data, 'done task')
+                dispatch({
+                    type: PULL_APPS,
+                    payload: response.data
+        
+                })
+            } else {
+
+            }
+        })
+    }
+}
