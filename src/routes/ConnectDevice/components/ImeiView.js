@@ -5,7 +5,7 @@ import WriteImeiFrom from './WriteImeiForm'
 
 // import EditForm from './editForm';
 let editDevice;
-var coppyDevices = [];
+var coppyImeis = [];
 var status = true;
 export default class ImeiView extends Component {
 
@@ -79,25 +79,34 @@ export default class ImeiView extends Component {
             imei1List: searchedData
         });
     }
-    handleComponentSearch = (value, type) => {
-        try {
+    handleComponentSearch = (e, type) => {
+        try { 
+           let value = e.target.value;
+            console.log(status,'searched value', e.target.value)
             if (value.length) {
+                console.log(status,'searched value', value)
                 if (status) {
-                    coppyDevices = (type == 'imei1') ? this.state.imei1List : this.state.imei2List;
+                    // console.log('status')
+                    if (type == "imei1") {
+                        coppyImeis = this.state.imei1List;
+                    } else {
+                        coppyImeis = this.state.imei2List;
+                    }
+                   
                     status = false;
                 }
-                let foundDevices = componentSearch(coppyDevices, value);
-                console.log(value, coppyDevices, value, foundDevices);
-                if (foundDevices.length) {
+                // console.log(this.state.users,'coppy de', coppyDevices)
+                let foundImeis = componentSearch(coppyImeis, value);
+                 console.log('found devics', foundImeis)
+                if (foundImeis.length) {
                     if (type == "imei1") {
                         this.setState({
-                            imei1List: foundDevices,
+                            imei1List: foundImeis,
                         })
                     } else {
                         this.setState({
-                            imei2List: foundDevices,
+                            imei2List: foundImeis,
                         })
-
                     }
                 } else {
                     if (type == "imei1") {
@@ -112,17 +121,20 @@ export default class ImeiView extends Component {
                 }
             } else {
                 status = true;
+
                 if (type == "imei1") {
                     this.setState({
-                        imei1List: coppyDevices,
+                        imei1List: coppyImeis,
                     })
                 } else {
                     this.setState({
-                        imei2List: coppyDevices,
+                        imei2List: coppyImeis,
                     })
                 }
             }
+
         } catch (error) {
+            console.log('error')
             // alert("hello");
         }
     }
@@ -212,7 +224,6 @@ export default class ImeiView extends Component {
                                     </div>
                                     <div className="col-md-9 pl-0">
                                         <Input.Search
-                                            type="number"
                                             name="imei1"
                                             key="imei1"
                                             id="imei1"
@@ -276,7 +287,6 @@ export default class ImeiView extends Component {
                                     </div>
                                     <div className="col-md-9 pl-0">
                                         <Input.Search
-                                            type="number"
                                             name="imei2"
                                             key="imei2"
                                             id="imei2"
