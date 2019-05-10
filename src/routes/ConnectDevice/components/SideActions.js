@@ -78,7 +78,7 @@ const DealerAppModal = (props) => {
                 props.showPushAppsModal(false);
                 props.showSelectedAppsModal(true);
             }}
-            onCancel={() => props.showPushAppsModal(false)}
+            onCancel={() => { props.showPushAppsModal(false); props.resetSeletedRows() }}
             okText="Push Apps"
         >
             <DealerApps
@@ -86,12 +86,12 @@ const DealerAppModal = (props) => {
                 onSelectChange={props.onSelectChange}
                 isSwitchable={true}
                 selectedApps={props.selectedApps}
+                selectedAppKeys={props.selectedAppKeys}
                 handleChecked={props.handleChecked}
             />
         </Modal>
     )
 }
-
 const PullAppModal = (props) => {
     return (
         <Modal
@@ -104,7 +104,7 @@ const PullAppModal = (props) => {
                 props.showPullAppsModal(false);
                 props.showSelectedAppsModal(true);
             }}
-            onCancel={() => props.showPullAppsModal(false)}
+            onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
             okText="Pull Apps"
         >
             <DealerApps
@@ -112,7 +112,9 @@ const PullAppModal = (props) => {
                 onSelectChange={props.onSelectChange}
                 isSwitchable={true}
                 selectedApps={props.selectedApps}
+                selectedAppKeys={props.selectedAppKeys}
                 handleChecked={props.handleChecked}
+                type={props.actionType == PUSH_APPS ? "push" : 'pull'}
             />
         </Modal>
     )
@@ -127,16 +129,18 @@ const SelectedApps = (props) => {
             title="Selected Apps"
             visible={props.selectedAppsModal}
             onOk={() => {
-                props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list): props.applyPullApps(props.apk_list);
+                props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
                 props.showSelectedAppsModal(false);
+                props.resetSeletedRows()
             }}
-            onCancel={() => props.showSelectedAppsModal(false)}
-            okText= {props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps' }
+            onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
+            okText={props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps'}
         >
             <DealerApps
                 apk_list={props.apk_list}
                 isSwitchable={false}
                 selectedApps={props.selectedApps}
+                type={props.actionType == PUSH_APPS ? "push" : 'pull'}
             />
         </Modal>
     )
@@ -162,7 +166,7 @@ class SideActions extends Component {
             profileName: '',
             policyName: '',
             disabled: false,
-            actionType:PUSH_APPS,
+            actionType: PUSH_APPS,
             selectedApps: []
         }
     }
@@ -174,7 +178,7 @@ class SideActions extends Component {
             historyType: this.props.historyType,
             saveProfileType: this.props.saveProfileType,
             profileName: this.props.profileName,
-            policyName: this.props.policyName
+            policyName: this.props.policyName,
         })
     }
 
@@ -216,7 +220,7 @@ class SideActions extends Component {
 
     showSelectedAppsModal = (visible) => {
         this.setState({
-            selectedAppsModal: visible,
+            selectedAppsModal: visible
         })
     }
 
@@ -268,13 +272,19 @@ class SideActions extends Component {
 
     showPushAppsModal = (visible) => {
         this.setState({
-            pushAppsModal: visible
+            pushAppsModal: visible,
         })
     }
 
     showPullAppsModal = (visible) => {
         this.setState({
-            pullAppsModal: visible
+            pullAppsModal: visible,
+        })
+    }
+
+    onCancelModel = () => {
+        this.setState({
+            selectedApps: []
         })
     }
 
@@ -288,6 +298,7 @@ class SideActions extends Component {
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
         let selectedApps = selectedRows;
+
         selectedApps.map(el => {
             if (typeof (el.guest) !== Boolean) {
                 el.guest = false
@@ -302,7 +313,8 @@ class SideActions extends Component {
             }
         });
         this.setState({
-            selectedApps: selectedApps
+            selectedApps: selectedApps,
+            selectedAppKeys: selectedRowKeys
         })
     }
     handleChecked = (e, key, app_id) => {
@@ -333,12 +345,19 @@ class SideActions extends Component {
     }
     applyPushApps = () => {
         this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
-        this.setState({selectedApps: []})
+        this.setState({ selectedApps: [] })
     }
 
     applyPullApps = () => {
         this.props.applyPullApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
-        this.setState({selectedApps: []})
+        this.setState({ selectedApps: [] })
+    }
+    resetSeletedRows = () => {
+        // console.log('table ref')
+        this.setState({
+            selectedAppKeys: [],
+            selectedApps: [],
+        })
     }
 
     render() {
@@ -369,7 +388,7 @@ class SideActions extends Component {
                                 justify="center"
                             >
                                 {/* <Tooltip placement="bottom" title="Coming Soon"> */}
-                                    <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={()=> this.showPwdConfirmModal(true, PULL_APPS)} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
+                                <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true, PULL_APPS)} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
                                 {/* </Tooltip> */}
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
@@ -463,7 +482,9 @@ class SideActions extends Component {
                     showPushAppsModal={this.props.showPushAppsModal}
                     apk_list={this.props.apk_list}
                     onSelectChange={this.onSelectChange}
+                    selectedAppKeys={this.state.selectedAppKeys}
                     showSelectedAppsModal={this.showSelectedAppsModal}
+                    resetSeletedRows={this.resetSeletedRows}
                     selectedApps={this.state.selectedApps}
                     handleChecked={this.handleChecked}
                 />
@@ -475,15 +496,18 @@ class SideActions extends Component {
                     onSelectChange={this.onSelectChange}
                     showSelectedAppsModal={this.showSelectedAppsModal}
                     selectedApps={this.state.selectedApps}
+                    selectedAppKeys={this.state.selectedAppKeys}
+                    resetSeletedRows={this.resetSeletedRows}
                     handleChecked={this.handleChecked}
+                    onCancelModel={this.onCancelModel}
                 />
 
                 <PasswordModal
                     pwdConfirmModal={this.state.pwdConfirmModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
-                    actionType={this.state.actionType}  
-                    
+                    actionType={this.state.actionType}
+
                 />
 
                 <SelectedApps
@@ -491,7 +515,8 @@ class SideActions extends Component {
                     showSelectedAppsModal={this.showSelectedAppsModal}
                     applyPushApps={this.applyPushApps}
                     apk_list={this.state.selectedApps}
-                    selectedApps={[]}
+                    selectedApps={this.state.selectedApps}
+                    resetSeletedRows={this.resetSeletedRows}
                     applyPullApps={this.applyPullApps}
                     actionType={this.state.actionType}
                 />

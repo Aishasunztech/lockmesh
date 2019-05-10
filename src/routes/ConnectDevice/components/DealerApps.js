@@ -3,8 +3,7 @@ import { Avatar, Table, Switch } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 
 const DealerApps = (props) => {
-    const columns = [
-
+    let columns = [
         {
             title: 'APK',
             dataIndex: 'apk',
@@ -43,13 +42,12 @@ const DealerApps = (props) => {
         },
     ];
     const renderApps = (apk_list, isSwitchable, selectedApps) => {
-            // console.log(selectedApps);
+        // console.log(selectedApps);
         return apk_list.map((app) => {
-            
-            let isAvailable = (selectedApps.length)?selectedApps.find(el => (el.apk_id === app.apk_id)?true:false): false;
+
+            let isAvailable = (selectedApps.length) ? selectedApps.find(el => (el.apk_id === app.apk_id) ? true : false) : false;
             // let isAvailable = false;
             // console.log('isAvailable', isAvailable);
-
             return {
                 key: app.apk_id,
                 apk_id: app.apk_id,
@@ -90,8 +88,36 @@ const DealerApps = (props) => {
     const rowSelection = {
         // selectedDealers,
         onChange: props.onSelectChange,
-        selectionColumnIndex: 1
+        selectionColumnIndex: 1,
+        selectedRowKeys: props.selectedAppKeys,
+
     };
+    if (props.type == 'pull') {
+        columns = [
+
+            {
+                title: 'APK',
+                dataIndex: 'apk',
+                key: 'apk',
+            },
+            {
+                title: 'APP NAME',
+                dataIndex: 'apk_name',
+                width: "100",
+                key: 'apk_name',
+                sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
+
+                sortDirections: ['ascend', 'descend'],
+                // sortOrder:"ascend",
+                defaultSortOrder: "ascend"
+            },
+            {
+                title: 'APP LOGO',
+                dataIndex: 'apk_logo',
+                key: 'apk_logo',
+            },
+        ];
+    }
     return (
         <Fragment>
             <Table

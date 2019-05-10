@@ -312,14 +312,13 @@ export default (state = initialState, action) => {
         case PUSH_APPS: {
             if (action.payload.status) {
                 if (action.payload.online) {
-                    message.success(action.payload.msg)
+                    message.success("Apps are Being pushed")
                 } else {
                     message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                 }
             } else {
                 message.error(action.payload.msg)
             }
-
             return {
                 ...state
             }
@@ -508,9 +507,17 @@ export default (state = initialState, action) => {
         }
 
         case PULL_APPS: {
+            if (action.payload.status) {
+                if (action.payload.online) {
+                    message.success("Apps are Being pulled")
+                } else {
+                    message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pulled to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                }
+            } else {
+                message.error(action.payload.msg)
+            }
             return {
-                ...state,
-                apk_list: state.apk_list_dump
+                ...state
             }
         }
 
@@ -898,7 +905,7 @@ export default (state = initialState, action) => {
         case WRITE_IMEI: {
             if (action.payload.status) {
                 if (action.payload.online) {
-                    message.success(action.imeiData.imeiNo + "successfully written to " + action.imeiData.type + " on Device!")
+                    message.success(action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device!")
                 } else {
                     message.warning(<Fragment><span>Warning Device Offline</span> <div> {action.imeiData.imeiNo} write to {action.imeiData.type}. </div> <div>Action will be performed when device is back online</div></Fragment>)
                 }

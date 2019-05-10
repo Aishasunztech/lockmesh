@@ -40,7 +40,7 @@ import {
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
-import { ackFinishedPushApps } from "../../appRedux/actions/Socket";
+import { ackFinishedPushApps, ackFinishedPullApps } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
@@ -153,8 +153,9 @@ class ConnectDevice extends Component {
       this.props.getImeiHistory(device_id);
       this.props.getDealerApps();
       this.props.ackFinishedPushApps(this.props.socket, device_id);
+      this.props.ackFinishedPullApps(this.props.socket, device_id);
       // console.log('ack_finished_push_apps_' + device_id);
- 
+
     }
 
 
@@ -526,11 +527,12 @@ function mapDispatchToProps(dispatch) {
     handleMainSettingCheck: handleMainSettingCheck,
     reSyncDevice: reSyncDevice,
     getDealerApps: getDealerApps,
+    ackFinishedPullApps: ackFinishedPullApps,
     ackFinishedPushApps: ackFinishedPushApps
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth}) => {
-  // console.log("connect device state", device_details.app_list);
+var mapStateToProps = ({ routing, device_details, auth }) => {
+  console.log("connect device state", device_details.device);
   return {
     auth: auth,
     socket: auth.socket,

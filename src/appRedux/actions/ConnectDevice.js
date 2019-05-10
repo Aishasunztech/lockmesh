@@ -833,7 +833,7 @@ export const flagged = (device_id, data) => {
     }
 }
 export const checkPass = (user, actionType) => {
-    console.log(user);
+    // console.log(user);
     return (dispatch) => {
         RestService.checkPass(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -1000,7 +1000,7 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
     return (dispatch) => {
         RestService.applyPullApps(apps, deviceId, usrAccId).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data, 'done task')
+                // console.log(response.data, 'done task')
                 dispatch({
                     type: PULL_APPS,
                     payload: response.data

@@ -10,6 +10,7 @@ import Account from "./Account"
 import Policy from "./Policy";
 import Users from "./Users";
 import AppMarket from "./AppMarket";
+import Soccket from "./Socket";
 
 
 const reducers = combineReducers({
@@ -23,7 +24,8 @@ const reducers = combineReducers({
   account: Account,
   policies: Policy,
   users: Users,
-  appMarket: AppMarket
+  appMarket: AppMarket,
+  socket: Soccket
 });
 
 export default reducers;

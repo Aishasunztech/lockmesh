@@ -40,7 +40,7 @@ class WriteImeiForm extends Component {
                             required: true, message: 'IMEI number required',
                         },
                         {
-                            len: 15, message: 'Please Enter a valid IMEI number',
+                            len: 15, message: 'IMEI Number must be 15 digits long',
                         }
                         ],
                     })(
