@@ -321,7 +321,7 @@ export default (state = initialState, action) => {
                     /> */}
                     // message.open({ icon: <Icon type="question-circle" className="warn_icon" />, content: (<div><span>Warning Device Offline</span> Apps pushed to device.Action will be performed when device is back online</div>) })
 
-                    message.warning(<Fragment><b>Warning Device Offline</b><div>Apps pushed to device. Action will be performed when device is back online</div></Fragment>)
+                    message.warning(<Fragment><b >Warning Device Offline</b><div className="mt-4">Apps pushed to device. Action will be performed <br></br> when device is back online</div></Fragment>)
                 }
             } else {
                 message.error(action.payload.msg)
