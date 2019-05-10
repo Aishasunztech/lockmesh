@@ -85,27 +85,27 @@ class RestrictedRoute extends Component {
   };
   getNavStyles = (navStyle) => {
     switch (navStyle) {
-      case NAV_STYLE_DEFAULT_HORIZONTAL :
-        return <HorizontalDefault/>;
-      case NAV_STYLE_DARK_HORIZONTAL :
-        return <HorizontalDark/>;
-      case NAV_STYLE_INSIDE_HEADER_HORIZONTAL :
-        return <InsideHeader/>;
-      case NAV_STYLE_ABOVE_HEADER :
-        return <AboveHeader/>;
-      case NAV_STYLE_BELOW_HEADER :
-        return <BelowHeader/>;
-      case NAV_STYLE_FIXED :
-        return <Topbar/>;
-      case NAV_STYLE_DRAWER :
-        return <Topbar/>;
-      case NAV_STYLE_MINI_SIDEBAR :
-        return <Topbar/>;
-      case NAV_STYLE_NO_HEADER_MINI_SIDEBAR :
-        return <NoHeaderNotification/>;
-      case NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR :
-        return <NoHeaderNotification/>;
-      default :
+      case NAV_STYLE_DEFAULT_HORIZONTAL:
+        return <HorizontalDefault />;
+      case NAV_STYLE_DARK_HORIZONTAL:
+        return <HorizontalDark />;
+      case NAV_STYLE_INSIDE_HEADER_HORIZONTAL:
+        return <InsideHeader />;
+      case NAV_STYLE_ABOVE_HEADER:
+        return <AboveHeader />;
+      case NAV_STYLE_BELOW_HEADER:
+        return <BelowHeader />;
+      case NAV_STYLE_FIXED:
+        return <Topbar />;
+      case NAV_STYLE_DRAWER:
+        return <Topbar />;
+      case NAV_STYLE_MINI_SIDEBAR:
+        return <Topbar />;
+      case NAV_STYLE_NO_HEADER_MINI_SIDEBAR:
+        return <NoHeaderNotification />;
+      case NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR:
+        return <NoHeaderNotification />;
+      default:
         return null;
     }
   };
@@ -132,26 +132,23 @@ class RestrictedRoute extends Component {
 
   render() {
     const Component = this.props.component;
-    const { width, navStyle } = this.props;
+    const { width, navStyle, authUser, isAllowed, location, isRequested } = this.props;
     // console.trace("restricted route allowed", this.props.rest);
+
     return (
       <Route
         // {...this.props.rest} 
         render={
           (props) => {
 
-            if (this.props.authUser.id === null || this.props.authUser.email === null || this.props.authUser.token === null || this.props.authUser.type === null) {
+            if (authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null) {
               return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
             } else {
-              if (this.props.isRequested) {
-
-
-
-                if (this.props.isAllowed || this.props.location.pathname === "/invalid_page") {
-
+              if (isRequested) {
+              
+                if (isAllowed || location.pathname === "/invalid_page") {
                   return <Component {...props} />;
                 } else {
-                  // alert("usman hafeez");
                   return <Redirect to={{ pathname: '/invalid_page', state: { from: props.location } }} />
                 }
 

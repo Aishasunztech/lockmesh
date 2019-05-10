@@ -12,7 +12,9 @@ import {
   ACCESS_DENIED,
   UPDATE_PROFILE,
   BEFORE_COMPONENT_ALLOWED,
-  TWO_FACTOR_AUTH
+  TWO_FACTOR_AUTH,
+  VERIFY_CODE,
+  CODE_VERIFIED
 } from "../../constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
@@ -27,6 +29,8 @@ const INIT_STATE = {
   socket: io,
   isAllowed: false,
   isRequested: false,
+  two_factor_auth: false,
+
   authUser: {
     id: localStorage.getItem('id'),
     connected_devices: localStorage.getItem('connected_devices'),
@@ -39,7 +43,8 @@ const INIT_STATE = {
     token: localStorage.getItem("token"),
     type: localStorage.getItem("type"),
     dealer_pin: localStorage.getItem("dealer_pin"),
-    two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth')
+    two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth'),
+    verified: false
   },
 };
 
@@ -60,6 +65,24 @@ export default (state = INIT_STATE, action) => {
         ...state,
         loader: false,
         authUser: action.payload
+      }
+    }
+    case VERIFY_CODE:{
+      message.success(action.payload.msg);
+      return {
+        ...state,
+        two_factor_auth: action.payload.two_factor_auth
+      }
+    }
+    case CODE_VERIFIED:{
+      if(action.payload.status){
+        message.success(action.payload.msg);
+      }else {
+        message.error(action.payload.msg);
+      }
+      state.authUser.verified = action.payload.verified;
+      return {
+        ...state,
       }
     }
     case BEFORE_COMPONENT_ALLOWED: {
@@ -185,7 +208,8 @@ export default (state = INIT_STATE, action) => {
           name: action.payload.name,
           type: action.payload.type,
           dealer_pin: action.payload.dealer_pin,
-          two_factor_auth: action.payload.two_factor_auth
+          two_factor_auth: action.payload.two_factor_auth,
+          verified: action.payload.verified
         }
       }
       break;

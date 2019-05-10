@@ -17,6 +17,11 @@ const RestService = {
     login: (user) => {
         return axios.post(BASE_URL + 'users/login', user);
     },
+    verifyCode: (verifyForm) => {
+        return axios.post(BASE_URL + 'users/verify_code', {
+            verify_code: verifyForm.verify_code
+        });
+    },
     getHeader: () => {
         return {
             headers: {
@@ -75,7 +80,7 @@ const RestService = {
 
     },
     twoFactorAuth: (isEnable) => {
-        return axios.post(BASE_URL + 'users/two_factor_auth', {isEnable:isEnable}, RestService.getHeader())
+        return axios.post(BASE_URL + 'users/two_factor_auth', { isEnable: isEnable }, RestService.getHeader())
     },
     // Component Allowed
     checkComponent: (ComponentUri) => {
