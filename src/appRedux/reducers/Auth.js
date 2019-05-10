@@ -14,7 +14,8 @@ import {
   BEFORE_COMPONENT_ALLOWED,
   TWO_FACTOR_AUTH,
   VERIFY_CODE,
-  CODE_VERIFIED
+  CODE_VERIFIED,
+  GOTO_LOGIN
 } from "../../constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
@@ -29,8 +30,7 @@ const INIT_STATE = {
   socket: io,
   isAllowed: false,
   isRequested: false,
-  two_factor_auth: false,
-
+  two_factor_auth: (localStorage.getItem('is_twoFactorAuth') === null) ? false : localStorage.getItem('is_twoFactorAuth'),
   authUser: {
     id: localStorage.getItem('id'),
     connected_devices: localStorage.getItem('connected_devices'),
@@ -53,12 +53,20 @@ export default (state = INIT_STATE, action) => {
 
   switch (action.type) {
     case INIT_URL: {
+      localStorage.removeItem('is_twoFactorAuth')
+      state.two_factor_auth = false;
       return {
         ...state,
-        initURL: action.payload
+        initURL: action.payload,
+
       }
     }
-
+    case GOTO_LOGIN: {
+      return {
+        ...state,
+        initURL: '/login'
+      }
+    }
     case LOGIN_USER_SUCCESS: {
 
       return {
@@ -67,17 +75,19 @@ export default (state = INIT_STATE, action) => {
         authUser: action.payload
       }
     }
-    case VERIFY_CODE:{
+    case VERIFY_CODE: {
+      localStorage.setItem('is_twoFactorAuth', action.payload.two_factor_auth)
       message.success(action.payload.msg);
       return {
         ...state,
         two_factor_auth: action.payload.two_factor_auth
       }
     }
-    case CODE_VERIFIED:{
-      if(action.payload.status){
+    case CODE_VERIFIED: {
+      if (action.payload.status) {
         message.success(action.payload.msg);
-      }else {
+        localStorage.removeItem('is_twoFactorAuth');
+      } else {
         message.error(action.payload.msg);
       }
       state.authUser.verified = action.payload.verified;
@@ -222,9 +232,9 @@ export default (state = INIT_STATE, action) => {
       break;
     }
     case TWO_FACTOR_AUTH: {
-      if(action.payload.status){
+      if (action.payload.status) {
         message.success(action.payload.msg)
-        state.authUser.two_factor_auth= action.payload.isEnable
+        state.authUser.two_factor_auth = action.payload.isEnable
       } else {
         message.error(action.payload.msg)
       }

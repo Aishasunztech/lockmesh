@@ -13,7 +13,8 @@ import {
   UPDATE_PROFILE,
   BEFORE_COMPONENT_ALLOWED,
   TWO_FACTOR_AUTH,
-  VERIFY_CODE
+  VERIFY_CODE,
+  GOTO_LOGIN
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -114,6 +115,14 @@ export const twoFactorAuth = (isEnable) => {
         });
       }
     });
+  }
+}
+
+export const goToLogin = ()=>{
+  return (dispatch) => {
+    dispatch({
+      type:GOTO_LOGIN
+    })
   }
 }
 export const checkComponent = (componentUri) => {

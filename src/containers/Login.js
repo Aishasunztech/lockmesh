@@ -29,7 +29,6 @@ class Login extends React.Component {
 
   }
   componentDidUpdate(prevProps) {
-    // alert("componentDidUpdate Login")
 
     if (this.props.showMessage) {
       setTimeout(() => {
@@ -38,7 +37,7 @@ class Login extends React.Component {
     }
     const { authUser } = this.props;
 
-    if(this.props.auth.two_factor_auth){
+    if(this.props.auth.two_factor_auth===true || this.props.auth.two_factor_auth===1 || this.props.auth.two_factor_auth ==='true'){
       this.props.history.push('/verify-auth');
     }
     

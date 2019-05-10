@@ -9,6 +9,7 @@ import {
     hideMessage,
     verifyCode,
     showAuthLoader,
+    goToLogin
 } from "../appRedux/actions/Auth";
 
 class VerifyAuthCode extends Component {
@@ -37,8 +38,13 @@ class VerifyAuthCode extends Component {
         // console.log("value", e.target.value);
 
     }
+    goToLogin = () => {
+        this.props.goToLogin();
+    }
     render() {
+        const { initURL } = this.props;
 
+        
         return (
             <div className="gx-app-login-wrap">
                 <div className="gx-app-login-container">
@@ -72,8 +78,10 @@ class VerifyAuthCode extends Component {
 
                                 <Form.Item>
                                     <Button type="primary" className="gx-mb-0" htmlType="submit">
-                                        {/* <IntlMessages id="app.userAuth.signIn" /> */}
                                         Verify
+                                    </Button>
+                                    <Button type="primary" className="gx-mb-0" disabled onClick={() => { this.goToLogin() }}>
+                                        Sign in
                                     </Button>
                                 </Form.Item>
 
@@ -97,12 +105,12 @@ const wrappedNormalVerifyForm = Form.create()(VerifyAuthCode);
 const mapStateToProps = ({ auth }) => {
     // console.log(auth);
 
-    const { loader, alertMessage, showMessage, authUser } = auth;
-    return { loader, alertMessage, showMessage, authUser }
+    const { loader, alertMessage, showMessage, authUser, initURL } = auth;
+    return { loader, alertMessage, showMessage, authUser, initURL }
 };
 
 export default connect(mapStateToProps, {
     verifyCode,
-    // hideMessage,
+    goToLogin,
     showAuthLoader
 })(wrappedNormalVerifyForm);
