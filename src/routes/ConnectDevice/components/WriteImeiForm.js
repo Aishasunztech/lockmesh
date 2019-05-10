@@ -40,21 +40,16 @@ class WriteImeiForm extends Component {
                             required: true, message: 'IMEI number required',
                         },
                         {
-                            len: 15, message: 'Please Enter a valid IMEI number',
+                            len: 15, message: 'IMEI Number must be 15 digits long',
                         }
                         ],
                     })(
-                        <span className="numeric_field" >
-                            <Search
-                                max={15}
-                                type="Number"
-                                placeholder="Enter IMEI Number"
-                                enterButton={<a onClick={this.handleSubmit} type="primary" htmlType="submit">{this.props.buttonText}</a>}
-                            />
-                        </span>
+                        <Search
+                            type="Number"
+                            placeholder="Enter IMEI Number"
+                            enterButton={<a onClick={this.handleSubmit} type="primary">{this.props.buttonText}</a>}
+                        />
                     )}
-
-
                 </Form.Item>
             </Form>
         )

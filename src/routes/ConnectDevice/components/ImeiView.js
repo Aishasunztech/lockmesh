@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumber } from 'antd';
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
 import WriteImeiFrom from './WriteImeiForm'
 
 // import EditForm from './editForm';
 let editDevice;
-var imei1List;
-var imei2List;
+var coppyDevices = [];
+var status = true;
 export default class ImeiView extends Component {
 
     constructor(props) {
@@ -78,34 +79,51 @@ export default class ImeiView extends Component {
             imei1List: searchedData
         });
     }
-    searchField = (originalData, fieldName, value) => {
-        let demoData = [];
-
-        if (value.length) {
-            originalData.forEach((data) => {
-                // console.log(data);
-                if (data[fieldName] !== undefined) {
-                    if ((typeof data[fieldName]) === 'string') {
-
-                        if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
-                            demoData.push(data);
-                        }
-                    } else if (data[fieldName] != null) {
-                        if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
-                            demoData.push(data);
-                        }
-                    }
-                    // else {
-                    //     // demoDevices.push(device);
-                    // }
-                } else {
-                    demoData.push(data);
+    handleComponentSearch = (value, type) => {
+        try {
+            if (value.length) {
+                if (status) {
+                    coppyDevices = (type == 'imei1') ? this.state.imei1List : this.state.imei2List;
+                    status = false;
                 }
-            });
+                let foundDevices = componentSearch(coppyDevices, value);
+                console.log(value, coppyDevices, value, foundDevices);
+                if (foundDevices.length) {
+                    if (type == "imei1") {
+                        this.setState({
+                            imei1List: foundDevices,
+                        })
+                    } else {
+                        this.setState({
+                            imei2List: foundDevices,
+                        })
 
-            return demoData;
-        } else {
-            return originalData;
+                    }
+                } else {
+                    if (type == "imei1") {
+                        this.setState({
+                            imei1List: [],
+                        })
+                    } else {
+                        this.setState({
+                            imei2List: [],
+                        })
+                    }
+                }
+            } else {
+                status = true;
+                if (type == "imei1") {
+                    this.setState({
+                        imei1List: coppyDevices,
+                    })
+                } else {
+                    this.setState({
+                        imei2List: coppyDevices,
+                    })
+                }
+            }
+        } catch (error) {
+            // alert("hello");
         }
     }
     renderList = (imei_list, type) => {
@@ -186,7 +204,7 @@ export default class ImeiView extends Component {
                                             className="search_heading1"
                                             onKeyUp={
                                                 (e) => {
-                                                    this.handleSearch(e, 'imei1')
+                                                    this.handleComponentSearch(e, 'imei1')
                                                 }
                                             }
                                             autoComplete="new-password"
@@ -258,7 +276,7 @@ export default class ImeiView extends Component {
                                             className="search_heading1"
                                             onKeyUp={
                                                 (e) => {
-                                                    this.handleSearch(e, 'imei2')
+                                                    this.handleComponentSearch(e, 'imei2')
                                                 }
                                             }
                                             autoComplete="new-password"
@@ -308,6 +326,8 @@ export default class ImeiView extends Component {
                         </Col>
                     </Row>
                 </Modal>
-                        
-            </div>)
-}}
+
+            </div>
+        )
+    }
+}

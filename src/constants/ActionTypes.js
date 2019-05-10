@@ -162,3 +162,4 @@ export const GET_MARKET_APPS = 'GET_MARKET_APPS'
 
 // Socket Actions
 export const FINISHED_PUSH_APPS = 'FINISHED_PUSH_APPS';
+export const FINISHED_PULL_APPS = 'FINISHED_PULL_APPS';
