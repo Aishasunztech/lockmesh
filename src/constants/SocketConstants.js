@@ -25,3 +25,6 @@ export const SEND_PULLED_APPS_STATUS = 'send_pulled_apps_status_';
 export const FINISHED_PULL_APPS = 'finished_pull_apps_';
 export const ACK_pull_APPS = 'ack_pull_apps_';
 export const ACK_FINISHED_PULL_APPS = 'ack_finished_pull_apps_';
+
+
+export const PULL_PUSH_IN_PROCESS = 'pull_push_in_process';

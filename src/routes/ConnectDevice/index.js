@@ -40,7 +40,7 @@ import {
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
-import { ackFinishedPushApps, ackFinishedPullApps } from "../../appRedux/actions/Socket";
+import { ackFinishedPushApps, ackFinishedPullApps, pullPushInProcess } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
@@ -154,8 +154,8 @@ class ConnectDevice extends Component {
       this.props.getDealerApps();
       this.props.ackFinishedPushApps(this.props.socket, device_id);
       this.props.ackFinishedPullApps(this.props.socket, device_id);
+      this.props.pullPushInProcess(this.props.socket, device_id);
       // console.log('ack_finished_push_apps_' + device_id);
-
     }
 
 
@@ -385,7 +385,7 @@ class ConnectDevice extends Component {
     let onlineColor = (onlineStatus === 'Offline') ? { color: 'red' } : { color: 'green' }
     return (
       <div className="gutter-example">
-        {this.props.isLoading || this.props.device_details.is_push_apps ?
+        {this.props.isLoading || this.props.socket.is_push_apps ?
           <div className="gx-loader-view">
             <CircularProgress />
           </div> : null}
@@ -528,11 +528,12 @@ function mapDispatchToProps(dispatch) {
     reSyncDevice: reSyncDevice,
     getDealerApps: getDealerApps,
     ackFinishedPullApps: ackFinishedPullApps,
-    ackFinishedPushApps: ackFinishedPushApps
+    ackFinishedPushApps: ackFinishedPushApps,
+    pullPushInProcess: pullPushInProcess
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth }) => {
-  console.log("connect device state", device_details.device);
+var mapStateToProps = ({ routing, device_details, auth, socket }) => {
+  // console.log("connect device state", device_details.device);
   return {
     auth: auth,
     socket: auth.socket,
@@ -577,6 +578,7 @@ var mapStateToProps = ({ routing, device_details, auth }) => {
     secureSettingsMain: device_details.secureSettingsMain,
     forceUpdate: device_details.forceUpdate,
     apk_list: device_details.apk_list,
+    is_pull_apps: socket.is_pull_apps
   };
 }
 
