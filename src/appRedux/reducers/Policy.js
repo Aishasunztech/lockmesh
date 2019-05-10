@@ -12,7 +12,8 @@ import {
     POLICY_PERMSSION_SAVED,
     EDIT_POLICY,
     SAVE_POLICY_CHANGES,
-    GET_PAGINATION
+    GET_PAGINATION,
+    CHECK_HANDLE_ALL_POLICY
 
 } from "../../constants/ActionTypes";
 import {
@@ -50,6 +51,18 @@ const initialState = {
     guestAllallExtensions: false,
     encryptedAllallExtensions: false,
     enableAllallExtensions: false,
+
+    guestAll2dealerApps: false,
+    encryptedAll2dealerApps: false,
+    enableAll2dealerApps: false,
+
+    guestAll2appPermissions: false,
+    encryptedAll2appPermissions: false,
+    enableAll2appPermissions: false,
+
+    guestAll2allExtensions: false,
+    encryptedAll2allExtensions: false,
+    enableAll2allExtensions: false,
     DisplayPages: 10,
 }
 
@@ -154,7 +167,7 @@ export default (state = initialState, action) => {
             let key = action.payload.key;
             let stateToUpdate = action.payload.stateToUpdate;
             let rowId = changedState.findIndex(item => item.id == policyId);
-            // console.log(policyId, 'row id', rowId)
+            //  console.log(policyId, 'row id', rowId)
 
             if (rowId >= 0) {
                 let index = -1;
@@ -378,6 +391,67 @@ export default (state = initialState, action) => {
                         value: action.payload.value
                     },
 
+                }
+            }
+        }
+
+
+        case CHECK_HANDLE_ALL_POLICY: {
+             
+            //  console.log(state.policies,'reducer', action.payload);
+             let changedState = JSON.parse(JSON.stringify(state.policies));
+             let chandedRowIndex = changedState.findIndex((item)=> item.id == action.payload.rowId) 
+
+            if (action.payload.stateToUpdate === 'allExtensions') {
+                state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;    
+                changedState[chandedRowIndex]['secure_apps'].forEach(extension => {
+                    if (extension.uniqueName === action.payload.uniqueName) {
+                        extension.subExtension.forEach(obj => {
+                            obj[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                            obj.isChanged = true;
+                        });
+                    }
+                });
+
+                state.policies = JSON.parse(JSON.stringify(changedState));
+
+                // console.log(state.policies, 'updated')
+                return {
+                    ...state,
+                    policies: [...state.policies],
+                }
+            }
+
+            else if (action.payload.stateToUpdate === 'dealerApps') {
+           
+                state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
+                changedState[chandedRowIndex]['push_apps'].forEach(app => {
+                    app.isChanged = true;
+                    app[action.payload.key] = action.payload.value;
+                });
+
+                state.policies = JSON.parse(JSON.stringify(changedState));
+
+                // console.log(state.policies, 'updated')
+                return {
+                    ...state,
+                    policies: [...state.policies],
+                }
+            }
+
+            else if (action.payload.stateToUpdate === 'appPermissions') {
+                state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
+                changedState[chandedRowIndex]['app_list'].forEach(app => {
+                    app.isChanged = true;
+                    app[action.payload.key] = action.payload.value;
+                });
+
+                state.policies = JSON.parse(JSON.stringify(changedState));
+
+                // console.log(state.policies, 'updated')
+                return {
+                    ...state,
+                    policies: [...state.policies],
                 }
             }
         }

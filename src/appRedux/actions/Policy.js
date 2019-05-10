@@ -10,7 +10,8 @@ import {
     HANDLE_POLICY_STATUS,
     EDIT_POLICY,
     POLICY_PERMSSION_SAVED,
-    SAVE_POLICY_CHANGES
+    SAVE_POLICY_CHANGES,
+    CHECK_HANDLE_ALL_POLICY
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -179,7 +180,7 @@ export function SavePolicyChanges(record) {
 
 
 export function handleEditPolicy(e, key, id, stateToUpdate='',rowId, uniqueName='') {
-    // console.log('action called', e , key, id, stateToUpdate, uniqueName)
+    //  console.log('action called', e , key, id, stateToUpdate, uniqueName)
     return (dispatch) => {
         dispatch({
             type: EDIT_POLICY,
@@ -210,6 +211,22 @@ export function handleCheckAllAppPolicy(e, key, stateToUpdate, uniqueName = '') 
                 // app_id: app_id,
                 stateToUpdate: stateToUpdate,
                 uniqueName: uniqueName
+            }
+        })
+    }
+}
+
+export function handleCheckAll(e, key, stateToUpdate, uniqueName = '', rowId) {
+    return (dispatch) => {
+        dispatch({
+            type: CHECK_HANDLE_ALL_POLICY,
+            payload: {
+                value: e,
+                key: key,
+                // app_id: app_id,
+                stateToUpdate: stateToUpdate,
+                uniqueName: uniqueName,
+                rowId: rowId
             }
         })
     }

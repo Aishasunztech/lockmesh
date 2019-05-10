@@ -78,17 +78,20 @@ class AppList extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log("app list in list, nextProps", nextProps);
+        // console.log(this.props.apk_list, "app list in list, nextProps", nextProps.apk_list);
         // alert("componentWillReceiveProps");
         // console.log(nextProps.enableAll, 'enable all is')
+        if (this.props !== nextProps) {
+            this.setState({
+                apk_list: nextProps.apk_list,
+                allExtensions: nextProps.allExtensions,
+                // app_list_count: this.props.length,
+                guestAll: nextProps.guestAll,
+                encryptedAll: nextProps.encryptedAll,
+                enableAll: nextProps.enableAll
+            })
+        }
 
-        this.setState({
-            apk_list: nextProps.apk_list,
-            // app_list_count: this.props.length,
-            guestAll: nextProps.guestAll,
-            encryptedAll: nextProps.encryptedAll,
-            enableAll: nextProps.enableAll
-        })
     }
 
     componentDidUpdate(nextProps, prevState, snapshot) {
@@ -108,18 +111,26 @@ class AppList extends Component {
             key = 'enable';
         }
 
-        if (this.props.apps) this.props.handleCheckAllAppPolicy(value, key, this.props.apps)
-        else if (this.props.appPermissions) this.props.handleCheckAllAppPolicy(value, key, this.props.appPermissions)
-        else if (this.props.secureSettings) this.props.handleCheckAllAppPolicy(value, key, this.props.secureSettings)
+        if (this.props.edit) {
+            if (this.props.apps) this.props.handleCheckAll(value, key, this.props.apps, '', this.props.rowId)
+            else if (this.props.appPermissions) this.props.handleCheckAll(value, key, this.props.appPermissions, '', this.props.rowId)
+            else if (this.props.secureSettings) this.props.handleCheckAll(value, key, this.props.secureSettings, SECURE_SETTING, this.props.rowId)
+        } else {
+
+            if (this.props.apps) this.props.handleCheckAllAppPolicy(value, key, this.props.apps)
+            else if (this.props.appPermissions) this.props.handleCheckAllAppPolicy(value, key, this.props.appPermissions)
+            else if (this.props.secureSettings) this.props.handleCheckAllAppPolicy(value, key, this.props.secureSettings)
+        }
+
 
     }
 
     handleChecked = (e, key, app_id) => {
         if (this.props.edit) {
-            console.log('handle checked is called')
+            // console.log('handle checked is called')
             if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps', this.props.rowId)
-            else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id, this.props.appPermissions)
-            else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id, this.props.secureSettings)
+            else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id, 'app_list', this.props.rowId)
+            else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id, 'secure_apps', this.props.rowId, SECURE_SETTING)
         } else {
             if (this.props.apps) this.props.handleCheckApp(e, key, app_id, this.props.apps)
             else if (this.props.appPermissions) this.props.handleCheckApp(e, key, app_id, this.props.appPermissions)
@@ -181,8 +192,8 @@ class AppList extends Component {
                         ref={`guest_${app_id}`}
                         name={`guest_${app_id}`}
                         value={guest}
-                        checked={((guest === true || guest === 1) ? true : false)}
-                         disabled={this.props.isCheckbox ? !isAvailable: false}
+                        checked={this.props.edit ? ((guest === true || guest === 1) ? true : false): (isAvailable ? ((guest === true || guest === 1) ? true : false) : false)}
+                        disabled={this.props.isCheckbox ? !isAvailable : false}
                         onClick={(e) => {
                             this.handleChecked(e, "guest", app_id)
 
@@ -195,8 +206,8 @@ class AppList extends Component {
                         ref={`encrypted_${app_id}`}
                         name={`encrypted_${app_id}`}
                         // value={encrypted}
-                         disabled={this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable: false}
-                        checked={ app.default_app == 1 ? true : ((encrypted === true || encrypted === 1) ? true : false) }
+                        disabled={this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false}
+                        checked={app.default_app == 1 ? true : this.props.edit ? ((encrypted === true || encrypted === 1) ? true : false): (isAvailable ? ((encrypted === true || encrypted === 1) ? true : false) : false)}
                         onClick={(e) => {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app_id);
@@ -209,8 +220,8 @@ class AppList extends Component {
                         ref={`enable_${app_id}`}
                         name={`enable_${app_id}`}
                         // value={enable}
-                        checked={app.default_app == 1 ? true :((enable === true || enable === 1) ? true : false)}
-                         disabled={this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable :  false}
+                        checked={app.default_app == 1 ? true : this.props.edit ? ((enable === true || enable === 1) ? true : false): (isAvailable ? ((enable === true || enable === 1) ? true : false) : false)}
+                        disabled={this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false}
                         onClick={(e) => {
                             this.handleChecked(e, "enable", app_id);
                         }}
@@ -283,7 +294,6 @@ class AppList extends Component {
                     return this.renderExtensionsApp(app)
                 })
             }
-
         }
         // else {
         //     return this.props.app_list.map(app => {

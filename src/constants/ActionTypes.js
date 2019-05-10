@@ -105,6 +105,7 @@ export const CHANGE_PAGE = 'CHANGE_PAGE';
 
 export const HANDLE_CHECK_APP = 'HANDLE_CHECK_APP';
 export const HANDLE_CHECK_ALL = 'HANDLE_CHECK_ALL';
+export const CHECK_HANDLE_ALL_POLICY = 'CHECK_HANDLE_ALL_POLICY';
 
 export const PUSH_APPS = 'PUSH_APPS';
 export const PULL_APPS = 'PULL_APPS';

@@ -20,11 +20,6 @@ class PolicyList extends Component {
         }
     }
 
-    editPolicy() {
-        // alert("Edit Policy")
-    }
-
-
     expandRow = (rowId, btnof, expandedByCustom = false) => {
         //  console.log('btn is', btnof)
         // this.setState({
@@ -225,7 +220,7 @@ class PolicyList extends Component {
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
-                            console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                            // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
                                 <PolicyInfo
                                     selected={this.state.expandTabSelected[record.rowKey]}
@@ -233,7 +228,19 @@ class PolicyList extends Component {
                                     isSwitch= {this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
                                     rowId={record.policy_id}
                                     handleEditPolicy={this.props.handleEditPolicy}
+                                    handleCheckAll={this.props.handleCheckAll}
                                     edit={true}
+                                    guestAlldealerApps={this.props.guestAlldealerApps}
+                                    encryptedAlldealerApps={this.props.encryptedAlldealerApps}
+                                    enableAlldealerApps={this.props.enableAlldealerApps}
+                
+                                    guestAllappPermissions={this.props.guestAllappPermissions}
+                                    encryptedAllappPermissions={this.props.encryptedAllappPermissions}
+                                    enableAllappPermissions={this.props.enableAllappPermissions}
+                
+                                    guestAllallExtensions={this.props.guestAllallExtensions}
+                                    encryptedAllallExtensions={this.props.encryptedAllallExtensions}
+                                    enableAllallExtensions={this.props.enableAllallExtension}
                                 />
                             )
                         }}
