@@ -82,9 +82,9 @@ export default class ImeiView extends Component {
     handleComponentSearch = (e, type) => {
         try { 
            let value = e.target.value;
-            console.log(status,'searched value', e.target.value)
+            // console.log(status,'searched value', e.target.value)
             if (value.length) {
-                console.log(status,'searched value', value)
+                // console.log(status,'searched value', value)
                 if (status) {
                     // console.log('status')
                     if (type == "imei1") {
@@ -97,7 +97,7 @@ export default class ImeiView extends Component {
                 }
                 // console.log(this.state.users,'coppy de', coppyDevices)
                 let foundImeis = componentSearch(coppyImeis, value);
-                 console.log('found devics', foundImeis)
+                //  console.log('found devics', foundImeis)
                 if (foundImeis.length) {
                     if (type == "imei1") {
                         this.setState({
