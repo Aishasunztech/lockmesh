@@ -175,14 +175,14 @@ export default class ImeiView extends Component {
                 <Modal
                     width='720px'
                     visible={visible}
-                    title={<div className="text-center"><span style={{ float: "left", lineHeight: "36px" }}>MANAGE IMEI</span> <a className="text-right" href='https://dyrk.org/tools/imei/' target='blank'><Button> Generate IMEI number </Button></a></div>}
+                    title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"> <a href='https://dyrk.org/tools/imei/' target='blank'><Button> Generate IMEI number </Button></a></div></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
                 >
                     <Row>
-                        <Col span={12}>
+                        <Col span={12} className="pr-8">
                             <WriteImeiFrom
                                 ref='form1'
                                 buttonText='WRITE IMEI 1'
@@ -191,7 +191,7 @@ export default class ImeiView extends Component {
                                 device={this.props.device}
                             />
                         </Col>
-                        <Col span={12}>
+                        <Col span={12} className="pl-8">
                             <WriteImeiFrom
                                 ref='form2'
                                 buttonText='WRITE IMEI 2'
@@ -204,7 +204,7 @@ export default class ImeiView extends Component {
                     </Row>
 
                     <Row>
-                        <Col span={12}>
+                        <Col span={12} className="pr-8">
                             <Fragment>
                                 <div className="row">
                                     <div className="col-md-3">
@@ -267,7 +267,7 @@ export default class ImeiView extends Component {
                                 />
                             </Fragment>
                         </Col>
-                        <Col span={12}>
+                        <Col span={12} className="pl-8">
                             <Fragment>
 
                                 <div className="row">
