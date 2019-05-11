@@ -7,8 +7,9 @@ import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
 
 import {
-    getPolicies,handlePolicyStatus,
-    handleEditPolicy, SavePolicyChanges
+    getPolicies, handlePolicyStatus,
+    handleEditPolicy, SavePolicyChanges,
+    handleCheckAll
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -31,9 +32,10 @@ import {
     POLICY_NOTE
 } from "../../constants/PolicyConstants";
 
-import {
-    titleCase
-} from '../utils/commonUtils';
+import { componentSearch, titleCase } from '../utils/commonUtils';
+
+var coppyPolicy = [];
+var status = true;
 
 class Policy extends Component {
     constructor(props) {
@@ -89,7 +91,7 @@ class Policy extends Component {
                         key="policy_name"
                         id="policy_name"
                         className="search_heading"
-                        // onKeyUp={this.handleSearch}
+                        onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder={titleCase(POLICY_NAME)}
                     />
@@ -111,9 +113,9 @@ class Policy extends Component {
             {
                 title: (
                     <Input.Search
-                        name="policy_command"
-                        key="policy_command"
-                        id="policy_command"
+                        name="command_name"
+                        key="command_name"
+                        id="command_name"
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
@@ -176,23 +178,28 @@ class Policy extends Component {
             policyModal: false,
             policies: (this.props.policies) ? this.props.policies : [],
             current: 0,
-           
+
         }
+
 
     }
     componentDidMount() {
         // console.log(this.props, 'his')
         this.props.getPolicies();
         this.props.getPagination('policies');
+        this.setState({
+            policies: this.props.policies
+        })
         // this.props.getApkList();
         // this.props.getDefaultApps();
     }
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-            // console.log('this.props ', this.props.DisplayPages);
+            // console.log('this.props ', this.props.policies);
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
+                policies: this.props.policies
             })
         }
     }
@@ -200,8 +207,91 @@ class Policy extends Component {
     handlePagination = (value) => {
         //   alert(value);
         //  console.log('pagination value of ', value)
-         this.refs.policyList.handlePagination(value);
+        this.refs.policyList.handlePagination(value);
         this.props.postPagination(value, 'policies');
+    }
+
+    handleComponentSearch = (value) => {
+        //    console.log('values sr', value)   
+        try {
+            if (value.length) {
+
+                // console.log('length')
+
+                if (status) {
+                    // console.log('status')
+                    coppyPolicy = this.state.policies;
+                    status = false;
+                }
+                // console.log(this.state.users,'coppy de', coppyDevices)
+                let foundPolicies = componentSearch(coppyPolicy, value);
+                // console.log('found devics', foundPolicies)
+                if (foundPolicies.length) {
+                    this.setState({
+                        policies: foundPolicies,
+                    })
+                } else {
+                    this.setState({
+                        policies: []
+                    })
+                }
+            } else {
+                status = true;
+
+                this.setState({
+                    policies: coppyPolicy,
+                })
+            }
+        } catch (error) {
+            // alert("hello");
+        }
+    }
+
+    handleSearch = (e) => {
+        //  console.log('============ check search value ========')
+        //  console.log(e.target.name , e.target.value);
+
+        let demoPolicy = [];
+        if (status) {
+            coppyPolicy = this.state.policies;
+            status = false;
+        }
+        //   console.log("devices", coppyDevices);
+
+        if (e.target.value.length) {
+            // console.log("keyname", e.target.name);
+            // console.log("value", e.target.value);
+            // console.log(this.state.devices);
+            coppyPolicy.forEach((policy) => {
+                //   console.log(policy,"user", policy[e.target.name]);
+
+                if (policy[e.target.name] !== undefined) {
+                    if ((typeof policy[e.target.name]) === 'string') {
+                        //  console.log("string check", policy[e.target.name])
+                        if (policy[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+                            demoPolicy.push(policy);
+                        }
+                    } else if (policy[e.target.name] != null) {
+                        // console.log("else null check", policy[e.target.name])
+                        if (policy[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+                            demoPolicy.push(policy);
+                        }
+                    } else {
+                        // demoUsers.push(policy);
+                    }
+                } else {
+                    demoPolicy.push(policy);
+                }
+            });
+            //  console.log("searched value", demoPolicy);
+            this.setState({
+                policies: demoPolicy
+            })
+        } else {
+            this.setState({
+                policies: coppyPolicy
+            })
+        }
     }
 
     handlePolicyModal = (visible) => {
@@ -231,13 +321,25 @@ class Policy extends Component {
                 />
                 <PolicyList
                     columns={this.columns}
-                    policies={this.props.policies}
+                    policies={this.state.policies}
                     handlePolicyStatus={this.props.handlePolicyStatus}
                     handleEditPolicy={this.props.handleEditPolicy}
+                    handleCheckAll={this.props.handleCheckAll}
                     SavePolicyChanges={this.props.SavePolicyChanges}
                     pagination={this.props.DisplayPages}
                     ref='policyList'
-                   
+                    guestAlldealerApps={this.props.guestAlldealerApps}
+                    encryptedAlldealerApps={this.props.encryptedAlldealerApps}
+                    enableAlldealerApps={this.props.enableAlldealerApps}
+
+                    guestAllappPermissions={this.props.guestAllappPermissions}
+                    encryptedAllappPermissions={this.props.encryptedAllappPermissions}
+                    enableAllappPermissions={this.props.enableAllappPermissions}
+
+                    guestAllallExtensions={this.props.guestAllallExtensions}
+                    encryptedAllallExtensions={this.props.encryptedAllallExtensions}
+                    enableAllallExtensions={this.props.enableAllallExtension}
+
                 />
                 <Modal
                     maskClosable={false}
@@ -255,7 +357,7 @@ class Policy extends Component {
                         apk_list={this.props.apk_list}
                         app_list={this.props.app_list}
                         handlePolicyModal={this.handlePolicyModal}
-                        getPolicies={this.props.getPolicies}    
+                        getPolicies={this.props.getPolicies}
                         ref='addPolicy'
                     />
                 </Modal>
@@ -265,7 +367,7 @@ class Policy extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-   
+
     return bindActionCreators({
         getPolicies: getPolicies,
         // postDropdown: postDropdown,
@@ -273,19 +375,32 @@ function mapDispatchToProps(dispatch) {
         getPagination: getPagination,
         handlePolicyStatus: handlePolicyStatus,
         handleEditPolicy: handleEditPolicy,
-        SavePolicyChanges : SavePolicyChanges
+        SavePolicyChanges: SavePolicyChanges,
+        handleCheckAll: handleCheckAll,
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);
 }
 var mapStateToProps = ({ policies }) => {
-    console.log('pages to display', policies.DisplayPages)
+    // console.log('pages to display', policies.DisplayPages)
     //  console.log("policies", policies.policies);
     return {
         policies: policies.policies,
         apk_list: policies.apk_list,
         app_list: policies.app_list,
-        DisplayPages: policies.DisplayPages
+        DisplayPages: policies.DisplayPages,
+
+        guestAlldealerApps: policies.guestAll2dealerApps,
+        encryptedAlldealerApps: policies.encryptedAll2dealerApps,
+        enableAlldealerApps: policies.enableAll2dealerApps,
+
+        guestAllappPermissions: policies.guestAll2appPermissions,
+        encryptedAllappPermissions: policies.encryptedAll2appPermissions,
+        enableAllappPermissions: policies.enableAll2appPermissions,
+
+        guestAllallExtensions: policies.guestAll2allExtensions,
+        encryptedAllallExtensions: policies.encryptedAll2allExtensions,
+        enableAllallExtensions: policies.enableAll2allExtensions,
     };
 }
 
