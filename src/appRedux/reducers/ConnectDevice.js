@@ -58,6 +58,7 @@ import {
     message, Modal
 } from 'antd';
 
+const warning = Modal.warning;
 const confirm = Modal.confirm;
 const actions = require("../../appRedux/actions/ConnectDevice")
 
@@ -312,9 +313,14 @@ export default (state = initialState, action) => {
         case PUSH_APPS: {
             if (action.payload.status) {
                 if (action.payload.online) {
-                    message.success(action.payload.msg)
+                   
+                     message.success(action.payload.msg)
                 } else {
-                    message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: 'Apps pushed to device. Action will be performed when device is back online',
+                      });
                 }
             } else {
                 message.error(action.payload.msg)
