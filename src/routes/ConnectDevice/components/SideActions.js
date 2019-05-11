@@ -71,7 +71,7 @@ const DealerAppModal = (props) => {
         <Modal
             // closable={false}
             style={{ top: 20 }}
-            width="650px"
+            width="780px"
             title="Select Apps"
             visible={props.pushAppsModal}
             onOk={() => {

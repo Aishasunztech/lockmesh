@@ -54,9 +54,7 @@ import {
     NOT_AVAILABLE, MAIN_MENU,
 } from '../../constants/Constants';
 
-import {
-    message, Modal
-} from 'antd';
+import { message, Modal, Alert, Icon } from 'antd';
 
 const confirm = Modal.confirm;
 const actions = require("../../appRedux/actions/ConnectDevice")
@@ -314,7 +312,16 @@ export default (state = initialState, action) => {
                 if (action.payload.online) {
                     message.success("Apps are Being pushed")
                 } else {
-                    message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    // Alert.warning('jhdskfh');
+                    {/* <Alert
+                        message="Warning Device Offline"
+                        description="Apps pushed to device.Action will be performed when device is back online"
+                        type="warning"
+                        showIcon
+                    /> */}
+                    // message.open({ icon: <Icon type="question-circle" className="warn_icon" />, content: (<div><span>Warning Device Offline</span> Apps pushed to device.Action will be performed when device is back online</div>) })
+
+                    message.warning(<Fragment><b >Warning Device Offline</b><div className="mt-4">Apps pushed to device. Action will be performed <br></br> when device is back online</div></Fragment>)
                 }
             } else {
                 message.error(action.payload.msg)

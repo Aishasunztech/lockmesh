@@ -185,7 +185,7 @@ export default class ImeiView extends Component {
         return (
             <div>
                 <Modal
-                    width='720px'
+                    width='850px'
                     visible={visible}
                     title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"> <a href='https://dyrk.org/tools/imei/' target='blank'><Button> Generate IMEI number </Button></a></div></div>}
                     onOk={this.handleOk}
@@ -194,7 +194,7 @@ export default class ImeiView extends Component {
                     className="edit_form"
                 >
                     <Row>
-                        <Col span={12} className="pr-8">
+                        <Col span={11} className="p-16 imei_col_11" >
                             <WriteImeiFrom
                                 ref='form1'
                                 buttonText='WRITE IMEI 1'
@@ -202,21 +202,6 @@ export default class ImeiView extends Component {
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
                             />
-                        </Col>
-                        <Col span={12} className="pl-8">
-                            <WriteImeiFrom
-                                ref='form2'
-                                buttonText='WRITE IMEI 2'
-                                type='IMEI2'
-                                writeImei={this.props.writeImei}
-                                device={this.props.device}
-                            />
-                        </Col>
-
-                    </Row>
-
-                    <Row>
-                        <Col span={12} className="pr-8">
                             <Fragment>
                                 <div className="row">
                                     <div className="col-md-3">
@@ -237,7 +222,6 @@ export default class ImeiView extends Component {
                                             placeholder="IMEI 1 NUMBER"
                                         />
                                     </div>
-
                                 </div>
 
                                 <Table
@@ -273,12 +257,21 @@ export default class ImeiView extends Component {
 
                                         },
                                     ]}
+                                    bordered
                                     dataSource={this.renderList(this.state.imei1List, 'IMEI 1')}
                                     scroll={{ y: 350 }}
                                 />
                             </Fragment>
+
                         </Col>
-                        <Col span={12} className="pl-8">
+                        <Col span={11} className="p-16 imei_col_11">
+                            <WriteImeiFrom
+                                ref='form2'
+                                buttonText='WRITE IMEI 2'
+                                type='IMEI2'
+                                writeImei={this.props.writeImei}
+                                device={this.props.device}
+                            />
                             <Fragment>
 
                                 <div className="row">
@@ -300,7 +293,6 @@ export default class ImeiView extends Component {
                                             placeholder="IMEI 2 NUMBER"
                                         />
                                     </div>
-
                                 </div>
 
                                 <Table
@@ -336,17 +328,16 @@ export default class ImeiView extends Component {
 
                                         },
                                     ]}
+                                    bordered
                                     dataSource={this.renderList(this.state.imei2List, 'IMEI 2')}
                                     scroll={{ y: 350 }}
                                 />
                             </Fragment>
-
                         </Col>
                     </Row>
-
                 </Modal>
-            </div >
-        )
 
+            </div>
+        )
     }
 }
