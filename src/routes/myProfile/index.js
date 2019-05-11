@@ -27,14 +27,14 @@ class Profile extends Component {
     }
 
     handleOk1 = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
     }
 
     handleCancel1 = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
@@ -231,7 +231,7 @@ var matchDispatchToProps = (dispatch) => {
 var mapStateToProps = ({auth}) => {
     // console.log("mapStateToProps");
     // console.log('ooo', state.auth);
-    console.log(auth.authUser);
+    // console.log(auth.authUser);
     return {
         profile: auth.authUser
 

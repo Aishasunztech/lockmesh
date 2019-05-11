@@ -127,7 +127,9 @@ export default (state = INIT_STATE, action) => {
           two_factor_auth: null
         },
         initURL: '/',
-        loader: false
+        loader: false,
+        two_factor_auth: false
+
       }
     }
 

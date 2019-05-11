@@ -36,11 +36,12 @@ class Login extends React.Component {
       }, 100);
     }
     const { authUser } = this.props;
-
-    if(this.props.auth.two_factor_auth===true || this.props.auth.two_factor_auth===1 || this.props.auth.two_factor_auth ==='true'){
+    // console.log(this.props.auth);
+    if (this.props.auth.two_factor_auth === true || this.props.auth.two_factor_auth === 1 || this.props.auth.two_factor_auth === 'true') {
+      // console.log("asdaddsa");
       this.props.history.push('/verify-auth');
     }
-    
+
     if (authUser.id != null && authUser.email != null && authUser.token != null && authUser.type != null) {
       this.props.history.push('/');
     }

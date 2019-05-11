@@ -10,7 +10,7 @@ import RestService from '../services/RestServices';
 
 export function transferApps(data) {
     return (dispatch) => {
-        console.log(data);
+        // console.log(data);
         RestService.transferApps(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({

@@ -7,7 +7,7 @@ import {
 } from 'antd';
 
 const initialState = {
-    is_pull_apps: false
+    is_in_process: false
 };
 
 export default (state = initialState, action) => {
@@ -17,20 +17,20 @@ export default (state = initialState, action) => {
             // console.log("works");
             message.success("Apps Pushed Successfully.")
             return {
-                is_pull_apps: false
+                is_in_process: false
             }
         }
         case FINISHED_PULL_APPS: {
             // console.log("works");
             message.success("Apps Pulled Successfully.")
             return {
-                is_pull_apps: false
+                is_in_process: false
             }
         }
         case PULL_PUSH_INPROCESS: {
             // console.log("works");
             return {
-                is_pull_apps: true
+                is_in_process: true
             }
         }
         default:
