@@ -75,9 +75,10 @@ export default class Activity extends Component {
     renderList = () => {
         let data = this.state.activities;
         if (data.length) {
-           return data.map((row) => {
-                return{
-                    activity_name: row.activity_name,
+            return data.map((row, index) => {
+                return {
+                    key: index,
+                    action_name: row.action_name.toUpperCase(),
                     created_at: row.created_at
                 }
             })
@@ -129,12 +130,14 @@ export default class Activity extends Component {
                                 className: '',
                                 sorter: (a, b) => { return a.created_at.localeCompare(b.created_at) },
                                 sortDirections: ['ascend', 'descend'],
+                                defaultSortOrder: 'descend'
 
                             },
                         ]}
                         bordered
                         dataSource={this.renderList()}
                         scroll={{ y: 350 }}
+                        pagination={false}
                     />
 
                 </Modal>

@@ -993,10 +993,11 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
     }
 }
 
-export const getActivities = () => {
+export const getActivities = (device_id) => {
     return (dispatch) => {
-        RestService.getActivities().then((response) => {
+        RestService.getActivities(device_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
                 dispatch({
                     type: GET_ACTIVITIES,
                     payload: response.data

@@ -254,12 +254,14 @@ export default class ImeiView extends Component {
                                             className: '',
                                             sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
                                             sortDirections: ['ascend', 'descend'],
+                                            defaultSortOrder: 'descend'
 
                                         },
                                     ]}
                                     bordered
                                     dataSource={this.renderList(this.state.imei1List, 'IMEI 1')}
                                     scroll={{ y: 350 }}
+                                    pagination={false}
                                 />
                             </Fragment>
 
@@ -325,12 +327,14 @@ export default class ImeiView extends Component {
                                             className: '',
                                             sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
                                             sortDirections: ['ascend', 'descend'],
+                                            defaultSortOrder: 'descend'
 
                                         },
                                     ]}
                                     bordered
                                     dataSource={this.renderList(this.state.imei2List, 'IMEI 2')}
                                     scroll={{ y: 350 }}
+                                    pagination={false}
                                 />
                             </Fragment>
                         </Col>

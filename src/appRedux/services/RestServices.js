@@ -558,8 +558,8 @@ const RestService = {
         return axios.get(BASE_URL + "users/get_imei_history/" + device_id, RestService.getHeader());
     },
 
-    getActivities: () => {
-        return axios.get(BASE_URL + "users/get_activities", RestService.getHeader());
+    getActivities: (device_id) => {
+        return axios.get(BASE_URL + "users/get_activities/" + device_id, RestService.getHeader());
     },
 
     //GET User List

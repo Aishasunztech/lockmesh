@@ -176,7 +176,7 @@ class SideActions extends Component {
     }
 
     componentDidMount() {
-        this.props.getActivities()
+        this.props.getActivities(this.props.device.device_id)
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
@@ -186,8 +186,8 @@ class SideActions extends Component {
             policyName: this.props.policyName,
             activities: this.props.activities
         });
-        
-       
+
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -405,7 +405,7 @@ class SideActions extends Component {
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
 
                                 {/* <Tooltip placement="left" title="Coming Soon"> */}
-                                    <Button type="default " style={{ width: "100%", marginBottom: 16 }} onClick={() => this.refs.activity.showModal()} >Activity</Button>
+                                <Button type="default " style={{ width: "100%", marginBottom: 16 }} onClick={() => this.refs.activity.showModal()} >Activity</Button>
                                 {/* </Tooltip> */}
                             </Col>
                         </Row>
@@ -564,7 +564,7 @@ class SideActions extends Component {
                 <Activity
                     ref='activity'
                     activities={this.state.activities}
-                  
+
                 />
             </div>
         )
