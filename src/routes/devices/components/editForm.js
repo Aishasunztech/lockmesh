@@ -119,8 +119,8 @@ class EditDevice extends Component {
                     <p>(*)- Required Fields</p>
                     <Form.Item
                         label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? "Device ID " : null}
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
                         {this.props.form.getFieldDecorator('device_id', {
                             initialValue: this.props.device.device_id,
@@ -138,7 +138,7 @@ class EditDevice extends Component {
                         <Fragment>
                             <Form.Item
                                 label="USER ID"
-                                labelCol={{ span: 8 }}
+                                labelCol={{ span: 8, xs: 24, md: 8, sm: 24 }}
                                 wrapperCol={{ span: 10 }}
                             >
 
@@ -220,8 +220,8 @@ class EditDevice extends Component {
                     </Form.Item>
                     <Form.Item
                         label="Name "
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
                         {this.props.form.getFieldDecorator('name', {
                             initialValue: checkValue(this.props.device.name),
@@ -236,8 +236,8 @@ class EditDevice extends Component {
                     <Form.Item
 
                         label="Account Email "
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
                         {this.props.form.getFieldDecorator('email', {
                             initialValue: this.props.device.account_email,
@@ -255,8 +255,8 @@ class EditDevice extends Component {
 
                     <Form.Item
                         label="PGP Email "
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         showSearch
                     >
                         {this.props.form.getFieldDecorator('pgp_email', {
@@ -286,8 +286,8 @@ class EditDevice extends Component {
                     </Form.Item>
                     <Form.Item
                         label="Client ID "
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
                         {this.props.form.getFieldDecorator('client_id', {
 
@@ -298,8 +298,8 @@ class EditDevice extends Component {
                     </Form.Item>
                     <Form.Item
                         label="Chat ID"
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         showSearch
                     >
                         {this.props.form.getFieldDecorator('chat_id', {
@@ -325,8 +325,8 @@ class EditDevice extends Component {
 
                     <Form.Item
                         label="Sim ID "
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         showSearch
                     >
                         {this.props.form.getFieldDecorator('sim_id', {
@@ -351,8 +351,8 @@ class EditDevice extends Component {
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
                         <Form.Item
                             label="Model"
-                            labelCol={{ span: 8 }}
-                            wrapperCol={{ span: 14 }}
+                            labelCol={{ span: 8, xs: 24, sm: 8 }}
+                            wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         >
                             {this.props.form.getFieldDecorator('model', {
                                 initialValue: checkValue(this.props.device.model),
@@ -363,8 +363,8 @@ class EditDevice extends Component {
                     }
                     <Form.Item
                         label="Start Date "
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
                         {this.props.form.getFieldDecorator('start_date', {
                             initialValue: (this.props.device.start_date) ? this.props.device.start_date : this.createdDate()
@@ -375,8 +375,8 @@ class EditDevice extends Component {
                     </Form.Item>
                     <Form.Item
                         label="Expiry Date "
-                        labelCol={{ span: 8 }}
-                        wrapperCol={{ span: 14 }}
+                        labelCol={{ span: 8, xs: 24, sm: 8 }}
+                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
                         {this.props.form.getFieldDecorator('expiry_date', {
                             initialValue: this.props.device.expiry_date,
@@ -402,8 +402,8 @@ class EditDevice extends Component {
 
                             <Form.Item
                                 label="NOTE"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                labelCol={{ span: 8, xs: 24, sm: 8 }}
+                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
                                 {this.props.form.getFieldDecorator('note', {
                                     initialValue: this.props.device.note,
@@ -414,8 +414,8 @@ class EditDevice extends Component {
                             </Form.Item>
                             <Form.Item
                                 label="VALID FOR(DAYS)"
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                labelCol={{ span: 8, xs: 24, sm: 8 }}
+                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
                                 {this.props.form.getFieldDecorator('validity', {
                                     initialValue: this.props.device.validity,
@@ -433,8 +433,8 @@ class EditDevice extends Component {
                         <Fragment>
                             <Form.Item
                                 label="Dealer Pin "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                labelCol={{ span: 8, xs: 24, sm: 8 }}
+                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
                                 <Input value={this.props.device.link_code} disabled />
 
@@ -442,8 +442,8 @@ class EditDevice extends Component {
 
                             <Form.Item
                                 label="IMEI 1 "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                labelCol={{ span: 8, xs: 24, sm: 8 }}
+                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
 
                                 <Input type='text' value={this.props.device.imei} disabled />
@@ -451,16 +451,16 @@ class EditDevice extends Component {
                             </Form.Item>
                             <Form.Item
                                 label="SIM 1 "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                labelCol={{ span: 8, xs: 24, sm: 8 }}
+                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
                                 <Input value={this.props.device.simno} disabled />
 
                             </Form.Item>
                             <Form.Item
                                 label="IMEI 2 "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                labelCol={{ span: 8, xs: 24, sm: 8 }}
+                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
 
                                 <Input value={this.props.device.imei2} disabled />
@@ -468,8 +468,8 @@ class EditDevice extends Component {
                             </Form.Item>
                             <Form.Item
                                 label="SIM 2 "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
+                                labelCol={{ span: 8, xs: 24, sm: 8 }}
+                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
                                 <Input value={this.props.device.simno2} disabled />
 

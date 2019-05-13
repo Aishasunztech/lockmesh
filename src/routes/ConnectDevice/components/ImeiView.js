@@ -175,14 +175,14 @@ export default class ImeiView extends Component {
                 <Modal
                     width='850px'
                     visible={visible}
-                    title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"> <a href='https://dyrk.org/tools/imei/' target='blank'><Button> Generate IMEI number </Button></a></div></div>}
+                    title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"><Button> <a href='https://dyrk.org/tools/imei/' target='blank'> Generate IMEI number</a></Button></div></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
                 >
                     <Row>
-                        <Col span={11} className="p-16 imei_col_11" >
+                        <Col span={11} md={11} sm={23} xs={23} className="p-16 imei_col_11" >
                             <WriteImeiFrom
                                 ref='form1'
                                 buttonText='WRITE IMEI 1'
@@ -195,7 +195,7 @@ export default class ImeiView extends Component {
                                     <div className="col-md-3">
                                         <h4 className="imei_heading">IMEI 1</h4>
                                     </div>
-                                    <div className="col-md-9 pl-0">
+                                    <div className="col-md-9">
                                         <Input.Search
                                             type="number"
                                             name="imei1"
@@ -248,12 +248,12 @@ export default class ImeiView extends Component {
                                     ]}
                                     bordered
                                     dataSource={this.renderList(this.state.imei1List, 'IMEI 1')}
-                                    scroll={{ y: 350 }}
+                                    scroll={{}}
                                 />
                             </Fragment>
 
                         </Col>
-                        <Col span={11} className="p-16 imei_col_11">
+                        <Col span={11} md={11} sm={23} xs={23} className="p-16 imei_col_11 mt-16">
                             <WriteImeiFrom
                                 ref='form2'
                                 buttonText='WRITE IMEI 2'
@@ -267,7 +267,7 @@ export default class ImeiView extends Component {
                                     <div className="col-md-3">
                                         <h4 className="imei_heading">IMEI 2</h4>
                                     </div>
-                                    <div className="col-md-9 pl-0">
+                                    <div className="col-md-9">
                                         <Input.Search
                                             type="number"
                                             name="imei2"
@@ -320,7 +320,7 @@ export default class ImeiView extends Component {
                                     ]}
                                     bordered
                                     dataSource={this.renderList(this.state.imei2List, 'IMEI 2')}
-                                    scroll={{ y: 350 }}
+                                    scroll={{}}
                                 />
                             </Fragment>
                         </Col>

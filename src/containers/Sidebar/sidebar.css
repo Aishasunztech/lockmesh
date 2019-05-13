@@ -80,3 +80,9 @@
 .ant-layout-sider-collapsed .gx-sidebar-notifications {
     padding: 15px 10px 36px;
 }
+
+@media screen and (max-width: 768px) {
+    .edit_ftr_1 .ant-radio-button-wrapper {
+        padding: 0;
+    }
+}

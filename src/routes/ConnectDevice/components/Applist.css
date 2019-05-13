@@ -156,14 +156,18 @@
 }
 
 .imei_col_11 {
-
     border: 1px solid #e8e8e8;
-    margin: 4px 0 8px 24px !important;
+    margin: 0 auto !important;
+    margin-bottom: 16px !important;
 }
 
-.imei_col_11 .ant-table-thead>tr>th,
 .imei_col_11 .ant-table-tbody>tr>td {
     padding: 8px 8px;
+}
+
+.imei_col_11 .ant-table-thead>tr>th {
+    padding: 8px 8px;
+    white-space: nowrap;
 }
 
 @media (max-width:1330px) and (min-width:1200px) {

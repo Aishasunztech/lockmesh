@@ -262,7 +262,11 @@
 
 @media screen and (max-width: 768px) {
     .add_user_btn {
-        left: 120px;
+        left: 230px;
+        width: 50%;
     }
 
+    .edit_form .ant-form-item-label {
+        text-align: left;
+    }
 }

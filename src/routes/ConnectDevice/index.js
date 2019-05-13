@@ -413,10 +413,10 @@ class ConnectDevice extends Component {
             <Card>
               <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
                 <div className="status_bar">
-                  <div className="col-md-6 active_st">
+                  <div className="col-md-6 col-xs-6 col-sm-6 active_st">
                     <h5><span style={color}>{finalStatus}</span></h5>
                   </div>
-                  <div className="col-md-6 offline_st">
+                  <div className="col-md-6 col-xs-6 col-sm-6 offline_st">
                     <h5><span style={onlineColor}>{onlineStatus}</span></h5>
                   </div>
                 </div>

@@ -121,6 +121,7 @@ const DealerApps = (props) => {
     return (
         <Fragment>
             <Table
+                scroll={{ x: 500 }}
                 bordered
                 rowSelection={(props.isSwitchable) ? rowSelection : null}
                 columns={columns}

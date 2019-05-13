@@ -26,7 +26,7 @@ class Apk extends Component {
                                             <h2 style={{ textAlign: "center" }}>Manage App</h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0 0px' }}>
-                                                <Col span={8} className="" style={{ padding: 0, textAlign: "right" }}>
+                                                <Col span={8} className="" style={{ textAlign: "center" }}>
                                                     <Icon type="android" className="and_icon" />
                                                 </Col>
                                                 <Col span={16}>
@@ -62,7 +62,7 @@ class Apk extends Component {
                                             <h2 style={{ textAlign: "center" }}>Manage Policy</h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0px 0px' }}>
-                                                <Col span={8} style={{ padding: 0, textAlign: "right" }}>
+                                                <Col span={8} style={{ textAlign: "center" }}>
                                                     <Icon type="file-text" className="policy_icon" />
                                                 </Col>
                                                 <Col span={15}>
@@ -77,7 +77,6 @@ class Apk extends Component {
                                 </Link>
                             </div>
                         </Col>
-
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div>
@@ -87,7 +86,7 @@ class Apk extends Component {
                                                 <h2 style={{ textAlign: "center" }}>Secure Market</h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0px 0px' }}>
-                                                    <Col span={8} style={{ padding: 0, textAlign: "right" }}>
+                                                    <Col span={8} style={{ textAlign: "center" }}>
                                                         <Icon type="appstore" className="policy_icon" />
                                                     </Col>
                                                     <Col span={15}>
@@ -105,11 +104,9 @@ class Apk extends Component {
                                 </div>
                             </div>
                         </Col>
-
                     </Row>
-                </div >
-
-            </div >
+                </div>
+            </div>
         )
     }
 }
