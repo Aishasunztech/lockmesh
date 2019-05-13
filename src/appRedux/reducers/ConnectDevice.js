@@ -139,7 +139,8 @@ const initialState = {
 
     imei_list: [],
     pushAppsModal: false,
-    pullAppsModal: false
+    pullAppsModal: false,
+    device_found: true
 };
 
 export default (state = initialState, action) => {
@@ -156,33 +157,39 @@ export default (state = initialState, action) => {
         case GET_DEVICE_DETAILS: {
 
             let device = action.payload;
-            if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
-                let status = null;
+            if (device) {
+                if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
+                    let status = null;
 
-                if (device.status === "expired") {
-                    status = "Expired"
-                } else if (device.account_status === "suspended") {
-                    status = "Suspended";
-                } else if (device.unlink_status === 1) {
-                    status = "Unlinked"
-                }
+                    if (device.status === "expired") {
+                        status = "Expired"
+                    } else if (device.account_status === "suspended") {
+                        status = "Suspended";
+                    } else if (device.unlink_status === 1) {
+                        status = "Unlinked"
+                    }
 
-                return {
-                    ...state,
-                    device: action.payload,
-                    applyBtn: false,
-                    undoBtn: false,
-                    redoBtn: false,
-                    clearBtn: false,
-                    pageName: NOT_AVAILABLE,
-                    status: status
+                    return {
+                        ...state,
+                        device: action.payload,
+                        applyBtn: false,
+                        undoBtn: false,
+                        redoBtn: false,
+                        clearBtn: false,
+                        pageName: NOT_AVAILABLE,
+                        status: status,
+                        device_found: true
+                    }
+                } else {
+                    return {
+                        ...state,
+                        device: action.payload,
+                        device_found: true
+                    }
+
                 }
             } else {
-                return {
-                    ...state,
-                    device: action.payload,
-                }
-
+                return { ...state, device_found: false }
             }
 
         }
@@ -289,7 +296,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_ACTIVITIES: {
-            return{
+            return {
                 ...state,
                 activities: action.payload.data
             }

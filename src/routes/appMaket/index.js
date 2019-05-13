@@ -49,16 +49,18 @@ class ApkMarket extends React.Component {
         return apkList
 
     }
-    filterOption = (inputValue, option) => { 
+    filterOption = (inputValue, option) => {
         // console.log(option, 'object', inputValue)
         return option.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
-       
+
     }
 
-    handleChange = (targetKeys) => {
+    handleChange = (targetKeys, direction, moveKeys) => {
         let marketApps = targetKeys;
         this.props.transferApps(marketApps)
-        this.setState({ targetKeys, });
+        // console.log(direction, moveKeys);
+        this.setState({ targetKeys });
+
     }
 
     handleSearch = (dir, value) => {

@@ -188,6 +188,15 @@ export function checkRemainDays(createDate, validity) {
   if (days > 0) return days; else if (days <= 0) return "Expired"; else return "Not Announced";
 }
 
+export function isBase64(str) {
+  if (str === '' || str.trim() === '') { return false; }
+  try {
+    return atob(str)
+  } catch (err) {
+    return false;
+  }
+}
+
 export function dealerColsWithSearch(searchBar = false, callBack = null) {
 
   var searchInput = [

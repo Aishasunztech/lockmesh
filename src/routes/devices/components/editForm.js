@@ -249,7 +249,7 @@ class EditDevice extends Component {
                                     required: true, message: 'Account Email is Required !',
                                 }],
                         })(
-                            <Input disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? false : true} />
+                            <Input disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION || this.props.device.account_email === null) ? false : true} />
                         )}
                     </Form.Item>
 
