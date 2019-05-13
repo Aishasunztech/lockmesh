@@ -124,6 +124,21 @@ export function componentSearch(arr, search) {
   })
   return foundDevices;
 }
+
+export function getFormattedDate(value) {
+  function convert(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [mnth, day, date.getFullYear()].join("-");
+  }
+
+  let date = new Date(value);
+  let formattedDate = convert(date)
+  return formattedDate;
+  // date.toLocaleDateString('%d-%b-%Y');
+}
+
 export function initCap(str) {
   return str.replace(/^\w/, function (chr) { return chr.toUpperCase() })
 }
@@ -166,7 +181,7 @@ export function checkRemainDays(createDate, validity) {
   if (days > 0) return days; else if (days <= 0) return "Expired"; else return "Not Announced";
 }
 
-export function dealerColsWithSearch(searchBar = false, callBack=null) {
+export function dealerColsWithSearch(searchBar = false, callBack = null) {
 
   var searchInput = [
     {

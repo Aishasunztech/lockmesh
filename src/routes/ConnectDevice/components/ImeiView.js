@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumber } from 'antd';
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate } from '../../utils/commonUtils';
 import WriteImeiFrom from './WriteImeiForm'
 
 // import EditForm from './editForm';
@@ -80,8 +80,8 @@ export default class ImeiView extends Component {
         });
     }
     handleComponentSearch = (e, type) => {
-        try { 
-           let value = e.target.value;
+        try {
+            let value = e.target.value;
             // console.log(status,'searched value', e.target.value)
             if (value.length) {
                 // console.log(status,'searched value', value)
@@ -92,7 +92,7 @@ export default class ImeiView extends Component {
                     } else {
                         coppyImeis = this.state.imei2List;
                     }
-                   
+
                     status = false;
                 }
                 // console.log(this.state.users,'coppy de', coppyDevices)
@@ -147,7 +147,7 @@ export default class ImeiView extends Component {
                     key: index,
                     tableIndex: i,
                     imei: device.imei1 + ' (ORIGNAL)',
-                    changed_time: device.created_at
+                    changed_time: getFormattedDate(device.created_at)
                 }
             } else {
                 i++
@@ -155,7 +155,7 @@ export default class ImeiView extends Component {
                     key: index,
                     tableIndex: i,
                     imei: device.imei1,
-                    changed_time: device.created_at
+                    changed_time: getFormattedDate(device.created_at)
                 }
             }
         }) : imei_list.map((device, index) => {
@@ -165,7 +165,7 @@ export default class ImeiView extends Component {
                     key: index,
                     tableIndex: i,
                     imei: device.imei2 + ' (ORIGNAL)',
-                    changed_time: device.created_at
+                    changed_time: getFormattedDate(device.created_at)
                 }
             } else {
                 i++
@@ -173,7 +173,7 @@ export default class ImeiView extends Component {
                     key: index,
                     tableIndex: i,
                     imei: device.imei2,
-                    changed_time: device.created_at
+                    changed_time: getFormattedDate(device.created_at)
                 }
             }
         })

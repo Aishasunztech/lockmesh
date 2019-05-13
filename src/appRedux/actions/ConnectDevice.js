@@ -913,9 +913,9 @@ export const getImeiHistory = (device_id) => {
 }
 
 
-export const writeImei = (device_id, usrAccId, type, imeiNo) => {
+export const writeImei = (device_id, usrAccId, type, imeiNo, device) => {
     return (dispatch) => {
-        RestService.writeImei(device_id, usrAccId, type, imeiNo).then((response) => {
+        RestService.writeImei(device_id, usrAccId, type, imeiNo, device).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: WRITE_IMEI,

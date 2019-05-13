@@ -913,7 +913,10 @@ export default (state = initialState, action) => {
                 if (action.payload.online) {
                     message.success(action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device!")
                 } else {
-                    message.warning(<Fragment><span>Warning Device Offline</span> <div> {action.imeiData.imeiNo} write to {action.imeiData.type}. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: action.imeiData.imeiNo + ' write to ' + action.imeiData.type + '. Action will be performed when device is back online',
+                    });
                 }
             }
             else {

@@ -564,8 +564,8 @@ const RestService = {
         )
     },
 
-    writeImei(device_id, usrAccId, type, imeiNo) {
-        return axios.post(BASE_URL + 'users/writeImei/' + device_id, { usrAccId, type, imeiNo }, RestService.getHeader());
+    writeImei(device_id, usrAccId, type, imeiNo, device) {
+        return axios.post(BASE_URL + 'users/writeImei/' + device_id, { usrAccId, type, imeiNo, device }, RestService.getHeader());
     },
 
     // ADD new user
