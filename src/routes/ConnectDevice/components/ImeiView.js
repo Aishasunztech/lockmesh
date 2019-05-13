@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumber } from 'antd';
 import { componentSearch, getFormattedDate } from '../../utils/commonUtils';
 import WriteImeiFrom from './WriteImeiForm'
+import Moment from 'react-moment'
 
 // import EditForm from './editForm';
 let editDevice;

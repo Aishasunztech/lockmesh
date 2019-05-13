@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, message, Input, Table } from 'antd';
-import { componentSearch } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate } from '../../utils/commonUtils';
+import Moment from 'react-moment'
+
 var coppyActivities = [];
 var status = true;
 export default class Activity extends Component {
@@ -79,7 +81,7 @@ export default class Activity extends Component {
                 return {
                     key: index,
                     action_name: row.action_name.toUpperCase(),
-                    created_at: row.created_at
+                    created_at: getFormattedDate(row.created_at)
                 }
             })
         }
@@ -136,7 +138,7 @@ export default class Activity extends Component {
                         ]}
                         bordered
                         dataSource={this.renderList()}
-                        scroll={{ y: 350 }}
+                        // scroll={{ y: 350 }}
                         pagination={false}
                     />
 

@@ -127,12 +127,17 @@ export function componentSearch(arr, search) {
 
 export function getFormattedDate(value) {
   function convert(str) {
-
+    var month, day, year, hours, minutes, seconds;
     var date = new Date(str),
-      
-      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      month = ("0" + (date.getMonth() + 1)).slice(-2),
       day = ("0" + date.getDate()).slice(-2);
-    return [mnth, day, date.getFullYear()].join("-");
+    hours = ("0" + date.getHours()).slice(-2);
+    minutes = ("0" + date.getMinutes()).slice(-2);
+    seconds = ("0" + date.getSeconds()).slice(-2);
+
+    var mySQLDate = [month, day, date.getFullYear()].join("-");
+    var mySQLTime = [hours, minutes, seconds].join(":");
+    return [mySQLDate, mySQLTime].join(" ");
   }
 
   let date = new Date(value);
