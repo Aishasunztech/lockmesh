@@ -52,6 +52,14 @@ export default class ImeiView extends Component {
 
         });
     }
+
+    componentWillReceiveProps(nextProps){
+        if(this.props.imei_list !== nextProps.imei_list){
+            console.log('actoin done successfuly')
+            this.showModal('', this.state.func)
+        }
+    }
+
     // showViewmodal = (dataVisible, dataFieldName = "") => {
     //     // console.log(dataVisible);
     //     this.setState({
@@ -181,7 +189,7 @@ export default class ImeiView extends Component {
         return data;
     }
     render() {
-        // console.log(this.props.imei_list);
+        console.log(this.props.imei_list);
         const { visible, loading } = this.state;
         return (
             <div>

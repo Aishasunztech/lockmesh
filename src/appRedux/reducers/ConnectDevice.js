@@ -926,6 +926,10 @@ export default (state = initialState, action) => {
 
         case WRITE_IMEI: {
             if (action.payload.status) {
+                if(action.payload.insertedData !== null){
+                    state.imei_list.unshift(action.payload.insertedData)
+                }
+               
                 if (action.payload.online) {
                     message.success(action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device!")
                 } else {
@@ -934,12 +938,14 @@ export default (state = initialState, action) => {
                         content: action.imeiData.imeiNo + ' write to ' + action.imeiData.type + '. Action will be performed when device is back online',
                     });
                 }
+                console.log('new state is', state.imei_list)
             }
             else {
                 message.error(action.payload.msg)
             }
             return {
                 ...state,
+                imei_list: [...state.imei_list]
             }
         }
         default:
