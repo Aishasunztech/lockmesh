@@ -42,7 +42,8 @@ import {
     SHOW_PUSH_APPS_MODAL,
     SHOW_PULL_APPS_MODAL,
     PULL_APPS,
-    WRITE_IMEI
+    WRITE_IMEI,
+    GET_ACTIVITIES
 } from "../../constants/ActionTypes"
 
 import {
@@ -982,6 +983,23 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
                     type: PUSH_APPS,
                     payload: response.data
 
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export const getActivities = () => {
+    return (dispatch) => {
+        RestService.getActivities().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_ACTIVITIES,
+                    payload: response.data
                 })
             } else {
                 dispatch({
