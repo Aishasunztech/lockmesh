@@ -13,6 +13,8 @@ import WipeDevice from '../../ConnectDevice/components/wipeDevice';
 import ImeiView from '../../ConnectDevice/components/ImeiView';
 import DealerApps from "./DealerApps";
 import PasswordForm from './PasswordForm';
+import Activity from './Activity';
+
 
 import {
     showHistoryModal,
@@ -27,7 +29,8 @@ import {
     showPullAppsModal,
     applyPushApps,
     applyPullApps,
-    writeImei
+    writeImei,
+    getActivities
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -167,11 +170,13 @@ class SideActions extends Component {
             policyName: '',
             disabled: false,
             actionType: PUSH_APPS,
-            selectedApps: []
+            selectedApps: [],
+            activities: [],
         }
     }
 
     componentDidMount() {
+        this.props.getActivities()
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
@@ -179,7 +184,10 @@ class SideActions extends Component {
             saveProfileType: this.props.saveProfileType,
             profileName: this.props.profileName,
             policyName: this.props.policyName,
-        })
+            activities: this.props.activities
+        });
+        
+       
     }
 
     componentWillReceiveProps(nextProps) {
@@ -192,7 +200,8 @@ class SideActions extends Component {
                 saveProfileType: nextProps.saveProfileType,
                 profileName: nextProps.profileName,
                 policyName: nextProps.policyName,
-                pullAppsModal: nextProps.pullAppsModal
+                pullAppsModal: nextProps.pullAppsModal,
+                activities: nextProps.activities
             })
         }
     }
@@ -395,9 +404,9 @@ class SideActions extends Component {
 
                                 <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
 
-                                <Tooltip placement="left" title="Coming Soon">
-                                    <Button type="default " style={{ width: "100%", marginBottom: 16 }} >Activity</Button>
-                                </Tooltip>
+                                {/* <Tooltip placement="left" title="Coming Soon"> */}
+                                    <Button type="default " style={{ width: "100%", marginBottom: 16 }} onClick={() => this.refs.activity.showModal()} >Activity</Button>
+                                {/* </Tooltip> */}
                             </Col>
                         </Row>
                     </Card>
@@ -551,6 +560,12 @@ class SideActions extends Component {
                     imei_list={this.props.imei_list}
                     writeImei={this.props.writeImei}
                 />
+
+                <Activity
+                    ref='activity'
+                    activities={this.state.activities}
+                  
+                />
             </div>
         )
     }
@@ -578,7 +593,8 @@ function mapDispatchToProps(dispatch) {
         applyPushApps: applyPushApps,
         applyPullApps: applyPullApps,
         savePolicy: savePolicy,
-        writeImei: writeImei
+        writeImei: writeImei,
+        getActivities: getActivities
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
@@ -607,6 +623,7 @@ var mapStateToProps = ({ device_details, auth }, otherProps) => {
         apk_list: otherProps.apk_list,
         controls: device_details.controls,
         extensions: device_details.extensions,
+        activities: device_details.activities,
     };
 }
 

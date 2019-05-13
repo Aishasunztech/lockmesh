@@ -47,7 +47,8 @@ import {
     SHOW_PUSH_APPS_MODAL,
     SHOW_PULL_APPS_MODAL,
     PULL_APPS,
-    WRITE_IMEI
+    WRITE_IMEI,
+    GET_ACTIVITIES
 } from "../../constants/ActionTypes";
 
 import {
@@ -131,6 +132,7 @@ const initialState = {
     controls: {},
     undoControls: [],
     redoControls: [],
+    activities: [],
 
     guestAllExt: false,
     encryptedAllExt: false,
@@ -283,6 +285,13 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: true,
                 policies: action.payload
+            }
+        }
+
+        case GET_ACTIVITIES: {
+            return{
+                ...state,
+                activities: action.payload.data
             }
         }
 
