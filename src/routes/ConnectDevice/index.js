@@ -69,7 +69,8 @@ class ConnectDevice extends Component {
       device_id: '',
       pageName: MAIN_MENU,
       showChangesModal: false,
-      controls: []
+      controls: [],
+      imei_list:[]
     }
     // console.log("hello every body", this.props);
     this.mainMenu = [
@@ -170,9 +171,10 @@ class ConnectDevice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls) {
+    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list) {
       this.setState({
-        controls: this.props.controls
+        controls: this.props.controls,
+        imei_list: this.props.imei_list
       })
     }
   }
@@ -453,7 +455,7 @@ class ConnectDevice extends Component {
                   history={this.props.history}
                   getDevicesList={this.props.getDevicesList}
                   refreshDevice={this.refreshDevice}
-                  imei_list={this.props.imei_list}
+                  imei_list={this.state.imei_list}
                   apk_list={this.props.apk_list}
                 // applySetting = {this.applyActions}
                 />
