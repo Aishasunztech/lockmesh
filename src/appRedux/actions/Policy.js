@@ -94,7 +94,7 @@ export function savePolicy(data) {
             //  console.log('conect device method call', data);
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);
-                if (response.data.status) {
+                if (response.data) {
                     dispatch({
                         type: SAVE_POLICY,
                         response: response.data,

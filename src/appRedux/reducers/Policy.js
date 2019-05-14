@@ -111,6 +111,7 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY: {
+            // console.log(action.response, 'resp')
             if (action.response.status) {
                 message.success(action.response.msg)
             } else {
