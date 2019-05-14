@@ -13,8 +13,8 @@ import {
     EDIT_POLICY,
     SAVE_POLICY_CHANGES,
     GET_PAGINATION,
-    CHECK_HANDLE_ALL_POLICY
-
+    CHECK_HANDLE_ALL_POLICY,
+    DEFAULT_POLICY_CHANGE
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -463,6 +463,20 @@ export default (state = initialState, action) => {
             // console.log(dealers.length ,'itrititt',action.apk_id);
             let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
             state.policies[objIndex].permission_count = action.permission_count;
+
+            return {
+                ...state,
+                policies: [...state.policies]
+            }
+        }
+        case DEFAULT_POLICY_CHANGE: {
+
+            message.success(action.payload);
+            let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
+            let defaultPolicyIndex = state.policies.findIndex((obj => obj.is_default === true));
+            state.policies[objIndex].is_default = true;
+            state.policies[defaultPolicyIndex].is_default = false;
+
 
             return {
                 ...state,

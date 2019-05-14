@@ -152,6 +152,7 @@ export const WRITE_IMEI = 'WRITE_IMEI';
 
 // Policy consts
 export const GET_POLICIES = 'GET_POLICIES'
+export const DEFAULT_POLICY_CHANGE = 'DEFAULT_POLICY_CHANGE'
 
 
 // Users consts

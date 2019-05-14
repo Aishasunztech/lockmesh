@@ -8,7 +8,7 @@ import {
     SECURE_SETTING
     // , 
     // SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
-  } from '../../../constants/Constants';
+} from '../../../constants/Constants';
 
 
 // applyProfile = (app_list) => {
@@ -16,21 +16,21 @@ import {
 //     this.props.showHistoryModal(false, '');
 // }
 
-const renderList= (histories, type, callback ) => {
+const renderList = (histories, type, callback) => {
     return histories.map((history) => {
         // console.log("list", history.app_list);
 
         return ({
             key: history.id,
-            history_date: (type === "history")?history.created_at : (type === "policy")?history.policy_name:(type === "profile")?history.profile_name:null,
+            history_date: (type === "history") ? history.created_at : (type === "policy") ? history.policy_name : (type === "profile") ? history.profile_name : null,
             action: (
                 <Button
                     size="small"
                     className="mb-0"
-                onClick={()=>{ 
-                    callback(history.id);
-                    // this.applyProfile(history.app_list)
-                }} 
+                    onClick={() => {
+                        callback(history.id);
+                        // this.applyProfile(history.app_list)
+                    }}
                 > Apply
                 </Button>
             ),
@@ -65,7 +65,7 @@ const renderColumn = (type) => {
 
 const TableHistory = (props) => {
     // console.log("props", props);
-    
+
     return (
         <Table
             style={{ margin: 0, padding: 0 }}
@@ -76,15 +76,16 @@ const TableHistory = (props) => {
             dataSource={renderList(props.histories, props.type, props.applyHistory)}
             pagination={false}
             expandedRowRender={record => {
-                // console.log("record", record);
+                console.log("record", record);
 
                 let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
                 let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? JSON.parse(record.secure_apps) : [];
-                let controls = (Object.entries(record.controls).length > 0 && record.controls.constructor === Object && record.controls !== undefined && record.controls !== null && record.controls !== '') ? record.controls : [];
+
+                let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
                 // console.log("app_list: ", app_list);
                 // console.log("extensions: ", extensions);
                 // console.log("controls: ", controls);
-            
+
                 return (
                     <DeviceSettings
                         app_list={app_list}
@@ -101,7 +102,7 @@ const TableHistory = (props) => {
             }}
         />
     )
-    
+
 }
 
 export default TableHistory;
