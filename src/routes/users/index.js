@@ -112,7 +112,7 @@ class Users extends Component {
                     </span>),
                 dataIndex: 'devices',
                 key: 'devices',
-                className: 'row devices1',
+                className: 'row',
             },
             {
                 title: (

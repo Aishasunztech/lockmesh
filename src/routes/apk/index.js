@@ -19,9 +19,9 @@ import AppFilter from "../../components/AppFilter";
 import ListApk from './components/ListApk';
 
 import {
-	APK_SHOW_ON_DEVICE,
-	APK,
-	APK_APP_NAME,
+    APK_SHOW_ON_DEVICE,
+    APK,
+    APK_APP_NAME,
     APK_APP_LOGO,
     APK_PERMISSION,
     APK_ACTION
@@ -31,7 +31,15 @@ import { componentSearch, titleCase } from "../utils/commonUtils";
 
 const question_txt = (
     <div>
-        <p>Press <a style={{ fontSize: 14 }}><Icon type="caret-right" /> </a> to Add, remove or View <br></br>the Dealers who have permission <br></br> to use this App</p>
+        <span>
+            Press
+            <a style={{ fontSize: 14 }}>
+                <Icon type="caret-right" />
+            </a>
+            to Add, remove or View
+            <br></br>the Dealers who have permission
+            <br></br> to use this App
+        </span>
     </div>
 );
 var status = true;
@@ -55,13 +63,13 @@ class Apk extends React.Component {
                     title: (
                         <span>
                             {APK_PERMISSION}
-                        <Popover placement="top" content={question_txt}>
+                            <Popover placement="top" content={question_txt}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
                         </span>),
                     dataIndex: 'permission',
                     key: 'permission',
-                    className: 'row devices1'
+                    className: 'row'
                 },
                 {
                     title: APK_SHOW_ON_DEVICE,

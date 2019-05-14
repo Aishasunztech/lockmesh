@@ -7,7 +7,7 @@ import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
 
 import {
-    getPolicies,handlePolicyStatus,
+    getPolicies, handlePolicyStatus,
     handleEditPolicy, SavePolicyChanges
 } from "../../appRedux/actions/Policy";
 
@@ -34,6 +34,14 @@ import {
 import {
     titleCase
 } from '../utils/commonUtils';
+
+const PERMISSION_HELPING_TEXT = (
+    <span>Add dealers who are allowed  <br /> to use this Policy</span>
+);
+
+const STATUS_HELPING_TEXT = (
+    <span>Enable or Disable this policy using <br /> the toggle below.  When disabled,  <br />it cannot be pushed to devices</span>
+);
 
 class Policy extends Component {
     constructor(props) {
@@ -69,16 +77,24 @@ class Policy extends Component {
                 title: (
                     <span>
                         {POLICY_PERMISSIONS}
-                        <Popover placement="top" content='dumy'>
+                        <Popover placement="top" content={PERMISSION_HELPING_TEXT}>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover>
-                    </span>),
+                    </span>
+                ),
                 dataIndex: 'permission',
                 key: 'permission',
-                className: 'row devices1'
+                className: 'row '
             },
             {
-                title: POLICY_STATUS,
+                title: (
+                    <span>
+                        {POLICY_STATUS}
+                        <Popover placement="top" content={STATUS_HELPING_TEXT}>
+                            <span className="helping_txt"><Icon type="info-circle" /></span>
+                        </Popover>
+                    </span>
+                ),
                 dataIndex: 'policy_status',
                 key: 'policy_status',
             },
@@ -176,7 +192,7 @@ class Policy extends Component {
             policyModal: false,
             policies: (this.props.policies) ? this.props.policies : [],
             current: 0,
-           
+
         }
 
     }
@@ -200,7 +216,7 @@ class Policy extends Component {
     handlePagination = (value) => {
         //   alert(value);
         //  console.log('pagination value of ', value)
-         this.refs.policyList.handlePagination(value);
+        this.refs.policyList.handlePagination(value);
         this.props.postPagination(value, 'policies');
     }
 
@@ -237,7 +253,7 @@ class Policy extends Component {
                     SavePolicyChanges={this.props.SavePolicyChanges}
                     pagination={this.props.DisplayPages}
                     ref='policyList'
-                   
+
                 />
                 <Modal
                     maskClosable={false}
@@ -255,7 +271,7 @@ class Policy extends Component {
                         apk_list={this.props.apk_list}
                         app_list={this.props.app_list}
                         handlePolicyModal={this.handlePolicyModal}
-                        getPolicies={this.props.getPolicies}    
+                        getPolicies={this.props.getPolicies}
                         ref='addPolicy'
                     />
                 </Modal>
@@ -265,7 +281,7 @@ class Policy extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-   
+
     return bindActionCreators({
         getPolicies: getPolicies,
         // postDropdown: postDropdown,
@@ -273,7 +289,7 @@ function mapDispatchToProps(dispatch) {
         getPagination: getPagination,
         handlePolicyStatus: handlePolicyStatus,
         handleEditPolicy: handleEditPolicy,
-        SavePolicyChanges : SavePolicyChanges
+        SavePolicyChanges: SavePolicyChanges
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);

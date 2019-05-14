@@ -10,6 +10,12 @@
 
 .devices .ant-table-tbody>tr>.devices1 {
     text-align: left;
-    padding-left: 4.6% !important;
+    padding-left: 48px !important;
     width: 130px;
+}
+
+@media screen and (max-width: 768px) {
+    .devices .ant-table-tbody>tr>.devices1 {
+        padding-left: 5.5% !important;
+    }
 }

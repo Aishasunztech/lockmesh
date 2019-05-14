@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Transfer, Card, Avatar } from "antd";
+import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Transfer, Card, Avatar, Row, Col } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 import { BASE_URL } from '../../constants/Application';
@@ -10,7 +10,7 @@ import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/
 import { transferApps, getMarketApps } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { ADMIN, DEALER } from "../../constants/Constants";
-
+import styles from './appmarket.css'
 
 class ApkMarket extends React.Component {
     constructor(props) {
@@ -39,7 +39,7 @@ class ApkMarket extends React.Component {
         let apkList = combinedList.map((app, index) => {
             let data = {
                 key: app.id,
-                title: <Fragment> <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} /><span> {app.app_name} </span> </Fragment>,
+                title: <Fragment> <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} /><span> {app.app_name} </span> </Fragment>,
                 description: `${app.app_name + index + 1}`,
                 disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
                 className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
@@ -105,14 +105,19 @@ class ApkMarket extends React.Component {
                 {
                     this.props.isloading ? <CircularProgress /> :
                         <Card >
+                            <Row>
+                                <h4 className="sm_heading">Move <b>(Avaiable Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices</h4>
+                                <Col md={12} sm={24} xs={24} className="text-center">
+                                    <h4><b>Avaiable Apps</b></h4>
+                                </Col>
+                                <Col md={12} sm={24} xs={24} className="text-center sec_market">
+                                    <h4><b>Secure Market</b></h4>
+                                </Col>
+                            </Row>
                             <Transfer
-                                style={{ margin: 'auto' }}
-                                titles={['AVAILABLE APPS', 'SECURE MARKET']}
+                                renderTitle="test"
+                                className="transfer_box"
                                 dataSource={this.renderList(this.props.availbleAppList, this.state.secureMarketList)}
-                                listStyle={{
-                                    width: 500,
-                                    height: 500,
-                                }}
                                 showSearch
                                 filterOption={this.filterOption}
                                 targetKeys={this.state.targetKeys}
@@ -121,11 +126,13 @@ class ApkMarket extends React.Component {
                                 onSelectChange={this.onSelectChange}
                                 render={item => item.title}
                                 locale={{ itemUnit: 'App', itemsUnit: 'Apps' }}
+
                             />
                         </Card>
                 }
             </div>
         )
+
     }
 }
 
