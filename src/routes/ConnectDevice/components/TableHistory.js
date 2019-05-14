@@ -76,10 +76,10 @@ const TableHistory = (props) => {
             dataSource={renderList(props.histories, props.type, props.applyHistory)}
             pagination={false}
             expandedRowRender={record => {
-                console.log("record", record);
+                // console.log("record", record);
 
                 let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
-                let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? JSON.parse(record.secure_apps) : [];
+                let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
 
                 let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
                 // console.log("app_list: ", app_list);
@@ -96,7 +96,7 @@ const TableHistory = (props) => {
                         // isEncryptedPwd={this.props.isEncryptedPwd}
                         // isGuestPwd={this.props.isGuestPwd}
                         show_all_apps={true}
-                        controls={controls}
+                        controls={{ controls }}
                     />
                 );
             }}

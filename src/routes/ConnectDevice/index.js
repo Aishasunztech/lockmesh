@@ -37,6 +37,7 @@ import {
   handleCheckAllExtension,
   reSyncDevice,
   getDealerApps,
+  getActivities
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -156,6 +157,7 @@ class ConnectDevice extends Component {
       this.props.getDealerApps();
       this.props.ackFinishedPushApps(this.props.socket, device_id);
       this.props.ackFinishedPullApps(this.props.socket, device_id);
+      this.props.getActivities(device_id)
 
       // console.log('ack_finished_push_apps_' + device_id);
     }
@@ -348,6 +350,7 @@ class ConnectDevice extends Component {
     this.props.getImeiHistory(deviceId);
     this.props.reSyncDevice(deviceId);
     this.props.getDealerApps();
+    this.props.getActivities(deviceId)
     this.onBackHandler();
     setTimeout(() => {
       this.props.endLoading();
@@ -532,7 +535,8 @@ function mapDispatchToProps(dispatch) {
     getDealerApps: getDealerApps,
     ackFinishedPullApps: ackFinishedPullApps,
     ackFinishedPushApps: ackFinishedPushApps,
-    pullPushInProcess: pullPushInProcess
+    pullPushInProcess: pullPushInProcess,
+    getActivities: getActivities
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket }) => {

@@ -141,7 +141,7 @@ export default class Activity extends Component {
                         // scroll={{ y: 350 }}
                         pagination={false}
                     />
-
+                    
                 </Modal>
 
             </div>

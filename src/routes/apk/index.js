@@ -153,7 +153,7 @@ class Apk extends React.Component {
                     }
                     if (column.title === value) {
                         dumydata[index].className = '';
-                    } 
+                    }
                     // else if (column.title.props.children !== undefined) {
                     //     if(column.title.props.children[0] === value){
                     //         dumydata[index].className = '';

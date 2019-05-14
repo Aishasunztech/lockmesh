@@ -176,7 +176,7 @@ class SideActions extends Component {
     }
 
     componentDidMount() {
-        this.props.getActivities(this.props.device.device_id)
+
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
@@ -451,6 +451,7 @@ class SideActions extends Component {
                                     type="primary"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showHistoryModal(true, "history")}
+                                    disabled
 
                                 >
                                     <Icon type="file" />
