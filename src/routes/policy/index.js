@@ -9,7 +9,7 @@ import AddPolicy from "./components/AddPolicy";
 import {
     getPolicies, handlePolicyStatus,
     handleEditPolicy, SavePolicyChanges,
-    handleCheckAll
+    handleCheckAll, defaultPolicyChange
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -33,6 +33,7 @@ import {
 } from "../../constants/PolicyConstants";
 
 import { componentSearch, titleCase } from '../utils/commonUtils';
+import { ADMIN } from '../../constants/Constants';
 
 var coppyPolicy = [];
 var status = true;
@@ -190,6 +191,9 @@ class Policy extends Component {
         this.setState({
             policies: this.props.policies
         })
+        if (this.props.user.type === ADMIN) {
+            this.columns.pop()
+        }
         // this.props.getApkList();
         // this.props.getDefaultApps();
     }
@@ -300,6 +304,7 @@ class Policy extends Component {
         });
     }
 
+
     render() {
         return (
             <Fragment>
@@ -322,6 +327,7 @@ class Policy extends Component {
                 <PolicyList
                     columns={this.columns}
                     policies={this.state.policies}
+                    defaultPolicyChange={this.props.defaultPolicyChange}
                     handlePolicyStatus={this.props.handlePolicyStatus}
                     handleEditPolicy={this.props.handleEditPolicy}
                     handleCheckAll={this.props.handleCheckAll}
@@ -377,14 +383,16 @@ function mapDispatchToProps(dispatch) {
         handleEditPolicy: handleEditPolicy,
         SavePolicyChanges: SavePolicyChanges,
         handleCheckAll: handleCheckAll,
+        defaultPolicyChange: defaultPolicyChange,
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);
 }
-var mapStateToProps = ({ policies }) => {
+var mapStateToProps = ({ policies, auth }) => {
     // console.log('pages to display', policies.DisplayPages)
-    //  console.log("policies", policies.policies);
+    // console.log("policies", auth);
     return {
+        user: auth.authUser,
         policies: policies.policies,
         apk_list: policies.apk_list,
         app_list: policies.app_list,

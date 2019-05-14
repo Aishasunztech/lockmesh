@@ -591,6 +591,10 @@ const RestService = {
         return axios.get(BASE_URL + 'users/marketApplist', RestService.getHeader())
     },
 
+    defaultPolicyChange: (enable, policy_id) => {
+        return axios.post(BASE_URL + 'users/set_default_policy', { enable, policy_id }, RestService.getHeader())
+    },
+
 
 }
 export default RestService;

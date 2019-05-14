@@ -46,23 +46,23 @@ class PolicyList extends Component {
             newItems[rowId] = (btnof == 'info' || btnof == 'edit') ? '1' : '6';
             // this.setState({ items:newItems });
             // console.log("new Items", newItems);
-            if(btnof == 'edit'){
+            if (btnof == 'edit') {
                 this.setState({
                     expandedRowKeys: this.state.expandedRowKeys,
                     expandTabSelected: newItems,
                     isSwitch: btnof == 'edit' ? true : false,
-                    [rowId]:rowId
+                    [rowId]: rowId
                 })
-            }else{
+            } else {
                 // console.log('row id is ', this.state[rowId])
                 this.setState({
                     expandedRowKeys: this.state.expandedRowKeys,
                     expandTabSelected: newItems,
-                    [rowId]:null
+                    [rowId]: null
                     // isSwitch: btnof == 'edit' ? true : false,
                 })
             }
-            
+
             // console.log("updated state", this.state.expandTabSelected);
             // this.forceUpdate()
         }
@@ -94,7 +94,7 @@ class PolicyList extends Component {
 
             return {
                 rowKey: index,
-                isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy: false,
+                isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy : false,
                 policy_id: policy.id,
                 action:
                     (<Fragment>
@@ -102,7 +102,7 @@ class PolicyList extends Component {
                             type="primary"
                             size="small"
                             onClick={() => { this.expandRow(index, 'edit', true) }}
-                        
+
                         >
                             EDIT
                         </Button>
@@ -140,13 +140,26 @@ class PolicyList extends Component {
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
                 default_policy: (
-                    <Switch size='small' defaultChecked={true} onChange={(e) => { }} />
+                    <Switch size='small' checked={policy.is_default} onChange={(e) => { this.handleDefaultChange(e, policy.id) }} />
                 ),
             }
         });
 
     }
+    handleDefaultChange(e, policy_id) {
 
+        let _this = this
+        confirm({
+            title: 'Do you want to change your default Policy?',
+            onOk() {
+                _this.props.defaultPolicyChange(e, policy_id)
+            },
+            onCancel() { },
+            okText: 'Yes',
+            cancelText: 'No'
+
+        });
+    }
     customExpandIcon(props) {
         // console.log('rowKey, ', props.record.rowKey)
 
@@ -225,7 +238,7 @@ class PolicyList extends Component {
                                 <PolicyInfo
                                     selected={this.state.expandTabSelected[record.rowKey]}
                                     policy={record}
-                                    isSwitch= {this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
+                                    isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
                                     rowId={record.policy_id}
                                     handleEditPolicy={this.props.handleEditPolicy}
                                     handleCheckAll={this.props.handleCheckAll}
@@ -233,11 +246,11 @@ class PolicyList extends Component {
                                     guestAlldealerApps={this.props.guestAlldealerApps}
                                     encryptedAlldealerApps={this.props.encryptedAlldealerApps}
                                     enableAlldealerApps={this.props.enableAlldealerApps}
-                
+
                                     guestAllappPermissions={this.props.guestAllappPermissions}
                                     encryptedAllappPermissions={this.props.encryptedAllappPermissions}
                                     enableAllappPermissions={this.props.enableAllappPermissions}
-                
+
                                     guestAllallExtensions={this.props.guestAllallExtensions}
                                     encryptedAllallExtensions={this.props.encryptedAllallExtensions}
                                     enableAllallExtensions={this.props.enableAllallExtension}
