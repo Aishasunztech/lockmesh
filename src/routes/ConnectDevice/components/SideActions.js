@@ -352,6 +352,7 @@ class SideActions extends Component {
             alert(historyId);
         }
     }
+
     applyPushApps = () => {
         this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [] })
@@ -388,7 +389,7 @@ class SideActions extends Component {
                                 <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)} disabled={this.props.authUser.type == ADMIN ? false : true}   > <Icon type="lock" className="lock_icon" /> <Icon type='upload' /> Push</Button>
 
                                 <Button disabled type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
-                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} disabled><Icon type="file" />Load Policy</Button>
+                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
                                 <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} ><Icon type="barcode" /> IMEI</Button>
                             </Col>
                             <Col
@@ -399,13 +400,31 @@ class SideActions extends Component {
                                 {/* <Tooltip placement="bottom" title="Coming Soon"> */}
                                 <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true, PULL_APPS)} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
                                 {/* </Tooltip> */}
-                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
-                                    <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
-                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
+                                {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
+                                    <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
+                                        <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
+                                        </Button>
+                                    : null}
+
+                                <Button
+                                    type="primary"
+                                    style={{ width: "100%", marginBottom: 16 }}
+                                    onClick={() => this.showHistoryModal(true, "history")}
+
+                                >
+                                    <Icon type="file" />
+                                    Load History
+                                </Button>
 
                                 {/* <Tooltip placement="left" title="Coming Soon"> */}
-                                <Button type="default " style={{ width: "100%", marginBottom: 16 }} onClick={() => this.refs.activity.showModal()} >Activity</Button>
+                                <Button
+                                    type="default"
+                                    style={{ width: "100%", marginBottom: 16 }}
+                                    onClick={() => this.refs.activity.showModal()}
+                                >
+                                    Activity
+                                </Button>
                                 {/* </Tooltip> */}
                             </Col>
                         </Row>

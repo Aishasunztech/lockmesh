@@ -6,15 +6,8 @@ import DeviceSettings from './DeviceSettings';
 
 import {
     SECURE_SETTING
-    // , 
-    // SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
-  } from '../../../constants/Constants';
+} from '../../../constants/Constants';
 
-
-// applyProfile = (app_list) => {
-//     this.props.loadDeviceProfile(app_list);
-//     this.props.showHistoryModal(false, '');
-// }
 
 const renderList= (histories, type, callback ) => {
     return histories.map((history) => {
