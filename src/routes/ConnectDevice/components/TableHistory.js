@@ -78,10 +78,10 @@ const TableHistory = (props) => {
             expandedRowRender={record => {
                 console.log("record", record);
 
-                let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
+                let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? JSON.parse(record.app_list) : [];
                 let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? JSON.parse(record.secure_apps) : [];
 
-                let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
+                let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? JSON.parse(record.controls) : [] : [];
                 // console.log("app_list: ", app_list);
                 // console.log("extensions: ", extensions);
                 // console.log("controls: ", controls);

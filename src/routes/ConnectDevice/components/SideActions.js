@@ -402,7 +402,7 @@ class SideActions extends Component {
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
                                     <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile</Button> : null}
 
-                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} ><Icon type="file" />Load History</Button>
+                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "history")} disabled><Icon type="file" />Load History</Button>
 
                                 {/* <Tooltip placement="left" title="Coming Soon"> */}
                                 <Button type="default " style={{ width: "100%", marginBottom: 16 }} onClick={() => this.refs.activity.showModal()} >Activity</Button>
