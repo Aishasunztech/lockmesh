@@ -19,9 +19,9 @@ import AppFilter from "../../components/AppFilter";
 import ListApk from './components/ListApk';
 
 import {
-	APK_SHOW_ON_DEVICE,
-	APK,
-	APK_APP_NAME,
+    APK_SHOW_ON_DEVICE,
+    APK,
+    APK_APP_NAME,
     APK_APP_LOGO,
     APK_PERMISSION,
     APK_ACTION
@@ -55,7 +55,7 @@ class Apk extends React.Component {
                     title: (
                         <span>
                             {APK_PERMISSION}
-                        <Popover placement="top" content={question_txt}>
+                            <Popover placement="top" content={question_txt}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
                         </span>),
@@ -79,15 +79,8 @@ class Apk extends React.Component {
                     dataIndex: 'apk_name',
                     width: "100",
                     key: 'apk_name',
-                    // sorter: (a, b, direction) => {
-                    //     // alert(self);
-                    //     self.sortOrder(direction);
-                    // },
                     sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
-                    // renderColumnSorter:(<h1>hello</h1>),
-                    // sorter: true,
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder:"ascend",
                     defaultSortOrder: "ascend"
                 },
                 {
@@ -155,6 +148,11 @@ class Apk extends React.Component {
                     if (column.title === value) {
                         dumydata[index].className = '';
                     }
+                    // else if (column.title.props.children !== undefined) {
+                    //     if(column.title.props.children[0] === value){
+                    //         dumydata[index].className = '';
+                    //     }
+                    // }
                 });
 
 

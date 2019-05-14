@@ -16,7 +16,8 @@ import {
 	APK_SHOW_ON_DEVICE,
 	APK,
 	APK_APP_NAME,
-	APK_APP_LOGO
+	APK_APP_LOGO,
+	APK_PERMISSION
 } from '../../constants/ApkConstants';
 import { message } from 'antd';
 
@@ -26,12 +27,12 @@ const initialState = {
 	selectedOptions: [],
 	DisplayPages: '10',
 	options: [
+		APK_PERMISSION,
 		APK_SHOW_ON_DEVICE,
 		APK,
 		APK_APP_NAME,
-		APK_APP_LOGO
+		APK_APP_LOGO,
 	]
-	// options: ['SHOW ON DEVICE', 'APK', 'APP NAME', 'APP LOGO']
 };
 
 export default (state = initialState, action) => {
