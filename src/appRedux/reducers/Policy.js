@@ -220,7 +220,8 @@ export default (state = initialState, action) => {
                     message.success('Policy Deleted Successfully')
 
                 } else if (action.payload.key == 'status') {
-                    changedState[index][action.payload.key] = action.payload.value
+                    changedState[index][action.payload.key] = action.payload.value;
+                    message.success(' Status Changed Sccessfully ')
                 }
                 state.policies = changedState;
                 return {
