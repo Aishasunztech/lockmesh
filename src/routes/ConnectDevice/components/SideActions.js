@@ -386,11 +386,43 @@ class SideActions extends Component {
                                 className="gutter-row"
                                 justify="center"
                             >
-                                <Button type="default" placement="bottom" style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)} disabled={this.props.authUser.type == ADMIN ? false : true}   > <Icon type="lock" className="lock_icon" /> <Icon type='upload' /> Push</Button>
+                                <Button
+                                    type="default"
+                                    placement="bottom"
+                                    style={{ width: "100%", marginBottom: 16, paddingRight: 30 }}
+                                    onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
+                                    disabled={this.props.authUser.type == ADMIN ? false : true}
+                                >
+                                    <Icon type="lock" className="lock_icon" />
+                                    <Icon type='upload' />
+                                    Push
+                                </Button>
 
-                                <Button disabled type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "profile")} ><Icon type="file" />Load Profile</Button>
-                                <Button type="primary" style={{ width: "100%", marginBottom: 16 }} onClick={() => this.showHistoryModal(true, "policy")} ><Icon type="file" />Load Policy</Button>
-                                <Button onClick={() => this.refs.imeiView.showModal(this.props.device)} type="default" style={{ width: "100%", marginBottom: 16 }} ><Icon type="barcode" /> IMEI</Button>
+                                <Button
+                                    disabled
+                                    type="primary"
+                                    style={{ width: "100%", marginBottom: 16 }}
+                                    onClick={() => this.showHistoryModal(true, "profile")}
+                                >
+                                    <Icon type="file" />
+                                    Load Profile
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    style={{ width: "100%", marginBottom: 16 }}
+                                    onClick={() => this.showHistoryModal(true, "policy")}
+                                >
+                                    <Icon type="file" />
+                                    Load Policy
+                                </Button>
+                                <Button
+                                    onClick={() => this.refs.imeiView.showModal(this.props.device)}
+                                    type="default"
+                                    style={{ width: "100%", marginBottom: 16 }}
+                                >
+                                    <Icon type="barcode" />
+                                    IMEI
+                                </Button>
                             </Col>
                             <Col
                                 span={12}
@@ -398,7 +430,15 @@ class SideActions extends Component {
                                 justify="center"
                             >
                                 {/* <Tooltip placement="bottom" title="Coming Soon"> */}
-                                <Button type="default " style={{ width: "100%", marginBottom: 16, paddingRight: 30 }} onClick={() => this.showPwdConfirmModal(true, PULL_APPS)} > <Icon type="lock" /> <Icon type='download' />Pull</Button>
+                                <Button
+                                    type="default"
+                                    style={{ width: "100%", marginBottom: 16, paddingRight: 30 }}
+                                    onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
+                                >
+                                    <Icon type="lock" />
+                                    <Icon type='download' />
+                                    Pull
+                                </Button>
                                 {/* </Tooltip> */}
 
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
