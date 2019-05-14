@@ -300,6 +300,7 @@ class Policy extends Component {
         });
     }
 
+
     render() {
         return (
             <Fragment>

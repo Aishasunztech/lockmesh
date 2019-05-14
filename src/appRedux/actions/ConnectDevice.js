@@ -997,7 +997,7 @@ export const getActivities = (device_id) => {
     return (dispatch) => {
         RestService.getActivities(device_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
+                // console.log(response.data);
                 dispatch({
                     type: GET_ACTIVITIES,
                     payload: response.data

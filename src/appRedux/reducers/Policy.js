@@ -149,9 +149,9 @@ export default (state = initialState, action) => {
 
         case SAVE_POLICY_CHANGES: {
 
-            if(action.payload.response.status){
+            if (action.payload.response.status) {
                 message.success(action.payload.response.msg)
-            }else{
+            } else {
                 message.error(action.payload.response.msg)
             }
             return {
@@ -194,9 +194,9 @@ export default (state = initialState, action) => {
                     changedState[rowId][stateToUpdate][key] = action.payload.value;
                 }
 
-               
-                 changedState[rowId]['isChangedPolicy'] = true;
-              
+
+                changedState[rowId]['isChangedPolicy'] = true;
+
                 // console.log(index, 'lll')
             }
 
@@ -397,13 +397,13 @@ export default (state = initialState, action) => {
 
 
         case CHECK_HANDLE_ALL_POLICY: {
-             
+
             //  console.log(state.policies,'reducer', action.payload);
-             let changedState = JSON.parse(JSON.stringify(state.policies));
-             let chandedRowIndex = changedState.findIndex((item)=> item.id == action.payload.rowId) 
+            let changedState = JSON.parse(JSON.stringify(state.policies));
+            let chandedRowIndex = changedState.findIndex((item) => item.id == action.payload.rowId)
 
             if (action.payload.stateToUpdate === 'allExtensions') {
-                state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;    
+                state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
                 changedState[chandedRowIndex]['secure_apps'].forEach(extension => {
                     if (extension.uniqueName === action.payload.uniqueName) {
                         extension.subExtension.forEach(obj => {
@@ -423,7 +423,7 @@ export default (state = initialState, action) => {
             }
 
             else if (action.payload.stateToUpdate === 'dealerApps') {
-           
+
                 state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
                 changedState[chandedRowIndex]['push_apps'].forEach(app => {
                     app.isChanged = true;

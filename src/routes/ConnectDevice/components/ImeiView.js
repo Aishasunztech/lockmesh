@@ -26,7 +26,7 @@ export default class ImeiView extends Component {
         message.success('Action Done Susscefully ');
     };
 
-    showModal = (device, func) => {
+    getImeiLists() {
 
         let dumyImei1List = []
         let dumyImei2List = []
@@ -42,21 +42,26 @@ export default class ImeiView extends Component {
                 return item
             }
         })
-
-        editDevice = func;
         this.setState({
             imei2List: imei2List,
             imei1List: imei1List,
+        })
+    }
+
+    showModal = (device, func) => {
+        this.getImeiLists()
+        editDevice = func;
+        this.setState({
             visible: true,
             func: func,
 
         });
     }
 
-    componentWillReceiveProps(nextProps){
-        if(this.props.imei_list !== nextProps.imei_list){
-            console.log('actoin done successfuly')
-            this.showModal('', this.state.func)
+    componentWillReceiveProps(nextProps) {
+        if (this.props.imei_list !== nextProps.imei_list) {
+            // console.log('actoin done successfuly')
+            this.getImeiLists()
         }
     }
 
@@ -189,7 +194,6 @@ export default class ImeiView extends Component {
         return data;
     }
     render() {
-        console.log(this.props.imei_list);
         const { visible, loading } = this.state;
         return (
             <div>
