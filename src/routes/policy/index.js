@@ -325,6 +325,7 @@ class Policy extends Component {
 
                 />
                 <PolicyList
+                    user={this.props.user}
                     columns={this.columns}
                     policies={this.state.policies}
                     defaultPolicyChange={this.props.defaultPolicyChange}

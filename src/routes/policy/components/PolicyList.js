@@ -5,6 +5,8 @@ import { Card, Row, Col, Modal, Button, message, Table, Icon, Switch } from "ant
 import update from 'react-addons-update';
 
 import PolicyInfo from './PolicyInfo';
+import { flagged } from '../../../appRedux/actions/ConnectDevice';
+import { ADMIN } from '../../../constants/Constants';
 const confirm = Modal.confirm;
 
 class PolicyList extends Component {
@@ -90,30 +92,32 @@ class PolicyList extends Component {
             // }
         })
         return policy_list.map((policy, index) => {
-            // console.log(policy);
 
             return {
                 rowKey: index,
                 isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy : false,
                 policy_id: policy.id,
                 action:
-                    (<Fragment>
-                        <Button
-                            type="primary"
-                            size="small"
-                            onClick={() => { this.expandRow(index, 'edit', true) }}
 
-                        >
-                            EDIT
+                    (policy.dealer_id == this.props.user.id || this.props.user.type == ADMIN) ?
+                        (
+                            <Fragment>
+                                <Button
+                                    type="primary"
+                                    size="small"
+                                    onClick={() => { this.expandRow(index, 'edit', true) }}
+
+                                >
+                                    EDIT
                         </Button>
-                        <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => { this.deletePolicy(policy.id) }}
-                        >
-                            DELETE
+                                <Button
+                                    type="danger"
+                                    size="small"
+                                    onClick={() => { this.deletePolicy(policy.id) }}
+                                >
+                                    DELETE
                         </Button>
-                    </Fragment>)
+                            </Fragment>) : null
                 ,
                 policy_info:
                     <div>
@@ -131,6 +135,7 @@ class PolicyList extends Component {
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
                 policy_status: (<Switch size='small' checked={policy.status == 1 || policy.status == true ? true : false}
                     onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
+                    } disabled={(policy.dealer_id == this.props.user.id || this.props.user.type == ADMIN) ? false : true
                     } />),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
                 policy_command: (policy.command_name) ? `${policy.command_name}` : "N/A",
@@ -140,7 +145,7 @@ class PolicyList extends Component {
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
                 default_policy: (
-                    <Switch size='small' checked={policy.is_default} onChange={(e) => { this.handleDefaultChange(e, policy.id) }} />
+                    <Switch size='small' checked={policy.is_default} onChange={(e) => { this.handleDefaultChange(e, policy.id) }} disabled={(policy.status == 1 || policy.status == true) ? false : true} />
                 ),
             }
         });
