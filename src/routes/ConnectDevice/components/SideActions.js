@@ -176,7 +176,7 @@ class SideActions extends Component {
     }
 
     componentDidMount() {
-        this.props.getActivities(this.props.device.device_id)
+
         this.setState({
             historyModal: this.props.historyModal,
             saveProfileModal: this.props.saveProfileModal,
