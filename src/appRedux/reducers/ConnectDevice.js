@@ -48,7 +48,9 @@ import {
     SHOW_PULL_APPS_MODAL,
     PULL_APPS,
     WRITE_IMEI,
-    GET_ACTIVITIES
+    GET_ACTIVITIES,
+    HIDE_POLICY_CONFIRM,
+    APPLY_POLICY
 } from "../../constants/ActionTypes";
 
 import {
@@ -140,6 +142,7 @@ const initialState = {
     imei_list: [],
     pushAppsModal: false,
     pullAppsModal: false,
+    applyPolicyConfirm: false,
     device_found: true
 };
 
@@ -342,6 +345,25 @@ export default (state = initialState, action) => {
                 ...state
             }
         }
+        case APPLY_POLICY: {
+            if (action.payload.status) {
+                if (action.payload.online) {
+                    message.success("Policy is Being applied")
+                } else {
+                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: 'Policy Applied to device. Action will be performed when device is back online',
+                    });
+                }
+            } else {
+                message.error(action.payload.msg)
+            }
+            return {
+                ...state,
+                applyPolicyConfirm: false
+            }
+        }
 
         case LOAD_PROFILE: {
             // console.log(LOAD_PROFILE);
@@ -375,7 +397,7 @@ export default (state = initialState, action) => {
         case SHOW_HISTORY_MODAL: {
             // console.log(SHOW_HISTORY_MODAL);
             // console.log({
-            //     ...state,
+            //     ...state,SHOW_HISTORY_MODAL
             //     historyType: action.payload.ProfileType,
             //     historyModal: action.payload.visible
             // })
@@ -497,7 +519,14 @@ export default (state = initialState, action) => {
                     }
                 } else if (action.payload.actionType === WIPE_DEVICE) {
 
-                    showConfirm1(action.payload.device, "Do You really Want to Wipe the device")
+                    showConfirm1(action.payload.device, "Do you really want to Wipe the device")
+                }
+                else if (action.payload.actionType === POLICY) {
+                    return {
+                        ...state,
+                        historyModal: false,
+                        applyPolicyConfirm: true
+                    }
                 }
             }
             else {
@@ -923,13 +952,19 @@ export default (state = initialState, action) => {
                 imei_list: action.payload,
             }
         }
+        case HIDE_POLICY_CONFIRM: {
+            return {
+                ...state,
+                applyPolicyConfirm: false,
+            }
+        }
 
         case WRITE_IMEI: {
             if (action.payload.status) {
-                if(action.payload.insertedData !== null){
+                if (action.payload.insertedData !== null) {
                     state.imei_list.unshift(action.payload.insertedData)
                 }
-               
+
                 if (action.payload.online) {
                     message.success(action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device!")
                 } else {
@@ -1033,11 +1068,11 @@ function handleCheckedAllExts(extensions) {
     }
 }
 
-function showConfirm1(device, msg) {
+function showConfirm1(device, msg, buttonText) {
     confirm({
         title: 'WARNNING!',
         content: msg,
-        okText: "WIPE DEVICE",
+        okText: buttonText,
         onOk() {
             showConfirm(device, "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.")
         },
@@ -1052,6 +1087,8 @@ function showConfirm(device, msg) {
         onOk() {
             actions.wipe(device)
         },
-        onCancel() { },
+        onCancel() {
+
+        },
     });
 }

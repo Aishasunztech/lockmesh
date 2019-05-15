@@ -3,7 +3,8 @@ import { Modal, message, Radio, Button, Form, Input } from 'antd';
 import {
     PUSH_APPS,
     WIPE_DEVICE,
-    PULL_APPS
+    PULL_APPS,
+    POLICY
 } from "../../../constants/ActionTypes"
 
 class PassworForm extends Component {
@@ -21,15 +22,18 @@ class PassworForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             //  console.log(this.props.actionType, 'action type');
             if (!err) {
-                if(this.props.actionType === PUSH_APPS){
+                if (this.props.actionType === PUSH_APPS) {
                     this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
-                }else if(this.props.actionType === WIPE_DEVICE){
+                } else if (this.props.actionType === WIPE_DEVICE) {
                     this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
 
                 }
-                else if(this.props.actionType === PULL_APPS){
+                else if (this.props.actionType === PULL_APPS) {
                     this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
 
+                }
+                else if (this.props.actionType === POLICY) {
+                    this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
                 }
             }
         });

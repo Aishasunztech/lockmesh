@@ -119,7 +119,7 @@ class AddDevice extends Component {
                     : null}
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p style={{ marginLeft: 36 }}>(*)- Required Fields</p>
-                    {(this.state.type == 0) ?
+                    {(this.props.preActive) ? null :
                         <Form.Item
                             label="Device ID "
                             labelCol={{ span: 8 }}
@@ -131,7 +131,7 @@ class AddDevice extends Component {
 
                                 <Input disabled />
                             )}
-                        </Form.Item> : null
+                        </Form.Item>
                     }
                     {(isloading ?
 
@@ -227,39 +227,6 @@ class AddDevice extends Component {
                                     <Input type='hidden' disabled />
                                 )}
                             </Form.Item>
-                            <Form.Item
-                                label="Name "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('name', {
-                                    initialValue: this.props.new ? "" : this.props.device.name,
-                                    rules: [{
-
-                                        required: true, message: 'Name is Required !',
-                                    }],
-                                })(
-                                    <Input autoComplete="new-password" />
-                                )}
-                            </Form.Item>
-                            <Form.Item
-
-                                label="Account Email "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('email', {
-                                    initialValue: this.props.new ? "" : this.props.device.email,
-                                    rules: [{
-                                        type: 'email', message: 'The input is not valid E-mail!',
-                                    }, {
-                                        required: true, message: 'Account Email is Required !',
-                                    }],
-                                })(
-                                    <Input autoComplete="new-password" />
-                                )}
-                            </Form.Item>
-
                             <Form.Item
                                 label="PGP Email "
                                 labelCol={{ span: 8 }}
