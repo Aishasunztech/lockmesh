@@ -125,7 +125,7 @@ export default class Activity extends Component {
 
                             },
                             {
-                                title: "Date",
+                                title: "DATE",
                                 align: "center",
                                 dataIndex: 'created_at',
                                 key: "created_at",
@@ -141,7 +141,7 @@ export default class Activity extends Component {
                         // scroll={{ y: 350 }}
                         pagination={false}
                     />
-                    
+
                 </Modal>
 
             </div>
