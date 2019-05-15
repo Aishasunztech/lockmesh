@@ -27,7 +27,11 @@ class ApkMarket extends React.Component {
     }
     renderList = (availbleAppList, secureMarketList) => {
 
-        let combinedList = [...availbleAppList, ...secureMarketList]
+        // console.log(availbleAppList, ' objext data ', secureMarketList)
+
+        let combinedList = availbleAppList;
+        // let combinedList = [...availbleAppList, ...secureMarketList];
+        // console.log('combined', combinedList)
         combinedList.forEach((item) => {
             if (item.dealer_type === ADMIN) {
                 item.disabled = true
@@ -57,8 +61,9 @@ class ApkMarket extends React.Component {
 
     handleChange = (targetKeys, direction, moveKeys) => {
         let marketApps = targetKeys;
+        // console.log('target keys', targetKeys)
         this.props.transferApps(marketApps)
-        // console.log(direction, moveKeys);
+        //  console.log(targetKeys,direction, moveKeys ,'ttttt');
         this.setState({ targetKeys });
 
     }
@@ -68,7 +73,7 @@ class ApkMarket extends React.Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        //  console.log('will recive props');
+        //   console.log('will recive props', nextProps);
 
         if (this.props.apk_list !== nextProps.apk_list) {
             let keys = nextProps.secureMarketList.map((app) => {
@@ -77,9 +82,9 @@ class ApkMarket extends React.Component {
             // console.log(keys);
             this.setState({
                 apk_list: nextProps.apk_list,
-                secureMarketList: nextProps.secureMarketList,
+                 secureMarketList: nextProps.secureMarketList,
                 availbleAppList: nextProps.availbleAppList,
-                targetKeys: keys
+                 targetKeys: keys
             })
         }
     }
@@ -91,7 +96,7 @@ class ApkMarket extends React.Component {
             })
             this.setState({
                 apk_list: this.props.apk_list,
-                secureMarketList: this.props.secureMarketList,
+                 secureMarketList: this.props.secureMarketList,
                 availbleAppList: this.props.availbleAppList,
                 targetKeys: keys
             })

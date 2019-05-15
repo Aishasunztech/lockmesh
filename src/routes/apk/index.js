@@ -69,7 +69,7 @@ class Apk extends React.Component {
                         </span>),
                     dataIndex: 'permission',
                     key: 'permission',
-                    className: 'row'
+                    className: ''
                 },
                 {
                     title: APK_SHOW_ON_DEVICE,
@@ -129,7 +129,6 @@ class Apk extends React.Component {
     }
 
 
-
     componentWillReceiveProps(nextProps) {
         //  console.log('will recive props');
 
@@ -143,7 +142,7 @@ class Apk extends React.Component {
     handleCheckChange = (values) => {
         let dumydata = this.state.columns;
 
-        // console.log('values', values);
+         console.log('values', values);
         // console.log('values', values)
         if (values.length) {
             this.state.columns.map((column, index) => {
@@ -153,6 +152,13 @@ class Apk extends React.Component {
                 }
 
                 values.map((value) => {
+                    console.log(APK_PERMISSION,value,"columns", column);
+                    if(value === APK_PERMISSION && column.dataIndex == 'permission'){
+                        console.log('......... ......', column.title)
+                        if (column.title.props.children[0] === value) {
+                            dumydata[index].className = '';
+                        }
+                    }
                     if (column.title === value) {
                         dumydata[index].className = '';
                     }
