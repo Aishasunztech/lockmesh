@@ -59,8 +59,11 @@ export default (state = initialState, action) => {
 		case UNLINK_APK:
 
 			// console.log(UNLINK_APK);
-			state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
+			if (action.response.status) {
+				message.success(action.response.msg);
+				state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
 
+			}
 			return {
 				...state,
 				isloading: false,
