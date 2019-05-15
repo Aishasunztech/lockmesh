@@ -111,6 +111,7 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY: {
+            // console.log(action.response, 'resp')
             if (action.response.status) {
                 message.success(action.response.msg)
             } else {
@@ -220,7 +221,8 @@ export default (state = initialState, action) => {
                     message.success('Policy Deleted Successfully')
 
                 } else if (action.payload.key == 'status') {
-                    changedState[index][action.payload.key] = action.payload.value
+                    changedState[index][action.payload.key] = action.payload.value;
+                    message.success(' Status Changed Sccessfully ')
                 }
                 state.policies = changedState;
                 return {
