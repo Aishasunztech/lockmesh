@@ -61,7 +61,7 @@ function showConfirm(_this, device, type, values) {
     confirm({
         title: "Write " + values.imei + " to " + type + " on Device? ",
         onOk() {
-            _this.props.writeImei(device.device_id, device.id, type, values.imei)
+            _this.props.writeImei(device.device_id, device.id, type, values.imei, device)
             _this.props.form.resetFields();
         },
         onCancel() {

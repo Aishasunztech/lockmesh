@@ -10,7 +10,9 @@ import {
     HANDLE_POLICY_STATUS,
     EDIT_POLICY,
     POLICY_PERMSSION_SAVED,
-    SAVE_POLICY_CHANGES
+    SAVE_POLICY_CHANGES,
+    CHECK_HANDLE_ALL_POLICY,
+    DEFAULT_POLICY_CHANGE
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -164,7 +166,7 @@ export function SavePolicyChanges(record) {
                     dispatch({
                         type: SAVE_POLICY_CHANGES,
                         payload: {
-                          response: response.data
+                            response: response.data
                         }
                     })
                 } else {
@@ -178,8 +180,8 @@ export function SavePolicyChanges(record) {
 }
 
 
-export function handleEditPolicy(e, key, id, stateToUpdate='',rowId, uniqueName='') {
-    // console.log('action called', e , key, id, stateToUpdate, uniqueName)
+export function handleEditPolicy(e, key, id, stateToUpdate = '', rowId, uniqueName = '') {
+    //  console.log('action called', e , key, id, stateToUpdate, uniqueName)
     return (dispatch) => {
         dispatch({
             type: EDIT_POLICY,
@@ -187,8 +189,8 @@ export function handleEditPolicy(e, key, id, stateToUpdate='',rowId, uniqueName=
                 value: e,
                 key: key,
                 id: id,
-                rowId:rowId,
-                stateToUpdate:stateToUpdate,
+                rowId: rowId,
+                stateToUpdate: stateToUpdate,
                 uniqueName: uniqueName
             }
         })
@@ -215,6 +217,22 @@ export function handleCheckAllAppPolicy(e, key, stateToUpdate, uniqueName = '') 
     }
 }
 
+export function handleCheckAll(e, key, stateToUpdate, uniqueName = '', rowId) {
+    return (dispatch) => {
+        dispatch({
+            type: CHECK_HANDLE_ALL_POLICY,
+            payload: {
+                value: e,
+                key: key,
+                // app_id: app_id,
+                stateToUpdate: stateToUpdate,
+                uniqueName: uniqueName,
+                rowId: rowId
+            }
+        })
+    }
+}
+
 export function savePermission(policy_id, dealers, action) {
     // alert(policy_id);
 
@@ -228,6 +246,25 @@ export function savePermission(policy_id, dealers, action) {
                     permission_count: response.data.permission_count,
                     policy_id: policy_id,
                     dealers: dealers
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
+}
+export function defaultPolicyChange(enable, policy_id) {
+    return (dispatch) => {
+        RestService.defaultPolicyChange(enable, policy_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: DEFAULT_POLICY_CHANGE,
+                    payload: response.data.msg,
+                    policy_id: policy_id
                 })
 
             } else {

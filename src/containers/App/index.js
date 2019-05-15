@@ -9,6 +9,9 @@ import AppLocale from "lngProvider";
 import MainApp from "./MainApp";
 
 import Login from "../Login";
+
+import VerifyAuthCode from "../VerifyAuthCode";
+
 // import SignUp from "../SignUp";
 import { setInitUrl } from "appRedux/actions/Auth";
 import { onLayoutTypeChange, onNavStyleChange, setThemeType } from "appRedux/actions/Setting";
@@ -26,26 +29,6 @@ import {
   NAV_STYLE_INSIDE_HEADER_HORIZONTAL
 } from "../../constants/ThemeSetting";
 import RestrictedRoute from "./RestrictedRoute";
-
-// const RestrictedRoute = ({component: Component, authUser, ...rest}) => {
-//   console.log("RestrictedRoute");
-//   console.log("component", Component);
-//   console.log("AuthUser", authUser);
-//   console.log("rest", rest);
-
-//   return (<Route {...rest} render={
-//     (props) => {
-//       if(authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null){
-//         return <Redirect to={{ pathname: '/login', state: {from: props.location} }} />
-//       }else{
-//         return <Component {...props} />;
-//       }
-//     }
-//   } />);
-// }
-
-// return (<Route {...rest} render={(props) => authUser ? <Component {...props} /> : <Redirect to={{ pathname: '/login', state: {from: props.location} }} />} />);
-
 
 class App extends Component {
 
@@ -98,19 +81,15 @@ class App extends Component {
   }
 
   render() {
-    // console.log("app container index.js");
-
-    // console.log("app component sdfa",this.props);
 
     const { match, location, layoutType, navStyle, locale, authUser, initURL } = this.props;
-
-    // console.log(location.pathname);
 
     if (location.pathname === '/') {
       if (authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null) {
         return (<Redirect to={'/login'} />);
-      } else if (initURL === '' || initURL === '/' || initURL === '/login') {
-        return (<Redirect to={'/devices'} />);
+      } else if ((initURL === '' || initURL === '/' || initURL === '/login')) {
+          return (<Redirect to={'/devices'} />);
+
       } else {
         return (<Redirect to={initURL} />);
       }
@@ -122,37 +101,34 @@ class App extends Component {
     this.setNavStyle(navStyle);
 
     const currentAppLocale = AppLocale[locale.locale];
-    // console.log("language Provider");
-    // console.log(currentAppLocale.antd);
-    // console.log(currentAppLocale.locale);
-    // console.log(currentAppLocale.messages);
-    // console.log(locale);
-    // console.log(locale.locale);
+
     return (
-      <LocaleProvider locale={currentAppLocale.antd}>
+      <LocaleProvider
+        locale={currentAppLocale.antd}
+      >
         <IntlProvider
           locale={currentAppLocale.locale}
-          messages={currentAppLocale.messages}>
+          messages={currentAppLocale.messages}
+        >
 
           <Switch>
             <Route exact path='/login' component={Login} />
-            {/*             
-            {
-              (this.props.isAllowed)? */}
+            <Route exact path="/verify-auth" component={VerifyAuthCode} />
             <RestrictedRoute
               authUser={authUser}
               path={`${match.url}`}
               // authUser={authUser}
               component={MainApp}
             />
-            {/* :
-              null
-              // <Redirect to={{ pathname: '/invalid_page', state: { from: this.props.location } }} />
-            } */}
+
           </Switch>
         </IntlProvider>
       </LocaleProvider>
     )
+  }
+
+  newMethod(location) {
+    return location.pathname;
   }
 }
 

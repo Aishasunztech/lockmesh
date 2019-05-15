@@ -37,10 +37,11 @@ import {
   handleCheckAllExtension,
   reSyncDevice,
   getDealerApps,
+  getActivities
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
-import { ackFinishedPushApps, ackFinishedPullApps } from "../../appRedux/actions/Socket";
+import { ackFinishedPushApps, ackFinishedPullApps, pullPushInProcess } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
@@ -55,7 +56,7 @@ import DeviceSidebar from './components/DeviceSidebar';
 import SideActions from './components/SideActions';
 import AppList from './components/AppList';
 import Password from "./components/Password"
-import { getColor } from "../utils/commonUtils"
+import { getColor, isBase64 } from "../utils/commonUtils"
 import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
@@ -69,7 +70,8 @@ class ConnectDevice extends Component {
       device_id: '',
       pageName: MAIN_MENU,
       showChangesModal: false,
-      controls: []
+      controls: [],
+      imei_list: []
     }
     // console.log("hello every body", this.props);
     this.mainMenu = [
@@ -137,14 +139,15 @@ class ConnectDevice extends Component {
 
     this.setState({
       pageName: this.props.pageName,
-      device_id: atob(this.props.match.params.device_id),
+      device_id: isBase64(this.props.match.params.device_id),
       controls: this.props.controls
     });
 
-    const device_id = atob(this.props.match.params.device_id);
+    const device_id = isBase64(this.props.match.params.device_id);
 
     if (device_id !== '') {
 
+      this.props.pullPushInProcess(this.props.socket, device_id);
       this.props.getDeviceDetails(device_id);
       this.props.getDeviceApps(device_id);
       this.props.getProfiles(device_id);
@@ -154,8 +157,9 @@ class ConnectDevice extends Component {
       this.props.getDealerApps();
       this.props.ackFinishedPushApps(this.props.socket, device_id);
       this.props.ackFinishedPullApps(this.props.socket, device_id);
-      // console.log('ack_finished_push_apps_' + device_id);
+      this.props.getActivities(device_id)
 
+      // console.log('ack_finished_push_apps_' + device_id);
     }
 
 
@@ -169,9 +173,10 @@ class ConnectDevice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls) {
+    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list) {
       this.setState({
-        controls: this.props.controls
+        controls: this.props.controls,
+        imei_list: this.props.imei_list
       })
     }
   }
@@ -345,6 +350,7 @@ class ConnectDevice extends Component {
     this.props.getImeiHistory(deviceId);
     this.props.reSyncDevice(deviceId);
     this.props.getDealerApps();
+    this.props.getActivities(deviceId)
     this.onBackHandler();
     setTimeout(() => {
       this.props.endLoading();
@@ -528,11 +534,13 @@ function mapDispatchToProps(dispatch) {
     reSyncDevice: reSyncDevice,
     getDealerApps: getDealerApps,
     ackFinishedPullApps: ackFinishedPullApps,
-    ackFinishedPushApps: ackFinishedPushApps
+    ackFinishedPushApps: ackFinishedPushApps,
+    pullPushInProcess: pullPushInProcess,
+    getActivities: getActivities
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth }) => {
-  console.log("connect device state", device_details.device);
+var mapStateToProps = ({ routing, device_details, auth, socket }) => {
+  // console.log("connect device state", socket.is_in_process, device_details.device.is_push_apps);
   return {
     auth: auth,
     socket: auth.socket,
@@ -577,6 +585,8 @@ var mapStateToProps = ({ routing, device_details, auth }) => {
     secureSettingsMain: device_details.secureSettingsMain,
     forceUpdate: device_details.forceUpdate,
     apk_list: device_details.apk_list,
+    is_in_process: socket.is_in_process,
+    device_found: device_details.device_found
   };
 }
 

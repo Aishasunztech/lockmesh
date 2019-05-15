@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Divider, Badge, } from "antd";
-import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS} from '../../../constants/Constants';
+import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS } from '../../../constants/Constants';
 
 // import AppList from "./AppList";
 
@@ -64,9 +64,10 @@ export default class TableHistory extends Component {
         ];
     }
 
-    cotrolsValues = ()=> {
-        if(Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object){
-            return(
+    cotrolsValues = () => {
+        console.log(this.state.controls);
+        if (Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object) {
+            return (
                 [
                     {
                         label: 'Wifi',
@@ -89,25 +90,25 @@ export default class TableHistory extends Component {
                         status: this.state.controls.controls.call_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
                     }
                 ]
-        
+
             )
         }
-      
-    } 
+
+    }
 
     filterAppList = () => {
         let data = this.props.app_list;
         let applist = [];
-        if(this.props.show_all_apps){
+        if (this.props.show_all_apps) {
             this.setState({ applist: data })
-        }else{
+        } else {
             for (let obj of data) {
                 if (obj.isChanged !== undefined && obj.isChanged === true) {
                     // if(applist.includes(obj)){
 
                     // }else{
-                        applist.push(obj);
-                      
+                    applist.push(obj);
+
                     // }
                 }
             }
@@ -121,22 +122,22 @@ export default class TableHistory extends Component {
     filterExtensions = () => {
         let data = this.props.extensions;
         let extensions = [];
-        if(this.props.show_all_apps){
+        if (this.props.show_all_apps) {
             this.setState({ extensions: data })
-        }else{
-        if (data.length) {
-            for (let obj of data) {
-                if (obj.uniqueName == this.props.extensionUniqueName) {
-                    for (let item of obj.subExtension) {
-                        if (item.isChanged !== undefined && item.isChanged === true) {
-                            extensions.push(item);
+        } else {
+            if (data.length) {
+                for (let obj of data) {
+                    if (obj.uniqueName == this.props.extensionUniqueName) {
+                        for (let item of obj.subExtension) {
+                            if (item.isChanged !== undefined && item.isChanged === true) {
+                                extensions.push(item);
+                            }
                         }
                     }
                 }
+                this.setState({ extensions: extensions })
             }
-            this.setState({ extensions: extensions })
         }
-    }
 
     }
 
@@ -151,14 +152,13 @@ export default class TableHistory extends Component {
     }
 
     componentDidMount() {
-        this.setState({controls: this.props.controls})
+        this.setState({ controls: this.props.controls })
         this.filterAppList();
         this.filterExtensions();
     }
 
     renderData = (datalist) => {
-        //  console.log(datalist, ' object', this.state.applist);
-         
+
         if (datalist.length > 0) {
             return (
                 datalist.map((item, index) => {
@@ -181,62 +181,62 @@ export default class TableHistory extends Component {
                 {/* {
                     this.state.applist.length ? */}
 
-                        <div>
-                            <Divider >{APPLICATION_PERMISION} </Divider>
-                            <Table
-                                style={{ margin: 0, padding: 0 }}
-                                size='small'
-                                bordered={false}
-                                columns={this.appsColumns}
-                                align='center'
-                                dataSource={this.renderData(this.state.applist)}
-                                pagination={false}
+                <div>
+                    <Divider >{APPLICATION_PERMISION} </Divider>
+                    <Table
+                        style={{ margin: 0, padding: 0 }}
+                        size='small'
+                        bordered={false}
+                        columns={this.appsColumns}
+                        align='center'
+                        dataSource={this.renderData(this.state.applist)}
+                        pagination={false}
 
-                            />
-                        </div>
-                         {/* : false}
+                    />
+                </div>
+                {/* : false}
                  { */}
-                     {/* this.state.extensions.length ? */}
-                        <div>
-                            <Divider> {SECURE_SETTING_PERMISSION}</Divider>
+                {/* this.state.extensions.length ? */}
+                <div>
+                    <Divider> {SECURE_SETTING_PERMISSION}</Divider>
 
-                            <Table
-                                style={{ margin: 0, padding: 0 }}
-                                size='small'
-                                bordered={false}
-                                columns={this.extensionColumns}
-                                align='center'
-                                dataSource={this.renderData(this.state.extensions)}
-                                pagination={false}
+                    <Table
+                        style={{ margin: 0, padding: 0 }}
+                        size='small'
+                        bordered={false}
+                        columns={this.extensionColumns}
+                        align='center'
+                        dataSource={this.renderData(this.state.extensions)}
+                        pagination={false}
 
-                            /></div> 
-                            {/* : false} */}
-                            
-                            <div>
-                            <Divider> {SYSTEM_PERMISSION}</Divider>
+                    /></div>
+                {/* : false} */}
 
-                            <Table
-                                style={{ margin: 0, padding: 0 }}
-                                size='small'
-                                bordered={false}
-                                columns={this.controlColumns}
-                                align='center'
-                                dataSource={this.cotrolsValues()}
-                                pagination={false}
+                <div>
+                    <Divider> {SYSTEM_PERMISSION}</Divider>
 
-                            /> 
-                    
-                            </div> 
+                    <Table
+                        style={{ margin: 0, padding: 0 }}
+                        size='small'
+                        bordered={false}
+                        columns={this.controlColumns}
+                        align='center'
+                        dataSource={this.cotrolsValues()}
+                        pagination={false}
 
-                           <Divider> {MANAGE_PASSWORDS} </Divider>
+                    />
+
+                </div>
+
+                <Divider> {MANAGE_PASSWORDS} </Divider>
                 {
                     this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
                 }{
                     this.props.isEncryptedPwd ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
                 }{
-                    this.props.isGuestPwd ? <div><p></p> <Badge status="processing" text='Guest Password is changed' /></div> : false  
+                    this.props.isGuestPwd ? <div><p></p> <Badge status="processing" text='Guest Password is changed' /></div> : false
                 }{
-                    this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false 
+                    this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false
                 }
 
             </div>

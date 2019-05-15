@@ -1,8 +1,10 @@
 
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import { updatePassword } from "../../appRedux/actions/Dealers";
-import { updateUserProfile } from "../../appRedux/actions/Auth";
+import { updateUserProfile, twoFactorAuth } from "../../appRedux/actions/Auth";
 import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch } from 'antd';
 import ChangePassword from './components/changePassword';
 import ChangeProfile from './components/change_profile';
@@ -25,14 +27,14 @@ class Profile extends Component {
     }
 
     handleOk1 = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
     }
 
     handleCancel1 = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
@@ -41,7 +43,9 @@ class Profile extends Component {
     callChild = () => {
         this.refs.Customize33.toggleCustomizer();
     }
-
+    twoFactorAuth = (e) => {
+        this.props.twoFactorAuth(e);
+    }
     render() {
         let columnData = null
         let commonColumns = [
@@ -190,7 +194,13 @@ class Profile extends Component {
                                         <h3>Login Email Authentication</h3>
                                     </Col>
                                     <Col span={6} style={{ padding: "16px 16px 0 " }}>
-                                        <Switch checkedChildren="ON" unCheckedChildren="OFF" />
+                                        <Switch 
+                                        checkedChildren="ON" 
+                                        unCheckedChildren="OFF"  
+                                        defaultChecked={(this.props.profile.two_factor_auth===1 || this.props.profile.two_factor_auth ===true)? true : false}
+                                        onChange={(e)=>{
+                                            this.twoFactorAuth(e);
+                                        }} />
                                     </Col>
                                 </Row>
                             </Modal>
@@ -211,16 +221,22 @@ class Profile extends Component {
     }
 }
 
-var mapStateToProps = (state) => {
+var matchDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        twoFactorAuth: twoFactorAuth,
+        updatePassword, updateUserProfile
+       }, dispatch);
+}
+
+var mapStateToProps = ({auth}) => {
     // console.log("mapStateToProps");
     // console.log('ooo', state.auth);
-
+    // console.log(auth.authUser);
     return {
-        isloading: state.isloading,
-        profile: state.auth.authUser
+        profile: auth.authUser
 
     };
 }
 
 
-export default connect(mapStateToProps, { updatePassword, updateUserProfile })(Profile)
+export default connect(mapStateToProps, matchDispatchToProps)(Profile)

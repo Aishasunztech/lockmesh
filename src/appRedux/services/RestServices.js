@@ -17,6 +17,11 @@ const RestService = {
     login: (user) => {
         return axios.post(BASE_URL + 'users/login', user);
     },
+    verifyCode: (verifyForm) => {
+        return axios.post(BASE_URL + 'users/verify_code', {
+            verify_code: verifyForm.verify_code
+        });
+    },
     getHeader: () => {
         return {
             headers: {
@@ -46,9 +51,10 @@ const RestService = {
         localStorage.setItem('lastName', data.user.lastName);
         localStorage.setItem('connected_dealer', data.user.connected_dealer);
         localStorage.setItem('connected_devices', data.user.connected_devices[0].total);
-
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
+        localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
+
     },
     setUserData: (data) => {
         // console.log("hello12312", data);
@@ -61,6 +67,7 @@ const RestService = {
         localStorage.setItem('connected_devices', data.user.connected_devices[0].total);
         localStorage.setItem('type', data.user.user_type);
         localStorage.setItem('dealer_pin', data.user.link_code);
+        localStorage.setItem('two_factor_auth', data.user.two_factor_auth);
 
     },
     // checkAuth
@@ -72,7 +79,9 @@ const RestService = {
         }
 
     },
-
+    twoFactorAuth: (isEnable) => {
+        return axios.post(BASE_URL + 'users/two_factor_auth', { isEnable: isEnable }, RestService.getHeader())
+    },
     // Component Allowed
     checkComponent: (ComponentUri) => {
         return axios.post(BASE_URL + 'users/check_component', { ComponentUri: ComponentUri }, RestService.getHeader());
@@ -225,7 +234,6 @@ const RestService = {
 
     saveNewData: (data) => {
         return axios.post(BASE_URL + "users/save_new_data ", data, RestService.getHeader());
-
     },
 
     getDeviceApps: (device_id) => {
@@ -549,6 +557,11 @@ const RestService = {
     getImeiHistory: (device_id) => {
         return axios.get(BASE_URL + "users/get_imei_history/" + device_id, RestService.getHeader());
     },
+
+    getActivities: (device_id) => {
+        return axios.get(BASE_URL + "users/get_activities/" + device_id, RestService.getHeader());
+    },
+
     //GET User List
     userList: () => {
         return axios.get(BASE_URL + 'users/userList',
@@ -556,8 +569,8 @@ const RestService = {
         )
     },
 
-    writeImei(device_id, usrAccId, type, imeiNo) {
-        return axios.post(BASE_URL + 'users/writeImei/' + device_id, { usrAccId, type, imeiNo }, RestService.getHeader());
+    writeImei(device_id, usrAccId, type, imeiNo, device) {
+        return axios.post(BASE_URL + 'users/writeImei/' + device_id, { usrAccId, type, imeiNo, device }, RestService.getHeader());
     },
 
     // ADD new user
@@ -576,6 +589,10 @@ const RestService = {
     },
     getMarketApps: () => {
         return axios.get(BASE_URL + 'users/marketApplist', RestService.getHeader())
+    },
+
+    defaultPolicyChange: (enable, policy_id) => {
+        return axios.post(BASE_URL + 'users/set_default_policy', { enable, policy_id }, RestService.getHeader())
     },
 
 

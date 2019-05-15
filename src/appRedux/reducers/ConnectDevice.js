@@ -47,7 +47,8 @@ import {
     SHOW_PUSH_APPS_MODAL,
     SHOW_PULL_APPS_MODAL,
     PULL_APPS,
-    WRITE_IMEI
+    WRITE_IMEI,
+    GET_ACTIVITIES
 } from "../../constants/ActionTypes";
 
 import {
@@ -56,6 +57,7 @@ import {
 
 import { message, Modal, Alert, Icon } from 'antd';
 
+const warning = Modal.warning;
 const confirm = Modal.confirm;
 const actions = require("../../appRedux/actions/ConnectDevice")
 
@@ -130,13 +132,15 @@ const initialState = {
     controls: {},
     undoControls: [],
     redoControls: [],
+    activities: [],
 
     guestAllExt: false,
     encryptedAllExt: false,
 
     imei_list: [],
     pushAppsModal: false,
-    pullAppsModal: false
+    pullAppsModal: false,
+    device_found: true
 };
 
 export default (state = initialState, action) => {
@@ -153,33 +157,39 @@ export default (state = initialState, action) => {
         case GET_DEVICE_DETAILS: {
 
             let device = action.payload;
-            if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
-                let status = null;
+            if (device) {
+                if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
+                    let status = null;
 
-                if (device.status === "expired") {
-                    status = "Expired"
-                } else if (device.account_status === "suspended") {
-                    status = "Suspended";
-                } else if (device.unlink_status === 1) {
-                    status = "Unlinked"
-                }
+                    if (device.status === "expired") {
+                        status = "Expired"
+                    } else if (device.account_status === "suspended") {
+                        status = "Suspended";
+                    } else if (device.unlink_status === 1) {
+                        status = "Unlinked"
+                    }
 
-                return {
-                    ...state,
-                    device: action.payload,
-                    applyBtn: false,
-                    undoBtn: false,
-                    redoBtn: false,
-                    clearBtn: false,
-                    pageName: NOT_AVAILABLE,
-                    status: status
+                    return {
+                        ...state,
+                        device: action.payload,
+                        applyBtn: false,
+                        undoBtn: false,
+                        redoBtn: false,
+                        clearBtn: false,
+                        pageName: NOT_AVAILABLE,
+                        status: status,
+                        device_found: true
+                    }
+                } else {
+                    return {
+                        ...state,
+                        device: action.payload,
+                        device_found: true
+                    }
+
                 }
             } else {
-                return {
-                    ...state,
-                    device: action.payload,
-                }
-
+                return { ...state, device_found: false }
             }
 
         }
@@ -285,6 +295,13 @@ export default (state = initialState, action) => {
             }
         }
 
+        case GET_ACTIVITIES: {
+            return {
+                ...state,
+                activities: action.payload.data
+            }
+        }
+
         case GET_USER_ACC_ID: {
 
             return {
@@ -312,16 +329,11 @@ export default (state = initialState, action) => {
                 if (action.payload.online) {
                     message.success("Apps are Being pushed")
                 } else {
-                    // Alert.warning('jhdskfh');
-                    {/* <Alert
-                        message="Warning Device Offline"
-                        description="Apps pushed to device.Action will be performed when device is back online"
-                        type="warning"
-                        showIcon
-                    /> */}
-                    // message.open({ icon: <Icon type="question-circle" className="warn_icon" />, content: (<div><span>Warning Device Offline</span> Apps pushed to device.Action will be performed when device is back online</div>) })
-
-                    message.warning(<Fragment><b >Warning Device Offline</b><div className="mt-4">Apps pushed to device. Action will be performed <br></br> when device is back online</div></Fragment>)
+                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: 'Apps pushed to device. Action will be performed when device is back online',
+                    });
                 }
             } else {
                 message.error(action.payload.msg)
@@ -518,7 +530,10 @@ export default (state = initialState, action) => {
                 if (action.payload.online) {
                     message.success("Apps are Being pulled")
                 } else {
-                    message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pulled to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: 'Apps pulled from device. Action will be performed when device is back online',
+                    });
                 }
             } else {
                 message.error(action.payload.msg)
@@ -911,17 +926,26 @@ export default (state = initialState, action) => {
 
         case WRITE_IMEI: {
             if (action.payload.status) {
+                if(action.payload.insertedData !== null){
+                    state.imei_list.unshift(action.payload.insertedData)
+                }
+               
                 if (action.payload.online) {
                     message.success(action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device!")
                 } else {
-                    message.warning(<Fragment><span>Warning Device Offline</span> <div> {action.imeiData.imeiNo} write to {action.imeiData.type}. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: action.imeiData.imeiNo + ' write to ' + action.imeiData.type + '. Action will be performed when device is back online',
+                    });
                 }
+                console.log('new state is', state.imei_list)
             }
             else {
                 message.error(action.payload.msg)
             }
             return {
                 ...state,
+                imei_list: [...state.imei_list]
             }
         }
         default:

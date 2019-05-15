@@ -124,6 +124,28 @@ export function componentSearch(arr, search) {
   })
   return foundDevices;
 }
+
+export function getFormattedDate(value) {
+  function convert(str) {
+    var month, day, year, hours, minutes, seconds;
+    var date = new Date(str),
+      month = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    hours = ("0" + date.getHours()).slice(-2);
+    minutes = ("0" + date.getMinutes()).slice(-2);
+    seconds = ("0" + date.getSeconds()).slice(-2);
+
+    var mySQLDate = [month, day, date.getFullYear()].join("-");
+    var mySQLTime = [hours, minutes, seconds].join(":");
+    return [mySQLDate, mySQLTime].join(" ");
+  }
+
+  let date = new Date(value);
+  let formattedDate = convert(date)
+  return formattedDate;
+  // date.toLocaleDateString('%d-%b-%Y');
+}
+
 export function initCap(str) {
   return str.replace(/^\w/, function (chr) { return chr.toUpperCase() })
 }
@@ -166,7 +188,16 @@ export function checkRemainDays(createDate, validity) {
   if (days > 0) return days; else if (days <= 0) return "Expired"; else return "Not Announced";
 }
 
-export function dealerColsWithSearch(searchBar = false, callBack=null) {
+export function isBase64(str) {
+  if (str === '' || str.trim() === '') { return false; }
+  try {
+    return atob(str)
+  } catch (err) {
+    return false;
+  }
+}
+
+export function dealerColsWithSearch(searchBar = false, callBack = null) {
 
   var searchInput = [
     {

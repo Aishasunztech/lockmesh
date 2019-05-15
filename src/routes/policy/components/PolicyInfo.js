@@ -116,11 +116,16 @@ export default class PolicyInfo extends Component {
         })
     }
 
-    componentWillReceiveProps(nextProp) {
-        if (this.props.selected !== nextProp.selected) {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.selected !== nextProps.selected) {
+            console.log(this.props, 'object updated', nextProps)
             this.setState({
-                selected: nextProp.selected,
-                policy: nextProp.policy
+                selected: nextProps.selected,
+            })
+        }
+        if (this.props.policy !== nextProps.policy) {
+            this.setState({
+                policy: nextProps.policy
             })
         }
     }
@@ -148,6 +153,10 @@ export default class PolicyInfo extends Component {
                             apk_list={this.state.policy.push_apps}
                             handleCheckApp={this.handleCheckApp}
                             handleEditPolicy={this.props.handleEditPolicy}
+                            handleCheckAll={this.props.handleCheckAll}
+                            guestAll={this.props.guestAlldealerApps}
+                            encryptedAll={this.props.encryptedAlldealerApps}
+                            enableAll={this.props.enableAlldealerApps}
                             apps='dealerApps'
                             isSwitch={this.props.isSwitch}
                             edit={this.props.edit}
@@ -158,8 +167,12 @@ export default class PolicyInfo extends Component {
                         <AppList
                             apk_list={this.state.policy.app_list}
                             handleEditPolicy={this.props.handleEditPolicy}
+                            handleCheckAll={this.props.handleCheckAll}
                             handleCheckApp={this.handleCheckApp}
                             appPermissions='appPermissions'
+                            guestAll={this.props.guestAllappPermissions}
+                            encryptedAll={this.props.encryptedAllappPermissions}
+                            enableAll={this.props.enableAllappPermissions}
                             isSwitch={this.props.isSwitch}
                             edit={this.props.edit}
                             rowId={this.props.rowId}
@@ -169,8 +182,13 @@ export default class PolicyInfo extends Component {
                         <AppList
                             allExtensions={this.state.policy.secure_apps}
                             handleEditPolicy={this.props.handleEditPolicy}
+                            handleCheckAll={this.props.handleCheckAll}
                             handleCheckApp={this.handleCheckApp}
                             secureSettings='allExtensions'
+                            guestAll={this.props.guestAllallExtensions}
+                            encryptedAll={this.props.encryptedAllallExtensions}
+                            enableAll={this.props.enableAllallExtension}
+                            
                             isSwitch={this.props.isSwitch}
                             edit={this.props.edit}
                             rowId={this.props.rowId}

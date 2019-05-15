@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumber } from 'antd';
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate } from '../../utils/commonUtils';
 import WriteImeiFrom from './WriteImeiForm'
+import Moment from 'react-moment'
 
 // import EditForm from './editForm';
 let editDevice;
-var coppyDevices = [];
+var coppyImeis = [];
 var status = true;
 export default class ImeiView extends Component {
 
@@ -25,7 +26,7 @@ export default class ImeiView extends Component {
         message.success('Action Done Susscefully ');
     };
 
-    showModal = (device, func) => {
+    getImeiLists() {
 
         let dumyImei1List = []
         let dumyImei2List = []
@@ -41,16 +42,29 @@ export default class ImeiView extends Component {
                 return item
             }
         })
-
-        editDevice = func;
         this.setState({
             imei2List: imei2List,
             imei1List: imei1List,
+        })
+    }
+
+    showModal = (device, func) => {
+        this.getImeiLists()
+        editDevice = func;
+        this.setState({
             visible: true,
             func: func,
 
         });
     }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.imei_list !== nextProps.imei_list) {
+            // console.log('actoin done successfuly')
+            this.getImeiLists()
+        }
+    }
+
     // showViewmodal = (dataVisible, dataFieldName = "") => {
     //     // console.log(dataVisible);
     //     this.setState({
@@ -79,25 +93,34 @@ export default class ImeiView extends Component {
             imei1List: searchedData
         });
     }
-    handleComponentSearch = (value, type) => {
+    handleComponentSearch = (e, type) => {
         try {
+            let value = e.target.value;
+            // console.log(status,'searched value', e.target.value)
             if (value.length) {
+                // console.log(status,'searched value', value)
                 if (status) {
-                    coppyDevices = (type == 'imei1') ? this.state.imei1List : this.state.imei2List;
+                    // console.log('status')
+                    if (type == "imei1") {
+                        coppyImeis = this.state.imei1List;
+                    } else {
+                        coppyImeis = this.state.imei2List;
+                    }
+
                     status = false;
                 }
-                let foundDevices = componentSearch(coppyDevices, value);
-                console.log(value, coppyDevices, value, foundDevices);
-                if (foundDevices.length) {
+                // console.log(this.state.users,'coppy de', coppyDevices)
+                let foundImeis = componentSearch(coppyImeis, value);
+                //  console.log('found devics', foundImeis)
+                if (foundImeis.length) {
                     if (type == "imei1") {
                         this.setState({
-                            imei1List: foundDevices,
+                            imei1List: foundImeis,
                         })
                     } else {
                         this.setState({
-                            imei2List: foundDevices,
+                            imei2List: foundImeis,
                         })
-
                     }
                 } else {
                     if (type == "imei1") {
@@ -112,17 +135,20 @@ export default class ImeiView extends Component {
                 }
             } else {
                 status = true;
+
                 if (type == "imei1") {
                     this.setState({
-                        imei1List: coppyDevices,
+                        imei1List: coppyImeis,
                     })
                 } else {
                     this.setState({
-                        imei2List: coppyDevices,
+                        imei2List: coppyImeis,
                     })
                 }
             }
+
         } catch (error) {
+            console.log('error')
             // alert("hello");
         }
     }
@@ -135,7 +161,7 @@ export default class ImeiView extends Component {
                     key: index,
                     tableIndex: i,
                     imei: device.imei1 + ' (ORIGNAL)',
-                    changed_time: device.created_at
+                    changed_time: getFormattedDate(device.created_at)
                 }
             } else {
                 i++
@@ -143,7 +169,7 @@ export default class ImeiView extends Component {
                     key: index,
                     tableIndex: i,
                     imei: device.imei1,
-                    changed_time: device.created_at
+                    changed_time: getFormattedDate(device.created_at)
                 }
             }
         }) : imei_list.map((device, index) => {
@@ -153,7 +179,7 @@ export default class ImeiView extends Component {
                     key: index,
                     tableIndex: i,
                     imei: device.imei2 + ' (ORIGNAL)',
-                    changed_time: device.created_at
+                    changed_time: getFormattedDate(device.created_at)
                 }
             } else {
                 i++
@@ -161,14 +187,13 @@ export default class ImeiView extends Component {
                     key: index,
                     tableIndex: i,
                     imei: device.imei2,
-                    changed_time: device.created_at
+                    changed_time: getFormattedDate(device.created_at)
                 }
             }
         })
         return data;
     }
     render() {
-        // console.log(this.props.imei_list);
         const { visible, loading } = this.state;
         return (
             <div>
@@ -197,7 +222,6 @@ export default class ImeiView extends Component {
                                     </div>
                                     <div className="col-md-9">
                                         <Input.Search
-                                            type="number"
                                             name="imei1"
                                             key="imei1"
                                             id="imei1"
@@ -243,6 +267,7 @@ export default class ImeiView extends Component {
                                             className: '',
                                             sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
                                             sortDirections: ['ascend', 'descend'],
+                                            defaultSortOrder: 'descend'
 
                                         },
                                     ]}
@@ -269,7 +294,6 @@ export default class ImeiView extends Component {
                                     </div>
                                     <div className="col-md-9">
                                         <Input.Search
-                                            type="number"
                                             name="imei2"
                                             key="imei2"
                                             id="imei2"
@@ -315,6 +339,7 @@ export default class ImeiView extends Component {
                                             className: '',
                                             sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
                                             sortDirections: ['ascend', 'descend'],
+                                            defaultSortOrder: 'descend'
 
                                         },
                                     ]}

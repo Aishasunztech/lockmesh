@@ -5,6 +5,8 @@ import { Card, Row, Col, Modal, Button, message, Table, Icon, Switch } from "ant
 import update from 'react-addons-update';
 
 import PolicyInfo from './PolicyInfo';
+import { flagged } from '../../../appRedux/actions/ConnectDevice';
+import { ADMIN } from '../../../constants/Constants';
 const confirm = Modal.confirm;
 
 class PolicyList extends Component {
@@ -19,11 +21,6 @@ class PolicyList extends Component {
 
         }
     }
-
-    editPolicy() {
-        // alert("Edit Policy")
-    }
-
 
     expandRow = (rowId, btnof, expandedByCustom = false) => {
         //  console.log('btn is', btnof)
@@ -51,23 +48,23 @@ class PolicyList extends Component {
             newItems[rowId] = (btnof == 'info' || btnof == 'edit') ? '1' : '6';
             // this.setState({ items:newItems });
             // console.log("new Items", newItems);
-            if(btnof == 'edit'){
+            if (btnof == 'edit') {
                 this.setState({
                     expandedRowKeys: this.state.expandedRowKeys,
                     expandTabSelected: newItems,
                     isSwitch: btnof == 'edit' ? true : false,
-                    [rowId]:rowId
+                    [rowId]: rowId
                 })
-            }else{
+            } else {
                 // console.log('row id is ', this.state[rowId])
                 this.setState({
                     expandedRowKeys: this.state.expandedRowKeys,
                     expandTabSelected: newItems,
-                    [rowId]:null
+                    [rowId]: null
                     // isSwitch: btnof == 'edit' ? true : false,
                 })
             }
-            
+
             // console.log("updated state", this.state.expandTabSelected);
             // this.forceUpdate()
         }
@@ -95,30 +92,32 @@ class PolicyList extends Component {
             // }
         })
         return policy_list.map((policy, index) => {
-            // console.log(policy);
 
             return {
                 rowKey: index,
-                isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy: false,
+                isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy : false,
                 policy_id: policy.id,
                 action:
-                    (<Fragment>
-                        <Button
-                            type="primary"
-                            size="small"
-                            onClick={() => { this.expandRow(index, 'edit', true) }}
-                        
-                        >
-                            EDIT
+
+                    (policy.dealer_id == this.props.user.id || this.props.user.type == ADMIN) ?
+                        (
+                            <Fragment>
+                                <Button
+                                    type="primary"
+                                    size="small"
+                                    onClick={() => { this.expandRow(index, 'edit', true) }}
+
+                                >
+                                    EDIT
                         </Button>
-                        <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => { this.deletePolicy(policy.id) }}
-                        >
-                            DELETE
+                                <Button
+                                    type="danger"
+                                    size="small"
+                                    onClick={() => { this.deletePolicy(policy.id) }}
+                                >
+                                    DELETE
                         </Button>
-                    </Fragment>)
+                            </Fragment>) : null
                 ,
                 policy_info:
                     <div>
@@ -136,6 +135,7 @@ class PolicyList extends Component {
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
                 policy_status: (<Switch size='small' checked={policy.status == 1 || policy.status == true ? true : false}
                     onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
+                    } disabled={(policy.dealer_id == this.props.user.id || this.props.user.type == ADMIN) ? false : true
                     } />),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
                 policy_command: (policy.command_name) ? `${policy.command_name}` : "N/A",
@@ -145,13 +145,26 @@ class PolicyList extends Component {
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
                 default_policy: (
-                    <Switch size='small' defaultChecked={true} onChange={(e) => { }} />
+                    <Switch size='small' checked={policy.is_default} onChange={(e) => { this.handleDefaultChange(e, policy.id) }} disabled={(policy.status == 1 || policy.status == true) ? false : true} />
                 ),
             }
         });
 
     }
+    handleDefaultChange(e, policy_id) {
 
+        let _this = this
+        confirm({
+            title: 'Do you want to change your default Policy?',
+            onOk() {
+                _this.props.defaultPolicyChange(e, policy_id)
+            },
+            onCancel() { },
+            okText: 'Yes',
+            cancelText: 'No'
+
+        });
+    }
     customExpandIcon(props) {
         // console.log('rowKey, ', props.record.rowKey)
 
@@ -225,15 +238,27 @@ class PolicyList extends Component {
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
-                            console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                            // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
                                 <PolicyInfo
                                     selected={this.state.expandTabSelected[record.rowKey]}
                                     policy={record}
-                                    isSwitch= {this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
+                                    isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
                                     rowId={record.policy_id}
                                     handleEditPolicy={this.props.handleEditPolicy}
+                                    handleCheckAll={this.props.handleCheckAll}
                                     edit={true}
+                                    guestAlldealerApps={this.props.guestAlldealerApps}
+                                    encryptedAlldealerApps={this.props.encryptedAlldealerApps}
+                                    enableAlldealerApps={this.props.enableAlldealerApps}
+
+                                    guestAllappPermissions={this.props.guestAllappPermissions}
+                                    encryptedAllappPermissions={this.props.encryptedAllappPermissions}
+                                    enableAllappPermissions={this.props.enableAllappPermissions}
+
+                                    guestAllallExtensions={this.props.guestAllallExtensions}
+                                    encryptedAllallExtensions={this.props.encryptedAllallExtensions}
+                                    enableAllallExtensions={this.props.enableAllallExtension}
                                 />
                             )
                         }}

@@ -11,7 +11,11 @@ import {
   COMPONENT_ALLOWED,
   ACCESS_DENIED,
   UPDATE_PROFILE,
-  BEFORE_COMPONENT_ALLOWED
+  BEFORE_COMPONENT_ALLOWED,
+  TWO_FACTOR_AUTH,
+  VERIFY_CODE,
+  CODE_VERIFIED,
+  GOTO_LOGIN
 } from "../../constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
@@ -26,6 +30,7 @@ const INIT_STATE = {
   socket: io,
   isAllowed: false,
   isRequested: false,
+  two_factor_auth: (localStorage.getItem('is_twoFactorAuth') === null) ? false : localStorage.getItem('is_twoFactorAuth'),
   authUser: {
     id: localStorage.getItem('id'),
     connected_devices: localStorage.getItem('connected_devices'),
@@ -37,7 +42,9 @@ const INIT_STATE = {
     name: localStorage.getItem("name"),
     token: localStorage.getItem("token"),
     type: localStorage.getItem("type"),
-    dealer_pin: localStorage.getItem("dealer_pin")
+    dealer_pin: localStorage.getItem("dealer_pin"),
+    two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth'),
+    verified: false
   },
 };
 
@@ -45,13 +52,47 @@ const INIT_STATE = {
 export default (state = INIT_STATE, action) => {
 
   switch (action.type) {
+    case INIT_URL: {
+      localStorage.removeItem('is_twoFactorAuth')
+      state.two_factor_auth = false;
+      return {
+        ...state,
+        initURL: action.payload,
 
+      }
+    }
+    case GOTO_LOGIN: {
+      return {
+        ...state,
+        initURL: '/login'
+      }
+    }
     case LOGIN_USER_SUCCESS: {
-      
+
       return {
         ...state,
         loader: false,
         authUser: action.payload
+      }
+    }
+    case VERIFY_CODE: {
+      localStorage.setItem('is_twoFactorAuth', action.payload.two_factor_auth)
+      message.success(action.payload.msg);
+      return {
+        ...state,
+        two_factor_auth: action.payload.two_factor_auth
+      }
+    }
+    case CODE_VERIFIED: {
+      if (action.payload.status) {
+        message.success(action.payload.msg);
+        localStorage.removeItem('is_twoFactorAuth');
+      } else {
+        message.error(action.payload.msg);
+      }
+      state.authUser.verified = action.payload.verified;
+      return {
+        ...state,
       }
     }
     case BEFORE_COMPONENT_ALLOWED: {
@@ -69,12 +110,7 @@ export default (state = INIT_STATE, action) => {
         loader: false
       }
     }
-    case INIT_URL: {
-      return {
-        ...state,
-        initURL: action.payload
-      }
-    }
+
     case LOGOUT_USER_SUCCESS: {
       return {
         ...state,
@@ -87,10 +123,13 @@ export default (state = INIT_STATE, action) => {
           lastName: null,
           name: null,
           token: null,
-          type: null
+          type: null,
+          two_factor_auth: null
         },
         initURL: '/',
-        loader: false
+        loader: false,
+        two_factor_auth: false
+
       }
     }
 
@@ -126,7 +165,8 @@ export default (state = INIT_STATE, action) => {
           lastName: null,
           name: null,
           token: null,
-          type: null
+          type: null,
+          two_factor_auth: null
         },
         initURL: '/',
         loader: false
@@ -163,7 +203,7 @@ export default (state = INIT_STATE, action) => {
     }
     case COMPONENT_ALLOWED: {
       let socket = RestService.connectSocket(state.authUser.token);
-      
+
       return {
         ...state,
         isAllowed: action.payload.ComponentAllowed,
@@ -179,7 +219,9 @@ export default (state = INIT_STATE, action) => {
           lastName: action.payload.lastName,
           name: action.payload.name,
           type: action.payload.type,
-          dealer_pin: action.payload.dealer_pin
+          dealer_pin: action.payload.dealer_pin,
+          two_factor_auth: action.payload.two_factor_auth,
+          verified: action.payload.verified
         }
       }
       break;
@@ -190,6 +232,17 @@ export default (state = INIT_STATE, action) => {
         initURL: '/invalid_page'
       }
       break;
+    }
+    case TWO_FACTOR_AUTH: {
+      if (action.payload.status) {
+        message.success(action.payload.msg)
+        state.authUser.two_factor_auth = action.payload.isEnable
+      } else {
+        message.error(action.payload.msg)
+      }
+      return {
+        ...state
+      }
     }
     default:
       return state;

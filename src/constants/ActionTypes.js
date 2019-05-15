@@ -30,7 +30,10 @@ export const GET_USER = 'GET_USER';
 export const BEFORE_COMPONENT_ALLOWED = 'BEFORE_COMPONENT_ALLOWED';
 export const DUPLICATE_SIM_IDS = 'DUPLICATE_SIM_IDS';
 export const NEW_DATA_INSERTED = 'NEW_DATA_INSERTED';
-
+export const TWO_FACTOR_AUTH = 'TWO_FACTOR_AUTH';
+export const VERIFY_CODE = 'VERIFY_CODE';
+export const CODE_VERIFIED = 'CODE_VERIFIED';
+export const GOTO_LOGIN = 'GOTO_LOGIN';
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
 export const SUSPEND_DEVICE = 'SUSPEND_DEVICE';
@@ -67,6 +70,7 @@ export const PERMSSION_SAVED = 'PERMSSION_SAVED';
 
 // Connect Device 
 export const GET_DEVICE_DETAILS = 'GET_DEVICE_DETAILS';
+export const GET_ACTIVITIES = 'GET_ACTIVITIES';
 export const GET_DEVICE_APPS = 'GET_DEVICE_APPS';
 export const GET_PROFILES = 'GET_PROFILES';
 export const GET_DEVICE_HISTORIES = 'GET_DEVICE_HISTORIES';
@@ -104,6 +108,7 @@ export const CHANGE_PAGE = 'CHANGE_PAGE';
 
 export const HANDLE_CHECK_APP = 'HANDLE_CHECK_APP';
 export const HANDLE_CHECK_ALL = 'HANDLE_CHECK_ALL';
+export const CHECK_HANDLE_ALL_POLICY = 'CHECK_HANDLE_ALL_POLICY';
 
 export const PUSH_APPS = 'PUSH_APPS';
 export const PULL_APPS = 'PULL_APPS';
@@ -147,6 +152,7 @@ export const WRITE_IMEI = 'WRITE_IMEI';
 
 // Policy consts
 export const GET_POLICIES = 'GET_POLICIES'
+export const DEFAULT_POLICY_CHANGE = 'DEFAULT_POLICY_CHANGE'
 
 
 // Users consts
@@ -163,3 +169,4 @@ export const GET_MARKET_APPS = 'GET_MARKET_APPS'
 // Socket Actions
 export const FINISHED_PUSH_APPS = 'FINISHED_PUSH_APPS';
 export const FINISHED_PULL_APPS = 'FINISHED_PULL_APPS';
+export const PULL_PUSH_INPROCESS = 'PULL_PUSH_INPROCESS';

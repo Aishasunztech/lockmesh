@@ -87,15 +87,8 @@ class Apk extends React.Component {
                     dataIndex: 'apk_name',
                     width: "100",
                     key: 'apk_name',
-                    // sorter: (a, b, direction) => {
-                    //     // alert(self);
-                    //     self.sortOrder(direction);
-                    // },
                     sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
-                    // renderColumnSorter:(<h1>hello</h1>),
-                    // sorter: true,
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder:"ascend",
                     defaultSortOrder: "ascend"
                 },
                 {
@@ -163,6 +156,11 @@ class Apk extends React.Component {
                     if (column.title === value) {
                         dumydata[index].className = '';
                     }
+                    // else if (column.title.props.children !== undefined) {
+                    //     if(column.title.props.children[0] === value){
+                    //         dumydata[index].className = '';
+                    //     }
+                    // }
                 });
 
 
