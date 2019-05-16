@@ -82,9 +82,9 @@ class ApkMarket extends React.Component {
             // console.log(keys);
             this.setState({
                 apk_list: nextProps.apk_list,
-                 secureMarketList: nextProps.secureMarketList,
+                secureMarketList: nextProps.secureMarketList,
                 availbleAppList: nextProps.availbleAppList,
-                 targetKeys: keys
+                targetKeys: keys
             })
         }
     }
@@ -96,7 +96,7 @@ class ApkMarket extends React.Component {
             })
             this.setState({
                 apk_list: this.props.apk_list,
-                 secureMarketList: this.props.secureMarketList,
+                secureMarketList: this.props.secureMarketList,
                 availbleAppList: this.props.availbleAppList,
                 targetKeys: keys
             })
@@ -117,16 +117,30 @@ class ApkMarket extends React.Component {
                     this.props.isloading ? <CircularProgress /> :
                         <Card >
                             <Row>
-                                <h4 className="sm_heading">Move <b>(Avaiable Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices</h4>
+                                <h4 className="sm_top_heading">Move <b>(Avaiable Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices</h4>
                                 <Col md={12} sm={24} xs={24} className="text-center">
-                                    <h4><b>Avaiable Apps</b></h4>
+                                    <h4 className="sm_heading1"><b>Avaiable Apps</b></h4>
                                 </Col>
                                 <Col md={12} sm={24} xs={24} className="text-center sec_market">
-                                    <h4><b>Secure Market</b></h4>
+                                    <h4 className="sm_heading1"><b>Secure Market</b></h4>
                                 </Col>
                             </Row>
                             <Transfer
-                                renderTitle="test"
+                                titles={[
+                                    (
+                                        <div className="sm_heading2">
+                                            <h4>
+                                                <b>Avaiable Apps</b>
+                                            </h4>
+                                        </div>),
+                                    (
+                                        <div className="sm_heading2">
+                                            <h4>
+                                                <b>Secure Market</b>
+                                            </h4>
+                                        </div>
+                                    )
+                                ]}
                                 className="transfer_box"
                                 dataSource={this.renderList(this.props.availbleAppList, this.state.secureMarketList)}
                                 showSearch

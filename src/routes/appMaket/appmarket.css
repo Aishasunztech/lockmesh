@@ -1,4 +1,4 @@
-.sm_heading {
+.sm_top_heading {
     border: 1px solid #e8e8e8;
     border-radius: 8px;
     padding: 15px 0;
@@ -47,8 +47,20 @@
     margin: 0 16px;
 }
 
+.sm_heading2 {
+    display: none;
+}
+
 @media screen and (max-width: 768px) {
     .transfer_box .ant-transfer-list {
         width: 100%;
+    }
+
+    .sm_heading1 {
+        display: none;
+    }
+
+    .sm_heading2 {
+        display: block;
     }
 }
