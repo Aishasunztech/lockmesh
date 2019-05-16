@@ -7,7 +7,10 @@ import {
     DUPLICATE_SIM_IDS,
     NEW_DATA_INSERTED
 } from "constants/ActionTypes";
-import { message } from "antd";
+import { message, Modal } from "antd";
+
+const success = Modal.success
+const error = Modal.error
 
 const initialState = {
     msg: "",
@@ -15,7 +18,7 @@ const initialState = {
     used_pgp_emails: [],
     used_sim_ids: [],
     used_chat_ids: [],
-    duplicate_ids:[],
+    duplicate_ids: [],
     duplicate_modal_show: false,
     duplicate_data_type: '',
     newData: [],
@@ -26,8 +29,6 @@ export default (state = initialState, action) => {
     switch (action.type) {
 
         case IMPORT_CSV:
-        console.log();
-
             return {
                 ...state,
                 msg: action.payload.msg,
@@ -51,18 +52,22 @@ export default (state = initialState, action) => {
             // alert("hello");
             return {
                 ...state,
-                used_sim_ids: action.payload    
+                used_sim_ids: action.payload
             }
         }
 
         case NEW_DATA_INSERTED: {
-    
-            if(action.payload.status && action.showMsg){
-                message.success(action.payload.msg)
-            }else if(action.payload.status ==false && action.showMsg){
-                message.error(action.payload.msg)
+
+            if (action.payload.status && action.showMsg) {
+                success({
+                    title: action.payload.msg,
+                });
+            } else if (action.payload.status == false && action.showMsg) {
+                Modal.error({
+                    title: action.payload.msg,
+                });
             }
-            return{
+            return {
                 ...state,
                 duplicate_ids: [],
                 duplicate_data_type: '',
@@ -73,8 +78,7 @@ export default (state = initialState, action) => {
         }
 
         case DUPLICATE_SIM_IDS: {
-            console.log('reducer of accrount', action.payload)
-            return{
+            return {
                 ...state,
                 duplicate_ids: action.payload.duplicateData,
                 duplicate_data_type: action.payload.type,
@@ -87,10 +91,14 @@ export default (state = initialState, action) => {
             // alert("hello");
             // console.log(action.payload);
             if (action.payload.status) {
-                message.success(action.payload.msg)
+                success({
+                    title: action.payload.msg,
+                });
             }
             else {
-                message.error(action.payload.msg)
+                Modal.error({
+                    title: action.payload.msg,
+                });
 
             }
             if (action.payload.type === 'sim') {
