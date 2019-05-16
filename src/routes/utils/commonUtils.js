@@ -88,7 +88,7 @@ export function getSortOrder(status) {
 }
 
 export function checkValue(value) {
-  if (value !== undefined && value !== '' && value != null && value !== 'undefined' && value !== 'null') {
+  if (value !== undefined && value !== '' && value != null && value !== 'undefined' && value !=='Undefined' && value!=="UNDEFINED" && value !== 'null' && value !== 'Null' && value!=='NULL') {
     return value;
   } else {
     return 'N/A';
