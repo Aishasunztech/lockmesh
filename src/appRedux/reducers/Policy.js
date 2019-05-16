@@ -23,7 +23,10 @@ import {
     POLICY_COMMAND
 } from "../../constants/PolicyConstants";
 
-import { message } from "antd";
+import { message, Modal } from 'antd';
+
+const success = Modal.success
+const error = Modal.error
 
 const initialState = {
     policies: [],
@@ -113,9 +116,13 @@ export default (state = initialState, action) => {
         case SAVE_POLICY: {
             // console.log(action.response, 'resp')
             if (action.response.status) {
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
             return {
@@ -151,9 +158,13 @@ export default (state = initialState, action) => {
         case SAVE_POLICY_CHANGES: {
 
             if (action.payload.response.status) {
-                message.success(action.payload.response.msg)
+                success({
+                    title: action.payload.response.msg,
+                });
             } else {
-                message.error(action.payload.response.msg)
+                error({
+                    title: action.payload.response.msg,
+                });
             }
             return {
                 ...state,
@@ -218,11 +229,15 @@ export default (state = initialState, action) => {
             if (index >= 0) {
                 if (action.payload.key == 'delete_status') {
                     changedState.splice(index, 1);
-                    message.success('Policy Deleted Successfully')
+                    success({
+                        title: 'Policy Deleted Successfully',
+                    });
 
                 } else if (action.payload.key == 'status') {
                     changedState[index][action.payload.key] = action.payload.value;
-                    message.success(' Status Changed Sccessfully ')
+                    success({
+                        title: ' Status Changed Sccessfully',
+                    });
                 }
                 state.policies = changedState;
                 return {
@@ -460,7 +475,9 @@ export default (state = initialState, action) => {
 
         case POLICY_PERMSSION_SAVED: {
             // console.log("dasdasdad");
-            message.success(action.payload);
+            success({
+                title: action.payload
+            });
             let dealers = JSON.parse(action.dealers)
             // console.log(dealers.length ,'itrititt',action.apk_id);
             let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
@@ -473,7 +490,9 @@ export default (state = initialState, action) => {
         }
         case DEFAULT_POLICY_CHANGE: {
 
-            message.success(action.payload);
+            success({
+                title: action.payload
+            });
             let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
             let defaultPolicyIndex = state.policies.findIndex((obj => obj.is_default === true));
             state.policies[objIndex].is_default = true;

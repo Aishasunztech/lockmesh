@@ -5,7 +5,10 @@ import {
     USERS_LIST,
     EDIT_USERS
 } from "../../constants/ActionTypes";
-import { message } from 'antd';
+
+import { message, Modal } from 'antd';
+const success = Modal.success
+const error = Modal.error
 
 const initialState = {
     isloading: false,
@@ -32,11 +35,15 @@ export default (state = initialState, action) => {
             // console.log('item added is:', action.response.user)
             let result = []
             if (action.response.status) {
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
                 result = [...action.response.user, ...state.users_list]
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
                 result = state.users_list
             }
             // console.log(result);
@@ -52,10 +59,14 @@ export default (state = initialState, action) => {
                 let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.userData.user_id));
                 state.users_list[objIndex4] = action.response.user[0];
 
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
             return {

@@ -11,11 +11,6 @@ export default class FlagDevice extends Component {
             expiry_date: 1
         }
     }
-
-    success = () => {
-        message.success('Action Done Susscefully ');
-    };
-
     showModel = (device, func, refreshDevice) => {
         // console.log('device Detail', device)
         // alert('its working')

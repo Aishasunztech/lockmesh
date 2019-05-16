@@ -50,7 +50,7 @@ import {
 } from "../../constants/ActionTypes"
 
 import {
-    message
+    message,Modal
 } from 'antd';
 import RestService from '../services/RestServices';
 
@@ -265,10 +265,14 @@ export function wipe(device) {
             //         msg: response.data.msg,
             //     }
             // });
-            message.success(response.data.msg);
+            success({
+                title: action.data.msg,
+            });
         }
         else {
-            message.error("Device Not Wiped.Please Try again.")
+            error({
+                title: "Device Not Wiped.Please Try again.",
+            });
         }
     });
 }
@@ -1008,9 +1012,9 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
         })
     }
 }
-export const applyPolicy = (deviceId,userAccId, policyId) => {
+export const applyPolicy = (deviceId, userAccId, policyId) => {
     return (dispatch) => {
-        RestService.applyPolicy(deviceId,userAccId, policyId).then((response) => {
+        RestService.applyPolicy(deviceId, userAccId, policyId).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log(response.data);
                 dispatch({

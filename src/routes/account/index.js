@@ -22,6 +22,8 @@ import {
     getPGPEmails,
 } from "../../appRedux/actions/Devices";
 const confirm = Modal.confirm;
+const success = Modal.success
+const error = Modal.error
 
 class Account extends Component {
     constructor(props) {
@@ -333,9 +335,13 @@ class Account extends Component {
 
         if (this.props.showMsg) {
             if (this.props.msg === "imported successfully") {
-                message.success(this.props.msg);
+                success({
+                    title: this.props.msg,
+                });
             } else {
-                message.error(this.props.msg);
+                error({
+                    title: this.props.msg,
+                });
             }
 
         }

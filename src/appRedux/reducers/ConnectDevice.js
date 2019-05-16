@@ -1003,13 +1003,13 @@ export default (state = initialState, action) => {
 
         case WRITE_IMEI: {
             if (action.payload.status) {
-                if (action.payload.insertedData !== null) {
-                    state.imei_list.unshift(action.payload.insertedData)
-                }
+                // if (action.payload.insertedData !== null) {
+                //     state.imei_list.unshift(action.payload.insertedData)
+                // }
 
                 if (action.payload.online) {
                     success({
-                        title: action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device!",
+                        title: action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device.Restart device is required to apply IMEI.",
                     });
                 } else {
                     warning({
@@ -1017,7 +1017,7 @@ export default (state = initialState, action) => {
                         content: action.imeiData.imeiNo + ' write to ' + action.imeiData.type + '. Action will be performed when device is back online',
                     });
                 }
-                console.log('new state is', state.imei_list)
+                // console.log('new state is', state.imei_list)
             }
             else {
                 error({
@@ -1026,7 +1026,7 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
-                imei_list: [...state.imei_list]
+                // imei_list: [...state.imei_list]
             }
         }
         default:

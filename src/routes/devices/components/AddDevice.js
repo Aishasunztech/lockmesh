@@ -15,10 +15,6 @@ export default class AddDevice extends Component {
         }
     }
 
-    success = () => {
-        message.success('Action Done Susscefully ');
-    };
-
 
     showModal = (device = null, handleSubmit, preActive = false) => {
 
