@@ -63,7 +63,7 @@ export default (state = initialState, action) => {
                     title: action.payload.msg,
                 });
             } else if (action.payload.status == false && action.showMsg) {
-                Modal.error({
+                error({
                     title: action.payload.msg,
                 });
             }
@@ -96,7 +96,7 @@ export default (state = initialState, action) => {
                 });
             }
             else {
-                Modal.error({
+                error({
                     title: action.payload.msg,
                 });
 
