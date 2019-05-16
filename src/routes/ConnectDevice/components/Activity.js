@@ -3,8 +3,8 @@ import { Modal, message, Input, Table } from 'antd';
 import { componentSearch, getFormattedDate } from '../../utils/commonUtils';
 import Moment from 'react-moment'
 
-var coppyActivities = [];
-var status = true;
+var coppyActivities = []; 
+var status = true; 
 export default class Activity extends Component {
 
     constructor(props) {

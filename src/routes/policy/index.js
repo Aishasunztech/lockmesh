@@ -8,12 +8,8 @@ import AddPolicy from "./components/AddPolicy";
 
 import {
     getPolicies, handlePolicyStatus,
-<<<<<<< HEAD
-    handleEditPolicy, SavePolicyChanges
-=======
     handleEditPolicy, SavePolicyChanges,
     handleCheckAll, defaultPolicyChange
->>>>>>> 1de9b0364c47595d40726c5b6e85896ab1b487a5
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -358,11 +354,9 @@ class Policy extends Component {
                     guestAlldealerApps={this.props.guestAlldealerApps}
                     encryptedAlldealerApps={this.props.encryptedAlldealerApps}
                     enableAlldealerApps={this.props.enableAlldealerApps}
-
                     guestAllappPermissions={this.props.guestAllappPermissions}
                     encryptedAllappPermissions={this.props.encryptedAllappPermissions}
                     enableAllappPermissions={this.props.enableAllappPermissions}
-
                     guestAllallExtensions={this.props.guestAllallExtensions}
                     encryptedAllallExtensions={this.props.encryptedAllallExtensions}
                     enableAllallExtensions={this.props.enableAllallExtension}
@@ -378,7 +372,6 @@ class Policy extends Component {
                     onCancel={() => this.handlePolicyModal(false)}
                     okText="Save"
                     footer={null}
-
                 >
                     <AddPolicy
                         apk_list={this.props.apk_list}
@@ -418,15 +411,12 @@ var mapStateToProps = ({ policies, auth }) => {
         apk_list: policies.apk_list,
         app_list: policies.app_list,
         DisplayPages: policies.DisplayPages,
-
         guestAlldealerApps: policies.guestAll2dealerApps,
         encryptedAlldealerApps: policies.encryptedAll2dealerApps,
         enableAlldealerApps: policies.enableAll2dealerApps,
-
         guestAllappPermissions: policies.guestAll2appPermissions,
         encryptedAllappPermissions: policies.encryptedAll2appPermissions,
         enableAllappPermissions: policies.enableAll2appPermissions,
-
         guestAllallExtensions: policies.guestAll2allExtensions,
         encryptedAllallExtensions: policies.encryptedAll2allExtensions,
         enableAllallExtensions: policies.enableAll2allExtensions,

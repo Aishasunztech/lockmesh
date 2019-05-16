@@ -21,13 +21,13 @@ class PassworForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             //  console.log(this.props.actionType, 'action type');
             if (!err) {
-                if(this.props.actionType === PUSH_APPS){
+                if (this.props.actionType === PUSH_APPS) {
                     this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
-                }else if(this.props.actionType === WIPE_DEVICE){
+                } else if (this.props.actionType === WIPE_DEVICE) {
                     this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
 
                 }
-                else if(this.props.actionType === PULL_APPS){
+                else if (this.props.actionType === PULL_APPS) {
                     this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
 
                 }
@@ -47,7 +47,7 @@ class PassworForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <h4>PANNEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>
+                    <h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>
                 </Form.Item>
 
                 <Form.Item

@@ -418,9 +418,9 @@ class SideActions extends Component {
                                 <Button
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
                                     type="default"
-                                    style={{ width: "100%", marginBottom: 16 }}
+                                    style={{ width: "100%", marginBottom: 16, background: "#eed9c4", border: "1px solid #eab886" }}
                                 >
-                                    <Icon type="barcode" />
+                                    {/* <Icon type="number" /> */}
                                     IMEI
                                 </Button>
                             </Col>
@@ -652,7 +652,7 @@ class SideActions extends Component {
                     activities={this.state.activities}
 
                 />
-            </div>
+            </div >
         )
     }
     handleSuspendDevice = (device, _this) => {

@@ -30,13 +30,29 @@
     text-align: center;
 }
 
+/*
 .policy_steps .line_break {
     width: 100%;
 }
 
-/* .policy_popup {
+ .policy_popup {
     width: 700px !important;
 } */
+
+.line_break2 {
+    width: 100px;
+    margin: 0 0 0 12px;
+    display: inline-block;
+    text-align: left;
+    font-weight: 300;
+}
+
+.exp_policy .ant-table-tbody>tr>td {
+    font-size: 13px;
+    text-align: center;
+    padding: 8px 8px !important;
+    font-weight: 500;
+}
 
 .policy_popup .ant-modal-body {
     padding: 16px 16px 10px;

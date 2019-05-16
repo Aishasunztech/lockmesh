@@ -167,8 +167,8 @@ class AppList extends Component {
         let enable = (app.enable !== undefined) ? app.enable : false;
         let label = (app.apk_name !== undefined) ? app.apk_name : app.label;
         let icon = (app.logo !== undefined) ? app.logo : app.icon;
-        let Off = 'Off';
-        let On = 'On';
+        let Off = 'OFF';
+        let On = 'ON';
         let isAvailable = (this.state.selectedRowKeys.length) ? this.state.selectedRowKeys.find(id => (id === app_id) ? true : false) : false;
         if (this.props.appPermissions) {
             app_id = app.id;
@@ -182,8 +182,8 @@ class AppList extends Component {
             app_name:
                 <Fragment>
                     <Avatar src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
-                    <br />
-                    <div className="line_break">{label}</div>
+
+                    <div className="line_break2">{label}</div>
                 </Fragment>,
             guest:
                 this.props.isSwitch ?
@@ -243,9 +243,9 @@ class AppList extends Component {
             key: app_id,
             app_name:
                 <Fragment>
-                    <img src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
-                    <br />
-                    <div className="line_break">{label}</div>
+                    <Avatar className="perm_icons" src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
+
+                    <div className="line_break2">{label}</div>
                 </Fragment>,
             guest:
                 this.props.isSwitch ?
@@ -259,7 +259,7 @@ class AppList extends Component {
                         onClick={(e) => {
                             this.handleChecked(e, "guest", app_id);
                         }}
-                    /> : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }} >{(guest === true || guest === 1) ? 'On' : 'Off'}</span>,
+                    /> : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }} >{(guest === true || guest === 1) ? 'ON' : 'OFF'}</span>,
             encrypted:
                 this.props.isSwitch ?
                     <Switch
@@ -273,7 +273,7 @@ class AppList extends Component {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app_id);
                         }}
-                    /> : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? 'On' : 'Off'}</span>,
+                    /> : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? 'ON' : 'OFF'}</span>,
 
         });
     }
@@ -362,11 +362,11 @@ class AppList extends Component {
                         <a><Icon type="ellipsis" /></a>
                     </Popover> : false}
                 <Table
+                    className="exp_policy"
                     style={{ margin: 0, padding: 0 }}
                     rowSelection={rowSelection}
                     size='small'
                     scroll={this.props.isHistory ? {} : {}}
-                    bordered={false}
                     columns={this.props.allExtensions ? this.extensionColumns : this.appsColumns}
                     align='center'
                     dataSource={
