@@ -22,7 +22,10 @@ import {
     DEALER_DEVICES,
     DEALER_TOKENS
 } from '../../constants/DealerConstants';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
+
+const success = Modal.success
+const error = Modal.error
 
 const initialState = {
     isloading: false,
@@ -57,7 +60,7 @@ export default (state = initialState, action) => {
                 options: state.options
             }
 
-            case SPIN_lOADING:
+        case SPIN_lOADING:
 
             return {
                 ...state,
@@ -81,10 +84,14 @@ export default (state = initialState, action) => {
             if (action.response.status === true) {
                 let objIndex = state.dealers.findIndex((obj => obj.dealer_id === action.payload.id));
                 state.dealers[objIndex].account_status = "suspended";
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
             return {
@@ -101,10 +108,14 @@ export default (state = initialState, action) => {
             if (action.response.status) {
                 let objIndex1 = state.dealers.findIndex((obj => obj.dealer_id === action.payload.id));
                 state.dealers[objIndex1].account_status = null;
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
             return {
@@ -122,10 +133,14 @@ export default (state = initialState, action) => {
             if (action.response.status) {
                 let objIndex2 = state.dealers.findIndex((obj => obj.dealer_id === action.payload.id));
                 state.dealers[objIndex2].unlink_status = 1;
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
 
@@ -142,10 +157,14 @@ export default (state = initialState, action) => {
             if (action.response.status) {
                 let objIndex3 = state.dealers.findIndex((obj => obj.dealer_id === action.payload.id));
                 state.dealers[objIndex3].unlink_status = 0;
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
 
@@ -161,10 +180,14 @@ export default (state = initialState, action) => {
 
             if (action.response.status) {
 
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
             return {
@@ -185,10 +208,14 @@ export default (state = initialState, action) => {
                     state.dealers[objIndex4].dealer_email = action.payload.formData.email;
                 }
 
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
             return {
@@ -204,7 +231,9 @@ export default (state = initialState, action) => {
             // console.log('item added is:',action.response.item_added[0])
 
             if (action.response.status) {
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
                 // if(action.response.item_added[0] !== undefined)
                 // {
                 //     state.dealers.push({'dchec':'lsdkflk'})
@@ -213,7 +242,9 @@ export default (state = initialState, action) => {
                 //  state.dealers[state.dealers.length] = action.response.item_added[0];
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
             // console.log('msg', action.payload.msg)
             return {

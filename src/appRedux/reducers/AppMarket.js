@@ -9,9 +9,11 @@ import {
     APK_APP_NAME,
     APK_APP_LOGO
 } from '../../constants/ApkConstants';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import { DEALERS_LIST } from "../../constants/ActionTypes";
 
+const success = Modal.success
+const error = Modal.error
 const initialState = {
     isloading: false,
     apk_list: [],
@@ -25,7 +27,9 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case TRANSFER_APPS:
             if (action.status) {
-                message.success("Apps Transfered Successfully");
+                success({
+                    title: "Apps Transfered Successfully",
+                });
             }
             return {
                 ...state

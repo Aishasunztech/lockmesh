@@ -63,7 +63,9 @@ export default (state = initialState, action) => {
 
 			// console.log(UNLINK_APK);
 			if (action.response.status) {
-				message.success(action.response.msg);
+				success({
+					title: action.response.msg,
+				});
 				state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
 
 			}
@@ -79,12 +81,12 @@ export default (state = initialState, action) => {
 
 			if (action.response.status) {
 				success({
-					title: action.payload.msg,
+					title: action.response.msg,
 				});
 			}
 			else {
 				error({
-					title: action.payload.msg,
+					title: action.response.msg,
 				});
 			}
 			return {
@@ -104,12 +106,12 @@ export default (state = initialState, action) => {
 					state.apk_list[objIndex1].logo = action.payload.logo
 				}
 				success({
-					title: action.payload.msg,
+					title: action.response.msg,
 				});;
 			}
 			else {
 				error({
-					title: action.payload.msg,
+					title: action.response.msg,
 				});;
 			}
 

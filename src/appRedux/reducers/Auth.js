@@ -19,8 +19,10 @@ import {
 } from "../../constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
-import { message } from "antd";
+import { message, Modal } from "antd";
 import io from 'socket.io-client';
+const success = Modal.success
+const error = Modal.error
 
 const INIT_STATE = {
   loader: false,
@@ -77,7 +79,9 @@ export default (state = INIT_STATE, action) => {
     }
     case VERIFY_CODE: {
       localStorage.setItem('is_twoFactorAuth', action.payload.two_factor_auth)
-      message.success(action.payload.msg);
+      success({
+        title: action.payload.msg,
+      });
       return {
         ...state,
         two_factor_auth: action.payload.two_factor_auth
@@ -85,10 +89,14 @@ export default (state = INIT_STATE, action) => {
     }
     case CODE_VERIFIED: {
       if (action.payload.status) {
-        message.success(action.payload.msg);
+        success({
+          title: action.payload.msg,
+        });
         localStorage.removeItem('is_twoFactorAuth');
       } else {
-        message.error(action.payload.msg);
+        error({
+          title: action.payload.msg,
+        });
       }
       state.authUser.verified = action.payload.verified;
       return {
@@ -137,10 +145,14 @@ export default (state = INIT_STATE, action) => {
       if (action.response.status) {
         state.authUser.name = action.response.data.name;
         localStorage.setItem('name', action.response.data.name);
-        message.success(action.response.msg);
+        success({
+          title: action.response.msg,
+        });
       }
       else {
-        message.error(action.response.msg);
+        error({
+          title: action.response.msg,
+        });
       }
       return {
         ...state,
@@ -235,10 +247,14 @@ export default (state = INIT_STATE, action) => {
     }
     case TWO_FACTOR_AUTH: {
       if (action.payload.status) {
-        message.success(action.payload.msg)
+        success({
+          title: action.payload.msg,
+        });
         state.authUser.two_factor_auth = action.payload.isEnable
       } else {
-        message.error(action.payload.msg)
+        error({
+          title: action.payload.msg,
+        });
       }
       return {
         ...state
