@@ -73,7 +73,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 10,
                 name: (<a href="javascript:void(0)" >{titleCase(DEVICE_STATUS)}:</a>),
-                value: <span style={color}>{device_details.finalStatus}</span>,
+                value: <span style={color}>{checkValue(device_details.finalStatus)}</span>,
             },
             {
                 key: 171,
@@ -88,7 +88,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 1,
                 name: (<a href="javascript:void(0)">{titleCase(DEVICE_NAME)}:</a>),
-                value: (<span className="captilize">{device_details.name}</span>)
+                value: (<span className="captilize">{checkValue(device_details.name)}</span>)
             },
             {
                 key: 2,
@@ -192,7 +192,6 @@ export default class DeviceSidebar extends Component {
             {
                 key: 18,
                 name: (<a href="javascript:void(0)">{titleCase(DEVICE_START_DATE)}:</a>),
-                // value: (Date(device_details.start_date,'mm-dd-Y'))
                 value: checkValue(device_details.start_date)
             },
             {
