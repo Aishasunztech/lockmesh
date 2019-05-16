@@ -32,6 +32,7 @@ export const SECURE_SETTING_PERMISSION = 'Secure Settings Permission';
 export const SYSTEM_PERMISSION = 'System Permission';
 export const MANAGE_PASSWORDS = 'Manage Passwords';
 export const POLICY_DETAILS = 'Policy Details';
+export const POLICY = 'policy';
 
 // Constant Package Names
 export const Main_SETTINGS = 'com.android.settingsSettings';

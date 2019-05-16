@@ -132,7 +132,8 @@ class ApkMarket extends React.Component {
                                             <h4>
                                                 <b>Avaiable Apps</b>
                                             </h4>
-                                        </div>),
+                                        </div>
+                                    ),
                                     (
                                         <div className="sm_heading2">
                                             <h4>
@@ -141,9 +142,9 @@ class ApkMarket extends React.Component {
                                         </div>
                                     )
                                 ]}
+                                showSearch
                                 className="transfer_box"
                                 dataSource={this.renderList(this.props.availbleAppList, this.state.secureMarketList)}
-                                showSearch
                                 filterOption={this.filterOption}
                                 targetKeys={this.state.targetKeys}
                                 onChange={this.handleChange}
@@ -151,36 +152,36 @@ class ApkMarket extends React.Component {
                                 onSelectChange={this.onSelectChange}
                                 render={item => item.title}
                                 locale={{ itemUnit: 'App', itemsUnit: 'Apps' }}
-
-                            />
+            
+                           />
                         </Card>
                 }
-            </div>
-        )
-
-    }
-}
-
-const mapStateToProps = ({ apk_list, auth, appMarket }) => {
-    // console.log(appMarket.secureMarketList);
-    return {
-        isloading: apk_list.isloading,
-        apk_list: apk_list.apk_list,
+                        </div>
+                )
+                
+            }
+        }
+                
+        const mapStateToProps = ({ apk_list, auth, appMarket }) => {
+            // console.log(appMarket.secureMarketList);
+            return {
+                isloading: apk_list.isloading,
+                apk_list: apk_list.apk_list,
         options: apk_list.options,
         selectedOptions: apk_list.selectedOptions,
-        DisplayPages: apk_list.DisplayPages,
-        user: auth.authUser,
-        secureMarketList: appMarket.secureMarketList,
-        availbleAppList: appMarket.availbleAppList
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        getApkList: getApkList,
-        changeAppStatus: changeAppStatus,
-        deleteApk: deleteApk,
-        editApk: editApk,
+                    DisplayPages: apk_list.DisplayPages,
+                user: auth.authUser,
+                secureMarketList: appMarket.secureMarketList,
+                availbleAppList: appMarket.availbleAppList
+            };
+        }
+                
+        function mapDispatchToProps(dispatch) {
+            return bindActionCreators({
+                getApkList: getApkList,
+                changeAppStatus: changeAppStatus,
+                deleteApk: deleteApk,
+                editApk: editApk,
         getDropdown: getDropdown,
         postDropdown: postDropdown,
         postPagination: postPagination,

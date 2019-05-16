@@ -12,10 +12,6 @@ export default class EditDealer extends Component {
         }
     }
 
-    success = () => {
-        message.success('Action Done Susscefully ');
-    };
-
     showModal = (device, func) => {
         // console.log('device Detail', device)
         // alert('its working')

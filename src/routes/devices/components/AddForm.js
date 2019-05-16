@@ -81,8 +81,8 @@ class AddDevice extends Component {
         this.setState({ visible: false });
     }
     handleChange = (e) => {
-        // console.log(e.target);
-        this.setState({ type: e.target.value });
+        console.log(e);
+        this.setState({ pgp_email: e });
     }
 
     handleUserChange = (e) => {
@@ -119,7 +119,7 @@ class AddDevice extends Component {
                     : null}
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p style={{ marginLeft: 36 }}>(*)- Required Fields</p>
-                    {(this.state.type == 0) ?
+                    {(this.props.preActive) ? null :
                         <Form.Item
                             label="Device ID "
                             labelCol={{ span: 8 }}
@@ -131,7 +131,7 @@ class AddDevice extends Component {
 
                                 <Input disabled />
                             )}
-                        </Form.Item> : null
+                        </Form.Item>
                     }
                     {(isloading ?
 
@@ -228,39 +228,6 @@ class AddDevice extends Component {
                                 )}
                             </Form.Item>
                             <Form.Item
-                                label="Name "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('name', {
-                                    initialValue: this.props.new ? "" : this.props.device.name,
-                                    rules: [{
-
-                                        required: true, message: 'Name is Required !',
-                                    }],
-                                })(
-                                    <Input autoComplete="new-password" />
-                                )}
-                            </Form.Item>
-                            <Form.Item
-
-                                label="Account Email "
-                                labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('email', {
-                                    initialValue: this.props.new ? "" : this.props.device.email,
-                                    rules: [{
-                                        type: 'email', message: 'The input is not valid E-mail!',
-                                    }, {
-                                        required: true, message: 'Account Email is Required !',
-                                    }],
-                                })(
-                                    <Input autoComplete="new-password" />
-                                )}
-                            </Form.Item>
-
-                            <Form.Item
                                 label="PGP Email "
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
@@ -269,15 +236,13 @@ class AddDevice extends Component {
                                     initialValue: this.props.new ? "" : this.props.device.pgp_email,
                                     rules: [{
                                         type: 'email', message: 'The input is not valid E-mail!',
-                                    }, {
-                                        required: true, message: 'PGP Email is Required !',
                                     }],
                                 })(
                                     <Select
                                         showSearch
                                         placeholder="Select PGP Emails"
                                         optionFilterProp="children"
-                                        // onChange={handleChange}
+                                        // onChange={() => { this.handleChange() }}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         autoComplete="new-password"

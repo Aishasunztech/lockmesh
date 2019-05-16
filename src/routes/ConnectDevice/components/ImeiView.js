@@ -22,10 +22,6 @@ export default class ImeiView extends Component {
         }
     }
 
-    success = () => {
-        message.success('Action Done Susscefully ');
-    };
-
     getImeiLists() {
 
         let dumyImei1List = []
@@ -42,6 +38,7 @@ export default class ImeiView extends Component {
                 return item
             }
         })
+        // console.log(imei2List);
         this.setState({
             imei2List: imei2List,
             imei1List: imei1List,
@@ -173,6 +170,8 @@ export default class ImeiView extends Component {
                 }
             }
         }) : imei_list.map((device, index) => {
+
+            // console.log("original", device, "imei2", device.imei2);
             if (device.orignal_imei2 === device.imei2) {
                 i++
                 return {

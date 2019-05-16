@@ -30,7 +30,9 @@ import {
     applyPushApps,
     applyPullApps,
     writeImei,
-    getActivities
+    getActivities,
+    hidePolicyConfirm,
+    applyPolicy
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -38,7 +40,7 @@ import {
 } from "../../../constants/Constants";
 
 
-import { PUSH_APPS, PULL_APPS } from "../../../constants/ActionTypes"
+import { PUSH_APPS, PULL_APPS, POLICY } from "../../../constants/ActionTypes"
 
 const confirm = Modal.confirm;
 
@@ -172,6 +174,8 @@ class SideActions extends Component {
             actionType: PUSH_APPS,
             selectedApps: [],
             activities: [],
+            policyId: '',
+            applyPolicyConfirm: false
         }
     }
 
@@ -179,11 +183,11 @@ class SideActions extends Component {
 
         this.setState({
             historyModal: this.props.historyModal,
+            applyPolicyConfirm: this.props.applyPolicyConfirm,
             saveProfileModal: this.props.saveProfileModal,
             historyType: this.props.historyType,
             saveProfileType: this.props.saveProfileType,
             profileName: this.props.profileName,
-            policyName: this.props.policyName,
             activities: this.props.activities
         });
 
@@ -195,14 +199,17 @@ class SideActions extends Component {
             //   console.log(nextProps.pullAppsModal, 'reciceve')
             this.setState({
                 historyModal: nextProps.historyModal,
+                applyPolicyConfirm: nextProps.applyPolicyConfirm,
                 saveProfileModal: nextProps.saveProfileModal,
                 historyType: nextProps.historyType,
                 saveProfileType: nextProps.saveProfileType,
                 profileName: nextProps.profileName,
-                policyName: nextProps.policyName,
                 pullAppsModal: nextProps.pullAppsModal,
                 activities: nextProps.activities
             })
+        }
+        if (nextProps.applyPolicyConfirm) {
+            showConfirmPolcy(this)
         }
     }
 
@@ -210,7 +217,6 @@ class SideActions extends Component {
         if (((type !== undefined) || type === "" || type === null) && visible === false) {
             this.props.showHistoryModal(visible);
         } else {
-            // console.log('else')
             this.props.showHistoryModal(visible, type);
         }
     }
@@ -342,14 +348,22 @@ class SideActions extends Component {
         }
     }
 
-    applyHistory = (historyId) => {
+    applyHistory = (historyId, name = '') => {
         const historyType = this.state.historyType;
         if (historyType === 'history') {
 
         } else if (historyType === "profile") {
 
-        } else if (historyType === "policy") {
-            alert(historyId);
+        } else if (historyType === POLICY) {
+
+            console.log(name);
+            this.showPwdConfirmModal(true, POLICY)
+            this.setState({
+                policyId: historyId,
+                policyName: name,
+                historyModal: false
+            })
+
         }
     }
 
@@ -371,7 +385,6 @@ class SideActions extends Component {
     }
 
     render() {
-        // console.log(this.props.device);
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';
@@ -602,7 +615,6 @@ class SideActions extends Component {
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
                     actionType={this.state.actionType}
-
                 />
 
                 <SelectedApps
@@ -680,7 +692,9 @@ function mapDispatchToProps(dispatch) {
         applyPullApps: applyPullApps,
         savePolicy: savePolicy,
         writeImei: writeImei,
-        getActivities: getActivities
+        getActivities: getActivities,
+        hidePolicyConfirm: hidePolicyConfirm,
+        applyPolicy: applyPolicy,
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
@@ -688,6 +702,7 @@ var mapStateToProps = ({ device_details, auth }, otherProps) => {
     return {
         authUser: auth.authUser,
         historyModal: device_details.historyModal,
+        applyPolicyConfirm: device_details.applyPolicyConfirm,
         saveProfileModal: device_details.saveProfileModal,
         historyType: device_details.historyType,
         pushAppsModal: device_details.pushAppsModal,
@@ -743,5 +758,16 @@ function showConfirm(device, action, _this, msg, type) {
             }).catch(() => console.log(''));
         },
         onCancel() { },
+    });
+}
+function showConfirmPolcy(_this) {
+    confirm({
+        title: "Do you want to apply " + _this.state.policyName + " policy on device",
+        onOk() {
+            _this.props.applyPolicy(_this.props.device.device_id, _this.props.device.id, _this.state.policyId)
+        },
+        onCancel() {
+            _this.props.hidePolicyConfirm()
+        },
     });
 }

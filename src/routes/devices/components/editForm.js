@@ -219,41 +219,6 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Name "
-                        labelCol={{ span: 8, xs: 24, sm: 8 }}
-                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                    >
-                        {this.props.form.getFieldDecorator('name', {
-                            initialValue: checkValue(this.props.device.name),
-                            rules: [{
-
-                                required: true, message: 'Device Name is Required !',
-                            }],
-                        })(
-                            <Input autoComplete="new-password" />
-                        )}
-                    </Form.Item>
-                    <Form.Item
-
-                        label="Account Email "
-                        labelCol={{ span: 8, xs: 24, sm: 8 }}
-                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                    >
-                        {this.props.form.getFieldDecorator('email', {
-                            initialValue: this.props.device.account_email,
-                            rules: [{
-                                type: 'email', message: 'The input is not valid E-mail!',
-                            },
-                            (this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? {} :
-                                {
-                                    required: true, message: 'Account Email is Required !',
-                                }],
-                        })(
-                            <Input disabled={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION || this.props.device.account_email === null) ? false : true} />
-                        )}
-                    </Form.Item>
-
-                    <Form.Item
                         label="PGP Email "
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
@@ -263,8 +228,6 @@ class EditDevice extends Component {
                             initialValue: this.props.device.pgp_email,
                             rules: [{
                                 type: 'email', message: 'The input is not valid E-mail!',
-                            }, {
-                                required: true, message: 'PGP Email is Required !',
                             }],
                         })(
                             <Select

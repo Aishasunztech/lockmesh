@@ -51,8 +51,10 @@ import {
     DEVICE_S_DEALER_NAME
 } from '../../constants/DeviceConstants';
 
-import { message } from 'antd';
-import { stat } from "fs";
+import { message, Modal } from 'antd';
+
+const success = Modal.success
+const error = Modal.error
 
 
 const initialState = {
@@ -92,7 +94,7 @@ const initialState = {
         DEVICE_DEALER_NAME,
         DEVICE_S_DEALER,
         DEVICE_S_DEALER_NAME
-    ],  
+    ],
     // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
 };
@@ -139,10 +141,14 @@ export default (state = initialState, action) => {
                 if (objIndex !== -1) {
                     state.devices[objIndex] = action.response.data;
                 }
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
             }
 
 
@@ -161,10 +167,14 @@ export default (state = initialState, action) => {
                 if (objIndex1 !== -1) {
                     state.devices[objIndex1] = action.response.data;
                 }
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             return {
@@ -181,9 +191,13 @@ export default (state = initialState, action) => {
                     let objIndex = state.devices.findIndex((obj => obj.id === id));
                     state.devices.splice(objIndex, 1);
                 }
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
             }
             return {
                 ...state,
@@ -203,10 +217,14 @@ export default (state = initialState, action) => {
                 let objIndex4 = state.devices.findIndex((obj => obj.device_id === action.payload.formData.device_id));
                 state.devices[objIndex4] = action.response.data[0];
 
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
             return {
@@ -228,12 +246,16 @@ export default (state = initialState, action) => {
             if (action.response.status) {
                 // console.log('pre activated device', action.response.data.data)
                 // state.devices.push(action.response.data.data)
-                message.success(action.response.data.msg, 5);
+                success({
+                    title: action.response.msg,
+                });
                 devices = [...action.response.data.data, ...state.devices]
                 // message.success('done');
             }
             else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
 
             return {
@@ -312,9 +334,13 @@ export default (state = initialState, action) => {
 
 
             if (action.response.status) {
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
             }
 
             var devices = state.devices;

@@ -14,9 +14,6 @@ export default class AddUser extends Component {
         }
     }
 
-    success = () => {
-        message.success('Action Done Susscefully ');
-    };
 
 
     showModal = (handleSubmit, user = null, titleText = 'Add User') => {
