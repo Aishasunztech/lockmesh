@@ -75,6 +75,7 @@ export default class SystemControls extends Component {
     if (this.state.settings !== undefined && this.state.settings && this.state.settings !== []) {
       objindex = this.state.settings.findIndex(item => item.uniqueName == Main_SETTINGS)
     }
+    // console.log('object settings', objindex)
     if (this.state.controls) {
 
       return (
@@ -85,7 +86,7 @@ export default class SystemControls extends Component {
                 {
                   (this.state.settings !== undefined && this.state.settings && this.state.settings !== []) ?
                     <div className="row width_100 m-0 sec_head1">
-                      <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                      {/* <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                         <span>Guest</span>
                         <Switch onClick={(e) => {
                           //  console.log("guest", e , this.state.settings[objindex]);
@@ -105,7 +106,7 @@ export default class SystemControls extends Component {
                           // console.log("guest", e);
                           this.handleMainSettingCheck(e, "enable");
                         }} checked={this.state.settings[objindex].enable === 1 || this.state.settings[objindex].enable === true ? true : false} size="small" />
-                      </div>
+                      </div> */}
                     </div>
                     : false
                 }
