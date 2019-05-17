@@ -48,7 +48,7 @@ import imgUrl from '../../assets/images/mobile.png';
 import {
   DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
   SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
-  APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS
+  APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, Main_SETTINGS
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -311,6 +311,21 @@ class ConnectDevice extends Component {
       }
     }
 
+    console.log('main scure settings', this.props.controls.settings);
+    if(this.props.controls.settings.length){
+      let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
+      if(index >= 0){
+        app_list.push(this.props.controls.settings[index])
+      }
+    }
+
+    if(this.props.extensions.length){
+      let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
+      if(index >= 0){
+        app_list.push(this.props.extensions[index])
+      }
+    }
+
     this.props.applySetting(
       app_list, {
         adminPwd: this.props.adminPwd,
@@ -385,6 +400,7 @@ class ConnectDevice extends Component {
     this.setState({ showChangesModal: false });
   }
   render() {
+    console.log('app list: ', this.props.app_list, 'controls :', this.props.controls)
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
     let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'Online';
