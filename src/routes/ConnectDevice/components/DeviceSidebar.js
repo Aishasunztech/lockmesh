@@ -66,8 +66,8 @@ export default class DeviceSidebar extends Component {
 
         return [
             {
-                key:300,
-                name:(<a href="javascript:void(0)" >{titleCase(USER_ID)}:</a>),
+                key: 300,
+                name: (<a href="javascript:void(0)" >{titleCase(USER_ID)}:</a>),
                 value: checkValue(device_details.user_id)
             },
             {
@@ -205,15 +205,29 @@ export default class DeviceSidebar extends Component {
     renderDetailsColumns(device_details) {
         return [
             {
-                title: 'Device ID:',
+                title: <div>
+                    <p style={{ margin: "6px 0" }}>Device ID:</p>
+                    <p style={{ margin: "6px 0" }}>User ID:</p>
+                </div>,
                 dataIndex: 'name',
                 className: "device_info",
                 width: 110,
             }, {
                 key: 0,
-                title: (<span >{device_details.device_id}<a className="ref-btn" onClick={() => {
-                    this.props.refreshDevice(device_details.device_id)
-                }}><Icon type="sync" spin className="loading_icon" /> <Icon type="reload" /> Refresh</a></span>),
+                title: (
+                    <div>
+                        <div>
+                            <p style={{ margin: "6px 0" }}>{device_details.device_id}
+                                <a className="ref-btn" onClick={() => {
+                                    this.props.refreshDevice(device_details.device_id)
+                                }}>
+                                    <Icon type="sync" spin className="loading_icon" />
+                                    <Icon type="reload" /> Refresh</a>
+                            </p>
+                        </div>
+                        <p style={{ margin: "6px 0" }}>sdlaf98f</p>
+                    </div>
+                ),
                 dataIndex: 'value',
                 className: "device_value",
                 width: "auto",
