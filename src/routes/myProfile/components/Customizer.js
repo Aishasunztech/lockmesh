@@ -64,7 +64,7 @@ import {
   THEME_TYPE_SEMI_DARK
 } from "../../../constants/ThemeSetting";
 
-import { message, Modal } from 'antd';
+import {  Modal } from 'antd';
 
 const success = Modal.success
 const error = Modal.error
