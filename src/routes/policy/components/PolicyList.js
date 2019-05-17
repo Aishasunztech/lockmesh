@@ -17,7 +17,8 @@ class PolicyList extends Component {
             expandedRowKeys: [],
             expandTabSelected: [],
             expandedByCustom: [],
-            pagination: this.props.pagination
+            pagination: this.props.pagination,
+            savePolicyButton: false
 
         }
     }
@@ -53,15 +54,18 @@ class PolicyList extends Component {
                     expandedRowKeys: this.state.expandedRowKeys,
                     expandTabSelected: newItems,
                     isSwitch: btnof == 'edit' ? true : false,
-                    [rowId]: rowId
+                    [rowId]: rowId,
+                    savePolicyButton: true
                 })
             } else {
                 // console.log('row id is ', this.state[rowId])
                 this.setState({
                     expandedRowKeys: this.state.expandedRowKeys,
                     expandTabSelected: newItems,
-                    [rowId]: null
+                    [rowId]: null,
                     // isSwitch: btnof == 'edit' ? true : false,
+                    savePolicyButton: false
+
                 })
             }
 
@@ -70,6 +74,20 @@ class PolicyList extends Component {
         }
 
     }
+
+
+    SavePolicyChanges = (record) => {
+
+        Modal.confirm({
+            title: 'Are You Sure, You Want to Save Changes',
+            onOk: ()=> {
+                this.props.SavePolicyChanges(record);
+            },
+            // content: 'Bla bla ...',
+            okText: 'Save',
+        });
+    }
+
 
     deletePolicy = (id) => {
         let _this = this
@@ -240,26 +258,32 @@ class PolicyList extends Component {
                             // console.log("expandTabSelected", record);
                             // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                             return (
-                                <PolicyInfo
-                                    selected={this.state.expandTabSelected[record.rowKey]}
-                                    policy={record}
-                                    isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
-                                    rowId={record.policy_id}
-                                    handleEditPolicy={this.props.handleEditPolicy}
-                                    handleCheckAll={this.props.handleCheckAll}
-                                    edit={true}
-                                    guestAlldealerApps={this.props.guestAlldealerApps}
-                                    encryptedAlldealerApps={this.props.encryptedAlldealerApps}
-                                    enableAlldealerApps={this.props.enableAlldealerApps}
+                                <div>{
+                                    this.state.savePolicyButton ?
 
-                                    guestAllappPermissions={this.props.guestAllappPermissions}
-                                    encryptedAllappPermissions={this.props.encryptedAllappPermissions}
-                                    enableAllappPermissions={this.props.enableAllappPermissions}
+                                        <Button onClick={() => this.SavePolicyChanges(record)}>Save Changes</Button>
+                                        : false}
+                                    <PolicyInfo
+                                        selected={this.state.expandTabSelected[record.rowKey]}
+                                        policy={record}
+                                        isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
+                                        rowId={record.policy_id}
+                                        handleEditPolicy={this.props.handleEditPolicy}
+                                        handleCheckAll={this.props.handleCheckAll}
+                                        edit={true}
+                                        guestAlldealerApps={this.props.guestAlldealerApps}
+                                        encryptedAlldealerApps={this.props.encryptedAlldealerApps}
+                                        enableAlldealerApps={this.props.enableAlldealerApps}
 
-                                    guestAllallExtensions={this.props.guestAllallExtensions}
-                                    encryptedAllallExtensions={this.props.encryptedAllallExtensions}
-                                    enableAllallExtensions={this.props.enableAllallExtension}
-                                />
+                                        guestAllappPermissions={this.props.guestAllappPermissions}
+                                        encryptedAllappPermissions={this.props.encryptedAllappPermissions}
+                                        enableAllappPermissions={this.props.enableAllappPermissions}
+
+                                        guestAllallExtensions={this.props.guestAllallExtensions}
+                                        encryptedAllallExtensions={this.props.encryptedAllallExtensions}
+                                        enableAllallExtensions={this.props.enableAllallExtension}
+                                    />
+                                </div>
                             )
                         }}
                         // expandIconColumnIndex={1}         

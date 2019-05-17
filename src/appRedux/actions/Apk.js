@@ -84,7 +84,8 @@ export function deleteApk(appId) {
 
                 dispatch({
                     type: UNLINK_APK,
-                    payload: appId
+                    payload: appId,
+                    response: response.data
                 });
 
 
@@ -112,7 +113,6 @@ export function addApk(formData) {
                 dispatch({
                     type: ADD_APK,
                     response: response.data,
-
                     payload: ''
                 });
 

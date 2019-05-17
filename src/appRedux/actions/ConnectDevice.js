@@ -43,13 +43,17 @@ import {
     SHOW_PULL_APPS_MODAL,
     PULL_APPS,
     WRITE_IMEI,
-    GET_ACTIVITIES
+    GET_ACTIVITIES,
+    POLICY,
+    HIDE_POLICY_CONFIRM,
+    APPLY_POLICY
 } from "../../constants/ActionTypes"
 
-import {
-    message
-} from 'antd';
 import RestService from '../services/RestServices';
+
+import { Modal } from 'antd';
+const success = Modal.success;
+const error = Modal.error;
 
 // action creaters 
 
@@ -65,9 +69,9 @@ export function getDeviceDetails(deviceId) {
     return (dispatch) => {
         RestService.getDeviceDetails(deviceId).then((response) => {
             // console.log("slkdflaskdfjlasf", response.data);
-            if (RestService.checkAuth(response.data.status)) {
+            if (RestService.checkAuth(response.data)) {
                 // console.log("slkdflaskdfjlasf", response.data);
-                if (response.data) {
+                if (response.data.status) {
                     dispatch({
                         type: GET_DEVICE_DETAILS,
                         payload: response.data.data
@@ -262,10 +266,14 @@ export function wipe(device) {
             //         msg: response.data.msg,
             //     }
             // });
-            message.success(response.data.msg);
+            success({
+                title: response.data.msg,
+            });
         }
         else {
-            message.error("Device Not Wiped.Please Try again.")
+            error({
+                title: "Device Not Wiped.Please Try again.",
+            });
         }
     });
 }
@@ -335,6 +343,11 @@ export function showHistoryModal(visible, profileType = "") {
     }
 }
 
+export function hidePolicyConfirm() {
+    return {
+        type: HIDE_POLICY_CONFIRM,
+    }
+}
 export function loadDeviceProfile(app_list) {
     return {
         type: LOAD_PROFILE,
@@ -863,6 +876,14 @@ export const checkPass = (user, actionType) => {
                             PasswordMatch: response.data,
                         }
                     })
+                } else if (actionType === POLICY) {
+                    dispatch({
+                        type: CHECKPASS,
+                        payload: {
+                            actionType: actionType,
+                            PasswordMatch: response.data,
+                        }
+                    })
                 } else {
                     dispatch({
                         type: INVALID_TOKEN
@@ -992,7 +1013,23 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
         })
     }
 }
-
+export const applyPolicy = (deviceId, userAccId, policyId) => {
+    return (dispatch) => {
+        RestService.applyPolicy(deviceId, userAccId, policyId).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log(response.data);
+                dispatch({
+                    type: APPLY_POLICY,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
 export const getActivities = (device_id) => {
     return (dispatch) => {
         RestService.getActivities(device_id).then((response) => {

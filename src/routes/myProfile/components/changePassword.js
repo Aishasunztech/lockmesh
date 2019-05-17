@@ -18,9 +18,7 @@ export default class ChangePassword extends Component {
 
         }
     }
-    success = () => {
-        message.success('Action Done Susscefully ');
-    };
+    
 
     showModal = (profile, func) => {
         // console.log('profile', this.props.profile);

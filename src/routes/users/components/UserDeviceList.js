@@ -70,6 +70,57 @@ class UserDeviceList extends Component {
             {
                 title: (
                     <Input.Search
+                        name="activation_code"
+                        key="activation_code"
+                        id="activation_code"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(DEVICE_ACTIVATION_CODE)}
+                    />
+                ),
+                dataIndex: 'activation_code',
+                className: '',
+                children: [
+                    {
+                        title: DEVICE_ACTIVATION_CODE,
+                        align: "center",
+                        dataIndex: 'activation_code',
+                        className: '',
+                        sorter: (a, b) => { return a.activation_code - b.activation_code },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="link_code"
+                        key="link_code"
+                        id="link_code"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(DEVICE_DEALER_PIN)}
+                    />
+                ),
+                dataIndex: 'dealer_pin',
+                className: '',
+                children: [
+                    {
+                        title: DEVICE_DEALER_PIN,
+                        align: "center",
+                        dataIndex: 'dealer_pin',
+                        key: 'dealer_pin',
+                        className: '',
+                        sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
+            {
+                title: (
+                    <Input.Search
                         name="device_id"
                         key="device_id"
                         id="device_id"
@@ -430,6 +481,8 @@ class UserDeviceList extends Component {
 
 
                 ),
+                activation_code: checkValue(device.activation_code),
+                dealer_pin: checkValue(device.link_code),
                 status: (<span style={color} > {status}</span >),
                 device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 pgp_email: checkValue(device.pgp_email),

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Modal, Button, Form, Input, Icon, Col, message,Upload,Row } from 'antd';
+import { Modal, Button, Form, Input, Icon, Col, message, Upload, Row } from 'antd';
 import { BASE_URL } from "../../../constants/Application";
 
+const successMessage = Modal.success
+const errorMessage = Modal.error
 
 let logo = '';
 let apk = '';
@@ -11,7 +13,7 @@ let packageName = '';
 let details = '';
 
 let form_data = '';
-let edit_func= '';
+let edit_func = '';
 export default class EditApk extends Component {
 
     constructor(props) {
@@ -26,20 +28,22 @@ export default class EditApk extends Component {
         }
     }
     success = () => {
-        message.success('Action Done Susscefully ');
+        successMessage({
+            title: 'Action Done Susscefully '
+        })
     };
 
-    showModal = (app,func) => {
-        edit_func=func;
-         logo = app.logo;
-         apk = app.apk;
+    showModal = (app, func) => {
+        edit_func = func;
+        logo = app.logo;
+        apk = app.apk;
         this.setState({
             visible: true,
             apk_name: app.apk_name,
-            apk_id:app.apk_id,
-            func:func,
-            app:app
-           
+            apk_id: app.apk_id,
+            func: func,
+            app: app
+
         });
     }
 
@@ -61,19 +65,19 @@ export default class EditApk extends Component {
                     onCancel={this.handleCancel}
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>Cancel</Button>,
-                       
+
                     ]}
                 >
 
-                <WrappedNormalApkForm 
-                    app ={this.state.app} 
-                    editApk={this.state.func}
-                    handleCancel={this.handleCancel}
-                    getApkList={this.props.getApkList}
-                     />
-                    
+                    <WrappedNormalApkForm
+                        app={this.state.app}
+                        editApk={this.state.func}
+                        handleCancel={this.handleCancel}
+                        getApkList={this.props.getApkList}
+                    />
 
-                 
+
+
                 </Modal>
             </div>
         )
@@ -92,21 +96,21 @@ class EditApkForm extends Component {
         }
     }
 
-    logo= this.props.app.apk_logo;
-    apk=this.props.app.apk;
+    logo = this.props.app.apk_logo;
+    apk = this.props.app.apk;
 
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                form_data = { 
-                    'apk_id': this.props.app.apk_id, 
-                    'logo': logo, 
-                    'apk': apk, 
+                form_data = {
+                    'apk_id': this.props.app.apk_id,
+                    'logo': logo,
+                    'apk': apk,
                     'name': values.name,
                     'versionName': versionName,
-                    'versionCode' : versionCode,
-                    'packageName' :packageName,
+                    'versionCode': versionCode,
+                    'packageName': packageName,
                     'details': details
                 }
                 // console.log(form_data);
@@ -162,10 +166,14 @@ class EditApkForm extends Component {
                         if (info.file.response.fileName !== '') {
                             logo = info.file.response.fileName;
                         }
-                        message.success('file added Successfully ');
+                        successMessage({
+                            title: 'file added Successfully '
+                        })
                     }
                     else {
-                        message.error('Error While Uploading');
+                        errorMessage({
+                            title: 'Error While Uploading'
+                        })
                         disableLogo = false;
                     }
 
@@ -185,7 +193,7 @@ class EditApkForm extends Component {
             disabled: disableApk,
             onChange(info) {
                 const status = info.file.status;
-             
+
                 if (status !== 'uploading') {
                     // console.log('uploading');
                     // console.log(info.file, info.fileList);
@@ -193,21 +201,25 @@ class EditApkForm extends Component {
                 if (status === 'done') {
 
                     if (info.file.response.status !== false) {
-                      
+
                         disableApk = true;
-                       
+
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
                             // packageName = info.file.response.packageName;
                             // versionCode = info.file.response.versionCode;
                             // versionName = info.file.response.versionName;
                             // details = info.file.response.details;
-                           // console.log('apk name', apk);
+                            // console.log('apk name', apk);
                         }
-                        message.success('file added Successfully ');
+                        successMessage({
+                            title: 'file added Successfully '
+                        })
                     }
-                    else{
-                        message.error('Error While Uploading');
+                    else {
+                        errorMessage({
+                            title: 'Error While Uploading'
+                        })
                         disableApk = false;
                     }
 
@@ -225,7 +237,7 @@ class EditApkForm extends Component {
                     label="Apk Name"
                 >
                     {getFieldDecorator('name', {
-                       initialValue: this.props.app.apk_name,
+                        initialValue: this.props.app.apk_name,
                         rules: [{
                             required: true, message: 'Name is required',
                         }],
@@ -234,14 +246,14 @@ class EditApkForm extends Component {
                     )}
                 </Form.Item>
                 <Row>
-                
+
                     <Col span={12} className="upload_file">
                         <Form.Item
 
                         >
                             <div className="dropbox">
                                 {getFieldDecorator('icon', {
-                                   
+
                                 })(
                                     <Dragger {...props} >
                                         <p className="ant-upload-drag-icon">
@@ -278,7 +290,7 @@ class EditApkForm extends Component {
 
 
                     </Col>
-                   
+
                 </Row>
 
                 <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >

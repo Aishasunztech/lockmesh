@@ -475,6 +475,14 @@ const RestService = {
         }, RestService.getHeader());
     },
 
+    applyPolicy: (deviceId, userAccId, policyId) => {
+        return axios.post(BASE_URL + 'users/apply_policy/' + deviceId, {
+            deviceId: deviceId,
+            policyId: policyId,
+            userAccId: userAccId
+        }, RestService.getHeader());
+    },
+
     applyPullApps: (pull_apps, deviceId, usrAccId) => {
         return axios.post(BASE_URL + 'users/apply_pullapps/' + deviceId, {
             pull_apps: pull_apps,

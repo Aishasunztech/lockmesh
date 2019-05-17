@@ -5,7 +5,8 @@ import AppList from "./AppList";
 import DeviceSettings from './DeviceSettings';
 
 import {
-    SECURE_SETTING
+    SECURE_SETTING,
+    POLICY
     // , 
     // SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
 } from '../../../constants/Constants';
@@ -22,13 +23,15 @@ const renderList = (histories, type, callback) => {
 
         return ({
             key: history.id,
-            history_date: (type === "history") ? history.created_at : (type === "policy") ? history.policy_name : (type === "profile") ? history.profile_name : null,
+            history_date: (type === "history") ? history.created_at : (type === POLICY) ? history.policy_name : (type === "profile") ? history.profile_name : null,
             action: (
                 <Button
                     size="small"
                     className="mb-0"
                     onClick={() => {
-                        callback(history.id);
+                        if (type === POLICY) {
+                            callback(history.id, history.policy_name);
+                        }
                         // this.applyProfile(history.app_list)
                     }}
                 > Apply

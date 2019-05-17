@@ -48,7 +48,9 @@ import {
     SHOW_PULL_APPS_MODAL,
     PULL_APPS,
     WRITE_IMEI,
-    GET_ACTIVITIES
+    GET_ACTIVITIES,
+    HIDE_POLICY_CONFIRM,
+    APPLY_POLICY
 } from "../../constants/ActionTypes";
 
 import {
@@ -59,6 +61,9 @@ import { message, Modal, Alert, Icon } from 'antd';
 
 const warning = Modal.warning;
 const confirm = Modal.confirm;
+const success = Modal.success
+const error = Modal.error
+
 const actions = require("../../appRedux/actions/ConnectDevice")
 
 const initialState = {
@@ -140,6 +145,7 @@ const initialState = {
     imei_list: [],
     pushAppsModal: false,
     pullAppsModal: false,
+    applyPolicyConfirm: false,
     device_found: true
 };
 
@@ -199,9 +205,13 @@ export default (state = initialState, action) => {
                 state.device = action.response.data;
                 state.device.account_status = 'suspended';
 
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             // let device = state.device;
@@ -220,9 +230,13 @@ export default (state = initialState, action) => {
                 state.device = action.response.data;
                 state.pageName = NOT_AVAILABLE;
                 state.status = 'Suspended';
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             return {
@@ -234,9 +248,13 @@ export default (state = initialState, action) => {
         case UNFLAG_DEVICE:
             // console.log(action.response.msg);
             if (action.response.status) {
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             // console.log('action done ', state.device)
@@ -247,9 +265,13 @@ export default (state = initialState, action) => {
         case WIPE_DEVICE:
             // console.log(action.response.msg);
             if (action.response.status) {
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             // console.log('action done ', state.device)
@@ -327,7 +349,9 @@ export default (state = initialState, action) => {
         case PUSH_APPS: {
             if (action.payload.status) {
                 if (action.payload.online) {
-                    message.success("Apps are Being pushed")
+                    success({
+                        title: "Apps are Being pushed",
+                    });
                 } else {
                     // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                     warning({
@@ -336,10 +360,36 @@ export default (state = initialState, action) => {
                     });
                 }
             } else {
-                message.error(action.payload.msg)
+                error({
+                    title: action.payload.msg,
+                });
             }
             return {
                 ...state
+            }
+        }
+        case APPLY_POLICY: {
+            if (action.payload.status) {
+                if (action.payload.online) {
+                    success({
+                        title: "Policy is Being applied",
+                    });
+
+                } else {
+                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: 'Policy Applied to device. Action will be performed when device is back online',
+                    });
+                }
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                applyPolicyConfirm: false
             }
         }
 
@@ -375,7 +425,7 @@ export default (state = initialState, action) => {
         case SHOW_HISTORY_MODAL: {
             // console.log(SHOW_HISTORY_MODAL);
             // console.log({
-            //     ...state,
+            //     ...state,SHOW_HISTORY_MODAL
             //     historyType: action.payload.ProfileType,
             //     historyModal: action.payload.visible
             // })
@@ -413,10 +463,14 @@ export default (state = initialState, action) => {
                 state.device = action.response.data;
                 state.status = '';
                 state.pageName = 'main_menu'
+                success({
+                    title: action.response.msg,
+                });
 
-                message.success(action.response.msg);
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
 
@@ -430,9 +484,13 @@ export default (state = initialState, action) => {
 
         case UNLINK_DEVICE: {
             if (action.response.status) {
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
             // console.log('unlink called');
             return {
@@ -497,11 +555,20 @@ export default (state = initialState, action) => {
                     }
                 } else if (action.payload.actionType === WIPE_DEVICE) {
 
-                    showConfirm1(action.payload.device, "Do You really Want to Wipe the device")
+                    showConfirm1(action.payload.device, "Do you really want to Wipe the device")
+                }
+                else if (action.payload.actionType === POLICY) {
+                    return {
+                        ...state,
+                        historyModal: false,
+                        applyPolicyConfirm: true
+                    }
                 }
             }
             else {
-                message.error("Password Did not Match. Please Try again.");
+                error({
+                    title: "Password Did not Match. Please Try again.",
+                });
             }
 
         }
@@ -528,7 +595,9 @@ export default (state = initialState, action) => {
         case PULL_APPS: {
             if (action.payload.status) {
                 if (action.payload.online) {
-                    message.success("Apps are Being pulled")
+                    success({
+                        title: "Apps are Being pulled",
+                    });
                 } else {
                     warning({
                         title: 'Warning Device Offline',
@@ -536,7 +605,9 @@ export default (state = initialState, action) => {
                     });
                 }
             } else {
-                message.error(action.payload.msg)
+                error({
+                    title: action.payload.msg,
+                });
             }
             return {
                 ...state
@@ -923,29 +994,39 @@ export default (state = initialState, action) => {
                 imei_list: action.payload,
             }
         }
+        case HIDE_POLICY_CONFIRM: {
+            return {
+                ...state,
+                applyPolicyConfirm: false,
+            }
+        }
 
         case WRITE_IMEI: {
             if (action.payload.status) {
-                if(action.payload.insertedData !== null){
-                    state.imei_list.unshift(action.payload.insertedData)
-                }
-               
+                // if (action.payload.insertedData !== null) {
+                //     state.imei_list.unshift(action.payload.insertedData)
+                // }
+
                 if (action.payload.online) {
-                    message.success(action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device!")
+                    success({
+                        title: action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device.Restart device is required to apply IMEI.",
+                    });
                 } else {
                     warning({
                         title: 'Warning Device Offline',
                         content: action.imeiData.imeiNo + ' write to ' + action.imeiData.type + '. Action will be performed when device is back online',
                     });
                 }
-                console.log('new state is', state.imei_list)
+                // console.log('new state is', state.imei_list)
             }
             else {
-                message.error(action.payload.msg)
+                error({
+                    title: action.payload.msg,
+                });
             }
             return {
                 ...state,
-                imei_list: [...state.imei_list]
+                // imei_list: [...state.imei_list]
             }
         }
         default:
@@ -1033,11 +1114,11 @@ function handleCheckedAllExts(extensions) {
     }
 }
 
-function showConfirm1(device, msg) {
+function showConfirm1(device, msg, buttonText) {
     confirm({
         title: 'WARNNING!',
         content: msg,
-        okText: "WIPE DEVICE",
+        okText: buttonText,
         onOk() {
             showConfirm(device, "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.")
         },
@@ -1052,6 +1133,8 @@ function showConfirm(device, msg) {
         onOk() {
             actions.wipe(device)
         },
-        onCancel() { },
+        onCancel() {
+
+        },
     });
 }

@@ -22,6 +22,8 @@ import {
     getPGPEmails,
 } from "../../appRedux/actions/Devices";
 const confirm = Modal.confirm;
+const success = Modal.success
+const error = Modal.error
 
 class Account extends Component {
     constructor(props) {
@@ -333,9 +335,13 @@ class Account extends Component {
 
         if (this.props.showMsg) {
             if (this.props.msg === "imported successfully") {
-                message.success(this.props.msg);
+                success({
+                    title: this.props.msg,
+                });
             } else {
-                message.error(this.props.msg);
+                error({
+                    title: this.props.msg,
+                });
             }
 
         }
@@ -612,22 +618,7 @@ class Account extends Component {
                                                 {(this.state.dataFieldName === "sim_ids") ?
                                                     <Fragment>
                                                         <div className="row">
-                                                            <div className="col-md-6 pr-8">
-                                                                <Select
-                                                                    className="search_heading2"
-                                                                    value={this.state.sim_ids_page}
-                                                                    //  defaultValue={this.state.DisplayPages}
-                                                                    style={{ width: '100%' }}
-                                                                    // onSelect={value => this.setState({DisplayPages:value})}
-                                                                    onChange={value => this.handlePagination(value, 'sim_ids')}
-                                                                >
-                                                                    <Select.Option className="font-12" value="10" >10</Select.Option>
-                                                                    <Select.Option className="font-12" value="20">20</Select.Option>
-                                                                    <Select.Option className="font-12" value="30">30</Select.Option>
-                                                                    <Select.Option className="font-12" value="50">50</Select.Option>
-                                                                    <Select.Option className="font-12" value="100">100</Select.Option>
-                                                                </Select>
-                                                            </div>
+
                                                             <div className="col-md-6 pl-8">
                                                                 <Input.Search
                                                                     name="sim_id"
@@ -717,30 +708,15 @@ class Account extends Component {
                                                                     }
                                                                 })
                                                             }
-
-                                                            pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
+                                                            scroll={{ y: 250 }}
+                                                            pagination={false}
 
                                                         />
                                                     </Fragment>
                                                     : (this.state.dataFieldName === "chat_ids") ?
                                                         <Fragment>
                                                             <div className="row">
-                                                                <div className="col-md-6 pr-8">
-                                                                    <Select
-                                                                        className="search_heading2"
-                                                                        value={this.state.chat_ids_page}
-                                                                        //  defaultValue={this.state.DisplayPages}
-                                                                        style={{ width: '100%' }}
-                                                                        // onSelect={value => this.setState({DisplayPages:value})}
-                                                                        onChange={value => this.handlePagination(value, 'chat_ids')}
-                                                                    >
-                                                                        <Select.Option className="font-12" value="10" >10</Select.Option>
-                                                                        <Select.Option className="font-12" value="20">20</Select.Option>
-                                                                        <Select.Option className="font-12" value="30">30</Select.Option>
-                                                                        <Select.Option className="font-12" value="50">50</Select.Option>
-                                                                        <Select.Option className="font-12" value="100">100</Select.Option>
-                                                                    </Select>
-                                                                </div>
+
                                                                 <div className="col-md-6 pl-8">
                                                                     <Input.Search
                                                                         name="chat_id"
@@ -778,29 +754,15 @@ class Account extends Component {
                                                                         }
                                                                     })
                                                                 }
+                                                                scroll={{ y: 250 }}
+                                                                pagination={false}
 
-                                                                pagination={{ pageSize: Number(this.state.chat_ids_page), size: "middle" }}
+
                                                             />
                                                         </Fragment>
                                                         : (this.state.dataFieldName === "pgp_emails") ?
                                                             <Fragment>
                                                                 <div className="row">
-                                                                    <div className="col-md-6 pr-8">
-                                                                        <Select
-                                                                            className="search_heading2"
-                                                                            value={this.state.pgp_emails_page}
-                                                                            //  defaultValue={this.state.DisplayPages}
-                                                                            style={{ width: '100%' }}
-                                                                            // onSelect={value => this.setState({DisplayPages:value})}
-                                                                            onChange={value => this.handlePagination(value, 'pgp_emails')}
-                                                                        >
-                                                                            <Select.Option className="font-12" value="10" >10</Select.Option>
-                                                                            <Select.Option className="font-12" value="20">20</Select.Option>
-                                                                            <Select.Option className="font-12" value="30">30</Select.Option>
-                                                                            <Select.Option className="font-12" value="50">50</Select.Option>
-                                                                            <Select.Option className="font-12" value="100">100</Select.Option>
-                                                                        </Select>
-                                                                    </div>
                                                                     <div className="col-md-6 pl-8">
                                                                         <Input.Search
                                                                             name="pgp_email"
@@ -843,28 +805,13 @@ class Account extends Component {
                                                                         })
                                                                     }
 
-                                                                    pagination={{ pageSize: Number(this.state.pgp_emails_page), size: "middle" }}
+                                                                    scroll={{ y: 250 }}
+                                                                    pagination={false}
                                                                 />
                                                             </Fragment>
                                                             : (this.state.dataFieldName === "used_pgp_emails") ?
                                                                 <Fragment>
                                                                     <div className="row">
-                                                                        <div className="col-md-6 pr-8">
-                                                                            <Select
-                                                                                className="search_heading2"
-                                                                                value={this.state.used_pgp_emails_page}
-                                                                                //  defaultValue={this.state.DisplayPages}
-                                                                                style={{ width: '100%' }}
-                                                                                // onSelect={value => this.setState({DisplayPages:value})}
-                                                                                onChange={value => this.handlePagination(value, 'used_pgp_emails')}
-                                                                            >
-                                                                                <Select.Option className="font-12" value="10" >10</Select.Option>
-                                                                                <Select.Option className="font-12" value="20">20</Select.Option>
-                                                                                <Select.Option className="font-12" value="30">30</Select.Option>
-                                                                                <Select.Option className="font-12" value="50">50</Select.Option>
-                                                                                <Select.Option className="font-12" value="100">100</Select.Option>
-                                                                            </Select>
-                                                                        </div>
                                                                         <div className="col-md-6 pl-8">
                                                                             <Input.Search
                                                                                 name="pgp_email"
@@ -916,28 +863,12 @@ class Account extends Component {
                                                                                 }
                                                                             })
                                                                         }
-
-                                                                        pagination={{ pageSize: Number(this.state.used_pgp_emails_page), size: "middle" }}
+                                                                        scroll={{ y: 250 }}
+                                                                        pagination={false}
                                                                     />
                                                                 </Fragment> : (this.state.dataFieldName === "used_sim_ids") ?
                                                                     <Fragment>
                                                                         <div className="row">
-                                                                            <div className="col-md-6 pr-8">
-                                                                                <Select
-                                                                                    className="search_heading2"
-                                                                                    value={this.state.used_sim_ids_page}
-                                                                                    //  defaultValue={this.state.DisplayPages}
-                                                                                    style={{ width: '100%' }}
-                                                                                    // onSelect={value => this.setState({DisplayPages:value})}
-                                                                                    onChange={value => this.handlePagination(value, 'used_sim_ids')}
-                                                                                >
-                                                                                    <Select.Option className="font-12" value="10" >10</Select.Option>
-                                                                                    <Select.Option className="font-12" value="20">20</Select.Option>
-                                                                                    <Select.Option className="font-12" value="30">30</Select.Option>
-                                                                                    <Select.Option className="font-12" value="50">50</Select.Option>
-                                                                                    <Select.Option className="font-12" value="100">100</Select.Option>
-                                                                                </Select>
-                                                                            </div>
                                                                             <div className="col-md-6 pl-8">
                                                                                 <Input.Search
                                                                                     name="sim_id"
@@ -989,28 +920,12 @@ class Account extends Component {
                                                                                     }
                                                                                 })
                                                                             }
-
-                                                                            pagination={{ pageSize: Number(this.state.used_sim_ids_page), size: "middle" }}
+                                                                            scroll={{ y: 250 }}
+                                                                            pagination={false}
                                                                         />
                                                                     </Fragment> : (this.state.dataFieldName === "used_chat_ids") ?
                                                                         <Fragment>
                                                                             <div className="row">
-                                                                                <div className="col-md-6 pr-8">
-                                                                                    <Select
-                                                                                        className="search_heading2"
-                                                                                        value={this.state.used_chat_ids_page}
-                                                                                        //  defaultValue={this.state.DisplayPages}
-                                                                                        style={{ width: '100%' }}
-                                                                                        // onSelect={value => this.setState({DisplayPages:value})}
-                                                                                        onChange={value => this.handlePagination(value, 'used_chat_ids')}
-                                                                                    >
-                                                                                        <Select.Option className="font-12" value="10" >10</Select.Option>
-                                                                                        <Select.Option className="font-12" value="20">20</Select.Option>
-                                                                                        <Select.Option className="font-12" value="30">30</Select.Option>
-                                                                                        <Select.Option className="font-12" value="50">50</Select.Option>
-                                                                                        <Select.Option className="font-12" value="100">100</Select.Option>
-                                                                                    </Select>
-                                                                                </div>
                                                                                 <div className="col-md-6 pl-8">
                                                                                     <Input.Search
                                                                                         name="chat_id"
@@ -1061,8 +976,8 @@ class Account extends Component {
                                                                                         }
                                                                                     })
                                                                                 }
-
-                                                                                pagination={{ pageSize: Number(this.state.used_chat_ids_page), size: "middle" }}
+                                                                                scroll={{ y: 250 }}
+                                                                                pagination={false}
                                                                             />
                                                                         </Fragment> : null
                                                 }
