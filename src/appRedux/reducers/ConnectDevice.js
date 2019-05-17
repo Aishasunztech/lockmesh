@@ -61,6 +61,9 @@ import { message, Modal, Alert, Icon } from 'antd';
 
 const warning = Modal.warning;
 const confirm = Modal.confirm;
+const success = Modal.success
+const error = Modal.error
+
 const actions = require("../../appRedux/actions/ConnectDevice")
 
 const initialState = {
@@ -202,9 +205,13 @@ export default (state = initialState, action) => {
                 state.device = action.response.data;
                 state.device.account_status = 'suspended';
 
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             // let device = state.device;
@@ -223,9 +230,13 @@ export default (state = initialState, action) => {
                 state.device = action.response.data;
                 state.pageName = NOT_AVAILABLE;
                 state.status = 'Suspended';
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             return {
@@ -237,9 +248,13 @@ export default (state = initialState, action) => {
         case UNFLAG_DEVICE:
             // console.log(action.response.msg);
             if (action.response.status) {
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             // console.log('action done ', state.device)
@@ -250,9 +265,13 @@ export default (state = initialState, action) => {
         case WIPE_DEVICE:
             // console.log(action.response.msg);
             if (action.response.status) {
-                message.success(action.response.msg);
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
             // console.log('action done ', state.device)
@@ -330,7 +349,9 @@ export default (state = initialState, action) => {
         case PUSH_APPS: {
             if (action.payload.status) {
                 if (action.payload.online) {
-                    message.success("Apps are Being pushed")
+                    success({
+                        title: "Apps are Being pushed",
+                    });
                 } else {
                     // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                     warning({
@@ -339,7 +360,9 @@ export default (state = initialState, action) => {
                     });
                 }
             } else {
-                message.error(action.payload.msg)
+                error({
+                    title: action.payload.msg,
+                });
             }
             return {
                 ...state
@@ -348,7 +371,10 @@ export default (state = initialState, action) => {
         case APPLY_POLICY: {
             if (action.payload.status) {
                 if (action.payload.online) {
-                    message.success("Policy is Being applied")
+                    success({
+                        title: "Policy is Being applied",
+                    });
+
                 } else {
                     // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                     warning({
@@ -357,7 +383,9 @@ export default (state = initialState, action) => {
                     });
                 }
             } else {
-                message.error(action.payload.msg)
+                error({
+                    title: action.payload.msg,
+                });
             }
             return {
                 ...state,
@@ -435,10 +463,14 @@ export default (state = initialState, action) => {
                 state.device = action.response.data;
                 state.status = '';
                 state.pageName = 'main_menu'
+                success({
+                    title: action.response.msg,
+                });
 
-                message.success(action.response.msg);
             } else {
-                message.error(action.response.msg);
+                error({
+                    title: action.response.msg,
+                });
 
             }
 
@@ -452,9 +484,13 @@ export default (state = initialState, action) => {
 
         case UNLINK_DEVICE: {
             if (action.response.status) {
-                message.success(action.response.msg)
+                success({
+                    title: action.response.msg,
+                });
             } else {
-                message.error(action.response.msg)
+                error({
+                    title: action.response.msg,
+                });
             }
             // console.log('unlink called');
             return {
@@ -530,7 +566,9 @@ export default (state = initialState, action) => {
                 }
             }
             else {
-                message.error("Password Did not Match. Please Try again.");
+                error({
+                    title: "Password Did not Match. Please Try again.",
+                });
             }
 
         }
@@ -557,7 +595,9 @@ export default (state = initialState, action) => {
         case PULL_APPS: {
             if (action.payload.status) {
                 if (action.payload.online) {
-                    message.success("Apps are Being pulled")
+                    success({
+                        title: "Apps are Being pulled",
+                    });
                 } else {
                     warning({
                         title: 'Warning Device Offline',
@@ -565,7 +605,9 @@ export default (state = initialState, action) => {
                     });
                 }
             } else {
-                message.error(action.payload.msg)
+                error({
+                    title: action.payload.msg,
+                });
             }
             return {
                 ...state
@@ -961,26 +1003,30 @@ export default (state = initialState, action) => {
 
         case WRITE_IMEI: {
             if (action.payload.status) {
-                if (action.payload.insertedData !== null) {
-                    state.imei_list.unshift(action.payload.insertedData)
-                }
+                // if (action.payload.insertedData !== null) {
+                //     state.imei_list.unshift(action.payload.insertedData)
+                // }
 
                 if (action.payload.online) {
-                    message.success(action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device!")
+                    success({
+                        title: action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device.Restart device is required to apply IMEI.",
+                    });
                 } else {
                     warning({
                         title: 'Warning Device Offline',
                         content: action.imeiData.imeiNo + ' write to ' + action.imeiData.type + '. Action will be performed when device is back online',
                     });
                 }
-                console.log('new state is', state.imei_list)
+                // console.log('new state is', state.imei_list)
             }
             else {
-                message.error(action.payload.msg)
+                error({
+                    title: action.payload.msg,
+                });
             }
             return {
                 ...state,
-                imei_list: [...state.imei_list]
+                // imei_list: [...state.imei_list]
             }
         }
         default:

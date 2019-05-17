@@ -7,13 +7,16 @@ import { Link } from 'react-router-dom';
 import 'react-picky/dist/picky.css';
 import { bindActionCreators } from "redux";
 import { BASE_URL } from "../../constants/Application";
-import { addApk ,getApkList } from "../../appRedux/actions/Apk";
+import { addApk, getApkList } from "../../appRedux/actions/Apk";
 
-import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message } from 'antd';
+import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message, Modal } from 'antd';
 
 // import asyncComponent from "util/asyncComponent";
 
 // console.log('token', token);
+const success = Modal.success
+const error = Modal.error
+
 let logo = '';
 let apk = '';
 let versionCode = '';
@@ -43,12 +46,12 @@ class AddApk extends Component {
                                 </Link>
                                 <Divider />
                                 <div style={{ justifyContent: 'center' }} >
-                                    <WrappedNormalApkForm push={this.props.history} 
-                                    addApk={this.props.addApk}
-                                    getApkList={this.props.getApkList}
+                                    <WrappedNormalApkForm push={this.props.history}
+                                        addApk={this.props.addApk}
+                                        getApkList={this.props.getApkList}
                                     />
                                 </div>
-                               
+
 
                             </div>
                         </Card>
@@ -76,18 +79,18 @@ class AddApkForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                
-                form_data = { 
-                    'logo': logo, 
-                    'apk': apk, 
+
+                form_data = {
+                    'logo': logo,
+                    'apk': apk,
                     'name': values.name,
                 }
                 // console.log('hisory',this.props.go_back);
                 this.props.addApk(form_data);
-                disableLogo = false;    
+                disableLogo = false;
                 disableApk = false;
                 this.props.push.push('/apk-list');
-                
+
                 //  console.log(form_data);
             }
             else {
@@ -95,8 +98,8 @@ class AddApkForm extends Component {
             }
         });
 
-        
-       
+
+
     }
 
     render() {
@@ -131,17 +134,22 @@ class AddApkForm extends Component {
                 }
                 if (status === 'done') {
                     // console.log(info.file.response);
-                    
+
                     if (info.file.response.status !== false) {
                         disableLogo = true;
 
                         if (info.file.response.fileName !== '') {
                             logo = info.file.response.fileName;
                         }
-                        message.success('file added Successfully ');
+
+                        success({
+                            title: 'file added Successfully ',
+                        });
                     }
                     else {
-                        message.error('Error While Uploading');
+                        error({
+                            title: 'Error While Uploading',
+                        });
                         disableLogo = false;
                     }
 
@@ -166,7 +174,7 @@ class AddApkForm extends Component {
                     // console.log(info.file, info.fileList);
                 }
                 if (status === 'done') {
-                    
+
                     if (info.file.response.status !== false) {
                         // console.log(info.file.response);
 
@@ -181,10 +189,14 @@ class AddApkForm extends Component {
                             // details = info.file.response.details;
 
                         }
-                        message.success('file added Successfully ');
+                        success({
+                            title: 'file added Successfully ',
+                        });
                     }
                     else {
-                        message.error('Error While Uploading');
+                        error({
+                            title: 'Error While Uploading',
+                        });
                         disableApk = false;
                     }
 
@@ -287,7 +299,7 @@ const mapStateToProps = ({ apk_list }) => {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addApk: addApk, 
+        addApk: addApk,
         getApkList: getApkList
     }, dispatch);
 }

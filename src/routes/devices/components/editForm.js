@@ -228,8 +228,6 @@ class EditDevice extends Component {
                             initialValue: this.props.device.pgp_email,
                             rules: [{
                                 type: 'email', message: 'The input is not valid E-mail!',
-                            }, {
-                                required: true, message: 'PGP Email is Required !',
                             }],
                         })(
                             <Select

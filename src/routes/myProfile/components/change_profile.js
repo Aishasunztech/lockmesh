@@ -12,10 +12,6 @@ export default class ChangeProfile extends Component {
 
         }
     }
-    success = () => {
-        message.success('Action Done Susscefully ');
-    };
-
     showModal = () => {
         // console.log('lksdjkldafdsfaasdf');
 

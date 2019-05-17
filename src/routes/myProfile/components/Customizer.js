@@ -64,6 +64,10 @@ import {
   THEME_TYPE_SEMI_DARK
 } from "../../../constants/ThemeSetting";
 
+import { message, Modal } from 'antd';
+
+const success = Modal.success
+const error = Modal.error
 
 class Customizer extends Component {
 
@@ -80,12 +84,16 @@ class Customizer extends Component {
     window.less
       .modifyVars(vars)
       .then(() => {
-        message.success(`Theme updated successfully`);
+        success({
+          title: `Theme updated successfully`,
+        });
         this.setState({ vars });
         localStorage.setItem("app-theme", JSON.stringify(vars));
       })
-      .catch(error => {
-        message.error(`Failed to update theme`);
+      .catch(err => {
+        error({
+          title: `Failed to update theme`,
+        });
       });
   };
   getColorPicker = (varName) => (

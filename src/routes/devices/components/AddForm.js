@@ -81,8 +81,8 @@ class AddDevice extends Component {
         this.setState({ visible: false });
     }
     handleChange = (e) => {
-        // console.log(e.target);
-        this.setState({ type: e.target.value });
+        console.log(e);
+        this.setState({ pgp_email: e });
     }
 
     handleUserChange = (e) => {
@@ -236,15 +236,13 @@ class AddDevice extends Component {
                                     initialValue: this.props.new ? "" : this.props.device.pgp_email,
                                     rules: [{
                                         type: 'email', message: 'The input is not valid E-mail!',
-                                    }, {
-                                        required: true, message: 'PGP Email is Required !',
                                     }],
                                 })(
                                     <Select
                                         showSearch
                                         placeholder="Select PGP Emails"
                                         optionFilterProp="children"
-                                        // onChange={handleChange}
+                                        // onChange={() => { this.handleChange() }}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         autoComplete="new-password"

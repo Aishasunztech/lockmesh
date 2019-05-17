@@ -19,7 +19,10 @@ import {
 	APK_APP_LOGO,
 	APK_PERMISSION
 } from '../../constants/ApkConstants';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
+
+const success = Modal.success
+const error = Modal.error
 
 const initialState = {
 	isloading: false,
@@ -60,7 +63,9 @@ export default (state = initialState, action) => {
 
 			// console.log(UNLINK_APK);
 			if (action.response.status) {
-				message.success(action.response.msg);
+				success({
+					title: action.response.msg,
+				});
 				state.apk_list = state.apk_list.filter(apk => apk.apk_id !== action.payload);
 
 			}
@@ -75,10 +80,14 @@ export default (state = initialState, action) => {
 			// console.log(ADD_APK);
 
 			if (action.response.status) {
-				message.success(action.response.msg)
+				success({
+					title: action.response.msg,
+				});
 			}
 			else {
-				message.error(action.response.msg)
+				error({
+					title: action.response.msg,
+				});
 			}
 			return {
 				...state,
@@ -96,10 +105,14 @@ export default (state = initialState, action) => {
 					state.apk_list[objIndex1].apk = action.payload.apk
 					state.apk_list[objIndex1].logo = action.payload.logo
 				}
-				message.success(action.response.msg);
+				success({
+					title: action.response.msg,
+				});;
 			}
 			else {
-				message.error(action.response.msg);
+				error({
+					title: action.response.msg,
+				});;
 			}
 
 
@@ -132,7 +145,9 @@ export default (state = initialState, action) => {
 			}
 		}
 		case PERMSSION_SAVED: {
-			message.success(action.payload);
+			success({
+				title: action.payload
+			});;
 			let dealers = JSON.parse(action.dealers)
 			// console.log(dealers.length ,'itrititt',action.apk_id);
 			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.apk_id));
