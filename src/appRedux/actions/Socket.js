@@ -1,9 +1,9 @@
 import {
-    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, PULL_PUSH_INPROCESS
+    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI
 } from "../../constants/ActionTypes";
 
 import {
-    ACK_FINISHED_PUSH_APPS, ACK_FINISHED_PULL_APPS, PULL_PUSH_IN_PROCESS
+    ACK_FINISHED_PUSH_APPS, ACK_FINISHED_PULL_APPS, ACTION_IN_PROCESS, FINISH_POLICY, FINISH_IMEI
 } from "../../constants/SocketConstants";
 
 export const getNotification = (socket) => {
@@ -37,12 +37,32 @@ export const ackFinishedPullApps = (socket, deviceId) => {
         })
     }
 }
-export const pullPushInProcess = (socket, deviceId) => {
+export const actionInProcess = (socket, deviceId) => {
     return (dispatch) => {
-        socket.on(PULL_PUSH_IN_PROCESS + deviceId, (response) => {
+        socket.on(ACTION_IN_PROCESS + deviceId, (response) => {
             // console.log("in process socket");
             dispatch({
-                type: PULL_PUSH_INPROCESS,
+                type: IN_PROCESS,
+                payload: true
+            })
+        })
+    }
+}
+export const ackFinishedPolicy = (socket, deviceId) => {
+    return (dispatch) => {
+        socket.on(FINISH_POLICY + deviceId, (response) => {
+            dispatch({
+                type: FINISHED_POLICY,
+                payload: true
+            })
+        })
+    }
+}
+export const ackImeiChanged = (socket, deviceId) => {
+    return (dispatch) => {
+        socket.on(FINISH_IMEI + deviceId, (response) => {
+            dispatch({
+                type: FINISHED_IMEI,
                 payload: true
             })
         })

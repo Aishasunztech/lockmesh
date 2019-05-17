@@ -762,7 +762,7 @@ function showConfirm(device, action, _this, msg, type) {
 }
 function showConfirmPolcy(_this) {
     confirm({
-        title: "Do you want to apply " + _this.state.policyName + " policy on device",
+        title: "Do you want to apply #" + _this.state.policyName + " policy on device?",
         onOk() {
             _this.props.applyPolicy(_this.props.device.device_id, _this.props.device.id, _this.state.policyId)
         },
