@@ -65,11 +65,11 @@ export default class DeviceSidebar extends Component {
         // }
 
         return [
-            {
-                key: 300,
-                name: (<a href="javascript:void(0)" >{titleCase(USER_ID)}:</a>),
-                value: checkValue(device_details.user_id)
-            },
+            // {
+            //     key: 300,
+            //     name: (<a href="javascript:void(0)" >{titleCase(USER_ID)}:</a>),
+            //     value: checkValue(device_details.user_id)
+            // },
             {
                 key: 10,
                 name: (<a href="javascript:void(0)" >{titleCase(DEVICE_STATUS)}:</a>),
@@ -225,7 +225,7 @@ export default class DeviceSidebar extends Component {
                                     <Icon type="reload" /> Refresh</a>
                             </p>
                         </div>
-                        <p style={{ margin: "6px 0" }}>sdlaf98f</p>
+                        <p style={{ margin: "6px 0" }}>{checkValue(device_details.user_id)}</p>
                     </div>
                 ),
                 dataIndex: 'value',
