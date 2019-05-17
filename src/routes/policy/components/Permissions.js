@@ -13,16 +13,7 @@ import {
 import DealerList from "../../apk/components/DealerList";
 
 import CircularProgress from "components/CircularProgress/index";
-import { titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
-import {
-  DEALER_ID,
-  DEALER_NAME,
-  DEALER_EMAIL,
-  DEALER_PIN,
-  DEALER_DEVICES,
-  DEALER_TOKENS,
-  DEALER_ACTION
-} from '../../../constants/DealerConstants';
+import { dealerColsWithSearch } from '../../utils/commonUtils';
 
 
 // export default 
@@ -225,26 +216,24 @@ class Permissions extends Component {
     }
   }
   handleSearch = (e, global = false) => {
+      let fieldName = e.target.name;
+      let fieldValue = e.target.value;
+      
+      if (global) {
+        let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
+        // console.log("searchedData", searchedData);
+        this.setState({
+          dealerList: searchedData
+        });
+      } else {
 
-    let fieldName = e.target.name;
-    let fieldValue = e.target.value;
-    // console.log("fieldName", fieldName);
-    // console.log("fieldValue", fieldValue);
-    // console.log("global", global);
-    if (global) {
-      let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
-      // console.log("searchedData", searchedData);
-      this.setState({
-        dealerList: searchedData
-      });
-    } else {
+        let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
+        // console.log("searchedData", searchedData);
+        this.setState({
+          dealerList: searchedData
+        });
+      }
 
-      let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
-      // console.log("searchedData", searchedData);
-      this.setState({
-        dealerList: searchedData
-      });
-    }
   }
 
   rejectPemission = (dealer_id) => {
@@ -302,16 +291,16 @@ class Permissions extends Component {
       // console.log('object recrd', this.props.record.permissions);
       let is_included = this.state.permissions.includes(dealer.dealer_id);
       let common = {
-        'key': dealer.dealer_id,
-        'row_key': dealer.dealer_id,
-        'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-        'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-        'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-        'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-        'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-        'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-        'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-        'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
+        key: dealer.dealer_id,
+        row_key: dealer.dealer_id,
+        dealer_id: dealer.dealer_id ? dealer.dealer_id : 'N/A',
+        dealer_name: dealer.dealer_name ? dealer.dealer_name : 'N/A',
+        dealer_email: dealer.dealer_email ? dealer.dealer_email : 'N/A',
+        link_code: dealer.link_code ? dealer.link_code : 'N/A',
+        parent_dealer: dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+        parent_dealer_id: dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+        connected_devices: dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+        dealer_token: dealer.dealer_token ? dealer.dealer_token : 'N/A',
       }
 
       if (permitted && is_included) {
@@ -329,7 +318,6 @@ class Permissions extends Component {
     return (data);
   }
   render() {
-    // console.log('dealer state', this.state.dealerList);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
