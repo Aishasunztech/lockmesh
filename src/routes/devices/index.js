@@ -876,7 +876,7 @@ class Devices extends Component {
                 })
             }
         }
-
+        let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
         if (value == DEVICE_UNLINKED && (this.props.user.type != ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
@@ -891,6 +891,9 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = '';
                 this.state.columns[indxRemainingDays].children[0].className = '';
             }
+            if (activationCodeIndex >= 0) {
+                this.state.columns.splice(2, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+            }
         }
         else {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
@@ -899,6 +902,10 @@ class Devices extends Component {
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
                 this.state.columns[indxRemainingDays].className = 'hide';
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
+            }
+
+            if (activationCodeIndex >= 0) {
+                this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
         }
 
@@ -994,6 +1001,7 @@ class Devices extends Component {
                 })
             }
         }
+        let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
 
         if (value == '5' && (this.props.user.type != ADMIN)) {
             // console.log('tab 5', this.state.columns);
@@ -1009,6 +1017,9 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = '';
                 this.state.columns[indxRemainingDays].children[0].className = '';
             }
+            if (activationCodeIndex >= 0) {
+                this.state.columns.splice(2, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+            }
         }
         else {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
@@ -1017,6 +1028,9 @@ class Devices extends Component {
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
                 this.state.columns[indxRemainingDays].className = 'hide';
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
+            }
+            if (activationCodeIndex >= 0) {
+                this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
         }
 
