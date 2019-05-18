@@ -82,7 +82,8 @@ class AddDevice extends Component {
     }
     handleChange = (e) => {
         console.log(e);
-        this.setState({ pgp_email: e });
+        // this.setState({ pgp_email: e }); 
+        this.setState({ type: e.target.value });
     }
 
     handleUserChange = (e) => {
