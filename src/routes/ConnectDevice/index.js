@@ -37,7 +37,8 @@ import {
   handleCheckAllExtension,
   reSyncDevice,
   getDealerApps,
-  getActivities
+  getActivities,
+  clearApplications
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -73,7 +74,10 @@ class ConnectDevice extends Component {
       pageName: MAIN_MENU,
       showChangesModal: false,
       controls: [],
-      imei_list: []
+      imei_list: [],
+      showMessage: false,
+      messageText: '',
+      messageType: ''
     }
     // console.log("hello every body", this.props);
     this.mainMenu = [
@@ -178,11 +182,21 @@ class ConnectDevice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list) {
+    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
+     console.log('show message sate', this.props.showMessage)
       this.setState({
         controls: this.props.controls,
-        imei_list: this.props.imei_list
+        imei_list: this.props.imei_list,
+        showMessage: this.props.showMessage,
+        messageText: this.props.messageText,
+        messageType: this.props.messageType
       })
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props !== nextProps){
+      // console.log('object, ', nextProps.showMessage)
     }
   }
 
@@ -405,7 +419,7 @@ class ConnectDevice extends Component {
     this.setState({ showChangesModal: false });
   }
   render() {
-    console.log('app list: ', this.props.app_list, 'controls :', this.props.controls)
+    // console.log('app list: ', this.props.app_list, 'controls :', this.props.controls)
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
     let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'Online';
@@ -454,6 +468,7 @@ class ConnectDevice extends Component {
                       undoApplications={this.undoAction}
                       redoApplications={this.redoAction}
                       applyActionButton={this.applyActionButton}
+                      clearApplications={this.props.clearApplications}
                       applyBtn={this.props.applyBtn}
                       undoBtn={this.props.undoBtn}
                       redoBtn={this.props.redoBtn}
@@ -510,15 +525,15 @@ class ConnectDevice extends Component {
             <CircularProgress />
           </div> : null} */}
 
-          {this.props.showMessage === true ?
-            (this.props.messageType === "error") ?
+          {this.state.showMessage === true ?
+            (this.state.messageType === "error") ?
               error({
-                title: this.props.messageText,
+                title: this.state.messageText,
               })
               :
-              (this.props.messageType === "success") ?
+              (this.state.messageType === "success") ?
                 success({
-                  title: this.props.messageText,
+                  title: this.state.messageText,
                 })
                 : null : null}
 
@@ -569,7 +584,8 @@ function mapDispatchToProps(dispatch) {
     ackFinishedPolicy: ackFinishedPolicy,
     ackImeiChanged: ackImeiChanged,
     actionInProcess: actionInProcess,
-    getActivities: getActivities
+    getActivities: getActivities,
+    clearApplications: clearApplications
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket }) => {

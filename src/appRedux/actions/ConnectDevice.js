@@ -46,7 +46,8 @@ import {
     GET_ACTIVITIES,
     POLICY,
     HIDE_POLICY_CONFIRM,
-    APPLY_POLICY
+    APPLY_POLICY,
+    CLEAR_APPLICATIONS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -408,6 +409,14 @@ export function undoApps() {
     return (dispatch) => {
         dispatch({
             type: UNDO_APPS
+        })
+    }
+}
+
+export function clearApplications() {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR_APPLICATIONS
         })
     }
 }
