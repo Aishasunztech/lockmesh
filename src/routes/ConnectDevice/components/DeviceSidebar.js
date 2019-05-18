@@ -206,8 +206,8 @@ export default class DeviceSidebar extends Component {
         return [
             {
                 title: <div>
-                    <p style={{ margin: "6px 0" }}>Device ID:</p>
-                    <p style={{ margin: "6px 0" }}>User ID:</p>
+                    <p style={{ margin: "8px 0" }}>Device ID:</p>
+                    <p style={{ margin: "8px 0" }}>User ID:</p>
                 </div>,
                 dataIndex: 'name',
                 className: "device_info",
@@ -216,16 +216,15 @@ export default class DeviceSidebar extends Component {
                 key: 0,
                 title: (
                     <div>
+                        <a className="ref-btn" onClick={() => {
+                            this.props.refreshDevice(device_details.device_id)
+                        }}>
+                            <Icon type="sync" spin className="loading_icon" />
+                            <Icon type="reload" /> Refresh</a>
                         <div>
-                            <p style={{ margin: "6px 0" }}>{device_details.device_id}
-                                <a className="ref-btn" onClick={() => {
-                                    this.props.refreshDevice(device_details.device_id)
-                                }}>
-                                    <Icon type="sync" spin className="loading_icon" />
-                                    <Icon type="reload" /> Refresh</a>
-                            </p>
+                            <p style={{ margin: "8px 0" }}>{device_details.device_id}</p>
                         </div>
-                        <p style={{ margin: "6px 0" }}>{checkValue(device_details.user_id)}</p>
+                        <p style={{ margin: "8px 0" }}>{checkValue(device_details.user_id)}</p>
                     </div>
                 ),
                 dataIndex: 'value',
@@ -246,7 +245,7 @@ export default class DeviceSidebar extends Component {
                     dataSource={
                         this.renderDetailsData(this.props.device_details)
                     }
-                    scroll={{ y: 562 }}
+                    scroll={{ y: 546 }}
                     pagination={false}
                 />
             </Card>

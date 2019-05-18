@@ -57,6 +57,7 @@ export default class EditDealer extends Component {
 
         return (
             <div>
+
                 <Modal
                     width="600px"
                     visible={visible}
@@ -66,6 +67,7 @@ export default class EditDealer extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
+                    maskClosable={false}
                 >
 
                     <EditForm

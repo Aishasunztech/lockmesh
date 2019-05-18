@@ -1,3 +1,4 @@
+
 .deviceImg {
     width: 311px;
     margin: 0 auto;
@@ -241,6 +242,7 @@ th.device_info {
 .ref-btn {
     display: inline-flex;
     float: right;
+    margin: 12px 0;
 }
 
 .ref-btn .anticon {

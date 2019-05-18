@@ -456,7 +456,7 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, paddingRight: 30 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
                                 >
-                                    <Icon type="lock" />
+                                    <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
                                     Pull
                                 </Button>

@@ -72,8 +72,8 @@ const TableHistory = (props) => {
     return (
         <Table
             style={{ margin: 0, padding: 0 }}
-            size='small'
-            bordered={false}
+            size='default'
+            bordered
             columns={renderColumn(props.type)}
             align='center'
             dataSource={renderList(props.histories, props.type, props.applyHistory)}

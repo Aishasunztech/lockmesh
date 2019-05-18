@@ -520,14 +520,14 @@ class Account extends Component {
                                             <h2 style={{ textAlign: "center" }}>Manage Data</h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0 0px' }}>
-                                                <Col span={7} className="" style={{ padding: 0, textAlign: "center" }}>
+                                                <Col span={7} className="" style={{ textAlign: "center" }}>
                                                     <Icon type="form" className="and_icon" />
                                                 </Col>
                                                 <Col span={16} style={{ padding: 0 }} className="crd_txt">
                                                     <p style={{}}><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
                                                     <p style={{}}><span className="diamond_icon">&#9670;</span>Upload/View/Edit your data</p>
-                                                    <p style={{ position: "relative", right: 20 }}><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
-                                                    <p style={{ position: "relative", right: 60 }} className="more_txt">and more...</p>
+                                                    <p><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
+                                                    <p className="more_txt">and more...</p>
                                                 </Col>
                                             </Row>
                                         </div>
@@ -542,6 +542,7 @@ class Account extends Component {
                                     visible={this.state.visible1}
                                     onOk={this.handleOk}
                                     onCancel={this.handleCancel}
+                                    centered
                                 >
                                     <div className="profile_table">
                                         <Fragment>
@@ -623,7 +624,7 @@ class Account extends Component {
                                                     <Fragment>
                                                         <div className="row">
 
-                                                            <div className="col-md-6 pl-8">
+                                                            <div className="col-md-12">
                                                                 <Input.Search
                                                                     name="sim_id"
                                                                     key="sim_id"
@@ -721,7 +722,7 @@ class Account extends Component {
                                                         <Fragment>
                                                             <div className="row">
 
-                                                                <div className="col-md-6 pl-8">
+                                                                <div className="col-md-12">
                                                                     <Input.Search
                                                                         name="chat_id"
                                                                         key="chat_id"
@@ -767,7 +768,7 @@ class Account extends Component {
                                                         : (this.state.dataFieldName === "pgp_emails") ?
                                                             <Fragment>
                                                                 <div className="row">
-                                                                    <div className="col-md-6 pl-8">
+                                                                    <div className="col-md-12">
                                                                         <Input.Search
                                                                             name="pgp_email"
                                                                             key="pgp_email"
@@ -816,7 +817,7 @@ class Account extends Component {
                                                             : (this.state.dataFieldName === "used_pgp_emails") ?
                                                                 <Fragment>
                                                                     <div className="row">
-                                                                        <div className="col-md-6 pl-8">
+                                                                        <div className="col-md-12">
                                                                             <Input.Search
                                                                                 name="pgp_email"
                                                                                 key="used_pgp_emails"
@@ -873,7 +874,7 @@ class Account extends Component {
                                                                 </Fragment> : (this.state.dataFieldName === "used_sim_ids") ?
                                                                     <Fragment>
                                                                         <div className="row">
-                                                                            <div className="col-md-6 pl-8">
+                                                                            <div className="col-md-12">
                                                                                 <Input.Search
                                                                                     name="sim_id"
                                                                                     key="used_sim_ids"
@@ -930,7 +931,7 @@ class Account extends Component {
                                                                     </Fragment> : (this.state.dataFieldName === "used_chat_ids") ?
                                                                         <Fragment>
                                                                             <div className="row">
-                                                                                <div className="col-md-6 pl-8">
+                                                                                <div className="col-md-12">
                                                                                     <Input.Search
                                                                                         name="chat_id"
                                                                                         key="used_chat_ids"

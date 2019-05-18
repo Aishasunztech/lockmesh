@@ -71,23 +71,23 @@ export default class TableHistory extends Component {
                 [
                     {
                         label: 'Wifi',
-                        status: this.state.controls.controls.wifi_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.wifi_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
                     },
                     {
                         label: 'Bluetooth',
-                        status: this.state.controls.controls.bluetooth_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.bluetooth_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
                     },
                     {
                         label: 'Hotspot',
-                        status: this.state.controls.controls.hotspot_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.hotspot_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
                     },
                     {
                         label: 'Screenshots',
-                        status: this.state.controls.controls.screenshot_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.screenshot_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
                     },
                     {
                         label: 'Block Calls',
-                        status: this.state.controls.controls.call_status ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        status: this.state.controls.controls.call_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
                     }
                 ]
 
@@ -165,9 +165,9 @@ export default class TableHistory extends Component {
                     return {
                         key: item.app_id,
                         label: item.label,
-                        guest: (item.guest == 1 || item.guest === true) ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>,
-                        encrypted: (item.encrypted == 1 || item.encrypted) === true ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>,
-                        enable: (item.enable == 1 || item.enable === true) ? <p style={{ color: "green" }}>On</p> : <p style={{ color: "red" }}>Off</p>
+                        guest: (item.guest == 1 || item.guest === true) ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>,
+                        encrypted: (item.encrypted == 1 || item.encrypted) === true ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>,
+                        enable: (item.enable == 1 || item.enable === true) ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
                     }
                 })
             )
@@ -234,7 +234,7 @@ export default class TableHistory extends Component {
                 }{
                     this.props.isEncryptedPwd ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
                 }{
-                    this.props.isGuestPwd ? <div><p></p> <Badge status="processing" text='Guest Password is changed' /></div> : false
+                    this.props.isGuestPwd ? <div><Badge status="processing" text='Guest Password is changed' /></div> : false
                 }{
                     this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false
                 }
