@@ -37,6 +37,7 @@ export default class AddUser extends Component {
                 <Modal
                     visible={visible}
                     title={this.state.titleText}
+                    maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}

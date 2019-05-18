@@ -401,6 +401,7 @@ class Permissions extends Component {
         </Row>
         <Modal
           width='665px'
+          maskClosable={false}
           className="permiss_tabl"
           title="Add Dealer to permissions list for this App"
           visible={this.state.showDealersModal}
@@ -426,6 +427,7 @@ class Permissions extends Component {
         {/*  remove except selected */}
         <Modal
           width='665px'
+          maskClosable={false}
           className="permiss_tabl"
           title="Remove Dealers from permissions list for this App"
           visible={this.state.removeSelectedDealersModal}
@@ -452,6 +454,7 @@ class Permissions extends Component {
         {/*  Add Except selected */}
         <Modal
           width='665px'
+          maskClosable={false}
           className="permiss_tabl"
           title="Add Dealers to permissions list for this App"
           visible={this.state.addSelectedDealersModal}

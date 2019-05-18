@@ -37,6 +37,7 @@ export default class WipeDevice extends Component {
             <div>
                 <Modal
                     width="330px"
+                    maskClosable={false}
                     visible={visible}
                     title=""
                     onOk={this.handleOk}

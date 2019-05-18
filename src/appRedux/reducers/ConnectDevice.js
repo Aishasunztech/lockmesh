@@ -50,7 +50,8 @@ import {
     WRITE_IMEI,
     GET_ACTIVITIES,
     HIDE_POLICY_CONFIRM,
-    APPLY_POLICY
+    APPLY_POLICY,
+    CLEAR_APPLICATIONS
 } from "../../constants/ActionTypes";
 
 import {
@@ -632,14 +633,14 @@ export default (state = initialState, action) => {
         }
 
         case HANDLE_CHECK_CONTROL: {
-            let changedControls = JSON.parse(JSON.stringify(state.controls.controls));
+            let changedControls = JSON.parse(JSON.stringify(state.controls));
             if (action.payload.key == 'wifi_status') {
                 changedControls[action.payload.key] = true;
             } else {
-                changedControls[action.payload.key] = action.payload.value;
+                changedControls.controls[action.payload.key] = action.payload.value;
             }
 
-            state.controls.controls = JSON.parse(JSON.stringify(changedControls));
+            state.controls = JSON.parse(JSON.stringify(changedControls));
             let controls = state.controls;
             state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
             // console.log('reduver aongds', state.controls);
@@ -719,13 +720,15 @@ export default (state = initialState, action) => {
                         ...state,
                         controls: controls,
                         undoBtn: true,
-                        redoBtn: false
+                        redoBtn: false,
+                        clearBtn: true
                     };
                 } else {
                     return {
                         ...state,
                         controls: controls,
-                        undoBtn: true
+                        undoBtn: true,
+                        clearBtn: true
                     };
 
                 }
@@ -760,7 +763,7 @@ export default (state = initialState, action) => {
             let extensions = state.extensions;
             state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
             let check = handleCheckedAllExts(extensions);
-
+            console.log("undo extensions", state.undoExtensions)
 
             return {
                 ...state,
@@ -772,6 +775,7 @@ export default (state = initialState, action) => {
                 },
                 applyBtn: true,
                 undoBtn: true,
+                clearBtn: true,
                 ...check
             }
         }
@@ -794,10 +798,15 @@ export default (state = initialState, action) => {
                 extensions: changedExtensions,
                 applyBtn: true,
                 undoBtn: true,
+                clearBtn: true
                 // ...check
             }
         }
         case UNDO_EXTENSIONS: {
+            console.log('action', UNDO_EXTENSIONS)
+            console.log(state.undoExtensions, 'undo ex')
+            console.log(state.redoExtensions, 'redo ext')
+            console.log(state.extensions, ' ext')
 
             if (state.undoExtensions.length > 1) {
 
@@ -818,7 +827,7 @@ export default (state = initialState, action) => {
                     return {
                         ...state,
                         redoBtn: true,
-                        extensions: state.undoExtensions[state.undoApps.length - 1]
+                        extensions: JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]))
                     };
                 }
             } else {
@@ -829,6 +838,10 @@ export default (state = initialState, action) => {
             }
         }
         case REDO_EXTENSIONS: {
+            console.log('action', REDO_EXTENSIONS)
+            console.log(state.undoExtensions, 'undo ex')
+            console.log(state.redoExtensions, 'redo ext')
+            console.log(state.extensions, ' ext')
             // console.log('REDUCER UNDO');
             if (state.redoExtensions.length > 0) {
 
@@ -842,13 +855,15 @@ export default (state = initialState, action) => {
                         ...state,
                         extensions: extensions,
                         undoBtn: true,
-                        redoBtn: false
+                        redoBtn: false,
+                        clearBtn: true
                     };
                 } else {
                     return {
                         ...state,
                         extensions: extensions,
-                        undoBtn: true
+                        undoBtn: true,
+                        clearBtn: true
                     };
 
                 }
@@ -882,6 +897,7 @@ export default (state = initialState, action) => {
                 },
                 applyBtn: true,
                 undoBtn: true,
+                clearBtn: true,
                 ...check
             }
         }
@@ -908,7 +924,8 @@ export default (state = initialState, action) => {
                     value: action.payload.value,
                 },
                 applyBtn: true,
-                undoBtn: true
+                undoBtn: true,
+                clearBtn: true,
             }
         }
 
@@ -926,12 +943,14 @@ export default (state = initialState, action) => {
                         ...state,
                         undoBtn: false,
                         redoBtn: true,
+                        clearBtn: true,
                         app_list: JSON.parse(JSON.stringify(state.undoApps[state.undoApps.length - 1]))
                     };
                 } else {
                     return {
                         ...state,
                         redoBtn: true,
+                        clearBtn: true,
                         app_list: state.undoApps[state.undoApps.length - 1]
                     };
                 }
@@ -954,7 +973,9 @@ export default (state = initialState, action) => {
                         ...state,
                         app_list: apps,
                         undoBtn: true,
-                        redoBtn: false
+                        redoBtn: false,
+                        clearBtn: true
+                        
                     };
                 } else {
                     return {
@@ -971,6 +992,34 @@ export default (state = initialState, action) => {
                 };
             }
         }
+
+        case CLEAR_APPLICATIONS: {
+            console.log(state.undoApps.length, state.undoControls.length, state.undoExtensions.length )
+            let extensions = state.undoExtensions.length ? state.undoExtensions[0]: [];
+            let controls = state.undoControls.length ? state.undoControls[0]: [];
+            let apps = state.undoApps.length ? state.undoApps[0]: [];
+            state.undoApps.length = 1;
+            state.undoControls.length = 1;
+            state.undoExtensions.length = 1;
+            return{
+                ...state,
+                extensions: extensions,
+                controls: controls,
+                app_list: apps,
+                undoApps: state.undoApps,
+                undoControls: state.undoControls,
+                undoExtensions: state.undoExtensions,
+                redoApps: [],
+                redoControls: [],
+                redoExtensions: [],
+                clearBtn: false,
+                redoBtn: false,
+                undoBtn: false,
+                pageName: MAIN_MENU
+            }
+        }
+
+
         case GET_DEALER_APPS: {
 
             return {

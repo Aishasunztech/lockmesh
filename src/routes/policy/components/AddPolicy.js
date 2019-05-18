@@ -64,6 +64,7 @@ class AddPolicy extends Component {
             policy_name_error: '',
             command_error: '',
             pushAppsIds: [],
+            appPermissionsIds: [],
 
             guestAlldealerApps: false,
             encryptedAlldealerApps: false,
@@ -100,12 +101,22 @@ class AddPolicy extends Component {
                 this.state.pushApps.push(this.state.dealerApps[index])
             }
         }
+        let appPermissions = [];
+
+        if(this.state.appPermissionsIds.length){
+            console.log('app permission', this.state.appPermissions)
+            for(let id of this.state.appPermissionsIds){
+                let obj = this.state.appPermissions.find(item => item.id == id)
+                if(obj) appPermissions.push(obj);
+                
+            }
+        }
 
         let data = {
             policy_name: this.state.policy_name,
             policy_note: this.state.command,
             push_apps: this.state.pushApps,
-            app_list: this.state.appPermissions,
+            app_list: appPermissions,
             secure_apps: this.state.allExtensions,
             system_permissions: this.state.systemPermissions
 
@@ -213,9 +224,11 @@ class AddPolicy extends Component {
     }
 
 
-    onSelectChange = (selected) => {
-        this.state.pushAppsIds = selected;
-        // console.log(this.state.dealerApps, 'guested apps')    
+    onSelectChange = (selected, pageType) => {
+        if(pageType == 'dealerApps')  this.state.pushAppsIds = selected;
+        else if(pageType == 'appPermissions') this.state.appPermissionsIds = selected
+       
+         console.log(this.state.appPermissionsIds, 'guested apps', this.state.pushAppsIds)    
     }
 
     renderSystemPermissions = () => {
@@ -285,6 +298,7 @@ class AddPolicy extends Component {
                     apps='dealerApps'
                     isSwitch={true}
                     isCheckbox={true}
+                    pageType={'dealerApps'}
                 />
             ),
         }, {
@@ -298,8 +312,11 @@ class AddPolicy extends Component {
                     guestAll={this.state.guestAllappPermissions}
                     encryptedAll={this.state.encryptedAllappPermissions}
                     enableAll={this.state.enableAllappPermissions}
+                    onSelectChange={this.onSelectChange}
+                    pageType={'appPermissions'}
                     appPermissions='appPermissions'
                     isSwitch={true}
+                    isCheckbox={true}
                 />
             ),
         }, {
@@ -313,6 +330,7 @@ class AddPolicy extends Component {
                     guestAll={this.state.guestAllallExtensions}
                     encryptedAll={this.state.encryptedAllallExtensions}
                     enableAll={this.state.enableAllallExtensions}
+                    pageType={'allExtensions'}
                     secureSettings='allExtensions'
                     isSwitch={true}
                 />

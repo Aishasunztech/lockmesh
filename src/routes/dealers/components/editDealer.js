@@ -54,6 +54,7 @@ export default class editDealer extends Component {
                 <Modal
                     visible={visible}
                     title="Edit Dealer"
+                    maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={[

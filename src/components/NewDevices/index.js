@@ -98,7 +98,7 @@ export default class NewDevices extends Component {
             <div>
                 <Modal
                     width={1000}
-
+                    maskClosable={false}
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}

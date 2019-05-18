@@ -59,6 +59,7 @@ export default class EditApk extends Component {
         return (
             <div>
                 <Modal
+                maskClosable={false}
                     visible={visible}
                     title="Edit APK"
                     onOk={this.handleOk}

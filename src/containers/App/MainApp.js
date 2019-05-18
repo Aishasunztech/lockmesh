@@ -120,7 +120,7 @@ export class MainApp extends Component {
 }
 
 const mapStateToProps = ({settings}) => {
-  console.log('style:', settings)
+  // console.log('style:', settings)
   const {width, navStyle} = settings;
   return {width, navStyle}
 };

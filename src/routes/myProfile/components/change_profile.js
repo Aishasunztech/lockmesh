@@ -40,6 +40,7 @@ export default class ChangeProfile extends Component {
                 <Modal
                     visible={visible}
                     title="Change Profile"
+                    maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={false}
