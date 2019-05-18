@@ -93,6 +93,7 @@ export default class Activity extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
+                    className="activities"
                 // className="edit_form"
                 >
                     <Input.Search

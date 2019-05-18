@@ -194,13 +194,13 @@ class Profile extends Component {
                                         <h3>Login Email Authentication</h3>
                                     </Col>
                                     <Col span={6} style={{ padding: "16px 16px 0 " }}>
-                                        <Switch 
-                                        checkedChildren="ON" 
-                                        unCheckedChildren="OFF"  
-                                        defaultChecked={(this.props.profile.two_factor_auth===1 || this.props.profile.two_factor_auth ===true)? true : false}
-                                        onChange={(e)=>{
-                                            this.twoFactorAuth(e);
-                                        }} />
+                                        <Switch
+                                            checkedChildren="ON"
+                                            unCheckedChildren="OFF"
+                                            defaultChecked={(this.props.profile.two_factor_auth === 1 || this.props.profile.two_factor_auth === true) ? true : false}
+                                            onChange={(e) => {
+                                                this.twoFactorAuth(e);
+                                            }} />
                                     </Col>
                                 </Row>
                             </Modal>
@@ -225,10 +225,10 @@ var matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
         twoFactorAuth: twoFactorAuth,
         updatePassword, updateUserProfile
-       }, dispatch);
+    }, dispatch);
 }
 
-var mapStateToProps = ({auth}) => {
+var mapStateToProps = ({ auth }) => {
     // console.log("mapStateToProps");
     // console.log('ooo', state.auth);
     // console.log(auth.authUser);

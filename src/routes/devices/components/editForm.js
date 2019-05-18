@@ -116,7 +116,7 @@ class EditDevice extends Component {
             <div>
 
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                    <p>(*)- Required Fields</p>
+                    <p className="mb-4">(*)- Required Fields</p>
                     <Form.Item
                         label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? "Device ID " : null}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
@@ -394,7 +394,7 @@ class EditDevice extends Component {
                         </Fragment>
                         :
                         <Fragment>
-                            <Form.Item
+                            {/* <Form.Item
                                 label="Dealer Pin "
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
@@ -436,12 +436,12 @@ class EditDevice extends Component {
                             >
                                 <Input value={this.props.device.simno2} disabled />
 
-                            </Form.Item>
+                            </Form.Item> */}
                         </Fragment>
 
                     }
 
-                    <Form.Item className="edit_ftr_btn"
+                    <Form.Item className="edit_ftr_btn11"
                         wrapperCol={{
                             xs: { span: 24, offset: 0 },
                             sm: { span: 24, offset: 0 },

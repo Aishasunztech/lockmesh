@@ -27,22 +27,22 @@ class Apk extends Component {
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0 0px' }}>
                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                    <Icon type="android" className="and_icon" />
+                                                    <Icon type="android" className="policy_icon" />
                                                 </Col>
-                                                <Col span={16}>
-                                                    <h5 style={{ position: 'relative', right: 1 }}><span className="diamond_icon">&#9670;</span>Manage apk's</h5>
-                                                    <h5 style={{ position: 'relative', left: 12 }}><span className="diamond_icon">&#9670;</span>Add permssion</h5>
+                                                <Col span={16} style={{ padding: 0 }}>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Manage apk's</h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Add permssion</h5>
                                                     {(this.props.user.type === 'admin') ?
                                                         (<Fragment>
-                                                            <h5 style={{ position: 'relative', left: 10 }}><span className="diamond_icon">&#9670;</span>Activate apk push</h5>
-                                                            <h5 style={{ position: 'relative', right: 4, marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Set apk Dealer permissions</h5>
-                                                            <h5 style={{ position: 'relative', right: 35 }} className="more_txt">and more...</h5>
+                                                            <h5><span className="diamond_icon">&#9670;</span>Activate apk push</h5>
+                                                            <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Set apk Dealer permissions</h5>
+                                                            <h5 className="more_txt">and more...</h5>
                                                         </Fragment>
                                                         )
                                                         :
                                                         (
                                                             <Fragment>
-                                                                <h5 style={{ position: 'relative', left: 10 }} className="more_txt">and more...</h5>
+                                                                <h5 className="more_txt">and more...</h5>
                                                             </Fragment>
                                                         )
                                                     }
@@ -65,10 +65,10 @@ class Apk extends Component {
                                                 <Col span={8} style={{ textAlign: "center" }}>
                                                     <Icon type="file-text" className="policy_icon" />
                                                 </Col>
-                                                <Col span={15}>
-                                                    <h5 style={{ position: 'relative', right: 16 }}><span className="diamond_icon">&#9670;</span>Create/Edit Policies</h5>
-                                                    <h5 style={{ position: 'relative', right: 0 }}><span className="diamond_icon">&#9670;</span>Set Policy  Permission</h5>
-                                                    <h5 style={{ position: 'relative', right: 4 }} className="more_txt">and more...</h5>
+                                                <Col span={16} style={{ padding: 0 }}>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Create/Edit Policies</h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>Set Policy  Permission</h5>
+                                                    <h5 className="more_txt">and more...</h5>
                                                 </Col>
                                             </Row>
                                         </div>
@@ -89,11 +89,11 @@ class Apk extends Component {
                                                     <Col span={8} style={{ textAlign: "center" }}>
                                                         <Icon type="appstore" className="policy_icon" />
                                                     </Col>
-                                                    <Col span={15}>
-                                                        <h5 style={{ position: 'relative', right: 12, marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Add/remove apps in </h5>
-                                                        <h5 style={{ position: 'relative', left: 10 }}> Secure Market</h5>
-                                                        <h5 style={{ position: 'relative', right: 2 }}><span className="diamond_icon">&#9670;</span>Set permissions</h5>
-                                                        <h5 style={{ position: 'relative', right: 10 }} className="more_txt">and more...</h5>
+                                                    <Col span={16} style={{ padding: 0 }}>
+                                                        <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Add/remove apps in </h5>
+                                                        <h5> Secure Market</h5>
+                                                        <h5><span className="diamond_icon">&#9670;</span>Set permissions</h5>
+                                                        <h5 className="more_txt">and more...</h5>
                                                     </Col>
                                                 </Row>
 

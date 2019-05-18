@@ -12,6 +12,10 @@
     bottom: 56px;
 }
 
+.ant-table-thead>tr>.device_value {
+    padding: 2px 8px 2px 16px;
+}
+
 .applist_menu .ant-checkbox-wrapper {
     font-size: 14px;
     font-weight: 400;
@@ -168,6 +172,11 @@
 .imei_col_11 .ant-table-thead>tr>th {
     padding: 8px 8px;
     white-space: nowrap;
+}
+
+.activities .ant-modal-body {
+    max-height: 560px;
+    overflow: overlay;
 }
 
 @media (max-width:1330px) and (min-width:1200px) {
