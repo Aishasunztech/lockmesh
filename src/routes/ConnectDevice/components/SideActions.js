@@ -49,6 +49,7 @@ const PasswordModal = (props) => {
     return (
         <Modal
             // closable={false}
+            maskClosable={false}
             style={{ top: 20 }}
             width="330px"
             className="push_app"
@@ -75,6 +76,7 @@ const DealerAppModal = (props) => {
     return (
         <Modal
             // closable={false}
+            maskClosable={false}
             style={{ top: 20 }}
             width="780px"
             title="Select Apps"
@@ -101,6 +103,7 @@ const PullAppModal = (props) => {
     return (
         <Modal
             // closable={false}
+            maskClosable={false}
             style={{ top: 20 }}
             width="650px"
             title="Select Apps"
@@ -129,6 +132,7 @@ const SelectedApps = (props) => {
     return (
         <Modal
             // closable={false}
+            maskClosable={false}
             style={{ top: 20 }}
             width="650px"
             title="Selected Apps"
@@ -539,6 +543,7 @@ class SideActions extends Component {
                 </div>
                 <Modal
                     title={this.state.historyType}
+                    maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}
                     onOk={() => this.showHistoryModal(false, '')}
@@ -573,6 +578,7 @@ class SideActions extends Component {
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
                     closable={false}
+                    maskClosable={false}
                     style={{ top: 20 }}
 
                     visible={this.state.saveProfileModal}

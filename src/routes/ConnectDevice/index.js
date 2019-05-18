@@ -183,7 +183,7 @@ class ConnectDevice extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
-     console.log('show message sate', this.props.showMessage)
+      console.log('show message sate', this.props.showMessage)
       this.setState({
         controls: this.props.controls,
         imei_list: this.props.imei_list,
@@ -194,8 +194,8 @@ class ConnectDevice extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    if(this.props !== nextProps){
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
       // console.log('object, ', nextProps.showMessage)
     }
   }
@@ -331,16 +331,16 @@ class ConnectDevice extends Component {
     }
 
     console.log('main scure settings', this.props.controls.settings);
-    if(this.props.controls.settings.length){
+    if (this.props.controls.settings.length) {
       let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
-      if(index >= 0){
+      if (index >= 0) {
         app_list.push(this.props.controls.settings[index])
       }
     }
 
-    if(this.props.extensions.length){
+    if (this.props.extensions.length) {
       let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
-      if(index >= 0){
+      if (index >= 0) {
         app_list.push(this.props.extensions[index])
       }
     }
@@ -502,6 +502,7 @@ class ConnectDevice extends Component {
                 </Col>
               </Row>
               <Modal
+                maskClosable={false}
                 title="Confirm new Settings to be sent to Device"
                 visible={this.state.showChangesModal}
                 onOk={this.applyActions}

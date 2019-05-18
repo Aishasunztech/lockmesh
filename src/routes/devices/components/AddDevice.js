@@ -77,6 +77,7 @@ export default class AddDevice extends Component {
                 <Modal
                     width="600px"
                     visible={visible}
+                    maskClosable={false}
                     title="Add Device"
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}

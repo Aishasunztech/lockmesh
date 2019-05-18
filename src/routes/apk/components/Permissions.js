@@ -410,6 +410,7 @@ class Permissions extends Component {
           }
         </Row>
         <Modal
+        maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Add Dealer to permissions list for this App"
@@ -435,6 +436,7 @@ class Permissions extends Component {
 
         {/*  remove except selected */}
         <Modal
+        maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Remove Dealers from permissions list for this App"
@@ -460,6 +462,7 @@ class Permissions extends Component {
 
         {/*  Add Except selected */}
         <Modal
+        maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Add Dealers to permissions list for this App"

@@ -197,6 +197,7 @@ export default class ImeiView extends Component {
         return (
             <div>
                 <Modal
+                    maskClosable={false}
                     width='850px'
                     visible={visible}
                     title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"><Button> <a href='https://dyrk.org/tools/imei/' target='blank'> Generate IMEI number</a></Button></div></div>}
