@@ -82,8 +82,10 @@ const DealerAppModal = (props) => {
             title="Select Apps"
             visible={props.pushAppsModal}
             onOk={() => {
-                props.showPushAppsModal(false);
-                props.showSelectedAppsModal(true);
+                if(props.selectedApps.length){
+                    props.showPushAppsModal(false);
+                    props.showSelectedAppsModal(true);
+                }
             }}
             onCancel={() => { props.showPushAppsModal(false); props.resetSeletedRows() }}
             okText="Push Apps"
@@ -109,8 +111,10 @@ const PullAppModal = (props) => {
             title="Select Apps"
             visible={props.pullAppsModal}
             onOk={() => {
-                props.showPullAppsModal(false);
-                props.showSelectedAppsModal(true);
+                if(props.selectedApps.length){
+                    props.showPullAppsModal(false);
+                    props.showSelectedAppsModal(true);
+                } 
             }}
             onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
             okText="Pull Apps"
