@@ -51,7 +51,7 @@ class PassworForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <h4>PANNEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>
+                    <h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>
                 </Form.Item>
 
                 <Form.Item

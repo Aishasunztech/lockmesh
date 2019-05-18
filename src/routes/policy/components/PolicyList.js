@@ -249,7 +249,7 @@ class PolicyList extends Component {
             <Fragment>
                 <Card>
                     <Table
-                        scroll={{ x: 500 }}
+                        scroll={{ x: 400 }}
                         className="devices"
                         size="default"
                         bordered
