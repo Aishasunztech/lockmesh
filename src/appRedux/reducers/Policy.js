@@ -235,9 +235,10 @@ export default (state = initialState, action) => {
 
                 } else if (action.payload.key == 'status') {
                     changedState[index][action.payload.key] = action.payload.value;
-                    success({
-                        title: ' Status Changed Sccessfully',
-                    });
+                    message.success('Status Changed Sccessfully');
+                    // success({
+                    //     title: ' Status Changed Sccessfully',
+                    // });
                 }
                 state.policies = changedState;
                 return {
