@@ -21,7 +21,7 @@ import {
     DEALER_DEVICES,
     DEALER_TOKENS,
     DEALER_ACTION
-  } from '../../constants/DealerConstants';
+} from '../../constants/DealerConstants';
 
 var coppydealers = [];
 var status = true;
@@ -45,7 +45,7 @@ class Dealers extends Component {
                     id="dealer_id"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder= {titleCase(DEALER_ID)}
+                    placeholder={titleCase(DEALER_ID)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -71,7 +71,7 @@ class Dealers extends Component {
                     id="link_code"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder= {titleCase(DEALER_PIN)}
+                    placeholder={titleCase(DEALER_PIN)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -104,7 +104,7 @@ class Dealers extends Component {
                     id="dealer_name"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder= {titleCase(DEALER_NAME)}
+                    placeholder={titleCase(DEALER_NAME)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -137,7 +137,7 @@ class Dealers extends Component {
                     id="dealer_email"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder= {titleCase(DEALER_EMAIL)}
+                    placeholder={titleCase(DEALER_EMAIL)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -539,7 +539,6 @@ class Dealers extends Component {
 
     render() {
 
-        // console.log('columns r',this.state.columns.length);
         // alert('render');
         //  console.log('render check', this.state.dealer_type, 'columns', this.state.options.length, 'option', this.state.columns)
         // alert('render');
@@ -606,12 +605,10 @@ class Dealers extends Component {
         if ((window.location.pathname.split("/").pop() !== 'dealer') && (this.state.options.length <= 6)) {
             this.state.options.push('PARENT DEALER', 'PARENT DEALER ID');
         }
-        else if ((window.location.pathname.split("/").pop() === 'dealer') && (this.state.columns.length > 8)) {
-
+        else if ((window.location.pathname.split("/").pop() === 'dealer') && (this.state.columns.length > 8) || (this.state.options.length > 6)) {
             this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER ID');
             this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER');
             this.state.options = this.state.options.slice(0, 6);
-
         }
         return (
 

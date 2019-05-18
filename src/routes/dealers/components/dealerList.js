@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
@@ -41,7 +41,7 @@ class DealerList extends Component {
     handleCheckChange = (values) => {
 
         let dumydata = this.state.columns;
-        // console.log('values', values)
+
         try {
             if (values.length) {
                 this.state.columns.map((column, index) => {
@@ -101,7 +101,7 @@ class DealerList extends Component {
                         {(dealer.unlink_status === 0) ? <div> DELETE</div> : <div> UNDO</div>}
 
                     </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px'  }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >PASSWORD RESET</Button>
+                    <Button type="primary" style={{ margin: '0 0 0 8px' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >PASSWORD RESET</Button>
                 </span>,
                 'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
                 'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
@@ -191,73 +191,31 @@ export default class Tab extends Component {
 
     render() {
         return (
-            <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                <TabPane tab="All" key="1" >
-                    <DealerList
-                        dealersList={this.state.dealersList}
-                        suspendDealer={this.props.suspendDealer}
-                        activateDealer={this.props.activateDealer}
-                        deleteDealer={this.props.deleteDealer}
-                        undoDealer={this.props.undoDealer}
-                        columns={this.props.columns}
-                        selectedOptions={this.state.selectedOptions}
-                        ref="dealersList"
-                        pagination={this.props.pagination}
-                        editDealer={this.props.editDealer}
-                        updatePassword={this.props.updatePassword}
-
-
-                    />
-                </TabPane>
-
-                <TabPane tab={<span className="green">Active</span>} key="2" forceRender={true}>
-                    <DealerList
-                        dealersList={this.state.dealersList}
-                        suspendDealer={this.props.suspendDealer}
-                        activateDealer={this.props.activateDealer}
-                        deleteDealer={this.props.deleteDealer}
-                        undoDealer={this.props.undoDealer}
-                        columns={this.props.columns}
-                        selectedOptions={this.state.selectedOptions}
-                        // ref="dealersList"
-                        pagination={this.props.pagination}
-                        editDealer={this.props.editDealer}
-                        updatePassword={this.props.updatePassword}
-
-                    />
-                </TabPane>
-                <TabPane tab={<span className="yellow">Suspended</span>} key="4" forceRender={true}>
-                    <DealerList
-                        dealersList={this.state.dealersList}
-                        suspendDealer={this.props.suspendDealer}
-                        activateDealer={this.props.activateDealer}
-                        deleteDealer={this.props.deleteDealer}
-                        undoDealer={this.props.undoDealer}
-                        columns={this.props.columns}
-                        selectedOptions={this.state.selectedOptions}
-                        // ref="dealersList"
-                        pagination={this.props.pagination}
-                        editDealer={this.props.editDealer}
-                        updatePassword={this.props.updatePassword}
-                    />
-                </TabPane>
-                <TabPane tab={<span className="orange">Archived</span>} key="3" forceRender={true}>
-                    <DealerList
-                        dealersList={this.state.dealersList}
-                        suspendDealer={this.props.suspendDealer}
-                        activateDealer={this.props.activateDealer}
-                        deleteDealer={this.props.deleteDealer}
-                        undoDealer={this.props.undoDealer}
-                        columns={this.props.columns}
-                        selectedOptions={this.state.selectedOptions}
-                        // ref="dealersList"
-                        pagination={this.props.pagination}
-                        editDealer={this.props.editDealer}
-                        updatePassword={this.props.updatePassword}
-
-                    />
-                </TabPane>
-            </Tabs>
+            <Fragment>
+                <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
+                    <TabPane tab="All" key="1" >
+                    </TabPane>
+                    <TabPane tab={<span className="green">Active</span>} key="2" forceRender={true}>
+                    </TabPane>
+                    <TabPane tab={<span className="yellow">Suspended</span>} key="4" forceRender={true}>
+                    </TabPane>
+                    <TabPane tab={<span className="orange">Archived</span>} key="3" forceRender={true}>
+                    </TabPane>
+                </Tabs>
+                <DealerList
+                    dealersList={this.state.dealersList}
+                    suspendDealer={this.props.suspendDealer}
+                    activateDealer={this.props.activateDealer}
+                    deleteDealer={this.props.deleteDealer}
+                    undoDealer={this.props.undoDealer}
+                    columns={this.props.columns}
+                    selectedOptions={this.state.selectedOptions}
+                    ref="dealersList"
+                    pagination={this.props.pagination}
+                    editDealer={this.props.editDealer}
+                    updatePassword={this.props.updatePassword}
+                />
+            </Fragment>
 
         )
     }
