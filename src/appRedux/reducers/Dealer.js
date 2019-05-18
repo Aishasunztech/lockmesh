@@ -205,12 +205,19 @@ export default (state = initialState, action) => {
                 let objIndex4 = state.dealers.findIndex((obj => obj.dealer_id === action.payload.formData.dealer_id));
                 if (objIndex4 !== undefined) {
                     state.dealers[objIndex4].dealer_name = action.payload.formData.name;
-                    state.dealers[objIndex4].dealer_email = action.payload.formData.email;
+                    if (action.response.alreadyAvailable === false) {
+                        state.dealers[objIndex4].dealer_email = action.payload.formData.email;
+                    }
                 }
-
-                success({
-                    title: action.response.msg,
-                });
+                if (action.response.alreadyAvailable === false) {
+                    success({
+                        title: action.response.msg,
+                    });
+                } else {
+                    error({
+                        title: "Given email is already in use. Please choose different Email",
+                    });
+                }
             }
             else {
                 error({

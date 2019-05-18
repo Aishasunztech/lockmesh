@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import {
-    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, PULL_PUSH_INPROCESS
+    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -32,10 +32,27 @@ export default (state = initialState, action) => {
                 is_in_process: false
             }
         }
-        case PULL_PUSH_INPROCESS: {
+        case FINISHED_POLICY: {
+            // console.log("works");
+            success({
+                title: "Policy Applied Successfully.",
+            });
+            return {
+                is_in_process: false
+            }
+        }
+        case IN_PROCESS: {
             // console.log("works");
             return {
                 is_in_process: true
+            }
+        }
+        case FINISHED_IMEI: {
+            success({
+                title: "Imei Changed Successfully.",
+            });
+            return {
+                is_in_process: false
             }
         }
         default:
