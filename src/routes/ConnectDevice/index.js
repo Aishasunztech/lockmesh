@@ -509,20 +509,6 @@ class ConnectDevice extends Component {
           <div className="gx-loader-view">
             <CircularProgress />
           </div> : null} */}
-
-          {this.props.showMessage === true ?
-            (this.props.messageType === "error") ?
-              error({
-                title: this.props.messageText,
-              })
-              :
-              (this.props.messageType === "success") ?
-                success({
-                  title: this.props.messageText,
-                })
-                : null : null}
-
-
         </div> : <h1>Device Not Found</h1>
     )
   }
