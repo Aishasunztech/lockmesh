@@ -374,25 +374,18 @@ export function applySetting(app_list, passwords, extensions, controls, device_i
         RestService.applySettings(device_setting, device_id, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
+
                     dispatch({
                         type: SHOW_MESSAGE,
                         payload: {
                             showMessage: true,
                             messageType: 'success',
-                            messageText: "settings are applied"
+                            messageText: response.data.msg
                         }
                     })
                     dispatch({
                         type: SETTINGS_APPLIED,
                         payload: response.data
-                    })
-                    dispatch({
-                        type: SHOW_MESSAGE,
-                        payload: {
-                            showMessage: false,
-                            messageType: 'success',
-                            messageText: 'settings are applied'
-                        }
                     })
                 }
             } else {

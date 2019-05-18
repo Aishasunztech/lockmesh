@@ -447,11 +447,17 @@ export default (state = initialState, action) => {
 
         case SHOW_MESSAGE: {
 
+            if (action.payload.messageType === 'success') {
+                success({
+                    title: action.payload.messageText,
+                })
+            } else {
+                error({
+                    title: this.props.messageText,
+                })
+            }
             return {
                 ...state,
-                showMessage: action.payload.showMessage,
-                messageType: action.payload.messageType,
-                messageText: action.payload.messageText
             }
         }
 

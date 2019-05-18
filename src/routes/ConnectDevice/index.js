@@ -48,7 +48,7 @@ import imgUrl from '../../assets/images/mobile.png';
 import {
   DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
   SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
-  APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, Main_SETTINGS
+  APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -316,21 +316,6 @@ class ConnectDevice extends Component {
       }
     }
 
-    console.log('main scure settings', this.props.controls.settings);
-    if (this.props.controls.settings.length) {
-      let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
-      if (index >= 0) {
-        app_list.push(this.props.controls.settings[index])
-      }
-    }
-
-    if (this.props.extensions.length) {
-      let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
-      if (index >= 0) {
-        app_list.push(this.props.extensions[index])
-      }
-    }
-
     this.props.applySetting(
       app_list, {
         adminPwd: this.props.adminPwd,
@@ -405,127 +390,111 @@ class ConnectDevice extends Component {
     this.setState({ showChangesModal: false });
   }
   render() {
-    console.log('app list: ', this.props.app_list, 'controls :', this.props.controls)
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
     let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'Online';
     let onlineColor = (onlineStatus === 'Offline') ? { color: 'red' } : { color: 'green' }
-    if (this.props.device_found) {
-      return (<div className="gutter-example">
-        {this.props.isLoading || this.props.is_in_process || this.props.device_details.is_push_apps ?
+    return (
+      (this.props.device_found) ?
+        <div className="gutter-example">
+          {this.props.isLoading || this.props.is_in_process || this.props.device_details.is_push_apps ?
+            <div className="gx-loader-view">
+              <CircularProgress />
+            </div> :
+            <div>
+              <Row gutter={16} type="flex" align="top">
+                <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>
+                  <DeviceSidebar
+                    device_details={this.props.device_details}
+                    refreshDevice={this.refreshDevice}
+                    startLoading={this.props.startLoading}
+                    endLoading={this.props.endLoading}
+                  />
+                </Col>
+                <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
+                  <Card>
+                    <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
+                      <div className="status_bar">
+                        <div className="col-md-6 col-xs-6 col-sm-6 active_st">
+                          <h5><span style={color}>{finalStatus}</span></h5>
+                        </div>
+                        <div className="col-md-6 col-xs-6 col-sm-6 offline_st">
+                          <h5><span style={onlineColor}>{onlineStatus}</span></h5>
+                        </div>
+                      </div>
+                      {this.renderScreen()}
+                      <Button.Group className="nav_btn_grp">
+                        <Button type="default" icon="left" className="nav_btn" onClick={() => {
+                          this.onBackHandler();
+                        }} />
+                        <Button type="default" className="nav_btn" onClick={() => {
+                          this.changePage("main_menu")
+                        }} />
+                        {/* <Button type="default" icon="border" className="nav_btn" /> */}
+                      </Button.Group>
+
+                    </div>
+                    <DeviceActions
+                      undoApplications={this.undoAction}
+                      redoApplications={this.redoAction}
+                      applyActionButton={this.applyActionButton}
+                      applyBtn={this.props.applyBtn}
+                      undoBtn={this.props.undoBtn}
+                      redoBtn={this.props.redoBtn}
+                      clearBtn={this.props.clearBtn}
+                    />
+                  </Card>
+                </Col>
+                <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
+                  {/*  */}
+                  <SideActions
+                    device={this.props.device_details}
+                    profiles={this.props.profiles}
+                    policies={this.props.policies}
+                    histories={this.props.histories}
+                    activateDevice={this.props.activateDevice2}
+                    suspendDevice={this.props.suspendDevice2}
+                    editDevice={this.props.editDevice}
+                    unlinkDevice={this.props.unlinkDevice}
+                    flagged={this.props.flagged}
+                    unflagged={this.props.unflagged}
+                    wipe={this.props.wipe}
+                    checkPass={this.props.checkPass}
+                    history={this.props.history}
+                    getDevicesList={this.props.getDevicesList}
+                    refreshDevice={this.refreshDevice}
+                    imei_list={this.props.imei_list}
+                    apk_list={this.props.apk_list}
+                  // applySetting = {this.applyActions}
+                  />
+
+                </Col>
+              </Row>
+              <Modal
+                title="Confirm new Settings to be sent to Device"
+                visible={this.state.showChangesModal}
+                onOk={this.applyActions}
+                onCancel={this.onCancel}
+                okText='Apply'
+              >
+                <DeviceSettings
+                  app_list={this.props.app_list}
+                  extensions={this.props.extensions}
+                  extensionUniqueName={SECURE_SETTING}
+                  isAdminPwd={this.props.isAdminPwd}
+                  isDuressPwd={this.props.isDuressPwd}
+                  isEncryptedPwd={this.props.isEncryptedPwd}
+                  isGuestPwd={this.props.isGuestPwd}
+                  controls={this.state.controls}
+                />
+              </Modal>
+            </div>}
+          {/* {this.props.isLoading ?
           <div className="gx-loader-view">
             <CircularProgress />
-          </div> :
-          <div>
-            <Row gutter={16} type="flex" align="top">
-              <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>
-                <DeviceSidebar
-                  device_details={this.props.device_details}
-                  refreshDevice={this.refreshDevice}
-                  startLoading={this.props.startLoading}
-                  endLoading={this.props.endLoading}
-                />
-              </Col>
-              <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
-                <Card>
-                  <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
-                    <div className="status_bar">
-                      <div className="col-md-6 col-xs-6 col-sm-6 active_st">
-                        <h5><span style={color}>{finalStatus}</span></h5>
-                      </div>
-                      <div className="col-md-6 col-xs-6 col-sm-6 offline_st">
-                        <h5><span style={onlineColor}>{onlineStatus}</span></h5>
-                      </div>
-                    </div>
-                    {this.renderScreen()}
-                    <Button.Group className="nav_btn_grp">
-                      <Button type="default" icon="left" className="nav_btn" onClick={() => {
-                        this.onBackHandler();
-                      }} />
-                      <Button type="default" className="nav_btn" onClick={() => {
-                        this.changePage("main_menu")
-                      }} />
-                      {/* <Button type="default" icon="border" className="nav_btn" /> */}
-                    </Button.Group>
-
-                  </div>
-                  <DeviceActions
-                    undoApplications={this.undoAction}
-                    redoApplications={this.redoAction}
-                    applyActionButton={this.applyActionButton}
-                    applyBtn={this.props.applyBtn}
-                    undoBtn={this.props.undoBtn}
-                    redoBtn={this.props.redoBtn}
-                    clearBtn={this.props.clearBtn}
-                  />
-                </Card>
-              </Col>
-              <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
-                {/*  */}
-                <SideActions
-                  device={this.props.device_details}
-                  profiles={this.props.profiles}
-                  policies={this.props.policies}
-                  histories={this.props.histories}
-                  activateDevice={this.props.activateDevice2}
-                  suspendDevice={this.props.suspendDevice2}
-                  editDevice={this.props.editDevice}
-                  unlinkDevice={this.props.unlinkDevice}
-                  flagged={this.props.flagged}
-                  unflagged={this.props.unflagged}
-                  wipe={this.props.wipe}
-                  checkPass={this.props.checkPass}
-                  history={this.props.history}
-                  getDevicesList={this.props.getDevicesList}
-                  refreshDevice={this.refreshDevice}
-                  imei_list={this.props.imei_list}
-                  apk_list={this.props.apk_list}
-                // applySetting = {this.applyActions}
-                />
-
-              </Col>
-            </Row>
-            <Modal
-              title="Confirm new Settings to be sent to Device"
-              visible={this.state.showChangesModal}
-              onOk={this.applyActions}
-              onCancel={this.onCancel}
-              okText='Apply'
-            >
-              <DeviceSettings
-                app_list={this.props.app_list}
-                extensions={this.props.extensions}
-                extensionUniqueName={SECURE_SETTING}
-                isAdminPwd={this.props.isAdminPwd}
-                isDuressPwd={this.props.isDuressPwd}
-                isEncryptedPwd={this.props.isEncryptedPwd}
-                isGuestPwd={this.props.isGuestPwd}
-                controls={this.state.controls}
-              />
-            </Modal>
-          </div>}
-        {/* {this.props.isLoading ?
-      <div className="gx-loader-view">
-        <CircularProgress />
-      </div> : null} */}
-
-        {this.props.showMessage === true ?
-          (this.props.messageType === "error") ?
-            error({
-              title: this.props.messageText,
-            })
-            :
-            (this.props.messageType === "success") ?
-              success({
-                title: this.props.messageText,
-              })
-              : null : null}
-
-
-      </div>);
-    } else {
-      return (<h1>Device Not Found</h1>);
-    }
+          </div> : null} */}
+        </div> : <h1>Device Not Found</h1>
+    )
   }
 }
 
