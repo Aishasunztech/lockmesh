@@ -496,8 +496,12 @@ export default (state = initialState, action) => {
             });
             let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
             let defaultPolicyIndex = state.policies.findIndex((obj => obj.is_default === true));
-            state.policies[objIndex].is_default = true;
-            state.policies[defaultPolicyIndex].is_default = false;
+            if (defaultPolicyIndex === -1) {
+                state.policies[objIndex].is_default = true;
+            } else {
+                state.policies[objIndex].is_default = true;
+                state.policies[defaultPolicyIndex].is_default = false;
+            }
 
 
             return {
