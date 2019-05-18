@@ -28,7 +28,7 @@ export default (state = initialState, action) => {
         case TRANSFER_APPS:
             if (action.status) {
                 success({
-                    title: "Apps Transfered Successfully",
+                    title: "Apps Transferred Successfully",
                 });
             }
             return {

@@ -132,7 +132,8 @@ class ApkMarket extends React.Component {
                                             <h4>
                                                 <b>Avaiable Apps</b>
                                             </h4>
-                                        </div>),
+                                        </div>
+                                    ),
                                     (
                                         <div className="sm_heading2">
                                             <h4>
