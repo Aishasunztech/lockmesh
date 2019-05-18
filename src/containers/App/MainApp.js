@@ -9,7 +9,7 @@ import InsideHeader from "../Topbar/InsideHeader/index";
 import AboveHeader from "../Topbar/AboveHeader/index";
 import BelowHeader from "../Topbar/BelowHeader/index";
 import Topbar from "../Topbar/index";
-import Customizer from "routes/myProfile/components/Customizer";
+import Customizer from "./Customizer";
 
 import {footerText} from "util/config";
 import App from "routes/index";
@@ -113,13 +113,14 @@ export class MainApp extends Component {
             </Footer>
           </Content>
         </Layout>
-        {/* <Customizer/> */}
+        <Customizer/>
       </Layout>
     )
   }
 }
 
 const mapStateToProps = ({settings}) => {
+  console.log('style:', settings)
   const {width, navStyle} = settings;
   return {width, navStyle}
 };

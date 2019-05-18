@@ -49,10 +49,11 @@ import {
     APPLY_POLICY
 } from "../../constants/ActionTypes"
 
-import {
-    message,Modal
-} from 'antd';
 import RestService from '../services/RestServices';
+
+import { Modal } from 'antd';
+const success = Modal.success;
+const error = Modal.error;
 
 // action creaters 
 
@@ -68,7 +69,7 @@ export function getDeviceDetails(deviceId) {
     return (dispatch) => {
         RestService.getDeviceDetails(deviceId).then((response) => {
             // console.log("slkdflaskdfjlasf", response.data);
-            if (RestService.checkAuth(response.data.status)) {
+            if (RestService.checkAuth(response.data)) {
                 // console.log("slkdflaskdfjlasf", response.data);
                 if (response.data) {
                     dispatch({
@@ -266,7 +267,7 @@ export function wipe(device) {
             //     }
             // });
             success({
-                title: action.data.msg,
+                title: response.data.msg,
             });
         }
         else {

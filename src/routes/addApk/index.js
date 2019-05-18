@@ -71,7 +71,9 @@ class AddApkForm extends Component {
 
         super(props);
         this.state = {
-            canUoload: false
+            canUoload: false,
+            fileList: [],
+            fileList: []
         }
     }
 
@@ -105,11 +107,11 @@ class AddApkForm extends Component {
     render() {
 
         const { getFieldDecorator } = this.props.form;
+        let fileList = [];
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
                 sm: { span: 7 },
-
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -118,6 +120,7 @@ class AddApkForm extends Component {
         };
         const Dragger = Upload.Dragger;
         let token = localStorage.getItem('token');
+        let _this = this;
         const props = {
             name: 'logo',
             multiple: false,
@@ -125,9 +128,19 @@ class AddApkForm extends Component {
             headers: { 'authorization': token },
             accept: '.png, .jpg',
             disabled: disableLogo,
+            // fileList: fileList,
+            onRemove(info) {
+                if (_this.state.fileList.length > 1) {
+                    _this.state.fileList.length -= 1;
+                } else {
+                    disableLogo = false
+                }
+            },
 
             onChange(info) {
                 const status = info.file.status;
+                let fileList = [...info.fileList];
+                console.log('file list id', fileList)
                 if (status !== 'uploading') {
                     // console.log('uploading ..')
                     // console.log(info.file, info.fileList);
@@ -153,6 +166,8 @@ class AddApkForm extends Component {
                         disableLogo = false;
                     }
 
+                    _this.setState({ fileList });
+
                     //  message.success(`${info.file.name} file uploaded successfully.`);
                 } else if (status === 'error') {
                     //  message.error(`${info.file.name} file upload failed.`);
@@ -166,9 +181,16 @@ class AddApkForm extends Component {
             headers: { 'authorization': token },
             accept: '.apk',
             disabled: disableApk,
+            onRemove(info) {
+                if (_this.state.fileList2.length > 1) {
+                    _this.state.fileList2.length -= 1;
+                } else {
+                    disableApk = false
+                }
+            },
             onChange(info) {
                 const status = info.file.status;
-
+                let fileList2 = [...info.fileList];
                 if (status !== 'uploading') {
                     // console.log('uploading');
                     // console.log(info.file, info.fileList);
@@ -199,6 +221,7 @@ class AddApkForm extends Component {
                         });
                         disableApk = false;
                     }
+                    _this.setState({ fileList2 });
 
                 } else if (status === 'error') {
                     //  message.error(`${info.file.name} file upload failed.`);

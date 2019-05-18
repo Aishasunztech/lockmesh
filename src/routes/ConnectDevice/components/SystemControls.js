@@ -69,7 +69,7 @@ export default class SystemControls extends Component {
 
   render() {
     // console.log('consroslss sdfsd fsd ', this.state.controls);
-    let objindex = 0;
+    let objindex = -1;
     // console.log('object settings', this.state.settings)
     // if(this.state.settings !== undefined && this.state.settings && this.state.controls.length){
     if (this.state.settings !== undefined && this.state.settings && this.state.settings !== []) {
@@ -84,9 +84,9 @@ export default class SystemControls extends Component {
             <div>
               <List>
                 {
-                  (this.state.settings !== undefined && this.state.settings && this.state.settings !== []) ?
+                  (this.state.settings !== undefined && this.state.settings && this.state.settings !== [] && objindex>=0) ?
                     <div className="row width_100 m-0 sec_head1">
-                      {/* <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                      <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                         <span>Guest</span>
                         <Switch onClick={(e) => {
                           //  console.log("guest", e , this.state.settings[objindex]);
@@ -106,7 +106,7 @@ export default class SystemControls extends Component {
                           // console.log("guest", e);
                           this.handleMainSettingCheck(e, "enable");
                         }} checked={this.state.settings[objindex].enable === 1 || this.state.settings[objindex].enable === true ? true : false} size="small" />
-                      </div> */}
+                      </div>
                     </div>
                     : false
                 }

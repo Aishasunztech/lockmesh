@@ -13,16 +13,7 @@ import {
 import DealerList from "../../apk/components/DealerList";
 
 import CircularProgress from "components/CircularProgress/index";
-import { titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
-import {
-  DEALER_ID,
-  DEALER_NAME,
-  DEALER_EMAIL,
-  DEALER_PIN,
-  DEALER_DEVICES,
-  DEALER_TOKENS,
-  DEALER_ACTION
-} from '../../../constants/DealerConstants';
+import { dealerColsWithSearch } from '../../utils/commonUtils';
 
 
 // export default 
@@ -33,13 +24,15 @@ class Permissions extends Component {
       showDealersModal: false,
       dealer_ids: [],
       dealerList: [],
+      dealerListForModal: [],
       permissions: [],
       hideDefaultSelections: false,
       removeSelectedDealersModal: false,
       addSelectedDealersModal: false
     }
 
-    this.addDealerCols = dealerColsWithSearch(true, this.handleSearch)
+    this.addDealerCols = dealerColsWithSearch(true, this.handleSearch);
+    this.addDealerColsInModal = dealerColsWithSearch(true, this.handleSearchInModal);
     this.listDealerCols = dealerColsWithSearch();
 
 
@@ -49,6 +42,7 @@ class Permissions extends Component {
     this.props.getAllDealers()
     this.setState({
       dealerList: this.props.dealerList,
+      dealerListForModal: this.props.dealerList,
       permissions: this.props.record.permissions
     })
   }
@@ -58,11 +52,13 @@ class Permissions extends Component {
       this.props.getAllDealers();
       this.setState({
         dealerList: this.props.dealerList,
+        dealerListForModal: this.props.dealerList,
         permissions: this.props.record.permissions
       })
     } else if (this.props.dealerList.length !== nextProps.dealerList.length) {
       this.setState({
         dealerList: nextProps.dealerList,
+        dealerListForModal: nextProps.dealerList,
         permissions: this.props.record.permissions
       })
     }
@@ -95,7 +91,9 @@ class Permissions extends Component {
   addSelectedDealers = () => {
     let permissions = this.state.permissions;
     let selectedRows = this.state.selectedRowKeys;
-    var dList = this.state.dealerList;
+    // var dList = this.state.dealerList; arfan
+
+    var dList = this.state.dealerListForModal;
     var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
     var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
     var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
@@ -225,6 +223,27 @@ class Permissions extends Component {
     }
   }
   handleSearch = (e, global = false) => {
+      let fieldName = e.target.name;
+      let fieldValue = e.target.value;
+      
+      if (global) {
+        let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
+        // console.log("searchedData", searchedData);
+        this.setState({
+          dealerList: searchedData
+        });
+      } else {
+
+        let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
+        // console.log("searchedData", searchedData);
+        this.setState({
+          dealerList: searchedData
+        });
+      }
+
+  }
+
+  handleSearchInModal = (e, global = false) => {
 
     let fieldName = e.target.name;
     let fieldValue = e.target.value;
@@ -235,17 +254,18 @@ class Permissions extends Component {
       let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
       // console.log("searchedData", searchedData);
       this.setState({
-        dealerList: searchedData
+        dealerListForModal: searchedData
       });
     } else {
 
       let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
       // console.log("searchedData", searchedData);
       this.setState({
-        dealerList: searchedData
+        dealerListForModal: searchedData
       });
     }
   }
+
 
   rejectPemission = (dealer_id) => {
     let dealers = this.state.permissions;
@@ -258,7 +278,8 @@ class Permissions extends Component {
     // console.log("permissions",dealers);
     this.props.savePermission(this.props.record.policy_id, JSON.stringify([dealer_id]), 'delete');
     this.setState({
-      dealerList: this.props.dealerList
+      dealerList: this.props.dealerList,
+      dealerListForModal: this.props.dealerList
     })
 
   }
@@ -278,6 +299,7 @@ class Permissions extends Component {
   removeSelectedDealersModal = (visible) => {
     this.setState({
       removeSelectedDealersModal: visible
+
     })
   }
 
@@ -302,16 +324,16 @@ class Permissions extends Component {
       // console.log('object recrd', this.props.record.permissions);
       let is_included = this.state.permissions.includes(dealer.dealer_id);
       let common = {
-        'key': dealer.dealer_id,
-        'row_key': dealer.dealer_id,
-        'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-        'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-        'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-        'link_code': dealer.link_code ? dealer.link_code : 'N/A',
-        'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
-        'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
-        'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-        'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
+        key: dealer.dealer_id,
+        row_key: dealer.dealer_id,
+        dealer_id: dealer.dealer_id ? dealer.dealer_id : 'N/A',
+        dealer_name: dealer.dealer_name ? dealer.dealer_name : 'N/A',
+        dealer_email: dealer.dealer_email ? dealer.dealer_email : 'N/A',
+        link_code: dealer.link_code ? dealer.link_code : 'N/A',
+        parent_dealer: dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
+        parent_dealer_id: dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
+        connected_devices: dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
+        dealer_token: dealer.dealer_token ? dealer.dealer_token : 'N/A',
       }
 
       if (permitted && is_included) {
@@ -329,7 +351,6 @@ class Permissions extends Component {
     return (data);
   }
   render() {
-    // console.log('dealer state', this.state.dealerList);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
@@ -392,8 +413,8 @@ class Permissions extends Component {
           }}
         >
           <DealerList
-            columns={this.addDealerCols}
-            dealers={this.renderDealer(this.state.dealerList)}
+            columns={this.addDealerColsInModal}
+            dealers={this.renderDealer(this.state.dealerListForModal)}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
             selectedRows={this.state.dealer_ids}
@@ -414,11 +435,12 @@ class Permissions extends Component {
           okText="Delete Except Selected"
           onCancel={() => {
             this.removeSelectedDealersModal(false)
+      
           }}
         >
           <DealerList
-            columns={this.addDealerCols}
-            dealers={this.renderDealer(this.state.dealerList, true)}
+            columns={this.addDealerColsInModal}
+            dealers={this.renderDealer(this.state.dealerListForModal, true)}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
             selectedRows={this.state.dealer_ids}
@@ -442,8 +464,8 @@ class Permissions extends Component {
           }}
         >
           <DealerList
-            columns={this.addDealerCols}
-            dealers={this.renderDealer(this.state.dealerList)}
+            columns={this.addDealerColsInModal}
+            dealers={this.renderDealer(this.state.dealerListForModal)}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
             selectedRows={this.state.dealer_ids}
