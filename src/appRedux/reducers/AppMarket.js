@@ -1,7 +1,8 @@
 import {
     TRANSFER_APPS,
     GET_MARKET_APPS,
-    LOADING
+    LOADING,
+    UNINSTALL_PERMISSION_CHANGED
 } from "constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -24,9 +25,7 @@ export default (state = initialState, action) => {
             }
         case TRANSFER_APPS:
             if (action.status) {
-                success({
-                    title: "Apps Transferred Successfully",
-                });
+                message.success("Apps Transferred Successfully")
             }
             return {
                 ...state,
@@ -41,6 +40,16 @@ export default (state = initialState, action) => {
                 isloading: false,
                 secureMarketList: action.payload.marketApplist,
                 availbleAppList: action.payload.availableApps
+            }
+        case UNINSTALL_PERMISSION_CHANGED:
+            if (action.status) {
+                message.success(action.msg)
+            } else {
+                message.error(action.msg)
+            }
+
+            return {
+                ...state,
             }
 
         default:

@@ -603,6 +603,10 @@ const RestService = {
     transferApps: (data) => {
         return axios.post(BASE_URL + 'users/transferApps', { data }, RestService.getHeader())
     },
+    // Change unistall app restriction for Secure market apps 
+    handleUninstall: (apk_id, value) => {
+        return axios.put(BASE_URL + 'users/handleUninstall/' + apk_id, { value }, RestService.getHeader())
+    },
     getMarketApps: () => {
         return axios.get(BASE_URL + 'users/marketApplist', RestService.getHeader())
     },

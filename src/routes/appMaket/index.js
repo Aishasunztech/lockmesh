@@ -7,7 +7,7 @@ import CircularProgress from "components/CircularProgress/index";
 import { BASE_URL } from '../../constants/Application';
 
 import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
-import { transferApps, getMarketApps } from "../../appRedux/actions/AppMarket";
+import { transferApps, getMarketApps, handleUninstall } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { ADMIN, DEALER } from "../../constants/Constants";
 import styles from './appmarket.css'
@@ -27,13 +27,11 @@ class ApkMarket extends React.Component {
     }
     renderList = (availbleAppList, secureMarketList) => {
 
-        console.log(availbleAppList, ' objext data ', secureMarketList)
+        // console.log(availbleAppList, ' objext data ', secureMarketList)
         let combinedList = [];
-        if (this.props.user.type === ADMIN) {
-            combinedList = availbleAppList
-        } else {
-            combinedList = [...availbleAppList, ...secureMarketList];
-        }
+
+        combinedList = [...availbleAppList, ...secureMarketList];
+
 
         // let combinedList = availbleAppList;
         // console.log('combined', combinedList)
@@ -46,10 +44,9 @@ class ApkMarket extends React.Component {
             }
         })
         let apkList = combinedList.map((app, index) => {
-            console.log(app);
             let data = {
                 key: app.id,
-                title: <Fragment> <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} /> <span> {app.app_name} </span> {(app.dealer_type !== undefined) ? <span><Switch defaultChecked = {app.is_restrict_uninstall} size='small' disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch></span> : null} </Fragment>,
+                title: <Fragment> <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} /> <span> {app.app_name} </span> {(app.dealer_type !== undefined) ? <span><Switch onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall == 0) ? true : false} size='small' disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch></span> : null} </Fragment>,
                 description: `${app.app_name + index + 1}`,
                 disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
                 // className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
@@ -67,10 +64,12 @@ class ApkMarket extends React.Component {
 
     handleChange = (targetKeys, direction, moveKeys) => {
         let marketApps = targetKeys;
-        // console.log('target keys', targetKeys)
         this.props.transferApps(marketApps)
         this.setState({ targetKeys });
 
+    }
+    handleCheckChange = (apk_id, value) => {
+        this.props.handleUninstall(apk_id, value)
     }
 
     handleSearch = (dir, value) => {
@@ -86,7 +85,6 @@ class ApkMarket extends React.Component {
             })
             // console.log(keys);
             this.setState({
-                apk_list: nextProps.apk_list,
                 secureMarketList: nextProps.secureMarketList,
                 availbleAppList: nextProps.availbleAppList,
                 targetKeys: keys
@@ -100,7 +98,6 @@ class ApkMarket extends React.Component {
                 return app.id
             })
             this.setState({
-                apk_list: this.props.apk_list,
                 secureMarketList: this.props.secureMarketList,
                 availbleAppList: this.props.availbleAppList,
                 targetKeys: keys
@@ -108,7 +105,7 @@ class ApkMarket extends React.Component {
         }
     }
     componentWillMount() {
-        this.props.getApkList();
+        // this.props.getApkList();
         this.props.getMarketApps()
     }
     componentDidMount() {
@@ -168,7 +165,7 @@ class ApkMarket extends React.Component {
 }
 
 const mapStateToProps = ({ apk_list, auth, appMarket }) => {
-    console.log(appMarket.isloading);
+    // console.log(appMarket.isloading);
     return {
         isloading: appMarket.isloading,
         apk_list: apk_list.apk_list,
@@ -192,7 +189,8 @@ function mapDispatchToProps(dispatch) {
         postPagination: postPagination,
         getPagination: getPagination,
         transferApps: transferApps,
-        getMarketApps: getMarketApps
+        getMarketApps: getMarketApps,
+        handleUninstall: handleUninstall
     }, dispatch);
 }
 
