@@ -101,10 +101,12 @@ class AddPolicy extends Component {
                 this.state.pushApps.push(this.state.dealerApps[index])
             }
         }
+
         let appPermissions = [];
+        let secure_apps = [];
 
         if(this.state.appPermissionsIds.length){
-            console.log('app permission', this.state.appPermissions)
+            // console.log('app permission', this.state.appPermissions)
             for(let id of this.state.appPermissionsIds){
                 let obj = this.state.appPermissions.find(item => item.id == id)
                 if(obj) appPermissions.push(obj);
@@ -112,12 +114,19 @@ class AddPolicy extends Component {
             }
         }
 
+        let main_extension = this.state.allExtensions.find(item => item.uniqueName == SECURE_SETTING);
+// console.log(main_extension)
+        if(main_extension){
+            secure_apps = main_extension.subExtension
+        }
+        // console.log('appPermissions', appPermissions, 'secure_apps', this.state.allExtensions)
+
         let data = {
             policy_name: this.state.policy_name,
             policy_note: this.state.command,
             push_apps: this.state.pushApps,
             app_list: appPermissions,
-            secure_apps: this.state.allExtensions,
+            secure_apps: secure_apps,
             system_permissions: this.state.systemPermissions
 
         }
@@ -161,7 +170,6 @@ class AddPolicy extends Component {
                 })
             }
         }
-
     }
 
 

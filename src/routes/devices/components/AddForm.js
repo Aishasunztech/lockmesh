@@ -29,6 +29,10 @@ class AddDevice extends Component {
             addNewUserModal: false,
             isloading: false,
             addNewUserValue: "",
+            client_id: this.props.new ? '' : this.props.device.client_id,
+            pgp_email: this.props.new ? '' : this.props.device.pgp_email,
+            chat_id: this.props.new ? "" : this.props.device.chat_id,
+            sim_id: this.props.new ? "" : this.props.device.sim_id,
         }
     }
 
@@ -101,7 +105,7 @@ class AddDevice extends Component {
     }
 
     render() {
-        // console.log(this.props.device);
+        console.log(this.state.client_id, 'id is', this.state.pgp_email);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
@@ -234,7 +238,7 @@ class AddDevice extends Component {
                                 wrapperCol={{ span: 14 }}
                             >
                                 {this.props.form.getFieldDecorator('pgp_email', {
-                                    initialValue: this.props.new ? "" : this.props.device.pgp_email,
+                                    initialValue: this.state.pgp_email,
                                     rules: [{
                                         type: 'email', message: 'The input is not valid E-mail!',
                                     }],
@@ -243,9 +247,10 @@ class AddDevice extends Component {
                                         showSearch
                                         placeholder="Select PGP Emails"
                                         optionFilterProp="children"
-                                        // onChange={() => { this.handleChange() }}
+                                         onChange={(e) => this.setState({pgp_email: e}) }
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
+                                        // defaultValue={this.state.pgp_email}
                                         autoComplete="new-password"
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     >
@@ -264,14 +269,14 @@ class AddDevice extends Component {
                                 wrapperCol={{ span: 14 }}
                             >
                                 {this.props.form.getFieldDecorator('chat_id', {
-                                    initialValue: this.props.new ? "" : this.props.device.chat_id,
+                                    initialValue: this.state.chat_id,
                                 })(
                                     // <Input />
                                     <Select
                                         showSearch
                                         placeholder="Select Chat ID"
                                         optionFilterProp="children"
-                                        // onChange={handleChange}
+                                        onChange={(value)=> this.setState({chat_id: value})}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -289,10 +294,10 @@ class AddDevice extends Component {
                                 wrapperCol={{ span: 14 }}
                             >
                                 {this.props.form.getFieldDecorator('client_id', {
-                                    initialValue: this.props.new ? "" : this.props.device.client_id,
+                                    initialValue: this.state.client_id,
 
                                 })(
-                                    <Input />
+                                    <Input value={this.state.client_id} onChange={e=> this.setState({client_id: e.target.value})} />
                                 )}
                             </Form.Item>
 
@@ -302,13 +307,13 @@ class AddDevice extends Component {
                                 wrapperCol={{ span: 14 }}
                             >
                                 {this.props.form.getFieldDecorator('sim_id', {
-                                    initialValue: this.props.new ? "" : this.props.device.sim_id,
+                                    initialValue: this.state.sim_id
                                 })(
                                     <Select
                                         showSearch
                                         placeholder="Select Sim ID"
                                         optionFilterProp="children"
-                                        // onChange={handleChange}
+                                        onChange={(value)=> this.setState({sim_id: value})}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
