@@ -408,7 +408,7 @@ class Dealers extends Component {
     componentWillReceiveProps(nextProps) {
         // alert("componentWillReceiveProps");
         const dealer_type = nextProps.match.params.dealer_type;
-        //   console.log('device type recieved', dealer_type);
+        //    console.log('device type recieved', dealer_type);
 
         if (this.state.dealer_type !== dealer_type) {
             this.props.getDealerList(dealer_type);
@@ -457,24 +457,86 @@ class Dealers extends Component {
 
 
     componentDidUpdate(prevProps) {
-        // console.log('updated', this.props.selectedOptions);
+        // console.log('updated', this.state.columns);
 
-        if (this.props !== prevProps) {
-            // alert("componentDidUpdate");
+        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 8)) {
+            //  alert('if sdealer')
 
+            this.state.columns.push(
+                {
+                    title: (
+                        <Input.Search
+                            name="parent_dealer"
+                            key="parent_dealer"
+                            id="parent_dealer"
+                            className="search_heading"
+                            autoComplete="new-password"
+                            placeholder="Parent Dealer"
+                        />
+                    ),
+                    dataIndex: 'parent_dealer',
+                    className: '',
+                    children: [
+                        {
+                            title: 'PARENT DEALER',
+                            dataIndex: 'parent_dealer',
+                            key: 'parent_dealer',
+                            className: '',
+                            // sorter: (a, b) => {
+                            //     console.log(a);
+                            //     // console.log(b);
+                            //     return a.parent_dealer.length;
+                            // },
+                            sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
+
+                        }
+                    ]
+                },
+                {
+                    title: (
+                        <Input.Search
+                            name="parent_dealer_id"
+                            key="parent_dealer_id"
+                            id="parent_dealer_id"
+                            className="search_heading"
+                            autoComplete="new-password"
+                            placeholder="Parent Dealer ID"
+                        />
+                    ),
+                    dataIndex: 'parent_dealer_id',
+                    className: '',
+                    children: [
+                        {
+                            title: 'PARENT DEALER ID',
+                            dataIndex: 'parent_dealer_id',
+                            key: 'parent_dealer_id',
+                            className: '',
+                            sorter: (a, b) => { return a.parent_dealer_id.localeCompare(b.parent_dealer_id) },
+
+                        }
+                    ]
+                }
+            )
+            // this.state.columns = this.state.columns
+        }
+        if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 6)) {
+            this.state.options.push('PARENT DEALER', 'PARENT DEALER ID');
+        }
+        else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 8) || (this.state.options.length > 6))) {
+
+            this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER ID');
+            this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER');
+            this.state.options = this.state.options.slice(0, 6);
+        }
+
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            this.handleCheckChange(this.props.selectedOptions)
+        }
+       
+        if(this.props.dealers !== prevProps.dealers){
             this.setState({
-                dealers: this.props.dealers,
-                columns: this.state.columns,
+                dealers: this.props.dealers
             })
-
-            if (this.props.selectedOptions !== prevProps.selectedOptions) {
-                this.handleCheckChange(this.props.selectedOptions)
-            }
-            // const dealer_type = window.location.pathname.split("/").pop();
-            //  if(this.state.dealer_type !== dealer_type)
-            //  {
-            //      this.props.getDropdown(dealer_type);
-            //  }
         }
 
     }
@@ -539,77 +601,7 @@ class Dealers extends Component {
 
     render() {
 
-        // alert('render');
-        //  console.log('render check', this.state.dealer_type, 'columns', this.state.options.length, 'option', this.state.columns)
-        // alert('render');
-        if ((window.location.pathname.split("/").pop() !== 'dealer') && (this.state.options.length <= 6) && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 8)) {
-            //  alert('if sdealer')
-            // console.log('sdealer came')
-            this.state.columns.push(
-                {
-                    title: (
-                        <Input.Search
-                            name="parent_dealer"
-                            key="parent_dealer"
-                            id="parent_dealer"
-                            className="search_heading"
-                            autoComplete="new-password"
-                            placeholder="Parent Dealer"
-                        />
-                    ),
-                    dataIndex: 'parent_dealer',
-                    className: '',
-                    children: [
-                        {
-                            title: 'PARENT DEALER',
-                            dataIndex: 'parent_dealer',
-                            key: 'parent_dealer',
-                            className: '',
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.parent_dealer.length;
-                            // },
-                            sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
-
-                        }
-                    ]
-                },
-                {
-                    title: (
-                        <Input.Search
-                            name="parent_dealer_id"
-                            key="parent_dealer_id"
-                            id="parent_dealer_id"
-                            className="search_heading"
-                            autoComplete="new-password"
-                            placeholder="Parent Dealer ID"
-                        />
-                    ),
-                    dataIndex: 'parent_dealer_id',
-                    className: '',
-                    children: [
-                        {
-                            title: 'PARENT DEALER ID',
-                            dataIndex: 'parent_dealer_id',
-                            key: 'parent_dealer_id',
-                            className: '',
-                            sorter: (a, b) => { return a.parent_dealer_id.localeCompare(b.parent_dealer_id) },
-
-                        }
-                    ]
-                }
-            )
-
-        }
-        if ((window.location.pathname.split("/").pop() !== 'dealer') && (this.state.options.length <= 6)) {
-            this.state.options.push('PARENT DEALER', 'PARENT DEALER ID');
-        }
-        else if ((window.location.pathname.split("/").pop() === 'dealer') && (this.state.columns.length > 8) || (this.state.options.length > 6)) {
-            this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER ID');
-            this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER');
-            this.state.options = this.state.options.slice(0, 6);
-        }
+        // console.log(this.state.columns, window.location.pathname.split("/").pop(), this.state.options)
         return (
 
             <div>
