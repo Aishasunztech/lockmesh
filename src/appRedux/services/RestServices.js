@@ -590,6 +590,14 @@ const RestService = {
     editUser: (user) => {
         return axios.post(BASE_URL + 'users/edit/user', user, RestService.getHeader())
     },
+    //DELETE user
+    deleteUser: (userId) => {
+        return axios.put(BASE_URL + 'users/delete_user/' + userId, {}, RestService.getHeader())
+    },
+    //UNDO DELETE user
+    undoDeleteUser: (userId) => {
+        return axios.put(BASE_URL + 'users/undo_delete_user/' + userId, {}, RestService.getHeader())
+    },
 
     // Transfer Secure market Apps 
     transferApps: (data) => {

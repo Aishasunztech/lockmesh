@@ -4,7 +4,9 @@ import {
     INVALID_TOKEN,
     USERS_LIST,
     LOADING,
-    EDIT_USERS
+    EDIT_USERS,
+    DELETE_USER,
+    UNDO_DELETE_USER
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -63,11 +65,6 @@ export function addUser(user) {
 export function editUser(user) {
     // console.log("action called", data);
     return (dispatch) => {
-
-        dispatch({
-            type: LOAD_USER,
-        });
-
         RestService.editUser(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('action done ', response.data);
@@ -76,6 +73,52 @@ export function editUser(user) {
                     response: response.data,
                     payload: {
                         userData: user,
+                    }
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export function deleteUser(userId) {
+    return (dispatch) => {
+
+        RestService.deleteUser(userId).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('action done ', response.data);
+                dispatch({
+                    type: DELETE_USER,
+                    payload: {
+                        status: response.data.status,
+                        msg: response.data.msg,
+                        user_id: userId
+                    }
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export function undoDeleteUser(userId) {
+    return (dispatch) => {
+
+        RestService.undoDeleteUser(userId).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('action done ', response.data);
+                dispatch({
+                    type: UNDO_DELETE_USER,
+                    payload: {
+                        status: response.data.status,
+                        msg: response.data.msg,
+                        user_id: userId
                     }
                 });
 

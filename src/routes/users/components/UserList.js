@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Table, Icon, Switch } from "antd";
+import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
+
+const confirm = Modal.confirm
 
 class UserList extends Component {
 
@@ -43,7 +45,21 @@ class UserList extends Component {
                             size="small"
                             onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
                         > EDIT </Button>
-                    </Fragment>)
+                        {(user.devicesList.length === 0) ?
+                            (user.del_status == 0) ?
+                                <Button
+                                    type="danger"
+                                    size="small"
+                                    onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
+                                > DELETE </Button>
+                                : <Button
+                                    type="dashed"
+                                    size="small"
+                                    onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
+                                >UNDO </Button>
+                            : null
+                        }
+                    </Fragment >)
                 ,
                 user_id: user.user_id,
                 devices: (user.devicesList) ? user.devicesList.length : 0,
@@ -133,3 +149,16 @@ class UserList extends Component {
 
 // export default connect(mapStateToProps, mapDispatchToProps)(PolicyList);
 export default UserList;
+
+
+function showConfirm(action, user_id, msg, buttonText) {
+    confirm({
+        title: msg + user_id,
+        okText: buttonText,
+        onOk() {
+            action(user_id)
+        },
+        onCancel() { },
+    })
+}
+
