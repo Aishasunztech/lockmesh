@@ -127,6 +127,7 @@ export default (state = initialState, action) => {
 			// console.log(APK_STATUS_CHANGED)
 			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.payload));
 			// console.log('index of item',objIndex);
+			message.success('Status Changed Successfully')
 			if (state.apk_list[objIndex].apk_status === 'Off') {
 				// console.log('apk_status_off',state.apk_list[objIndex].apk_status);
 				state.apk_list[objIndex].apk_status = "On";

@@ -434,6 +434,7 @@ class Account extends Component {
                     <Row>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                             <Modal
+                            maskClosable={false}
                                 title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! Duplicate Data</span></div>}
                                 visible={this.state.duplicate_modal_show}
                                 onOk={this.InsertNewData}
@@ -534,6 +535,7 @@ class Account extends Component {
                                     <Button type="primary" size="small" className="open_btn">Open</Button>
                                 </Link>
                                 <Modal
+                                maskClosable={false}
                                     className="manage_data"
                                     width="450px"
                                     title="Manage Data"
@@ -545,6 +547,7 @@ class Account extends Component {
                                     <div className="profile_table">
                                         <Fragment>
                                             <Modal
+                                            maskClosable={false}
                                                 className="m_d_pop"
                                                 visible={this.state.visible}
                                                 title={`Import ${this.state.fieldValue}`}
@@ -589,6 +592,7 @@ class Account extends Component {
                                             </Modal>
 
                                             <Modal
+                                            maskClosable={false}
                                                 className="m_d_pop"
                                                 visible={this.state.dataVisible}
                                                 title={`${this.state.dataFieldTitle}`}

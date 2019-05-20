@@ -43,6 +43,7 @@ export default class FlagDevice extends Component {
         return (
             <div>
                 <Modal
+                    maskClosable={false}
                     visible={visible}
                     title="Flag Device"
                     onOk={this.handleOk}

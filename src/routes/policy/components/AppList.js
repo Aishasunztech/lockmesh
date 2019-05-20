@@ -26,6 +26,8 @@ class AppList extends Component {
             app_list_count: 0,
             selectedRowKeys: [],
             selectedRows: [],
+            selectedRowKeysApps: [],
+            selectedRowKeysPermissios: [],
         }
 
         this.appsColumns = [
@@ -169,11 +171,18 @@ class AppList extends Component {
         let icon = (app.logo !== undefined) ? app.logo : app.icon;
         let Off = 'OFF';
         let On = 'ON';
-        let isAvailable = (this.state.selectedRowKeys.length) ? this.state.selectedRowKeys.find(id => (id === app_id) ? true : false) : false;
+        let isAvailable = true;
         if (this.props.appPermissions) {
             app_id = app.id;
-            isAvailable = true
+            // isAvailable = true
         }
+        if(this.props.pageType === 'dealerApps'){
+             isAvailable = (this.state.selectedRowKeysApps.length) ? this.state.selectedRowKeysApps.find(id => (id === app_id) ? true : false) : false;
+        }else if(this.props.pageType==='appPermissions'){
+         isAvailable = (this.state.selectedRowKeysPermissios.length) ? this.state.selectedRowKeysPermissios.find(id => (id === app_id) ? true : false) : false;
+
+        }
+
         // alert(guest);
 
 
@@ -304,13 +313,27 @@ class AppList extends Component {
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        this.setState({
-            selectedRowKeys: selectedRowKeys,
-            selectedRows: selectedRows
-        })
-        if (!this.props.edit) {
-            this.props.onSelectChange(selectedRowKeys);
+        if(this.props.pageType == 'dealerApps'){
+            this.setState({
+                selectedRowKeysApps: selectedRowKeys,
+                selectedRows: selectedRows
+            }, ()=> {
+                if (!this.props.edit) {
+                    this.props.onSelectChange(this.state.selectedRowKeysApps, this.props.pageType);
+                }
+            })
+        }else{
+            this.setState({
+                selectedRowKeysPermissios: selectedRowKeys,
+                selectedRows: selectedRows
+            }, ()=> {
+                if (!this.props.edit) {
+                    this.props.onSelectChange(this.state.selectedRowKeysPermissios, this.props.pageType);
+                }
+            })
         }
+       
+       
 
         // console.log('selected row keys', selectedRowKeys)
     }
@@ -334,15 +357,15 @@ class AppList extends Component {
         );
     }
     render() {
-        const { loading, selectedRowKeys, selectedRows } = this.state;
+        const { loading, selectedRowKeys, selectedRows, selectedRowKeysApps, selectedRowKeysPermissios } = this.state;
         let rowSelection = {
-            selectedRowKeys,
+            selectedRowKeys : this.props.pageType=='dealerApps'? selectedRowKeysApps: selectedRowKeysPermissios,
             selectedRows,
             onChange: this.onSelectChange,
         };
         // const hasSelected = selectedRowKeys.length > 0;
 
-        if (this.props.apps && this.props.isSwitch && this.props.isCheckbox) {
+        if ((this.props.apps || this.props.appPermissions) && this.props.isSwitch && this.props.isCheckbox) {
             rowSelection = rowSelection
         } else {
             rowSelection = null
@@ -365,6 +388,7 @@ class AppList extends Component {
                     className="exp_policy"
                     style={{ margin: 0, padding: 0 }}
                     rowSelection={rowSelection}
+                    selectedRowKeys={ this.props.pageType=='dealerApps' ? this.state.selectedRowKeysApps: this.state.selectedRowKeysPermissios}
                     size='small'
                     scroll={this.props.isHistory ? {} : {}}
                     columns={this.props.allExtensions ? this.extensionColumns : this.appsColumns}

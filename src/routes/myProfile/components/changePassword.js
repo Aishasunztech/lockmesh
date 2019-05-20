@@ -92,6 +92,7 @@ export default class ChangePassword extends Component {
                     visible={visible}
                     title="Change Password"
                     onOk={this.handleOk}
+                    maskClosable={false}
                     onCancel={this.handleCancel}
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>Cancel</Button>,

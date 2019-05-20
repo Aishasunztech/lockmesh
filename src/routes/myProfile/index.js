@@ -172,6 +172,7 @@ class Profile extends Component {
                                 </a>
                             </div>
                             <Modal
+                                maskClosable={false}
                                 title={<div>Edit Profile <a className="edit_a_tag" onClick={() => this.refs.change_profile.showModal()} >Edit</a></div>}
                                 visible={this.state.visible}
                                 onOk={this.handleOk1}

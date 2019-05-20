@@ -37,7 +37,8 @@ import {
   handleCheckAllExtension,
   reSyncDevice,
   getDealerApps,
-  getActivities
+  getActivities,
+  clearApplications
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -48,7 +49,8 @@ import imgUrl from '../../assets/images/mobile.png';
 import {
   DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
   SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
-  APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, Main_SETTINGS
+  APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS,
+  Main_SETTINGS
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -73,7 +75,10 @@ class ConnectDevice extends Component {
       pageName: MAIN_MENU,
       showChangesModal: false,
       controls: [],
-      imei_list: []
+      imei_list: [],
+      showMessage: false,
+      messageText: '',
+      messageType: ''
     }
     // console.log("hello every body", this.props);
     this.mainMenu = [
@@ -178,11 +183,21 @@ class ConnectDevice extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list) {
+    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
+      console.log('show message sate', this.props.showMessage)
       this.setState({
         controls: this.props.controls,
-        imei_list: this.props.imei_list
+        imei_list: this.props.imei_list,
+        showMessage: this.props.showMessage,
+        messageText: this.props.messageText,
+        messageType: this.props.messageType
       })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      // console.log('object, ', nextProps.showMessage)
     }
   }
 
@@ -303,7 +318,6 @@ class ConnectDevice extends Component {
   }
   applyActions = () => {
     let objIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING);
-    console.log('index of ex', objIndex);
     let app_list = this.props.app_list;
     if (objIndex >= 0) {
 
@@ -317,16 +331,16 @@ class ConnectDevice extends Component {
     }
 
     console.log('main scure settings', this.props.controls.settings);
-    if(this.props.controls.settings.length){
+    if (this.props.controls.settings.length) {
       let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
-      if(index >= 0){
+      if (index >= 0) {
         app_list.push(this.props.controls.settings[index])
       }
     }
 
-    if(this.props.extensions.length){
+    if (this.props.extensions.length) {
       let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
-      if(index >= 0){
+      if (index >= 0) {
         app_list.push(this.props.extensions[index])
       }
     }
@@ -405,7 +419,6 @@ class ConnectDevice extends Component {
     this.setState({ showChangesModal: false });
   }
   render() {
-    console.log('app list: ', this.props.app_list, 'controls :', this.props.controls)
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
     let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'Online';
@@ -454,6 +467,7 @@ class ConnectDevice extends Component {
                       undoApplications={this.undoAction}
                       redoApplications={this.redoAction}
                       applyActionButton={this.applyActionButton}
+                      clearApplications={this.props.clearApplications}
                       applyBtn={this.props.applyBtn}
                       undoBtn={this.props.undoBtn}
                       redoBtn={this.props.redoBtn}
@@ -487,6 +501,7 @@ class ConnectDevice extends Component {
                 </Col>
               </Row>
               <Modal
+                maskClosable={false}
                 title="Confirm new Settings to be sent to Device"
                 visible={this.state.showChangesModal}
                 onOk={this.applyActions}
@@ -509,6 +524,20 @@ class ConnectDevice extends Component {
           <div className="gx-loader-view">
             <CircularProgress />
           </div> : null} */}
+
+          {this.state.showMessage === true ?
+            (this.state.messageType === "error") ?
+              error({
+                title: this.state.messageText,
+              })
+              :
+              (this.state.messageType === "success") ?
+                success({
+                  title: this.state.messageText,
+                })
+                : null : null}
+
+
         </div> : <h1>Device Not Found</h1>
     )
   }
@@ -555,7 +584,8 @@ function mapDispatchToProps(dispatch) {
     ackFinishedPolicy: ackFinishedPolicy,
     ackImeiChanged: ackImeiChanged,
     actionInProcess: actionInProcess,
-    getActivities: getActivities
+    getActivities: getActivities,
+    clearApplications: clearApplications
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket }) => {
