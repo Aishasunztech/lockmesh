@@ -337,8 +337,12 @@ class DevicesList extends Component {
                         bordered
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.devices)}
-                        pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
-
+                        pagination={{ 
+                            pageSize: Number(this.state.pagination), 
+                            size: "midddle", 
+                            // showSizeChanger:true 
+                        }}
+                        
                         scroll={{
                             x: 500,
                             // y: 600 
