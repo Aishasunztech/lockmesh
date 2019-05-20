@@ -82,7 +82,7 @@ const DealerAppModal = (props) => {
             title="Select Apps"
             visible={props.pushAppsModal}
             onOk={() => {
-                if(props.selectedApps.length){
+                if (props.selectedApps.length) {
                     props.showPushAppsModal(false);
                     props.showSelectedAppsModal(true);
                 }
@@ -111,10 +111,10 @@ const PullAppModal = (props) => {
             title="Select Apps"
             visible={props.pullAppsModal}
             onOk={() => {
-                if(props.selectedApps.length){
+                if (props.selectedApps.length) {
                     props.showPullAppsModal(false);
                     props.showSelectedAppsModal(true);
-                } 
+                }
             }}
             onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
             okText="Pull Apps"
@@ -552,6 +552,7 @@ class SideActions extends Component {
                     visible={this.state.historyModal}
                     onOk={() => this.showHistoryModal(false, '')}
                     onCancel={() => this.showHistoryModal(false, '')}
+                    className="load_policy_popup"
                 >
                     {(this.state.historyType === "history") ?
                         <TableHistory

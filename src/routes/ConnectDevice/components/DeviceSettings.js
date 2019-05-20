@@ -19,7 +19,7 @@ export default class TableHistory extends Component {
                 title: 'APP NAME',
                 dataIndex: 'label',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
             }, {
                 title: 'GUEST',
                 dataIndex: 'guest',
@@ -39,7 +39,7 @@ export default class TableHistory extends Component {
                 title: 'Extension NAME',
                 dataIndex: 'label',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a href="javascript:;" style={{ fontSize: 12 }}> {text}</ a>,
             }, {
                 title: 'GUEST',
                 dataIndex: 'guest',
@@ -55,7 +55,7 @@ export default class TableHistory extends Component {
                 title: 'PERMISSION NAME',
                 dataIndex: 'label',
                 key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
+                render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
             }, {
                 title: 'STATUS',
                 dataIndex: 'status',
@@ -71,23 +71,23 @@ export default class TableHistory extends Component {
                 [
                     {
                         label: 'Wifi',
-                        status: this.state.controls.controls.wifi_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
+                        status: this.state.controls.controls.wifi_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
                     },
                     {
                         label: 'Bluetooth',
-                        status: this.state.controls.controls.bluetooth_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
+                        status: this.state.controls.controls.bluetooth_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
                     },
                     {
                         label: 'Hotspot',
-                        status: this.state.controls.controls.hotspot_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
+                        status: this.state.controls.controls.hotspot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
                     },
                     {
                         label: 'Screenshots',
-                        status: this.state.controls.controls.screenshot_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
+                        status: this.state.controls.controls.screenshot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
                     },
                     {
                         label: 'Block Calls',
-                        status: this.state.controls.controls.call_status ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
+                        status: this.state.controls.controls.call_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
                     }
                 ]
 
@@ -165,9 +165,9 @@ export default class TableHistory extends Component {
                     return {
                         key: item.app_id,
                         label: item.label,
-                        guest: (item.guest == 1 || item.guest === true) ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>,
-                        encrypted: (item.encrypted == 1 || item.encrypted) === true ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>,
-                        enable: (item.enable == 1 || item.enable === true) ? <span style={{ color: "green" }}>ON</span> : <span style={{ color: "red" }}>OFF</span>
+                        guest: (item.guest == 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
+                        encrypted: (item.encrypted == 1 || item.encrypted) === true ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
+                        enable: (item.enable == 1 || item.enable === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
                     }
                 })
             )
@@ -185,7 +185,7 @@ export default class TableHistory extends Component {
                     <Divider >{APPLICATION_PERMISION} </Divider>
                     <Table
                         style={{ margin: 0, padding: 0 }}
-                        size='small'
+                        size='default'
                         bordered={false}
                         columns={this.appsColumns}
                         align='center'
@@ -202,7 +202,7 @@ export default class TableHistory extends Component {
 
                     <Table
                         style={{ margin: 0, padding: 0 }}
-                        size='small'
+                        size='default'
                         bordered={false}
                         columns={this.extensionColumns}
                         align='center'
@@ -217,7 +217,7 @@ export default class TableHistory extends Component {
 
                     <Table
                         style={{ margin: 0, padding: 0 }}
-                        size='small'
+                        size='default'
                         bordered={false}
                         columns={this.controlColumns}
                         align='center'
