@@ -299,9 +299,16 @@ class AppList extends Component {
         }
         else if (this.props.allExtensions) {
             if (this.props.allExtensions.length) {
-                return this.props.allExtensions[0]['subExtension'].map(app => {
-                    return this.renderExtensionsApp(app)
-                })
+                if(this.props.edit){
+                    return this.props.allExtensions.map(app => {
+                        return this.renderExtensionsApp(app)
+                    })
+                }else{
+                    return this.props.allExtensions[0]['subExtension'].map(app => {
+                        return this.renderExtensionsApp(app)
+                    })
+                }
+                
             }
         }
         // else {

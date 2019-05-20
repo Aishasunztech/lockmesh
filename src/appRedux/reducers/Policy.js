@@ -194,14 +194,15 @@ export default (state = initialState, action) => {
                         changedState[rowId][stateToUpdate][index][key] = action.payload.value;
                     }
                 } else if (stateToUpdate == 'secure_apps') {
+                    console.log('object', changedState)
 
-                    let permissionIndex = changedState[rowId][stateToUpdate].findIndex(item => item.uniqueName == action.payload.uniqueName);
-                    if (permissionIndex >= 0) {
-                        index = changedState[rowId][stateToUpdate][permissionIndex]['subExtension'].findIndex(item => item.id == id);
+                    // let permissionIndex = changedState[rowId][stateToUpdate].findIndex(item => item.uniqueName == action.payload.uniqueName);
+                    // if (permissionIndex >= 0) {
+                        index = changedState[rowId][stateToUpdate].findIndex(item => item.id == id);
                         if (index >= 0) {
-                            changedState[rowId][stateToUpdate][permissionIndex]['subExtension'][index][key] = action.payload.value;
+                            changedState[rowId][stateToUpdate][index][key] = action.payload.value;
                         }
-                    }
+                    // }
                 } else if (stateToUpdate == 'controls') {
                     changedState[rowId][stateToUpdate][key] = action.payload.value;
                 }
@@ -423,12 +424,12 @@ export default (state = initialState, action) => {
             if (action.payload.stateToUpdate === 'allExtensions') {
                 state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
                 changedState[chandedRowIndex]['secure_apps'].forEach(extension => {
-                    if (extension.uniqueName === action.payload.uniqueName) {
-                        extension.subExtension.forEach(obj => {
-                            obj[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
-                            obj.isChanged = true;
-                        });
-                    }
+                    // if (extension.uniqueName === action.payload.uniqueName) {
+                        // extension.subExtension.forEach(obj => {
+                            extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                            extension.isChanged = true;
+                        // });
+                    // }
                 });
 
                 state.policies = JSON.parse(JSON.stringify(changedState));

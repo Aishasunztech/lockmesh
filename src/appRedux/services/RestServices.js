@@ -221,7 +221,7 @@ const RestService = {
     },
 
     SavePolicyChanges: (record) => {
-        //    console.log('api called ', record);
+           console.log('api called ', record);
         let data = {
             id: record.policy_id,
             push_apps: JSON.stringify(record.push_apps),
