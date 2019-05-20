@@ -491,9 +491,10 @@ export default (state = initialState, action) => {
         }
         case DEFAULT_POLICY_CHANGE: {
 
-            success({
-                title: action.payload
-            });
+            // success({
+            //     title: action.payload
+            // });
+            message.success(action.payload)
             let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
             let defaultPolicyIndex = state.policies.findIndex((obj => obj.is_default === true));
             if (defaultPolicyIndex === -1) {
