@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Transfer, Card, Avatar, Row, Col } from "antd";
+import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Transfer, Card, Avatar, Row, Col, Switch } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 import { BASE_URL } from '../../constants/Application';
 
 import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
-import { transferApps, getMarketApps } from "../../appRedux/actions/AppMarket";
+import { transferApps, getMarketApps, handleUninstall } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { ADMIN, DEALER } from "../../constants/Constants";
 import styles from './appmarket.css'
@@ -19,7 +19,7 @@ class ApkMarket extends React.Component {
         this.state = {
             apk_list: [],
             secureMarketList: [],
-            availbleAppList: [],
+            availbleAppList: this.props.availbleAppList,
             targetKeys: [],
         }
 
@@ -28,9 +28,12 @@ class ApkMarket extends React.Component {
     renderList = (availbleAppList, secureMarketList) => {
 
         // console.log(availbleAppList, ' objext data ', secureMarketList)
+        let combinedList = [];
 
-        let combinedList = availbleAppList;
-        // let combinedList = [...availbleAppList, ...secureMarketList];
+        combinedList = [...availbleAppList, ...secureMarketList];
+
+
+        // let combinedList = availbleAppList;
         // console.log('combined', combinedList)
         combinedList.forEach((item) => {
             if (item.dealer_type === ADMIN) {
@@ -43,10 +46,10 @@ class ApkMarket extends React.Component {
         let apkList = combinedList.map((app, index) => {
             let data = {
                 key: app.id,
-                title: <Fragment> <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} /><span> {app.app_name} </span> </Fragment>,
+                title: <Fragment> <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} /> <span> {app.app_name} </span> {(app.dealer_type !== undefined) ? <span><Switch onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall == 0) ? true : false} size='small' disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch></span> : null} </Fragment>,
                 description: `${app.app_name + index + 1}`,
                 disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
-                className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
+                // className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
             }
             return data
         })
@@ -61,11 +64,12 @@ class ApkMarket extends React.Component {
 
     handleChange = (targetKeys, direction, moveKeys) => {
         let marketApps = targetKeys;
-        // console.log('target keys', targetKeys)
         this.props.transferApps(marketApps)
-        //  console.log(targetKeys,direction, moveKeys ,'ttttt');
         this.setState({ targetKeys });
 
+    }
+    handleCheckChange = (apk_id, value) => {
+        this.props.handleUninstall(apk_id, value)
     }
 
     handleSearch = (dir, value) => {
@@ -81,7 +85,6 @@ class ApkMarket extends React.Component {
             })
             // console.log(keys);
             this.setState({
-                apk_list: nextProps.apk_list,
                 secureMarketList: nextProps.secureMarketList,
                 availbleAppList: nextProps.availbleAppList,
                 targetKeys: keys
@@ -95,7 +98,6 @@ class ApkMarket extends React.Component {
                 return app.id
             })
             this.setState({
-                apk_list: this.props.apk_list,
                 secureMarketList: this.props.secureMarketList,
                 availbleAppList: this.props.availbleAppList,
                 targetKeys: keys
@@ -103,7 +105,7 @@ class ApkMarket extends React.Component {
         }
     }
     componentWillMount() {
-        this.props.getApkList();
+        // this.props.getApkList();
         this.props.getMarketApps()
     }
     componentDidMount() {
@@ -143,7 +145,7 @@ class ApkMarket extends React.Component {
                                     )
                                 ]}
                                 className="transfer_box"
-                                dataSource={this.renderList(this.props.availbleAppList, this.state.secureMarketList)}
+                                dataSource={this.renderList(this.state.availbleAppList, this.state.secureMarketList)}
                                 showSearch
                                 filterOption={this.filterOption}
                                 targetKeys={this.state.targetKeys}
@@ -163,9 +165,9 @@ class ApkMarket extends React.Component {
 }
 
 const mapStateToProps = ({ apk_list, auth, appMarket }) => {
-    // console.log(appMarket.secureMarketList);
+    // console.log(appMarket.isloading);
     return {
-        isloading: apk_list.isloading,
+        isloading: appMarket.isloading,
         apk_list: apk_list.apk_list,
         options: apk_list.options,
         selectedOptions: apk_list.selectedOptions,
@@ -187,7 +189,8 @@ function mapDispatchToProps(dispatch) {
         postPagination: postPagination,
         getPagination: getPagination,
         transferApps: transferApps,
-        getMarketApps: getMarketApps
+        getMarketApps: getMarketApps,
+        handleUninstall: handleUninstall
     }, dispatch);
 }
 

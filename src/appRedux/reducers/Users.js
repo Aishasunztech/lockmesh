@@ -3,7 +3,9 @@ import {
     LOAD_USER,
     LOADING,
     USERS_LIST,
-    EDIT_USERS
+    EDIT_USERS,
+    DELETE_USER,
+    UNDO_DELETE_USER
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -88,6 +90,38 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: false,
                 users_list: action.payload.users_list,
+            }
+        case DELETE_USER:
+            if (action.payload.status) {
+                let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.user_id));
+                state.users_list[objIndex4].del_status = 1;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                users_list: [...state.users_list]
+            }
+        case UNDO_DELETE_USER:
+            if (action.payload.status) {
+                let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.user_id));
+                state.users_list[objIndex4].del_status = 0;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                users_list: [...state.users_list]
             }
         default:
             return state;

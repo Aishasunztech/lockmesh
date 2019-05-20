@@ -247,7 +247,7 @@ export default (state = initialState, action) => {
                 // console.log('pre activated device', action.response.data.data)
                 // state.devices.push(action.response.data.data)
                 success({
-                    title: action.response.msg,
+                    title: action.response.data.msg,
                 });
                 devices = [...action.response.data.data, ...state.devices]
                 // message.success('done');

@@ -7,7 +7,7 @@ import { checkValue } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 import {
-    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION
+    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN
 } from '../../../constants/Constants';
 import AddUser from '../../users/components/AddUser';
 import {
@@ -111,6 +111,7 @@ class EditDevice extends Component {
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
+        // console.log(this.props.user);
 
         return (
             <div>
@@ -129,6 +130,7 @@ class EditDevice extends Component {
                             <Input type={(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? 'hidden' : ''} disabled />
                         )}
                     </Form.Item>
+
                     {(isloading ?
 
                         <div className="addUserSpin">
@@ -179,19 +181,21 @@ class EditDevice extends Component {
                                     //     Add User
                                     // </Button> */}
                                 )}
-                                <Button
-                                    className="add_user_btn"
-                                    type="primary"
-                                    onClick={() => this.handleUserModal()}
-                                >
-                                    Add User
-                                </Button>
+                                {(this.props.user.type === ADMIN) ? null :
+                                    <Button
+                                        className="add_user_btn"
+                                        type="primary"
+                                        onClick={() => this.handleUserModal()}
+                                    >
+                                        Add User
+                                     </Button>
+                                }
 
                             </Form.Item>
 
                         </Fragment>
                     )}
-                    <Form.Item style={{ marginBottom: 0 }}
+                    < Form.Item style={{ marginBottom: 0 }}
                     >
                         {this.props.form.getFieldDecorator('dealer_id', {
                             initialValue: this.props.device.dealer_id,
@@ -453,7 +457,7 @@ class EditDevice extends Component {
 
                 </Form>
                 <AddUser ref="add_user" />
-            </div>
+            </div >
 
         )
 
@@ -474,10 +478,11 @@ function mapDispatchToProps(dispatch) {
         addUser: addUser,
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, users }) => {
+var mapStateToProps = ({ routing, devices, users, auth }) => {
     // console.log("sdfsaf", devices);
 
     return {
+        user: auth.authUser,
         routing: routing,
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,

@@ -590,10 +590,22 @@ const RestService = {
     editUser: (user) => {
         return axios.post(BASE_URL + 'users/edit/user', user, RestService.getHeader())
     },
+    //DELETE user
+    deleteUser: (userId) => {
+        return axios.put(BASE_URL + 'users/delete_user/' + userId, {}, RestService.getHeader())
+    },
+    //UNDO DELETE user
+    undoDeleteUser: (userId) => {
+        return axios.put(BASE_URL + 'users/undo_delete_user/' + userId, {}, RestService.getHeader())
+    },
 
     // Transfer Secure market Apps 
     transferApps: (data) => {
         return axios.post(BASE_URL + 'users/transferApps', { data }, RestService.getHeader())
+    },
+    // Change unistall app restriction for Secure market apps 
+    handleUninstall: (apk_id, value) => {
+        return axios.put(BASE_URL + 'users/handleUninstall/' + apk_id, { value }, RestService.getHeader())
     },
     getMarketApps: () => {
         return axios.get(BASE_URL + 'users/marketApplist', RestService.getHeader())

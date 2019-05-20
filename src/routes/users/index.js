@@ -8,49 +8,18 @@ import { getStatus, componentSearch, titleCase } from '../utils/commonUtils';
 
 
 import {
-    DEVICE_ACTIVATED,
-    DEVICE_EXPIRED,
-    DEVICE_PENDING_ACTIVATION,
-    DEVICE_PRE_ACTIVATION,
-    DEVICE_SUSPENDED,
-    DEVICE_UNLINKED,
     ADMIN,
-    DEVICE_TRIAL
 } from '../../constants/Constants'
 import {
-    DEVICE_ID,
-    DEVICE_REMAINING_DAYS,
-    DEVICE_FLAGGED,
-    DEVICE_STATUS,
-    DEVICE_MODE,
-    DEVICE_NAME,
-    DEVICE_ACTIVATION_CODE,
-    DEVICE_ACCOUNT_EMAIL,
-    DEVICE_PGP_EMAIL,
-    DEVICE_CHAT_ID,
-    DEVICE_CLIENT_ID,
-    DEVICE_DEALER_ID,
-    DEVICE_DEALER_PIN,
-    DEVICE_MAC_ADDRESS,
-    DEVICE_SIM_ID,
-    DEVICE_IMEI_1,
-    DEVICE_SIM_1,
-    DEVICE_IMEI_2,
-    DEVICE_SIM_2,
-    DEVICE_SERIAL_NUMBER,
-    DEVICE_MODEL,
-    DEVICE_START_DATE,
-    DEVICE_EXPIRY_DATE,
-    DEVICE_DEALER_NAME,
-    DEVICE_S_DEALER,
-    DEVICE_S_DEALER_NAME,
     USER_ID
 } from '../../constants/DeviceConstants';
 
 import {
     addUser,
     editUser,
-    getUserList
+    getUserList,
+    deleteUser,
+    undoDeleteUser
 } from "../../appRedux/actions/Users";
 
 import {
@@ -113,6 +82,9 @@ class Users extends Component {
                 dataIndex: 'devices',
                 key: 'devices',
                 className: 'row',
+                sorter: (a, b) => { return a.devices - b.devices },
+                sortDirections: [],
+                sortOrder: 'descend'
             },
             {
                 title: (
@@ -313,6 +285,8 @@ class Users extends Component {
                 <AddUser ref="add_user" />
                 <UserList
                     editUser={this.props.editUser}
+                    deleteUser={this.props.deleteUser}
+                    undoDeleteUser={this.props.undoDeleteUser}
                     location={this.props.location}
                     columns={this.columns}
                     users={this.state.users}
@@ -329,6 +303,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addUser: addUser,
         editUser: editUser,
+        deleteUser: deleteUser,
+        undoDeleteUser: undoDeleteUser,
         getUserList: getUserList,
         postPagination: postPagination,
         getPagination: getPagination
