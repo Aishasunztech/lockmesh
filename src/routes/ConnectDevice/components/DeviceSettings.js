@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Divider, Badge, } from "antd";
+import { Table, Divider, Badge, Switch } from "antd";
 import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS } from '../../../constants/Constants';
 
 // import AppList from "./AppList";
@@ -71,23 +71,53 @@ export default class TableHistory extends Component {
                 [
                     {
                         label: 'Wifi',
-                        status: this.state.controls.controls.wifi_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        // status: this.state.controls.controls.wifi_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        status: <Switch
+                            size="small"
+                            value={this.state.controls.controls.wifi_status}
+                            checked={(this.state.controls.controls.wifi_status === true || this.state.controls.controls.wifi_status === 1) ? true : false}
+                            disabled={true}
+                        />,
                     },
                     {
                         label: 'Bluetooth',
-                        status: this.state.controls.controls.bluetooth_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        // status: this.state.controls.controls.bluetooth_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        status: <Switch
+                            size="small"
+                            value={this.state.controls.controls.bluetooth_status}
+                            checked={(this.state.controls.controls.bluetooth_status === true || this.state.controls.controls.bluetooth_status === 1) ? true : false}
+                            disabled={true}
+                        />,
                     },
                     {
                         label: 'Hotspot',
-                        status: this.state.controls.controls.hotspot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        // status: this.state.controls.controls.hotspot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        status: <Switch
+                            size="small"
+                            value={this.state.controls.controls.hotspot_status}
+                            checked={(this.state.controls.controls.hotspot_status === true || this.state.controls.controls.hotspot_status === 1) ? true : false}
+                            disabled={true}
+                        />,
                     },
                     {
                         label: 'Screenshots',
-                        status: this.state.controls.controls.screenshot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        // status: this.state.controls.controls.screenshot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        status: <Switch
+                            size="small"
+                            value={this.state.controls.controls.screenshot_status}
+                            checked={(this.state.controls.controls.screenshot_status === true || this.state.controls.controls.screenshot_status === 1) ? true : false}
+                            disabled={true}
+                        />,
                     },
                     {
                         label: 'Block Calls',
-                        status: this.state.controls.controls.call_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        // status: this.state.controls.controls.call_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        status: <Switch
+                            size="small"
+                            value={this.state.controls.controls.call_status}
+                            checked={(this.state.controls.controls.call_status === true || this.state.controls.controls.call_status === 1) ? true : false}
+                            disabled={true}
+                        />,
                     }
                 ]
 
@@ -165,9 +195,25 @@ export default class TableHistory extends Component {
                     return {
                         key: item.app_id,
                         label: item.label,
-                        guest: (item.guest == 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
-                        encrypted: (item.encrypted == 1 || item.encrypted) === true ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
-                        enable: (item.enable == 1 || item.enable === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
+                        // guest: (item.guest == 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
+                        guest: <Switch
+                            size="small"
+                            value={item.guest}
+                            checked={(item.guest === true || item.guest === 1) ? true : false}
+                            disabled={true}
+                        />,
+                        encrypted: <Switch
+                            size="small"
+                            value={item.encrypted}
+                            checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
+                            disabled={true}
+                        />,
+                        enable: <Switch
+                            size="small"
+                            value={item.enable}
+                            checked={(item.enable === true || item.enable === 1) ? true : false}
+                            disabled={true}
+                        />,
                     }
                 })
             )

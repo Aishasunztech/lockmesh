@@ -195,46 +195,49 @@ class AppList extends Component {
                     <div className="line_break2">{label}</div>
                 </Fragment>,
             guest:
-                this.props.isSwitch ?
+                // this.props.isSwitch ?
                     <Switch
                         size="small"
                         ref={`guest_${app_id}`}
                         name={`guest_${app_id}`}
                         value={guest}
                         checked={this.props.edit ? ((guest === true || guest === 1) ? true : false) : (isAvailable ? ((guest === true || guest === 1) ? true : false) : false)}
-                        disabled={this.props.isCheckbox ? !isAvailable : false}
+                        disabled={this.props.isSwitch ? this.props.isCheckbox ? !isAvailable : false : true}
                         onClick={(e) => {
                             this.handleChecked(e, "guest", app_id)
 
                         }}
-                    /> : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }}>{(guest === true || guest === 1) ? On : Off}</span>,
+                    /> ,
+                    // : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }}>{(guest === true || guest === 1) ? On : Off}</span>,
             encrypted:
-                this.props.isSwitch ?
+                // this.props.isSwitch ?
                     <Switch
                         size="small"
                         ref={`encrypted_${app_id}`}
                         name={`encrypted_${app_id}`}
                         // value={encrypted}
-                        disabled={this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false}
+                        disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false: true}
                         checked={app.default_app == 1 ? true : this.props.edit ? ((encrypted === true || encrypted === 1) ? true : false) : (isAvailable ? ((encrypted === true || encrypted === 1) ? true : false) : false)}
                         onClick={(e) => {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app_id);
                         }}
-                    /> : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? On : Off}</span>,
+                    />,
+                    //  : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? On : Off}</span>,
             enable:
-                this.props.isSwitch ?
+                // this.props.isSwitch ?
                     <Switch
                         size="small"
                         ref={`enable_${app_id}`}
                         name={`enable_${app_id}`}
                         // value={enable}
                         checked={app.default_app == 1 ? true : this.props.edit ? ((enable === true || enable === 1) ? true : false) : (isAvailable ? ((enable === true || enable === 1) ? true : false) : false)}
-                        disabled={this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false}
+                        disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false: true}
                         onClick={(e) => {
                             this.handleChecked(e, "enable", app_id);
                         }}
-                    /> : <span style={{ color: (enable === true || enable === 1) ? 'green' : 'red' }} >{(enable === true || enable === 1) ? On : Off}</span>,
+                    />
+                    //  : <span style={{ color: (enable === true || enable === 1) ? 'green' : 'red' }} >{(enable === true || enable === 1) ? On : Off}</span>,
         });
     }
 
@@ -257,32 +260,34 @@ class AppList extends Component {
                     <div className="line_break2">{label}</div>
                 </Fragment>,
             guest:
-                this.props.isSwitch ?
+                // this.props.isSwitch ?
                     <Switch
                         size="small"
                         ref={`guest_${app_id}`}
                         name={`guest_${app_id}`}
                         value={guest}
                         checked={(guest === true || guest === 1) ? true : false}
-
+                        disabled={this.props.isSwitch ? false: true}
                         onClick={(e) => {
                             this.handleChecked(e, "guest", app_id);
                         }}
-                    /> : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }} >{(guest === true || guest === 1) ? 'ON' : 'OFF'}</span>,
+                    />,
+                    //  : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }} >{(guest === true || guest === 1) ? 'ON' : 'OFF'}</span>,
             encrypted:
-                this.props.isSwitch ?
+                // this.props.isSwitch ?
                     <Switch
                         size="small"
                         ref={`encrypted_${app_id}`}
                         name={`encrypted_${app_id}`}
                         value={encrypted}
-
+                        disabled={this.props.isSwitch ? false: true}
                         checked={(encrypted === true || encrypted === 1) ? true : false}
                         onClick={(e) => {
                             // console.log("encrypted", e);
                             this.handleChecked(e, "encrypted", app_id);
                         }}
-                    /> : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? 'ON' : 'OFF'}</span>,
+                    /> 
+                    // : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? 'ON' : 'OFF'}</span>,
 
         });
     }
@@ -298,6 +303,7 @@ class AppList extends Component {
 
         }
         else if (this.props.allExtensions) {
+            // console.log('a;; extension', this.props.allExtensions)
             if (this.props.allExtensions.length) {
                 if(this.props.edit){
                     return this.props.allExtensions.map(app => {
