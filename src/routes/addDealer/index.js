@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { getDealerList, addDealer } from "../../appRedux/actions/Dealers";
 import { ADMIN, DEALER, SDEALER} from "../../constants/Constants";
 
-const FormItem = Form.Item;
+// const FormItem = Form.Item;
 const { Option } = Select;
 class AddDealer extends Component {
     constructor(props) {

@@ -42,7 +42,7 @@ import {
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
-import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged } from "../../appRedux/actions/Socket";
+import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged, getAppJobQueue, ackSinglePushApp } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
@@ -62,6 +62,7 @@ import { getColor, isBase64 } from "../utils/commonUtils"
 import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
+import ProgressBar from "../../components/ProgressBar";
 
 const success = Modal.success
 const error = Modal.error
@@ -157,6 +158,7 @@ class ConnectDevice extends Component {
 
       this.props.actionInProcess(this.props.socket, device_id);
       this.props.getDeviceDetails(device_id);
+      // this.props.getAppJobQueue(device_id);
       this.props.getDeviceApps(device_id);
       this.props.getProfiles(device_id);
       this.props.getPolicies(device_id);
@@ -167,6 +169,7 @@ class ConnectDevice extends Component {
       this.props.ackFinishedPullApps(this.props.socket, device_id);
       this.props.ackFinishedPolicy(this.props.socket, device_id);
       this.props.ackImeiChanged(this.props.socket, device_id);
+      // this.props.ackSinglePushApp(this.props.socket, device_id);
       this.props.getActivities(device_id)
 
       // console.log('ack_finished_push_apps_' + device_id);
@@ -377,6 +380,7 @@ class ConnectDevice extends Component {
     }
     // console.log('ref', deviceId)
     this.props.getDeviceDetails(deviceId);
+    // this.props.getAppJobQueue(deviceId);
     this.props.getDeviceApps(deviceId);
     this.props.getProfiles(deviceId);
     this.props.getPolicies(deviceId);
@@ -430,6 +434,12 @@ class ConnectDevice extends Component {
             <div className="gx-loader-view">
               <CircularProgress />
             </div> :
+            // (this.props.is_in_process || this.props.is_push_apps == 1) ?
+            //   <ProgressBar
+            //     total={this.props.noOfApp_push_pull}
+            //     completed={this.props.noOfApp_pushed_pulled}
+            //   />
+            //   :
             <div>
               <Row gutter={16} type="flex" align="top">
                 <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>
@@ -585,10 +595,13 @@ function mapDispatchToProps(dispatch) {
     ackImeiChanged: ackImeiChanged,
     actionInProcess: actionInProcess,
     getActivities: getActivities,
-    clearApplications: clearApplications
+    clearApplications: clearApplications,
+    getAppJobQueue: getAppJobQueue,
+    ackSinglePushApp: ackSinglePushApp,
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket }) => {
+  // console.log("DEVICE DETAILS",device_details);
   return {
     auth: auth,
     socket: auth.socket,
@@ -634,7 +647,10 @@ var mapStateToProps = ({ routing, device_details, auth, socket }) => {
     forceUpdate: device_details.forceUpdate,
     apk_list: device_details.apk_list,
     is_in_process: socket.is_in_process,
-    device_found: device_details.device_found
+    is_push_apps: socket.is_push_apps,
+    device_found: device_details.device_found,
+    noOfApp_push_pull: socket.noOfApp_push_pull,
+    noOfApp_pushed_pulled: socket.noOfApp_pushed_pulled,
   };
 }
 
