@@ -172,7 +172,6 @@ class AddPolicy extends Component {
         }
     }
 
-
     componentDidMount() {
         this.props.getDealerApps();
         this.props.getAppPermissions();
@@ -392,6 +391,8 @@ class AddPolicy extends Component {
             )
         }
         ];
+
+        
         return (
             <Fragment>
                 <div className="policy_steps">

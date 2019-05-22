@@ -178,6 +178,7 @@ export default (state = initialState, action) => {
             let policyId = action.payload.rowId;
             let key = action.payload.key;
             let stateToUpdate = action.payload.stateToUpdate;
+            console.log(stateToUpdate, 'state to update')
             let rowId = changedState.findIndex(item => item.id == policyId);
             //  console.log(policyId, 'row id', rowId)
 
@@ -204,6 +205,8 @@ export default (state = initialState, action) => {
                         }
                     // }
                 } else if (stateToUpdate == 'controls') {
+                    console.log(changedState[rowId][stateToUpdate][key] , 'changed 0', action.payload.value)
+
                     changedState[rowId][stateToUpdate][key] = action.payload.value;
                 }
 

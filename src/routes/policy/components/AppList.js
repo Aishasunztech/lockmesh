@@ -129,7 +129,7 @@ class AppList extends Component {
 
     handleChecked = (e, key, app_id) => {
         if (this.props.edit) {
-            // console.log('handle checked is called')
+            console.log('handle checked is called', e, key , app_id, this.props.rowId)
             if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps', this.props.rowId)
             else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id, 'app_list', this.props.rowId)
             else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id, 'secure_apps', this.props.rowId, SECURE_SETTING)
