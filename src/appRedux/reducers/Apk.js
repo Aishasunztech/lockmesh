@@ -9,7 +9,7 @@ import {
 	GET_DROPDOWN,
 	GET_PAGINATION,
 	PERMSSION_SAVED,
-	DEALERS_LIST
+	RESET_UPLOAD_FORM
 } from "../../constants/ActionTypes";
 
 import {
@@ -35,7 +35,8 @@ const initialState = {
 		APK,
 		APK_APP_NAME,
 		APK_APP_LOGO,
-	]
+	],
+	resetUploadForm: false
 };
 
 export default (state = initialState, action) => {
@@ -181,6 +182,12 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				selectedOptions: action.payload
+			}
+		}
+		case RESET_UPLOAD_FORM: {
+			return {
+				...state,
+				resetUploadForm: action.payload
 			}
 		}
 
