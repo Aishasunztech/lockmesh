@@ -258,8 +258,8 @@ class AddApk extends Component {
                             )}
                         </Form.Item>
                         <Row>
-                            <Col span={6} ></Col>
-                            <Col span={6} className="upload_file">
+                            <Col span={2} ></Col>
+                            <Col span={10} className="upload_file">
                                 <Form.Item
 
                                 >
@@ -283,7 +283,7 @@ class AddApk extends Component {
                                 </Form.Item>
 
                             </Col>
-                            <Col span={6} className="upload_file">
+                            <Col span={10} className="upload_file">
                                 <Form.Item
 
                                 >
@@ -309,7 +309,7 @@ class AddApk extends Component {
 
 
                             </Col>
-                            <Col span={6} ></Col>
+                            <Col span={2} ></Col>
                         </Row>
 
                         <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
