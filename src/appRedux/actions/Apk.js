@@ -6,7 +6,8 @@ import {
     EDIT_APK,
     LOADING,
     PERMSSION_SAVED,
-    RESET_UPLOAD_FORM
+    RESET_UPLOAD_FORM,
+    CHECK_APK_NAME
 } from "../../constants/ActionTypes"
 // import AuthFailed from './Auth';
 
@@ -147,6 +148,11 @@ export function editApk(formData) {
             }
         });
     };
+}
+export function checkApkName(name, apk_id = '') {
+    // console.log('form data in action');
+    // console.log(formData);
+
 }
 
 export function savePermission(apk_id, dealers, action) {

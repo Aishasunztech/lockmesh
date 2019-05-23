@@ -9,7 +9,8 @@ import {
 	GET_DROPDOWN,
 	GET_PAGINATION,
 	PERMSSION_SAVED,
-	RESET_UPLOAD_FORM
+	RESET_UPLOAD_FORM,
+	CHECK_APK_NAME
 } from "../../constants/ActionTypes";
 
 import {
@@ -195,6 +196,15 @@ export default (state = initialState, action) => {
 		}
 
 		case POST_DROPDOWN: {
+			return {
+				...state
+			}
+		}
+		case CHECK_APK_NAME: {
+			// console.log(action);
+			if (action.response.status) {
+				console.log("ssadas");
+			}
 			return {
 				...state
 			}

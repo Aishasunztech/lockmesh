@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 import 'react-picky/dist/picky.css';
 import { bindActionCreators } from "redux";
 import { BASE_URL } from "../../constants/Application";
-import { addApk, getApkList } from "../../appRedux/actions/Apk";
+import { addApk, getApkList, checkApkName } from "../../appRedux/actions/Apk";
 
 import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message, Modal, Avatar } from 'antd';
+import RestService from '../../appRedux/services/RestServices'
 
 // import asyncComponent from "util/asyncComponent";
 
@@ -103,12 +104,46 @@ class AddApk extends Component {
             disableLogo: false,
             resetUploadForm: false
         })
-        size = ''
+        size = '';
+        // document.getElementById('apkSize').style.display = 'none'
     }
 
-    addApk = () => {
 
-    }
+    checkUniqueName = async (rule, value, callback) => {
+        const form = this.props.form;
+        let response = await RestService.checkApkName(value).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            }
+        });
+        if (response) {
+            callback();
+        } else {
+            callback('Please choose a different name');
+        }
+    };
+    validatelogoFile = async (rule, value, callback) => {
+        const form = this.props.form;
+        if (this.state.fileList.length <= 0) {
+            callback('File is required');
+        } else {
+            callback();
+        }
+    };
+    validateAkpFile = async (rule, value, callback) => {
+        const form = this.props.form;
+        if (this.state.fileList2.length <= 0) {
+            callback('File is required');
+        } else {
+            callback();
+        }
+    };
+
 
     handleCancel = () => {
         this.setState({
@@ -181,7 +216,6 @@ class AddApk extends Component {
                         error({
                             title: 'Error While Uploading',
                         });
-                        _this.setState({ disableLogo: false });
                     }
                     //  message.success(`${info.file.name} file uploaded successfully.`);
                 } else if (status === 'error') {
@@ -201,11 +235,8 @@ class AddApk extends Component {
             className: 'upload-list-inline',
             listType: 'picture',
             onRemove(info) {
-                if (_this.state.fileList2.length > 1) {
-                    _this.state.fileList2.length -= 1;
-                } else {
-                    _this.setState({ disableApk: false });
-                }
+                // document.getElementById('apkSize').style.display = 'none'
+                _this.setState({ disableApk: false });
             },
             beforeUpload(file) {
                 _this.setState({ disableApk: true });
@@ -235,12 +266,13 @@ class AddApk extends Component {
                             title: 'file added Successfully ',
                         });
                         _this.setState({ disableApk: true });
+                        // document.getElementById('apkSize').style.display = 'block'
                     }
                     else {
                         error({
                             title: 'Error While Uploading',
                         });
-                        _this.setState({ disableApk: false });
+                        // document.getElementById('apkSize').style.display = 'none'
                     }
 
                 } else if (status === 'error') {
@@ -257,11 +289,18 @@ class AddApk extends Component {
                         <Form.Item className="mb-0"
                             {...formItemLayout}
                             label="Apk Name "
+                            onChange={(e) => {
+                                this.props.checkApkName(e)
+                            }}
                         >
                             {getFieldDecorator('name', {
                                 rules: [{
                                     required: true, message: 'Name is required',
-                                }],
+                                },
+                                {
+                                    validator: this.checkUniqueName,
+                                },
+                                ],
                             })(
                                 <Input />
                             )}
@@ -276,7 +315,10 @@ class AddApk extends Component {
                                         {getFieldDecorator('icon', {
                                             rules: [{
                                                 required: true, message: 'File is required',
-                                            }],
+                                            },
+                                            {
+                                                validator: this.validatelogoFile,
+                                            },],
 
                                         })(
                                             <Upload {...props} >
@@ -308,8 +350,11 @@ class AddApk extends Component {
 
                                             rules: [{
                                                 required: true, message: 'File is required',
-                                            }],
-
+                                            },
+                                            {
+                                                validator: this.validateAkpFile,
+                                            }
+                                            ],
                                         })(
                                             <Upload  {...props2}>
                                                 <Button>
@@ -322,7 +367,9 @@ class AddApk extends Component {
                                                 <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
                                             </Upload>
                                         )}
-                                        <label>Apk Size: </label><span>{size}</span>
+                                        <div id='apkSize' style={{ display: 'none' }}>
+                                            <label>Apk Size: </label><span>{size}</span>
+                                        </div>
                                     </div>
                                 </Form.Item>
                             </Col>
@@ -355,7 +402,8 @@ const mapStateToProps = ({ apk_list }) => {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addApk: addApk,
-        getApkList: getApkList
+        getApkList: getApkList,
+        checkApkName: checkApkName
     }, dispatch);
 }
 export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(WrappedNormalApkForm);

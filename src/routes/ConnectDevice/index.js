@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Modal } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
 import {
@@ -435,11 +435,24 @@ class ConnectDevice extends Component {
               <CircularProgress />
             </div> :
             // (this.props.is_in_process || this.props.is_push_apps == 1) ?
-            //   <ProgressBar
-            //     total={this.props.noOfApp_push_pull}
-            //     completed={this.props.noOfApp_pushed_pulled}
-            //   />
-            //   :
+            // <div>
+            //   <CircularProgress />
+            // <Modal
+            //       maskClosable={false}
+            //       visible={(this.props.device_details.online == 'On') ? true : false}
+            //       footer={null}
+            //       closable={false}
+            //     >
+            //       <Progress type="circle" percent={100} />
+            //     </Modal> 
+
+            //    <Progress type="circle" percent={(props.completed / props.total) * 100} format={percent => `${props.completed} of ${props.total}`} />
+            //    <ProgressBar
+            //       total={this.props.noOfApp_push_pull}
+            //       completed={this.props.noOfApp_pushed_pulled}
+                // /> 
+            // </div>
+            // :
             <div>
               <Row gutter={16} type="flex" align="top">
                 <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>

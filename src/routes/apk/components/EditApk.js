@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form, Input, Icon, Col, message, Upload, Row } from 'antd';
 import { BASE_URL } from "../../../constants/Application";
+import RestService from '../../../appRedux/services/RestServices'
 
 const successMessage = Modal.success
 const errorMessage = Modal.error
@@ -146,6 +147,27 @@ class EditApkForm extends Component {
         size = ''
     }
 
+
+    checkUniqueName = async (rule, value, callback) => {
+        const form = this.props.form;
+        // console.log(value);
+        let response = await RestService.checkApkName(value, this.props.app.apk_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            }
+        });
+        if (response) {
+            callback();
+        } else {
+            callback('Please choose a different name');
+        }
+    };
+
     render() {
 
         const { getFieldDecorator } = this.props.form;
@@ -205,7 +227,6 @@ class EditApkForm extends Component {
                         errorMessage({
                             title: 'Error While Uploading'
                         })
-                        _this.setState({ disableLogo: false });
                     }
 
                     //  message.success(`${info.file.name} file uploaded successfully.`);
@@ -229,6 +250,7 @@ class EditApkForm extends Component {
 
             onRemove(info) {
                 _this.setState({ disableApk: false });
+                // document.getElementById('apkSize').style.display = 'none'
             },
 
             beforeUpload(file) {
@@ -258,12 +280,15 @@ class EditApkForm extends Component {
                             title: 'file added Successfully '
                         })
                         _this.setState({ disableApk: true });
+                        // document.getElementById('apkSize').style.display = 'block'
+
                     }
                     else {
                         errorMessage({
                             title: 'Error While Uploading'
                         })
-                        _this.setState({ disableApk: false });
+                        // document.getElementById('apkSize').style.display = 'none'
+
                     }
 
                 } else if (status === 'error') {
@@ -284,7 +309,11 @@ class EditApkForm extends Component {
                         initialValue: this.props.app.apk_name,
                         rules: [{
                             required: true, message: 'Name is required',
-                        }],
+                        },
+                        {
+                            validator: this.checkUniqueName,
+                        },
+                        ],
                     })(
                         <Input />
                     )}
@@ -334,13 +363,12 @@ class EditApkForm extends Component {
                                         <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
                                     </Upload>
                                 )}
-                                <label>Apk Size: </label><span>{size}</span>
+                                <div id='apkSize' style={{ display: 'none' }}>
+                                    <label>Apk Size: </label><span>{size}</span>
+                                </div>
                             </div>
                         </Form.Item>
-
-
                     </Col>
-
                 </Row>
 
                 <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
