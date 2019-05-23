@@ -31,7 +31,7 @@
 .upload_file .apk_size {
     margin-top: 13px;
     font-weight: 400;
-    color: #808080;
+    color: #777777;
     font-size: 14px;
 }
 
@@ -46,7 +46,13 @@
     margin-top: 16px;
 }
 
-
+.upload_file .upload_btn:hover,
+.upload_file .upload_btn:focus,
+.upload_file .upload_btn:active {
+    background: #e1e1e1 !important;
+    border: 1px solid #adadad;
+    color: #545454;
+}
 
 .ant-upload.ant-upload-drag p.ant-upload-drag-icon .anticon {
     font-size: 36px !important;
