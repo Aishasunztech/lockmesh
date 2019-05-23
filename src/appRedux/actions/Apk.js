@@ -114,7 +114,7 @@ export function addApk(formData) {
                 dispatch({
                     type: ADD_APK,
                     response: response.data,
-                    payload: ''
+                    payload: response.data.data
                 });
 
             } else {

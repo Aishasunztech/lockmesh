@@ -11,9 +11,9 @@ let versionCode = '';
 let versionName = '';
 let packageName = '';
 let details = '';
-
 let form_data = '';
-let edit_func = '';
+let size = ''
+let edit_func = ''
 export default class EditApk extends Component {
 
     constructor(props) {
@@ -21,9 +21,7 @@ export default class EditApk extends Component {
 
         this.state = {
             visible: false,
-            dealer_id: '',
-            dealer_name: '',
-            dealer_email: '',
+            isCancel: false
 
         }
     }
@@ -42,24 +40,23 @@ export default class EditApk extends Component {
             apk_name: app.apk_name,
             apk_id: app.apk_id,
             func: func,
-            app: app
+            app: app,
+            isCancel: false
 
         });
     }
 
     handleCancel = () => {
-        this.setState({ visible: false });
+        this.setState({ visible: false, isCancel: true });
     }
 
     render() {
-
         const { visible, loading } = this.state;
-        const Dragger = Upload.Dragger;
 
         return (
             <div>
                 <Modal
-                maskClosable={false}
+                    maskClosable={false}
                     visible={visible}
                     title="Edit APK"
                     onOk={this.handleOk}
@@ -75,6 +72,8 @@ export default class EditApk extends Component {
                         editApk={this.state.func}
                         handleCancel={this.handleCancel}
                         getApkList={this.props.getApkList}
+                        isCancel={this.state.isCancel}
+                        ref='editApkForm'
                     />
 
 
@@ -85,15 +84,17 @@ export default class EditApk extends Component {
     }
 }
 
-let disableLogo = false;
-let disableApk = false;
 class EditApkForm extends Component {
 
     constructor(props) {
 
         super(props);
         this.state = {
-            canUoload: false
+            canUoload: false,
+            disableLogo: false,
+            disableApk: false,
+            fileList: [],
+            fileList2: [],
         }
     }
 
@@ -116,8 +117,6 @@ class EditApkForm extends Component {
                 }
                 // console.log(form_data);
                 this.props.editApk(form_data);
-                disableLogo = false;
-                disableApk = false;
                 this.props.getApkList();
                 this.props.handleCancel();
                 //  console.log(form_data);
@@ -126,6 +125,25 @@ class EditApkForm extends Component {
 
             }
         });
+    }
+    componentWillReceiveProps(nextProps) {
+        if (this.props !== nextProps) {
+            if (nextProps.isCancel) {
+                this.resetUploadForm()
+            }
+        }
+    }
+
+    resetUploadForm = () => {
+        this.props.form.resetFields()
+        this.setState({
+            showUploadModal: false,
+            fileList: [],
+            fileList2: [],
+            disableApk: false,
+            disableLogo: false,
+        })
+        size = ''
     }
 
     render() {
@@ -144,17 +162,29 @@ class EditApkForm extends Component {
         };
         const Dragger = Upload.Dragger;
         let token = localStorage.getItem('token');
-
+        let _this = this
         const props = {
             name: 'logo',
             multiple: false,
-            action: BASE_URL + 'users/addApk',
+            action: BASE_URL + 'users/upload',
             headers: { 'authorization': token },
             accept: '.png, .jpg',
-            disabled: disableLogo,
+            disabled: this.state.disableLogo,
+            className: 'upload-list-inline',
+            listType: 'picture',
+            fileList: this.state.fileList,
+
+            onRemove(info) {
+                _this.setState({ disableLogo: false });
+            },
+
+            beforeUpload(file) {
+                _this.setState({ disableLogo: true });
+            },
 
             onChange(info) {
                 const status = info.file.status;
+                let fileList = [...info.fileList];
                 if (status !== 'uploading') {
                     // console.log('uploading ..')
                     // console.log(info.file, info.fileList);
@@ -162,7 +192,6 @@ class EditApkForm extends Component {
                 if (status === 'done') {
 
                     if (info.file.response.status !== false) {
-                        disableLogo = true;
 
                         if (info.file.response.fileName !== '') {
                             logo = info.file.response.fileName;
@@ -170,31 +199,45 @@ class EditApkForm extends Component {
                         successMessage({
                             title: 'file added Successfully '
                         })
+                        _this.setState({ disableLogo: true });
                     }
                     else {
                         errorMessage({
                             title: 'Error While Uploading'
                         })
-                        disableLogo = false;
+                        _this.setState({ disableLogo: false });
                     }
 
                     //  message.success(`${info.file.name} file uploaded successfully.`);
                 } else if (status === 'error') {
                     //  message.error(`${info.file.name} file upload failed.`);
                 }
+                _this.setState({ fileList });
             },
         };
 
         const props2 = {
             name: 'apk',
             multiple: false,
-            action: BASE_URL + 'users/addApk',
+            action: BASE_URL + 'users/upload',
             headers: { 'authorization': token },
             accept: '.apk',
-            disabled: disableApk,
+            disabled: this.state.disableApk,
+            className: 'upload-list-inline',
+            listType: 'picture',
+            fileList: this.state.fileList2,
+
+            onRemove(info) {
+                _this.setState({ disableApk: false });
+            },
+
+            beforeUpload(file) {
+                _this.setState({ disableApk: true });
+            },
+
             onChange(info) {
                 const status = info.file.status;
-
+                let fileList2 = [...info.fileList];
                 if (status !== 'uploading') {
                     // console.log('uploading');
                     // console.log(info.file, info.fileList);
@@ -202,11 +245,9 @@ class EditApkForm extends Component {
                 if (status === 'done') {
 
                     if (info.file.response.status !== false) {
-
-                        disableApk = true;
-
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
+                            size = info.file.response.size
                             // packageName = info.file.response.packageName;
                             // versionCode = info.file.response.versionCode;
                             // versionName = info.file.response.versionName;
@@ -216,17 +257,19 @@ class EditApkForm extends Component {
                         successMessage({
                             title: 'file added Successfully '
                         })
+                        _this.setState({ disableApk: true });
                     }
                     else {
                         errorMessage({
                             title: 'Error While Uploading'
                         })
-                        disableApk = false;
+                        _this.setState({ disableApk: false });
                     }
 
                 } else if (status === 'error') {
                     //  message.error(`${info.file.name} file upload failed.`);
                 }
+                _this.setState({ fileList2 });
             },
         };
         // console.log('form prosp',this.props);
@@ -256,13 +299,16 @@ class EditApkForm extends Component {
                                 {getFieldDecorator('icon', {
 
                                 })(
-                                    <Dragger {...props} >
-                                        <p className="ant-upload-drag-icon">
+                                    <Upload {...props} >
+                                        <Button>
+                                            <Icon type="upload" /> UPLOAD LOGO
+                                                </Button>
+                                        {/* <p className="ant-upload-drag-icon">
                                             <Icon type="picture" />
                                         </p>
                                         <h2 className="ant-upload-hint">UPLOAD LOGO </h2>
-                                        <p className="ant-upload-text">Upload file (.jpg,.png)</p>
-                                    </Dragger>
+                                        <p className="ant-upload-text">Upload file (.jpg,.png)</p> */}
+                                    </Upload>
                                 )}
 
                             </div>
@@ -277,15 +323,18 @@ class EditApkForm extends Component {
                                 {getFieldDecorator('apk', {
 
                                 })(
-                                    <Dragger  {...props2}>
-                                        <p className="ant-upload-drag-icon">
+                                    <Upload  {...props2}>
+                                        <Button>
+                                            <Icon type="upload" /> UPLOAD APK FILE
+                                                </Button>
+                                        {/* <p className="ant-upload-drag-icon">
                                             <Icon type="file" />
                                         </p>
                                         <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
-                                        <p className="ant-upload-text">Upload Apk file (.apk)</p>
-                                    </Dragger>
+                                        <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
+                                    </Upload>
                                 )}
-
+                                <label>Apk Size: </label><span>{size}</span>
                             </div>
                         </Form.Item>
 

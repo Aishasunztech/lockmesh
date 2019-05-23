@@ -332,7 +332,6 @@ class Apk extends React.Component {
                                     </div> : false
                             }
                             <ListApk
-
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
                                 // tableChangeHandler={this.tableChangeHandler}

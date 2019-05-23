@@ -187,7 +187,7 @@ class ConnectDevice extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
-      console.log('show message sate', this.props.showMessage)
+      // console.log('show message sate', this.props.showMessage)
       this.setState({
         controls: this.props.controls,
         imei_list: this.props.imei_list,
