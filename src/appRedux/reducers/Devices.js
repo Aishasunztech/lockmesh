@@ -120,7 +120,7 @@ export default (state = initialState, action) => {
                 msg: state.msg,
                 showMsg: "hello",
                 options: state.options,
-                devices: action.payload,
+                devices: action.payload ,
             }
 
         case NEW_DEVICES_LIST:

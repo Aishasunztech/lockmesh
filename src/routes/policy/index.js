@@ -5,6 +5,7 @@ import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
+import EditPolicy from "./components/editPolicy";
 
 import {
     getPolicies, handlePolicyStatus,
@@ -195,6 +196,7 @@ class Policy extends Component {
             policyModal: false,
             policies: (this.props.policies) ? this.props.policies : [],
             current: 0,
+            editPolicyModal: false,
 
         }
 
@@ -320,6 +322,16 @@ class Policy extends Component {
         });
     }
 
+    editPolicyModal = (policy) => {
+        this.setState({
+            editPolicyModal: true,
+            editAblePolicy: policy
+        })
+    }
+    editPolicyModalHide = () => {
+        this.setState({editPolicyModal: false})
+    }
+
 
     render() {
         return (
@@ -360,6 +372,7 @@ class Policy extends Component {
                     guestAllallExtensions={this.props.guestAllallExtensions}
                     encryptedAllallExtensions={this.props.encryptedAllallExtensions}
                     enableAllallExtensions={this.props.enableAllallExtension}
+                    editPolicyModal={this.editPolicyModal}
 
                 />
                 <Modal
@@ -379,6 +392,25 @@ class Policy extends Component {
                         handlePolicyModal={this.handlePolicyModal}
                         getPolicies={this.props.getPolicies}
                         ref='addPolicy'
+                    />
+                </Modal>
+                <Modal
+                    maskClosable={false}
+                    width="700px"
+                    className="policy_popup"
+                    visible={this.state.editPolicyModal}
+                    title="Edit Policy"
+                    onOk={() => this.handlePolicyModal(false)}
+                    onCancel={() => this.setState({editPolicyModal: false})}
+                    okText="Update"
+                    footer={null}
+                >
+                    <EditPolicy
+                       SavePolicyChanges={this.props.SavePolicyChanges}
+                        handleEditPolicy={this.props.handleEditPolicy}
+                        editAblePolicy={this.state.editAblePolicy}
+                        editPolicyModalHide={this.editPolicyModalHide}
+                        ref='editPolicy'
                     />
                 </Modal>
             </Fragment>

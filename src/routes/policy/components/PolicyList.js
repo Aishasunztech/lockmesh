@@ -123,7 +123,10 @@ class PolicyList extends Component {
                                 <Button
                                     type="primary"
                                     size="small"
-                                    onClick={() => { this.expandRow(index, 'edit', true) }}
+                                    onClick={() => { 
+                                        // this.expandRow(index, 'edit', true) 
+                                        this.props.editPolicyModal(policy)
+                                    }}
 
                                 >
                                     EDIT
