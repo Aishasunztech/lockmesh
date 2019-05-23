@@ -67,6 +67,7 @@ export const EDIT_APK = 'EDIT_APK';
 export const APK_STATUS_CHANGED = 'APK_STATUS_CHANGED';
 export const PERMSSION_SAVED = 'PERMSSION_SAVED';
 export const RESET_UPLOAD_FORM = 'RESET_UPLOAD_FORM';
+export const CHECK_APK_NAME = 'CHECK_APK_NAME';
 
 
 // Connect Device 

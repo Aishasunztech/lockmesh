@@ -307,6 +307,10 @@ const RestService = {
         return axios.post(BASE_URL + 'users/edit/apk', formData, RestService.getHeader());
 
     },
+    // For check apk name 
+    checkApkName: (name, apk_id = '') => {
+        return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
+    },
 
     updateUserProfile: (formData) => {
         return axios.put(BASE_URL + 'users/updateProfile/' + formData, formData, RestService.getHeader());
