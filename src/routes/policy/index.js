@@ -10,7 +10,8 @@ import AddPolicy from "./components/AddPolicy";
 import {
     getPolicies, handlePolicyStatus,
     handleEditPolicy, SavePolicyChanges,
-    handleCheckAll, defaultPolicyChange
+    handleCheckAll, defaultPolicyChange,
+    getAppPermissions, addAppsToPolicies
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -21,7 +22,7 @@ import {
 } from '../../appRedux/actions/Common';
 
 import {
-    getDealerApps
+    getDealerApps, 
 } from "../../appRedux/actions/ConnectDevice";
 
 import {
@@ -205,6 +206,8 @@ class Policy extends Component {
     componentDidMount() {
         // console.log(this.props, 'his')
         this.props.getPolicies();
+        this.props.getDealerApps();
+        this.props.getAppPermissions();
         this.props.getPagination('policies');
         this.setState({
             policies: this.props.policies
@@ -323,13 +326,17 @@ class Policy extends Component {
     }
 
     editPolicyModal = (policy) => {
+        // console.log('object', policy)
         this.setState({
             editPolicyModal: true,
-            editAblePolicy: policy
+            editAblePolicyId: policy.id
         })
     }
     editPolicyModalHide = () => {
-        this.setState({editPolicyModal: false})
+        this.setState({
+            editPolicyModal: false
+        })
+        this.refs.editPolicy.reset_steps()
     }
 
 
@@ -401,15 +408,32 @@ class Policy extends Component {
                     visible={this.state.editPolicyModal}
                     title="Edit Policy"
                     onOk={() => this.handlePolicyModal(false)}
-                    onCancel={() => this.setState({editPolicyModal: false})}
+                    onCancel={() => this.editPolicyModalHide()}
                     okText="Update"
                     footer={null}
-                >
+                > 
                     <EditPolicy
                        SavePolicyChanges={this.props.SavePolicyChanges}
                         handleEditPolicy={this.props.handleEditPolicy}
-                        editAblePolicy={this.state.editAblePolicy}
+                        editAblePolicy={this.state.policies}
+                        editAblePolicyId={this.state.editAblePolicyId}
+                        push_apps={this.props.push_apps}
+                        appPermissions={this.props.appPermissions}
+                        handleCheckAll={this.props.handleCheckAll}
                         editPolicyModalHide={this.editPolicyModalHide}
+                        addAppsToPolicies={this.props.addAppsToPolicies}
+
+                        guestAlldealerApps={this.props.guestAlldealerApps}
+                        encryptedAlldealerApps={this.props.encryptedAlldealerApps}
+                        enableAlldealerApps={this.props.enableAlldealerApps}
+
+                        guestAllappPermissions={this.props.guestAllappPermissions}
+                        encryptedAllappPermissions={this.props.encryptedAllappPermissions}
+                        enableAllappPermissions={this.props.enableAllappPermissions}
+
+                        guestAllallExtensions={this.props.guestAllallExtensions}
+                        encryptedAllallExtensions={this.props.encryptedAllallExtensions}
+                        enableAllallExtensions={this.props.enableAllallExtension}
                         ref='editPolicy'
                     />
                 </Modal> */}
@@ -429,6 +453,9 @@ function mapDispatchToProps(dispatch) {
         handleEditPolicy: handleEditPolicy,
         SavePolicyChanges: SavePolicyChanges,
         handleCheckAll: handleCheckAll,
+        getDealerApps: getDealerApps,
+        getAppPermissions: getAppPermissions,
+        addAppsToPolicies: addAppsToPolicies,
         defaultPolicyChange: defaultPolicyChange,
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
@@ -436,12 +463,14 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ policies, auth }) => {
     // console.log('pages to display', policies.DisplayPages)
-    // console.log("policies", auth);
+    // console.log("policies", policies);
     return {
         user: auth.authUser,
         policies: policies.policies,
         apk_list: policies.apk_list,
         app_list: policies.app_list,
+        push_apps: policies.dealer_apk_list,
+        appPermissions: policies.appPermissions,
         DisplayPages: policies.DisplayPages,
         guestAlldealerApps: policies.guestAll2dealerApps,
         encryptedAlldealerApps: policies.encryptedAll2dealerApps,

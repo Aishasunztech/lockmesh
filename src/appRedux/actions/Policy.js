@@ -12,7 +12,9 @@ import {
     POLICY_PERMSSION_SAVED,
     SAVE_POLICY_CHANGES,
     CHECK_HANDLE_ALL_POLICY,
-    DEFAULT_POLICY_CHANGE
+    DEFAULT_POLICY_CHANGE,
+    ADD_APPS_TO_POLICIES,
+    REMOVE_APPS_FROM_POLICIES
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -161,8 +163,8 @@ export function SavePolicyChanges(record) {
         RestService.SavePolicyChanges(record).then((response) => {
             //  console.log('conect device method call', data);
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
-                if (response.data.status) {
+                console.log('response', response.data);
+                if (response.data) {
                     dispatch({
                         type: SAVE_POLICY_CHANGES,
                         payload: {
@@ -197,6 +199,19 @@ export function handleEditPolicy(e, key, id, stateToUpdate = '', rowId, uniqueNa
     }
 }
 
+export function addAppsToPolicies(apps, policy_id, dataType) {
+    return (dispatch) => {
+        dispatch({
+            type: ADD_APPS_TO_POLICIES,
+            payload: {
+              apps: apps,
+              policy_id: policy_id,
+              dataType: dataType
+            }
+        })
+    }
+}
+
 
 
 
@@ -218,6 +233,7 @@ export function handleCheckAllAppPolicy(e, key, stateToUpdate, uniqueName = '') 
 }
 
 export function handleCheckAll(e, key, stateToUpdate, uniqueName = '', rowId) {
+    // console.log('handle check all action', e, key, stateToUpdate, uniqueName, rowId)
     return (dispatch) => {
         dispatch({
             type: CHECK_HANDLE_ALL_POLICY,
