@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form, Input, Icon, Col, message, Upload, Row } from 'antd';
 import { BASE_URL } from "../../../constants/Application";
+import styles from '../../addApk/addapk.css';
 
 const successMessage = Modal.success
 const errorMessage = Modal.error
@@ -35,6 +36,7 @@ export default class EditApk extends Component {
         edit_func = func;
         logo = app.logo;
         apk = app.apk;
+        size = app.size
         this.setState({
             visible: true,
             apk_name: app.apk_name,
@@ -42,7 +44,6 @@ export default class EditApk extends Component {
             func: func,
             app: app,
             isCancel: false
-
         });
     }
 
@@ -51,20 +52,19 @@ export default class EditApk extends Component {
     }
 
     render() {
+        // console.log(this.state.app)
         const { visible, loading } = this.state;
 
         return (
             <div>
                 <Modal
+                    width="620px"
                     maskClosable={false}
                     visible={visible}
                     title="Edit APK"
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    footer={[
-                        <Button key="back" onClick={this.handleCancel}>Cancel</Button>,
-
-                    ]}
+                    footer={false}
                 >
 
                     <WrappedNormalApkForm
@@ -152,12 +152,13 @@ class EditApkForm extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 7 },
-
+                sm: { span: 8 },
+                md: { span: 8 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 10 },
+                sm: { span: 12 },
+                md: { span: 12 },
             },
         };
         const Dragger = Upload.Dragger;
@@ -275,11 +276,8 @@ class EditApkForm extends Component {
         // console.log('form prosp',this.props);
 
         return (
-            <Form onSubmit={this.handleSubmit} style={{ marginTop: 21 }} >
-                <Form.Item className="mb-0"
-                    {...formItemLayout}
-                    label="Apk Name"
-                >
+            <Form onSubmit={this.handleSubmit}>
+                <Form.Item {...formItemLayout} label="Apk name" className="upload_file">
                     {getFieldDecorator('name', {
                         initialValue: this.props.app.apk_name,
                         rules: [{
@@ -289,64 +287,55 @@ class EditApkForm extends Component {
                         <Input />
                     )}
                 </Form.Item>
-                <Row>
-
-                    <Col span={12} className="upload_file">
-                        <Form.Item
-
-                        >
-                            <div className="dropbox">
-                                {getFieldDecorator('icon', {
-
-                                })(
-                                    <Upload {...props} >
-                                        <Button>
-                                            <Icon type="upload" /> UPLOAD LOGO
-                                                </Button>
-                                        {/* <p className="ant-upload-drag-icon">
+                <Form.Item label="Apk Icon" {...formItemLayout} className="upload_file">
+                    <div className="dropbox">
+                        {getFieldDecorator('icon', {}
+                        )
+                            (
+                                <Upload {...props} >
+                                    <Button className="width_100 upload_btn" type="default" >
+                                        <Icon type="folder-open" />UPLOAD ICON
+                                    </Button>
+                                    {/* <p className="ant-upload-drag-icon">
                                             <Icon type="picture" />
                                         </p>
                                         <h2 className="ant-upload-hint">UPLOAD LOGO </h2>
                                         <p className="ant-upload-text">Upload file (.jpg,.png)</p> */}
-                                    </Upload>
-                                )}
+                                </Upload>
+                            )}
 
-                            </div>
-                        </Form.Item>
-
-                    </Col>
-                    <Col span={12} className="upload_file">
-                        <Form.Item
-
-                        >
-                            <div className="dropbox">
-                                {getFieldDecorator('apk', {
-
-                                })(
-                                    <Upload  {...props2}>
-                                        <Button>
-                                            <Icon type="upload" /> UPLOAD APK FILE
+                    </div>
+                </Form.Item>
+                <Form.Item label="Apk file" className="upload_file" {...formItemLayout}>
+                    <div className="dropbox">
+                        {getFieldDecorator('apk', {}
+                        )
+                            (
+                                <Upload  {...props2}>
+                                    <Button className="width_100 upload_btn" type="default" >
+                                        <Icon type="folder-open" /> UPLOAD APK FILE
                                                 </Button>
-                                        {/* <p className="ant-upload-drag-icon">
+                                    {/* <p className="ant-upload-drag-icon">
                                             <Icon type="file" />
                                         </p>
                                         <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
                                         <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
-                                    </Upload>
-                                )}
-                                <label>Apk Size: </label><span>{size}</span>
-                            </div>
-                        </Form.Item>
-
-
-                    </Col>
-
+                                </Upload>
+                            )
+                        }
+                    </div>
+                </Form.Item>
+                <Form.Item label="Apk size:" className="upload_file" {...formItemLayout}>
+                    <div>
+                        <h5 className="apk_size">{size}</h5>
+                    </div>
+                </Form.Item>
+                <Row className='modal_footer'>
+                    <div>
+                        <Button key="back" className='submitButton' onClick={this.props.handleCancel}>Cancel</Button>
+                        <Button className='submitButton' type="primary" htmlType="submit" >Update</Button>
+                    </div>
                 </Row>
-
-                <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
-                    <Button className='submitButton' type="primary" htmlType="submit" >Update</Button>
-                </div>
-
             </Form>
         )
     }

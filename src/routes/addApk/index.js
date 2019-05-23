@@ -322,7 +322,7 @@ class AddApk extends Component {
                         </Form.Item>
                         <Row className='modal_footer'>
                             <div>
-                                <Button className='submitButton' type="default " >Cancel</Button>
+                                <Button key="back" className='submitButton' onClick={this.props.hideUploadApkModal}>Cancel</Button>
                                 <Button className='submitButton' type="primary" htmlType="submit" >Save</Button>
                             </div>
                         </Row>

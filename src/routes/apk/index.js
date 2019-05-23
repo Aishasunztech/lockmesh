@@ -358,6 +358,7 @@ class Apk extends React.Component {
                                 footer={null}
                             >
                                 <AddApk
+                                
                                     hideUploadApkModal={this.hideUploadApkModal}
                                     ref='uploadApk'
                                 />
