@@ -346,8 +346,8 @@ class Apk extends React.Component {
 
                             <Modal
                                 maskClosable={false}
-                                width="700px"
-                                className="policy_popup"
+                                width="620px"
+                                className="upload_apk_popup"
                                 visible={this.state.uploadApkModal}
                                 title="Upload APK"
                                 onOk={() => { }}

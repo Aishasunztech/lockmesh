@@ -125,11 +125,13 @@ class AddApk extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 7 },
+                sm: { span: 8 },
+                md: { span: 8 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 10 },
+                sm: { span: 12 },
+                md: { span: 12 },
             },
         };
         let token = localStorage.getItem('token');
@@ -252,12 +254,10 @@ class AddApk extends Component {
 
         return (
             <div>
-                <Card>
-                    <Form onSubmit={this.handleSubmit} style={{ marginTop: 21 }} >
-                        <Form.Item className="mb-0"
-                            {...formItemLayout}
-                            label="Apk Name "
-                        >
+                <Card bordered={false}>
+                    <p>(*)- Required Fields</p>
+                    <Form onSubmit={this.handleSubmit} >
+                        <Form.Item {...formItemLayout} label="Apk name" className="upload_file">
                             {getFieldDecorator('name', {
                                 rules: [{
                                     required: true, message: 'Name is required',
@@ -266,72 +266,69 @@ class AddApk extends Component {
                                 <Input />
                             )}
                         </Form.Item>
-                        <Row>
-                            <Col span={2} ></Col>
-                            <Col span={10} className="upload_file">
-                                <Form.Item
-
-                                >
-                                    <div className="dropbox">
-                                        {getFieldDecorator('icon', {
-                                            rules: [{
+                        <Form.Item label="Apk Icon" {...formItemLayout} className="upload_file">
+                            <div className="dropbox">
+                                {getFieldDecorator('icon',
+                                    {
+                                        rules: [
+                                            {
                                                 required: true, message: 'File is required',
-                                            }],
-
-                                        })(
-                                            <Upload {...props} >
-
-                                                <Button>
-                                                    <Icon type="upload" /> UPLOAD LOGO
+                                            }
+                                        ],
+                                    }
+                                )
+                                    (
+                                        <Upload {...props}>
+                                            <Button className="width_100 upload_btn" type="default" >
+                                                <Icon type="folder-open" />UPLOAD ICON
                                                 </Button>
-                                                {/* <p className="ant-upload-drag-icon">
+                                            {/* <p className="ant-upload-drag-icon">
                                                     <Icon type="picture" />
                                                 </p>
                                                 <h2 className="ant-upload-hint">UPLOAD LOGO </h2>
                                                 <p className="ant-upload-text">Upload file (.jpg,.png)</p> */}
-                                            </Upload>
-                                        )}
+                                        </Upload>
+                                    )
+                                }
+                            </div>
+                        </Form.Item>
+                        <Form.Item label="Apk file" className="upload_file" {...formItemLayout}>
+                            <div className="dropbox">
+                                {getFieldDecorator('apk', {
 
-                                    </div>
-                                </Form.Item>
+                                    rules: [{
+                                        required: true, message: 'File is required',
+                                    }],
 
-                            </Col>
-                            <Col span={10} className="upload_file">
-                                <Form.Item
-
-                                >
-                                    <div className="dropbox">
-                                        {getFieldDecorator('apk', {
-
-                                            rules: [{
-                                                required: true, message: 'File is required',
-                                            }],
-
-                                        })(
-                                            <Upload  {...props2}>
-                                                <Button>
-                                                    <Icon type="upload" /> UPLOAD APK FILE
+                                })(
+                                    <Upload  {...props2} >
+                                        <Button className="width_100 upload_btn" type="default" >
+                                            <Icon type="folder-open" /> UPLOAD APK FILE
                                                 </Button>
-                                                {/* <p className="ant-upload-drag-icon">
+                                        {/* <p className="ant-upload-drag-icon">
                                                     <Icon type="file" />
                                                 </p>
                                                 <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
                                                 <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
-                                            </Upload>
-                                        )}
-                                        <label>Apk Size: </label><span>{size}</span>
-                                    </div>
-                                </Form.Item>
-                            </Col>
-                            <Col span={2} ></Col>
+                                    </Upload>
+                                )}
+                                {/* <label>Apk size: </label><span>{size}</span> */}
+                            </div>
+                        </Form.Item>
+                        <Form.Item label="Apk size:" className="upload_file" {...formItemLayout}>
+                            <div>
+                                <h5 className="apk_size">{size}</h5>
+                            </div>
+                        </Form.Item>
+                        <Row className='modal_footer'>
+                            <div>
+                                <Button className='submitButton' type="default " >Cancel</Button>
+                                <Button className='submitButton' type="primary" htmlType="submit" >Save</Button>
+                            </div>
                         </Row>
-
-                        <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
-                            <Button className='submitButton' type="default" htmlType="submit" >Upload</Button>
-                        </div>
                     </Form>
                 </Card>
-            </div >
+            </div>
         )
     }
 }
