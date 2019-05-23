@@ -302,6 +302,7 @@ class AddPolicy extends Component {
                     encryptedAll={this.state.encryptedAlldealerApps}
                     enableAll={this.state.enableAlldealerApps}
                     onSelectChange={this.onSelectChange}
+                    isCheckAllButtons={true}
                     apps='dealerApps'
                     isSwitch={true}
                     isCheckbox={true}
@@ -320,6 +321,7 @@ class AddPolicy extends Component {
                     encryptedAll={this.state.encryptedAllappPermissions}
                     enableAll={this.state.enableAllappPermissions}
                     onSelectChange={this.onSelectChange}
+                    isCheckAllButtons={true}
                     pageType={'appPermissions'}
                     appPermissions='appPermissions'
                     isSwitch={true}
@@ -337,9 +339,11 @@ class AddPolicy extends Component {
                     guestAll={this.state.guestAllallExtensions}
                     encryptedAll={this.state.encryptedAllallExtensions}
                     enableAll={this.state.enableAllallExtensions}
+                    isCheckAllButtons={true}
                     pageType={'allExtensions'}
                     secureSettings='allExtensions'
                     isSwitch={true}
+                    AddPolicy={true}
                 />
             ),
         }, {

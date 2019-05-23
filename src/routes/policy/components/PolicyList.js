@@ -273,7 +273,7 @@ class PolicyList extends Component {
                                         rowId={record.policy_id}
                                         handleEditPolicy={this.props.handleEditPolicy}
                                         handleCheckAll={this.props.handleCheckAll}
-                                        edit={true}
+                                        // edit={true}
                                         guestAlldealerApps={this.props.guestAlldealerApps}
                                         encryptedAlldealerApps={this.props.encryptedAlldealerApps}
                                         enableAlldealerApps={this.props.enableAlldealerApps}
