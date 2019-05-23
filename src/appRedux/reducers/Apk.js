@@ -84,6 +84,9 @@ export default (state = initialState, action) => {
 				success({
 					title: action.response.msg,
 				});
+				// console.log("INSERTED DATA", state.apk_list);
+				state.apk_list.push(action.payload)
+				// console.log("INSERTED DATA", state.apk_list);
 			}
 			else {
 				error({

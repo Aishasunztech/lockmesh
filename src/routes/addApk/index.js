@@ -64,7 +64,6 @@ class AddApk extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(values);
 
                 form_data = {
                     'logo': logo,
@@ -72,14 +71,11 @@ class AddApk extends Component {
                     'name': values.name,
                     'size': size
                 }
-                this.setState({
-                    showUploadModal: true,
-                    logo: logo,
-                    name: values.name,
-                    size: size,
-                    uploadData: form_data,
-                    resetUploadForm: false
-                })
+                this.props.addApk(form_data)
+                this.props.hideUploadApkModal();
+
+
+
                 // console.log('hisory',this.props.go_back);
                 // this.props.showUploadModal(form_data);
             }
@@ -107,11 +103,20 @@ class AddApk extends Component {
             disableLogo: false,
             resetUploadForm: false
         })
+        size = ''
     }
 
     addApk = () => {
-        this.props.hideUploadApkModal()
-        this.props.addApk(this.state.uploadData)
+
+    }
+
+    handleCancel = () => {
+        this.setState({
+            showUploadModal: false
+        })
+    }
+    showName(e) {
+        console.log(e.target);
     }
 
     render() {
@@ -127,7 +132,6 @@ class AddApk extends Component {
                 sm: { span: 10 },
             },
         };
-        const Dragger = Upload.Dragger;
         let token = localStorage.getItem('token');
         let _this = this;
         const props = {
@@ -138,6 +142,8 @@ class AddApk extends Component {
             accept: '.png, .jpg',
             disabled: this.state.disableLogo,
             fileList: this.state.fileList,
+            className: 'upload-list-inline',
+            listType: 'picture',
             onRemove(info) {
                 if (_this.state.fileList.length > 1) {
                     _this.state.fileList.length -= 1;
@@ -149,6 +155,7 @@ class AddApk extends Component {
                 _this.setState({ disableLogo: true });
             },
             onChange(info) {
+                // console.log(info);
                 const status = info.file.status;
                 let fileList = [...info.fileList];
                 // console.log('file list id', fileList)
@@ -191,6 +198,8 @@ class AddApk extends Component {
             accept: '.apk',
             disabled: this.state.disableApk,
             fileList: this.state.fileList2,
+            className: 'upload-list-inline',
+            listType: 'picture',
             onRemove(info) {
                 if (_this.state.fileList2.length > 1) {
                     _this.state.fileList2.length -= 1;
@@ -258,8 +267,8 @@ class AddApk extends Component {
                             )}
                         </Form.Item>
                         <Row>
-                            <Col span={6} ></Col>
-                            <Col span={6} className="upload_file">
+                            <Col span={3} ></Col>
+                            <Col span={9} className="upload_file">
                                 <Form.Item
 
                                 >
@@ -270,20 +279,27 @@ class AddApk extends Component {
                                             }],
 
                                         })(
-                                            <Dragger {...props} >
-                                                <p className="ant-upload-drag-icon">
+                                            <Upload {...props} >
+
+                                                <Button>
+                                                    <Icon type="upload" /> UPLOAD LOGO
+                                                </Button>
+                                                {/* <p className="ant-upload-drag-icon">
                                                     <Icon type="picture" />
                                                 </p>
                                                 <h2 className="ant-upload-hint">UPLOAD LOGO </h2>
-                                                <p className="ant-upload-text">Upload file (.jpg,.png)</p>
-                                            </Dragger>
+                                                <p className="ant-upload-text">Upload file (.jpg,.png)</p> */}
+                                            </Upload>
                                         )}
 
                                     </div>
                                 </Form.Item>
 
                             </Col>
-                            <Col span={6} className="upload_file">
+                        </Row>
+                        <Row>
+                            <Col span={3} ></Col>
+                            <Col span={9} className="upload_file">
                                 <Form.Item
 
                                 >
@@ -295,21 +311,22 @@ class AddApk extends Component {
                                             }],
 
                                         })(
-                                            <Dragger  {...props2}>
-                                                <p className="ant-upload-drag-icon">
+                                            <Upload  {...props2}>
+                                                <Button>
+                                                    <Icon type="upload" /> UPLOAD APK FILE
+                                                </Button>
+                                                {/* <p className="ant-upload-drag-icon">
                                                     <Icon type="file" />
                                                 </p>
                                                 <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
-                                                <p className="ant-upload-text">Upload Apk file (.apk)</p>
-                                            </Dragger>
+                                                <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
+                                            </Upload>
                                         )}
-
+                                        <label>Apk Size: </label><span>{size}</span>
                                     </div>
                                 </Form.Item>
-
-
                             </Col>
-                            <Col span={6} ></Col>
+
                         </Row>
 
                         <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
@@ -317,35 +334,7 @@ class AddApk extends Component {
                         </div>
                     </Form>
                 </Card>
-                <Modal
-                    maskClosable={false}
-                    width="700px"
-                    className="policy_popup"
-                    visible={this.state.showUploadModal}
-                    title="Upload APK"
-                    onOk={() => {
-                    }}
-                    onCancel={() => {
-                        this.setState({
-                            showUploadModal: false
-                        })
-                    }}
-                    footer={[
-                        <Button onClick={() => this.setState({
-                            showUploadModal: false
-                        })}>Cancel</Button>,
-                        <Button key="submit" ref="formSubmission" type="primary" onClick={(e) => this.addApk()} >
-                            Upload Apk
-                        </Button>
-                    ]}
-                >
-                    <div>
-                        <label>Image:</label>  <Avatar size="large" src={BASE_URL + "users/getFile/" + this.state.logo} />
-                        <br /><label>Size:</label>  <span>{this.state.size}</span>
-                        <br /><label>Apk Name:</label> <span>{this.state.name}</span>
-                    </div>
-                </Modal>
-            </div>
+            </div >
         )
     }
 }
