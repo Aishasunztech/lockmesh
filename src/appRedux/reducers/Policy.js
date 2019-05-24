@@ -17,7 +17,8 @@ import {
     DEFAULT_POLICY_CHANGE,
     ADD_APPS_TO_POLICIES,
     REMOVE_APPS_FROM_POLICIES,
-    CHECK_TOGGLE_BUTTONS
+    CHECK_TOGGLE_BUTTONS,
+    RESET_POLICY
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -39,6 +40,7 @@ const initialState = {
     dealer_apk_list: [],
     showMsg: false,
     isloading: true,
+    copyPolicies: [],
     selectedOptions: [],
     options: [POLICY_NAME, POLICY_NOTE],
     allExtensions: [],
@@ -80,7 +82,8 @@ export default (state = initialState, action) => {
             // console.log(action.payload);
             return {
                 ...state,
-                policies: action.payload
+                policies: action.payload,
+                copyPolicies: action.payload
             }
 
         case APK_LIST: {
@@ -278,6 +281,15 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
+                copyPolicies: state.policies
+            }
+        }
+
+
+        case RESET_POLICY: {
+            return{
+                ...state,
+                policies: state.copyPolicies
             }
         }
 

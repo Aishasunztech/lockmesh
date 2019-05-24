@@ -12,7 +12,8 @@ import {
     handleEditPolicy, SavePolicyChanges,
     handleCheckAll, defaultPolicyChange,
     getAppPermissions, addAppsToPolicies,
-    removeAppsFromPolicies, checktogglebuttons
+    removeAppsFromPolicies, checktogglebuttons,
+    resetPlicies
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -358,8 +359,18 @@ class Policy extends Component {
         this.setState({
             editPolicyModal: false
         })
-        this.refs.editPolicy.reset_steps()
+        this.refs.editPolicy.reset_steps();
+        this.props.resetPlicies();
     }
+
+    editPolicyModalHide2 = () => {
+        this.setState({
+            editPolicyModal: false
+        })
+        this.refs.editPolicy.reset_steps();
+    }
+
+
 
 
     render() {
@@ -445,7 +456,7 @@ class Policy extends Component {
                         push_apps={this.props.push_apps}
                         appPermissions={this.props.appPermissions}
                         handleCheckAll={this.props.handleCheckAll}
-                        editPolicyModalHide={this.editPolicyModalHide}
+                        editPolicyModalHide={this.editPolicyModalHide2}
                         addAppsToPolicies={this.props.addAppsToPolicies}
                         removeAppsFromPolicies={this.props.removeAppsFromPolicies}
 
@@ -484,7 +495,8 @@ function mapDispatchToProps(dispatch) {
         addAppsToPolicies: addAppsToPolicies,
         defaultPolicyChange: defaultPolicyChange,
         removeAppsFromPolicies: removeAppsFromPolicies,
-        checktogglebuttons: checktogglebuttons
+        checktogglebuttons: checktogglebuttons,
+        resetPlicies: resetPlicies
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);
