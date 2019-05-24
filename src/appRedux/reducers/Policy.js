@@ -14,7 +14,8 @@ import {
     SAVE_POLICY_CHANGES,
     GET_PAGINATION,
     CHECK_HANDLE_ALL_POLICY,
-    DEFAULT_POLICY_CHANGE
+    DEFAULT_POLICY_CHANGE,
+    ADD_APPS_TO_POLICIES
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -113,6 +114,44 @@ export default (state = initialState, action) => {
             }
         }
 
+        case ADD_APPS_TO_POLICIES: {
+
+            let policies = state.policies;
+            let policy_index = state.policies.findIndex((item) => item.id == action.payload.policy_id);
+            if (policy_index > -1) {
+                for (let app_id of action.payload.apps) {
+                    let index1 = 0;
+                    if (action.payload.dataType == 'push_apps') {
+                        index1 = policies[policy_index][action.payload.dataType].findIndex(app => app.apk_id == app_id);
+                    } else {
+                        index1 = policies[policy_index][action.payload.dataType].findIndex(app => app.id == app_id);
+                    }
+                    console.log(index1, 'index is ')
+                    if (index1 == -1) {
+                        let app = null;
+                        if (action.payload.dataType == 'push_apps') {
+                            app = state.dealer_apk_list.find(item => item.apk_id == app_id);
+                            if (app) {
+                                policies[policy_index].push_apps.push(app)
+                            }
+                        } else {
+                           
+                            app = state.appPermissions.find(item => item.id == app_id);
+                            if (app) {
+                                policies[policy_index].app_list.push(app)
+                            }
+                        }
+                    }
+                }
+            }
+            console.log(policies[policy_index].app_list.length, 'aps are')
+            state.policies = policies;
+            return {
+                ...state,
+                policies: [...state.policies]
+            }
+        }
+
         case SAVE_POLICY: {
             // console.log(action.response, 'resp')
             if (action.response.status) {
@@ -156,6 +195,7 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY_CHANGES: {
+            console.log('response is', action.payload.response)
 
             if (action.payload.response.status) {
                 success({
@@ -173,7 +213,7 @@ export default (state = initialState, action) => {
 
         case EDIT_POLICY: {
             let changedState = state.policies;
-            // console.log('changeded state : ', changedState)
+            console.log('changeded state : ', changedState)
             let id = action.payload.id;
             let policyId = action.payload.rowId;
             let key = action.payload.key;
@@ -199,13 +239,13 @@ export default (state = initialState, action) => {
 
                     // let permissionIndex = changedState[rowId][stateToUpdate].findIndex(item => item.uniqueName == action.payload.uniqueName);
                     // if (permissionIndex >= 0) {
-                        index = changedState[rowId][stateToUpdate].findIndex(item => item.id == id);
-                        if (index >= 0) {
-                            changedState[rowId][stateToUpdate][index][key] = action.payload.value;
-                        }
+                    index = changedState[rowId][stateToUpdate].findIndex(item => item.id == id);
+                    if (index >= 0) {
+                        changedState[rowId][stateToUpdate][index][key] = action.payload.value;
+                    }
                     // }
                 } else if (stateToUpdate == 'controls') {
-                    console.log(changedState[rowId][stateToUpdate][key] , 'changed 0', action.payload.value)
+                    console.log(changedState[rowId][stateToUpdate][key], 'changed 0', action.payload.value)
 
                     changedState[rowId][stateToUpdate][key] = action.payload.value;
                 }
@@ -420,7 +460,7 @@ export default (state = initialState, action) => {
 
         case CHECK_HANDLE_ALL_POLICY: {
 
-            //  console.log(state.policies,'reducer', action.payload);
+            console.log('reducer', action.payload);
             let changedState = JSON.parse(JSON.stringify(state.policies));
             let chandedRowIndex = changedState.findIndex((item) => item.id == action.payload.rowId)
 
@@ -428,10 +468,10 @@ export default (state = initialState, action) => {
                 state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
                 changedState[chandedRowIndex]['secure_apps'].forEach(extension => {
                     // if (extension.uniqueName === action.payload.uniqueName) {
-                        // extension.subExtension.forEach(obj => {
-                            extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
-                            extension.isChanged = true;
-                        // });
+                    // extension.subExtension.forEach(obj => {
+                    extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                    extension.isChanged = true;
+                    // });
                     // }
                 });
 
@@ -450,14 +490,15 @@ export default (state = initialState, action) => {
                 changedState[chandedRowIndex]['push_apps'].forEach(app => {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
+                    console.log(action.payload.key, 'value', action.payload.value)
                 });
 
                 state.policies = JSON.parse(JSON.stringify(changedState));
 
-                // console.log(state.policies, 'updated')
+                console.log(state.policies, 'updated')
                 return {
                     ...state,
-                    policies: [...state.policies],
+                    policies: state.policies,
                 }
             }
 

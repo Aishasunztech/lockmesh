@@ -9,7 +9,7 @@ import { SECURE_SETTING } from '../../../constants/Constants';
 
 import { BASE_URL } from '../../../constants/Application';
 
-import { Table, Switch, Popover, Checkbox, Icon, Avatar } from "antd";
+import { Table, Switch, Popover, Checkbox, Icon, Avatar, Button, Row, Col } from "antd";
 import AppDropdown from "./AppDropdown";
 
 
@@ -104,7 +104,7 @@ class AppList extends Component {
     handleCheckedAll = (value, key) => {
 
         //   console.log('check all handling', value,key);
-        // console.log("handleCheckedAll");
+        console.log("handleCheckedAll");
         if (key === "guestAll") {
             key = 'guest';
         } else if (key === "encryptedAll") {
@@ -114,6 +114,7 @@ class AppList extends Component {
         }
 
         if (this.props.edit) {
+            console.log('this.props.edit')
             if (this.props.apps) this.props.handleCheckAll(value, key, this.props.apps, '', this.props.rowId)
             else if (this.props.appPermissions) this.props.handleCheckAll(value, key, this.props.appPermissions, '', this.props.rowId)
             else if (this.props.secureSettings) this.props.handleCheckAll(value, key, this.props.secureSettings, SECURE_SETTING, this.props.rowId)
@@ -129,7 +130,7 @@ class AppList extends Component {
 
     handleChecked = (e, key, app_id) => {
         if (this.props.edit) {
-            console.log('handle checked is called', e, key , app_id, this.props.rowId)
+            console.log('handle checked is called', e, key, app_id, this.props.rowId)
             if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps', this.props.rowId)
             else if (this.props.appPermissions) this.props.handleEditPolicy(e, key, app_id, 'app_list', this.props.rowId)
             else if (this.props.secureSettings) this.props.handleEditPolicy(e, key, app_id, 'secure_apps', this.props.rowId, SECURE_SETTING)
@@ -176,10 +177,10 @@ class AppList extends Component {
             app_id = app.id;
             // isAvailable = true
         }
-        if(this.props.pageType === 'dealerApps'){
-             isAvailable = (this.state.selectedRowKeysApps.length) ? this.state.selectedRowKeysApps.find(id => (id === app_id) ? true : false) : false;
-        }else if(this.props.pageType==='appPermissions'){
-         isAvailable = (this.state.selectedRowKeysPermissios.length) ? this.state.selectedRowKeysPermissios.find(id => (id === app_id) ? true : false) : false;
+        if (this.props.pageType === 'dealerApps' && this.props.isCheckbox) {
+            isAvailable = (this.state.selectedRowKeysApps.length) ? this.state.selectedRowKeysApps.find(id => (id === app_id) ? true : false) : false;
+        } else if (this.props.pageType === 'appPermissions') {
+            isAvailable = (this.state.selectedRowKeysPermissios.length) ? this.state.selectedRowKeysPermissios.find(id => (id === app_id) ? true : false) : false;
 
         }
 
@@ -196,48 +197,48 @@ class AppList extends Component {
                 </Fragment>,
             guest:
                 // this.props.isSwitch ?
-                    <Switch
-                        size="small"
-                        ref={`guest_${app_id}`}
-                        name={`guest_${app_id}`}
-                        value={guest}
-                        checked={this.props.edit ? ((guest === true || guest === 1) ? true : false) : (isAvailable ? ((guest === true || guest === 1) ? true : false) : false)}
-                        disabled={this.props.isSwitch ? this.props.isCheckbox ? !isAvailable : false : true}
-                        onClick={(e) => {
-                            this.handleChecked(e, "guest", app_id)
+                <Switch
+                    size="small"
+                    ref={`guest_${app_id}`}
+                    name={`guest_${app_id}`}
+                    value={guest}
+                    checked={this.props.edit ? ((guest === true || guest === 1) ? true : false) : (isAvailable ? ((guest === true || guest === 1) ? true : false) : false)}
+                    disabled={this.props.isSwitch ? this.props.isCheckbox ? !isAvailable : false : true}
+                    onClick={(e) => {
+                        this.handleChecked(e, "guest", app_id)
 
-                        }}
-                    /> ,
-                    // : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }}>{(guest === true || guest === 1) ? On : Off}</span>,
+                    }}
+                />,
+            // : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }}>{(guest === true || guest === 1) ? On : Off}</span>,
             encrypted:
                 // this.props.isSwitch ?
-                    <Switch
-                        size="small"
-                        ref={`encrypted_${app_id}`}
-                        name={`encrypted_${app_id}`}
-                        // value={encrypted}
-                        disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false: true}
-                        checked={app.default_app == 1 ? true : this.props.edit ? ((encrypted === true || encrypted === 1) ? true : false) : (isAvailable ? ((encrypted === true || encrypted === 1) ? true : false) : false)}
-                        onClick={(e) => {
-                            // console.log("encrypted", e);
-                            this.handleChecked(e, "encrypted", app_id);
-                        }}
-                    />,
-                    //  : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? On : Off}</span>,
+                <Switch
+                    size="small"
+                    ref={`encrypted_${app_id}`}
+                    name={`encrypted_${app_id}`}
+                    // value={encrypted}
+                    disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false : true}
+                    checked={app.default_app == 1 ? true : this.props.edit ? ((encrypted === true || encrypted === 1) ? true : false) : (isAvailable ? ((encrypted === true || encrypted === 1) ? true : false) : false)}
+                    onClick={(e) => {
+                        // console.log("encrypted", e);
+                        this.handleChecked(e, "encrypted", app_id);
+                    }}
+                />,
+            //  : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? On : Off}</span>,
             enable:
                 // this.props.isSwitch ?
-                    <Switch
-                        size="small"
-                        ref={`enable_${app_id}`}
-                        name={`enable_${app_id}`}
-                        // value={enable}
-                        checked={app.default_app == 1 ? true : this.props.edit ? ((enable === true || enable === 1) ? true : false) : (isAvailable ? ((enable === true || enable === 1) ? true : false) : false)}
-                        disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false: true}
-                        onClick={(e) => {
-                            this.handleChecked(e, "enable", app_id);
-                        }}
-                    />
-                    //  : <span style={{ color: (enable === true || enable === 1) ? 'green' : 'red' }} >{(enable === true || enable === 1) ? On : Off}</span>,
+                <Switch
+                    size="small"
+                    ref={`enable_${app_id}`}
+                    name={`enable_${app_id}`}
+                    // value={enable}
+                    checked={app.default_app == 1 ? true : this.props.edit ? ((enable === true || enable === 1) ? true : false) : (isAvailable ? ((enable === true || enable === 1) ? true : false) : false)}
+                    disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false : true}
+                    onClick={(e) => {
+                        this.handleChecked(e, "enable", app_id);
+                    }}
+                />
+            //  : <span style={{ color: (enable === true || enable === 1) ? 'green' : 'red' }} >{(enable === true || enable === 1) ? On : Off}</span>,
         });
     }
 
@@ -261,33 +262,33 @@ class AppList extends Component {
                 </Fragment>,
             guest:
                 // this.props.isSwitch ?
-                    <Switch
-                        size="small"
-                        ref={`guest_${app_id}`}
-                        name={`guest_${app_id}`}
-                        value={guest}
-                        checked={(guest === true || guest === 1) ? true : false}
-                        disabled={this.props.isSwitch ? false: true}
-                        onClick={(e) => {
-                            this.handleChecked(e, "guest", app_id);
-                        }}
-                    />,
-                    //  : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }} >{(guest === true || guest === 1) ? 'ON' : 'OFF'}</span>,
+                <Switch
+                    size="small"
+                    ref={`guest_${app_id}`}
+                    name={`guest_${app_id}`}
+                    value={guest}
+                    checked={(guest === true || guest === 1) ? true : false}
+                    disabled={this.props.isSwitch ? false : true}
+                    onClick={(e) => {
+                        this.handleChecked(e, "guest", app_id);
+                    }}
+                />,
+            //  : <span style={{ color: (guest === true || guest === 1) ? 'green' : 'red' }} >{(guest === true || guest === 1) ? 'ON' : 'OFF'}</span>,
             encrypted:
                 // this.props.isSwitch ?
-                    <Switch
-                        size="small"
-                        ref={`encrypted_${app_id}`}
-                        name={`encrypted_${app_id}`}
-                        value={encrypted}
-                        disabled={this.props.isSwitch ? false: true}
-                        checked={(encrypted === true || encrypted === 1) ? true : false}
-                        onClick={(e) => {
-                            // console.log("encrypted", e);
-                            this.handleChecked(e, "encrypted", app_id);
-                        }}
-                    /> 
-                    // : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? 'ON' : 'OFF'}</span>,
+                <Switch
+                    size="small"
+                    ref={`encrypted_${app_id}`}
+                    name={`encrypted_${app_id}`}
+                    value={encrypted}
+                    disabled={this.props.isSwitch ? false : true}
+                    checked={(encrypted === true || encrypted === 1) ? true : false}
+                    onClick={(e) => {
+                        // console.log("encrypted", e);
+                        this.handleChecked(e, "encrypted", app_id);
+                    }}
+                />
+            // : <span style={{ color: (encrypted === true || encrypted === 1) ? 'green' : 'red' }} >{(encrypted === true || encrypted === 1) ? 'ON' : 'OFF'}</span>,
 
         });
     }
@@ -305,16 +306,17 @@ class AppList extends Component {
         else if (this.props.allExtensions) {
             // console.log('a;; extension', this.props.allExtensions)
             if (this.props.allExtensions.length) {
-                if(this.props.edit){
-                    return this.props.allExtensions.map(app => {
-                        return this.renderExtensionsApp(app)
-                    })
-                }else{
+                if (this.props.AddPolicy) {
+
                     return this.props.allExtensions[0]['subExtension'].map(app => {
                         return this.renderExtensionsApp(app)
                     })
+                } else {
+                    return this.props.allExtensions.map(app => {
+                        return this.renderExtensionsApp(app)
+                    })
                 }
-                
+
             }
         }
         // else {
@@ -326,53 +328,62 @@ class AppList extends Component {
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        if(this.props.pageType == 'dealerApps'){
+        if (this.props.pageType == 'dealerApps') {
             this.setState({
                 selectedRowKeysApps: selectedRowKeys,
                 selectedRows: selectedRows
-            }, ()=> {
+            }, () => {
                 if (!this.props.edit) {
                     this.props.onSelectChange(this.state.selectedRowKeysApps, this.props.pageType);
                 }
             })
-        }else{
+        } else {
             this.setState({
                 selectedRowKeysPermissios: selectedRowKeys,
                 selectedRows: selectedRows
-            }, ()=> {
+            }, () => {
                 if (!this.props.edit) {
                     this.props.onSelectChange(this.state.selectedRowKeysPermissios, this.props.pageType);
                 }
             })
         }
-       
-       
+
+
 
         // console.log('selected row keys', selectedRowKeys)
     }
 
     renderDropdown() {
         return (
-            <div className="applist_menu">
-                <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
-                    this.handleCheckedAll(e.target.checked, "guestAll");
-                }}>Guests All</Checkbox><br></br>
-                <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
-                    this.handleCheckedAll(e.target.checked, "encryptedAll");
-                }}>Encrypted All</Checkbox><br></br>
+            <div className="applist_menu" >
+                <Switch value={this.state.guestAll ? true : false}
+                    checkedChildren='Enable All Guests'
+                    unCheckedChildren='Disable All Guests'
+                    onChange={(e) => {
+                        this.handleCheckedAll(e.target.checked, "guestAll");
+                    }} />
+                <Switch value={this.state.encryptedAll ? true : false}
+                    checkedChildren='Enable All Encrypted'
+                    unCheckedChildren='Disable All Encrypted'
+                    onChange={(e) => {
+                        this.handleCheckedAll(e.target.checked, "encryptedAll");
+                    }} />
                 {
                     this.props.apps || this.props.appPermissions ?
 
-                        <Checkbox checked={this.state.enableAll ? true : false} onChange={(e) => {
-                            this.handleCheckedAll(e.target.checked, "enableAll");
-                        }}>Enable All</Checkbox> : false}
+                        <Switch checked={this.state.enableAll ? true : false}
+                            checkedChildren='Enable All'
+                            unCheckedChildren='Disable All'
+                            onChange={(e) => {
+                                this.handleCheckedAll(e.target.checked, "enableAll");
+                            }} /> : false}
             </div>
         );
     }
     render() {
         const { loading, selectedRowKeys, selectedRows, selectedRowKeysApps, selectedRowKeysPermissios } = this.state;
         let rowSelection = {
-            selectedRowKeys : this.props.pageType=='dealerApps'? selectedRowKeysApps: selectedRowKeysPermissios,
+            selectedRowKeys: this.props.pageType == 'dealerApps' ? selectedRowKeysApps : selectedRowKeysPermissios,
             selectedRows,
             onChange: this.onSelectChange,
         };
@@ -393,15 +404,71 @@ class AppList extends Component {
                     encryptedAll={this.state.encryptedAll} 
                     guestAll={this.state.guestAll} handleCheckedAll={this.handleCheckedAll} 
                 /> */}
-                {this.props.isSwitch ?
+                {/* {this.props.isSwitch ?
                     <Popover className="list_p_down1" placement="bottomRight" content={this.renderDropdown()} trigger="click">
                         <a><Icon type="ellipsis" /></a>
-                    </Popover> : false}
+                    </Popover> : false} */}
+
+                {
+                    this.props.isCheckAllButtons ?
+
+                        <div className="applist_menu" style={{ marginBottom: 10, }}>
+                            <Row>
+                                <Col span={6}>
+                                    <span>Guest All</span>
+
+                                    <Switch value={this.state.guestAll ? true : false}
+                                        size='small'
+
+                                        onChange={(e) => {
+                                            this.handleCheckedAll(e, "guestAll");
+                                        }} />
+                                </Col>
+                                <Col span={6}>
+                                    <span>Encrypted All</span>
+                                    <Switch value={this.state.encryptedAll ? true : false}
+                                        size='small'
+
+                                        onChange={(e) => {
+                                            this.handleCheckedAll(e, "encryptedAll");
+                                        }} />
+                                </Col>
+                                <Col span={6}>
+                                    {
+
+                                        this.props.apps || this.props.appPermissions ?
+                                            <div>
+                                                <span>Enable All</span>
+                                                <Switch checked={this.state.enableAll ? true : false}
+                                                    size='small'
+
+                                                    onChange={(e) => {
+                                                        this.handleCheckedAll(e, "enableAll");
+                                                    }} />
+                                            </div>
+                                            : false}
+                                </Col>
+                                <Col span={6}>
+                                    {
+                                        this.props.addAppsButton ?
+                                            this.props.apps ?
+                                                <Button onClick={() => this.props.addApps('push_apps')} >Add Push Apps</Button>
+                                                : this.props.appPermissions ?
+                                                    <Button onClick={() => this.props.addApps('app_list')} >Add Permissions</Button>
+                                                    : false
+                                            : false
+
+                                    }
+                                </Col>
+                            </Row>
+
+                        </div> : false
+                }
                 <Table
                     className="exp_policy"
                     style={{ margin: 0, padding: 0 }}
                     rowSelection={rowSelection}
-                    selectedRowKeys={ this.props.pageType=='dealerApps' ? this.state.selectedRowKeysApps: this.state.selectedRowKeysPermissios}
+                    selectedRowKeys={this.props.pageType == 'dealerApps' ? this.state.selectedRowKeysApps : this.state.selectedRowKeysPermissios}
                     size='small'
                     scroll={this.props.isHistory ? {} : {}}
                     columns={this.props.allExtensions ? this.extensionColumns : this.appsColumns}
