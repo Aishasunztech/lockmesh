@@ -15,7 +15,8 @@ import {
     DEFAULT_POLICY_CHANGE,
     ADD_APPS_TO_POLICIES,
     REMOVE_APPS_FROM_POLICIES,
-    CHECK_TOGGLE_BUTTONS
+    CHECK_TOGGLE_BUTTONS,
+    RESET_POLICY
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -199,6 +200,15 @@ export function handleEditPolicy(e, key, id, stateToUpdate = '', rowId, uniqueNa
         })
     }
 }
+
+export function resetPlicies(){
+    return (dispatch) => {
+        dispatch({
+            type: RESET_POLICY,
+     
+        })
+    }
+} 
 
 export function addAppsToPolicies(apps, policy_id, dataType) {
     return (dispatch) => {
