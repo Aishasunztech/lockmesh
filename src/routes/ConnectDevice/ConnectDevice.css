@@ -1,4 +1,3 @@
-
 .deviceImg {
     width: 311px;
     margin: 0 auto;
@@ -85,7 +84,6 @@
 }
 
 .ant-table-small {
-    border: 1px solid transparent !important;
     border-radius: 6px;
 }
 
