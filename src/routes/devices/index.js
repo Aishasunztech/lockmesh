@@ -131,7 +131,7 @@ class Devices extends Component {
                         dataIndex: 'validity',
                         key: "validity",
                         className: 'hide',
-                        sorter: (a, b) => { return a.validity.localeCompare(b.validity) },
+                        sorter: (a, b) => { return a.validity - b.validity },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -182,7 +182,10 @@ class Devices extends Component {
                         dataIndex: 'user_id',
                         key: "user_id",
                         className: '',
-                        sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+                        sorter: (a, b) => {
+                            console.log(a, 'user is is')
+                             return a.user_id.props.children.localeCompare(b.user_id.props.children) 
+                            },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],

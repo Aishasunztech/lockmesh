@@ -355,12 +355,15 @@ class Policy extends Component {
             editAblePolicyId: policy.id
         })
     }
+
     editPolicyModalHide = () => {
+        console.log('cancel called')
+        this.props.resetPlicies();
         this.setState({
             editPolicyModal: false
         })
         this.refs.editPolicy.reset_steps();
-        this.props.resetPlicies();
+
     }
 
     editPolicyModalHide2 = () => {
@@ -374,7 +377,7 @@ class Policy extends Component {
 
 
     render() {
-        // console.log('sdaf asdf asf', this.state.encryptedAllappPermissions, this.state.guestAllappPermissions, this.state.enableAllappPermissions )
+        console.log('sdaf asdf asf', this.state.policies)
         return (
             <Fragment>
                 <AppFilter
@@ -449,7 +452,6 @@ class Policy extends Component {
                 >
                     <EditPolicy
                         SavePolicyChanges={this.props.SavePolicyChanges}
-
                         handleEditPolicy={this.props.handleEditPolicy}
                         editAblePolicy={this.state.policies}
                         editAblePolicyId={this.state.editAblePolicyId}

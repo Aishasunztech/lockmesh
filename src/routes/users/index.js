@@ -62,11 +62,14 @@ class Users extends Component {
                 children: [
                     {
                         title: USER_ID,
-                        dataIndex: 'user_id',
                         align: "center",
-                        key: 'user_id',
+                        dataIndex: 'user_id',
+                        key: "user_id",
                         className: '',
-                        sorter: (a, b) => { return a.user_id.toString().localeCompare(b.user_id.toString()) },
+                        sorter: (a, b) => {
+                            console.log(a, 'user is is')
+                            return a.user_id.localeCompare(b.user_id)
+                        },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],
