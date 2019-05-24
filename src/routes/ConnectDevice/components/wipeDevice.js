@@ -29,6 +29,7 @@ export default class WipeDevice extends Component {
     }
     handleCancel = () => {
         this.setState({ visible: false });
+        this.refs.pswdForm.resetFields()
     }
 
     render() {
@@ -51,7 +52,8 @@ export default class WipeDevice extends Component {
                         authUser={this.props.authUser}
                         checkPass={this.props.checkPass}
                         handleCancel={this.handleCancel}
-                        actionType = "WIPE_DEVICE"
+                        actionType="WIPE_DEVICE"
+                        ref='pswdForm'
                     />
                 </Modal>
             </div>

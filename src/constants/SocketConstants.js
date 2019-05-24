@@ -27,6 +27,7 @@ export const ACK_pull_APPS = 'ack_pull_apps_';
 export const ACK_FINISHED_PULL_APPS = 'ack_finished_pull_apps_';
 export const FINISH_POLICY = 'finish_policy_';
 export const ACK_SINGLE_PUSH_APP = 'ack_single_push_app_';
+export const ACK_SINGLE_PULL_APP = 'ack_single_pull_app_';
 
 export const FINISH_IMEI = 'finish_imei';
 

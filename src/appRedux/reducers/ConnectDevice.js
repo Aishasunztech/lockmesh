@@ -351,7 +351,7 @@ export default (state = initialState, action) => {
             }
         }
         case PUSH_APPS: {
-            // let noOfApps = 0
+            let noOfApps = 0
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
@@ -364,7 +364,7 @@ export default (state = initialState, action) => {
                         content: 'Apps pushed to device. Action will be performed when device is back online',
                     });
                 }
-                // noOfApps = action.payload.noOfApps
+                noOfApps = action.payload.noOfApps
             } else {
                 error({
                     title: action.payload.msg,
@@ -372,7 +372,7 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
-                // noOfApp_push_pull: noOfApps
+                noOfApp_push_pull: noOfApps
             }
         }
         case APPLY_POLICY: {
@@ -606,6 +606,7 @@ export default (state = initialState, action) => {
         }
 
         case PULL_APPS: {
+            let noOfApps = 0
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
@@ -617,13 +618,15 @@ export default (state = initialState, action) => {
                         content: 'Apps pulled from device. Action will be performed when device is back online',
                     });
                 }
+                noOfApps = action.payload.noOfApps
             } else {
                 error({
                     title: action.payload.msg,
                 });
             }
             return {
-                ...state
+                ...state,
+                noOfApp_push_pull: noOfApps
             }
         }
 
