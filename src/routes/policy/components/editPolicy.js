@@ -105,9 +105,9 @@ export default class AddPolicy extends Component {
     componentDidMount() {
         if (this.props.editAblePolicy.length) {
             let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
-            console.log(this.props.editAblePolicyId, 'id')
-            console.log(this.props.editAblePolicy, 'policys')
-            console.log(editAblePolicy, 'eidtable')
+            // console.log(this.props.editAblePolicyId, 'id')
+            // console.log(this.props.editAblePolicy, 'policys')
+            // console.log(editAblePolicy, 'eidtable')
             if (editAblePolicy) {
                 this.setState({
                     editAblePolicy: editAblePolicy,
@@ -120,7 +120,7 @@ export default class AddPolicy extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log('edit able changed', this.props.editAblePolicy);
+        // console.log('edit able changed', this.props.editAblePolicy);
         if (this.props !== prevProps) {
 
             if (this.props.editAblePolicy.length) {
@@ -273,7 +273,7 @@ export default class AddPolicy extends Component {
 
     render() {
         const { current } = this.state;
-        console.log(this.state.selectedRowKeys, 'selected row')
+        // console.log(this.props.encryptedAlldealerApps, 'selected row')
 
         const { selectedRows,selectedRowKeys } = this.state;
         let rowSelection = {
@@ -294,6 +294,7 @@ export default class AddPolicy extends Component {
                     guestAll={this.props.guestAlldealerApps}
                     encryptedAll={this.props.encryptedAlldealerApps}
                     enableAll={this.props.enableAlldealerApps}
+                    removeAppsFromPolicies={this.props.removeAppsFromPolicies}
                     addAppsButton={true}
                     isCheckAllButtons={true}
 
@@ -314,6 +315,8 @@ export default class AddPolicy extends Component {
                     apk_list={this.state.editAblePolicy.app_list}
                     handleEditPolicy={this.props.handleEditPolicy}
                     handleCheckAll={this.props.handleCheckAll}
+                    removeAppsFromPolicies={this.props.removeAppsFromPolicies}
+
                     handleCheckApp={this.handleCheckApp}
                     appPermissions='appPermissions'
                     addAppsButton={true}
@@ -412,7 +415,7 @@ export default class AddPolicy extends Component {
                     </div>
 
                     <Modal
-                        title="Add Push Apps"
+                        title="Add Apps"
                         visible={this.state.addPushAppModal}
                         onOk={this.addItems}
                         onCancel={this.hideAddPushAppModal}
