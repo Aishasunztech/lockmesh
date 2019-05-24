@@ -66,6 +66,8 @@ export const ADD_APK = 'ADD_APK';
 export const EDIT_APK = 'EDIT_APK';
 export const APK_STATUS_CHANGED = 'APK_STATUS_CHANGED';
 export const PERMSSION_SAVED = 'PERMSSION_SAVED';
+export const RESET_UPLOAD_FORM = 'RESET_UPLOAD_FORM';
+export const CHECK_APK_NAME = 'CHECK_APK_NAME';
 
 
 // Connect Device 
@@ -179,3 +181,5 @@ export const FINISHED_PULL_APPS = 'FINISHED_PULL_APPS';
 export const FINISHED_POLICY = 'FINISHED_POLICY';
 export const FINISHED_IMEI = 'FINISHED_IMEI';
 export const IN_PROCESS = 'IN_PROCESS';
+export const SINGLE_APP_PUSHED = 'SINGLE_APP_PUSHED';
+export const GET_APP_JOBS = 'GET_APP_JOBS';

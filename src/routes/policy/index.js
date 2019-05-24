@@ -5,7 +5,7 @@ import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
-import EditPolicy from "./components/editPolicy";
+// import EditPolicy from "./components/editPolicy";
 
 import {
     getPolicies, handlePolicyStatus,
@@ -401,7 +401,7 @@ class Policy extends Component {
                         ref='addPolicy'
                     />
                 </Modal>
-                <Modal
+                {/* <Modal
                     maskClosable={false}
                     width="700px"
                     className="policy_popup"
@@ -436,7 +436,7 @@ class Policy extends Component {
                         enableAllallExtensions={this.props.enableAllallExtension}
                         ref='editPolicy'
                     />
-                </Modal>
+                </Modal> */}
             </Fragment>
         )
     }
