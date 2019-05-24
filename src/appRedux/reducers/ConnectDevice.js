@@ -147,7 +147,11 @@ const initialState = {
     pushAppsModal: false,
     pullAppsModal: false,
     applyPolicyConfirm: false,
-    device_found: true
+    device_found: true,
+    noOfApp_push_pull: 0,
+    noOfApp_pushed_pulled: 0,
+    is_push_apps: 0
+
 };
 
 export default (state = initialState, action) => {
@@ -162,8 +166,8 @@ export default (state = initialState, action) => {
             }
         }
         case GET_DEVICE_DETAILS: {
-
             let device = action.payload;
+            // console.log(device);
             if (device) {
                 if (device.account_status === "suspended" || device.status === "expired" || device.unlink_status === 1) {
                     let status = null;
@@ -185,15 +189,14 @@ export default (state = initialState, action) => {
                         clearBtn: false,
                         pageName: NOT_AVAILABLE,
                         status: status,
-                        device_found: true
+                        device_found: true,
                     }
                 } else {
                     return {
                         ...state,
                         device: action.payload,
-                        device_found: true
+                        device_found: true,
                     }
-
                 }
             } else {
                 return { ...state, device_found: false }
@@ -348,6 +351,7 @@ export default (state = initialState, action) => {
             }
         }
         case PUSH_APPS: {
+            // let noOfApps = 0
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
@@ -360,13 +364,15 @@ export default (state = initialState, action) => {
                         content: 'Apps pushed to device. Action will be performed when device is back online',
                     });
                 }
+                // noOfApps = action.payload.noOfApps
             } else {
                 error({
                     title: action.payload.msg,
                 });
             }
             return {
-                ...state
+                ...state,
+                // noOfApp_push_pull: noOfApps
             }
         }
         case APPLY_POLICY: {
@@ -975,7 +981,7 @@ export default (state = initialState, action) => {
                         undoBtn: true,
                         redoBtn: false,
                         clearBtn: true
-                        
+
                     };
                 } else {
                     return {
@@ -994,14 +1000,14 @@ export default (state = initialState, action) => {
         }
 
         case CLEAR_APPLICATIONS: {
-            console.log(state.undoApps.length, state.undoControls.length, state.undoExtensions.length )
-            let extensions = state.undoExtensions.length ? state.undoExtensions[0]: [];
-            let controls = state.undoControls.length ? state.undoControls[0]: [];
-            let apps = state.undoApps.length ? state.undoApps[0]: [];
+            console.log(state.undoApps.length, state.undoControls.length, state.undoExtensions.length)
+            let extensions = state.undoExtensions.length ? state.undoExtensions[0] : [];
+            let controls = state.undoControls.length ? state.undoControls[0] : [];
+            let apps = state.undoApps.length ? state.undoApps[0] : [];
             state.undoApps.length = 1;
             state.undoControls.length = 1;
             state.undoExtensions.length = 1;
-            return{
+            return {
                 ...state,
                 extensions: extensions,
                 controls: controls,

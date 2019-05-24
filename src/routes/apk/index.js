@@ -1,21 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip, Popover } from "antd";
+import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
+
 // import {Route, Switch} from "react-router-dom";
 // import Apk from "../../containers/ApkList"
 import CircularProgress from "components/CircularProgress/index";
 //import {getDevicesList} from '../../appRedux/actions/Devices';
 
-import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/actions/Apk";
+import { getApkList, changeAppStatus, deleteApk, editApk, addApk, resetUploadForm } from "../../appRedux/actions/Apk";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 // import {getDeviceList} from 
 
 import AppFilter from "../../components/AppFilter";
+import AddApk from '../addApk/index'
 
-// import { BASE_URL } from '../../constants/Application';
+import { BASE_URL } from '../../constants/Application';
 import ListApk from './components/ListApk';
 
 import {
@@ -52,6 +54,9 @@ class Apk extends React.Component {
         let self = this;
         this.state = {
             apk_list: [],
+            uploadApkModal: false,
+            showUploadModal: false,
+            showUploadData: {},
             columns: [
                 {
                     title: APK_ACTION,
@@ -142,7 +147,6 @@ class Apk extends React.Component {
     handleCheckChange = (values) => {
         let dumydata = this.state.columns;
 
-         console.log('values', values);
         // console.log('values', values)
         if (values.length) {
             this.state.columns.map((column, index) => {
@@ -152,9 +156,9 @@ class Apk extends React.Component {
                 }
 
                 values.map((value) => {
-                    console.log(APK_PERMISSION,value,"columns", column);
-                    if(value === APK_PERMISSION && column.dataIndex == 'permission'){
-                        console.log('......... ......', column.title)
+                    // console.log(APK_PERMISSION, value, "columns", column);
+                    if (value === APK_PERMISSION && column.dataIndex == 'permission') {
+                        // console.log('......... ......', column.title)
                         if (column.title.props.children[0] === value) {
                             dumydata[index].className = '';
                         }
@@ -268,9 +272,20 @@ class Apk extends React.Component {
         );
     }
 
+    handleUploadApkModal = (visible) => {
+        this.setState({
+            uploadApkModal: visible
+        });
+        this.props.resetUploadForm(false)
+    }
+    hideUploadApkModal = () => {
+        this.setState({
+            uploadApkModal: false
+        });
+        this.props.resetUploadForm(true)
+    }
 
     render() {
-        // console.log(this.props.user);
         if (this.props.user.type === 'dealer') {
             this.state.columns[0].className = 'hide';
         } else {
@@ -289,7 +304,8 @@ class Apk extends React.Component {
                                 isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
-                                toLink="/upload-apk"
+                                // toLink="/upload-apk"
+                                handleUploadApkModal={this.handleUploadApkModal}
                                 selectedOptions={this.props.selectedOptions}
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
@@ -316,7 +332,6 @@ class Apk extends React.Component {
                                     </div> : false
                             }
                             <ListApk
-
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
                                 // tableChangeHandler={this.tableChangeHandler}
@@ -328,6 +343,28 @@ class Apk extends React.Component {
                                 user={this.props.user}
                                 ref="listApk"
                             />
+
+                            <Modal
+                                maskClosable={false}
+                                width="620px"
+                                className="upload_apk_popup"
+                                visible={this.state.uploadApkModal}
+                                title="Upload APK"
+                                onOk={() => { }}
+                                onCancel={() => {
+                                    this.hideUploadApkModal()
+                                }}
+                                okText="Save"
+                                footer={null}
+                            >
+                                <AddApk
+                                
+                                    hideUploadApkModal={this.hideUploadApkModal}
+                                    ref='uploadApk'
+                                />
+                            </Modal>
+
+
                         </div>}
             </div>
         )
@@ -424,7 +461,9 @@ function mapDispatchToProps(dispatch) {
         getDropdown: getDropdown,
         postDropdown: postDropdown,
         postPagination: postPagination,
-        getPagination: getPagination
+        getPagination: getPagination,
+        addApk: addApk,
+        resetUploadForm: resetUploadForm
         //  getDevicesList: getDevicesList
     }, dispatch);
 }

@@ -9,7 +9,8 @@ import {
 	GET_DROPDOWN,
 	GET_PAGINATION,
 	PERMSSION_SAVED,
-	DEALERS_LIST
+	RESET_UPLOAD_FORM,
+	CHECK_APK_NAME
 } from "../../constants/ActionTypes";
 
 import {
@@ -35,7 +36,8 @@ const initialState = {
 		APK,
 		APK_APP_NAME,
 		APK_APP_LOGO,
-	]
+	],
+	resetUploadForm: false
 };
 
 export default (state = initialState, action) => {
@@ -83,6 +85,9 @@ export default (state = initialState, action) => {
 				success({
 					title: action.response.msg,
 				});
+				// console.log("INSERTED DATA", state.apk_list);
+				state.apk_list.push(action.payload)
+				// console.log("INSERTED DATA", state.apk_list);
 			}
 			else {
 				error({
@@ -183,8 +188,23 @@ export default (state = initialState, action) => {
 				selectedOptions: action.payload
 			}
 		}
+		case RESET_UPLOAD_FORM: {
+			return {
+				...state,
+				resetUploadForm: action.payload
+			}
+		}
 
 		case POST_DROPDOWN: {
+			return {
+				...state
+			}
+		}
+		case CHECK_APK_NAME: {
+			// console.log(action);
+			if (action.response.status) {
+				console.log("ssadas");
+			}
 			return {
 				...state
 			}

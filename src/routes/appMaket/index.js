@@ -12,6 +12,10 @@ import { getDropdown, postDropdown, postPagination, getPagination } from '../../
 import { ADMIN, DEALER } from "../../constants/Constants";
 import styles from './appmarket.css'
 
+const UNINSTALL_HELPING_TEXT = (
+    <span>Turn toggle OFF to restrict app <br /> from being uninstalled by user</span>
+);
+
 class ApkMarket extends React.Component {
     constructor(props) {
         super(props);
@@ -46,7 +50,14 @@ class ApkMarket extends React.Component {
         let apkList = combinedList.map((app, index) => {
             let data = {
                 key: app.id,
-                title: <Fragment> <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} /> <span> {app.app_name} </span> {(app.dealer_type !== undefined) ? <span><Switch onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall == 0) ? true : false} size='small' disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch></span> : null} </Fragment>,
+                title:
+                    <Fragment>
+                        <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
+                        <span> {app.app_name} </span>
+                        {(app.dealer_type !== undefined) ? <span>
+                            <Switch className="sm_uninstall" size='small' unCheckedChildren="Uninstall" checkedChildren="Uninstall" onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall == 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
+                        </span> : null}
+                    </Fragment>,
                 description: `${app.app_name + index + 1}`,
                 disabled: (this.props.user.type === ADMIN) ? false : app.disabled,
                 // className: (this.props.user.type !== ADMIN) ? 'sm_chk' : false
@@ -69,6 +80,7 @@ class ApkMarket extends React.Component {
 
     }
     handleCheckChange = (apk_id, value) => {
+
         this.props.handleUninstall(apk_id, value)
     }
 
@@ -111,7 +123,10 @@ class ApkMarket extends React.Component {
     componentDidMount() {
     }
 
-
+    handleSelect = (list, e) => {
+        // alert("asdsa")
+        console.log("handle select", e)
+    }
     render() {
         return (
             <div>
@@ -130,17 +145,26 @@ class ApkMarket extends React.Component {
                             <Transfer
                                 titles={[
                                     (
-                                        <div className="sm_heading2">
-                                            <h4>
+
+                                        <div>
+                                            <h4 className="sm_heading2">
                                                 <b>Avaiable Apps</b>
                                             </h4>
+
                                         </div>
+
                                     ),
                                     (
-                                        <div className="sm_heading2">
-                                            <h4>
+                                        <div>
+                                            <h4 className="sm_heading2">
                                                 <b>Secure Market</b>
                                             </h4>
+                                            <span>
+                                                <Popover placement="topRight" content={UNINSTALL_HELPING_TEXT}>
+                                                    <span className="helping_txt"><Icon type="info-circle" /></span>
+                                                </Popover>
+                                            </span>
+
                                         </div>
                                     )
                                 ]}
@@ -151,9 +175,10 @@ class ApkMarket extends React.Component {
                                 targetKeys={this.state.targetKeys}
                                 onChange={this.handleChange}
                                 onSearch={this.handleSearch}
-                                onSelectChange={this.onSelectChange}
+                                onSelectChange={this.handleSelect}
                                 render={item => item.title}
                                 locale={{ itemUnit: 'App', itemsUnit: 'Apps' }}
+                                onItemSelect={this.handleSelect}
 
                             />
                         </Card>
