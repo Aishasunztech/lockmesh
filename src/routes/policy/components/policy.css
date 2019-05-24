@@ -3,7 +3,7 @@
 }
 
 .policy_steps .ant-table-body {
-    height: 200px;
+    height: 250px;
     overflow: overlay;
 }
 
@@ -116,6 +116,14 @@
 
 .pol_inp {
     margin: 0;
+}
+
+.applist_menu {
+    margin: 12px 0 6px;
+}
+
+.applist_menu .policy_s_txt {
+    vertical-align: sub;
 }
 
 .lst_stp label {
