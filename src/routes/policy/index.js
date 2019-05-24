@@ -11,7 +11,9 @@ import {
     getPolicies, handlePolicyStatus,
     handleEditPolicy, SavePolicyChanges,
     handleCheckAll, defaultPolicyChange,
-    getAppPermissions, addAppsToPolicies
+    getAppPermissions, addAppsToPolicies,
+    removeAppsFromPolicies, checktogglebuttons,
+    resetPlicies
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -22,7 +24,7 @@ import {
 } from '../../appRedux/actions/Common';
 
 import {
-    getDealerApps, 
+    getDealerApps,
 } from "../../appRedux/actions/ConnectDevice";
 
 import {
@@ -190,14 +192,19 @@ class Policy extends Component {
                 dataIndex: 'default_policy',
                 key: 'default_policy',
             },
-
-
         ];
         this.state = {
             policyModal: false,
             policies: (this.props.policies) ? this.props.policies : [],
             current: 0,
             editPolicyModal: false,
+            guestAlldealerApps: false,
+            enableAlldealerApps: false,
+            encryptedAlldealerApps: false,
+
+            guestAllappPermissions: false,
+            enableAllappPermissions: false,
+            encryptedAllappPermissions: false
 
         }
 
@@ -210,7 +217,14 @@ class Policy extends Component {
         this.props.getAppPermissions();
         this.props.getPagination('policies');
         this.setState({
-            policies: this.props.policies
+            policies: this.props.policies,
+            guestAlldealerApps: this.props.guestAlldealerApps,
+            enableAlldealerApps: this.props.enableAlldealerApps,
+            encryptedAlldealerApps: this.props.encryptedAlldealerApps,
+
+            guestAllappPermissions: this.props.guestAllappPermissions,
+            enableAllappPermissions: this.props.enableAllappPermissions,
+            encryptedAllappPermissions: this.props.encryptedAllappPermissions
         })
         if (this.props.user.type === ADMIN) {
             this.columns.pop()
@@ -222,9 +236,18 @@ class Policy extends Component {
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.policies);
+            // console.log('updated', this.props.guestAlldealerApps, this.props.enableAlldealerApps, this.props.encryptedAlldealerApps)
+
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
-                policies: this.props.policies
+                policies: this.props.policies,
+                guestAlldealerApps: this.props.guestAlldealerApps,
+                enableAlldealerApps: this.props.enableAlldealerApps,
+                encryptedAlldealerApps: this.props.encryptedAlldealerApps,
+
+                guestAllappPermissions: this.props.guestAllappPermissions,
+                enableAllappPermissions: this.props.enableAllappPermissions,
+                encryptedAllappPermissions: this.props.encryptedAllappPermissions
             })
         }
     }
@@ -332,15 +355,29 @@ class Policy extends Component {
             editAblePolicyId: policy.id
         })
     }
+
     editPolicyModalHide = () => {
+        console.log('cancel called')
+        this.props.resetPlicies();
         this.setState({
             editPolicyModal: false
         })
-        this.refs.editPolicy.reset_steps()
+        this.refs.editPolicy.reset_steps();
+
+    }
+
+    editPolicyModalHide2 = () => {
+        this.setState({
+            editPolicyModal: false
+        })
+        this.refs.editPolicy.reset_steps();
     }
 
 
+
+
     render() {
+        console.log('sdaf asdf asf', this.state.policies)
         return (
             <Fragment>
                 <AppFilter
@@ -363,6 +400,7 @@ class Policy extends Component {
                     user={this.props.user}
                     columns={this.columns}
                     policies={this.state.policies}
+                    checktogglebuttons={this.props.checktogglebuttons}
                     defaultPolicyChange={this.props.defaultPolicyChange}
                     handlePolicyStatus={this.props.handlePolicyStatus}
                     handleEditPolicy={this.props.handleEditPolicy}
@@ -411,25 +449,26 @@ class Policy extends Component {
                     onCancel={() => this.editPolicyModalHide()}
                     okText="Update"
                     footer={null}
-                > 
+                >
                     <EditPolicy
-                       SavePolicyChanges={this.props.SavePolicyChanges}
+                        SavePolicyChanges={this.props.SavePolicyChanges}
                         handleEditPolicy={this.props.handleEditPolicy}
                         editAblePolicy={this.state.policies}
                         editAblePolicyId={this.state.editAblePolicyId}
                         push_apps={this.props.push_apps}
                         appPermissions={this.props.appPermissions}
                         handleCheckAll={this.props.handleCheckAll}
-                        editPolicyModalHide={this.editPolicyModalHide}
+                        editPolicyModalHide={this.editPolicyModalHide2}
                         addAppsToPolicies={this.props.addAppsToPolicies}
+                        removeAppsFromPolicies={this.props.removeAppsFromPolicies}
 
-                        guestAlldealerApps={this.props.guestAlldealerApps}
-                        encryptedAlldealerApps={this.props.encryptedAlldealerApps}
-                        enableAlldealerApps={this.props.enableAlldealerApps}
+                        guestAlldealerApps={this.state.guestAlldealerApps}
+                        encryptedAlldealerApps={this.state.encryptedAlldealerApps}
+                        enableAlldealerApps={this.state.enableAlldealerApps}
 
-                        guestAllappPermissions={this.props.guestAllappPermissions}
-                        encryptedAllappPermissions={this.props.encryptedAllappPermissions}
-                        enableAllappPermissions={this.props.enableAllappPermissions}
+                        guestAllappPermissions={this.state.guestAllappPermissions}
+                        encryptedAllappPermissions={this.state.encryptedAllappPermissions}
+                        enableAllappPermissions={this.state.enableAllappPermissions}
 
                         guestAllallExtensions={this.props.guestAllallExtensions}
                         encryptedAllallExtensions={this.props.encryptedAllallExtensions}
@@ -457,6 +496,9 @@ function mapDispatchToProps(dispatch) {
         getAppPermissions: getAppPermissions,
         addAppsToPolicies: addAppsToPolicies,
         defaultPolicyChange: defaultPolicyChange,
+        removeAppsFromPolicies: removeAppsFromPolicies,
+        checktogglebuttons: checktogglebuttons,
+        resetPlicies: resetPlicies
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);

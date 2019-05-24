@@ -125,6 +125,7 @@ class PolicyList extends Component {
                                     size="small"
                                     onClick={() => { 
                                         // this.expandRow(index, 'edit', true) 
+                                        this.props.checktogglebuttons(policy)
                                         this.props.editPolicyModal(policy)
                                     }}
 
