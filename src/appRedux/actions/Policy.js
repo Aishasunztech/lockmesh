@@ -14,7 +14,8 @@ import {
     CHECK_HANDLE_ALL_POLICY,
     DEFAULT_POLICY_CHANGE,
     ADD_APPS_TO_POLICIES,
-    REMOVE_APPS_FROM_POLICIES
+    REMOVE_APPS_FROM_POLICIES,
+    CHECK_TOGGLE_BUTTONS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -212,8 +213,29 @@ export function addAppsToPolicies(apps, policy_id, dataType) {
     }
 }
 
+export function removeAppsFromPolicies(app_id, policy_id, dataType) {
+    return (dispatch) => {
+        dispatch({
+            type: REMOVE_APPS_FROM_POLICIES,
+            payload: {
+              app_id: app_id,
+              policy_id: policy_id,
+              dataType: dataType
+            }
+        })
+    }
+}
 
-
+export function checktogglebuttons(policy) {
+    return (dispatch) => {
+        dispatch({
+            type: CHECK_TOGGLE_BUTTONS,
+            payload: {
+              policy: policy,
+            }
+        })
+    }
+}
 
 
 

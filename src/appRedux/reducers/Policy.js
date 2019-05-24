@@ -15,7 +15,9 @@ import {
     GET_PAGINATION,
     CHECK_HANDLE_ALL_POLICY,
     DEFAULT_POLICY_CHANGE,
-    ADD_APPS_TO_POLICIES
+    ADD_APPS_TO_POLICIES,
+    REMOVE_APPS_FROM_POLICIES,
+    CHECK_TOGGLE_BUTTONS
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -114,9 +116,43 @@ export default (state = initialState, action) => {
             }
         }
 
+        case CHECK_TOGGLE_BUTTONS: {
+
+            let checkButtons = checkToggleButtons(action.payload.policy);
+            // let policy = action.payload.policy;
+            // let push_apps_guestCount = 0;
+            // let push_apps_encryptedCount = 0;
+            // let push_apps_enableCount = 0;
+            // for (let app of policy.push_apps) {
+            //     if (app.guest == true || app.guest == 1) {
+            //         push_apps_guestCount += 1;
+            //     }
+            //     if (app.encrypted == true || app.encrypted == 1) {
+            //         push_apps_encryptedCount += 1;
+            //     }
+            //     if (app.enable == true || app.enable == 1) {
+            //         push_apps_enableCount += 1;
+            //     }
+            // }
+            // state.guestAll2dealerApps = push_apps_enableCount == policy.push_apps.length ? true : false;
+
+            // state.encryptedAll2dealerApps = push_apps_encryptedCount == policy.push_apps.length ? true : false;
+
+            // state.enableAll2dealerApps = push_apps_guestCount == policy.push_apps.length ? true : false
+            // console.log(state.guestAll2dealerApps, state.enableAll2dealerApps, state.encryptedAll2dealerApps)
+            return {
+                ...state,
+                ...checkButtons
+                // guestAll2dealerApps: state.guestAll2dealerApps,
+                // encryptedAll2dealerApps: state.encryptedAll2dealerApps,
+                // enableAll2dealerApps: state.enableAll2dealerApps
+            }
+        }
+
         case ADD_APPS_TO_POLICIES: {
 
             let policies = state.policies;
+            let checkButtons;
             let policy_index = state.policies.findIndex((item) => item.id == action.payload.policy_id);
             if (policy_index > -1) {
                 for (let app_id of action.payload.apps) {
@@ -126,7 +162,7 @@ export default (state = initialState, action) => {
                     } else {
                         index1 = policies[policy_index][action.payload.dataType].findIndex(app => app.id == app_id);
                     }
-                    console.log(index1, 'index is ')
+                    // console.log(index1, 'index is ')
                     if (index1 == -1) {
                         let app = null;
                         if (action.payload.dataType == 'push_apps') {
@@ -135,7 +171,7 @@ export default (state = initialState, action) => {
                                 policies[policy_index].push_apps.push(app)
                             }
                         } else {
-                           
+
                             app = state.appPermissions.find(item => item.id == app_id);
                             if (app) {
                                 policies[policy_index].app_list.push(app)
@@ -143,12 +179,46 @@ export default (state = initialState, action) => {
                         }
                     }
                 }
+                 checkButtons = checkToggleButtons(policies[policy_index])
             }
-            console.log(policies[policy_index].app_list.length, 'aps are')
+            // console.log(policies[policy_index].app_list.length, 'aps are')
             state.policies = policies;
+
+           
             return {
                 ...state,
-                policies: [...state.policies]
+                policies: [...state.policies],
+                ...checkButtons
+            }
+        }
+
+
+        case REMOVE_APPS_FROM_POLICIES: {
+            let policies = state.policies;
+            let app_id = action.payload.app_id;
+            let checkButtons;
+            let policy_index = state.policies.findIndex((item) => item.id == action.payload.policy_id);
+            if (policy_index > -1) {
+                if (action.payload.dataType == 'push_apps') {
+                    let index = policies[policy_index].push_apps.findIndex(item => item.apk_id == app_id);
+                    if (index > -1) {
+                        policies[policy_index].push_apps.splice(index, 1);
+                    }
+                }
+                else if (action.payload.dataType == 'appPermissions') {
+                    let index = policies[policy_index].app_list.findIndex(item => item.apk_id == app_id);
+                    if (index > -1) {
+                        policies[policy_index].app_list.splice(index, 1);
+                    }
+                }
+                checkButtons = checkToggleButtons(policies[policy_index])
+            }
+            state.policies = policies
+
+            return {
+                ...state,
+                policies: [...state.policies],
+                ...checkButtons
             }
         }
 
@@ -195,7 +265,7 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY_CHANGES: {
-            console.log('response is', action.payload.response)
+            // console.log('response is', action.payload.response)
 
             if (action.payload.response.status) {
                 success({
@@ -213,12 +283,13 @@ export default (state = initialState, action) => {
 
         case EDIT_POLICY: {
             let changedState = state.policies;
-            console.log('changeded state : ', changedState)
+            // console.log('changeded state : ', changedState)
             let id = action.payload.id;
             let policyId = action.payload.rowId;
             let key = action.payload.key;
             let stateToUpdate = action.payload.stateToUpdate;
-            console.log(stateToUpdate, 'state to update')
+            let checkButtons;
+            // console.log(stateToUpdate, 'state to update')
             let rowId = changedState.findIndex(item => item.id == policyId);
             //  console.log(policyId, 'row id', rowId)
 
@@ -235,7 +306,7 @@ export default (state = initialState, action) => {
                         changedState[rowId][stateToUpdate][index][key] = action.payload.value;
                     }
                 } else if (stateToUpdate == 'secure_apps') {
-                    console.log('object', changedState)
+                    // console.log('object', changedState)
 
                     // let permissionIndex = changedState[rowId][stateToUpdate].findIndex(item => item.uniqueName == action.payload.uniqueName);
                     // if (permissionIndex >= 0) {
@@ -245,13 +316,14 @@ export default (state = initialState, action) => {
                     }
                     // }
                 } else if (stateToUpdate == 'controls') {
-                    console.log(changedState[rowId][stateToUpdate][key], 'changed 0', action.payload.value)
+                    // console.log(changedState[rowId][stateToUpdate][key], 'changed 0', action.payload.value)
 
                     changedState[rowId][stateToUpdate][key] = action.payload.value;
                 }
 
 
                 changedState[rowId]['isChangedPolicy'] = true;
+               checkButtons = checkToggleButtons(changedState[rowId]) 
 
                 // console.log(index, 'lll')
             }
@@ -262,6 +334,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 policies: [...state.policies],
+                ...checkButtons
             }
         }
 
@@ -561,5 +634,88 @@ export default (state = initialState, action) => {
             return state;
         }
 
+    }
+
+}
+
+function checkToggleButtons(policy) {
+
+    let push_apps_guestCount = 0;
+    let push_apps_encryptedCount = 0;
+    let push_apps_enableCount = 0;
+
+    let appPermissions_guestCount = 0;
+    let appPermissions_encryptedCount = 0;
+    let appPermissions_enableCount = 0;
+
+    let extension_guestCount = 0;
+    let extension_encryptedCount = 0;
+    let extension_enableCount = 0;
+
+    for (let app of policy.push_apps) {
+        if (app.guest == true || app.guest == 1) {
+            push_apps_guestCount += 1;
+        }
+        if (app.encrypted == true || app.encrypted == 1) {
+            push_apps_encryptedCount += 1;
+        }
+        if (app.enable == true || app.enable == 1) {
+            push_apps_enableCount += 1;
+        }
+    }
+
+    for (let app of policy.app_list) {
+        if (app.guest == true || app.guest == 1) {
+            appPermissions_guestCount += 1;
+        }
+        if (app.encrypted == true || app.encrypted == 1) {
+            appPermissions_encryptedCount += 1;
+        }
+        if (app.enable == true || app.enable == 1) {
+            appPermissions_enableCount += 1;
+        }
+    }
+
+    for (let app of policy.secure_apps) {
+        if (app.guest == true || app.guest == 1) {
+            extension_guestCount += 1;
+        }
+        if (app.encrypted == true || app.encrypted == 1) {
+            extension_encryptedCount += 1;
+        }
+        if (app.enable == true || app.enable == 1) {
+            extension_enableCount += 1;
+        }
+    }
+    
+
+    let guestAll2dealerApps = push_apps_guestCount == policy.push_apps.length ? true : false;
+
+    let encryptedAll2dealerApps = push_apps_encryptedCount == policy.push_apps.length ? true : false;
+
+    let enableAll2dealerApps = push_apps_enableCount == policy.push_apps.length ? true : false;
+
+    let guestAll2appPermissions = appPermissions_guestCount == policy.app_list.length ? true : false;
+
+    let encryptedAll2appPermissions = appPermissions_encryptedCount == policy.app_list.length ? true : false;
+
+    let enableAll2appPermissions = appPermissions_enableCount == policy.app_list.length ? true : false;
+
+    let guestAll2allExtensions = extension_guestCount == policy.secure_apps.length ? true : false;
+
+    let encryptedAll2allExtensions = extension_encryptedCount == policy.secure_apps.length ? true : false;
+
+    let enableAll2allExtensions = extension_enableCount == policy.secure_apps.length ? true : false
+    console.log('reducer',  guestAll2appPermissions,encryptedAll2appPermissions, enableAll2appPermissions)
+    return {
+        guestAll2dealerApps: guestAll2dealerApps,
+        encryptedAll2dealerApps: encryptedAll2dealerApps,
+        enableAll2dealerApps: enableAll2dealerApps,
+        guestAll2appPermissions: guestAll2appPermissions,
+        encryptedAll2appPermissions: encryptedAll2appPermissions,
+        enableAll2appPermissions: enableAll2appPermissions,
+        guestAll2allExtensions: guestAll2allExtensions,
+        encryptedAll2allExtensions: encryptedAll2allExtensions,
+        enableAll2allExtensions: enableAll2allExtensions
     }
 }
