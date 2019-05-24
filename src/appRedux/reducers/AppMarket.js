@@ -6,6 +6,8 @@ import {
 } from "constants/ActionTypes";
 import { message, Modal } from 'antd';
 
+const success = Modal.success
+const error = Modal.error
 const initialState = {
     isloading: false,
     apk_list: [],

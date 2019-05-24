@@ -193,11 +193,6 @@ const RestService = {
         //console.log('rest apoi')
         return axios.get(BASE_URL + 'users/connect/' + device_id, RestService.getHeader());
     },
-    // getAppJobQueue
-    getAppJobQueue: (device_id) => {
-        //console.log('rest apoi')
-        return axios.get(BASE_URL + 'users/getAppJobQueue/' + device_id, RestService.getHeader());
-    },
 
     reSyncDevice: (deviceId) => {
         return axios.patch(BASE_URL + 'users/sync-device', { device_id: deviceId }, RestService.getHeader());
@@ -308,10 +303,6 @@ const RestService = {
         return axios.post(BASE_URL + 'users/edit/apk', formData, RestService.getHeader());
 
     },
-    // For check apk name 
-    checkApkName: (name, apk_id = '') => {
-        return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
-    },
 
     updateUserProfile: (formData) => {
         return axios.put(BASE_URL + 'users/updateProfile/' + formData, formData, RestService.getHeader());
@@ -418,7 +409,7 @@ const RestService = {
     },
 
     addAPK: (formData) => {
-        return axios.post(BASE_URL + 'users/addApk', formData, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/upload', formData, RestService.getHeader());
     },
     importCSV: (formData, fieldName) => {
         return axios.post(BASE_URL + 'users/import/' + fieldName, formData, RestService.getHeader());

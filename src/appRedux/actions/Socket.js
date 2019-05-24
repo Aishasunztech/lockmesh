@@ -1,12 +1,10 @@
 import {
-    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS
+    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI
 } from "../../constants/ActionTypes";
 
 import {
-    ACK_FINISHED_PUSH_APPS, ACK_FINISHED_PULL_APPS, ACTION_IN_PROCESS, FINISH_POLICY, FINISH_IMEI, ACK_SINGLE_PUSH_APP,
+    ACK_FINISHED_PUSH_APPS, ACK_FINISHED_PULL_APPS, ACTION_IN_PROCESS, FINISH_POLICY, FINISH_IMEI
 } from "../../constants/SocketConstants";
-
-import RestService from '../services/RestServices'
 
 export const getNotification = (socket) => {
     return (dispatch) => {
@@ -29,17 +27,6 @@ export const ackFinishedPushApps = (socket, deviceId) => {
         })
     }
 }
-export const ackSinglePushApp = (socket, deviceId) => {
-    return (dispatch) => {
-        socket.on(ACK_SINGLE_PUSH_APP + deviceId, (response) => {
-            console.log("SOCKET WEB SINGLE");
-            dispatch({
-                type: SINGLE_APP_PUSHED,
-                payload: true
-            })
-        })
-    }
-}
 export const ackFinishedPullApps = (socket, deviceId) => {
     return (dispatch) => {
         socket.on(ACK_FINISHED_PULL_APPS + deviceId, (response) => {
@@ -53,6 +40,7 @@ export const ackFinishedPullApps = (socket, deviceId) => {
 export const actionInProcess = (socket, deviceId) => {
     return (dispatch) => {
         socket.on(ACTION_IN_PROCESS + deviceId, (response) => {
+            // console.log("in process socket");
             dispatch({
                 type: IN_PROCESS,
                 payload: true
@@ -79,20 +67,4 @@ export const ackImeiChanged = (socket, deviceId) => {
             })
         })
     }
-}
-export function getAppJobQueue(deviceId) {
-    return (dispatch) => {
-        RestService.getAppJobQueue(deviceId).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                if (response.data) {
-                    dispatch({
-                        type: GET_APP_JOBS,
-                        payload: response.data.data
-                    })
-                }
-
-            }
-        });
-
-    };
 }

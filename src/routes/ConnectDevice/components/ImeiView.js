@@ -245,7 +245,7 @@ export default class ImeiView extends Component {
                                             dataIndex: 'tableIndex',
                                             key: "tableIndex",
                                             className: '',
-                                            sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
+                                            sorter: (a, b) => { return a.tableIndex.localeCompare(b.tableIndex) },
                                             sortDirections: ['ascend', 'descend'],
 
                                         },
@@ -267,6 +267,7 @@ export default class ImeiView extends Component {
                                             className: '',
                                             sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
                                             sortDirections: ['ascend', 'descend'],
+                                            defaultSortOrder: 'descend'
 
                                         },
                                     ]}
@@ -316,7 +317,7 @@ export default class ImeiView extends Component {
                                             dataIndex: 'tableIndex',
                                             key: "tableIndex",
                                             className: '',
-                                            sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
+                                            sorter: (a, b) => { return a.tableIndex.localeCompare(b.tableIndex) },
                                             sortDirections: ['ascend', 'descend'],
 
                                         },
@@ -338,6 +339,8 @@ export default class ImeiView extends Component {
                                             className: '',
                                             sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
                                             sortDirections: ['ascend', 'descend'],
+                                            defaultSortOrder: 'descend'
+
                                         },
                                     ]}
                                     bordered

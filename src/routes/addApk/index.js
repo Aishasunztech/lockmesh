@@ -7,10 +7,9 @@ import { Link } from 'react-router-dom';
 import 'react-picky/dist/picky.css';
 import { bindActionCreators } from "redux";
 import { BASE_URL } from "../../constants/Application";
-import { addApk, getApkList, checkApkName } from "../../appRedux/actions/Apk";
+import { addApk, getApkList } from "../../appRedux/actions/Apk";
 
-import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message, Modal, Avatar } from 'antd';
-import RestService from '../../appRedux/services/RestServices'
+import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message, Modal } from 'antd';
 
 // import asyncComponent from "util/asyncComponent";
 
@@ -20,29 +19,53 @@ const error = Modal.error
 
 let logo = '';
 let apk = '';
-let size = '';
+let versionCode = '';
+let versionName = '';
 let packageName = '';
+let details = '';
 
 let form_data = '';
+class AddApk extends Component {
+
+    render() {
+
+        return (
+            <div>
+                <Row justify='center' style={{ backgroundColor: '#012346', height: 150, paddingTop: 50 }}>
+
+                </Row>
+
+                <div style={{ marginTop: - 90 }}>
+                    <Row>
+
+                        <Card style={{ borderRadius: 15, width: '100%', margin: 30, }}>
+                            <div >
+                                <h1 style={{ float: "left", marginTop: "5px" }}>Upload APK</h1>
+                                <Link to="/apk-list">
+                                    <Button type="primary" style={{ float: "right", marginBottom: "16px" }}>Back</Button>
+                                </Link>
+                                <Divider />
+                                <div style={{ justifyContent: 'center' }} >
+                                    <WrappedNormalApkForm push={this.props.history}
+                                        addApk={this.props.addApk}
+                                        getApkList={this.props.getApkList}
+                                    />
+                                </div>
+
+
+                            </div>
+                        </Card>
+
+                    </Row>
+                </div>
+            </div>
+        )
+    }
+}
+
 let disableLogo = false;
 let disableApk = false;
-// class AddApk extends Component {
-//     render() {
-
-//         return (
-//             <div>
-//                 <WrappedNormalApkForm
-//                     addApk={this.props.addApk}
-//                     getApkList={this.props.getApkList}
-//                     showUploadModal={this.props.showUploadModal}
-//                     ref='uploadForm'
-//                 />
-//             </div>
-//         )
-//     }
-// }
-
-class AddApk extends Component {
+class AddApkForm extends Component {
 
     constructor(props) {
 
@@ -50,14 +73,7 @@ class AddApk extends Component {
         this.state = {
             canUoload: false,
             fileList: [],
-            fileList2: [],
-            showUploadModal: false,
-            logo: '',
-            size: '',
-            name: '',
-            uploadData: {},
-            disableApk: false,
-            disableLogo: false
+            fileList: []
         }
     }
 
@@ -70,132 +86,61 @@ class AddApk extends Component {
                     'logo': logo,
                     'apk': apk,
                     'name': values.name,
-                    'size': size
                 }
-                this.props.addApk(form_data)
-                this.props.hideUploadApkModal();
-
-
-
                 // console.log('hisory',this.props.go_back);
-                // this.props.showUploadModal(form_data);
+                this.props.addApk(form_data);
+                disableLogo = false;
+                disableApk = false;
+                this.props.push.push('/apk-list');
+
+                //  console.log(form_data);
             }
             else {
 
             }
         });
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.props !== nextProps) {
-            if (nextProps.resetUploadForm) {
-                this.resetUploadForm()
-            }
-        }
-    }
-
-    resetUploadForm = () => {
-        this.props.form.resetFields()
-        this.setState({
-            showUploadModal: false,
-            fileList: [],
-            fileList2: [],
-            disableApk: false,
-            disableLogo: false,
-            resetUploadForm: false
-        })
-        size = '';
-        // document.getElementById('apkSize').style.display = 'none'
-    }
 
 
-    checkUniqueName = async (rule, value, callback) => {
-        const form = this.props.form;
-        let response = await RestService.checkApkName(value).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                if (response.data.status) {
-                    return true
-                }
-                else {
-                    return false
-                }
-            }
-        });
-        if (response) {
-            callback();
-        } else {
-            callback('Please choose a different name');
-        }
-    };
-    validatelogoFile = async (rule, value, callback) => {
-        const form = this.props.form;
-        if (this.state.fileList.length <= 0) {
-            callback('File is required');
-        } else {
-            callback();
-        }
-    };
-    validateAkpFile = async (rule, value, callback) => {
-        const form = this.props.form;
-        if (this.state.fileList2.length <= 0) {
-            callback('File is required');
-        } else {
-            callback();
-        }
-    };
 
-
-    handleCancel = () => {
-        this.setState({
-            showUploadModal: false
-        })
-    }
-    showName(e) {
-        console.log(e.target);
     }
 
     render() {
+
         const { getFieldDecorator } = this.props.form;
         let fileList = [];
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 8 },
-                md: { span: 8 },
+                sm: { span: 7 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 12 },
-                md: { span: 12 },
+                sm: { span: 10 },
             },
         };
+        const Dragger = Upload.Dragger;
         let token = localStorage.getItem('token');
         let _this = this;
         const props = {
             name: 'logo',
             multiple: false,
-            action: BASE_URL + 'users/upload',
+            action: BASE_URL + 'users/addApk',
             headers: { 'authorization': token },
             accept: '.png, .jpg',
-            disabled: this.state.disableLogo,
-            fileList: this.state.fileList,
-            className: 'upload-list-inline',
-            listType: 'picture',
+            disabled: disableLogo,
+            // fileList: fileList,
             onRemove(info) {
                 if (_this.state.fileList.length > 1) {
                     _this.state.fileList.length -= 1;
                 } else {
-                    _this.setState({ disableLogo: false });
+                    disableLogo = false
                 }
             },
-            beforeUpload(file) {
-                _this.setState({ disableLogo: true });
-            },
+
             onChange(info) {
-                // console.log(info);
                 const status = info.file.status;
                 let fileList = [...info.fileList];
-                // console.log('file list id', fileList)
+                console.log('file list id', fileList)
                 if (status !== 'uploading') {
                     // console.log('uploading ..')
                     // console.log(info.file, info.fileList);
@@ -209,44 +154,45 @@ class AddApk extends Component {
                         if (info.file.response.fileName !== '') {
                             logo = info.file.response.fileName;
                         }
+
                         success({
                             title: 'file added Successfully ',
                         });
-                        _this.setState({ disableLogo: true });
                     }
                     else {
                         error({
                             title: 'Error While Uploading',
                         });
+                        disableLogo = false;
                     }
+
+                    _this.setState({ fileList });
+
                     //  message.success(`${info.file.name} file uploaded successfully.`);
                 } else if (status === 'error') {
                     //  message.error(`${info.file.name} file upload failed.`);
                 }
-                _this.setState({ fileList });
             },
         };
         const props2 = {
             name: 'apk',
             multiple: false,
-            action: BASE_URL + 'users/upload',
+            action: BASE_URL + 'users/addApk',
             headers: { 'authorization': token },
             accept: '.apk',
-            disabled: this.state.disableApk,
-            fileList: this.state.fileList2,
-            className: 'upload-list-inline',
-            listType: 'picture',
+            disabled: disableApk,
             onRemove(info) {
-                // document.getElementById('apkSize').style.display = 'none'
-                _this.setState({ disableApk: false });
-            },
-            beforeUpload(file) {
-                _this.setState({ disableApk: true });
+                if (_this.state.fileList2.length > 1) {
+                    _this.state.fileList2.length -= 1;
+                } else {
+                    disableApk = false
+                }
             },
             onChange(info) {
                 const status = info.file.status;
                 let fileList2 = [...info.fileList];
                 if (status !== 'uploading') {
+                    // console.log('uploading');
                     // console.log(info.file, info.fileList);
                 }
                 if (status === 'done') {
@@ -254,11 +200,12 @@ class AddApk extends Component {
                     if (info.file.response.status !== false) {
                         // console.log(info.file.response);
 
+                        disableApk = true;
+
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
                             // console.log('apk name', apk);
                             packageName = info.file.response.packageName;
-                            size = info.file.response.size
                             // versionCode = info.file.response.versionCode;
                             // versionName = info.file.response.versionName;
                             // details = info.file.response.details;
@@ -267,133 +214,116 @@ class AddApk extends Component {
                         success({
                             title: 'file added Successfully ',
                         });
-                        _this.setState({ disableApk: true });
-                        // document.getElementById('apkSize').style.display = 'block'
                     }
                     else {
                         error({
                             title: 'Error While Uploading',
                         });
-                        // document.getElementById('apkSize').style.display = 'none'
+                        disableApk = false;
                     }
+                    _this.setState({ fileList2 });
 
                 } else if (status === 'error') {
                     //  message.error(`${info.file.name} file upload failed.`);
                 }
-                _this.setState({ fileList2 });
             },
         };
 
         return (
-            <div>
-                <Card bordered={false}>
-                    <p>(*)- Required Fields</p>
-                    <Form onSubmit={this.handleSubmit} >
-                        <Form.Item {...formItemLayout} label="Apk name" className="upload_file">
-                            {getFieldDecorator('name', {
-                                rules: [{
-                                    required: true, message: 'Name is required',
-                                },
-                                {
-                                    validator: this.checkUniqueName,
-                                },
-                                ],
-                            })(
-                                <Input />
-                            )}
-                        </Form.Item>
-                        <Form.Item label="Apk Icon" {...formItemLayout} className="upload_file">
+            <Form onSubmit={this.handleSubmit} style={{ marginTop: 21 }} >
+                <Form.Item className="mb-0"
+                    {...formItemLayout}
+                    label="Apk Name "
+                >
+                    {getFieldDecorator('name', {
+                        rules: [{
+                            required: true, message: 'Name is required',
+                        }],
+                    })(
+                        <Input />
+                    )}
+                </Form.Item>
+                <Row>
+                    <Col span={6} ></Col>
+                    <Col span={6} className="upload_file">
+                        <Form.Item
+
+                        >
                             <div className="dropbox">
-                                {getFieldDecorator('icon',
-                                    {
-                                        rules: [
-                                            {
-                                                required: true, message: 'File is required',
-                                            },
-                                            {
-                                                validator: this.validatelogoFile,
-                                            },
-                                            ],
-                                    }
-                                )
-                                    (
-                                        <Upload {...props}>
-                                            <Button className="width_100 upload_btn" type="default" >
-                                                <Icon type="folder-open" />UPLOAD ICON
-                                                </Button>
-                                            {/* <p className="ant-upload-drag-icon">
-                                                    <Icon type="picture" />
-                                                </p>
-                                                <h2 className="ant-upload-hint">UPLOAD LOGO </h2>
-                                                <p className="ant-upload-text">Upload file (.jpg,.png)</p> */}
-                                        </Upload>
-                                    )
-                                }
+                                {getFieldDecorator('icon', {
+                                    rules: [{
+                                        required: true, message: 'File is required',
+                                    }],
+
+                                })(
+                                    <Dragger {...props} >
+                                        <p className="ant-upload-drag-icon">
+                                            <Icon type="picture" />
+                                        </p>
+                                        <h2 className="ant-upload-hint">UPLOAD LOGO </h2>
+                                        <p className="ant-upload-text">Upload file (.jpg,.png)</p>
+                                    </Dragger>
+                                )}
+
                             </div>
                         </Form.Item>
-                        <Form.Item label="Apk file" className="upload_file" {...formItemLayout}>
+
+                    </Col>
+                    <Col span={6} className="upload_file">
+                        <Form.Item
+
+                        >
                             <div className="dropbox">
                                 {getFieldDecorator('apk', {
 
                                     rules: [{
                                         required: true, message: 'File is required',
-                                    },
-                                    {
-                                                validator: this.validateAkpFile,
-                                            }
-                                            ],
+                                    }],
 
                                 })(
-                                    <Upload  {...props2} >
-                                        <Button className="width_100 upload_btn" type="default" >
-                                            <Icon type="folder-open" /> UPLOAD APK FILE
-                                                </Button>
-                                        {/* <p className="ant-upload-drag-icon">
-                                                    <Icon type="file" />
-                                                </p>
-                                                <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
-                                                <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
-                                    </Upload>
+                                    <Dragger  {...props2}>
+                                        <p className="ant-upload-drag-icon">
+                                            <Icon type="file" />
+                                        </p>
+                                        <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
+                                        <p className="ant-upload-text">Upload Apk file (.apk)</p>
+                                    </Dragger>
                                 )}
-                                {/* <label>Apk size: </label><span>{size}</span> */}
+
                             </div>
                         </Form.Item>
-                        <Form.Item label="Apk size:" className="upload_file" {...formItemLayout}>
-                            <div>
-                                <h5 className="apk_size">{size}</h5>
-                            </div>
-                        </Form.Item>
-                        <Row className='modal_footer'>
-                            <div>
-                                <Button key="back" className='submitButton' onClick={this.props.hideUploadApkModal}>Cancel</Button>
-                                <Button className='submitButton' type="primary" htmlType="submit" >Save</Button>
-                            </div>
-                        </Row>
-                    </Form>
-                </Card>
-            </div>
+
+
+                    </Col>
+                    <Col span={6} ></Col>
+                </Row>
+
+                <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
+                    <Button className='submitButton' type="default" htmlType="submit" >Upload</Button>
+                </div>
+
+            </Form>
         )
     }
 }
 
 
 
-const WrappedNormalApkForm = Form.create('name', 'add_apk')(AddApk);
+const WrappedNormalApkForm = Form.create('name', 'add_apk')(AddApkForm);
 
 
 const mapStateToProps = ({ apk_list }) => {
+
     return {
         isloading: apk_list.isloading,
-        apk_list: apk_list.apk_list,
-        resetUploadForm: apk_list.resetUploadForm
+        apk_list: apk_list.apk_list
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addApk: addApk,
-        getApkList: getApkList,
-        checkApkName: checkApkName
+        getApkList: getApkList
     }, dispatch);
 }
-export default connect(mapStateToProps, mapDispatchToProps, null, { withRef: true })(WrappedNormalApkForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AddApk);
