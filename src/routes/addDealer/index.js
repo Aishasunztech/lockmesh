@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Card, Button, Divider, Form, Input, Select } from 'antd';
+import { Row, Card, Button, Divider, Form, Input, Select,Modal } from 'antd';
 // import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
@@ -11,9 +11,9 @@ const { Option } = Select;
 class AddDealer extends Component {
     constructor(props) {
         super(props);
-    
+       
     }
-
+   
     handleSubmit = (e) => {
 
         this.props.form.validateFields((err, values) => {
@@ -24,26 +24,25 @@ class AddDealer extends Component {
                
                 this.props.addDealer(values);
                // message.success('Action done Successfylly');
-             this.props.history.goBack();
-             this.props.getDealerList(window.location.pathname.split("/").pop()); 
-           
+            //  this.props.history.goBack();
+            //  this.props.getDealerList(window.location.pathname.split("/").pop()); 
+             this.props.handleCancel();
             }
         });
     }
 
-    componentDidUpdate(prevProps) {
+    // componentDidUpdate(prevProps) {
+    //     // console.log('this.props',this.props)
+    //     if (this.props.navigate_to !== prevProps.navigate_to) {
 
-        // console.log('this.props',this.props)
-        if (this.props.navigate_to !== prevProps.navigate_to) {
+    //         alert('its working');
+    //     }
+    // }
 
-            alert('its working');
-        }
-    }
-
-    componentDidMount(){
-        // console.log('cmp');
-        this.props.getDealerList('dealer');
-    }
+    // componentDidMount(){
+    //     // console.log('cmp');
+    //     this.props.getDealerList('dealer');
+    // }
     
     render() {
 
@@ -67,19 +66,21 @@ class AddDealer extends Component {
         };
         return (
             <div>
-                <Row justify='center' style={{ backgroundColor: '#012346', height: 150, paddingTop: 50 }}>
+                {/* <Row justify='center' style={{ backgroundColor: '#012346', height: 150, paddingTop: 50 }}>
 
                 </Row>
 
                 <div style={{ marginTop: - 90 }}>
                     <Row>
-
+                     
                         <Card style={{ borderRadius: 15, width: '100%', margin: 30, }}>
                             <div>
                                 <h1 style={{float:"left", marginTop:"5px"}}>Add {dealer_type}</h1>
                                 <Link to={`/dealer/${window.location.pathname.split("/").pop()}`} ><Button type="primary" style={{float:"right", marginBottom:"16px"}}>Back</Button></Link>
-                                <Divider />            
-                                <Form style={{ marginTop: 50 }} >
+                                <Divider />   
+                                 */}
+                                    
+                                <Form  >
                                     {
                                         ((dealer_type !== DEALER) && (dealer_type === SDEALER) && (this.props.profile.type === ADMIN )) ?
 
@@ -130,17 +131,20 @@ class AddDealer extends Component {
                                             <Input />
                                         )}
                                     </Form.Item>
-
+                                   
                                     <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
                                         <Button className='submitButton' onClick={this.handleSubmit}  >Add Dealer</Button>
+                                        {/* <Button className='submitButton' onClick={this.showModal}  >Add Dealer </Button> */}
                                     </div>
 
                                 </Form>
-                            </div>
+                               
+                            {/* </div>
                         </Card>
+                     
 
                     </Row>
-                </div>
+                </div> */}
             </div>
         )
     }
