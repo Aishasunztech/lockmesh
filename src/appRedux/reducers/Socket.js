@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import {
-    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS, SINGLE_APP_PULLED
+    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS, SINGLE_APP_PULLED, FINISHED_POLICY_STEP
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -11,7 +11,9 @@ const initialState = {
     is_in_process: false,
     noOfApp_pushed_pulled: 0,
     noOfApp_push_pull: 0,
-    is_push_apps: 0
+    is_push_apps: 0,
+    complete_policy_step: 0,
+    is_policy_process: 0
 };
 
 export default (state = initialState, action) => {
@@ -25,17 +27,25 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 is_in_process: false,
-                noOfApp_pushed_pulled: state.noOfApp_push_pull
+                noOfApp_pushed_pulled: state.noOfApp_push_pull,
+                is_policy_process: 0
             }
         }
         case GET_APP_JOBS: {
-            // console.log(action.payload);
             if (action.payload.id) {
-                return {
-                    ...state,
-                    is_push_apps: action.payload.is_in_process,
-                    noOfApp_push_pull: action.payload.total_apps,
-                    noOfApp_pushed_pulled: action.payload.complete_apps,
+                if (action.data_type == 'policy') {
+                    return {
+                        ...state,
+                        is_policy_process: action.payload.is_in_process,
+                        complete_policy_step: action.payload.complete_steps,
+                    }
+                } else {
+                    return {
+                        ...state,
+                        is_push_apps: action.payload.is_in_process,
+                        noOfApp_push_pull: action.payload.total_apps,
+                        noOfApp_pushed_pulled: action.payload.complete_apps,
+                    }
                 }
             } else {
                 return {
@@ -65,7 +75,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 is_in_process: false,
-                noOfApp_pushed_pulled: state.noOfApp_push_pull
+                noOfApp_pushed_pulled: state.noOfApp_push_pull,
+                is_policy_process: 0
             }
         }
         case FINISHED_POLICY: {
@@ -75,7 +86,15 @@ export default (state = initialState, action) => {
             });
             return {
                 ...state,
-                is_in_process: false
+                is_in_process: false,
+                is_policy_process: false,
+                complete_policy_step: 0
+            }
+        }
+        case FINISHED_POLICY_STEP: {
+            return {
+                ...state,
+                complete_policy_step: state.complete_policy_step + 1
             }
         }
         case IN_PROCESS: {
@@ -91,7 +110,8 @@ export default (state = initialState, action) => {
             });
             return {
                 ...state,
-                is_in_process: false
+                is_in_process: false,
+                is_policy_process: 0
             }
         }
         default:

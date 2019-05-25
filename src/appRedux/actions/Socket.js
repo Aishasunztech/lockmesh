@@ -1,9 +1,24 @@
 import {
-    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS,SINGLE_APP_PULLED
+    FINISHED_PUSH_APPS,
+    FINISHED_PULL_APPS,
+    IN_PROCESS,
+    FINISHED_POLICY,
+    FINISHED_POLICY_STEP,
+    FINISHED_IMEI,
+    SINGLE_APP_PUSHED,
+    GET_APP_JOBS,
+    SINGLE_APP_PULLED
 } from "../../constants/ActionTypes";
 
 import {
-    ACK_FINISHED_PUSH_APPS, ACK_FINISHED_PULL_APPS, ACTION_IN_PROCESS, FINISH_POLICY, FINISH_IMEI, ACK_SINGLE_PUSH_APP, ACK_SINGLE_PULL_APP
+    ACK_FINISHED_PUSH_APPS,
+    ACK_FINISHED_PULL_APPS,
+    ACTION_IN_PROCESS,
+    FINISH_POLICY,
+    FINISH_IMEI,
+    ACK_SINGLE_PUSH_APP,
+    ACK_SINGLE_PULL_APP,
+    FINISH_POLICY_STEP
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
@@ -81,6 +96,17 @@ export const ackFinishedPolicy = (socket, deviceId) => {
         })
     }
 }
+export const ackFinishedPolicyStep = (socket, deviceId) => {
+    // console.log("ssad");
+    return (dispatch) => {
+        socket.on(FINISH_POLICY_STEP + deviceId, (response) => {
+            dispatch({
+                type: FINISHED_POLICY_STEP,
+                payload: true
+            })
+        })
+    }
+}
 export const ackImeiChanged = (socket, deviceId) => {
     return (dispatch) => {
         socket.on(FINISH_IMEI + deviceId, (response) => {
@@ -98,7 +124,8 @@ export function getAppJobQueue(deviceId) {
                 if (response.data) {
                     dispatch({
                         type: GET_APP_JOBS,
-                        payload: response.data.data
+                        payload: response.data.data,
+                        data_type: response.data.type
                     })
                 }
 
