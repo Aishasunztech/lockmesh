@@ -111,20 +111,25 @@ class AddApk extends Component {
 
     checkUniqueName = async (rule, value, callback) => {
         const form = this.props.form;
-        let response = await RestService.checkApkName(value).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                if (response.data.status) {
-                    return true
-                }
-                else {
-                    return false
-                }
-            }
-        });
-        if (response) {
-            callback();
+        if (/[^A-Za-z\d]/.test(value)) {
+            callback('Please insert only alphabets and numbers.');
         } else {
-            callback('Please choose a different name');
+
+            let response = await RestService.checkApkName(value).then((response) => {
+                if (RestService.checkAuth(response.data)) {
+                    if (response.data.status) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+            });
+            if (response) {
+                callback();
+            } else {
+                callback('Please choose a different name');
+            }
         }
     };
     validatelogoFile = async (rule, value, callback) => {
@@ -212,12 +217,16 @@ class AddApk extends Component {
                         success({
                             title: 'file added Successfully ',
                         });
+
                         _this.setState({ disableLogo: true });
+
                     }
                     else {
                         error({
                             title: 'Error While Uploading',
                         });
+                        fileList = []
+                        _this.setState({ disableLogo: false });
                     }
                     //  message.success(`${info.file.name} file uploaded successfully.`);
                 } else if (status === 'error') {
@@ -274,6 +283,8 @@ class AddApk extends Component {
                         error({
                             title: 'Error While Uploading',
                         });
+                        fileList2 = []
+                        _this.setState({ disableApk: false });
                         // document.getElementById('apkSize').style.display = 'none'
                     }
 
@@ -313,7 +324,7 @@ class AddApk extends Component {
                                             {
                                                 validator: this.validatelogoFile,
                                             },
-                                            ],
+                                        ],
                                     }
                                 )
                                     (
@@ -339,9 +350,9 @@ class AddApk extends Component {
                                         required: true, message: 'File is required',
                                     },
                                     {
-                                                validator: this.validateAkpFile,
-                                            }
-                                            ],
+                                        validator: this.validateAkpFile,
+                                    }
+                                    ],
 
                                 })(
                                     <Upload  {...props2} >

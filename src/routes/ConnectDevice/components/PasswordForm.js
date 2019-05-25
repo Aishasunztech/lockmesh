@@ -37,6 +37,7 @@ class PassworForm extends Component {
                 }
             }
         });
+        this.props.form.resetFields()
         this.props.handleCancel(false, this.props.actionType);
     }
 
@@ -62,6 +63,7 @@ class PassworForm extends Component {
                 >
                     {
                         this.props.form.getFieldDecorator('pass', {
+                            initialValue: '',
                             rules: [
                                 {
                                     required: true, message: 'Please input your password!',

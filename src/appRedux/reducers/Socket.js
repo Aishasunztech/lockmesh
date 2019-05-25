@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import {
-    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS
+    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS, SINGLE_APP_PULLED
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -25,10 +25,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 is_in_process: false,
+                noOfApp_pushed_pulled: state.noOfApp_push_pull
             }
         }
         case GET_APP_JOBS: {
-            if (action.payload) {
+            // console.log(action.payload);
+            if (action.payload.id) {
                 return {
                     ...state,
                     is_push_apps: action.payload.is_in_process,
@@ -42,9 +44,17 @@ export default (state = initialState, action) => {
             }
         }
         case SINGLE_APP_PUSHED: {
+            // console.log(action.payload.completePushApps);
             return {
                 ...state,
-                noOfApp_pushed_pulled: Number(state.noOfApp_pushed_pulled) + 1
+                noOfApp_pushed_pulled: state.noOfApp_pushed_pulled + 1
+            }
+        }
+        case SINGLE_APP_PULLED: {
+            // console.log(action.payload.completePushApps);
+            return {
+                ...state,
+                noOfApp_pushed_pulled: state.noOfApp_pushed_pulled + 1
             }
         }
         case FINISHED_PULL_APPS: {
@@ -54,7 +64,8 @@ export default (state = initialState, action) => {
             });
             return {
                 ...state,
-                is_in_process: false
+                is_in_process: false,
+                noOfApp_pushed_pulled: state.noOfApp_push_pull
             }
         }
         case FINISHED_POLICY: {
