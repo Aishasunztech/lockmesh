@@ -72,6 +72,11 @@
     margin-right: 13px;
 }
 
+.sm_labels {
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
 @media screen and (max-width: 768px) {
     .transfer_box .ant-transfer-list {
         width: 100%;
