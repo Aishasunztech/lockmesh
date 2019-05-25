@@ -39,7 +39,7 @@
     width: 700px !important;
 } */
 
-.line_break2 {
+.line_break2 {  
     width: 100px;
     margin: 0 0 0 12px;
     display: inline-block;
@@ -124,6 +124,10 @@
 
 .applist_menu .policy_s_txt {
     vertical-align: sub;
+}
+
+.applist_menu .ant-switch {
+    vertical-align: middle;
 }
 
 .lst_stp label {
