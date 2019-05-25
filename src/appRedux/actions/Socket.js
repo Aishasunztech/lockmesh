@@ -1,9 +1,9 @@
 import {
-    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS
+    FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS,SINGLE_APP_PULLED
 } from "../../constants/ActionTypes";
 
 import {
-    ACK_FINISHED_PUSH_APPS, ACK_FINISHED_PULL_APPS, ACTION_IN_PROCESS, FINISH_POLICY, FINISH_IMEI, ACK_SINGLE_PUSH_APP,
+    ACK_FINISHED_PUSH_APPS, ACK_FINISHED_PULL_APPS, ACTION_IN_PROCESS, FINISH_POLICY, FINISH_IMEI, ACK_SINGLE_PUSH_APP, ACK_SINGLE_PULL_APP
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
@@ -32,10 +32,21 @@ export const ackFinishedPushApps = (socket, deviceId) => {
 export const ackSinglePushApp = (socket, deviceId) => {
     return (dispatch) => {
         socket.on(ACK_SINGLE_PUSH_APP + deviceId, (response) => {
-            console.log("SOCKET WEB SINGLE");
+            // console.log("SOCKET WEB SINGLE");
             dispatch({
                 type: SINGLE_APP_PUSHED,
-                payload: true
+                payload: response
+            })
+        })
+    }
+}
+export const ackSinglePullApp = (socket, deviceId) => {
+    return (dispatch) => {
+        socket.on(ACK_SINGLE_PULL_APP + deviceId, (response) => {
+            // console.log("SOCKET WEB SINGLE");
+            dispatch({
+                type: SINGLE_APP_PULLED,
+                payload: response
             })
         })
     }

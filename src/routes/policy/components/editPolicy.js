@@ -196,7 +196,6 @@ export default class AddPolicy extends Component {
                     //  this.props.isSwitch ? 
                     <Switch checked={controls.location_status} onClick={(e) => this.props.handleEditPolicy(e, 'location_status', '', 'controls', this.state.editAblePolicy.id)} size="small" />
                 // : <span style={{ color: (controls.location_status === true || controls.location_status === 1) ? 'green' : 'red' }} >{(controls.location_status === true || controls.location_status === 1) ? 'On' : 'Off'}</span>
-
             }, {
                 rowKey: 'hotspot_status',
                 name: 'Hotspot',

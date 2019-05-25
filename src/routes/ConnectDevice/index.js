@@ -42,7 +42,7 @@ import {
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
-import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged, getAppJobQueue, ackSinglePushApp } from "../../appRedux/actions/Socket";
+import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged, getAppJobQueue, ackSinglePushApp, ackSinglePullApp } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
@@ -158,7 +158,7 @@ class ConnectDevice extends Component {
 
       this.props.actionInProcess(this.props.socket, device_id);
       this.props.getDeviceDetails(device_id);
-      // this.props.getAppJobQueue(device_id);
+      this.props.getAppJobQueue(device_id);
       this.props.getDeviceApps(device_id);
       this.props.getProfiles(device_id);
       this.props.getPolicies(device_id);
@@ -169,7 +169,9 @@ class ConnectDevice extends Component {
       this.props.ackFinishedPullApps(this.props.socket, device_id);
       this.props.ackFinishedPolicy(this.props.socket, device_id);
       this.props.ackImeiChanged(this.props.socket, device_id);
-      // this.props.ackSinglePushApp(this.props.socket, device_id);
+      this.props.ackSinglePushApp(this.props.socket, device_id);
+      this.props.ackSinglePullApp(this.props.socket, device_id);
+
       this.props.getActivities(device_id)
 
       // console.log('ack_finished_push_apps_' + device_id);
@@ -380,7 +382,7 @@ class ConnectDevice extends Component {
     }
     // console.log('ref', deviceId)
     this.props.getDeviceDetails(deviceId);
-    // this.props.getAppJobQueue(deviceId);
+    this.props.getAppJobQueue(deviceId);
     this.props.getDeviceApps(deviceId);
     this.props.getProfiles(deviceId);
     this.props.getPolicies(deviceId);
@@ -427,122 +429,130 @@ class ConnectDevice extends Component {
     let color = getColor(finalStatus)
     let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'Online';
     let onlineColor = (onlineStatus === 'Offline') ? { color: 'red' } : { color: 'green' }
+    let totalApps = (this.props.noOfApp_push_pull == undefined || this.props.noOfApp_push_pull == 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
+    let completeApps = (this.props.noOfApp_pushed_pulled == undefined) ? 0 : this.props.noOfApp_pushed_pulled
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
-          {this.props.isLoading || this.props.is_in_process || this.props.device_details.is_push_apps ?
+          {/* || this.props.is_in_process || this.props.device_details.is_push_apps */}
+          {this.props.isLoading ?
             <div className="gx-loader-view">
               <CircularProgress />
             </div> :
-            // (this.props.is_in_process || this.props.is_push_apps == 1) ?
-            // <div>
-            //   <CircularProgress />
-            // <Modal
-            //       maskClosable={false}
-            //       visible={(this.props.device_details.online == 'On') ? true : false}
-            //       footer={null}
-            //       closable={false}
-            //     >
-            //       <Progress type="circle" percent={100} />
-            //     </Modal> 
+            (this.props.is_in_process || this.props.is_push_apps == 1) ?
+              <div>
+                {(this.props.device_details.online == 'On') ?
+                  null : <CircularProgress />
+                }
+                <Modal
+                  width='auto'
+                  centered
+                  maskClosable={false}
+                  visible={(this.props.device_details.online == 'On') ? true : false}
+                  footer={null}
+                  closable={false}
 
-            //    <Progress type="circle" percent={(props.completed / props.total) * 100} format={percent => `${props.completed} of ${props.total}`} />
-            //    <ProgressBar
-            //       total={this.props.noOfApp_push_pull}
-            //       completed={this.props.noOfApp_pushed_pulled}
-                // /> 
-            // </div>
-            // :
-            <div>
-              <Row gutter={16} type="flex" align="top">
-                <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>
-                  <DeviceSidebar
-                    device_details={this.props.device_details}
-                    refreshDevice={this.refreshDevice}
-                    startLoading={this.props.startLoading}
-                    endLoading={this.props.endLoading}
-                  />
-                </Col>
-                <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
-                  <Card>
-                    <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
-                      <div className="status_bar">
-                        <div className="col-md-6 col-xs-6 col-sm-6 active_st">
-                          <h5><span style={color}>{finalStatus}</span></h5>
-                        </div>
-                        <div className="col-md-6 col-xs-6 col-sm-6 offline_st">
-                          <h5><span style={onlineColor}>{onlineStatus}</span></h5>
-                        </div>
-                      </div>
-                      {this.renderScreen()}
-                      <Button.Group className="nav_btn_grp">
-                        <Button type="default" icon="left" className="nav_btn" onClick={() => {
-                          this.onBackHandler();
-                        }} />
-                        <Button type="default" className="nav_btn" onClick={() => {
-                          this.changePage("main_menu")
-                        }} />
-                        {/* <Button type="default" icon="border" className="nav_btn" /> */}
-                      </Button.Group>
+                >
+                  <Progress className='prog' type="circle" percent={(completeApps / totalApps) * 100} format={percent => `${completeApps} of ${totalApps}`} />
+                  {/* <Progress type="circle" percent={100} /> */}
+                </Modal>
 
-                    </div>
-                    <DeviceActions
-                      undoApplications={this.undoAction}
-                      redoApplications={this.redoAction}
-                      applyActionButton={this.applyActionButton}
-                      clearApplications={this.props.clearApplications}
-                      applyBtn={this.props.applyBtn}
-                      undoBtn={this.props.undoBtn}
-                      redoBtn={this.props.redoBtn}
-                      clearBtn={this.props.clearBtn}
+                {/* <ProgressBar
+                  total={}
+                  completed={}
+                /> */}
+              </div>
+              :
+              <div>
+                <Row gutter={16} type="flex" align="top">
+                  <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>
+                    <DeviceSidebar
+                      device_details={this.props.device_details}
+                      refreshDevice={this.refreshDevice}
+                      startLoading={this.props.startLoading}
+                      endLoading={this.props.endLoading}
                     />
-                  </Card>
-                </Col>
-                <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
-                  {/*  */}
-                  <SideActions
-                    device={this.props.device_details}
-                    profiles={this.props.profiles}
-                    policies={this.props.policies}
-                    histories={this.props.histories}
-                    activateDevice={this.props.activateDevice2}
-                    suspendDevice={this.props.suspendDevice2}
-                    editDevice={this.props.editDevice}
-                    unlinkDevice={this.props.unlinkDevice}
-                    flagged={this.props.flagged}
-                    unflagged={this.props.unflagged}
-                    wipe={this.props.wipe}
-                    checkPass={this.props.checkPass}
-                    history={this.props.history}
-                    getDevicesList={this.props.getDevicesList}
-                    refreshDevice={this.refreshDevice}
-                    imei_list={this.props.imei_list}
-                    apk_list={this.props.apk_list}
-                  // applySetting = {this.applyActions}
-                  />
+                  </Col>
+                  <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
+                    <Card>
+                      <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
+                        <div className="status_bar">
+                          <div className="col-md-6 col-xs-6 col-sm-6 active_st">
+                            <h5><span style={color}>{finalStatus}</span></h5>
+                          </div>
+                          <div className="col-md-6 col-xs-6 col-sm-6 offline_st">
+                            <h5><span style={onlineColor}>{onlineStatus}</span></h5>
+                          </div>
+                        </div>
+                        {this.renderScreen()}
+                        <Button.Group className="nav_btn_grp">
+                          <Button type="default" icon="left" className="nav_btn" onClick={() => {
+                            this.onBackHandler();
+                          }} />
+                          <Button type="default" className="nav_btn" onClick={() => {
+                            this.changePage("main_menu")
+                          }} />
+                          {/* <Button type="default" icon="border" className="nav_btn" /> */}
+                        </Button.Group>
 
-                </Col>
-              </Row>
-              <Modal
-                maskClosable={false}
-                title="Confirm new Settings to be sent to Device"
-                visible={this.state.showChangesModal}
-                onOk={this.applyActions}
-                onCancel={this.onCancel}
-                okText='Apply'
-              >
-                <DeviceSettings
-                  app_list={this.props.app_list}
-                  extensions={this.props.extensions}
-                  extensionUniqueName={SECURE_SETTING}
-                  isAdminPwd={this.props.isAdminPwd}
-                  isDuressPwd={this.props.isDuressPwd}
-                  isEncryptedPwd={this.props.isEncryptedPwd}
-                  isGuestPwd={this.props.isGuestPwd}
-                  controls={this.state.controls}
-                />
-              </Modal>
-            </div>}
+                      </div>
+                      <DeviceActions
+                        undoApplications={this.undoAction}
+                        redoApplications={this.redoAction}
+                        applyActionButton={this.applyActionButton}
+                        clearApplications={this.props.clearApplications}
+                        applyBtn={this.props.applyBtn}
+                        undoBtn={this.props.undoBtn}
+                        redoBtn={this.props.redoBtn}
+                        clearBtn={this.props.clearBtn}
+                      />
+                    </Card>
+                  </Col>
+                  <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
+                    {/*  */}
+                    <SideActions
+                      device={this.props.device_details}
+                      profiles={this.props.profiles}
+                      policies={this.props.policies}
+                      histories={this.props.histories}
+                      activateDevice={this.props.activateDevice2}
+                      suspendDevice={this.props.suspendDevice2}
+                      editDevice={this.props.editDevice}
+                      unlinkDevice={this.props.unlinkDevice}
+                      flagged={this.props.flagged}
+                      unflagged={this.props.unflagged}
+                      wipe={this.props.wipe}
+                      checkPass={this.props.checkPass}
+                      history={this.props.history}
+                      getDevicesList={this.props.getDevicesList}
+                      refreshDevice={this.refreshDevice}
+                      imei_list={this.props.imei_list}
+                      apk_list={this.props.apk_list}
+                    // applySetting = {this.applyActions}
+                    />
+
+                  </Col>
+                </Row>
+                <Modal
+                  maskClosable={false}
+                  title="Confirm new Settings to be sent to Device"
+                  visible={this.state.showChangesModal}
+                  onOk={this.applyActions}
+                  onCancel={this.onCancel}
+                  okText='Apply'
+                >
+                  <DeviceSettings
+                    app_list={this.props.app_list}
+                    extensions={this.props.extensions}
+                    extensionUniqueName={SECURE_SETTING}
+                    isAdminPwd={this.props.isAdminPwd}
+                    isDuressPwd={this.props.isDuressPwd}
+                    isEncryptedPwd={this.props.isEncryptedPwd}
+                    isGuestPwd={this.props.isGuestPwd}
+                    controls={this.state.controls}
+                  />
+                </Modal>
+              </div>}
           {/* {this.props.isLoading ?
           <div className="gx-loader-view">
             <CircularProgress />
@@ -611,6 +621,7 @@ function mapDispatchToProps(dispatch) {
     clearApplications: clearApplications,
     getAppJobQueue: getAppJobQueue,
     ackSinglePushApp: ackSinglePushApp,
+    ackSinglePullApp: ackSinglePullApp
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket }) => {
@@ -664,6 +675,7 @@ var mapStateToProps = ({ routing, device_details, auth, socket }) => {
     device_found: device_details.device_found,
     noOfApp_push_pull: socket.noOfApp_push_pull,
     noOfApp_pushed_pulled: socket.noOfApp_pushed_pulled,
+    noOfApp_push_pull_device: device_details.noOfApp_push_pull,
   };
 }
 

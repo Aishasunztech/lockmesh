@@ -122,33 +122,10 @@ export default (state = initialState, action) => {
         case CHECK_TOGGLE_BUTTONS: {
 
             let checkButtons = checkToggleButtons(action.payload.policy);
-            // let policy = action.payload.policy;
-            // let push_apps_guestCount = 0;
-            // let push_apps_encryptedCount = 0;
-            // let push_apps_enableCount = 0;
-            // for (let app of policy.push_apps) {
-            //     if (app.guest == true || app.guest == 1) {
-            //         push_apps_guestCount += 1;
-            //     }
-            //     if (app.encrypted == true || app.encrypted == 1) {
-            //         push_apps_encryptedCount += 1;
-            //     }
-            //     if (app.enable == true || app.enable == 1) {
-            //         push_apps_enableCount += 1;
-            //     }
-            // }
-            // state.guestAll2dealerApps = push_apps_enableCount == policy.push_apps.length ? true : false;
 
-            // state.encryptedAll2dealerApps = push_apps_encryptedCount == policy.push_apps.length ? true : false;
-
-            // state.enableAll2dealerApps = push_apps_guestCount == policy.push_apps.length ? true : false
-            // console.log(state.guestAll2dealerApps, state.enableAll2dealerApps, state.encryptedAll2dealerApps)
             return {
                 ...state,
                 ...checkButtons
-                // guestAll2dealerApps: state.guestAll2dealerApps,
-                // encryptedAll2dealerApps: state.encryptedAll2dealerApps,
-                // enableAll2dealerApps: state.enableAll2dealerApps
             }
         }
 
@@ -182,12 +159,12 @@ export default (state = initialState, action) => {
                         }
                     }
                 }
-                 checkButtons = checkToggleButtons(policies[policy_index])
+                checkButtons = checkToggleButtons(policies[policy_index])
             }
             // console.log(policies[policy_index].app_list.length, 'aps are')
             state.policies = policies;
 
-           
+
             return {
                 ...state,
                 policies: [...state.policies],
@@ -268,7 +245,7 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY_CHANGES: {
-            // console.log('response is', action.payload.response)
+            console.log('response is', action.payload.response)
 
             if (action.payload.response.status) {
                 success({
@@ -287,9 +264,10 @@ export default (state = initialState, action) => {
 
 
         case RESET_POLICY: {
-            return{
+            console.log(state.copyPolicies, 'copypolicies')
+            return {
                 ...state,
-                policies: state.copyPolicies
+                policies: state.copyPolicies,
             }
         }
 
@@ -333,14 +311,11 @@ export default (state = initialState, action) => {
                     changedState[rowId][stateToUpdate][key] = action.payload.value;
                 }
 
-
                 changedState[rowId]['isChangedPolicy'] = true;
-               checkButtons = checkToggleButtons(changedState[rowId]) 
+                checkButtons = checkToggleButtons(changedState[rowId])
 
                 // console.log(index, 'lll')
             }
-
-
 
             state.policies = changedState;
             return {
@@ -699,7 +674,7 @@ function checkToggleButtons(policy) {
             extension_enableCount += 1;
         }
     }
-    
+
 
     let guestAll2dealerApps = push_apps_guestCount == policy.push_apps.length ? true : false;
 
@@ -718,7 +693,7 @@ function checkToggleButtons(policy) {
     let encryptedAll2allExtensions = extension_encryptedCount == policy.secure_apps.length ? true : false;
 
     let enableAll2allExtensions = extension_enableCount == policy.secure_apps.length ? true : false
-    console.log('reducer',  guestAll2appPermissions,encryptedAll2appPermissions, enableAll2appPermissions)
+    // console.log('reducer',  guestAll2appPermissions,encryptedAll2appPermissions, enableAll2appPermissions)
     return {
         guestAll2dealerApps: guestAll2dealerApps,
         encryptedAll2dealerApps: encryptedAll2dealerApps,

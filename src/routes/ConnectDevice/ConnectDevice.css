@@ -278,6 +278,12 @@ th.device_info {
     margin-right: 10px;
 }
 
+.prog ,
+.prog .ant-progress-circle {
+    margin-right: 0 !important;
+    margin-bottom: 0 !important
+}
+
 @media (max-width:1330px) and (min-width:1200px) {
     .deviceImg {
         width: 270px;
