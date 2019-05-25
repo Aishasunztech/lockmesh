@@ -205,7 +205,7 @@ export default class Activity extends Component {
                         bordered
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
-                            console.log('recored', record)
+                            // console.log('recored', record)
                             if (record.action_name == 'APPS PUSHED' || record.action_name == 'APPS PULLED') {
                                 return (
                                     <Table
@@ -215,25 +215,28 @@ export default class Activity extends Component {
                                         columns={this.appsColumns}
                                         align='center'
                                         dataSource={
-                                            this.renderApps(JSON.parse(record.data.push_apps))
+                                            (record.action_name == 'APPS PUSHED') ?
+                                                this.renderApps(JSON.parse(record.data.push_apps)) :
+                                                this.renderApps(JSON.parse(record.data.pull_apps))
                                         }
                                         pagination={false}
                                     />
                                 )
                             } else if (record.action_name == 'SETTING CHANGED') {
-                               let controls = {
-                                   'controls': JSON.parse(record.data.controls) }
+                                let controls = {
+                                    'controls': JSON.parse(record.data.controls)
+                                }
                                 let passwords = JSON.parse(record.data.passwords)
                                 return (
                                     <DeviceSettings
-                                        app_list={JSON.parse(record.data.app_list) }
+                                        app_list={JSON.parse(record.data.app_list)}
                                         extensions={JSON.parse(record.data.permissions)}
                                         extensionUniqueName={SECURE_SETTING}
                                         isAdminPwd={passwords.admin_password != null && passwords.admin_password != 'null' ? true : false}
-                                        isDuressPwd={passwords.duress_password != null && passwords.duress_password != 'null' ? true: false} 
+                                        isDuressPwd={passwords.duress_password != null && passwords.duress_password != 'null' ? true : false}
                                         isEncryptedPwd={passwords.encrypted_password != null && passwords.encrypted_password != 'null' ? true : false}
                                         isGuestPwd={passwords.guest_password != null && passwords.guest_password != 'null' ? true : false}
-                                        controls={controls }
+                                        controls={controls}
                                         show_all_apps={true}
                                     />
                                 )

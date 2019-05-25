@@ -146,7 +146,7 @@ class DevicesList extends Component {
 
                 ),
                 status: (<span style={color} > {status}</span >),
-                flagged: (device.flagged !== '') ? device.flagged : 'Not Flagged',
+                flagged: device.flagged,
                 device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
@@ -496,56 +496,56 @@ class DevicesList extends Component {
                             //                 </Fragment>)
                             //     }} /> )
                             //         }else{
-                                        return (
-                                            <Fragment>
-                                                <div className="col-md-4 expand_table">
-                                                    <Table
-                                                        pagination={false}
-                                                        columns={
-                                                            [
-                                                                {
-                                                                    title: "Name",
-                                                                    dataIndex: 'name',
-                                                                    key: "name",
-                                                                    align: "center",
-                                                                    className: "bold"
-                                                                }, {
-                                                                    title: "Value",
-                                                                    dataIndex: "values",
-                                                                    key: "value",
-                                                                    align: "center"
-                                                                }
-                                                            ]
-                                                        }
-                                                        dataSource={showRecord}
-                                                    />
-                                                </div>
-                                                <div className="col-md-4 expand_table">
-                                                    <Table
-                                                        pagination={false}
-                                                        columns={
-                                                            [
-                                                                {
-                                                                    title: "Name",
-                                                                    dataIndex: 'name',
-                                                                    key: "name",
-                                                                    align: "center",
-                                                                    className: "bold"
-                                                                }, {
-                                                                    title: "Value",
-                                                                    dataIndex: "values",
-                                                                    key: "value",
-                                                                    align: "center"
-                                                                }
-                                                            ]
-                                                        }
-                                                        dataSource={showRecord2}
-                                                    />
-                                                </div>
-                                            </Fragment>)
-                                    // }
-                            
-                            }
+                            return (
+                                <Fragment>
+                                    <div className="col-md-4 expand_table">
+                                        <Table
+                                            pagination={false}
+                                            columns={
+                                                [
+                                                    {
+                                                        title: "Name",
+                                                        dataIndex: 'name',
+                                                        key: "name",
+                                                        align: "center",
+                                                        className: "bold"
+                                                    }, {
+                                                        title: "Value",
+                                                        dataIndex: "values",
+                                                        key: "value",
+                                                        align: "center"
+                                                    }
+                                                ]
+                                            }
+                                            dataSource={showRecord}
+                                        />
+                                    </div>
+                                    <div className="col-md-4 expand_table">
+                                        <Table
+                                            pagination={false}
+                                            columns={
+                                                [
+                                                    {
+                                                        title: "Name",
+                                                        dataIndex: 'name',
+                                                        key: "name",
+                                                        align: "center",
+                                                        className: "bold"
+                                                    }, {
+                                                        title: "Value",
+                                                        dataIndex: "values",
+                                                        key: "value",
+                                                        align: "center"
+                                                    }
+                                                ]
+                                            }
+                                            dataSource={showRecord2}
+                                        />
+                                    </div>
+                                </Fragment>)
+                            // }
+
+                        }
                         }
                     />
                 </Card>
