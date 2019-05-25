@@ -12,7 +12,6 @@ export default class Activity extends Component {
         this.state = {
             visible: false,
             activities: this.props.activities
-
         }
     }
 
@@ -136,6 +135,7 @@ export default class Activity extends Component {
                         ]}
                         bordered
                         dataSource={this.renderList()}
+                        expandedRowRender={record => <p style={{ margin: 0 }}>Hello Here will be more details about Action {console.log(record)}</p>}
                         // scroll={{ y: 350 }}
                         pagination={false}
                     />

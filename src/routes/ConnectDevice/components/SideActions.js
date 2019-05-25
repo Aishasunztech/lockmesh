@@ -44,31 +44,37 @@ import { PUSH_APPS, PULL_APPS, POLICY } from "../../../constants/ActionTypes"
 
 const confirm = Modal.confirm;
 
-const PasswordModal = (props) => {
+class PasswordModal extends Component {
     // console.log('object,', props.actionType)
-    return (
-        <Modal
-            // closable={false}
-            maskClosable={false}
-            style={{ top: 20 }}
-            width="330px"
-            className="push_app"
-            title=""
-            visible={props.pwdConfirmModal}
-            footer={false}
-            onOk={() => {
-
-            }}
-            onCancel={() => props.showPwdConfirmModal(false, props.actionType)}
-            okText="Push Apps"
-        >
-            <PasswordForm
-                checkPass={props.checkPass}
-                actionType={props.actionType}
-                handleCancel={props.showPwdConfirmModal}
-            />
-        </Modal>
-    )
+    render() {
+        return (
+            <Modal
+                // closable={false}
+                maskClosable={false}
+                style={{ top: 20 }}
+                width="330px"
+                className="push_app"
+                title=""
+                visible={this.props.pwdConfirmModal}
+                footer={false}
+                onOk={() => {
+                }}
+                onCancel={() => {
+                    this.props.showPwdConfirmModal(false, this.props.actionType)
+                    this.refs.pswdForm.resetFields()
+                }
+                }
+                okText="Push Apps"
+            >
+                <PasswordForm
+                    checkPass={this.props.checkPass}
+                    actionType={this.props.actionType}
+                    handleCancel={this.props.showPwdConfirmModal}
+                    ref='pswdForm'
+                />
+            </Modal >
+        )
+    }
 }
 
 
@@ -396,7 +402,6 @@ class SideActions extends Component {
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';
-        // console.log(flagged);
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
