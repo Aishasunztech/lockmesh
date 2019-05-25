@@ -2,11 +2,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
-import { Input, Modal, Select, } from "antd";
+import { Input, Modal, Select,Button   } from "antd";
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 // import {getDevicesList} from '../../appRedux/actions/Devices';
 import AppFilter from '../../components/AppFilter';
+import AddDealer from '../addDealer/index';
 import EditDealer from './components/editDealer';
 import CircularProgress from "components/CircularProgress/index";
 import DealerList from "./components/dealerList";
@@ -22,14 +23,14 @@ import {
     DEALER_TOKENS,
     DEALER_ACTION
 } from '../../constants/DealerConstants';
-
+ 
 var coppydealers = [];
 var status = true;
 class Dealers extends Component {
 
     constructor(props) {
         super(props);
-
+      
         const columns = [{
             title: '',
             dataIndex: 'accounts',
@@ -236,17 +237,36 @@ class Dealers extends Component {
             dealer_type: '',
             columns: columns,
             options: this.props.options,
+            loading_DealerModal: false,
+            visible_DealerModal: false,
             pagination: 10,
             tabselect: '1'
         };
         this.handleChange = this.handleChange.bind(this);
     }
 
-
+    showAddDealer = () => {
+        this.setState({
+          visible_DealerModal: true,
+        });
+ 
+      };
+    
+      handleOk = () => {
+        this.setState({ loading_DealerModal: true });
+        setTimeout(() => {
+          this.setState({ loading_DealerModal: false, visible_DealerModal: false });
+        }, 3000);
+      };
+    
+      handleCancel = () => {
+        this.setState({ visible_DealerModal: false });
+      };
+    
     showModal = () => {
         this.setState({
             visible: true,
-        });
+        }); 
     }
 
 
@@ -367,7 +387,7 @@ class Dealers extends Component {
                     return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
                 }}
                 onChange={this.handleChange}
-            >
+                 >
                 <Select.Option value="all">All</Select.Option>
                 <Select.Option value="active">Active</Select.Option>
                 <Select.Option value="suspended">Suspended</Select.Option>
@@ -600,7 +620,7 @@ class Dealers extends Component {
 
 
     render() {
-
+           console.log('this is the refs',this.refs)
         // console.log(this.state.columns, window.location.pathname.split("/").pop(), this.state.options)
         return (
 
@@ -609,7 +629,18 @@ class Dealers extends Component {
                     this.props.isloading ? <CircularProgress /> :
 
                         <div>
-
+                                {/* <AddDealer ref='addDealer'  /> */}
+                                <Modal
+                                  visible={this.state.visible_DealerModal}
+                                  title="Title"
+                                  onOk={this.handleOk}
+                                  onCancel={this.handleCancel}
+                                  footer={null}
+                                >  
+                              <AddDealer handleCancel={this.handleCancel}   dealersList={this.state.dealers}/>
+                                      
+                                </Modal>
+                                
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search Dealer"
@@ -629,7 +660,9 @@ class Dealers extends Component {
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
                                 testfunc={this.testfunc}
-                                toLink={"/create-dealer/" + this.state.dealer_type}
+                               addDealer= {this.showAddDealer}
+                                //  toLink={"/create-dealer/" + this.state.dealer_type}
+
                             />
                             <DealerList
                                 columns={this.state.columns}
@@ -660,6 +693,7 @@ class Dealers extends Component {
 
                     </Card> */}
                             <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
+                         
 
                         </div>
                 }

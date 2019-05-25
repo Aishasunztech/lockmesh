@@ -223,6 +223,15 @@ class AppFilter extends Component {
                                             <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
                                         </Button>
 
+                                        : (this.props.addDealer) ?
+                                        <Button
+                                            type="primary"
+                                            disabled={(this.props.disableAddButton === true) ? true : false}
+                                            style={{ width: '100%' }}
+                                            onClick={() => this.props.addDealer(true)}
+                                        >
+                                            {this.props.addButtonText}
+                                        </Button>
                                         :
                                         (this.props.AddDeviceModal) ?
                                             <Button
