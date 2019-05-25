@@ -39,7 +39,8 @@ const renderList = (histories, type, callback) => {
             ),
             app_list: history.app_list,
             controls: history.controls,
-            secure_apps: history.secure_apps
+            secure_apps: history.secure_apps,
+            push_apps: history.push_apps
         })
     })
 }
@@ -85,9 +86,10 @@ const TableHistory = (props) => {
                 let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
 
                 let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
+               let push_apps = record.push_apps == null || record.push_apps == 'null' ? [] : record.push_apps;
                 // console.log("app_list: ", app_list);
                 // console.log("extensions: ", extensions);
-                // console.log("controls: ", controls);
+                // console.log("push_apps: ", push_apps);
 
                 return (
                     <DeviceSettings
@@ -100,6 +102,9 @@ const TableHistory = (props) => {
                         // isGuestPwd={this.props.isGuestPwd}
                         show_all_apps={true}
                         controls={{ controls }}
+                        isPushApps={true}
+                        push_apps={push_apps}
+                    
                     />
                 );
             }}
