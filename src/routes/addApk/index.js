@@ -111,7 +111,7 @@ class AddApk extends Component {
 
     checkUniqueName = async (rule, value, callback) => {
         const form = this.props.form;
-        if (/[^A-Za-z\d]/.test(value)) {
+        if (/[^A-Za-z \d]/.test(value)) {
             callback('Please insert only alphabets and numbers.');
         } else {
 
