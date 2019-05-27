@@ -267,7 +267,7 @@ export default class AddPolicy extends Component {
     }
 
     callback = (activeKey) => [
-        this.setState({tabSelected: activeKey})
+        this.setState({ tabSelected: activeKey })
     ]
 
     // next() {
@@ -398,8 +398,8 @@ export default class AddPolicy extends Component {
         ];
         return (
             <Fragment>
-                <div className="policy_steps">
-                    <Tabs type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
+                <div className="policy_steps card-container">
+                    <Tabs size="small" type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
                         <TabPane tab="APPS" key="1">
                             <AppList
                                 apk_list={this.state.editAblePolicy.push_apps}
@@ -412,7 +412,6 @@ export default class AddPolicy extends Component {
                                 removeAppsFromPolicies={this.props.removeAppsFromPolicies}
                                 addAppsButton={true}
                                 isCheckAllButtons={true}
-
                                 addApps={this.addApps}
                                 apps='dealerApps'
                                 isSwitch={true}
@@ -423,18 +422,16 @@ export default class AddPolicy extends Component {
                             />
 
                         </TabPane>
-                        <TabPane tab={APPLICATION_PERMISION.toUpperCase()} key="2">
+                        <TabPane tab="APP PERMISSION" key="2">
                             <AppList
                                 apk_list={this.state.editAblePolicy.app_list}
                                 handleEditPolicy={this.props.handleEditPolicy}
                                 handleCheckAll={this.props.handleCheckAll}
                                 removeAppsFromPolicies={this.props.removeAppsFromPolicies}
-
                                 handleCheckApp={this.handleCheckApp}
                                 appPermissions='appPermissions'
                                 addAppsButton={true}
                                 isCheckAllButtons={true}
-
                                 addApps={this.addApps}
                                 guestAll={this.props.guestAllappPermissions}
                                 encryptedAll={this.props.encryptedAllappPermissions}
@@ -445,7 +442,7 @@ export default class AddPolicy extends Component {
                             />
 
                         </TabPane>
-                        <TabPane tab={SECURE_SETTING_PERMISSION.toUpperCase()} key="3">
+                        <TabPane tab="SETTINGS PERMISSION" key="3">
                             <AppList
                                 allExtensions={this.state.editAblePolicy.secure_apps}
                                 handleEditPolicy={this.props.handleEditPolicy}
@@ -462,7 +459,7 @@ export default class AddPolicy extends Component {
                                 rowId={this.state.editAblePolicy.id}
                             />
                         </TabPane>
-                        <TabPane tab={ 'SET ' + SYSTEM_PERMISSION.toUpperCase()} key="4">
+                        <TabPane tab="SYSTEM PERMISSION" key="4">
                             <Table
                                 pagination={false}
                                 dataSource={this.renderSystemPermissions()}
@@ -470,7 +467,6 @@ export default class AddPolicy extends Component {
                                 columns={columns}>
                             </Table>
                         </TabPane>
-
                         <TabPane tab="POLICY DETAILS" key="5">
                             <Form className="login-form">
                                 <Form.Item
@@ -491,10 +487,10 @@ export default class AddPolicy extends Component {
                             </Form>
                         </TabPane>
                     </Tabs>
-                    
-                    <Button onClick={() => this.onCancel()}>Cancel</Button>
-                    <Button type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
-                    
+                    <div className="text-right">
+                        <Button className="mt-10" onClick={() => this.onCancel()}>Cancel</Button>
+                        <Button className="mt-10" type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
+                    </div>
                     {/* <Steps current={current} labelPlacement="vertical">
                         {this.steps.map(item => <Steps.Step icon={item.Icon} key={item.title} title={item.title} />)}
                     </Steps>

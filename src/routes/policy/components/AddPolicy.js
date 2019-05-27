@@ -105,18 +105,18 @@ class AddPolicy extends Component {
         let appPermissions = [];
         let secure_apps = [];
 
-        if(this.state.appPermissionsIds.length){
+        if (this.state.appPermissionsIds.length) {
             // console.log('app permission', this.state.appPermissions)
-            for(let id of this.state.appPermissionsIds){
+            for (let id of this.state.appPermissionsIds) {
                 let obj = this.state.appPermissions.find(item => item.id == id)
-                if(obj) appPermissions.push(obj);
-                
+                if (obj) appPermissions.push(obj);
+
             }
         }
 
         let main_extension = this.state.allExtensions.find(item => item.uniqueName == SECURE_SETTING);
-// console.log(main_extension)
-        if(main_extension){
+        // console.log(main_extension)
+        if (main_extension) {
             secure_apps = main_extension.subExtension
         }
         // console.log('appPermissions', appPermissions, 'secure_apps', this.state.allExtensions)
@@ -232,10 +232,10 @@ class AddPolicy extends Component {
 
 
     onSelectChange = (selected, pageType) => {
-        if(pageType == 'dealerApps')  this.state.pushAppsIds = selected;
-        else if(pageType == 'appPermissions') this.state.appPermissionsIds = selected
-       
-         console.log(this.state.appPermissionsIds, 'guested apps', this.state.pushAppsIds)    
+        if (pageType == 'dealerApps') this.state.pushAppsIds = selected;
+        else if (pageType == 'appPermissions') this.state.appPermissionsIds = selected
+
+        console.log(this.state.appPermissionsIds, 'guested apps', this.state.pushAppsIds)
     }
 
     renderSystemPermissions = () => {
@@ -353,7 +353,6 @@ class AddPolicy extends Component {
                 <Table
                     pagination={false}
                     dataSource={this.renderSystemPermissions()}
-                    size="small"
                     columns={columns}>
                 </Table>
             ),
@@ -396,7 +395,7 @@ class AddPolicy extends Component {
         }
         ];
 
-        
+
         return (
             <Fragment>
                 <div className="policy_steps">
