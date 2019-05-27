@@ -84,7 +84,7 @@ class Users extends Component {
                 className: 'row',
                 sorter: (a, b) => { return a.devices - b.devices },
                 sortDirections: [],
-                sortOrder: 'descend'
+                
             },
             {
                 title: (

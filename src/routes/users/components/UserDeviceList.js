@@ -87,7 +87,7 @@ class UserDeviceList extends Component {
                         align: "center",
                         dataIndex: 'activation_code',
                         className: '',
-                        sorter: (a, b) => { return a.activation_code - b.activation_code },
+                        sorter: (a, b) => { return a.activation_code.localeCompare( b.activation_code) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]

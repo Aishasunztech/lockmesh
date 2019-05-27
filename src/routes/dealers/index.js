@@ -492,6 +492,7 @@ class Dealers extends Component {
                             className="search_heading"
                             autoComplete="new-password"
                             placeholder="Parent Dealer"
+                            onKeyUp={this.handleSearch}
                         />
                     ),
                     dataIndex: 'parent_dealer',
@@ -521,6 +522,7 @@ class Dealers extends Component {
                             className="search_heading"
                             autoComplete="new-password"
                             placeholder="Parent Dealer ID"
+                            onKeyUp={this.handleSearch}
                         />
                     ),
                     dataIndex: 'parent_dealer_id',
@@ -531,7 +533,7 @@ class Dealers extends Component {
                             dataIndex: 'parent_dealer_id',
                             key: 'parent_dealer_id',
                             className: '',
-                            sorter: (a, b) => { return a.parent_dealer_id.localeCompare(b.parent_dealer_id) },
+                            sorter: (a, b) => { return a.parent_dealer_id - b.parent_dealer_id },
 
                         }
                     ]
