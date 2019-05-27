@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styles from './AppList';
 import { Card, Table, Icon } from "antd";
 import { getStatus, getColor, checkValue, titleCase } from '../../../routes/utils/commonUtils'
+import { Redirect } from 'react-router-dom';
 import {
     DEVICE_ID,
     DEVICE_REMAINING_DAYS,
@@ -41,6 +42,13 @@ export default class DeviceSidebar extends Component {
     // componentDidMount(){
 
     // }    
+    constructor(props) {
+        super(props);
+        this.state = {
+            redirect: false,
+            user_id: ''
+        };
+    }
 
     renderDetailsData(device_details) {
 
@@ -201,6 +209,14 @@ export default class DeviceSidebar extends Component {
             }
         ]
     }
+    handleUserId = (user_id) => {
+        if (user_id != 'null' && user_id != null) {
+            this.setState({
+                redirect: true,
+                user_id: user_id
+            })
+        }
+    }
 
     renderDetailsColumns(device_details) {
         return [
@@ -224,7 +240,7 @@ export default class DeviceSidebar extends Component {
                         <div>
                             <p style={{ margin: "8px 0" }}>{device_details.device_id}</p>
                         </div>
-                        <p style={{ margin: "8px 0" }}>{checkValue(device_details.user_id)}</p>
+                        <p style={{ margin: "8px 0" }}>{<a onClick={() => { this.handleUserId(device_details.user_id) }}>{checkValue(device_details.user_id)}</a>}</p>
                     </div>
                 ),
                 dataIndex: 'value',
@@ -235,6 +251,13 @@ export default class DeviceSidebar extends Component {
     }
 
     render() {
+        const { redirect } = this.state
+        if (redirect) {
+            return <Redirect to={{
+                pathname: '/users',
+                state: { id: this.state.user_id }
+            }} />
+        }
         // console.log('device detail', this.props.device_details)
         return (
             <Card>

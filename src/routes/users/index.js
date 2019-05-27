@@ -38,6 +38,9 @@ const question_txt = (
 class Users extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            users: []
+        }
         this.columns = [
             {
                 title: 'ACTION',
@@ -86,7 +89,8 @@ class Users extends Component {
                 key: 'devices',
                 className: 'row',
                 sorter: (a, b) => { return a.devices - b.devices },
-                sortDirections: ['ascend', 'descend']
+                sortDirections: ['ascend', 'descend'],
+                // defaultSortOrder: 'descend'
             },
             {
                 title: (
@@ -134,6 +138,7 @@ class Users extends Component {
                     className: '',
                     sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
                     sortDirections: ['ascend', 'descend'],
+
                 }]
             },
             {
@@ -143,15 +148,14 @@ class Users extends Component {
                 key: "tokens",
             },
         ];
-        this.state = {
-            users: []
-        }
+        
 
     }
 
     componentDidMount() {
         this.props.getUserList();
         this.props.getPagination('users');
+        this.columns[1].children[0].title = USER_ID + ' (' +this.props.users_list.length +')'
         this.setState({
             users: this.props.users_list
         })
@@ -160,15 +164,18 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
+            this.columns[1].children[0].title = USER_ID + ' (' +nextProps.users_list.length +')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 users: nextProps.users_list
             })
+
         }
     }
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.DisplayPages);
+            this.columns[1].children[0].title = USER_ID + ' (' +this.props.users_list.length +')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
             })

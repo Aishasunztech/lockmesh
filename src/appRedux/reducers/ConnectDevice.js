@@ -151,7 +151,8 @@ const initialState = {
     noOfApp_push_pull: 0,
     noOfApp_pushed_pulled: 0,
     is_push_apps: 0,
-    is_policy_process: 0
+    is_policy_process: 0,
+
 };
 
 export default (state = initialState, action) => {

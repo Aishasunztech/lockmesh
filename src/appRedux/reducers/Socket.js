@@ -13,7 +13,8 @@ const initialState = {
     noOfApp_push_pull: 0,
     is_push_apps: 0,
     complete_policy_step: 0,
-    is_policy_process: 0
+    is_policy_process: 0,
+    is_policy_finish: false
 };
 
 export default (state = initialState, action) => {
@@ -87,7 +88,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 is_in_process: false,
-                is_policy_process: false,
+                is_policy_process: 0,
+                is_policy_finish: true,
                 complete_policy_step: 0
             }
         }
@@ -102,6 +104,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 is_in_process: true,
+                is_policy_finish: false
             }
         }
         case FINISHED_IMEI: {
