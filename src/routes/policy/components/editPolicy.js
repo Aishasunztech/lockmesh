@@ -78,7 +78,7 @@ export default class AddPolicy extends Component {
             editAblePolicy: this.props.editAblePolicy,
             addPushAppModal: false,
 
-            selectedRowKeysApps : [],
+            selectedRowKeysApps: [],
             selectedRowKeysPermissios: [],
             addDataOf: 'push_apps'
 
@@ -142,7 +142,7 @@ export default class AddPolicy extends Component {
     renderApp = (data) => {
         // console.log('data is', data)
         if (data.length) {
-           return data.map(app => {
+            return data.map(app => {
                 let app_id = (app.apk_id !== undefined) ? app.apk_id : app.id;
                 let label = (app.apk_name !== undefined) ? app.apk_name : app.label;
                 let icon = (app.logo !== undefined) ? app.logo : app.icon;
@@ -232,7 +232,7 @@ export default class AddPolicy extends Component {
     onSelectChange = selectedRowKeys => {
         // console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys: selectedRowKeys });
-      };
+    };
 
 
     reset_steps = () => [
@@ -254,7 +254,7 @@ export default class AddPolicy extends Component {
     }
 
     addItems = () => {
-        if(this.state.selectedRowKeys.length){
+        if (this.state.selectedRowKeys.length) {
             this.props.addAppsToPolicies(this.state.selectedRowKeys, this.props.editAblePolicyId, this.state.addDataOf)
             this.hideAddPushAppModal()
         }
@@ -274,7 +274,7 @@ export default class AddPolicy extends Component {
         const { current } = this.state;
         // console.log(this.props.encryptedAlldealerApps, 'selected row')
 
-        const { selectedRows,selectedRowKeys } = this.state;
+        const { selectedRows, selectedRowKeys } = this.state;
         let rowSelection = {
             selectedRowKeys,
             selectedRows,
@@ -297,7 +297,7 @@ export default class AddPolicy extends Component {
                     addAppsButton={true}
                     isCheckAllButtons={true}
 
-                    addApps = {this.addApps}
+                    addApps={this.addApps}
                     apps='dealerApps'
                     isSwitch={true}
                     edit={true}
@@ -321,7 +321,7 @@ export default class AddPolicy extends Component {
                     addAppsButton={true}
                     isCheckAllButtons={true}
 
-                    addApps = {this.addApps}
+                    addApps={this.addApps}
                     guestAll={this.props.guestAllappPermissions}
                     encryptedAll={this.props.encryptedAllappPermissions}
                     enableAll={this.props.enableAllappPermissions}
@@ -357,7 +357,7 @@ export default class AddPolicy extends Component {
                 <Table
                     pagination={false}
                     dataSource={this.renderSystemPermissions()}
-                    size="small"
+                    bordered
                     columns={columns}>
                 </Table>
             ),
@@ -425,7 +425,6 @@ export default class AddPolicy extends Component {
                             className="exp_policy"
                             style={{ margin: 0, padding: 0 }}
                             rowSelection={rowSelection}
-                            size='small'
                             scroll={this.props.isHistory ? {} : {}}
                             columns={this.appsColumns}
                             align='center'
@@ -433,6 +432,7 @@ export default class AddPolicy extends Component {
                                 this.renderApp(this.state.addDataOf == 'push_apps' ? this.props.push_apps : this.props.appPermissions)
                             }
                             pagination={false}
+                            bordered
                         />
 
                     </Modal>

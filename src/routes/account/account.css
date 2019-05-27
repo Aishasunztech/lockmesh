@@ -325,3 +325,9 @@
         line-height: 338px;
     }
 }
+
+@media screen and (max-width: 768px) {
+    .text {
+        line-height: 260px;
+    }
+}

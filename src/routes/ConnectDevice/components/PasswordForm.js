@@ -70,7 +70,7 @@ class PassworForm extends Component {
                                 }
                             ],
                         })(
-                            <Input.Password className="password_field" type='password' required placeholder="Enter Password" />
+                            <Input.Password className="password_field" type='password' required placeholder="Enter Password" autoComplete='password' />
                         )
                     }
                 </Form.Item>

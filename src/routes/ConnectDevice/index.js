@@ -42,7 +42,7 @@ import {
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
-import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged, getAppJobQueue, ackSinglePushApp, ackSinglePullApp } from "../../appRedux/actions/Socket";
+import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged, getAppJobQueue, ackSinglePushApp, ackSinglePullApp, ackFinishedPolicyStep } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
@@ -171,6 +171,7 @@ class ConnectDevice extends Component {
       this.props.ackImeiChanged(this.props.socket, device_id);
       this.props.ackSinglePushApp(this.props.socket, device_id);
       this.props.ackSinglePullApp(this.props.socket, device_id);
+      this.props.ackFinishedPolicyStep(this.props.socket, device_id);
 
       this.props.getActivities(device_id)
 
@@ -431,6 +432,8 @@ class ConnectDevice extends Component {
     let onlineColor = (onlineStatus === 'Offline') ? { color: 'red' } : { color: 'green' }
     let totalApps = (this.props.noOfApp_push_pull == undefined || this.props.noOfApp_push_pull == 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
     let completeApps = (this.props.noOfApp_pushed_pulled == undefined) ? 0 : this.props.noOfApp_pushed_pulled
+    let completeStep = this.props.complete_policy_step;
+    let policy_loading = (this.props.is_policy_applying == 1) ? (this.props.is_policy_process === false) ? 0 : 1 : this.props.is_policy_process
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -439,7 +442,7 @@ class ConnectDevice extends Component {
             <div className="gx-loader-view">
               <CircularProgress />
             </div> :
-            (this.props.is_in_process || this.props.is_push_apps == 1) ?
+            (this.props.is_in_process || this.props.is_push_apps == 1 || policy_loading == 1) ?
               <div>
                 {(this.props.device_details.online == 'On') ?
                   null : <CircularProgress />
@@ -451,9 +454,13 @@ class ConnectDevice extends Component {
                   visible={(this.props.device_details.online == 'On') ? true : false}
                   footer={null}
                   closable={false}
-
                 >
-                  <Progress className='prog' type="circle" percent={(completeApps / totalApps) * 100} format={percent => `${completeApps} of ${totalApps}`} />
+                  {(policy_loading == 1) ?
+
+                    <Progress className='prog' type="circle" percent={(completeStep / 4) * 100} format={percent => `Step ${completeStep} of ${4}`} />
+                    :
+                    <Progress className='prog' type="circle" percent={(completeApps / totalApps) * 100} format={percent => `${completeApps} of ${totalApps}`} />
+                  }
                   {/* <Progress type="circle" percent={100} /> */}
                 </Modal>
 
@@ -621,7 +628,8 @@ function mapDispatchToProps(dispatch) {
     clearApplications: clearApplications,
     getAppJobQueue: getAppJobQueue,
     ackSinglePushApp: ackSinglePushApp,
-    ackSinglePullApp: ackSinglePullApp
+    ackSinglePullApp: ackSinglePullApp,
+    ackFinishedPolicyStep: ackFinishedPolicyStep
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket }) => {
@@ -676,6 +684,9 @@ var mapStateToProps = ({ routing, device_details, auth, socket }) => {
     noOfApp_push_pull: socket.noOfApp_push_pull,
     noOfApp_pushed_pulled: socket.noOfApp_pushed_pulled,
     noOfApp_push_pull_device: device_details.noOfApp_push_pull,
+    is_policy_process: socket.is_policy_process,
+    complete_policy_step: socket.complete_policy_step,
+    is_policy_applying: device_details.is_policy_process
   };
 }
 

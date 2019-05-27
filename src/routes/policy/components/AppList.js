@@ -184,7 +184,7 @@ class AppList extends Component {
     }
 
     removeItem = (app) => {
-        let dataType = this.props.pageType=='dealerApps' ? 'push_apps' : 'appPermissions';
+        let dataType = this.props.pageType == 'dealerApps' ? 'push_apps' : 'appPermissions';
         this.props.removeAppsFromPolicies(app.apk_id, this.props.rowId, dataType)
     }
 
@@ -423,54 +423,56 @@ class AppList extends Component {
                 {
                     this.props.isCheckAllButtons ?
 
-                        <div className="applist_menu" style={{ marginBottom: 10, }}>
+                        <div className="applist_menu">
                             <Row>
-                                <Col span={6}>
-                                    <span>Guest All</span>
+                                <Col className="text-center" span={7}>
+                                    {
+                                        this.props.addAppsButton ?
+                                            this.props.apps ?
+                                                <Button size="small" type="primary" onClick={() => this.props.addApps('push_apps')} >Add Push Apps</Button>
+                                                : this.props.appPermissions ?
+                                                    <Button size="small" type="primary" onClick={() => this.props.addApps('app_list')} >Add Permissions</Button>
+                                                    : false
+                                            : false
+
+                                    }</Col>
+                                <Col className="text-center pr-2 pl-2" span={4}></Col>
+                                <Col className="text-center pr-2 pl-2" span={4}>
+                                    <span className="policy_s_txt">Guest All</span>
 
                                     <Switch checked={this.state.guestAll ? true : false}
                                         size='small'
-
+                                        className="ml-4"
                                         onChange={(e) => {
                                             this.handleCheckedAll(e, "guestAll");
                                         }} />
                                 </Col>
-                                <Col span={6}>
-                                    <span>Encrypted All</span>
+                                <Col className="text-center pr-2 pl-2" span={5}>
+                                    <span className="policy_s_txt">Encrypted All</span>
                                     <Switch checked={this.state.encryptedAll ? true : false}
                                         size='small'
+                                        className="ml-4"
                                         // defaultChecked={this.state.encryptedAll}
                                         onChange={(e) => {
                                             this.handleCheckedAll(e, "encryptedAll");
                                         }} />
                                 </Col>
-                                <Col span={6}>
+                                <Col className="text-center pr-2 pl-2" span={4}>
                                     {
 
                                         this.props.apps || this.props.appPermissions ?
                                             <div>
-                                                <span>Enable All</span>
+                                                <span className="policy_s_txt">Enable All</span>
                                                 <Switch checked={this.state.enableAll ? true : false}
                                                     size='small'
-
+                                                    className="ml-4"
                                                     onChange={(e) => {
                                                         this.handleCheckedAll(e, "enableAll");
                                                     }} />
                                             </div>
                                             : false}
                                 </Col>
-                                <Col span={6}>
-                                    {
-                                        this.props.addAppsButton ?
-                                            this.props.apps ?
-                                                <Button onClick={() => this.props.addApps('push_apps')} >Add Push Apps</Button>
-                                                : this.props.appPermissions ?
-                                                    <Button onClick={() => this.props.addApps('app_list')} >Add Permissions</Button>
-                                                    : false
-                                            : false
 
-                                    }
-                                </Col>
                             </Row>
 
                         </div> : false
@@ -480,7 +482,6 @@ class AppList extends Component {
                     style={{ margin: 0, padding: 0 }}
                     rowSelection={rowSelection}
                     selectedRowKeys={this.props.pageType == 'dealerApps' ? this.state.selectedRowKeysApps : this.state.selectedRowKeysPermissios}
-                    size='small'
                     scroll={this.props.isHistory ? {} : {}}
                     columns={this.props.allExtensions ? this.extensionColumns : this.props.addAppsButton ? this.appsColumns2 : this.appsColumns}
                     align='center'

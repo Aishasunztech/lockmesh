@@ -150,8 +150,8 @@ const initialState = {
     device_found: true,
     noOfApp_push_pull: 0,
     noOfApp_pushed_pulled: 0,
-    is_push_apps: 0
-
+    is_push_apps: 0,
+    is_policy_process: 0
 };
 
 export default (state = initialState, action) => {
@@ -396,6 +396,7 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
+                is_policy_process: 1,
                 applyPolicyConfirm: false
             }
         }
@@ -574,7 +575,8 @@ export default (state = initialState, action) => {
                     return {
                         ...state,
                         historyModal: false,
-                        applyPolicyConfirm: true
+                        applyPolicyConfirm: true,
+                        is_policy_process : 0
                     }
                 }
             }

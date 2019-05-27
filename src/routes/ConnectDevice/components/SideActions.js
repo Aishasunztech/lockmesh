@@ -402,7 +402,7 @@ class SideActions extends Component {
         // console.log(this.state.historyType,'history', this.props.policies)
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
-        const flagged = (this.props.device.flagged !== '') ? 'Unflag' : 'Flag';
+        const flagged = (this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'Flag';
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
@@ -416,7 +416,7 @@ class SideActions extends Component {
                                 <Button
                                     type="default"
                                     placement="bottom"
-                                    style={{ width: "100%", marginBottom: 16, paddingRight: 30 }}
+                                    style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
                                     disabled={this.props.authUser.type == ADMIN ? false : true}
                                 >
@@ -459,7 +459,7 @@ class SideActions extends Component {
                                 {/* <Tooltip placement="bottom" title="Coming Soon"> */}
                                 <Button
                                     type="default"
-                                    style={{ width: "100%", marginBottom: 16, paddingRight: 30 }}
+                                    style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
                                 >
                                     <Icon type="lock" className="lock_icon" />
@@ -544,7 +544,7 @@ class SideActions extends Component {
                                     />
                                     <Icon
                                         type="poweroff"
-                                        style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top', margin: '0px 30px 0 15px' }}
+                                        style={{ color: 'yellow', fontSize: '16px', verticalAlign: 'text-top' }}
                                     />
                                 </Button>
                             </Tooltip>
