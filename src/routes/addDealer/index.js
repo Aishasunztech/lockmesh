@@ -26,7 +26,10 @@ class AddDealer extends Component {
                // message.success('Action done Successfylly');
             //  this.props.history.goBack();
             //  this.props.getDealerList(window.location.pathname.split("/").pop()); 
-             this.props.handleCancel();
+            setTimeout(() => {
+                this.props.handleCancel();
+              }, 1000);
+             
             }
         });
     }
@@ -39,10 +42,10 @@ class AddDealer extends Component {
     //     }
     // }
 
-    // componentDidMount(){
-    //     // console.log('cmp');
-    //     this.props.getDealerList('dealer');
-    // }
+    componentDidMount(){
+        // console.log('cmp');
+        this.props.getDealerList('dealer', false);
+    }
     
     render() {
 
@@ -158,7 +161,7 @@ var mapStateToProps = (dealers) => {
     // console.log('dealer', dealers);
     return {
         msg: dealers.dealers.msg,
-        dealersList:dealers.dealers.dealers,
+        dealersList:dealers.dealers.dealers2,
         profile: dealers.auth.authUser,
         navigate_to:dealers.navigate_to,
     }

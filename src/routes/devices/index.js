@@ -830,7 +830,9 @@ class Devices extends Component {
             columns: columns,
             searchText: '',
             devices: [],
-            tabselect: '4'
+            tabselect: '4',
+            filteredDevices: [],
+            copy_status: true,
         }
         this.copyDevices = [];
 
@@ -859,6 +861,7 @@ class Devices extends Component {
     }
 
     handleChange(value) {
+        console.log('filtede dis0')
 
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
@@ -946,6 +949,7 @@ class Devices extends Component {
             case 'all':
                 this.setState({
                     devices: this.props.devices,
+                    filteredDevices:this.props.devices,
                     column: this.columns,
                     tabselect: '1'
                 })
@@ -1044,7 +1048,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '4'
+                    tabselect: '4',
+                    copy_status: true
                 })
                 break;
             case '9':
@@ -1052,7 +1057,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '9'
+                    tabselect: '9',
+                    copy_status: true
                 })
                 break;
             case '7':
@@ -1060,7 +1066,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '7'
+                    tabselect: '7',
+                    copy_status: true
                 })
                 break;
             case '6':
@@ -1068,14 +1075,16 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '6'
+                    tabselect: '6',
+                    copy_status: true
                 })
                 break;
             case '1':
                 this.setState({
                     devices: this.props.devices,
                     column: this.state.columns,
-                    tabselect: '1'
+                    tabselect: '1',
+                    copy_status: true
                 })
                 break;
             case "5":
@@ -1083,7 +1092,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '5'
+                    tabselect: '5',
+                    copy_status: true
                 })
                 break;
             case "2":
@@ -1091,7 +1101,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '2'
+                    tabselect: '2',
+                    copy_status: true
                 })
                 break;
             case "3":
@@ -1099,26 +1110,28 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '3'
+                    tabselect: '3',
+                    copy_status: true
                 })
                 break;
             case "8":
                 this.setState({
                     devices: [],
                     column: this.state.columns,
-                    tabselect: '8'
+                    tabselect: '8',
+                    copy_status: true
                 })
                 break;
             default:
                 this.setState({
                     devices: this.props.devices,
                     column: this.state.columns,
-                    tabselect: '1'
+                    tabselect: '1',
+                    copy_status: true
                 })
                 break;
         }
     }
-
 
     updateColumn(column, type) {
         if (type === 'hide') {
@@ -1285,6 +1298,7 @@ class Devices extends Component {
     }
     render() {
         // dealerColsWithSearch();
+        console.log(' device for search are', this.state.devices)
         return (
             <Fragment>
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
@@ -1349,11 +1363,11 @@ class Devices extends Component {
         // console.log(e.target.name , e.target.value);
 
         let demoDevices = [];
-        if (status) {
+        if (this.state.copy_status) {
             coppyDevices = this.state.devices;
-            status = false;
+            this.state.copy_status = false;
         }
-        //   console.log("devices", coppyDevices);
+        //   console.log("devices for search", coppyDevices);
 
         if (e.target.value.length) {
             // console.log("keyname", e.target.name);
@@ -1361,7 +1375,6 @@ class Devices extends Component {
             // console.log(this.state.devices);
             coppyDevices.forEach((device) => {
                 //  console.log("device", device[e.target.name] !== undefined);
-
                 if (device[e.target.name] !== undefined) {
                     if ((typeof device[e.target.name]) === 'string') {
                         // console.log("string check", device[e.target.name])
@@ -1377,7 +1390,7 @@ class Devices extends Component {
                         // demoDevices.push(device);
                     }
                 } else {
-                    demoDevices.push(device);
+                    // demoDevices.push(device);
                 }
             });
             //  console.log("searched value", demoDevices);

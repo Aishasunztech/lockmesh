@@ -58,6 +58,7 @@ export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
 export const ACTIVATE_DEALER = 'ACTIVATE_DEALER';
 export const UNDO_DEALER = 'UNDO_DEALER';
 export const ADD_DEALER = 'ADD_DEALER';
+export const DEALERS_LIST_IN_SDEALER = 'DEALERS_LIST_IN_SDEALER';
 
 // Apk const
 export const APK_LIST = 'APK_LIST';
