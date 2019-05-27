@@ -237,9 +237,13 @@ export default class AddPolicy extends Component {
     };
 
 
-    reset_steps = () => [
+    reset_steps = () => {
         this.setState({ tabSelected: '1' })
-    ]
+    }
+
+    onCancel = () => {
+        this.props.onCancel();
+    }
 
     hideAddPushAppModal = () => {
         this.setState({
@@ -487,7 +491,10 @@ export default class AddPolicy extends Component {
                             </Form>
                         </TabPane>
                     </Tabs>
+                    
+                    <Button onClick={() => this.onCancel()}>Cancel</Button>
                     <Button type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
+                    
                     {/* <Steps current={current} labelPlacement="vertical">
                         {this.steps.map(item => <Steps.Step icon={item.Icon} key={item.title} title={item.title} />)}
                     </Steps>
