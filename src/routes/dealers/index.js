@@ -32,7 +32,12 @@ class Dealers extends Component {
     constructor(props) {
         super(props);
       
-        const columns = [{
+        const columns = [ {
+            title: '#',
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+        },{
             title: '',
             dataIndex: 'accounts',
             align: 'center',

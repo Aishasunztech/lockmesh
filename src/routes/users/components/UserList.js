@@ -26,6 +26,12 @@ class UserList extends Component {
             pagination: x,
         });
     }
+
+    handleSearch2 = () => {
+        console.log('refs of all', this.refs)
+        
+    }
+
     renderList(list) {
         let user_list = list.filter((data) => {
             // if (data.type === "policy") {
@@ -62,6 +68,7 @@ class UserList extends Component {
                     </Fragment >)
                 ,
                 user_id: user.user_id,
+                counter: ++index,
                 devices: (user.devicesList) ? user.devicesList.length : 0,
                 devicesList: user.devicesList,
                 user_name: user.user_name,
@@ -116,10 +123,11 @@ class UserList extends Component {
                             // console.log("table row", record);
                             return (
                                 <UserDeviceList
+                                    ref='userDeviceList'
                                     record={record} />
                             );
                         }}
-                        expandIconColumnIndex={2}
+                        expandIconColumnIndex={3}
                         expandIconAsCell={false}
                         defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                         columns={this.state.columns}
