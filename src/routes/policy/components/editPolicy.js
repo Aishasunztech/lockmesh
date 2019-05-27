@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react'
-import { Button, Avatar, Input, Modal, Form, Icon, Steps, Table, Switch } from "antd";
+import { Button, Avatar, Input, Modal, Form, Icon, Steps, Table, Switch, Tabs } from "antd";
 import AppList from "./AppList";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING } from '../../../constants/Constants';
 import styles from './policy.css';
 import { BASE_URL } from '../../../constants/Application';
 
 const TextArea = Input;
+const TabPane = Tabs.TabPane;
 const columns = [{
     title: 'Name',
     dataIndex: 'name',
@@ -52,6 +53,7 @@ export default class AddPolicy extends Component {
             dealerApps: [],
             pushApps: [],
             steps: [],
+            tabSelected: '1',
             allExtensions: [],
             systemPermissions: [],
             policy_name: '',
@@ -222,7 +224,7 @@ export default class AddPolicy extends Component {
                 onOk: () => {
                     this.props.SavePolicyChanges(this.state.editAblePolicy);
                     this.props.editPolicyModalHide();
-                    this.setState({ current: 0 })
+                    this.setState({ tabSelected: '1' })
                 },
                 okText: 'Save',
             });
@@ -236,13 +238,13 @@ export default class AddPolicy extends Component {
 
 
     reset_steps = () => [
-        this.setState({ current: 0 })
+        this.setState({ tabSelected: '1' })
     ]
 
     hideAddPushAppModal = () => {
         this.setState({
             addPushAppModal: false,
-            selectedRowKeys: []
+            selectedRowKeys: [],
         })
     }
 
@@ -260,15 +262,19 @@ export default class AddPolicy extends Component {
         }
     }
 
-    next() {
-        const current = this.state.current + 1;
-        this.setState({ current });
-    }
+    callback = (activeKey) => [
+        this.setState({tabSelected: activeKey})
+    ]
 
-    prev() {
-        const current = this.state.current - 1;
-        this.setState({ current });
-    }
+    // next() {
+    //     const current = this.state.current + 1;
+    //     this.setState({ current });
+    // }
+
+    // prev() {
+    //     const current = this.state.current - 1;
+    //     this.setState({ current });
+    // }
 
     render() {
         const { current } = this.state;
@@ -283,113 +289,206 @@ export default class AddPolicy extends Component {
         this.steps = [{
             title: 'SELECT APPS',
             Icon: <span className="step_counting">1</span>,
-            content: (
+            // content: (
 
-                <AppList
-                    apk_list={this.state.editAblePolicy.push_apps}
-                    handleCheckApp={this.handleCheckApp}
-                    handleEditPolicy={this.props.handleEditPolicy}
-                    handleCheckAll={this.props.handleCheckAll}
-                    guestAll={this.props.guestAlldealerApps}
-                    encryptedAll={this.props.encryptedAlldealerApps}
-                    enableAll={this.props.enableAlldealerApps}
-                    removeAppsFromPolicies={this.props.removeAppsFromPolicies}
-                    addAppsButton={true}
-                    isCheckAllButtons={true}
+            // <AppList
+            //     apk_list={this.state.editAblePolicy.push_apps}
+            //     handleCheckApp={this.handleCheckApp}
+            //     handleEditPolicy={this.props.handleEditPolicy}
+            //     handleCheckAll={this.props.handleCheckAll}
+            //     guestAll={this.props.guestAlldealerApps}
+            //     encryptedAll={this.props.encryptedAlldealerApps}
+            //     enableAll={this.props.enableAlldealerApps}
+            //     removeAppsFromPolicies={this.props.removeAppsFromPolicies}
+            //     addAppsButton={true}
+            //     isCheckAllButtons={true}
 
-                    addApps={this.addApps}
-                    apps='dealerApps'
-                    isSwitch={true}
-                    edit={true}
-                    rowId={this.state.editAblePolicy.id}
-                    isCheckbox={false}
-                    pageType={'dealerApps'}
-                />
-            ),
+            //     addApps={this.addApps}
+            //     apps='dealerApps'
+            //     isSwitch={true}
+            //     edit={true}
+            //     rowId={this.state.editAblePolicy.id}
+            //     isCheckbox={false}
+            //     pageType={'dealerApps'}
+            // />
+            // ),
         }, {
             title: 'SET ' + APPLICATION_PERMISION.toUpperCase(),
             Icon: <span className="step_counting">2</span>,
-            content: (
-                <AppList
-                    apk_list={this.state.editAblePolicy.app_list}
-                    handleEditPolicy={this.props.handleEditPolicy}
-                    handleCheckAll={this.props.handleCheckAll}
-                    removeAppsFromPolicies={this.props.removeAppsFromPolicies}
+            // content: (
+            // <AppList
+            //     apk_list={this.state.editAblePolicy.app_list}
+            //     handleEditPolicy={this.props.handleEditPolicy}
+            //     handleCheckAll={this.props.handleCheckAll}
+            //     removeAppsFromPolicies={this.props.removeAppsFromPolicies}
 
-                    handleCheckApp={this.handleCheckApp}
-                    appPermissions='appPermissions'
-                    addAppsButton={true}
-                    isCheckAllButtons={true}
+            //     handleCheckApp={this.handleCheckApp}
+            //     appPermissions='appPermissions'
+            //     addAppsButton={true}
+            //     isCheckAllButtons={true}
 
-                    addApps={this.addApps}
-                    guestAll={this.props.guestAllappPermissions}
-                    encryptedAll={this.props.encryptedAllappPermissions}
-                    enableAll={this.props.enableAllappPermissions}
-                    isSwitch={true}
-                    edit={true}
-                    rowId={this.state.editAblePolicy.id}
-                />
-            ),
+            //     addApps={this.addApps}
+            //     guestAll={this.props.guestAllappPermissions}
+            //     encryptedAll={this.props.encryptedAllappPermissions}
+            //     enableAll={this.props.enableAllappPermissions}
+            //     isSwitch={true}
+            //     edit={true}
+            //     rowId={this.state.editAblePolicy.id}
+            // />
+            // ),
         }, {
             title: 'SET ' + SECURE_SETTING_PERMISSION.toUpperCase(),
             Icon: <span className="step_counting">3</span>,
-            content: (
-                <AppList
-                    allExtensions={this.state.editAblePolicy.secure_apps}
-                    handleEditPolicy={this.props.handleEditPolicy}
-                    handleCheckAll={this.props.handleCheckAll}
-                    handleCheckApp={this.handleCheckApp}
-                    secureSettings='allExtensions'
-                    guestAll={this.props.guestAllallExtensions}
-                    encryptedAll={this.props.encryptedAllallExtensions}
-                    enableAll={this.props.enableAllallExtension}
-                    isCheckAllButtons={true}
+            // content: (
+            //     <AppList
+            //         allExtensions={this.state.editAblePolicy.secure_apps}
+            //         handleEditPolicy={this.props.handleEditPolicy}
+            //         handleCheckAll={this.props.handleCheckAll}
+            //         handleCheckApp={this.handleCheckApp}
+            //         secureSettings='allExtensions'
+            //         guestAll={this.props.guestAllallExtensions}
+            //         encryptedAll={this.props.encryptedAllallExtensions}
+            //         enableAll={this.props.enableAllallExtension}
+            //         isCheckAllButtons={true}
 
-                    isSwitch={true}
-                    edit={true}
-                    rowId={this.state.editAblePolicy.id}
-                />
-            ),
+            //         isSwitch={true}
+            //         edit={true}
+            //         rowId={this.state.editAblePolicy.id}
+            //     />
+            // ),
         }, {
             title: 'SET ' + SYSTEM_PERMISSION.toUpperCase(),
             Icon: <span className="step_counting">4</span>,
-            content: (
-                <Table
-                    pagination={false}
-                    dataSource={this.renderSystemPermissions()}
-                    bordered
-                    columns={columns}>
-                </Table>
-            ),
+            // content: (
+            //     <Table
+            //         pagination={false}
+            //         dataSource={this.renderSystemPermissions()}
+            //         bordered
+            //         columns={columns}>
+            //     </Table>
+            // ),
         }, {
             title: 'SET POLICY DETAILS',
             Icon: <span className="step_counting">5</span>,
-            content: (
-                <Form className="login-form">
-                    <Form.Item
-                        validateStatus={this.state.isPolicy_name}
-                        help={this.state.policy_name_error}
-                    >
-                        <span className="h3">Name</span>
-                        <Input placeholder="Name" disabled value={this.state.policy_name} onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
-                    </Form.Item>
-                    <Form.Item
-                        validateStatus={this.state.isCommand}
-                        help={this.state.command_error}
-                    >
-                        <span className="h3">Policy Note</span>
-                        <textarea placeholder="Policy Note" value={this.state.command} onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
+            // content: (
+            //     <Form className="login-form">
+            //         <Form.Item
+            //             validateStatus={this.state.isPolicy_name}
+            //             help={this.state.policy_name_error}
+            //         >
+            //             <span className="h3">Name</span>
+            //             <Input placeholder="Name" disabled value={this.state.policy_name} onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
+            //         </Form.Item>
+            //         <Form.Item
+            //             validateStatus={this.state.isCommand}
+            //             help={this.state.command_error}
+            //         >
+            //             <span className="h3">Policy Note</span>
+            //             <textarea placeholder="Policy Note" value={this.state.command} onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
 
-                    </Form.Item>
-                </Form>
+            //         </Form.Item>
+            //     </Form>
 
-            )
+            // )
         }
         ];
         return (
             <Fragment>
                 <div className="policy_steps">
-                    <Steps current={current} labelPlacement="vertical">
+                    <Tabs type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
+                        <TabPane tab="APPS" key="1">
+                            <AppList
+                                apk_list={this.state.editAblePolicy.push_apps}
+                                handleCheckApp={this.handleCheckApp}
+                                handleEditPolicy={this.props.handleEditPolicy}
+                                handleCheckAll={this.props.handleCheckAll}
+                                guestAll={this.props.guestAlldealerApps}
+                                encryptedAll={this.props.encryptedAlldealerApps}
+                                enableAll={this.props.enableAlldealerApps}
+                                removeAppsFromPolicies={this.props.removeAppsFromPolicies}
+                                addAppsButton={true}
+                                isCheckAllButtons={true}
+
+                                addApps={this.addApps}
+                                apps='dealerApps'
+                                isSwitch={true}
+                                edit={true}
+                                rowId={this.state.editAblePolicy.id}
+                                isCheckbox={false}
+                                pageType={'dealerApps'}
+                            />
+
+                        </TabPane>
+                        <TabPane tab={APPLICATION_PERMISION.toUpperCase()} key="2">
+                            <AppList
+                                apk_list={this.state.editAblePolicy.app_list}
+                                handleEditPolicy={this.props.handleEditPolicy}
+                                handleCheckAll={this.props.handleCheckAll}
+                                removeAppsFromPolicies={this.props.removeAppsFromPolicies}
+
+                                handleCheckApp={this.handleCheckApp}
+                                appPermissions='appPermissions'
+                                addAppsButton={true}
+                                isCheckAllButtons={true}
+
+                                addApps={this.addApps}
+                                guestAll={this.props.guestAllappPermissions}
+                                encryptedAll={this.props.encryptedAllappPermissions}
+                                enableAll={this.props.enableAllappPermissions}
+                                isSwitch={true}
+                                edit={true}
+                                rowId={this.state.editAblePolicy.id}
+                            />
+
+                        </TabPane>
+                        <TabPane tab={SECURE_SETTING_PERMISSION.toUpperCase()} key="3">
+                            <AppList
+                                allExtensions={this.state.editAblePolicy.secure_apps}
+                                handleEditPolicy={this.props.handleEditPolicy}
+                                handleCheckAll={this.props.handleCheckAll}
+                                handleCheckApp={this.handleCheckApp}
+                                secureSettings='allExtensions'
+                                guestAll={this.props.guestAllallExtensions}
+                                encryptedAll={this.props.encryptedAllallExtensions}
+                                enableAll={this.props.enableAllallExtension}
+                                isCheckAllButtons={true}
+
+                                isSwitch={true}
+                                edit={true}
+                                rowId={this.state.editAblePolicy.id}
+                            />
+                        </TabPane>
+                        <TabPane tab={ 'SET ' + SYSTEM_PERMISSION.toUpperCase()} key="4">
+                            <Table
+                                pagination={false}
+                                dataSource={this.renderSystemPermissions()}
+                                bordered
+                                columns={columns}>
+                            </Table>
+                        </TabPane>
+
+                        <TabPane tab="POLICY DETAILS" key="5">
+                            <Form className="login-form">
+                                <Form.Item
+                                    validateStatus={this.state.isPolicy_name}
+                                    help={this.state.policy_name_error}
+                                >
+                                    <span className="h3">Name</span>
+                                    <Input placeholder="Name" disabled value={this.state.policy_name} onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
+                                </Form.Item>
+                                <Form.Item
+                                    validateStatus={this.state.isCommand}
+                                    help={this.state.command_error}
+                                >
+                                    <span className="h3">Policy Note</span>
+                                    <textarea placeholder="Policy Note" value={this.state.command} onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
+
+                                </Form.Item>
+                            </Form>
+                        </TabPane>
+                    </Tabs>
+                    <Button type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
+                    {/* <Steps current={current} labelPlacement="vertical">
                         {this.steps.map(item => <Steps.Step icon={item.Icon} key={item.title} title={item.title} />)}
                     </Steps>
                     <div className="steps-content">{this.steps[current].content}</div>
@@ -410,8 +509,8 @@ export default class AddPolicy extends Component {
                             current < this.steps.length - 1
                             && <Button type="primary" onClick={() => this.next()}>Next</Button>
 
-                        }
-                    </div>
+                        } */}
+                    {/* </div> */}
 
                     <Modal
                         title="Add Apps"
@@ -420,6 +519,7 @@ export default class AddPolicy extends Component {
                         onCancel={this.hideAddPushAppModal}
                         okText="Add"
                         cancelText="Cancel"
+                        width='700px'
                     >
                         <Table
                             className="exp_policy"
