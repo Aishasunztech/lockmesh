@@ -32,6 +32,37 @@ export default class Activity extends Component {
                 key: '4',
             }
         ];
+        this.pullAppsColumns = [
+            {
+                title: 'APP NAME',
+                dataIndex: 'app_name',
+                key: '1',
+                render: text => <a href="javascript:;">{text}</a>,
+            }
+        ];
+        this.policyColumns = [
+            {
+                title: 'POLICY NAME',
+                dataIndex: 'policy_name',
+                key: '1',
+                render: text => <a href="javascript:;">{text}</a>,
+            }
+        ];
+
+        this.imeiColumns = [
+            {
+                title: 'IMEI1',
+                dataIndex: 'imei1',
+                key: '1',
+                render: text => <a href="javascript:;">{text}</a>,
+            },
+            {
+                title: 'IMEI2',
+                dataIndex: 'imei2',
+                key: '1',
+                render: text => <a href="javascript:;">{text}</a>,
+            },
+        ];
         this.state = {
             visible: false,
             activities: this.props.activities
@@ -158,7 +189,7 @@ export default class Activity extends Component {
                 <Modal
                     maskClosable={false}
                     visible={visible}
-                    title='Activity'
+                    title='Activities'
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
@@ -206,7 +237,7 @@ export default class Activity extends Component {
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
                             // console.log('recored', record)
-                            if (record.action_name == 'APPS PUSHED' || record.action_name == 'APPS PULLED') {
+                            if (record.action_name == 'APPS PUSHED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -215,14 +246,72 @@ export default class Activity extends Component {
                                         columns={this.appsColumns}
                                         align='center'
                                         dataSource={
-                                            (record.action_name == 'APPS PUSHED') ?
-                                                this.renderApps(JSON.parse(record.data.push_apps)) :
+                                                this.renderApps(JSON.parse(record.data.push_apps)) 
+                                        }
+                                        pagination={false}
+                                    />
+                                )
+                            } 
+
+                            else if (record.action_name == 'APPS PULLED') {
+                                return (
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='middle'
+                                        bordered={false}
+                                        columns={this.pullAppsColumns}
+                                        align='center'
+                                        dataSource={
                                                 this.renderApps(JSON.parse(record.data.pull_apps))
                                         }
                                         pagination={false}
                                     />
                                 )
-                            } else if (record.action_name == 'SETTING CHANGED') {
+                            }
+                            else if (record.action_name == 'IMEI CHANGED') {
+                                return (
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='middle'
+                                        bordered={false}
+                                        columns={this.imeiColumns}
+                                        align='center'
+                                        dataSource={
+                                               [
+                                                {
+                                                key: record.data.id,
+                                                imei1: JSON.parse(record.data.imei).imei1 ,
+                                                imei2: JSON.parse(record.data.imei).imei2 
+
+                                                }
+                                               ]
+                                        }
+                                        pagination={false}
+                                    />
+                                )
+                            }
+                            else if (record.action_name == 'POLICY APPLIED') {
+                                return (
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='middle'
+                                        bordered={false}
+                                        columns={this.policyColumns}
+                                        align='center'
+                                        dataSource={[
+                                                {
+                                                key: record.data.id,
+                                                policy_name: '#'+record.data.policy_name
+                                                }
+                                            ]
+                                        }
+                                        pagination={false}
+                                    />
+                                )
+                            }
+                            
+                            
+                            else if (record.action_name == 'SETTING CHANGED') {
                                 let controls = {
                                     'controls': JSON.parse(record.data.controls)
                                 }

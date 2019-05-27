@@ -681,7 +681,7 @@ class SideActions extends Component {
                     activities={this.state.activities}
 
                 />
-            </div >
+            </div>
         )
     }
     handleSuspendDevice = (device, _this) => {

@@ -433,7 +433,7 @@ class ConnectDevice extends Component {
     let totalApps = (this.props.noOfApp_push_pull == undefined || this.props.noOfApp_push_pull == 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
     let completeApps = (this.props.noOfApp_pushed_pulled == undefined) ? 0 : this.props.noOfApp_pushed_pulled
     let completeStep = this.props.complete_policy_step;
-    let policy_loading = (this.props.is_policy_applying == 1) ? (this.props.is_policy_process === false) ? 0 : 1 : this.props.is_policy_process
+    let policy_loading = (this.props.is_policy_applying == 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -686,7 +686,8 @@ var mapStateToProps = ({ routing, device_details, auth, socket }) => {
     noOfApp_push_pull_device: device_details.noOfApp_push_pull,
     is_policy_process: socket.is_policy_process,
     complete_policy_step: socket.complete_policy_step,
-    is_policy_applying: device_details.is_policy_process
+    is_policy_applying: device_details.is_policy_process,
+    is_policy_finish: socket.is_policy_finish
   };
 }
 
