@@ -84,7 +84,7 @@ class DealerList extends Component {
 
     renderList(list) {
         data = [];
-        list.map((dealer) => {
+        list.map((dealer, index) => {
             const dealer_status = (dealer.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             const button_type = (dealer_status === "ACTIVATE") ? "dashed" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
@@ -104,6 +104,7 @@ class DealerList extends Component {
                     <Button type="primary" style={{ margin: '0 0 0 8px' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >PASSWORD RESET</Button>
                 </span>,
                 'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
+                'counter': ++index,
                 'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
                 'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
                 'link_code': dealer.link_code ? dealer.link_code : 'N/A',

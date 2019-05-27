@@ -929,7 +929,8 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.activeDevices,
                     column: this.columns,
-                    tabselect: '4'
+                    tabselect: '4',
+                    copy_status: true
                 })
 
                 break;
@@ -937,7 +938,8 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.trialDevices,
                     column: this.columns,
-                    tabselect: '9'
+                    tabselect: '9',
+                    copy_status: true
                 })
 
                 break;
@@ -945,21 +947,24 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.suspendDevices,
                     column: this.columns,
-                    tabselect: '7'
+                    tabselect: '7',
+                    copy_status: true
                 })
                 break;
             case DEVICE_EXPIRED:
                 this.setState({
                     devices: this.state.expireDevices,
                     column: this.columns,
-                    tabselect: '6'
+                    tabselect: '6',
+                    copy_status: true
                 })
                 break;
             case 'all':
                 this.setState({
                     devices: this.state.allDevices,
                     column: this.columns,
-                    tabselect: '1'
+                    tabselect: '1',
+                    copy_status: true
                 })
                 break;
             case DEVICE_UNLINKED:
@@ -967,6 +972,7 @@ class Devices extends Component {
                     devices: this.state.unlinkedDevices,
                     column: this.columns,
                     tabselect: '5'
+                    , copy_status: true
                 })
                 break;
             case DEVICE_PENDING_ACTIVATION:
@@ -974,14 +980,16 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.pendingDevices,
                     column: this.columns,
-                    tabselect: '2'
+                    tabselect: '2',
+                    copy_status: true
                 })
                 break;
             case DEVICE_PRE_ACTIVATION:
                 this.setState({
                     devices: this.state.preActiveDevices,
                     column: this.columns,
-                    tabselect: '3'
+                    tabselect: '3',
+                    copy_status: true
                 })
                 break;
             default:

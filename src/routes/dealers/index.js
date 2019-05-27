@@ -23,6 +23,7 @@ import {
     DEALER_TOKENS,
     DEALER_ACTION
 } from '../../constants/DealerConstants';
+import { isArray } from "util";
  
 var coppydealers = [];
 var status = true;
@@ -31,7 +32,12 @@ class Dealers extends Component {
     constructor(props) {
         super(props);
       
-        const columns = [{
+        const columns = [ {
+            title: '#',
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+        },{
             title: '',
             dataIndex: 'accounts',
             align: 'center',
@@ -718,6 +724,7 @@ class Dealers extends Component {
             // console.log(this.state.dealers);
             coppydealers.forEach((dealer) => {
                 // console.log("device", dealer);
+                console.log('dealer amount is', dealer[e.target.name])
 
                 if (dealer[e.target.name] !== undefined) {
                     if ((typeof dealer[e.target.name]) === 'string') {
@@ -727,6 +734,12 @@ class Dealers extends Component {
                     } else if (dealer[e.target.name] != null) {
                         if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDealers.push(dealer);
+                        }
+                        if(isArray(dealer[e.target.name])){
+                            console.log('is it working', e.target.name)
+                            if (dealer[e.target.name][0]['total'].includes(e.target.value)) {
+                                demoDealers.push(dealer);
+                            }
                         }
                     } else {
                         // demoDevices.push(device);

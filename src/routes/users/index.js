@@ -43,6 +43,12 @@ class Users extends Component {
         }
         this.columns = [
             {
+                title: '#',
+                dataIndex: 'counter',
+                align: 'center',
+                className: 'row',
+            },
+            {
                 title: 'ACTION',
                 align: "center",
                 dataIndex: 'action',
@@ -79,18 +85,34 @@ class Users extends Component {
             },
             {
                 title: (
-                    <span>
-                        DEVICES
-                    <Popover placement="top" content={question_txt}>
-                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                        </Popover>
-                    </span>),
+                    <div>
+                        <Input.Search
+                            name="device_id"
+                            key="device_id"
+                            id="device_id"
+                            className="search_heading"
+                            autoComplete="new-password"
+                            placeholder={'Search By Device Id'}
+                        />
+                    </div>),
                 dataIndex: 'devices',
-                key: 'devices',
                 className: 'row',
-                sorter: (a, b) => { return a.devices - b.devices },
-                sortDirections: ['ascend', 'descend'],
-                // defaultSortOrder: 'descend'
+                children: [
+                    {
+                        title: (<span>
+                            DEVICES
+                    <Popover placement="top" content={question_txt}>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
+                            </Popover>
+                        </span>),
+                        align: "center",
+                        dataIndex: 'devices',
+                        key: "devices",
+                        className: 'row',
+                        sorter: (a, b) => { return a.devices - b.devices },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ],
             },
             {
                 title: (
@@ -148,14 +170,14 @@ class Users extends Component {
                 key: "tokens",
             },
         ];
-        
+
 
     }
 
     componentDidMount() {
         this.props.getUserList();
         this.props.getPagination('users');
-        this.columns[1].children[0].title = USER_ID + ' (' +this.props.users_list.length +')'
+        this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
         this.setState({
             users: this.props.users_list
         })
@@ -164,7 +186,7 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
-            this.columns[1].children[0].title = USER_ID + ' (' +nextProps.users_list.length +')'
+            this.columns[2].children[0].title = USER_ID + ' (' + nextProps.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 users: nextProps.users_list
@@ -172,15 +194,18 @@ class Users extends Component {
 
         }
     }
+
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.DisplayPages);
-            this.columns[1].children[0].title = USER_ID + ' (' +this.props.users_list.length +')'
+            this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
             })
         }
     }
+
+
 
 
     handleComponentSearch = (value) => {
@@ -227,6 +252,11 @@ class Users extends Component {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
     }
+
+    consoled = () => {
+        console.log('rendered row is ', this.refs)
+    }
+
     handleSearch = (e) => {
         // console.log('============ check search value ========')
         // console.log(e.target.name , e.target.value);
@@ -275,7 +305,7 @@ class Users extends Component {
     }
 
     render() {
-        // console.log(this.props.location);
+        console.log(this.state.users, 'refs is');
         return (
             <Fragment>
                 <AppFilter
@@ -301,6 +331,7 @@ class Users extends Component {
                     users={this.state.users}
                     pagination={this.props.DisplayPages}
                     ref="userList"
+                    consoled={this.consoled}
                 />
                 {/* <UserList/> */}
             </Fragment>
