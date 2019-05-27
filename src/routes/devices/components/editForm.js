@@ -252,15 +252,28 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Client ID "
+                        label="Sim ID "
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
+                        showSearch
                     >
-                        {this.props.form.getFieldDecorator('client_id', {
-
-                            initialValue: checkValue(this.props.device.client_id),
+                        {this.props.form.getFieldDecorator('sim_id', {
+                            initialValue: this.props.device.sim_id,
                         })(
-                            <Input />
+                            <Select
+                                showSearch
+                                placeholder="Select Sim ID"
+                                optionFilterProp="children"
+                                // onChange={handleChange}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                                <Select.Option value="">Select Sim ID</Select.Option>
+                                {this.props.sim_ids.map((sim_id, index) => {
+                                    return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                })}
+                            </Select>,
                         )}
                     </Form.Item>
                     <Form.Item
@@ -290,31 +303,7 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
 
-                    <Form.Item
-                        label="Sim ID "
-                        labelCol={{ span: 8, xs: 24, sm: 8 }}
-                        wrapperCol={{ span: 14, md: 14, xs: 24 }}
-                        showSearch
-                    >
-                        {this.props.form.getFieldDecorator('sim_id', {
-                            initialValue: this.props.device.sim_id,
-                        })(
-                            <Select
-                                showSearch
-                                placeholder="Select Sim ID"
-                                optionFilterProp="children"
-                                // onChange={handleChange}
-                                // onFocus={handleFocus}
-                                // onBlur={handleBlur}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            >
-                                <Select.Option value="">Select Sim ID</Select.Option>
-                                {this.props.sim_ids.map((sim_id, index) => {
-                                    return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
-                                })}
-                            </Select>,
-                        )}
-                    </Form.Item>
+
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
                         <Form.Item
                             label="Model"

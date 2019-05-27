@@ -431,7 +431,7 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showHistoryModal(true, "profile")}
                                 >
-                                    <Icon type="file" />
+                                    <Icon type="select" />
                                     Load Profile
                                 </Button>
                                 <Button
@@ -439,13 +439,13 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showHistoryModal(true, "policy")}
                                 >
-                                    <Icon type="file" />
+                                    <Icon type="select" />
                                     Load Policy
                                 </Button>
                                 <Button
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
                                     type="default"
-                                    style={{ width: "100%", marginBottom: 16, background: "#eed9c4", border: "1px solid #eab886" }}
+                                    style={{ width: "100%", marginBottom: 16, background: "#eed9c4", color: "#555", border: "1px solid #eab886" }}
                                 >
                                     {/* <Icon type="number" /> */}
                                     IMEI
@@ -473,19 +473,6 @@ class SideActions extends Component {
                                         <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
                                         </Button>
                                     : null}
-
-                                <Button
-                                    type="primary"
-                                    style={{ width: "100%", marginBottom: 16 }}
-                                    onClick={() => this.showHistoryModal(true, "history")}
-                                    disabled
-
-                                >
-                                    <Icon type="file" />
-                                    Load History
-                                </Button>
-
-                                {/* <Tooltip placement="left" title="Coming Soon"> */}
                                 <Button
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
@@ -493,7 +480,15 @@ class SideActions extends Component {
                                 >
                                     Activity
                                 </Button>
-                                {/* </Tooltip> */}
+                                <Tooltip placement="left" title="Coming Soon">
+                                    <Button
+                                        type="default"
+                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
+                                    >
+                                        <Icon type="file" />
+                                        SIM
+                                </Button>
+                                </Tooltip>
                             </Col>
                         </Row>
                     </Card>
