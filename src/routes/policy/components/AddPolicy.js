@@ -133,28 +133,37 @@ class AddPolicy extends Component {
         // console.log('polcy is', data);
 
         if ((this.state.policy_name !== '') && this.state.command !== '') {
-            this.props.savePolicy(data);
-            this.props.handlePolicyModal(false);
-            this.props.getPolicies();
-            this.props.getDealerApps();
-            this.props.getAppPermissions();
-            this.setState({
-                current: 0,
-                policy_name: '',
-                command: '',
-                pushApps: [],
-                guestAlldealerApps: false,
-                encryptedAlldealerApps: false,
-                enableAlldealerApps: false,
-
-                guestAllappPermissions: false,
-                encryptedAllappPermissions: false,
-                enableAllappPermissions: false,
-
-                guestAllallExtensions: false,
-                encryptedAllallExtensions: false,
-                enableAllallExtensions: false,
-            })
+            if (/[^A-Za-z \d]/.test(this.state.policy_name)) {
+                this.setState({
+                    isPolicy_name: 'error',
+                    policy_name_error: "Please insert only alphabets and numbers."
+                })
+            } 
+            else{
+                this.props.savePolicy(data);
+                this.props.handlePolicyModal(false);
+                this.props.getPolicies();
+                this.props.getDealerApps();
+                this.props.getAppPermissions();
+                this.setState({
+                    current: 0,
+                    policy_name: '',
+                    command: '',
+                    pushApps: [],
+                    guestAlldealerApps: false,
+                    encryptedAlldealerApps: false,
+                    enableAlldealerApps: false,
+    
+                    guestAllappPermissions: false,
+                    encryptedAllappPermissions: false,
+                    enableAllappPermissions: false,
+    
+                    guestAllallExtensions: false,
+                    encryptedAllallExtensions: false,
+                    enableAllallExtensions: false,
+                })
+            }
+           
         }
         else {
             if (this.state.policy_name === '') {
