@@ -9,7 +9,8 @@ import {
     EDIT_DEALER,
     LOADING,ADD_DEALER,
     INIT_URL,
-    SPIN_lOADING
+    SPIN_lOADING,
+    DEALERS_LIST_IN_SDEALER
 } from "constants/ActionTypes"
 // import { message } from 'antd';
 
@@ -17,21 +18,30 @@ import RestService from '../services/RestServices';
 
 // action creaters 
 
-export function getDealerList(d) {
+export function getDealerList(d, is_loading_show=true) {
     return (dispatch) => {
-        dispatch({
-            type: LOADING,
-            isloading: true
-        });
+        if(is_loading_show){
+            dispatch({
+                type: LOADING,
+                isloading: true
+            });
+        }
+       
         RestService.DealerList(d).then((response) => {
             // console.log('data form server', response.data);
-
             if (RestService.checkAuth(response.data)) {
-
-                dispatch({
-                    type: DEALERS_LIST,
-                    payload: response.data
-                });
+                if(is_loading_show){
+                    dispatch({
+                        type: DEALERS_LIST,
+                        payload: response.data
+                    });
+                }else{
+                    dispatch({
+                        type: DEALERS_LIST_IN_SDEALER,
+                        payload: response.data
+                    });
+                }
+                
             } else {
                 dispatch({
                     type: INVALID_TOKEN

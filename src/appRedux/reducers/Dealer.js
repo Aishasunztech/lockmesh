@@ -11,7 +11,8 @@ import {
     GET_DROPDOWN,
     POST_DROPDOWN,
     GET_PAGINATION,
-    SPIN_lOADING
+    SPIN_lOADING,
+    DEALERS_LIST_IN_SDEALER
 } from "constants/ActionTypes";
 
 import {
@@ -31,6 +32,7 @@ const initialState = {
     isloading: false,
     subIsloading: false,
     dealers: [],
+    dealers2: [],
     suspended: 'no change',
     action: '',
     msg: 'no message',
@@ -77,6 +79,13 @@ export default (state = initialState, action) => {
                 spinloading: false,
                 dealers: action.payload,
                 options: state.options
+            }
+
+            case DEALERS_LIST_IN_SDEALER: {
+                return {
+                    ...state,
+                    dealers2: action.payload
+                }
             }
 
         case SUSPEND_DEALERS:
