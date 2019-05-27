@@ -11,7 +11,8 @@ export default class TableHistory extends Component {
             appColumns: [],
             applist: [],
             extensions: [],
-            controls: {}
+            controls: {},
+            push_apps: []
         }
 
         this.appsColumns = [
@@ -174,7 +175,8 @@ export default class TableHistory extends Component {
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             this.setState({
-                controls: this.props.controls
+                controls: this.props.controls,
+                push_apps: this.props.push_apps
             })
             this.filterAppList()
             this.filterExtensions()
@@ -182,7 +184,10 @@ export default class TableHistory extends Component {
     }
 
     componentDidMount() {
-        this.setState({ controls: this.props.controls })
+        this.setState({
+            controls: this.props.controls,
+            push_apps: this.props.push_apps
+        })
         this.filterAppList();
         this.filterExtensions();
     }
@@ -194,7 +199,7 @@ export default class TableHistory extends Component {
                 datalist.map((item, index) => {
                     return {
                         key: item.app_id,
-                        label: item.label,
+                        label: item.label == undefined || item.label == 'undefined' ? item.apk_name : item.label,
                         // guest: (item.guest == 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
                         guest: <Switch
                             size="small"
@@ -226,6 +231,22 @@ export default class TableHistory extends Component {
             <div>
                 {/* {
                     this.state.applist.length ? */}
+                {
+                    this.props.isPushApps ?
+                        <div>
+                            <Divider > PUSH APPS </Divider>
+                            <Table
+                                style={{ margin: 0, padding: 0 }}
+                                size='default'
+                                bordered={false}
+                                columns={this.appsColumns}
+                                align='center'
+                                dataSource={this.renderData(this.state.push_apps)}
+                                pagination={false}
+
+                            />
+                        </div> : null
+                }
 
                 <div>
                     <Divider >{APPLICATION_PERMISION} </Divider>
