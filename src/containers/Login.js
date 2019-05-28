@@ -10,6 +10,7 @@ import {
 } from "appRedux/actions/Auth";
 import IntlMessages from "util/IntlMessages";
 import CircularProgress from "components/CircularProgress/index";
+import { AUTO_UPDATE_ADMIN } from "../constants/Constants";
 
 const FormItem = Form.Item;
 
@@ -42,7 +43,11 @@ class Login extends React.Component {
       this.props.history.push('/verify-auth');
     }
 
-    if (authUser.id != null && authUser.email != null && authUser.token != null && authUser.type != null) {
+    if (authUser.id != null && authUser.email != null && authUser.token != null && authUser.type === AUTO_UPDATE_ADMIN) {
+      // console.log("Updater");
+      this.props.history.push('/apk-list/autoupdate');
+    }
+    else if (authUser.id != null && authUser.email != null && authUser.token != null && authUser.type != null) {
       this.props.history.push('/');
     }
   }

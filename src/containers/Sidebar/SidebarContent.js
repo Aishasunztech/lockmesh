@@ -17,7 +17,7 @@ import IntlMessages from "../../util/IntlMessages";
 import { connect } from "react-redux";
 import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
 
-import { ADMIN, DEALER, SDEALER } from "../../constants/Constants";
+import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 
 // import MenuItems from "../MenuItems";
 
@@ -77,45 +77,55 @@ class SidebarContent extends Component {
             {/* <AppsNavigation/> */}
           </div>
           {/* <CustomScrollbars className="gx-layout-sider-scrollbar"> */}
-          <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
-            <Menu.Item key="devices">
-              <Link to="/devices">
-                <i className="icon icon-mobile" >
-                  <i className="fa fa-mobile" aria-hidden="true"></i>
-                </i>
-                <IntlMessages id="sidebar.devices" /></Link>
-            </Menu.Item>
-            <Menu.Item key="users">
-              <Link to="/users">
-                <i className="icon icon-user" />
-                <IntlMessages id="sidebar.users" /></Link>
-            </Menu.Item>
-            {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
-              <Link to="/dealer/dealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.dealers" /></Link>
-            </Menu.Item> : null}
+          {(authUser.type === AUTO_UPDATE_ADMIN)
+            ?
+            <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
+              <Menu.Item key="app">
+                <Link to="/apk-list/autoupdate"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
+              </Menu.Item>
+            </Menu>
+            :
 
-            {(authUser.type === ADMIN || authUser.type === DEALER) ? <Menu.Item key="dealer/sdealer">
-              <Link to="/dealer/sdealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.sdealers" /></Link>
-            </Menu.Item> : null}
+            <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
+              <Menu.Item key="devices">
+                <Link to="/devices">
+                  <i className="icon icon-mobile" >
+                    <i className="fa fa-mobile" aria-hidden="true"></i>
+                  </i>
+                  <IntlMessages id="sidebar.devices" /></Link>
+              </Menu.Item>
+              <Menu.Item key="users">
+                <Link to="/users">
+                  <i className="icon icon-user" />
+                  <IntlMessages id="sidebar.users" /></Link>
+              </Menu.Item>
+              {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
+                <Link to="/dealer/dealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.dealers" /></Link>
+              </Menu.Item> : null}
 
-            {(authUser.type === "admin" || authUser.type === "dealer") ? <Menu.Item key="app">
-              <Link to="/app"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
-            </Menu.Item> : null}
-            {(authUser.type === ADMIN) ? <Menu.Item key="account">
-              <Link to="/account"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.account" /></Link>
-            </Menu.Item> : null}
-            {/* {(authUser.type === "admin") ? <Menu.Item key="policy">
+              {(authUser.type === ADMIN || authUser.type === DEALER) ? <Menu.Item key="dealer/sdealer">
+                <Link to="/dealer/sdealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.sdealers" /></Link>
+              </Menu.Item> : null}
+
+              {(authUser.type === "admin" || authUser.type === "dealer") ? <Menu.Item key="app">
+                <Link to="/app"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
+              </Menu.Item> : null}
+              {(authUser.type === ADMIN) ? <Menu.Item key="account">
+                <Link to="/account"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.account" /></Link>
+              </Menu.Item> : null}
+              {/* {(authUser.type === "admin") ? <Menu.Item key="policy">
               <Link to="/policy"><Icon type="file-protect" className="icon" /> <IntlMessages id="sidebar.policy" /></Link>
             </Menu.Item> : null} */}
 
-            {/* {(authUser.type === "admin") ? <Menu.Item key="apk-list">
+              {/* {(authUser.type === "admin") ? <Menu.Item key="apk-list">
               <Link to="/app"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
             </Menu.Item> : null} */}
 
-            <Menu.Item key="profile">
-              <Link to="/profile"><i className="icon icon-contacts" /> <IntlMessages id="sidebar.profile" /></Link>
-            </Menu.Item>
-          </Menu>
+              <Menu.Item key="profile">
+                <Link to="/profile"><i className="icon icon-contacts" /> <IntlMessages id="sidebar.profile" /></Link>
+              </Menu.Item>
+            </Menu>
+          }
           {/* </CustomScrollbars> */}
         </div>
       </Auxiliary>

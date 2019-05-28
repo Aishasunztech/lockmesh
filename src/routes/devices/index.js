@@ -833,7 +833,6 @@ class Devices extends Component {
             searchText: '',
             devices: [],
             tabselect: '4',
-            copy_status: true,
             allDevices: this.props.devices,
             activeDevices: [],
             expireDevices: [],
@@ -842,6 +841,8 @@ class Devices extends Component {
             preActiveDevices: [],
             pendingDevices: [],
             unlinkedDevices: [],
+            filteredDevices: [],
+            copy_status: true,
         }
         this.copyDevices = [];
 
@@ -962,6 +963,7 @@ class Devices extends Component {
             case 'all':
                 this.setState({
                     devices: this.state.allDevices,
+                    filteredDevices: this.props.devices,
                     column: this.columns,
                     tabselect: '1',
                     copy_status: true
@@ -1385,7 +1387,6 @@ class Devices extends Component {
                             />
                             <AddDevice ref="add_device" />
                         </Fragment>
-
                 }
             </Fragment>
         );
