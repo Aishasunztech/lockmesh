@@ -65,40 +65,40 @@ export default class PolicyInfo extends Component {
             return [{
                 rowKey: 'wifi_status',
                 name: 'Wifi',
-                action: 
-                // this.props.isSwitch ?
+                action:
+                    // this.props.isSwitch ?
                     <Switch disabled checked={controls.wifi_status} onClick={(e) => this.props.handleEditPolicy(e, 'wifi_status', '', 'push_apps', this.props.rowId)} size="small" />
-                    // : <span style={{ color: (controls.wifi_status === true || controls.wifi_status === 1) ? 'green' : 'red' }} >{(controls.wifi_status === true || controls.wifi_status === 1) ? 'On' : 'Off'}</span>
+                // : <span style={{ color: (controls.wifi_status === true || controls.wifi_status === 1) ? 'green' : 'red' }} >{(controls.wifi_status === true || controls.wifi_status === 1) ? 'On' : 'Off'}</span>
             }, {
                 rowKey: 'bluetooth_status',
                 name: 'Bluetooth',
-                action: 
-                // this.props.isSwitch ?
+                action:
+                    // this.props.isSwitch ?
                     <Switch disabled={this.props.isSwitch ? false : true} checked={controls.bluetooth_status} onClick={(e) => this.props.handleEditPolicy(e, 'bluetooth_status', '', 'controls', this.props.rowId)} size="small" />
-                    // : <span style={{ color: (controls.bluetooth_status === true || controls.bluetooth_status === 1) ? 'green' : 'red' }} >{(controls.bluetooth_status === true || controls.bluetooth_status === 1) ? 'On' : 'Off'}</span>
+                // : <span style={{ color: (controls.bluetooth_status === true || controls.bluetooth_status === 1) ? 'green' : 'red' }} >{(controls.bluetooth_status === true || controls.bluetooth_status === 1) ? 'On' : 'Off'}</span>
             }, {
                 rowKey: 'screenshot_status',
                 name: 'ScreenShot',
-                action: 
-                // this.props.isSwitch ? 
-                <Switch disabled={this.props.isSwitch ? false : true} checked={controls.screenshot_status} onClick={(e) => this.props.handleEditPolicy(e, 'screenshot_status', '', 'controls', this.props.rowId)} size="small" />
-                    // : <span style={{ color: (controls.screenshot_status === true || controls.screenshot_status === 1) ? 'green' : 'red' }} >{(controls.screenshot_status === true || controls.screenshot_status === 1) ? 'On' : 'Off'}</span>
+                action:
+                    // this.props.isSwitch ? 
+                    <Switch disabled={this.props.isSwitch ? false : true} checked={controls.screenshot_status} onClick={(e) => this.props.handleEditPolicy(e, 'screenshot_status', '', 'controls', this.props.rowId)} size="small" />
+                // : <span style={{ color: (controls.screenshot_status === true || controls.screenshot_status === 1) ? 'green' : 'red' }} >{(controls.screenshot_status === true || controls.screenshot_status === 1) ? 'On' : 'Off'}</span>
 
             }, {
                 rowKey: 'location_status',
                 name: 'Location',
                 action:
-                //  this.props.isSwitch ? 
-                 <Switch disabled={this.props.isSwitch ? false : true} checked={controls.location_status} onClick={(e) => this.props.handleEditPolicy(e, 'location_status', '', 'controls', this.props.rowId)} size="small" />
-                    // : <span style={{ color: (controls.location_status === true || controls.location_status === 1) ? 'green' : 'red' }} >{(controls.location_status === true || controls.location_status === 1) ? 'On' : 'Off'}</span>
+                    //  this.props.isSwitch ? 
+                    <Switch disabled={this.props.isSwitch ? false : true} checked={controls.location_status} onClick={(e) => this.props.handleEditPolicy(e, 'location_status', '', 'controls', this.props.rowId)} size="small" />
+                // : <span style={{ color: (controls.location_status === true || controls.location_status === 1) ? 'green' : 'red' }} >{(controls.location_status === true || controls.location_status === 1) ? 'On' : 'Off'}</span>
 
             }, {
                 rowKey: 'hotspot_status',
                 name: 'Hotspot',
-                action: 
-                // this.props.isSwitch ? 
-                <Switch disabled={this.props.isSwitch ? false : true} checked={controls.hotspot_status} onClick={(e) => this.props.handleEditPolicy(e, 'hotspot_status', '', 'controls', this.props.rowId)} size="small" />
-                    // : <span style={{ color: (controls.hotspot_status === true || controls.hotspot_status === 1) ? 'green' : 'red' }} >{(controls.hotspot_status === true || controls.hotspot_status === 1) ? 'On' : 'Off'}</span>
+                action:
+                    // this.props.isSwitch ? 
+                    <Switch disabled={this.props.isSwitch ? false : true} checked={controls.hotspot_status} onClick={(e) => this.props.handleEditPolicy(e, 'hotspot_status', '', 'controls', this.props.rowId)} size="small" />
+                // : <span style={{ color: (controls.hotspot_status === true || controls.hotspot_status === 1) ? 'green' : 'red' }} >{(controls.hotspot_status === true || controls.hotspot_status === 1) ? 'On' : 'Off'}</span>
 
             }]
         }
@@ -196,7 +196,7 @@ export default class PolicyInfo extends Component {
                             guestAll={this.props.guestAllallExtensions}
                             encryptedAll={this.props.encryptedAllallExtensions}
                             enableAll={this.props.enableAllallExtension}
-                            
+
                             isSwitch={this.props.isSwitch}
                             edit={this.props.edit}
                             rowId={this.props.rowId}
@@ -206,7 +206,6 @@ export default class PolicyInfo extends Component {
                         <Table
                             pagination={false}
                             dataSource={this.renderSystemPermissions(this.state.policy.controls)}
-                            size="small"
                             columns={columnsSystemPermission}>
                         </Table>
                     </TabPane>
@@ -214,7 +213,6 @@ export default class PolicyInfo extends Component {
                         <Table
                             pagination={false}
                             dataSource={PolicyDetail}
-                            size="small"
                             columns={columnsPolicyDetail}>
                         </Table>
                     </TabPane>

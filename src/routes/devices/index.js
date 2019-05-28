@@ -184,8 +184,8 @@ class Devices extends Component {
                         className: '',
                         sorter: (a, b) => {
                             console.log(a, 'user is is')
-                             return a.user_id.props.children.localeCompare(b.user_id.props.children) 
-                            },
+                            return a.user_id.props.children.localeCompare(b.user_id.props.children)
+                        },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -832,13 +832,15 @@ class Devices extends Component {
             devices: [],
             tabselect: '4',
             allDevices: this.props.devices,
-                activeDevices: [],
-                expireDevices: [],
-                suspendDevices: [],
-                trialDevices: [],
-                preActiveDevices: [],
-                pendingDevices: [],
-                unlinkedDevices: [],
+            activeDevices: [],
+            expireDevices: [],
+            suspendDevices: [],
+            trialDevices: [],
+            preActiveDevices: [],
+            pendingDevices: [],
+            unlinkedDevices: [],
+            filteredDevices: [],
+            copy_status: true,
         }
         this.copyDevices = [];
 
@@ -867,6 +869,7 @@ class Devices extends Component {
     }
 
     handleChange(value) {
+        console.log('filtede dis0')
 
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
@@ -925,7 +928,8 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.activeDevices,
                     column: this.columns,
-                    tabselect: '4'
+                    tabselect: '4',
+                    copy_status: true
                 })
 
                 break;
@@ -933,7 +937,8 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.trialDevices,
                     column: this.columns,
-                    tabselect: '9'
+                    tabselect: '9',
+                    copy_status: true
                 })
 
                 break;
@@ -941,21 +946,25 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.suspendDevices,
                     column: this.columns,
-                    tabselect: '7'
+                    tabselect: '7',
+                    copy_status: true
                 })
                 break;
             case DEVICE_EXPIRED:
                 this.setState({
                     devices: this.state.expireDevices,
                     column: this.columns,
-                    tabselect: '6'
+                    tabselect: '6',
+                    copy_status: true
                 })
                 break;
             case 'all':
                 this.setState({
                     devices: this.state.allDevices,
+                    filteredDevices: this.props.devices,
                     column: this.columns,
-                    tabselect: '1'
+                    tabselect: '1',
+                    copy_status: true
                 })
                 break;
             case DEVICE_UNLINKED:
@@ -963,6 +972,7 @@ class Devices extends Component {
                     devices: this.state.unlinkedDevices,
                     column: this.columns,
                     tabselect: '5'
+                    , copy_status: true
                 })
                 break;
             case DEVICE_PENDING_ACTIVATION:
@@ -970,14 +980,16 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.pendingDevices,
                     column: this.columns,
-                    tabselect: '2'
+                    tabselect: '2',
+                    copy_status: true
                 })
                 break;
             case DEVICE_PRE_ACTIVATION:
                 this.setState({
                     devices: this.state.preActiveDevices,
                     column: this.columns,
-                    tabselect: '3'
+                    tabselect: '3',
+                    copy_status: true
                 })
                 break;
             default:
@@ -1048,11 +1060,12 @@ class Devices extends Component {
         var devices = [];
         switch (value) {
             case '4':
-                devices = this.filterList(DEVICE_ACTIVATED,this.props.devices)
+                devices = this.filterList(DEVICE_ACTIVATED, this.props.devices)
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '4'
+                    tabselect: '4',
+                    copy_status: true
                 })
                 break;
             case '9':
@@ -1060,7 +1073,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '9'
+                    tabselect: '9',
+                    copy_status: true
                 })
                 break;
             case '7':
@@ -1068,7 +1082,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '7'
+                    tabselect: '7',
+                    copy_status: true
                 })
                 break;
             case '6':
@@ -1076,14 +1091,16 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '6'
+                    tabselect: '6',
+                    copy_status: true
                 })
                 break;
             case '1':
                 this.setState({
                     devices: this.state.allDevices,
                     column: this.state.columns,
-                    tabselect: '1'
+                    tabselect: '1',
+                    copy_status: true
                 })
                 break;
             case "5":
@@ -1091,7 +1108,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '5'
+                    tabselect: '5',
+                    copy_status: true
                 })
                 break;
             case "2":
@@ -1099,7 +1117,8 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '2'
+                    tabselect: '2',
+                    copy_status: true
                 })
                 break;
             case "3":
@@ -1107,26 +1126,28 @@ class Devices extends Component {
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
-                    tabselect: '3'
+                    tabselect: '3',
+                    copy_status: true
                 })
                 break;
             case "8":
                 this.setState({
                     devices: [],
                     column: this.state.columns,
-                    tabselect: '8'
+                    tabselect: '8',
+                    copy_status: true
                 })
                 break;
             default:
                 this.setState({
                     devices: this.state.allDevices,
                     column: this.state.columns,
-                    tabselect: '1'
+                    tabselect: '1',
+                    copy_status: true
                 })
                 break;
         }
     }
-
 
     updateColumn(column, type) {
         if (type === 'hide') {
@@ -1202,15 +1223,15 @@ class Devices extends Component {
                 defaultPagingValue: this.props.DisplayPages,
                 selectedOptions: this.props.selectedOptions,
                 allDevices: this.props.devices,
-                activeDevices: this.filterList(DEVICE_ACTIVATED,this.props.devices),
-                expireDevices: this.filterList(DEVICE_EXPIRED,this.props.devices),
-                suspendDevices: this.filterList(DEVICE_SUSPENDED,this.props.devices),
-                trialDevices: this.filterList(DEVICE_TRIAL,this.props.devices),
-                preActiveDevices: this.filterList(DEVICE_PRE_ACTIVATION,this.props.devices),
-                pendingDevices: this.filterList(DEVICE_PENDING_ACTIVATION,this.props.devices),
-                unlinkedDevices: this.filterList(DEVICE_UNLINKED,this.props.devices),
+                activeDevices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
+                expireDevices: this.filterList(DEVICE_EXPIRED, this.props.devices),
+                suspendDevices: this.filterList(DEVICE_SUSPENDED, this.props.devices),
+                trialDevices: this.filterList(DEVICE_TRIAL, this.props.devices),
+                preActiveDevices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices),
+                pendingDevices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
+                unlinkedDevices: this.filterList(DEVICE_UNLINKED, this.props.devices),
                 // transferDevices: this.filterList(DEVICE_TRANSFER,this.props.devices),
-  
+
 
             })
             // this.copyDevices = this.props.devices;
@@ -1303,6 +1324,7 @@ class Devices extends Component {
     }
     render() {
         // dealerColsWithSearch();
+        console.log(' device for search are', this.state.devices)
         return (
             <Fragment>
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
@@ -1329,7 +1351,7 @@ class Devices extends Component {
 
                             <DevicesList
                                 devices={this.state.devices}
-                                allDevices = {this.state.allDevices.length}
+                                allDevices={this.state.allDevices.length}
                                 activeDevices={this.state.activeDevices.length}
                                 expireDevices={this.state.expireDevices.length}
                                 suspendDevices={this.state.suspendDevices.length}
@@ -1337,7 +1359,7 @@ class Devices extends Component {
                                 pendingDevices={this.state.pendingDevices.length}
                                 unlinkedDevices={this.state.unlinkedDevices.length}
                                 trialDevices={this.state.trialDevices.length}
-                                
+
                                 suspendDevice={this.props.suspendDevice}
                                 activateDevice={this.props.activateDevice}
                                 columns={this.state.columns}
@@ -1377,11 +1399,11 @@ class Devices extends Component {
         // console.log(e.target.name , e.target.value);
 
         let demoDevices = [];
-        if (status) {
+        if (this.state.copy_status) {
             coppyDevices = this.state.devices;
-            status = false;
+            this.state.copy_status = false;
         }
-        //   console.log("devices", coppyDevices);
+        //   console.log("devices for search", coppyDevices);
 
         if (e.target.value.length) {
             // console.log("keyname", e.target.name);
@@ -1389,7 +1411,6 @@ class Devices extends Component {
             // console.log(this.state.devices);
             coppyDevices.forEach((device) => {
                 //  console.log("device", device[e.target.name] !== undefined);
-
                 if (device[e.target.name] !== undefined) {
                     if ((typeof device[e.target.name]) === 'string') {
                         // console.log("string check", device[e.target.name])
@@ -1405,7 +1426,7 @@ class Devices extends Component {
                         // demoDevices.push(device);
                     }
                 } else {
-                    demoDevices.push(device);
+                    // demoDevices.push(device);
                 }
             });
             //  console.log("searched value", demoDevices);

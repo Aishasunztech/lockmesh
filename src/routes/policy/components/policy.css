@@ -45,6 +45,7 @@
     display: inline-block;
     text-align: left;
     font-weight: 300;
+    vertical-align: middle;
 }
 
 .exp_policy .ant-table-tbody>tr>td {
@@ -126,6 +127,10 @@
     vertical-align: sub;
 }
 
+.applist_menu .ant-switch {
+    vertical-align: middle;
+}
+
 .lst_stp label {
     line-height: 20px;
     margin-top: 8px;
@@ -138,4 +143,17 @@
 
 .lst_stp textarea {
     min-height: 70px;
+}
+
+.policy_expand .ant-table-tbody>tr>td {
+    padding: 8px 0 8px !important;
+    background: #fff;
+}
+
+.policy_expand .ant-tabs-nav .ant-tabs-tab {
+    font-weight: 400;
+}
+
+.policy_expand .ant-tabs-bar {
+    margin: 0 0 8px 0;
 }

@@ -253,8 +253,8 @@ class PolicyList extends Component {
             <Fragment>
                 <Card>
                     <Table
-                        scroll={{ x: 400 }}
-                        className="devices"
+                        scroll={{ x: 600 }}
+                        className="devices policy_expand"
                         size="default"
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}

@@ -461,6 +461,7 @@ class Policy extends Component {
                         editPolicyModalHide={this.editPolicyModalHide2}
                         addAppsToPolicies={this.props.addAppsToPolicies}
                         removeAppsFromPolicies={this.props.removeAppsFromPolicies}
+                        onCancel={this.editPolicyModalHide}
 
                         guestAlldealerApps={this.state.guestAlldealerApps}
                         encryptedAlldealerApps={this.state.encryptedAlldealerApps}
