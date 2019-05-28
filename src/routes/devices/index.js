@@ -329,7 +329,58 @@ class Devices extends Component {
                     }
                 ]
             },
+            {
+                title: (
+                    <Input.Search
+                        name="activation_code"
+                        key="activation_code"
+                        id="activation_code"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(DEVICE_ACTIVATION_CODE)}
+                    />
+                ),
+                dataIndex: 'activation_code',
+                className: '',
+                children: [
+                    {
+                        title: DEVICE_ACTIVATION_CODE,
+                        align: "center",
+                        dataIndex: 'activation_code',
+                        className: '',
+                        sorter: (a, b) => { return a.activation_code - b.activation_code },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
 
+            {
+                title: (
+                    <Input.Search
+                        name="client_id"
+                        key="client_id"
+                        id="client_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(DEVICE_CLIENT_ID)}
+                    />
+                ),
+                dataIndex: 'client_id',
+                className: '',
+                children: [
+                    {
+                        title: DEVICE_CLIENT_ID,
+                        align: "center",
+                        dataIndex: 'client_id',
+                        key: 'client_id',
+                        className: '',
+                        sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
             {
                 title: (
                     <Input.Search
@@ -358,24 +409,25 @@ class Devices extends Component {
             {
                 title: (
                     <Input.Search
-                        name="activation_code"
-                        key="activation_code"
-                        id="activation_code"
+                        name="sim_id"
+                        key="sim_id"
+                        id="sim_id"
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_ACTIVATION_CODE)}
+                        placeholder={titleCase(DEVICE_SIM_ID)}
                     />
                 ),
-                dataIndex: 'activation_code',
+                dataIndex: 'sim_id',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_ACTIVATION_CODE,
+                        title: DEVICE_SIM_ID,
                         align: "center",
-                        dataIndex: 'activation_code',
+                        dataIndex: 'sim_id',
+                        key: 'sim_id',
                         className: '',
-                        sorter: (a, b) => { return a.activation_code - b.activation_code },
+                        sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -407,32 +459,7 @@ class Devices extends Component {
                     }
                 ]
             },
-            {
-                title: (
-                    <Input.Search
-                        name="client_id"
-                        key="client_id"
-                        id="client_id"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_CLIENT_ID)}
-                    />
-                ),
-                dataIndex: 'client_id',
-                className: '',
-                children: [
-                    {
-                        title: DEVICE_CLIENT_ID,
-                        align: "center",
-                        dataIndex: 'client_id',
-                        key: 'client_id',
-                        className: '',
-                        sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
+
             {
                 title: (
                     <Input.Search
@@ -537,32 +564,7 @@ class Devices extends Component {
                     }
                 ]
             },
-            {
-                title: (
-                    <Input.Search
-                        name="sim_id"
-                        key="sim_id"
-                        id="sim_id"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_SIM_ID)}
-                    />
-                ),
-                dataIndex: 'sim_id',
-                className: '',
-                children: [
-                    {
-                        title: DEVICE_SIM_ID,
-                        align: "center",
-                        dataIndex: 'sim_id',
-                        key: 'sim_id',
-                        className: '',
-                        sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
+
             {
                 title: (
                     <Input.Search
@@ -1053,7 +1055,7 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
             }
             if (activationCodeIndex >= 0) {
-                this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+                this.state.columns.splice(10, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
         }
 

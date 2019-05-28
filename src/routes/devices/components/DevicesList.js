@@ -152,9 +152,9 @@ class DevicesList extends Component {
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 validity: checkValue(device.validity),
                 name: checkValue(device.name),
+                activation_code: checkValue(device.activation_code),
                 account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
-                activation_code: checkValue(device.activation_code),
                 chat_id: checkValue(device.chat_id),
                 client_id: checkValue(device.client_id),
                 dealer_id: checkValue(device.dealer_id),
@@ -326,15 +326,13 @@ class DevicesList extends Component {
                     activateDevice={activateDevice} />
                 <SuspendDevice ref="suspend"
                     suspendDevice={suspendDevice} />
-
                 <Card>
-
                     <Table
                         ref='tablelist'
                         className="devices"
                         rowSelection={rowSelection}
                         rowClassName={() => 'editable-row'}
-                        size="middle"
+                        size="default"
                         bordered
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.devices)}

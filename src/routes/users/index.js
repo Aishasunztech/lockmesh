@@ -170,14 +170,14 @@ class Users extends Component {
                 key: "tokens",
             },
         ];
-        
+
 
     }
 
     componentDidMount() {
         this.props.getUserList();
         this.props.getPagination('users');
-        this.columns[1].children[0].title = USER_ID + ' (' +this.props.users_list.length +')'
+        this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
         this.setState({
             users: this.props.users_list
         })
@@ -186,7 +186,7 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
-            this.columns[1].children[0].title = USER_ID + ' (' +nextProps.users_list.length +')'
+            this.columns[2].children[0].title = USER_ID + ' (' + nextProps.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 users: nextProps.users_list
@@ -198,7 +198,7 @@ class Users extends Component {
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.DisplayPages);
-            this.columns[1].children[0].title = USER_ID + ' (' +this.props.users_list.length +')'
+            this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
             })

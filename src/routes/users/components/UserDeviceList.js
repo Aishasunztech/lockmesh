@@ -532,12 +532,6 @@ class UserDeviceList extends Component {
                 <Card>
                     <Row>
                         <Col span={6}>
-                            <div style={{ display: "none" }}>Dummy</div>
-                        </Col>
-                        <Col span={6}>
-                            <div style={{ display: "none" }}>Dummy</div>
-                        </Col>
-                        <Col span={6}>
                             <div className="search_heading">
                                 <Search
                                     placeholder='Search Device'
@@ -563,17 +557,30 @@ class UserDeviceList extends Component {
                                 </Select>
                             </div>
                         </Col>
+                        <Col span={6}>
+                            <div style={{ display: "none" }}>Dummy</div>
+                        </Col>
+                        <Col span={6}>
+                            <div style={{ display: "none" }}>Dummy</div>
+                        </Col>
+
+                    </Row>
+                    <Row>
+                        <Col span={22}>
+
+                            <Table
+                                columns={this.listdeviceCols}
+                                dataSource={this.renderDevices(this.state.devicesList)}
+                                scroll={{
+                                    x: 500,
+                                }}
+                                pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
+                            />
+                        </Col>
                     </Row>
 
-
-                    <Table
-                        columns={this.listdeviceCols}
-                        dataSource={this.renderDevices(this.state.devicesList)}
-
-                        pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
-                    />
                 </Card>
-            </Fragment >
+            </Fragment>
         )
     }
 }

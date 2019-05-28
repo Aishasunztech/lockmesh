@@ -441,7 +441,7 @@ class Policy extends Component {
                 </Modal>
                 <Modal
                     maskClosable={false}
-                    width="700px"
+                    width="730px"
                     className="policy_popup"
                     visible={this.state.editPolicyModal}
                     title="Edit Policy"
@@ -462,15 +462,12 @@ class Policy extends Component {
                         addAppsToPolicies={this.props.addAppsToPolicies}
                         removeAppsFromPolicies={this.props.removeAppsFromPolicies}
                         onCancel={this.editPolicyModalHide}
-
                         guestAlldealerApps={this.state.guestAlldealerApps}
                         encryptedAlldealerApps={this.state.encryptedAlldealerApps}
                         enableAlldealerApps={this.state.enableAlldealerApps}
-
                         guestAllappPermissions={this.state.guestAllappPermissions}
                         encryptedAllappPermissions={this.state.encryptedAllappPermissions}
                         enableAllappPermissions={this.state.enableAllappPermissions}
-
                         guestAllallExtensions={this.props.guestAllallExtensions}
                         encryptedAllallExtensions={this.props.encryptedAllallExtensions}
                         enableAllallExtensions={this.props.enableAllallExtension}

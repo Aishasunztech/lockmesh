@@ -490,7 +490,6 @@ class AppList extends Component {
                     }
                     pagination={false}
                 />
-
             </div>
 
         )

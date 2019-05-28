@@ -223,23 +223,23 @@ class Permissions extends Component {
     }
   }
   handleSearch = (e, global = false) => {
-      let fieldName = e.target.name;
-      let fieldValue = e.target.value;
-      
-      if (global) {
-        let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
-        // console.log("searchedData", searchedData);
-        this.setState({
-          dealerList: searchedData
-        });
-      } else {
+    let fieldName = e.target.name;
+    let fieldValue = e.target.value;
 
-        let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
-        // console.log("searchedData", searchedData);
-        this.setState({
-          dealerList: searchedData
-        });
-      }
+    if (global) {
+      let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
+      // console.log("searchedData", searchedData);
+      this.setState({
+        dealerList: searchedData
+      });
+    } else {
+
+      let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
+      // console.log("searchedData", searchedData);
+      this.setState({
+        dealerList: searchedData
+      });
+    }
 
   }
 
@@ -355,7 +355,7 @@ class Permissions extends Component {
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
           <Col className="gutter-row" span={4}>
-            <div className="gutter-box"><h2>Permission List</h2> </div>
+            <div className="gutter-box"><h2 className="mb-4">Permission List</h2> </div>
           </Col>
           <Col className="gutter-row" span={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
@@ -437,7 +437,7 @@ class Permissions extends Component {
           okText="Delete Except Selected"
           onCancel={() => {
             this.removeSelectedDealersModal(false)
-      
+
           }}
         >
           <DealerList
