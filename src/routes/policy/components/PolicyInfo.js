@@ -155,7 +155,7 @@ export default class PolicyInfo extends Component {
         // console.log(this.state.policy);
         return (
             <div>
-                <Tabs onChange={this.callback} activeKey={this.state.selected} type="card">
+                <Tabs className="exp_tabs_policy" onChange={this.callback} activeKey={this.state.selected} type="card">
                     <TabPane tab="Selected Apps " key="1">
                         <AppList
                             apk_list={this.state.policy.push_apps}

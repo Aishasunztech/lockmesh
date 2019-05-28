@@ -44,6 +44,11 @@ const question_txt = (
         </span>
     </div>
 );
+const SHOW_DEVICE_TEXT = (
+    <div>
+        <span>Shows app in <b>Install Apps</b> <br />menu on Devices</span>
+    </div>
+);
 var status = true;
 var coppyApks = [];
 
@@ -77,7 +82,13 @@ class Apk extends React.Component {
                     className: ''
                 },
                 {
-                    title: APK_SHOW_ON_DEVICE,
+                    title:
+                        <span>
+                            {APK_SHOW_ON_DEVICE}
+                            <Popover placement="top" content={SHOW_DEVICE_TEXT}>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
+                            </Popover>
+                        </span>,
                     // title: 'SHOW ON DEVICE',
                     dataIndex: 'apk_status',
                     key: 'apk_status',
@@ -358,7 +369,7 @@ class Apk extends React.Component {
                                 footer={null}
                             >
                                 <AddApk
-                                
+
                                     hideUploadApkModal={this.hideUploadApkModal}
                                     ref='uploadApk'
                                 />
