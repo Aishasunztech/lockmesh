@@ -133,7 +133,7 @@ class UserList extends Component {
                 <Card>
                     <Table
                         className="devices"
-                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'testing' : ''}
+                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         size="middle"
                         bordered
                         scroll={{

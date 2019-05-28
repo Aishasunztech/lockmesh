@@ -623,7 +623,7 @@ export default class Tab extends Component {
             <Fragment>
                 <Tabs type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
                     <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
-                    
+
                     </TabPane>
                     <TabPane tab={<span className="green">Active ({this.props.activeDevices})</span>} key="4" forceRender={true}>
                     </TabPane>
@@ -660,6 +660,7 @@ export default class Tab extends Component {
                     resetTabSelected={this.resetTabSelected}
                     user={this.props.user}
                     history={this.props.history}
+
                 />
             </Fragment>
         )
