@@ -79,6 +79,7 @@ class Users extends Component {
                             console.log(a, 'user is is')
                             return a.user_id.localeCompare(b.user_id)
                         },
+
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -92,6 +93,7 @@ class Users extends Component {
                             id="device_id"
                             className="search_heading"
                             autoComplete="new-password"
+                            onKeyUp={this.handleSearch2}
                             placeholder={'Search By Device Id'}
                         />
                     </div>),
@@ -109,8 +111,12 @@ class Users extends Component {
                         dataIndex: 'devices',
                         key: "devices",
                         className: 'row',
+                        defaultSortOrder: 'descend',
+                        onFilter: (value, record) => record.devices.indexOf(value) === 0,
                         sorter: (a, b) => { return a.devices - b.devices },
-                        sortDirections: ['ascend', 'descend'],
+
+
+                        // sortDirections: ['ascend', 'descend'],
                     }
                 ],
             },
@@ -170,7 +176,11 @@ class Users extends Component {
                 key: "tokens",
             },
         ];
-
+        this.state = {
+            users: [],
+            originalUsers: [],
+            expandedRowsKeys: [],
+        }
 
     }
 
@@ -179,7 +189,8 @@ class Users extends Component {
         this.props.getPagination('users');
         this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
         this.setState({
-            users: this.props.users_list
+            users: this.props.users_list,
+            originalUsers: this.props.users_list,
         })
         // this.props.getApkList();
         // this.props.getDefaultApps();
@@ -187,9 +198,11 @@ class Users extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
             this.columns[2].children[0].title = USER_ID + ' (' + nextProps.users_list.length + ')'
+            console.log('will recice props is called', nextProps.users_list)
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
-                users: nextProps.users_list
+                users: nextProps.users_list,
+                originalUsers: nextProps.users_list,
             })
 
         }
@@ -257,6 +270,65 @@ class Users extends Component {
         console.log('rendered row is ', this.refs)
     }
 
+
+    handleSearch2 = (e) => {
+        let demoUsers = [];
+        coppyUsers = JSON.parse(JSON.stringify(this.state.originalUsers));
+        let expandedRowsKeys = [];
+
+        if (e.target.value.length) {
+
+            coppyUsers.forEach((user) => {
+                //  console.log("user", user[e.target.name] !== undefined);
+                if (user['devicesList'].length > 0) {
+                    let demoDeviceList = [];
+                    for (let device of user['devicesList']) {
+
+                        if (device[e.target.name] !== undefined && device[e.target.name] !== null) {
+                            if ((typeof device[e.target.name]) === 'string') {
+                                // console.log("string check", typeof device[e.target.name])
+
+                                if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+                                    demoDeviceList.push(device);
+                                }
+                            }
+                            else if (device[e.target.name] != null) {
+                                // console.log("else null check", user[e.target.name])
+                                // if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+                                //     demoDeviceList.push(device);
+                                // }
+                            } else {
+                                // demoUsers.push(user);
+                            }
+                        } else {
+                            // demoUsers.push(user);
+                        }
+                    }
+                    // console.log('array of device will b', demoDeviceList);
+
+                    if (demoDeviceList.length > 0) {
+                        user.devicesList = demoDeviceList;
+                        demoUsers.push(user);
+                        expandedRowsKeys.push(user.user_id);
+
+                    }
+
+                }
+
+            });
+            //  console.log(this.state.originalUsers, "searched value", demoUsers);
+            this.setState({
+                users: demoUsers,
+                expandedRowsKeys: expandedRowsKeys
+            })
+        } else {
+            this.setState({
+                users: this.state.originalUsers,
+                expandedRowsKeys: []
+            })
+        }
+    }
+
     handleSearch = (e) => {
         // console.log('============ check search value ========')
         // console.log(e.target.name , e.target.value);
@@ -305,7 +377,7 @@ class Users extends Component {
     }
 
     render() {
-        console.log(this.state.users, 'refs is');
+        console.log(this.state.expandedRowsKeys, 'refs is');
         return (
             <Fragment>
                 <AppFilter
@@ -329,6 +401,7 @@ class Users extends Component {
                     location={this.props.location}
                     columns={this.columns}
                     users={this.state.users}
+                    expandedRowsKey={this.state.expandedRowsKeys}
                     pagination={this.props.DisplayPages}
                     ref="userList"
                     consoled={this.consoled}
