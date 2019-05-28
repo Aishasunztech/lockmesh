@@ -1387,7 +1387,6 @@ class Devices extends Component {
                             />
                             <AddDevice ref="add_device" />
                         </Fragment>
-
                 }
             </Fragment>
         );
