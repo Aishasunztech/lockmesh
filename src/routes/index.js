@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import Account from "./account/index";
 import AddApk from "./addApk/index";
+import AutoUpdate from "./autoUpdate/index";
 import Devices from "./devices/index";
 import Dealers from "./dealers/index";
 import ConnectDevice from "./ConnectDevice/index";
@@ -29,7 +30,8 @@ const App = ({ match }) => {
       <Route exact path={`${match.url}create-dealer/:dealer_type`} component={AddDealer} />
       <Route path={`${match.url}profile`} component={myProfile} />
       <Route exact path={`${match.url}connect-device/:device_id`} component={ConnectDevice} />
-      <Route path={`${match.url}apk-list`} component={Apk} />
+      <Route exact path={`${match.url}apk-list`} component={Apk} />
+      <Route path={`${match.url}apk-list/autoupdate`} component={AutoUpdate} />
       <Route path={`${match.url}app`} component={ApkMain} />
       <Route path={`${match.url}upload-apk`} component={AddApk} />
       <Route path={`${match.url}invalid_page`} component={InvalidPage} />
