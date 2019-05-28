@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
+import styles from './user.css';
 
 const confirm = Modal.confirm
 
@@ -14,7 +15,8 @@ class UserList extends Component {
         this.state = {
             columns: [],
             pagination: this.props.pagination,
-            users: []
+            users: [],
+            expandedRowKeys: [],
 
         }
     }
@@ -93,26 +95,45 @@ class UserList extends Component {
     }
     componentDidMount() {
         this.setState({
-            users: this.props.users
+            users: this.props.users,
+            expandedRowKeys: this.props.expandedRowsKey
         })
+    }
+
+    onExpandRow =(expanded, record) => {
+        console.log(expanded, 'data is expanded', record);
+        if(expanded){
+            if(!this.state.expandedRowKeys.includes(record.rowKey)){
+                this.state.expandedRowKeys.push(record.rowKey);
+                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+            }
+        }else if(!expanded){
+            if(this.state.expandedRowKeys.includes(record.rowKey)){
+               let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+                this.setState({expandedRowKeys: list})
+            }
+        }
     }
 
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
+            console.log('this.props.expandr', this.props)
             this.setState({
                 columns: this.props.columns,
-                users: this.props.users
+                users: this.props.users,
+                expandedRowKeys: this.props.expandedRowsKey
             })
         }
     }
     render() {
-        // console.log(this.state.pagination)
+        console.log(this.state.expandedRowKeys)
         return (
             <Fragment>
                 <Card>
                     <Table
                         className="devices"
+                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'testing' : ''}
                         size="middle"
                         bordered
                         scroll={{
@@ -128,6 +149,8 @@ class UserList extends Component {
                             );
                         }}
                         expandIconColumnIndex={3}
+                        expandedRowKeys={this.state.expandedRowKeys}
+                        onExpand={this.onExpandRow}
                         expandIconAsCell={false}
                         defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                         columns={this.state.columns}

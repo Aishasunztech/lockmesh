@@ -331,13 +331,15 @@ class UserDeviceList extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        // console.log('will receive props', nextProps);
         if (this.props.record.user_id !== nextProps.record.user_id) {
             this.setState({
-                devicesList: this.props.record.devicesList,
+                devicesList: nextProps.record.devicesList,
             })
         } else if (this.props.record.devicesList.length !== nextProps.record.devicesList.length) {
+           
             this.setState({
-                devicesList: this.props.record.devicesList,
+                devicesList: nextProps.record.devicesList,
             })
         }
     }
@@ -526,7 +528,7 @@ class UserDeviceList extends Component {
 
 
     render() {
-        // console.log('dealer state', this.state.pagination);
+        console.log('dealer state', this.state.devicesList);
         return (
             <Fragment>
                 <Card>
