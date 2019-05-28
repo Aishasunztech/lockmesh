@@ -177,7 +177,7 @@ export default class ListApk extends Component {
 
         return (
             <Card>
-                {(this.props.user.type === AUTO_UPDATE_ADMIN)
+                {(this.props.link)
                     ?
 
 

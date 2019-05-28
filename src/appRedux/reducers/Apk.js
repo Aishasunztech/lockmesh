@@ -10,7 +10,9 @@ import {
 	GET_PAGINATION,
 	PERMSSION_SAVED,
 	RESET_UPLOAD_FORM,
-	CHECK_APK_NAME
+	CHECK_APK_NAME,
+	AUTHENTICATE_UPDATE_USER,
+	RESET_AUTH_UPDATE
 } from "../../constants/ActionTypes";
 
 import {
@@ -37,7 +39,8 @@ const initialState = {
 		APK_APP_NAME,
 		APK_APP_LOGO,
 	],
-	resetUploadForm: false
+	resetUploadForm: false,
+	authenticateUpdateUser: false
 };
 
 export default (state = initialState, action) => {
@@ -207,6 +210,27 @@ export default (state = initialState, action) => {
 			}
 			return {
 				...state
+			}
+		}
+		case RESET_AUTH_UPDATE: {
+			return {
+				...state,
+				authenticateUpdateUser: false
+			}
+		}
+		case AUTHENTICATE_UPDATE_USER: {
+			let authenticate = false
+			if (action.payload.status) {
+				authenticate = true
+			} else {
+				error({
+					title: 'Invalid email or password. Please try again.',
+				});;
+			}
+			return {
+				...state,
+				authenticateUpdateUser: authenticate
+
 			}
 		}
 
