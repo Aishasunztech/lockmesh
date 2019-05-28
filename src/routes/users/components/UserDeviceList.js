@@ -87,7 +87,7 @@ class UserDeviceList extends Component {
                         align: "center",
                         dataIndex: 'activation_code',
                         className: '',
-                        sorter: (a, b) => { return a.activation_code.localeCompare( b.activation_code) },
+                        sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -337,7 +337,7 @@ class UserDeviceList extends Component {
                 devicesList: nextProps.record.devicesList,
             })
         } else if (this.props.record.devicesList.length !== nextProps.record.devicesList.length) {
-           
+
             this.setState({
                 devicesList: nextProps.record.devicesList,
             })
@@ -567,20 +567,13 @@ class UserDeviceList extends Component {
                         </Col>
 
                     </Row>
-                    <Row>
-                        <Col span={22}>
-
-                            <Table
-                                columns={this.listdeviceCols}
-                                dataSource={this.renderDevices(this.state.devicesList)}
-                                scroll={{
-                                    x: 500,
-                                }}
-                                pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
-                            />
-                        </Col>
-                    </Row>
-
+                    <div className="overflow_x">
+                        <Table
+                            columns={this.listdeviceCols}
+                            dataSource={this.renderDevices(this.state.devicesList)}
+                            pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
+                        />
+                    </div>
                 </Card>
             </Fragment>
         )

@@ -260,6 +260,10 @@
     color: #fff !important;
 }
 
+.border_top_0 {
+    border-top: 0 !important;
+}
+
 @media screen and (max-width: 768px) {
     .add_user_btn {
         left: 230px;

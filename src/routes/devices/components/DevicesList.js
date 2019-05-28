@@ -660,6 +660,7 @@ export default class Tab extends Component {
                     resetTabSelected={this.resetTabSelected}
                     user={this.props.user}
                     history={this.props.history}
+
                 />
             </Fragment>
         )
