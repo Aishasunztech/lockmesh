@@ -156,7 +156,7 @@ class AddApk extends Component {
         })
     }
     showName(e) {
-        console.log(e.target);
+        // console.log(e.target);
     }
 
     render() {

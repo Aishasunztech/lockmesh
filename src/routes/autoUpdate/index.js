@@ -369,8 +369,6 @@ class Apk extends React.Component {
                                         ref='uploadApk'
                                     />
                                 </Modal>
-
-
                             </div>}
                 </div>
             )

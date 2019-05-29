@@ -349,7 +349,7 @@ class DevicesList extends Component {
 
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            console.log('record is', record)
+                            // console.log('record is', record)
                             let showRecord = [];
                             let showRecord2 = [];
 
@@ -385,7 +385,7 @@ class DevicesList extends Component {
                                 }
                             });
                             // console.log("cols",this.props.columns);
-                            console.log("toShow", record);
+                            // console.log("toShow", record);
                             // if (record.batchData.length) {
                             //     return(
                             //     <Table
