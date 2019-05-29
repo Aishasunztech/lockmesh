@@ -7,6 +7,7 @@ import update from 'react-addons-update';
 import PolicyInfo from './PolicyInfo';
 import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
+import styles from './policy.css';
 const confirm = Modal.confirm;
 
 class PolicyList extends Component {
@@ -234,6 +235,21 @@ class PolicyList extends Component {
         });
     }
 
+    // onExpandRow =(expanded, record) => {
+    //     // console.log(expanded, 'data is expanded', record);
+    //     if(expanded){
+    //         if(!this.state.expandedRowKeys.includes(record.rowKey)){
+    //             this.state.expandedRowKeys.push(record.rowKey);
+    //             this.setState({expandedRowKeys: this.state.expandedRowKeys})
+    //         }
+    //     }else if(!expanded){
+    //         if(this.state.expandedRowKeys.includes(record.rowKey)){
+    //            let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+    //             this.setState({expandedRowKeys: list})
+    //         }
+    //     }
+    // }
+
     componentDidMount() {
         this.props.policies.map((policy, index) => {
             this.state.expandTabSelected[index] = '1';
@@ -249,15 +265,19 @@ class PolicyList extends Component {
         }
     }
     render() {
+        console.log(this.state.expandedRowKeys, 'keys are')
         return (
             <Fragment>
                 <Card>
                     <Table
                         scroll={{ x: 600 }}
                         className="devices policy_expand"
+                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
                         size="default"
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
+                        // onExpand={this.onExpandRow}
+                   
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
                             // console.log("table row", this.state.expandTabSelected[record.rowKey]);

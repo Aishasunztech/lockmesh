@@ -123,6 +123,10 @@ th.device_info {
     padding: 4px 4px !important;
 }
 
+.exp_row {
+    background: #e6faff !important;
+}
+
 .left_bar .ant-table-tbody>tr>td {
     text-align: left;
     padding: 8px 4px 8px 16px !important;

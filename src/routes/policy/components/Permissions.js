@@ -15,7 +15,7 @@ import DealerList from "../../apk/components/DealerList";
 import CircularProgress from "components/CircularProgress/index";
 import { dealerColsWithSearch } from '../../utils/commonUtils';
 
-
+const confirm = Modal.confirm;
 // export default 
 class Permissions extends Component {
   constructor(props) {
@@ -104,6 +104,21 @@ class Permissions extends Component {
       addSelectedDealersModal: false
     })
     this.props.savePermission(this.props.record.policy_id, JSON.stringify(addUnSelected_IDs), 'save');
+  }
+
+  saveAllDealersConfirm = () => {
+    let _this = this;
+    confirm({
+      title: 'Do you realy Want to allow Permission for all Dealers?',
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk() {
+        _this.saveAllDealers()
+      },
+      onCancel() {
+        // console.log('Cancel');
+      },
+    });
   }
 
   saveAllDealers = () => {
@@ -283,6 +298,23 @@ class Permissions extends Component {
     })
 
   }
+
+
+  removeAllDealersConfirm = () => {
+    let _this = this;
+    confirm({
+      title: 'Do you realy Want to Remove Permission for all Dealers?',
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk() {
+        _this.removeAllDealers();
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
   removeAllDealers = () => {
     let permittedDealers = this.state.permissions;
     // console.log("permitted dealers", permittedDealers);
@@ -364,10 +396,10 @@ class Permissions extends Component {
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealersConfirm() }}>Add All</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealersConfirm() }}>Remove All</Button></div>
           </Col>
           <Col className="gutter-row" span={3}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>

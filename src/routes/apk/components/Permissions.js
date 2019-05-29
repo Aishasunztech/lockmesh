@@ -19,7 +19,7 @@ import {
   DEALER_ACTION
 } from '../../../constants/DealerConstants';
 
-
+const confirm = Modal.confirm;
 // export default 
 class Permissions extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class Permissions extends Component {
       showDealersModal: false,
       dealer_ids: [],
       dealerList: [],
-      dealerListForModal:[],
+      dealerListForModal: [],
       permissions: [],
       hideDefaultSelections: false,
       removeSelectedDealersModal: false,
@@ -95,7 +95,7 @@ class Permissions extends Component {
     let permissions = this.state.permissions;
     let selectedRows = this.state.selectedRowKeys;
     // var dList = this.state.dealerList; arfan
-    var dList = this.state.dealerListForModal;    
+    var dList = this.state.dealerListForModal;
     var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
     var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
     var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
@@ -106,6 +106,21 @@ class Permissions extends Component {
       addSelectedDealersModal: false
     })
     this.props.savePermission(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
+  }
+
+  saveAllDealersConfirm = () => {
+    let _this = this;
+    confirm({
+      title: 'Do you realy Want to allow Permission for all Dealers?',
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk() {
+        _this.saveAllDealers()
+      },
+      onCancel() {
+        // console.log('Cancel');
+      },
+    });
   }
 
   saveAllDealers = () => {
@@ -289,6 +304,22 @@ class Permissions extends Component {
     })
 
   }
+
+  removeAllDealersConfirm = () => {
+    let _this = this;
+    confirm({
+      title: 'Do you realy Want to Remove Permission for all Dealers?',
+      okText: 'Yes',
+      cancelText: 'No',
+      onOk() {
+        _this.removeAllDealers();
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
   removeAllDealers = () => {
     let permittedDealers = this.state.permissions;
     // console.log("permitted dealers", permittedDealers);
@@ -374,10 +405,10 @@ class Permissions extends Component {
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealers() }}>Select All</Button></div>
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealersConfirm() }}>Add All</Button></div>
           </Col>
           <Col className="gutter-row" span={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealers() }}>Remove All</Button></div>
+            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealersConfirm() }}>Remove All</Button></div>
           </Col>
           <Col className="gutter-row" span={3}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
@@ -410,7 +441,7 @@ class Permissions extends Component {
           }
         </Row>
         <Modal
-        maskClosable={false}
+          maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Add Dealer to permissions list for this App"
@@ -436,7 +467,7 @@ class Permissions extends Component {
 
         {/*  remove except selected */}
         <Modal
-        maskClosable={false}
+          maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Remove Dealers from permissions list for this App"
@@ -462,7 +493,7 @@ class Permissions extends Component {
 
         {/*  Add Except selected */}
         <Modal
-        maskClosable={false}
+          maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Add Dealers to permissions list for this App"

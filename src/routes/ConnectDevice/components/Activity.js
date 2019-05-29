@@ -5,6 +5,7 @@ import Moment from 'react-moment';
 import { SECURE_SETTING } from '../../../constants/Constants';
 import DeviceSettings from './DeviceSettings';
 import { BASE_URL } from '../../../constants/Application';
+import styles from './Applist.css';
 
 var coppyActivities = [];
 var status = true;
@@ -65,7 +66,8 @@ export default class Activity extends Component {
         ];
         this.state = {
             visible: false,
-            activities: this.props.activities
+            activities: this.props.activities,
+            expandedRowKeys: [],
         }
     }
 
@@ -167,6 +169,21 @@ export default class Activity extends Component {
         });
     }
 
+    onExpandRow =(expanded, record) => {
+        // console.log(expanded, 'data is expanded', record);
+        if(expanded){
+            if(!this.state.expandedRowKeys.includes(record.key)){
+                this.state.expandedRowKeys.push(record.key);
+                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+            }
+        }else if(!expanded){
+            if(this.state.expandedRowKeys.includes(record.key)){
+               let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                this.setState({expandedRowKeys: list})
+            }
+        }
+    }
+
 
     renderList = () => {
         let data = this.state.activities;
@@ -182,7 +199,7 @@ export default class Activity extends Component {
         }
     }
     render() {
-        console.log('activities', this.state.activities)
+        // console.log(this.state.expandedRowKeys, 'activities to')
         const { visible, loading } = this.state;
         return (
             <div>
@@ -234,6 +251,12 @@ export default class Activity extends Component {
                             },
                         ]}
                         bordered
+                        rowClassName= {(record, index) => 
+                            this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
+                            // console.log(this.state.expandedRowKeys,'row is', record.key , 'check' , this.state.expandedRowKeys.includes(record.key))
+                            //  this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''
+                            }
+                        onExpand={this.onExpandRow}
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
                             // console.log('recored', record)
