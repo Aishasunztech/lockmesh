@@ -151,6 +151,7 @@ export default class ImeiView extends Component {
     }
     renderList = (imei_list, type) => {
         var i = 0;
+        let imeiLength = imei_list.length
         let data = (type === 'IMEI 1') ? imei_list.map((device, index) => {
             if (device.orignal_imei1 === device.imei1) {
                 i++
@@ -165,7 +166,7 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: device.imei1,
+                    imei: (imeiLength === i) ? device.imei1 + ' (CURRENT)' : device.imei1,
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
@@ -185,7 +186,7 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: device.imei2,
+                    imei: (imeiLength === i) ? device.imei2 + ' (CURRENT)' : device.imei2,
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
@@ -200,7 +201,7 @@ export default class ImeiView extends Component {
                     maskClosable={false}
                     width='850px'
                     visible={visible}
-                    title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"><Button> <a href='https://dyrk.org/tools/imei/' target='blank'> Generate IMEI number</a></Button></div></div>}
+                    title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"><Button> <a href='https://dyrk.org/tools/imei/' target='blank'> Generate IMEI number</a></Button></div> <br /> <span>Device ID: {(this.props.device.id) ? this.props.device.device_id : ''}</span></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}

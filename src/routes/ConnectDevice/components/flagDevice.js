@@ -8,7 +8,8 @@ export default class FlagDevice extends Component {
         super(props);
         this.state = {
             visible: false,
-            expiry_date: 1
+            expiry_date: 1,
+            device: {}
         }
     }
     showModel = (device, func, refreshDevice) => {
@@ -45,7 +46,7 @@ export default class FlagDevice extends Component {
                 <Modal
                     maskClosable={false}
                     visible={visible}
-                    title="Flag Device"
+                    title={<div>Flag Device <br /> Device ID: {this.state.device.device_id}</div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
