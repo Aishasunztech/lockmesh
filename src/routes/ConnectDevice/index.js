@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Modal, Progress } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
+import BackBtn from './back';
 import {
   getDeviceDetails,
   getDeviceApps,
@@ -492,16 +493,19 @@ class ConnectDevice extends Component {
                           </div>
                         </div>
                         {this.renderScreen()}
-                        <Button.Group className="abc">
+                        <Button.Group className="act_b_grp">
                           <Button type="default" icon="check" className="action_btn clr_green" >apply</Button>
                           <Button type="default" icon="undo" className="action_btn clr_orange" >undo</Button>
                           <Button type="default" icon="redo" className="action_btn clr_orange" >redo</Button>
                           <Button type="default" icon="close" className="action_btn clr_red" >clear</Button>
                         </Button.Group>
                         <Button.Group className="nav_btn_grp">
-                          <Button type="default" icon="left" className="nav_btn" onClick={() => {
+
+                          <Button type="default" className="nav_btn" onClick={() => {
                             this.onBackHandler();
-                          }} />
+                          }} >
+                            <Icon className="back_btn" component={BackBtn} />
+                          </Button>
                           <Button type="default" className="nav_btn" onClick={() => {
                             this.changePage("main_menu")
                           }} />

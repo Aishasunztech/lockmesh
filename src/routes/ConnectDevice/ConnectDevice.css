@@ -72,6 +72,14 @@
     background-color: #fff;
 }
 
+.nav_btn .back_btn {
+    line-height: 0;
+    font-size: 26px;
+    margin-top: 10px;
+    color: #8a8a8a;
+    margin-left: 15px;
+}
+
 .ant-table-tbody>tr>td {
     font-size: 12px;
     text-align: center;
@@ -110,12 +118,25 @@
 
 }
 
-.abc.ant-btn-group .ant-btn {
+.act_b_grp.ant-btn-group .ant-btn {
     padding: 0 4px;
 }
 
-.abc .action_btn {
+.act_b_grp .action_btn {
     border-radius: 0 !important;
+}
+
+.act_b_grp .ant-btn>.anticon+span {
+    margin-left: 4px;
+    font-size: 12px;
+}
+
+.act_b_grp {
+    margin-right: 0 !important;
+    width: 100.1%;
+    position: absolute;
+    bottom: 45px;
+    left: 0px;
 }
 
 .action_btn i {
@@ -124,14 +145,6 @@
 
 .action_btn .ant-btn>.anticon+span {
     margin-left: 4px;
-}
-
-.abc {
-    margin-right: 0 !important;
-    width: 100.1%;
-    position: absolute;
-    bottom: 45px;
-    left: 0px;
 }
 
 .deviceImg .ant-table-thead>tr>th {
