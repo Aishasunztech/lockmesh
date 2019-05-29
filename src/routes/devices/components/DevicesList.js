@@ -146,16 +146,16 @@ class DevicesList extends Component {
 
 
                 ),
-                status: (<span style={color} > {status}</span >),
+                status: (<span style={color} > {status}</span>),
                 flagged: device.flagged,
                 device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 validity: checkValue(device.validity),
                 name: checkValue(device.name),
+                activation_code: checkValue(device.activation_code),
                 account_email: checkValue(device.account_email),
                 pgp_email: checkValue(device.pgp_email),
-                activation_code: checkValue(device.activation_code),
                 chat_id: checkValue(device.chat_id),
                 client_id: checkValue(device.client_id),
                 dealer_id: checkValue(device.dealer_id),
@@ -173,7 +173,7 @@ class DevicesList extends Component {
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 dealer_name: checkValue(device.dealer_name),
-                online: device.online ? (device.online == "On") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A",
+                online: device.online === 'Online' ? (<span style={{ color: "green" }}>{device.online}</span>) : (<span style={{ color: "red" }}>{device.online}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 start_date: checkValue(device.start_date),
@@ -197,8 +197,8 @@ class DevicesList extends Component {
     }
 
     deleteAllUnlinkedDevice = (type) => {
-        console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
-        console.log(type);
+        // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
+        // console.log(type);
         if (this.state.selectedRowKeys.length) {
             let title = ' Are you sure, you want to delete All these devices';
             let arr = [];
@@ -342,9 +342,7 @@ class DevicesList extends Component {
                     activateDevice={activateDevice} />
                 <SuspendDevice ref="suspend"
                     suspendDevice={suspendDevice} />
-
                 <Card>
-
                     <Table
                         ref='tablelist'
                         rowClassName= {(record, index) => {
@@ -641,28 +639,29 @@ export default class Tab extends Component {
     }
 
     render() {
-        console.log('columsns', this.state.devices)
+        // console.log('columsns', this.state.devices)
         return (
             <Fragment>
                 <Tabs type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab="All" key="1" >
+                    <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
+
                     </TabPane>
-                    <TabPane tab={<span className="green">Active</span>} key="4" forceRender={true}>
+                    <TabPane tab={<span className="green">Active ({this.props.activeDevices})</span>} key="4" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="red">Expired</span>} key="6" forceRender={true}>
+                    <TabPane tab={<span className="red">Expired ({this.props.expireDevices})</span>} key="6" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="green">Trial</span>} key="9" forceRender={true}>
+                    <TabPane tab={<span className="green">Trial ({this.props.trialDevices})</span>} key="9" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="yellow">Suspended</span>} key="7" forceRender={true}>
+                    <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="blue">Pre Activated</span>} key="3" forceRender={true}>
+                    <TabPane tab={<span className="blue">Pre Activated ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="gray">Pending Activation</span>} key="2" forceRender={true}>
+                    <TabPane tab={<span className="gray">Pending Activation ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="purple">Transfer</span>} key="8" forceRender={true}>
+                    <TabPane tab={<span className="purple">Transfer (0)</span>} key="8" forceRender={true}>
                         <h2 className="coming_s">Coming Soon</h2>
                     </TabPane>
-                    <TabPane tab={<span className="orange">Unlinked</span>} key="5" forceRender={true}>
+                    <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
                     </TabPane>
 
                 </Tabs>
@@ -682,6 +681,7 @@ export default class Tab extends Component {
                     resetTabSelected={this.resetTabSelected}
                     user={this.props.user}
                     history={this.props.history}
+
                 />
             </Fragment>
         )

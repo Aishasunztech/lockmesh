@@ -121,7 +121,7 @@ class DealerList extends Component {
     render() {
         // console.log(this.state.pagination)
         return (
-            <Card>
+            <Card className="border_top_0">
                 <Table size="middle"
                     className="gx-table-responsive devices table"
                     bordered

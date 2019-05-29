@@ -6,6 +6,13 @@
     line-height: 26px;
 }
 
-.testing {
-    background: #ebf4fa !important;
+.exp_row {
+    background: #e6faff !important;
+}
+
+.overflow_x {
+    width: 1000px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin: 0 auto;
 }

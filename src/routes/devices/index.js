@@ -184,8 +184,8 @@ class Devices extends Component {
                         className: '',
                         sorter: (a, b) => {
                             console.log(a, 'user is is')
-                             return a.user_id.props.children.localeCompare(b.user_id.props.children) 
-                            },
+                            return a.user_id.props.children.localeCompare(b.user_id.props.children)
+                        },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -329,7 +329,58 @@ class Devices extends Component {
                     }
                 ]
             },
+            {
+                title: (
+                    <Input.Search
+                        name="activation_code"
+                        key="activation_code"
+                        id="activation_code"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(DEVICE_ACTIVATION_CODE)}
+                    />
+                ),
+                dataIndex: 'activation_code',
+                className: '',
+                children: [
+                    {
+                        title: DEVICE_ACTIVATION_CODE,
+                        align: "center",
+                        dataIndex: 'activation_code',
+                        className: '',
+                        sorter: (a, b) => { return a.activation_code - b.activation_code },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
 
+            {
+                title: (
+                    <Input.Search
+                        name="client_id"
+                        key="client_id"
+                        id="client_id"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder={titleCase(DEVICE_CLIENT_ID)}
+                    />
+                ),
+                dataIndex: 'client_id',
+                className: '',
+                children: [
+                    {
+                        title: DEVICE_CLIENT_ID,
+                        align: "center",
+                        dataIndex: 'client_id',
+                        key: 'client_id',
+                        className: '',
+                        sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
+                        sortDirections: ['ascend', 'descend'],
+                    }
+                ]
+            },
             {
                 title: (
                     <Input.Search
@@ -358,24 +409,25 @@ class Devices extends Component {
             {
                 title: (
                     <Input.Search
-                        name="activation_code"
-                        key="activation_code"
-                        id="activation_code"
+                        name="sim_id"
+                        key="sim_id"
+                        id="sim_id"
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_ACTIVATION_CODE)}
+                        placeholder={titleCase(DEVICE_SIM_ID)}
                     />
                 ),
-                dataIndex: 'activation_code',
+                dataIndex: 'sim_id',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_ACTIVATION_CODE,
+                        title: DEVICE_SIM_ID,
                         align: "center",
-                        dataIndex: 'activation_code',
+                        dataIndex: 'sim_id',
+                        key: 'sim_id',
                         className: '',
-                        sorter: (a, b) => { return a.activation_code - b.activation_code },
+                        sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -407,32 +459,7 @@ class Devices extends Component {
                     }
                 ]
             },
-            {
-                title: (
-                    <Input.Search
-                        name="client_id"
-                        key="client_id"
-                        id="client_id"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_CLIENT_ID)}
-                    />
-                ),
-                dataIndex: 'client_id',
-                className: '',
-                children: [
-                    {
-                        title: DEVICE_CLIENT_ID,
-                        align: "center",
-                        dataIndex: 'client_id',
-                        key: 'client_id',
-                        className: '',
-                        sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
+
             {
                 title: (
                     <Input.Search
@@ -537,32 +564,7 @@ class Devices extends Component {
                     }
                 ]
             },
-            {
-                title: (
-                    <Input.Search
-                        name="sim_id"
-                        key="sim_id"
-                        id="sim_id"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_SIM_ID)}
-                    />
-                ),
-                dataIndex: 'sim_id',
-                className: '',
-                children: [
-                    {
-                        title: DEVICE_SIM_ID,
-                        align: "center",
-                        dataIndex: 'sim_id',
-                        key: 'sim_id',
-                        className: '',
-                        sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
+
             {
                 title: (
                     <Input.Search
@@ -831,6 +833,14 @@ class Devices extends Component {
             searchText: '',
             devices: [],
             tabselect: '4',
+            allDevices: this.props.devices,
+            activeDevices: [],
+            expireDevices: [],
+            suspendDevices: [],
+            trialDevices: [],
+            preActiveDevices: [],
+            pendingDevices: [],
+            unlinkedDevices: [],
             filteredDevices: [],
             copy_status: true,
         }
@@ -918,7 +928,7 @@ class Devices extends Component {
         switch (value) {
             case DEVICE_ACTIVATED:
                 this.setState({
-                    devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
+                    devices: this.state.activeDevices,
                     column: this.columns,
                     tabselect: '4',
                     copy_status: true
@@ -927,7 +937,7 @@ class Devices extends Component {
                 break;
             case DEVICE_TRIAL:
                 this.setState({
-                    devices: this.filterList(DEVICE_TRIAL, this.props.devices),
+                    devices: this.state.trialDevices,
                     column: this.columns,
                     tabselect: '9',
                     copy_status: true
@@ -936,7 +946,7 @@ class Devices extends Component {
                 break;
             case DEVICE_SUSPENDED:
                 this.setState({
-                    devices: this.filterList(DEVICE_SUSPENDED, this.props.devices),
+                    devices: this.state.suspendDevices,
                     column: this.columns,
                     tabselect: '7',
                     copy_status: true
@@ -944,7 +954,7 @@ class Devices extends Component {
                 break;
             case DEVICE_EXPIRED:
                 this.setState({
-                    devices: this.filterList(DEVICE_EXPIRED, this.props.devices),
+                    devices: this.state.expireDevices,
                     column: this.columns,
                     tabselect: '6',
                     copy_status: true
@@ -952,8 +962,8 @@ class Devices extends Component {
                 break;
             case 'all':
                 this.setState({
-                    devices: this.props.devices,
-                    filteredDevices:this.props.devices,
+                    devices: this.state.allDevices,
+                    filteredDevices: this.props.devices,
                     column: this.columns,
                     tabselect: '1',
                     copy_status: true
@@ -961,7 +971,7 @@ class Devices extends Component {
                 break;
             case DEVICE_UNLINKED:
                 this.setState({
-                    devices: this.filterList(DEVICE_UNLINKED, this.props.devices),
+                    devices: this.state.unlinkedDevices,
                     column: this.columns,
                     tabselect: '5'
                     , copy_status: true
@@ -970,7 +980,7 @@ class Devices extends Component {
             case DEVICE_PENDING_ACTIVATION:
                 // alert(value);
                 this.setState({
-                    devices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
+                    devices: this.state.pendingDevices,
                     column: this.columns,
                     tabselect: '2',
                     copy_status: true
@@ -978,7 +988,7 @@ class Devices extends Component {
                 break;
             case DEVICE_PRE_ACTIVATION:
                 this.setState({
-                    devices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices),
+                    devices: this.state.preActiveDevices,
                     column: this.columns,
                     tabselect: '3',
                     copy_status: true
@@ -986,7 +996,7 @@ class Devices extends Component {
                 break;
             default:
                 this.setState({
-                    devices: this.props.devices,
+                    devices: this.state.allDevices,
                     column: this.columns,
                     tabselect: '1'
                 })
@@ -1045,7 +1055,7 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
             }
             if (activationCodeIndex >= 0) {
-                this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+                this.state.columns.splice(10, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
         }
 
@@ -1061,7 +1071,7 @@ class Devices extends Component {
                 })
                 break;
             case '9':
-                devices = this.filterList(DEVICE_TRIAL, this.props.devices)
+                devices = this.state.trialDevices
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
@@ -1070,7 +1080,7 @@ class Devices extends Component {
                 })
                 break;
             case '7':
-                devices = this.filterList(DEVICE_SUSPENDED, this.props.devices)
+                devices = this.state.suspendDevices
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
@@ -1079,7 +1089,7 @@ class Devices extends Component {
                 })
                 break;
             case '6':
-                devices = this.filterList(DEVICE_EXPIRED, this.props.devices)
+                devices = this.state.expireDevices
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
@@ -1089,14 +1099,14 @@ class Devices extends Component {
                 break;
             case '1':
                 this.setState({
-                    devices: this.props.devices,
+                    devices: this.state.allDevices,
                     column: this.state.columns,
                     tabselect: '1',
                     copy_status: true
                 })
                 break;
             case "5":
-                devices = this.filterList(DEVICE_UNLINKED, this.props.devices)
+                devices = this.state.unlinkedDevices
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
@@ -1105,7 +1115,7 @@ class Devices extends Component {
                 })
                 break;
             case "2":
-                devices = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
+                devices = this.state.pendingDevices
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
@@ -1114,7 +1124,7 @@ class Devices extends Component {
                 })
                 break;
             case "3":
-                devices = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
+                devices = this.state.preActiveDevices
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
@@ -1132,7 +1142,7 @@ class Devices extends Component {
                 break;
             default:
                 this.setState({
-                    devices: this.props.devices,
+                    devices: this.state.allDevices,
                     column: this.state.columns,
                     tabselect: '1',
                     copy_status: true
@@ -1213,7 +1223,17 @@ class Devices extends Component {
                 devices: this.props.devices,
                 columns: this.state.columns,
                 defaultPagingValue: this.props.DisplayPages,
-                selectedOptions: this.props.selectedOptions
+                selectedOptions: this.props.selectedOptions,
+                allDevices: this.props.devices,
+                activeDevices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
+                expireDevices: this.filterList(DEVICE_EXPIRED, this.props.devices),
+                suspendDevices: this.filterList(DEVICE_SUSPENDED, this.props.devices),
+                trialDevices: this.filterList(DEVICE_TRIAL, this.props.devices),
+                preActiveDevices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices),
+                pendingDevices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
+                unlinkedDevices: this.filterList(DEVICE_UNLINKED, this.props.devices),
+                // transferDevices: this.filterList(DEVICE_TRANSFER,this.props.devices),
+
 
             })
             // this.copyDevices = this.props.devices;
@@ -1333,6 +1353,15 @@ class Devices extends Component {
 
                             <DevicesList
                                 devices={this.state.devices}
+                                allDevices={this.state.allDevices.length}
+                                activeDevices={this.state.activeDevices.length}
+                                expireDevices={this.state.expireDevices.length}
+                                suspendDevices={this.state.suspendDevices.length}
+                                preActiveDevices={this.state.preActiveDevices.length}
+                                pendingDevices={this.state.pendingDevices.length}
+                                unlinkedDevices={this.state.unlinkedDevices.length}
+                                trialDevices={this.state.trialDevices.length}
+
                                 suspendDevice={this.props.suspendDevice}
                                 activateDevice={this.props.activateDevice}
                                 columns={this.state.columns}
@@ -1350,6 +1379,7 @@ class Devices extends Component {
                                 user={this.props.user}
                                 refreshComponent={this.refreshComponent}
                                 history={this.props.history}
+
                             />
                             <ShowMsg
                                 msg={this.props.msg}
@@ -1357,7 +1387,6 @@ class Devices extends Component {
                             />
                             <AddDevice ref="add_device" />
                         </Fragment>
-
                 }
             </Fragment>
         );

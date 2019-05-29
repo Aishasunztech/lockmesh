@@ -38,6 +38,9 @@ const question_txt = (
 class Users extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            users: []
+        }
         this.columns = [
             {
                 title: '#',
@@ -76,7 +79,7 @@ class Users extends Component {
                             console.log(a, 'user is is')
                             return a.user_id.localeCompare(b.user_id)
                         },
-                        
+
                         sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -111,8 +114,8 @@ class Users extends Component {
                         defaultSortOrder: 'descend',
                         onFilter: (value, record) => record.devices.indexOf(value) === 0,
                         sorter: (a, b) => { return a.devices - b.devices },
-                      
-                       
+
+
                         // sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -163,6 +166,7 @@ class Users extends Component {
                     className: '',
                     sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
                     sortDirections: ['ascend', 'descend'],
+
                 }]
             },
             {
@@ -183,6 +187,7 @@ class Users extends Component {
     componentDidMount() {
         this.props.getUserList();
         this.props.getPagination('users');
+        this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
         this.setState({
             users: this.props.users_list,
             originalUsers: this.props.users_list,
@@ -192,18 +197,21 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
+            this.columns[2].children[0].title = USER_ID + ' (' + nextProps.users_list.length + ')'
             console.log('will recice props is called', nextProps.users_list)
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 users: nextProps.users_list,
                 originalUsers: nextProps.users_list,
             })
+
         }
     }
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.DisplayPages);
+            this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
             })
@@ -265,11 +273,11 @@ class Users extends Component {
 
     handleSearch2 = (e) => {
         let demoUsers = [];
-            coppyUsers =JSON.parse(JSON.stringify(this.state.originalUsers));
-            let expandedRowsKeys = [];
-       
+        coppyUsers = JSON.parse(JSON.stringify(this.state.originalUsers));
+        let expandedRowsKeys = [];
+
         if (e.target.value.length) {
-            
+
             coppyUsers.forEach((user) => {
                 //  console.log("user", user[e.target.name] !== undefined);
                 if (user['devicesList'].length > 0) {
@@ -284,7 +292,7 @@ class Users extends Component {
                                     demoDeviceList.push(device);
                                 }
                             }
-                             else if (device[e.target.name] != null) {
+                            else if (device[e.target.name] != null) {
                                 // console.log("else null check", user[e.target.name])
                                 // if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                                 //     demoDeviceList.push(device);
@@ -298,11 +306,11 @@ class Users extends Component {
                     }
                     // console.log('array of device will b', demoDeviceList);
 
-                    if(demoDeviceList.length > 0){
+                    if (demoDeviceList.length > 0) {
                         user.devicesList = demoDeviceList;
                         demoUsers.push(user);
                         expandedRowsKeys.push(user.user_id);
-                       
+
                     }
 
                 }

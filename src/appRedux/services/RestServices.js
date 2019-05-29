@@ -226,7 +226,7 @@ const RestService = {
     },
 
     SavePolicyChanges: (record) => {
-           console.log('api called ', record);
+        console.log('api called ', record);
         let data = {
             id: record.id,
             push_apps: JSON.stringify(record.push_apps),
@@ -268,6 +268,16 @@ const RestService = {
             policyId: policyId,
             dealers: dealers,
             action: action
+        },
+            RestService.getHeader()
+        );
+    },
+
+    //AUTHENTICATE UPDATE USER CREDENTIALS
+    authenticateUpdateUser: (data) => {
+        return axios.post(BASE_URL + 'users/authenticate_update_user', {
+            email: data.email,
+            pwd: data.pwd
         },
             RestService.getHeader()
         );

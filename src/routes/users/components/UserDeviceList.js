@@ -87,7 +87,7 @@ class UserDeviceList extends Component {
                         align: "center",
                         dataIndex: 'activation_code',
                         className: '',
-                        sorter: (a, b) => { return a.activation_code.localeCompare( b.activation_code) },
+                        sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -337,7 +337,7 @@ class UserDeviceList extends Component {
                 devicesList: nextProps.record.devicesList,
             })
         } else if (this.props.record.devicesList.length !== nextProps.record.devicesList.length) {
-           
+
             this.setState({
                 devicesList: nextProps.record.devicesList,
             })
@@ -534,12 +534,6 @@ class UserDeviceList extends Component {
                 <Card>
                     <Row>
                         <Col span={6}>
-                            <div style={{ display: "none" }}>Dummy</div>
-                        </Col>
-                        <Col span={6}>
-                            <div style={{ display: "none" }}>Dummy</div>
-                        </Col>
-                        <Col span={6}>
                             <div className="search_heading">
                                 <Search
                                     placeholder='Search Device'
@@ -565,17 +559,23 @@ class UserDeviceList extends Component {
                                 </Select>
                             </div>
                         </Col>
+                        <Col span={6}>
+                            <div style={{ display: "none" }}>Dummy</div>
+                        </Col>
+                        <Col span={6}>
+                            <div style={{ display: "none" }}>Dummy</div>
+                        </Col>
+
                     </Row>
-
-
-                    <Table
-                        columns={this.listdeviceCols}
-                        dataSource={this.renderDevices(this.state.devicesList)}
-
-                        pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
-                    />
+                    <div className="overflow_x">
+                        <Table
+                            columns={this.listdeviceCols}
+                            dataSource={this.renderDevices(this.state.devicesList)}
+                            pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
+                        />
+                    </div>
                 </Card>
-            </Fragment >
+            </Fragment>
         )
     }
 }

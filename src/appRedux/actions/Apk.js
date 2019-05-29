@@ -7,7 +7,9 @@ import {
     LOADING,
     PERMSSION_SAVED,
     RESET_UPLOAD_FORM,
-    CHECK_APK_NAME
+    CHECK_APK_NAME,
+    AUTHENTICATE_UPDATE_USER,
+    RESET_AUTH_UPDATE
 } from "../../constants/ActionTypes"
 // import AuthFailed from './Auth';
 
@@ -182,6 +184,33 @@ export function resetUploadForm(visible) {
         dispatch({
             type: RESET_UPLOAD_FORM,
             payload: visible
+        });
+    }
+}
+export function authenticateUpdateUser(data) {
+    // console.log(data);
+    return (dispatch) => {
+        RestService.authenticateUpdateUser(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log(response.data);
+                dispatch({
+                    type: AUTHENTICATE_UPDATE_USER,
+                    payload: response.data,
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+}
+export function resetAuthUpdate() {
+    // console.log(data);
+    return (dispatch) => {
+        dispatch({
+            type: RESET_AUTH_UPDATE,
         });
     }
 }

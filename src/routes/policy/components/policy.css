@@ -1,9 +1,13 @@
+.exp_tabs_policy {
+    margin: 4px 0 12px;
+}
+
 .policy_steps .steps-content {
     margin: 4px 0 10px;
 }
 
 .policy_steps .ant-table-body {
-    height: 250px;
+    max-height: 250px;
     overflow: overlay;
 }
 

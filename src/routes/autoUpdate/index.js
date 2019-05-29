@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
+import { Redirect } from 'react-router-dom'
 
 // import {Route, Switch} from "react-router-dom";
 // import Apk from "../../containers/ApkList"
@@ -30,6 +31,7 @@ import {
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
+import { ADMIN, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 
 const question_txt = (
     <div>
@@ -42,11 +44,6 @@ const question_txt = (
             <br></br>the Dealers who have permission
             <br></br> to use this App
         </span>
-    </div>
-);
-const SHOW_DEVICE_TEXT = (
-    <div>
-        <span>Shows app in <b>Install Apps</b> <br />menu on Devices</span>
     </div>
 );
 var status = true;
@@ -69,30 +66,24 @@ class Apk extends React.Component {
                     key: 'action',
                     className: 'row'
                 },
-                {
-                    title: (
-                        <span>
-                            {APK_PERMISSION}
-                            <Popover placement="top" content={question_txt}>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover>
-                        </span>),
-                    dataIndex: 'permission',
-                    key: 'permission',
-                    className: ''
-                },
-                {
-                    title:
-                        <span>
-                            {APK_SHOW_ON_DEVICE}
-                            <Popover placement="top" content={SHOW_DEVICE_TEXT}>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover>
-                        </span>,
-                    // title: 'SHOW ON DEVICE',
-                    dataIndex: 'apk_status',
-                    key: 'apk_status',
-                },
+                // {
+                //     title: (
+                //         <span>
+                //             {APK_PERMISSION}
+                //             <Popover placement="top" content={question_txt}>
+                //                 <span className="helping_txt"><Icon type="info-circle" /></span>
+                //             </Popover>
+                //         </span>),
+                //     dataIndex: 'permission',
+                //     key: 'permission',
+                //     className: ''
+                // },
+                // {
+                //     title: APK_SHOW_ON_DEVICE,
+                //     // title: 'SHOW ON DEVICE',
+                //     dataIndex: 'apk_status',
+                //     key: 'apk_status',
+                // },
                 {
                     title: APK,
                     dataIndex: 'apk',
@@ -302,83 +293,95 @@ class Apk extends React.Component {
         } else {
             this.state.columns[0].className = 'row';
         }
-        return (
-            <div>
-                {
-                    this.props.isloading ? <CircularProgress /> :
+        // console.log(this.props.location);
+        if (this.props.location.state || this.props.user.type === AUTO_UPDATE_ADMIN) {
 
-                        <div>
-                            <AppFilter
-                                handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder="Search APK"
-                                addButtonText="Upload APK"
-                                isAddButton={this.props.user.type === 'admin'}
-                                defaultPagingValue={this.props.DisplayPages}
-                                options={this.props.options}
-                                // toLink="/upload-apk"
-                                handleUploadApkModal={this.handleUploadApkModal}
-                                selectedOptions={this.props.selectedOptions}
-                                handleCheckChange={this.handleCheckChange}
-                                handlePagination={this.handlePagination}
-                                handleComponentSearch={this.handleComponentSearch}
-                            />
-                            {/* <div className="row">
-                                <div className="col-sm-12">
-                                    <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display:'flex', justifyContent: 'center'}}>
-                                        <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
-                                    </a>
-                                </div> 
-                            </div> */}
+            return (
+                <div>
+                    {
+                        this.props.isloading ? <CircularProgress /> :
 
-                            {
-                                (this.props.user.type === 'admin') ?
-                                    <div style={{ textAlign: "center" }}>
-                                        {/* <Button
-                                            type="primary"
-                                            // disabled={(this.props.disableAddButton == true) ? true : false}
-                                            style={{ width: '12%', marginBottom:16 }}
-                                        >
-                                            <Link to='/upload-apk'>Upload apk</Link>
-                                        </Button> */}
-                                    </div> : false
-                            }
-                            <ListApk
-                                handleStatusChange={this.handleStatusChange}
-                                apk_list={this.state.apk_list}
-                                // tableChangeHandler={this.tableChangeHandler}
-                                handleConfirmDelete={this.handleConfirmDelete}
-                                editApk={this.props.editApk}
-                                columns={this.state.columns}
-                                getApkList={this.props.getApkList}
-                                pagination={this.props.DisplayPages}
-                                user={this.props.user}
-                                ref="listApk"
-                            />
-
-                            <Modal
-                                maskClosable={false}
-                                width="620px"
-                                className="upload_apk_popup"
-                                visible={this.state.uploadApkModal}
-                                title="Upload APK"
-                                onOk={() => { }}
-                                onCancel={() => {
-                                    this.hideUploadApkModal()
-                                }}
-                                okText="Save"
-                                footer={null}
-                            >
-                                <AddApk
-
-                                    hideUploadApkModal={this.hideUploadApkModal}
-                                    ref='uploadApk'
+                            <div>
+                                <AppFilter
+                                    handleFilterOptions={this.handleFilterOptions}
+                                    searchPlaceholder="Search APK"
+                                    addButtonText="Upload APK"
+                                    isAddButton={this.props.user.type === ADMIN || this.props.user.type === AUTO_UPDATE_ADMIN}
+                                    defaultPagingValue={this.props.DisplayPages}
+                                    options={this.props.options}
+                                    // toLink="/upload-apk"
+                                    handleUploadApkModal={this.handleUploadApkModal}
+                                    selectedOptions={this.props.selectedOptions}
+                                    handleCheckChange={this.handleCheckChange}
+                                    handlePagination={this.handlePagination}
+                                    handleComponentSearch={this.handleComponentSearch}
                                 />
-                            </Modal>
+                                {/* <div className="row">
+                                    <div className="col-sm-12">
+                                        <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display:'flex', justifyContent: 'center'}}>
+                                            <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
+                                        </a>
+                                    </div> 
+                                </div> */}
+
+                                {
+                                    (this.props.user.type === 'admin') ?
+                                        <div style={{ textAlign: "center" }}>
+                                            {/* <Button
+                                                type="primary"
+                                                // disabled={(this.props.disableAddButton == true) ? true : false}
+                                                style={{ width: '12%', marginBottom:16 }}
+                                            >
+                                                <Link to='/upload-apk'>Upload apk</Link>
+                                            </Button> */}
+                                        </div> : false
+                                }
+                                <ListApk
+                                    handleStatusChange={this.handleStatusChange}
+                                    apk_list={this.state.apk_list}
+                                    // tableChangeHandler={this.tableChangeHandler}
+                                    handleConfirmDelete={this.handleConfirmDelete}
+                                    editApk={this.props.editApk}
+                                    columns={this.state.columns}
+                                    getApkList={this.props.getApkList}
+                                    pagination={this.props.DisplayPages}
+                                    user={this.props.user}
+                                    ref="listApk"
+                                    link='autoUpdate'
+                                />
+
+                                <Modal
+                                    maskClosable={false}
+                                    width="620px"
+                                    className="upload_apk_popup"
+                                    visible={this.state.uploadApkModal}
+                                    title="Upload APK"
+                                    onOk={() => { }}
+                                    onCancel={() => {
+                                        this.hideUploadApkModal()
+                                    }}
+                                    okText="Save"
+                                    footer={null}
+                                >
+                                    <AddApk
+
+                                        hideUploadApkModal={this.hideUploadApkModal}
+                                        ref='uploadApk'
+                                    />
+                                </Modal>
 
 
-                        </div>}
-            </div>
-        )
+                            </div>}
+                </div>
+            )
+        }
+        else {
+            return (
+                <Redirect to={{
+                    pathname: '/app',
+                }} />
+            )
+        }
     }
 
 
