@@ -151,7 +151,7 @@ export default class Activity extends Component {
         }
     }
     render() {
-        // console.log('activities', this.state.activities)
+        console.log('activities', this.state.activities)
         const { visible, loading } = this.state;
         return (
             <div>
@@ -205,7 +205,7 @@ export default class Activity extends Component {
                         bordered
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
-                            // console.log('recored', record)
+                            console.log('recored', JSON.parse(record.data.app_list))
                             if (record.action_name == 'APPS PUSHED' || record.action_name == 'APPS PULLED') {
                                 return (
                                     <Table
