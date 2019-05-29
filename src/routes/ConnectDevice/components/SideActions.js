@@ -601,7 +601,7 @@ class SideActions extends Component {
                         this.showSaveProfileModal(true, 'profile')
                         this.setState({showChangesModal: false})
                     }}
-                    onCancel={this.onCancel}
+                    onCancel={()=> this.setState({showChangesModal: false})}
                     okText='Apply'
                 >
                     <DeviceSettings
