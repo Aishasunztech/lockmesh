@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal, Row, Col, Input } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 import Permissions from './Permissions';
+import styles from './app.css';
 
 import EditApk from './EditApk';
 
@@ -34,6 +35,7 @@ export default class ListApk extends Component {
             searchText: '',
             columns: [],
             pagination: this.props.pagination,
+            expandedRowKeys: [],
 
         };
         this.renderList = this.renderList.bind(this);
@@ -107,6 +109,7 @@ export default class ListApk extends Component {
         return list.map((app) => {
             if (app.deleteable) {
                 return {
+                    'rowKey': app.apk_id,
                     'apk_id': app.apk_id,
                     'action': (
                         <Fragment>
@@ -130,6 +133,7 @@ export default class ListApk extends Component {
 
             } else {
                 return {
+                    'rowKey': app.apk_id,
                     'apk_id': app.apk_id,
                     'action': (
                         <Fragment>
@@ -168,6 +172,21 @@ export default class ListApk extends Component {
         }
     }
 
+    onExpandRow =(expanded, record) => {
+        // console.log(expanded, 'data is expanded', record);
+        if(expanded){
+            if(!this.state.expandedRowKeys.includes(record.rowKey)){
+                this.state.expandedRowKeys.push(record.rowKey);
+                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+            }
+        }else if(!expanded){
+            if(this.state.expandedRowKeys.includes(record.rowKey)){
+               let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+                this.setState({expandedRowKeys: list})
+            }
+        }
+    }
+
     render() {
 
         const rowSelection = {
@@ -180,6 +199,7 @@ export default class ListApk extends Component {
                     // rowSelection={rowSelection}
                     // expandableRowIcon={<Icon type="right" />}
                     // collapsedRowIcon={<Icon type="down" />}
+                    rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                     expandIcon={(props) => this.customExpandIcon(props)}
                     expandedRowRender={(record) => {
                         // console.log("table row", record);
@@ -188,6 +208,7 @@ export default class ListApk extends Component {
                         );
 
                     }}
+                    onExpand={this.onExpandRow}
                     expandIconColumnIndex={1}
                     expandIconAsCell={false}
                     className="gx-table-responsive apklist_table"
