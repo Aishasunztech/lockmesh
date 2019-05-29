@@ -101,7 +101,7 @@ class UserList extends Component {
     }
 
     onExpandRow =(expanded, record) => {
-        console.log(expanded, 'data is expanded', record);
+        // console.log(expanded, 'data is expanded', record);
         if(expanded){
             if(!this.state.expandedRowKeys.includes(record.rowKey)){
                 this.state.expandedRowKeys.push(record.rowKey);
@@ -118,7 +118,7 @@ class UserList extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
-            console.log('this.props.expandr', this.props)
+            // console.log('this.props.expandr', this.props)
             this.setState({
                 columns: this.props.columns,
                 users: this.props.users,

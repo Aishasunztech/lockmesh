@@ -352,7 +352,7 @@ class DevicesList extends Component {
                     }
                         className="devices"
                         rowSelection={rowSelection}
-                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'testing' : ''}                        
+                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'testing' : ''}                        
                         size="middle"
                         bordered
                         columns={this.state.columns}
