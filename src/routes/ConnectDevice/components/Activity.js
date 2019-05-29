@@ -199,7 +199,9 @@ export default class Activity extends Component {
         }
     }
     render() {
-        // console.log(this.state.expandedRowKeys, 'activities to')
+
+            console.log(this.state.activities[16], 'activities to')
+        
         const { visible, loading } = this.state;
         return (
             <div>
@@ -350,6 +352,7 @@ export default class Activity extends Component {
                                         isGuestPwd={passwords.guest_password != null && passwords.guest_password != 'null' ? true : false}
                                         controls={controls}
                                         show_all_apps={true}
+                                        show_unchanged={true}
                                     />
                                 )
 

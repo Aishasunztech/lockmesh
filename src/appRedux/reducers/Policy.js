@@ -83,7 +83,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 policies: action.payload,
-                copyPolicies: action.payload
+                copyPolicies: JSON.parse(JSON.stringify(action.payload)) 
             }
 
         case APK_LIST: {
@@ -258,7 +258,7 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
-                copyPolicies: state.policies
+                copyPolicies: JSON.parse(JSON.stringify(state.policies)) 
             }
         }
 

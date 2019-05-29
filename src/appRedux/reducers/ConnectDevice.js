@@ -51,7 +51,8 @@ import {
     GET_ACTIVITIES,
     HIDE_POLICY_CONFIRM,
     APPLY_POLICY,
-    CLEAR_APPLICATIONS
+    CLEAR_APPLICATIONS,
+    SAVE_PROFILE,
 } from "../../constants/ActionTypes";
 
 import {
@@ -78,6 +79,7 @@ const initialState = {
     status: '',
     appPermissions: [],
 
+    isSaveProfileBtn: false,
     syncStatus: false,
     device: {},
     allExtensions: [],
@@ -136,6 +138,7 @@ const initialState = {
     undoExtensions: [],
     redoExtensions: [],
     controls: {},
+    changedCtrls: {},
     undoControls: [],
     redoControls: [],
     activities: [],
@@ -419,9 +422,10 @@ export default (state = initialState, action) => {
                 ...state,
                 pageName: MAIN_MENU,
                 showMessage: false,
-                // applyBtn: false,
-                // undoBtn: false,
-                // redoBtn: false,
+                applyBtn: false,
+                undoBtn: false,
+                redoBtn: false,
+                clearBtn: false
             }
         }
         case START_LOADING: {
@@ -456,15 +460,18 @@ export default (state = initialState, action) => {
 
         case SHOW_MESSAGE: {
 
-            if (action.payload.messageType === 'success') {
-                success({
-                    title: action.payload.messageText,
-                })
-            } else {
-                error({
-                    title: this.props.messageText,
-                })
+            if(action.payload.showMessage){
+                if (action.payload.messageType === 'success') {
+                    success({
+                        title: action.payload.messageText,
+                    })
+                } else {
+                    error({
+                        title: this.props.messageText,
+                    })
+                }
             }
+
             return {
                 ...state,
             }
@@ -600,6 +607,14 @@ export default (state = initialState, action) => {
                 profileName: action.payload
             }
         }
+
+        case SAVE_PROFILE: {
+            return {
+                ...state,
+                isSaveProfileBtn: false,
+            }
+        }
+
         case SHOW_SAVE_PROFILE_MODAL: {
             return {
                 ...state,
@@ -646,11 +661,12 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_CONTROL: {
             let changedControls = JSON.parse(JSON.stringify(state.controls));
-            if (action.payload.key == 'wifi_status') {
-                changedControls[action.payload.key] = true;
-            } else {
+            // if (action.payload.key == 'wifi_status') {
+            //     changedControls[action.payload.key] = true;
+            // } else {
                 changedControls.controls[action.payload.key] = action.payload.value;
-            }
+               state.changedCtrls[action.payload.key] = action.payload.value;
+            // }
 
             state.controls = JSON.parse(JSON.stringify(changedControls));
             let controls = state.controls;
@@ -661,8 +677,11 @@ export default (state = initialState, action) => {
                 ...state,
                 controls: state.controls,
                 forceUpdate: state.forceUpdate + 1,
+                changedCtrls: state.changedCtrls,
                 applyBtn: true,
-                undoBtn: true
+                undoBtn: true,
+                clearBtn: true,
+                isSaveProfileBtn: true
             }
         }
 
@@ -684,7 +703,8 @@ export default (state = initialState, action) => {
                 ...state,
                 controls: state.controls,
                 applyBtn: true,
-                undoBtn: true
+                undoBtn: true,
+                isSaveProfileBtn: true
             }
 
         }
@@ -788,6 +808,7 @@ export default (state = initialState, action) => {
                 applyBtn: true,
                 undoBtn: true,
                 clearBtn: true,
+                isSaveProfileBtn: true,
                 ...check
             }
         }
@@ -810,7 +831,8 @@ export default (state = initialState, action) => {
                 extensions: changedExtensions,
                 applyBtn: true,
                 undoBtn: true,
-                clearBtn: true
+                clearBtn: true,
+                isSaveProfileBtn: true,
                 // ...check
             }
         }
@@ -910,6 +932,7 @@ export default (state = initialState, action) => {
                 applyBtn: true,
                 undoBtn: true,
                 clearBtn: true,
+                isSaveProfileBtn: true,
                 ...check
             }
         }
@@ -938,6 +961,7 @@ export default (state = initialState, action) => {
                 applyBtn: true,
                 undoBtn: true,
                 clearBtn: true,
+                isSaveProfileBtn: true
             }
         }
 
@@ -1027,6 +1051,8 @@ export default (state = initialState, action) => {
                 clearBtn: false,
                 redoBtn: false,
                 undoBtn: false,
+                applyBtn: false,
+                changedCtrls: {},
                 pageName: MAIN_MENU
             }
         }
