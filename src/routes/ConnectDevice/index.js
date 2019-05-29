@@ -493,12 +493,16 @@ class ConnectDevice extends Component {
                           </div>
                         </div>
                         {this.renderScreen()}
-                        <Button.Group className="act_b_grp">
-                          <Button type="default" icon="check" className="action_btn clr_green" >apply</Button>
-                          <Button type="default" icon="undo" className="action_btn clr_orange" >undo</Button>
-                          <Button type="default" icon="redo" className="action_btn clr_orange" >redo</Button>
-                          <Button type="default" icon="close" className="action_btn clr_red" >clear</Button>
-                        </Button.Group>
+                        <DeviceActions
+                          undoApplications={this.undoAction}
+                          redoApplications={this.redoAction}
+                          applyActionButton={this.applyActionButton}
+                          clearApplications={this.props.clearApplications}
+                          applyBtn={this.props.applyBtn}
+                          undoBtn={this.props.undoBtn}
+                          redoBtn={this.props.redoBtn}
+                          clearBtn={this.props.clearBtn}
+                        />
                         <Button.Group className="nav_btn_grp">
 
                           <Button type="default" className="nav_btn" onClick={() => {
@@ -513,16 +517,7 @@ class ConnectDevice extends Component {
 
                         </Button.Group>
                       </div>
-                      <DeviceActions
-                        undoApplications={this.undoAction}
-                        redoApplications={this.redoAction}
-                        applyActionButton={this.applyActionButton}
-                        clearApplications={this.props.clearApplications}
-                        applyBtn={this.props.applyBtn}
-                        undoBtn={this.props.undoBtn}
-                        redoBtn={this.props.redoBtn}
-                        clearBtn={this.props.clearBtn}
-                      />
+
 
                     </Card>
                   </Col>
