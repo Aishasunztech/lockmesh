@@ -41,7 +41,8 @@ class DevicesList extends Component {
             selectedRowKeys: [],
             self: this,
             redirect: false,
-            user_id: ''
+            user_id: '',
+            expandedRowKeys: [],
         };
         this.renderList = this.renderList.bind(this);
     }
@@ -263,6 +264,21 @@ class DevicesList extends Component {
         })
     }
 
+    onExpandRow =(expanded, record) => {
+        console.log(expanded, 'data is expanded', record);
+        if(expanded){
+            if(!this.state.expandedRowKeys.includes(record.key)){
+                this.state.expandedRowKeys.push(record.key);
+                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+            }
+        }else if(!expanded){
+            if(this.state.expandedRowKeys.includes(record.key)){
+               let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                this.setState({expandedRowKeys: list})
+            }
+        }
+    }
+
     // componentWillReceiveProps() {
     //     this.setState({
     //         devices: this.props.devices,
@@ -273,7 +289,7 @@ class DevicesList extends Component {
 
     render() {
 
-        // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
+        console.log(this.state.expandedRowKeys, 'selected keys', )
 
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state
@@ -329,10 +345,15 @@ class DevicesList extends Component {
                 <Card>
                     <Table
                         ref='tablelist'
+                        rowClassName= {(record, index) => {
+                            console.log(record,'df', index)
+                            // this.state.expandedRowKeys.includes(record.key) ? 'testing' : ''
+                        }
+                    }
                         className="devices"
                         rowSelection={rowSelection}
-                        rowClassName={() => 'editable-row'}
-                        size="default"
+                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'testing' : ''}                        
+                        size="middle"
                         bordered
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.devices)}
@@ -346,7 +367,7 @@ class DevicesList extends Component {
                             x: 500,
                             // y: 600 
                         }}
-
+                        onExpand={this.onExpandRow}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log('record is', record)

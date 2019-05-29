@@ -182,7 +182,7 @@ export default class Activity extends Component {
         }
     }
     render() {
-        // console.log('activities', this.state.activities)
+        console.log('activities', this.state.activities)
         const { visible, loading } = this.state;
         return (
             <div>
