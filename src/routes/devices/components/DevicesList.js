@@ -264,17 +264,17 @@ class DevicesList extends Component {
         })
     }
 
-    onExpandRow =(expanded, record) => {
+    onExpandRow = (expanded, record) => {
         console.log(expanded, 'data is expanded', record);
-        if(expanded){
-            if(!this.state.expandedRowKeys.includes(record.key)){
+        if (expanded) {
+            if (!this.state.expandedRowKeys.includes(record.key)) {
                 this.state.expandedRowKeys.push(record.key);
-                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
             }
-        }else if(!expanded){
-            if(this.state.expandedRowKeys.includes(record.key)){
-               let list = this.state.expandedRowKeys.filter(item => item != record.key)
-                this.setState({expandedRowKeys: list})
+        } else if (!expanded) {
+            if (this.state.expandedRowKeys.includes(record.key)) {
+                let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                this.setState({ expandedRowKeys: list })
             }
         }
     }
@@ -289,7 +289,7 @@ class DevicesList extends Component {
 
     render() {
 
-        console.log(this.state.expandedRowKeys, 'selected keys', )
+        console.log(this.state.expandedRowKeys, 'selected keys')
 
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state
@@ -345,14 +345,14 @@ class DevicesList extends Component {
                 <Card>
                     <Table
                         ref='tablelist'
-                        rowClassName= {(record, index) => {
-                            console.log(record,'df', index)
+                        rowClassName={(record, index) => {
+                            console.log(record, 'df', index)
                             // this.state.expandedRowKeys.includes(record.key) ? 'testing' : ''
                         }
-                    }
+                        }
                         className="devices"
                         rowSelection={rowSelection}
-                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'testing' : ''}                        
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
                         size="middle"
                         bordered
                         columns={this.state.columns}

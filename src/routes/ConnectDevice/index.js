@@ -492,6 +492,12 @@ class ConnectDevice extends Component {
                           </div>
                         </div>
                         {this.renderScreen()}
+                        <Button.Group className="abc">
+                          <Button type="default" icon="check" className="action_btn clr_green" >apply</Button>
+                          <Button type="default" icon="undo" className="action_btn clr_orange" >undo</Button>
+                          <Button type="default" icon="redo" className="action_btn clr_orange" >redo</Button>
+                          <Button type="default" icon="close" className="action_btn clr_red" >clear</Button>
+                        </Button.Group>
                         <Button.Group className="nav_btn_grp">
                           <Button type="default" icon="left" className="nav_btn" onClick={() => {
                             this.onBackHandler();
@@ -500,8 +506,8 @@ class ConnectDevice extends Component {
                             this.changePage("main_menu")
                           }} />
                           {/* <Button type="default" icon="border" className="nav_btn" /> */}
-                        </Button.Group>
 
+                        </Button.Group>
                       </div>
                       <DeviceActions
                         undoApplications={this.undoAction}
@@ -513,6 +519,7 @@ class ConnectDevice extends Component {
                         redoBtn={this.props.redoBtn}
                         clearBtn={this.props.clearBtn}
                       />
+
                     </Card>
                   </Col>
                   <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>

@@ -10,6 +10,7 @@
     color: #545454;
     position: relative;
     bottom: 56px;
+    border-top: 0;
 }
 
 .ant-table-thead>tr>.device_value {

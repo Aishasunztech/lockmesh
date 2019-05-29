@@ -113,6 +113,10 @@
     background: #ebf4fa !important;
 }
 
+.exp_row {
+    background: #e6faff !important;
+}
+
 .expand_table .bold {
     font-weight: 500 !important
 }
