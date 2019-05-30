@@ -11,6 +11,11 @@
     overflow: overlay;
 }
 
+.add-policy-modal-content {
+    height: 309px;
+    overflow: overlay
+}
+
 .exp_row {
     background: #e6faff !important;
 }
@@ -65,6 +70,12 @@
 
 .policy_popup .ant-modal-body {
     padding: 16px 16px 10px;
+}
+
+.add-policy-footer {
+    text-align: right;
+    margin-top: 10px
+
 }
 
 .policy_popup .ant-steps-item-title {

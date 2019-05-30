@@ -64,6 +64,7 @@ class AddPolicy extends Component {
             isPolicy_name: 'success',
             policy_name_error: '',
             command_error: '',
+            disabledCommand: '',
             pushAppsIds: [],
             appPermissionsIds: [],
 
@@ -182,6 +183,7 @@ class AddPolicy extends Component {
         }
     }
 
+
     componentDidMount() {
         this.props.getDealerApps();
         this.props.getAppPermissions();
@@ -287,123 +289,39 @@ class AddPolicy extends Component {
         // }
     }
 
+    policyNameChange = (e) => {
+
+        this.setState({ 
+            policy_name: e.target.value,
+             policy_name_error: '',
+            isPolicy_name: 'success' ,
+            disabledCommand: '#'+e.target.value.replace(/ /g, '_')
+        })
+    }
+
     callback = (activeKey) => {
         this.setState({ tabSelected: activeKey })
     }
 
+    prev_tab = ()=> {
+        let tabSelected = parseInt(this.state.tabSelected);
+        tabSelected--;
+        this.setState({tabSelected: String(tabSelected)})
+    }
+
+    next_tab = ()=> {
+        let tabSelected = parseInt(this.state.tabSelected);
+        tabSelected++;
+        this.setState({tabSelected: String(tabSelected)})
+    }
+
     render() {
-        const { current } = this.state;
         // console.log('console the applist', this.state.dealerApps);
-        this.steps = [{
-            title: 'SELECT APPS',
-            Icon: <span className="step_counting">1</span>,
-            content: (
-                <AppList
-                    apk_list={this.state.dealerApps}
-                    handleCheckApp={this.handleCheckApp}
-                    handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
-                    guestAll={this.state.guestAlldealerApps}
-                    encryptedAll={this.state.encryptedAlldealerApps}
-                    enableAll={this.state.enableAlldealerApps}
-                    onSelectChange={this.onSelectChange}
-                    isCheckAllButtons={true}
-                    apps='dealerApps'
-                    isSwitch={true}
-                    isCheckbox={true}
-                    pageType={'dealerApps'}
-                />
-            ),
-        }, {
-            title: 'SET ' + APPLICATION_PERMISION.toUpperCase(),
-            Icon: <span className="step_counting">2</span>,
-            content: (
-                <AppList
-                    apk_list={this.state.appPermissions}
-                    handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
-                    handleCheckApp={this.handleCheckApp}
-                    guestAll={this.state.guestAllappPermissions}
-                    encryptedAll={this.state.encryptedAllappPermissions}
-                    enableAll={this.state.enableAllappPermissions}
-                    onSelectChange={this.onSelectChange}
-                    isCheckAllButtons={true}
-                    pageType={'appPermissions'}
-                    appPermissions='appPermissions'
-                    isSwitch={true}
-                    isCheckbox={true}
-                />
-            ),
-        }, {
-            title: 'SET ' + SECURE_SETTING_PERMISSION.toUpperCase(),
-            Icon: <span className="step_counting">3</span>,
-            content: (
-                <AppList
-                    allExtensions={this.state.allExtensions}
-                    handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
-                    handleCheckApp={this.handleCheckApp}
-                    guestAll={this.state.guestAllallExtensions}
-                    encryptedAll={this.state.encryptedAllallExtensions}
-                    enableAll={this.state.enableAllallExtensions}
-                    isCheckAllButtons={true}
-                    pageType={'allExtensions'}
-                    secureSettings='allExtensions'
-                    isSwitch={true}
-                    AddPolicy={true}
-                />
-            ),
-        }, {
-            title: 'SET ' + SYSTEM_PERMISSION.toUpperCase(),
-            Icon: <span className="step_counting">4</span>,
-            content: (
-                <Table
-                    pagination={false}
-                    dataSource={this.renderSystemPermissions()}
-                    columns={columns}>
-                </Table>
-            ),
-        }, {
-            title: 'SET POLICY DETAILS',
-            Icon: <span className="step_counting">5</span>,
-            content: (
-                <Form className="login-form">
-                    <Form.Item
-                        validateStatus={this.state.isPolicy_name}
-                        help={this.state.policy_name_error}
-                    >
-                        <span className="h3">Name</span>
-                        <Input placeholder="Name" onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
-                    </Form.Item>
-                    <Form.Item
-                        validateStatus={this.state.isCommand}
-                        help={this.state.command_error}
-                    >
-                        <span className="h3">Policy Note</span>
-                        <textarea placeholder="Policy Note" onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
-
-                    </Form.Item>
-                </Form>
-                // <div className="lst_stp">
-                //     <div className="row">
-                //         <div className="col-md-2 pr-0 "><label>Name:</label></div>
-                //         <div className="col-md-8">
-                //             <Input placeholder="Name" onChange={(e)=> this.setState({policy_name: e.target.value})} className="pol_inp" />
-                //         </div>
-                //     </div>
-                //     <div className="row">
-                //         <div className="col-md-2 pr-0 "><label>Policy Note:</label></div>
-                //         <div className="col-md-8">
-                //             <textarea placeholder="Policy Note" onChange={(e)=> this.setState({command: e.target.value})} class="ant-input"></textarea>
-                //         </div>
-                //     </div>
-                // </div>
-            )
-        }
-        ];
-
 
         return (
             <Fragment>
-                <div className="policy_steps">
-                    <Tabs size="large" type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
+                <div className="policy_steps card-container">
+                    <Tabs size="small" tabPosition='left' type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
                         <TabPane tab="APPS" key="1">
                             <AppList
                                 apk_list={this.state.dealerApps}
@@ -455,19 +373,24 @@ class AddPolicy extends Component {
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">
                             <Table
+                            className="add-policy-modal-content"
                                 pagination={false}
                                 dataSource={this.renderSystemPermissions()}
                                 columns={columns}>
                             </Table>
                         </TabPane>
                         <TabPane tab="POLICY DETAILS" key="5">
-                            <Form className="login-form">
+                            <Form className="login-form add-policy-modal-content"> 
                                 <Form.Item
                                     validateStatus={this.state.isPolicy_name}
                                     help={this.state.policy_name_error}
                                 >
                                     <span className="h3">Name</span>
-                                    <Input placeholder="Name" onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
+                                    <Input placeholder="Name" onChange={(e) => this.policyNameChange(e)} className="pol_inp" />
+                                </Form.Item>
+                                <Form.Item>
+                                    <span className="h3">Command</span>
+                                    <Input disabled value={this.state.disabledCommand} className="pol_inp" />
                                 </Form.Item>
                                 <Form.Item
                                     validateStatus={this.state.isCommand}
@@ -480,10 +403,13 @@ class AddPolicy extends Component {
                             </Form>
                         </TabPane>
                     </Tabs>
-                    <div>
-                        <Button type="primary" onClick={() => console.log('cancel')}>Cancel</Button>
-                    <Button type="primary" onClick={() => this.savePolicy()}>Save</Button>
+
+                    <div class="add-policy-footer">
+                        {this.state.tabSelected !== '1' ? <Button type="primary" onClick={() => this.prev_tab()}>Previous</Button> : false}
+                        {this.state.tabSelected !== '5' ? <Button type="primary" onClick={() => this.next_tab()}>Next</Button> : false}
+                        {this.state.tabSelected === '5' ? <Button type="primary" onClick={() => this.savePolicy()}>Save</Button> : false}
                     </div>
+
                     {/* <Steps current={current} labelPlacement="vertical">
                         {this.steps.map(item => <Steps.Step icon={item.Icon} key={item.title} title={item.title} />)}
                     </Steps> */}
