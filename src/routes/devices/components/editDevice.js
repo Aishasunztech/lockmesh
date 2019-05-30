@@ -8,7 +8,8 @@ export default class EditDealer extends Component {
         super(props);
         this.state = {
             visible: false,
-            expiry_date: 1
+            expiry_date: 1,
+            device: {}
         }
     }
 
@@ -62,7 +63,7 @@ export default class EditDealer extends Component {
                     width="600px"
                     visible={visible}
                     maskClosable={false}
-                    title="Edit Device"
+                    title={<div>Edit Device <br /> <span>Device ID: {this.state.device.device_id} </span></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}

@@ -13,6 +13,7 @@ import WipeDevice from '../../ConnectDevice/components/wipeDevice';
 import ImeiView from '../../ConnectDevice/components/ImeiView';
 import DealerApps from "./DealerApps";
 import PasswordForm from './PasswordForm';
+import DeviceSettings from './DeviceSettings';
 import Activity from './Activity';
 
 
@@ -36,7 +37,7 @@ import {
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
-    ADMIN, DEALER, SDEALER
+    ADMIN, DEALER, SDEALER, SECURE_SETTING
 } from "../../../constants/Constants";
 
 
@@ -85,7 +86,7 @@ const DealerAppModal = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="780px"
-            title="Select Apps"
+            title={<div>Select Apps <br /> Device ID: {props.device.device_id} </div>}
             visible={props.pushAppsModal}
             onOk={() => {
                 if (props.selectedApps.length) {
@@ -114,7 +115,7 @@ const PullAppModal = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="650px"
-            title="Select Apps"
+            title={<div>Select Apps <br /> Device ID: {props.device.device_id} </div>}
             visible={props.pullAppsModal}
             onOk={() => {
                 if (props.selectedApps.length) {
@@ -145,7 +146,7 @@ const SelectedApps = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="650px"
-            title="Selected Apps"
+            title={<div>Selected Apps <br /> Device ID: {props.device.device_id} </div>}
             visible={props.selectedAppsModal}
             onOk={() => {
                 props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
@@ -189,7 +190,9 @@ class SideActions extends Component {
             selectedApps: [],
             activities: [],
             policyId: '',
-            applyPolicyConfirm: false
+            showChangesModal: false,
+            applyPolicyConfirm: false,
+            isSaveProfileBtn: false
         }
     }
 
@@ -202,7 +205,9 @@ class SideActions extends Component {
             historyType: this.props.historyType,
             saveProfileType: this.props.saveProfileType,
             profileName: this.props.profileName,
-            activities: this.props.activities
+            activities: this.props.activities,
+            changedCtrls: this.props.changedCtrls,
+            isSaveProfileBtn: this.props.isSaveProfileBtn
         });
 
 
@@ -219,7 +224,8 @@ class SideActions extends Component {
                 saveProfileType: nextProps.saveProfileType,
                 profileName: nextProps.profileName,
                 pullAppsModal: nextProps.pullAppsModal,
-                activities: nextProps.activities
+                activities: nextProps.activities,
+                isSaveProfileBtn: nextProps.isSaveProfileBtn
             })
         }
         if (nextProps.applyPolicyConfirm) {
@@ -469,7 +475,12 @@ class SideActions extends Component {
                                 {/* </Tooltip> */}
 
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
-                                    <Button type="primary " style={{ width: "100%", marginBottom: 15 }} onClick={() => { this.showSaveProfileModal(true, 'profile') }} >
+                                    <Button type="primary " style={{ width: "100%", marginBottom: 15 }}
+                                    disabled={this.state.isSaveProfileBtn ? false : true}
+                                     onClick={() => { 
+                                        // this.showSaveProfileModal(true, 'profile') 
+                                        this.setState({showChangesModal: true})
+                                        }} >
                                         <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
                                         </Button>
                                     : null}
@@ -547,7 +558,7 @@ class SideActions extends Component {
                     </Card>
                 </div>
                 <Modal
-                    title={this.state.historyType}
+                    title={<div>{this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}
@@ -581,6 +592,30 @@ class SideActions extends Component {
                     }
 
                 </Modal>
+
+                <Modal
+                    maskClosable={false}
+                    title="Confirm new Settings to be sent to Device"
+                    visible={this.state.showChangesModal}
+                    onOk={()=> {
+                        this.showSaveProfileModal(true, 'profile')
+                        this.setState({showChangesModal: false})
+                    }}
+                    onCancel={()=> this.setState({showChangesModal: false})}
+                    okText='Apply'
+                >
+                    <DeviceSettings
+                        app_list={this.props.app_list}
+                        extensions={this.props.extensions}
+                        extensionUniqueName={SECURE_SETTING}
+                        isAdminPwd={this.props.isAdminPwd}
+                        isDuressPwd={this.props.isDuressPwd}
+                        isEncryptedPwd={this.props.isEncryptedPwd}
+                        isGuestPwd={this.props.isGuestPwd}
+                        controls={{ 'controls': this.state.changedCtrls }}
+                        showChangedControls={true}
+                    />
+                </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
                     closable={false}
@@ -592,6 +627,7 @@ class SideActions extends Component {
                         this.saveProfile();
                     }}
                     onCancel={() => this.showSaveProfileModal(false)}
+                    okText='Save'
 
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
@@ -607,6 +643,7 @@ class SideActions extends Component {
                     resetSeletedRows={this.resetSeletedRows}
                     selectedApps={this.state.selectedApps}
                     handleChecked={this.handleChecked}
+                    device={this.props.device}
                 />
 
                 <PullAppModal
@@ -620,6 +657,7 @@ class SideActions extends Component {
                     resetSeletedRows={this.resetSeletedRows}
                     handleChecked={this.handleChecked}
                     onCancelModel={this.onCancelModel}
+                    device={this.props.device}
                 />
 
                 <PasswordModal
@@ -638,6 +676,7 @@ class SideActions extends Component {
                     resetSeletedRows={this.resetSeletedRows}
                     applyPullApps={this.applyPullApps}
                     actionType={this.state.actionType}
+                    device={this.props.device}
                 />
 
                 <ActivateDevcie
@@ -663,6 +702,7 @@ class SideActions extends Component {
                 />
                 <FlagDevice
                     ref='flag_device'
+                    device={this.props.device}
                 />
                 <ImeiView
                     ref='imeiView'
@@ -674,6 +714,7 @@ class SideActions extends Component {
                 <Activity
                     ref='activity'
                     activities={this.state.activities}
+                    device={this.props.device}
 
                 />
             </div>
@@ -735,8 +776,10 @@ var mapStateToProps = ({ device_details, auth }, otherProps) => {
         usr_acc_id: device_details.device.id,
         apk_list: otherProps.apk_list,
         controls: device_details.controls,
+        changedCtrls: device_details.changedCtrls,
         extensions: device_details.extensions,
         activities: device_details.activities,
+        isSaveProfileBtn: device_details.isSaveProfileBtn
     };
 }
 

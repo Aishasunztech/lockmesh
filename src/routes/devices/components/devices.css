@@ -121,6 +121,18 @@
     font-weight: 500 !important
 }
 
+.dev_tabs .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+    margin: 0;
+    border: 1px solid #e8e8e8;
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    background: #fafafa;
+    margin-right: 2px;
+    padding: 0 10px;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    line-height: 38px;
+}
+
 .ant-modal {
     top: 24px;
 }
@@ -135,6 +147,8 @@
 
 .dev_tabs .ant-tabs-tab {
     text-align: center;
+    padding: 0 12px !important;
+    font-size: 13px;
 }
 
 .dev_tabs .ant-tabs-bar {

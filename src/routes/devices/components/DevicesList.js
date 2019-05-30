@@ -114,6 +114,7 @@ class DevicesList extends Component {
             let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>DELETE</Button>
+            let Unflagbtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.props.unflagConfirm(device) }}> Unflag </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
             // console.log('end', device)
@@ -130,19 +131,21 @@ class DevicesList extends Component {
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
-                        : (status === DEVICE_SUSPENDED) ?
-                            (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            : (status === DEVICE_EXPIRED) ?
+                        : (device.flagged !== 'Not flagged') ?
+                            (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                            : (status === DEVICE_SUSPENDED) ?
                                 (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
-                                    (<Fragment>{DeleteBtn}</Fragment>)
-                                    : (status === DEVICE_PENDING_ACTIVATION) ?
-                                        (<Fragment><Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment></Fragment>)
-                                        : (device.status === DEVICE_PRE_ACTIVATION) ?
-                                            false
-                                            : (status === DEVICE_EXPIRED) ?
-                                                (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
-                                                : false
+                                : (status === DEVICE_EXPIRED) ?
+                                    (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                    : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
+                                        (<Fragment>{DeleteBtn}</Fragment>)
+                                        : (status === DEVICE_PENDING_ACTIVATION) ?
+                                            (<Fragment><Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment></Fragment>)
+                                            : (device.status === DEVICE_PRE_ACTIVATION) ?
+                                                false
+                                                : (status === DEVICE_EXPIRED) ?
+                                                    (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
+                                                    : false
 
 
                 ),
@@ -289,7 +292,11 @@ class DevicesList extends Component {
 
     render() {
 
+<<<<<<< HEAD
         console.log(this.state.expandedRowKeys, 'selected keys')
+=======
+        // console.log(this.state.expandedRowKeys, 'selected keys', )
+>>>>>>> d6b1250d17e08d19435c489e63a7904ed1935cf5
 
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state
@@ -598,6 +605,8 @@ class DevicesList extends Component {
 
 }
 
+const confirm = Modal.confirm;
+
 export default class Tab extends Component {
     constructor(props) {
         super(props)
@@ -622,6 +631,23 @@ export default class Tab extends Component {
 
     handlePagination = (value) => {
         this.refs.devciesList.handlePagination(value);
+    }
+
+    unflagConfirm = (device) => {
+       let _this = this;
+        confirm({
+            title: 'Do you really want to unflag the device '+device.device_id,
+            okText: 'Yes',
+            cancelText: 'No',
+            onOk() {
+                _this.props.unflagged(device.device_id)
+                _this.props.activateDevice(device)
+                // console.log('OK');
+            },
+            onCancel() {
+                // console.log('Cancel');
+            },
+        });
     }
 
     componentDidUpdate(prevProps) {
@@ -663,6 +689,8 @@ export default class Tab extends Component {
                     </TabPane>
                     <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
                     </TabPane>
+                    <TabPane tab={<span className="orange">Flagged ({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
+                    </TabPane>
 
                 </Tabs>
                 <DevicesList
@@ -680,6 +708,7 @@ export default class Tab extends Component {
                     deleteUnlinkDevice={this.props.deleteUnlinkDevice}
                     resetTabSelected={this.resetTabSelected}
                     user={this.props.user}
+                    unflagConfirm={this.unflagConfirm}
                     history={this.props.history}
 
                 />

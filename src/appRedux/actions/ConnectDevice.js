@@ -808,6 +808,7 @@ export const transferDeviceProfile = (device_id) => {
         })
     }
 }
+
 export const unflagged = (device_id) => {
     return (dispatch) => {
         RestService.unflagged(device_id).then((response) => {
@@ -815,6 +816,7 @@ export const unflagged = (device_id) => {
                 dispatch({
                     type: UNFLAG_DEVICE,
                     response: response.data,
+                    device_id: device_id,
                     payload: {
                         // device: response.data.data,
                         msg: response.data.msg,

@@ -77,6 +77,7 @@ class ConnectDevice extends Component {
       pageName: MAIN_MENU,
       showChangesModal: false,
       controls: [],
+      changedCtrls: {},
       imei_list: [],
       showMessage: false,
       messageText: '',
@@ -149,7 +150,8 @@ class ConnectDevice extends Component {
     this.setState({
       pageName: this.props.pageName,
       device_id: isBase64(this.props.match.params.device_id),
-      controls: this.props.controls
+      controls: this.props.controls,
+      changedCtrls: this.props.changedCtrls
     });
 
     const device_id = isBase64(this.props.match.params.device_id);
@@ -179,10 +181,6 @@ class ConnectDevice extends Component {
       // console.log('ack_finished_push_apps_' + device_id);
     }
 
-
-
-
-
     // this.props.endLoading();
     setTimeout(() => {
       this.props.endLoading();
@@ -194,6 +192,7 @@ class ConnectDevice extends Component {
       // console.log('show message sate', this.props.showMessage)
       this.setState({
         controls: this.props.controls,
+        changedCtrls: this.props.changedCtrls,
         imei_list: this.props.imei_list,
         showMessage: this.props.showMessage,
         messageText: this.props.messageText,
@@ -319,8 +318,22 @@ class ConnectDevice extends Component {
   }
 
   applyActionButton = (visible = true) => {
+    console.log(this.state.changedCtrls, 'controls are');
+    // let changedControls = Object.create(null);
+    // Object.keys(this.state.controls.controls).map(key => {
+    //   if(key == 'bluetooth_status_isChanged'){
+    //     changedControls['bluetooth_status'] = this.state.controls.controls.bluetooth_status;
+    //   }else if(key == 'call_status_isChanged'){
+    //     changedControls['call_status'] = this.state.controls.controls.call_status
+    //   }else if(key == 'hotspot_status_isChanged'){
+    //     changedControls['hotspot_status'] = this.state.controls.controls.hotspot_status
+    //   }else if(key == 'screenshot_status_isChanged'){
+    //     changedControls['screenshot_status'] = this.state.controls.controls.screenshot_status
+    //   }
+    // });
+
     this.setState({
-      showChangesModal: visible
+      showChangesModal: visible,
     })
   }
   applyActions = () => {
@@ -337,7 +350,7 @@ class ConnectDevice extends Component {
       }
     }
 
-    console.log('main scure settings', this.props.controls.settings);
+    // console.log('main scure settings', this.props.controls.settings);
     if (this.props.controls.settings.length) {
       let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
       if (index >= 0) {
@@ -562,7 +575,8 @@ class ConnectDevice extends Component {
                     isDuressPwd={this.props.isDuressPwd}
                     isEncryptedPwd={this.props.isEncryptedPwd}
                     isGuestPwd={this.props.isGuestPwd}
-                    controls={this.state.controls}
+                    controls={{'controls' : this.state.changedCtrls } }
+                    showChangedControls={true}
                   />
                 </Modal>
               </div>}
@@ -677,6 +691,7 @@ var mapStateToProps = ({ routing, device_details, auth, socket }) => {
     isEncryptedPwd: device_details.isEncryptedPwd,
     isDuressPwd: device_details.isDuressPwd,
     controls: device_details.controls,
+    changedCtrls: device_details.changedCtrls,
     imei_list: device_details.imei_list,
     guestAllExt: device_details.guestAllExt,
     encryptedAllExt: device_details.encryptedAllExt,

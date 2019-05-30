@@ -68,6 +68,7 @@ export default class Activity extends Component {
             visible: false,
             activities: this.props.activities,
             expandedRowKeys: [],
+            device: {}
         }
     }
 
@@ -199,14 +200,16 @@ export default class Activity extends Component {
         }
     }
     render() {
-        // console.log(this.state.expandedRowKeys, 'activities to')
+
+            // console.log(this.state.activities[16], 'activities to')
+        
         const { visible, loading } = this.state;
         return (
             <div>
                 <Modal
                     maskClosable={false}
                     visible={visible}
-                    title='Activities'
+                    title={<div>Activities <br /> <span>Device ID: {(this.props.device.id) ? this.props.device.device_id : ''}</span></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
@@ -269,12 +272,12 @@ export default class Activity extends Component {
                                         columns={this.appsColumns}
                                         align='center'
                                         dataSource={
-                                                this.renderApps(JSON.parse(record.data.push_apps)) 
+                                            this.renderApps(JSON.parse(record.data.push_apps))
                                         }
                                         pagination={false}
                                     />
                                 )
-                            } 
+                            }
 
                             else if (record.action_name == 'APPS PULLED') {
                                 return (
@@ -285,7 +288,7 @@ export default class Activity extends Component {
                                         columns={this.pullAppsColumns}
                                         align='center'
                                         dataSource={
-                                                this.renderApps(JSON.parse(record.data.pull_apps))
+                                            this.renderApps(JSON.parse(record.data.pull_apps))
                                         }
                                         pagination={false}
                                     />
@@ -300,14 +303,14 @@ export default class Activity extends Component {
                                         columns={this.imeiColumns}
                                         align='center'
                                         dataSource={
-                                               [
+                                            [
                                                 {
-                                                key: record.data.id,
-                                                imei1: JSON.parse(record.data.imei).imei1 ,
-                                                imei2: JSON.parse(record.data.imei).imei2 
+                                                    key: record.data.id,
+                                                    imei1: JSON.parse(record.data.imei).imei1,
+                                                    imei2: JSON.parse(record.data.imei).imei2
 
                                                 }
-                                               ]
+                                            ]
                                         }
                                         pagination={false}
                                     />
@@ -322,17 +325,18 @@ export default class Activity extends Component {
                                         columns={this.policyColumns}
                                         align='center'
                                         dataSource={[
-                                                {
+                                            {
                                                 key: record.data.id,
-                                                policy_name: '#'+record.data.policy_name
-                                                }
-                                            ]
+                                                policy_name: '#' + record.data.policy_name
+                                            }
+                                        ]
                                         }
                                         pagination={false}
                                     />
                                 )
                             }
-                            
+
+
                             
                             else if (record.action_name == 'SETTING CHANGED') {
                                 let controls = {
@@ -350,6 +354,7 @@ export default class Activity extends Component {
                                         isGuestPwd={passwords.guest_password != null && passwords.guest_password != 'null' ? true : false}
                                         controls={controls}
                                         show_all_apps={true}
+                                        show_unchanged={true}
                                     />
                                 )
 
