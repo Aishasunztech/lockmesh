@@ -76,7 +76,7 @@ class Users extends Component {
                         key: "user_id",
                         className: '',
                         sorter: (a, b) => {
-                            console.log(a, 'user is is')
+                            // console.log(a, 'user is is')
                             return a.user_id.localeCompare(b.user_id)
                         },
 
@@ -187,10 +187,12 @@ class Users extends Component {
     componentDidMount() {
         this.props.getUserList();
         this.props.getPagination('users');
+        // console.log(this.props.location.state);
         this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
         this.setState({
             users: this.props.users_list,
             originalUsers: this.props.users_list,
+            expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
         })
         // this.props.getApkList();
         // this.props.getDefaultApps();
@@ -198,11 +200,12 @@ class Users extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
             this.columns[2].children[0].title = USER_ID + ' (' + nextProps.users_list.length + ')'
-            console.log('will recice props is called', nextProps.users_list)
+            // console.log('will recice props is called', nextProps.users_list)
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 users: nextProps.users_list,
                 originalUsers: nextProps.users_list,
+                expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
             })
 
         }
@@ -214,6 +217,7 @@ class Users extends Component {
             this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
+                expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
             })
         }
     }
@@ -267,7 +271,7 @@ class Users extends Component {
     }
 
     consoled = () => {
-        console.log('rendered row is ', this.refs)
+        // console.log('rendered row is ', this.refs)
     }
 
 
@@ -377,7 +381,7 @@ class Users extends Component {
     }
 
     render() {
-        console.log(this.state.expandedRowsKeys, 'refs is');
+        // console.log(this.state.expandedRowsKeys, 'refs is');
         return (
             <Fragment>
                 <AppFilter

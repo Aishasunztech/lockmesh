@@ -134,7 +134,8 @@ class Apk extends Component {
                                     </div>
                                 </div>
                             </Col>
-                            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            {/* never ever delete this commented code :P */}
+                            {/* <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
                                     <div>
                                         <Link to="#" onClick={() => {
@@ -161,10 +162,11 @@ class Apk extends Component {
                                         </Link>
                                     </div>
                                 </div>
-                            </Col>
+                            </Col> */}
                         </Row>
                     </div>
-                    <Modal
+                    {/* never ever delete this commented code :P */}
+                    {/* <Modal
                         maskClosable={false}
                         style={{ top: 20 }}
                         className="push_app"
@@ -185,7 +187,7 @@ class Apk extends Component {
                             checkCredentials={this.props.authenticateUpdateUser}
                         />
 
-                    </Modal >
+                    </Modal > */}
                 </div>
             )
         }

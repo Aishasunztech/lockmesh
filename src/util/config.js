@@ -1,3 +1,3 @@
 module.exports = {
-  footerText: `Copyright LockMesh © ${new Date().getFullYear()} (Version 1.0)`,
+  footerText: `Copyright LockMesh © ${new Date().getFullYear()} (Version 1.1)`,
 };

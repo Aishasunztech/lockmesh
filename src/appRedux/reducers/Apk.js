@@ -206,7 +206,7 @@ export default (state = initialState, action) => {
 		case CHECK_APK_NAME: {
 			// console.log(action);
 			if (action.response.status) {
-				console.log("ssadas");
+				// console.log("ssadas");
 			}
 			return {
 				...state

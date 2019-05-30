@@ -370,7 +370,7 @@ class DevicesList extends Component {
                         onExpand={this.onExpandRow}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            console.log('record is', record)
+                            // console.log('record is', record)
                             let showRecord = [];
                             let showRecord2 = [];
 

@@ -111,8 +111,8 @@ class AddApk extends Component {
 
     checkUniqueName = async (rule, value, callback) => {
         const form = this.props.form;
-        if (/[^A-Za-z \d]/.test(value)) {
-            callback('Please insert only alphabets and numbers.');
+        if (/[^A-Za-z. \d]/.test(value)) {
+            callback('Please insert a valid name.');
         } else {
 
             let response = await RestService.checkApkName(value).then((response) => {
@@ -156,7 +156,7 @@ class AddApk extends Component {
         })
     }
     showName(e) {
-        console.log(e.target);
+        // console.log(e.target);
     }
 
     render() {

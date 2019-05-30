@@ -150,21 +150,25 @@ class EditApkForm extends Component {
 
     checkUniqueName = async (rule, value, callback) => {
         const form = this.props.form;
-        // console.log(value);
-        let response = await RestService.checkApkName(value, this.props.app.apk_id).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                if (response.data.status) {
-                    return true
-                }
-                else {
-                    return false
-                }
-            }
-        });
-        if (response) {
-            callback();
+        if (/[^A-Za-z. \d]/.test(value)) {
+            callback('Please insert a valid name.');
         } else {
-            callback('Please choose a different name');
+            // console.log(value);
+            let response = await RestService.checkApkName(value, this.props.app.apk_id).then((response) => {
+                if (RestService.checkAuth(response.data)) {
+                    if (response.data.status) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+            });
+            if (response) {
+                callback();
+            } else {
+                callback('Please choose a different name');
+            }
         }
     };
 

@@ -30,7 +30,7 @@ class UserList extends Component {
     }
 
     handleSearch2 = () => {
-        console.log('refs of all', this.refs)
+        // console.log('refs of all', this.refs)
         
     }
 
@@ -127,7 +127,7 @@ class UserList extends Component {
         }
     }
     render() {
-        console.log(this.state.expandedRowKeys)
+        // console.log(this.state.expandedRowKeys)
         return (
             <Fragment>
                 <Card>

@@ -86,7 +86,7 @@ const DealerAppModal = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="780px"
-            title="Select Apps"
+            title={<div>Select Apps <br /> Device ID: {props.device.device_id} </div>}
             visible={props.pushAppsModal}
             onOk={() => {
                 if (props.selectedApps.length) {
@@ -115,7 +115,7 @@ const PullAppModal = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="650px"
-            title="Select Apps"
+            title={<div>Select Apps <br /> Device ID: {props.device.device_id} </div>}
             visible={props.pullAppsModal}
             onOk={() => {
                 if (props.selectedApps.length) {
@@ -146,7 +146,7 @@ const SelectedApps = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="650px"
-            title="Selected Apps"
+            title={<div>Selected Apps <br /> Device ID: {props.device.device_id} </div>}
             visible={props.selectedAppsModal}
             onOk={() => {
                 props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
@@ -558,7 +558,7 @@ class SideActions extends Component {
                     </Card>
                 </div>
                 <Modal
-                    title={this.state.historyType}
+                    title={<div>{this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}
@@ -643,6 +643,7 @@ class SideActions extends Component {
                     resetSeletedRows={this.resetSeletedRows}
                     selectedApps={this.state.selectedApps}
                     handleChecked={this.handleChecked}
+                    device={this.props.device}
                 />
 
                 <PullAppModal
@@ -656,6 +657,7 @@ class SideActions extends Component {
                     resetSeletedRows={this.resetSeletedRows}
                     handleChecked={this.handleChecked}
                     onCancelModel={this.onCancelModel}
+                    device={this.props.device}
                 />
 
                 <PasswordModal
@@ -674,6 +676,7 @@ class SideActions extends Component {
                     resetSeletedRows={this.resetSeletedRows}
                     applyPullApps={this.applyPullApps}
                     actionType={this.state.actionType}
+                    device={this.props.device}
                 />
 
                 <ActivateDevcie
@@ -699,6 +702,7 @@ class SideActions extends Component {
                 />
                 <FlagDevice
                     ref='flag_device'
+                    device={this.props.device}
                 />
                 <ImeiView
                     ref='imeiView'
@@ -710,6 +714,7 @@ class SideActions extends Component {
                 <Activity
                     ref='activity'
                     activities={this.state.activities}
+                    device={this.props.device}
 
                 />
             </div>

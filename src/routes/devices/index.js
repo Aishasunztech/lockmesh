@@ -183,7 +183,7 @@ class Devices extends Component {
                         key: "user_id",
                         className: '',
                         sorter: (a, b) => {
-                            console.log(a, 'user is is')
+                            // console.log(a, 'user is is')
                             return a.user_id.props.children.localeCompare(b.user_id.props.children)
                         },
                         sortDirections: ['ascend', 'descend'],
@@ -212,7 +212,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'status',
                         key: 'status',
-                        sorter: (a, b) => { console.log('done', a.status); return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                        sorter: (a, b) => {  return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -267,7 +267,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'flagged',
                         key: 'flagged',
-                        sorter: (a, b) => { console.log('done', a.status); return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                        sorter: (a, b) => {  return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -871,7 +871,7 @@ class Devices extends Component {
     }
 
     handleChange(value) {
-        console.log('filtede dis0')
+        // console.log('filtede dis0')
 
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
@@ -1326,7 +1326,7 @@ class Devices extends Component {
     }
     render() {
         // dealerColsWithSearch();
-        console.log(' device for search are', this.state.devices)
+        // console.log(' device for search are', this.state.devices)
         return (
             <Fragment>
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
