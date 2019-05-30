@@ -114,7 +114,7 @@ class DevicesList extends Component {
             let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>DELETE</Button>
-            let Unflagbtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.props.unflagConfirm(device) }}> Unflag </Button>;
+            let Unflagbtn = <Button type="defualt" size="small" style={{ margin: '0 8px 0 0', color: "#fff", background: "#000" }} onClick={() => { this.props.unflagConfirm(device) }}> UNFLAG </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
             // console.log('end', device)
@@ -629,9 +629,9 @@ export default class Tab extends Component {
     }
 
     unflagConfirm = (device) => {
-       let _this = this;
+        let _this = this;
         confirm({
-            title: 'Do you really want to unflag the device '+device.device_id,
+            title: 'Do you really want to unflag the device ' + device.device_id,
             okText: 'Yes',
             cancelText: 'No',
             onOk() {
@@ -663,50 +663,50 @@ export default class Tab extends Component {
         // console.log('columsns', this.state.devices)
         return (
             <Fragment>
-                <Tabs type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
+                <div>
+                    <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
+                        <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
+                        </TabPane>
+                        <TabPane tab={<span className="green">Active ({this.props.activeDevices})</span>} key="4" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="red">Expired ({this.props.expireDevices})</span>} key="6" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="green">Trial ({this.props.trialDevices})</span>} key="9" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="blue">Pre Activated ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="gray">Pending Activation ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="purple">Transfer (0)</span>} key="8" forceRender={true}>
+                            <h2 className="coming_s">Coming Soon</h2>
+                        </TabPane>
+                        <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="black">Flagged ({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
+                        </TabPane>
 
-                    </TabPane>
-                    <TabPane tab={<span className="green">Active ({this.props.activeDevices})</span>} key="4" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="red">Expired ({this.props.expireDevices})</span>} key="6" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="green">Trial ({this.props.trialDevices})</span>} key="9" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="blue">Pre Activated ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="gray">Pending Activation ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="purple">Transfer (0)</span>} key="8" forceRender={true}>
-                        <h2 className="coming_s">Coming Soon</h2>
-                    </TabPane>
-                    <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="orange">Flagged ({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
-                    </TabPane>
-
-                </Tabs>
-                <DevicesList
-                    devices={this.state.devices}
-                    suspendDevice={this.props.suspendDevice}
-                    activateDevice={this.props.activateDevice}
-                    columns={this.props.columns}
-                    rejectDevice={this.props.rejectDevice}
-                    selectedOptions={this.state.selectedOptions}
-                    ref="devciesList"
-                    pagination={this.props.pagination}
-                    addDevice={this.props.addDevice}
-                    editDevice={this.props.editDevice}
-                    tabselect={this.state.tabselect}
-                    deleteUnlinkDevice={this.props.deleteUnlinkDevice}
-                    resetTabSelected={this.resetTabSelected}
-                    user={this.props.user}
-                    unflagConfirm={this.unflagConfirm}
-                    history={this.props.history}
-
-                />
+                    </Tabs>
+                    <DevicesList
+                        devices={this.state.devices}
+                        suspendDevice={this.props.suspendDevice}
+                        activateDevice={this.props.activateDevice}
+                        columns={this.props.columns}
+                        rejectDevice={this.props.rejectDevice}
+                        selectedOptions={this.state.selectedOptions}
+                        ref="devciesList"
+                        pagination={this.props.pagination}
+                        addDevice={this.props.addDevice}
+                        editDevice={this.props.editDevice}
+                        tabselect={this.state.tabselect}
+                        deleteUnlinkDevice={this.props.deleteUnlinkDevice}
+                        resetTabSelected={this.resetTabSelected}
+                        user={this.props.user}
+                        unflagConfirm={this.unflagConfirm}
+                        history={this.props.history}
+                    />
+                </div>
             </Fragment>
         )
     }

@@ -86,7 +86,23 @@ const DealerAppModal = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="780px"
-            title={<div>Select Apps <br /> Device ID: {props.device.device_id} </div>}
+            title={
+                <div className="pp_popup">Select Apps
+                <Input.Search
+                        name="push_apps"
+                        key="push_apps"
+                        id="push_apps"
+                        className="search_heading1"
+                        onKeyUp={
+                            (e) => {
+                                this.handleComponentSearch(e, 'push_apps')
+                            }
+                        }
+                        autoComplete="new-password"
+                        placeholder="Search Apps"
+                    />
+                    <br /> Device ID: {props.device.device_id}
+                </div>}
             visible={props.pushAppsModal}
             onOk={() => {
                 if (props.selectedApps.length) {
@@ -115,7 +131,22 @@ const PullAppModal = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="650px"
-            title={<div>Select Apps <br /> Device ID: {props.device.device_id} </div>}
+            title={
+                <div className="pp_popup">Select Apps
+                <Input.Search
+                        name="pull_apps"
+                        key="pull_apps"
+                        id="pull_apps"
+                        className="search_heading1"
+                        onKeyUp={
+                            (e) => {
+                                this.handleComponentSearch(e, 'pull_apps')
+                            }
+                        }
+                        autoComplete="new-password"
+                        placeholder="Search Apps"
+                    />
+                    <br /> Device ID: {props.device.device_id} </div>}
             visible={props.pullAppsModal}
             onOk={() => {
                 if (props.selectedApps.length) {
@@ -476,10 +507,10 @@ class SideActions extends Component {
 
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
                                     <Button type="primary " style={{ width: "100%", marginBottom: 15 }}
-                                    disabled={this.state.isSaveProfileBtn ? false : true}
-                                     onClick={() => { 
-                                        // this.showSaveProfileModal(true, 'profile') 
-                                        this.setState({showChangesModal: true})
+                                        disabled={this.state.isSaveProfileBtn ? false : true}
+                                        onClick={() => {
+                                            // this.showSaveProfileModal(true, 'profile') 
+                                            this.setState({ showChangesModal: true })
                                         }} >
                                         <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
                                         </Button>
@@ -597,11 +628,11 @@ class SideActions extends Component {
                     maskClosable={false}
                     title="Confirm new Settings to be sent to Device"
                     visible={this.state.showChangesModal}
-                    onOk={()=> {
+                    onOk={() => {
                         this.showSaveProfileModal(true, 'profile')
-                        this.setState({showChangesModal: false})
+                        this.setState({ showChangesModal: false })
                     }}
-                    onCancel={()=> this.setState({showChangesModal: false})}
+                    onCancel={() => this.setState({ showChangesModal: false })}
                     okText='Apply'
                 >
                     <DeviceSettings

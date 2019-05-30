@@ -196,6 +196,18 @@
     background: white;
 }
 
+.push_apps .ant-table-body {
+    height: 440px;
+    overflow: overlay;
+}
+
+.pp_popup .search_heading1 {
+    color: #545454;
+    width: 30%;
+    float: right;
+    margin-right: 40px;
+}
+
 @media (max-width:1330px) and (min-width:1200px) {
     .sec_set_table .ant-table-tbody>tr>td {
         padding: 6px 10px 6px 10px !important;
