@@ -570,14 +570,14 @@ export default (state = initialState, action) => {
                     }
                 } else if (action.payload.actionType === WIPE_DEVICE) {
 
-                    showConfirm1(action.payload.device, "Do you really want to Wipe the device")
+                    showConfirm1(action.payload.device, "Do you really want to Wipe the device " + action.payload.device.device_id + "?")
                 }
                 else if (action.payload.actionType === POLICY) {
                     return {
                         ...state,
                         historyModal: false,
                         applyPolicyConfirm: true,
-                        is_policy_process : 0
+                        is_policy_process: 0
                     }
                 }
             }
