@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Card, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
+import { Tabs, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
 import { connect } from "react-redux";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING } from '../../../constants/Constants';
@@ -9,6 +9,7 @@ import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
 import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy, handleCheckAllAppPolicy } from '../../../appRedux/actions/Policy';
 
 const TextArea = Input;
+const TabPane = Tabs.TabPane;
 const columns = [{
     title: 'Name',
     dataIndex: 'name',
@@ -51,7 +52,7 @@ class AddPolicy extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            current: 0,
+            tabSelected: '1',
             dealerApps: [],
             pushApps: [],
             steps: [],
@@ -138,8 +139,8 @@ class AddPolicy extends Component {
                     isPolicy_name: 'error',
                     policy_name_error: "Please insert only alphabets and numbers."
                 })
-            } 
-            else{
+            }
+            else {
                 this.props.savePolicy(data);
                 this.props.handlePolicyModal(false);
                 this.props.getPolicies();
@@ -153,17 +154,17 @@ class AddPolicy extends Component {
                     guestAlldealerApps: false,
                     encryptedAlldealerApps: false,
                     enableAlldealerApps: false,
-    
+
                     guestAllappPermissions: false,
                     encryptedAllappPermissions: false,
                     enableAllappPermissions: false,
-    
+
                     guestAllallExtensions: false,
                     encryptedAllallExtensions: false,
                     enableAllallExtensions: false,
                 })
             }
-           
+
         }
         else {
             if (this.state.policy_name === '') {
@@ -286,14 +287,8 @@ class AddPolicy extends Component {
         // }
     }
 
-    next() {
-        const current = this.state.current + 1;
-        this.setState({ current });
-    }
-
-    prev() {
-        const current = this.state.current - 1;
-        this.setState({ current });
+    callback = (activeKey) => {
+        this.setState({ tabSelected: activeKey })
     }
 
     render() {
@@ -408,10 +403,91 @@ class AddPolicy extends Component {
         return (
             <Fragment>
                 <div className="policy_steps">
-                    <Steps current={current} labelPlacement="vertical">
+                    <Tabs size="large" type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
+                        <TabPane tab="APPS" key="1">
+                            <AppList
+                                apk_list={this.state.dealerApps}
+                                handleCheckApp={this.handleCheckApp}
+                                handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
+                                guestAll={this.state.guestAlldealerApps}
+                                encryptedAll={this.state.encryptedAlldealerApps}
+                                enableAll={this.state.enableAlldealerApps}
+                                onSelectChange={this.onSelectChange}
+                                isCheckAllButtons={true}
+                                apps='dealerApps'
+                                isSwitch={true}
+                                isCheckbox={true}
+                                pageType={'dealerApps'}
+                            />
+
+                        </TabPane>
+                        <TabPane tab="APP PERMISSION" key="2">
+                            <AppList
+                                apk_list={this.state.appPermissions}
+                                handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
+                                handleCheckApp={this.handleCheckApp}
+                                guestAll={this.state.guestAllappPermissions}
+                                encryptedAll={this.state.encryptedAllappPermissions}
+                                enableAll={this.state.enableAllappPermissions}
+                                onSelectChange={this.onSelectChange}
+                                isCheckAllButtons={true}
+                                pageType={'appPermissions'}
+                                appPermissions='appPermissions'
+                                isSwitch={true}
+                                isCheckbox={true}
+                            />
+
+                        </TabPane>
+                        <TabPane tab="SETTINGS PERMISSION" key="3">
+                            <AppList
+                                allExtensions={this.state.allExtensions}
+                                handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
+                                handleCheckApp={this.handleCheckApp}
+                                guestAll={this.state.guestAllallExtensions}
+                                encryptedAll={this.state.encryptedAllallExtensions}
+                                enableAll={this.state.enableAllallExtensions}
+                                isCheckAllButtons={true}
+                                pageType={'allExtensions'}
+                                secureSettings='allExtensions'
+                                isSwitch={true}
+                                AddPolicy={true}
+                            />
+                        </TabPane>
+                        <TabPane tab="SYSTEM PERMISSION" key="4">
+                            <Table
+                                pagination={false}
+                                dataSource={this.renderSystemPermissions()}
+                                columns={columns}>
+                            </Table>
+                        </TabPane>
+                        <TabPane tab="POLICY DETAILS" key="5">
+                            <Form className="login-form">
+                                <Form.Item
+                                    validateStatus={this.state.isPolicy_name}
+                                    help={this.state.policy_name_error}
+                                >
+                                    <span className="h3">Name</span>
+                                    <Input placeholder="Name" onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
+                                </Form.Item>
+                                <Form.Item
+                                    validateStatus={this.state.isCommand}
+                                    help={this.state.command_error}
+                                >
+                                    <span className="h3">Policy Note</span>
+                                    <textarea placeholder="Policy Note" onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
+
+                                </Form.Item>
+                            </Form>
+                        </TabPane>
+                    </Tabs>
+                    <div>
+                        <Button type="primary" onClick={() => console.log('cancel')}>Cancel</Button>
+                    <Button type="primary" onClick={() => this.savePolicy()}>Save</Button>
+                    </div>
+                    {/* <Steps current={current} labelPlacement="vertical">
                         {this.steps.map(item => <Steps.Step icon={item.Icon} key={item.title} title={item.title} />)}
-                    </Steps>
-                    <div className="steps-content">{this.steps[current].content}</div>
+                    </Steps> */}
+                    {/* <div className="steps-content">{this.steps[current].content}</div>
                     <div className="steps-action">
                         {
                             current > 0
@@ -430,7 +506,7 @@ class AddPolicy extends Component {
                             && <Button type="primary" onClick={() => this.next()}>Next</Button>
 
                         }
-                    </div>
+                    </div> */}
                 </div>
             </Fragment>
         );

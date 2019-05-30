@@ -266,9 +266,9 @@ export default class AddPolicy extends Component {
         }
     }
 
-    callback = (activeKey) => [
+    callback = (activeKey) => {
         this.setState({ tabSelected: activeKey })
-    ]
+    }
 
     // next() {
     //     const current = this.state.current + 1;

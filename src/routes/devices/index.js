@@ -24,7 +24,7 @@ import {
     DEVICE_SUSPENDED,
     DEVICE_UNLINKED,
     ADMIN,
-    DEVICE_TRIAL
+    DEVICE_TRIAL,
 } from '../../constants/Constants'
 
 import {
@@ -63,6 +63,8 @@ import {
     postPagination,
     getPagination
 } from '../../appRedux/actions/Common';
+
+import {unflagged} from '../../appRedux/actions/ConnectDevice';
 
 import {
     getNotification
@@ -212,7 +214,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'status',
                         key: 'status',
-                        sorter: (a, b) => {  return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                        sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -267,7 +269,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'flagged',
                         key: 'flagged',
-                        sorter: (a, b) => {  return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                        sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
 
                         sortDirections: ['ascend', 'descend'],
                     }
@@ -842,6 +844,7 @@ class Devices extends Component {
             pendingDevices: [],
             unlinkedDevices: [],
             filteredDevices: [],
+            flaggedDevices: [],
             copy_status: true,
         }
         this.copyDevices = [];
@@ -859,13 +862,26 @@ class Devices extends Component {
     filterList = (type, devices) => {
         let dumyDevices = [];
 
-        devices.filter(function (device) {
-            // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
-            let deviceStatus = device.finalStatus;
-            if (deviceStatus === type) {
-                dumyDevices.push(device);
-            }
-        });
+        if (type == DEVICE_FLAGGED) {
+            // console.log('11111 flagged', type)
+            devices.filter(function (device) {
+                // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
+                let deviceStatus = device.flagged;
+                // console.log('22222 flagged', device.flagged)
+                if (deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') {
+                    // console.log('3333333 flagged', device.flagged)
+                    dumyDevices.push(device);
+                }
+            });
+        } else {
+            devices.filter(function (device) {
+                // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
+                let deviceStatus = device.finalStatus;
+                if (deviceStatus === type) {
+                    dumyDevices.push(device);
+                }
+            });
+        }
 
         return dumyDevices;
     }
@@ -1140,6 +1156,14 @@ class Devices extends Component {
                     copy_status: true
                 })
                 break;
+            case "10":
+                this.setState({
+                    devices: this.state.flaggedDevices,
+                    column: this.state.columns,
+                    tabselect: '10',
+                    copy_status: true
+                })
+                break;
             default:
                 this.setState({
                     devices: this.state.allDevices,
@@ -1232,6 +1256,7 @@ class Devices extends Component {
                 preActiveDevices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices),
                 pendingDevices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
                 unlinkedDevices: this.filterList(DEVICE_UNLINKED, this.props.devices),
+                flaggedDevices: this.filterList(DEVICE_FLAGGED, this.props.devices),
                 // transferDevices: this.filterList(DEVICE_TRANSFER,this.props.devices),
 
 
@@ -1360,6 +1385,7 @@ class Devices extends Component {
                                 preActiveDevices={this.state.preActiveDevices.length}
                                 pendingDevices={this.state.pendingDevices.length}
                                 unlinkedDevices={this.state.unlinkedDevices.length}
+                                flaggedDevices={this.state.flaggedDevices.length}
                                 trialDevices={this.state.trialDevices.length}
 
                                 suspendDevice={this.props.suspendDevice}
@@ -1379,6 +1405,7 @@ class Devices extends Component {
                                 user={this.props.user}
                                 refreshComponent={this.refreshComponent}
                                 history={this.props.history}
+                                unflagged={this.props.unflagged}
 
                             />
                             <ShowMsg
@@ -1463,6 +1490,7 @@ function mapDispatchToProps(dispatch) {
         getPagination: getPagination,
         getNotification: getNotification,
         deleteUnlinkDevice: deleteUnlinkDevice,
+        unflagged: unflagged
     }, dispatch);
 }
 
