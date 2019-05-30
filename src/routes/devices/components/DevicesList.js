@@ -292,12 +292,7 @@ class DevicesList extends Component {
 
     render() {
 
-<<<<<<< HEAD
-        console.log(this.state.expandedRowKeys, 'selected keys')
-=======
         // console.log(this.state.expandedRowKeys, 'selected keys', )
->>>>>>> d6b1250d17e08d19435c489e63a7904ed1935cf5
-
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state
         if (redirect) {
