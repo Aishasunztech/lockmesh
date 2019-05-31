@@ -21,10 +21,6 @@ import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Const
 
 // import MenuItems from "../MenuItems";
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
-
-
 class SidebarContent extends Component {
 
   constructor(props) {
@@ -46,18 +42,7 @@ class SidebarContent extends Component {
     return "";
   };
 
-  componentDidMount() {
-    // console.log('did mount of content', this.props.devices)
-    // this.props.getDevicesList();
-  }
-  componentWillReceiveProps(nextprops) {
-    // if(this.props.pathname!==nextprops.pathname){
-    //   alert("hello");
-    //   this.props.getDevicesList();
-    // }
 
-
-  }
   render() {
     // console.log(addDevice)
     const { themeType, navStyle, pathname, authUser } = this.props;
