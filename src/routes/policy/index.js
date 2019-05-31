@@ -374,10 +374,8 @@ class Policy extends Component {
     }
 
 
-
-
     render() {
-        console.log('sdaf asdf asf', this.state.policies)
+       
         return (
             <Fragment>
                 <AppFilter
@@ -422,7 +420,7 @@ class Policy extends Component {
                 />
                 <Modal
                     maskClosable={false}
-                    width="700px"
+                    width="730px"
                     className="policy_popup"
                     visible={this.state.policyModal}
                     title="Add Policy"
@@ -430,6 +428,7 @@ class Policy extends Component {
                     onCancel={() => this.handlePolicyModal(false)}
                     okText="Save"
                     footer={null}
+                    ref='modal'
                 >
                     <AddPolicy
                         apk_list={this.props.apk_list}

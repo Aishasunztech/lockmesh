@@ -663,7 +663,7 @@ export default class Tab extends Component {
         // console.log('columsns', this.state.devices)
         return (
             <Fragment>
-                <div>
+               <div>
                     <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
                         <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
                         </TabPane>
