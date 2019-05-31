@@ -17,6 +17,8 @@ const initialState = {
     addUserFlag: false,
     subIsloading: false,
     users_list: [],
+    options:[],
+    
     action: '',
     msg: 'no message',
 

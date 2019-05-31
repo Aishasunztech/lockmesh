@@ -4,6 +4,8 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
+import { getFormattedDate } from '../../utils/commonUtils';
+
 import styles from './user.css';
 
 const confirm = Modal.confirm
@@ -31,10 +33,12 @@ class UserList extends Component {
 
     handleSearch2 = () => {
         // console.log('refs of all', this.refs)
-        
+
     }
 
     renderList(list) {
+        console.log(list);
+
         let user_list = list.filter((data) => {
             // if (data.type === "policy") {
             return data
@@ -75,7 +79,8 @@ class UserList extends Component {
                 devicesList: user.devicesList,
                 user_name: user.user_name,
                 email: user.email,
-                token: user.email,
+                tokens: 'N/A',
+                created_at: getFormattedDate(user.created_at)
             }
         });
 
@@ -100,17 +105,17 @@ class UserList extends Component {
         })
     }
 
-    onExpandRow =(expanded, record) => {
+    onExpandRow = (expanded, record) => {
         // console.log(expanded, 'data is expanded', record);
-        if(expanded){
-            if(!this.state.expandedRowKeys.includes(record.rowKey)){
+        if (expanded) {
+            if (!this.state.expandedRowKeys.includes(record.rowKey)) {
                 this.state.expandedRowKeys.push(record.rowKey);
-                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
             }
-        }else if(!expanded){
-            if(this.state.expandedRowKeys.includes(record.rowKey)){
-               let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
-                this.setState({expandedRowKeys: list})
+        } else if (!expanded) {
+            if (this.state.expandedRowKeys.includes(record.rowKey)) {
+                let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+                this.setState({ expandedRowKeys: list })
             }
         }
     }
@@ -133,7 +138,7 @@ class UserList extends Component {
                 <Card>
                     <Table
                         className="devices"
-                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         size="middle"
                         bordered
                         scroll={{
