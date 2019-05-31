@@ -73,8 +73,14 @@ class SidebarContent extends Component {
               // devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
-            />
-            {/* <AppsNavigation/> */}
+            />            
+            
+            <ul className="gx-app-nav">
+            {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN )?(localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') :null}           
+              {/* <li><i className="icon icon-search-new"/></li>
+              <li><i className="icon icon-notification"/></li>
+              <li><i className="icon icon-chat-new"/></li> */}
+            </ul>
           </div>
           {/* <CustomScrollbars className="gx-layout-sider-scrollbar"> */}
           {(authUser.type === AUTO_UPDATE_ADMIN)
