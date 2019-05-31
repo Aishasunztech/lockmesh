@@ -127,7 +127,7 @@ class SettingAppPermissions extends Component {
             <Col span={7} className="pr-0">
               <img src={require("assets/images/setting.png")} />
             </Col>
-            <Col span={17} className="pl-6">
+            <Col span={17} className="pl-4 pr-0">
               <h5>Secure Settings Permission</h5>
             </Col>
           </Row>

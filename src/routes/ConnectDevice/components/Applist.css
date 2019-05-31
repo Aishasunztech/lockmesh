@@ -1,9 +1,10 @@
 .list_d_down {
     font-size: 25px;
     position: relative;
-    left: 25px;
-    bottom: 57px;
+    float: right;
+    bottom: 58px;
     z-index: 100;
+    right: 12px;
 }
 
 .action_group .ant-table {
@@ -69,7 +70,9 @@
 }
 
 .first_head {
-    margin-top: -27px;
+    margin-top: 30px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .first_head h5 {
