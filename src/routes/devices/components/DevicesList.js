@@ -630,9 +630,9 @@ export default class Tab extends Component {
     }
 
     unflagConfirm = (device) => {
-       let _this = this;
+        let _this = this;
         confirm({
-            title: 'Do you really want to unflag the device '+device.device_id,
+            title: 'Do you really want to unflag the device ' + device.device_id,
             okText: 'Yes',
             cancelText: 'No',
             onOk() {
@@ -683,10 +683,11 @@ export default class Tab extends Component {
                     <TabPane tab={<span className="purple">Transfer (0)</span>} key="8" forceRender={true}>
                         <h2 className="coming_s">Coming Soon</h2>
                     </TabPane>
-                    <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
-                    </TabPane>
                     <TabPane tab={<span className="orange">Flagged ({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
                     </TabPane>
+                    <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
+                    </TabPane>
+
 
                 </Tabs>
                 <DevicesList

@@ -261,7 +261,6 @@ class Devices extends Component {
                 ),
                 dataIndex: 'flagged',
                 className: '',
-
                 children: [
                     {
                         title: DEVICE_FLAGGED,
@@ -270,7 +269,6 @@ class Devices extends Component {
                         dataIndex: 'flagged',
                         key: 'flagged',
                         sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
-
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -909,6 +907,7 @@ class Devices extends Component {
             }
         }
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
+        let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
         if (value == DEVICE_UNLINKED && (this.props.user.type != ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
@@ -923,8 +922,24 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = '';
                 this.state.columns[indxRemainingDays].children[0].className = '';
             }
+            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+            }
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+            if (indexFlagged >= 0) {
+                this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
+            }
+        }
+        else if(value == DEVICE_FLAGGED) {
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+           
+            if(indexFlagged > -1){
+                this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
+            }
+            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
+            if (activationCodeIndex >= 0) {
+                this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
         }
         else {
@@ -938,6 +953,10 @@ class Devices extends Component {
 
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+            }
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+            if (indexFlagged >= 0) {
+                this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
         }
 
@@ -968,6 +987,14 @@ class Devices extends Component {
                     copy_status: true
                 })
                 break;
+                case DEVICE_FLAGGED:
+                    this.setState({
+                        devices: this.state.flaggedDevices,
+                        column: this.columns,
+                        tabselect: '10',
+                        copy_status: true
+                    })
+                    break;
             case DEVICE_EXPIRED:
                 this.setState({
                     devices: this.state.expireDevices,
@@ -1058,8 +1085,24 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = '';
                 this.state.columns[indxRemainingDays].children[0].className = '';
             }
+            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+            }
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+            if (indexFlagged >= 0) {
+                this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
+            }
+        }
+        else if(value == '10') {
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+           
+            if(indexFlagged > -1){
+                this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
+            }
+            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
+            if (activationCodeIndex >= 0) {
+                this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
         }
         else {
@@ -1070,8 +1113,13 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = 'hide';
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
             }
+
             if (activationCodeIndex >= 0) {
-                this.state.columns.splice(10, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+                this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
+            }
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+            if (indexFlagged >= 0) {
+                this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
         }
 
@@ -1333,6 +1381,7 @@ class Devices extends Component {
                 <Select.Option value={DEVICE_SUSPENDED}>Suspended</Select.Option>
                 <Select.Option value={DEVICE_PRE_ACTIVATION}>Pre Activated</Select.Option>
                 <Select.Option value={DEVICE_PENDING_ACTIVATION}>Pending Activation</Select.Option>
+                <Select.Option value={DEVICE_FLAGGED}>Flagged</Select.Option>
                 <Select.Option value={DEVICE_UNLINKED}>Unlinked</Select.Option>
 
             </Select>
