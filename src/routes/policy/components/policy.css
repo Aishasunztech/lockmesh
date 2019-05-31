@@ -79,7 +79,6 @@
 .add-policy-footer {
     text-align: right;
     margin-top: 10px
-
 }
 
 .policy_popup .ant-steps-item-title {
@@ -108,7 +107,6 @@
 .login-form {
     justify-content: center;
     display: grid;
-    margin-top: 30px;
 }
 
 .login-form .h3 {
