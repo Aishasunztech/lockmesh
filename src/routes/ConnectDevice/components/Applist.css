@@ -10,6 +10,7 @@
     color: #545454;
     position: relative;
     bottom: 56px;
+    border-top: 0;
 }
 
 .ant-table-thead>tr>.device_value {
@@ -193,6 +194,18 @@
 
 .load_policy_popup tr {
     background: white;
+}
+
+.push_apps .ant-table-body {
+    height: 440px;
+    overflow: overlay;
+}
+
+.pp_popup .search_heading1 {
+    color: #545454;
+    width: 30%;
+    float: right;
+    margin-right: 40px;
 }
 
 @media (max-width:1330px) and (min-width:1200px) {

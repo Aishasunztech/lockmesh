@@ -81,7 +81,7 @@ class PolicyList extends Component {
 
         Modal.confirm({
             title: 'Are You Sure, You Want to Save Changes',
-            onOk: ()=> {
+            onOk: () => {
                 this.props.SavePolicyChanges(record);
             },
             // content: 'Bla bla ...',
@@ -122,24 +122,24 @@ class PolicyList extends Component {
                         (
                             <Fragment>
                                 <Button
+                                    style={{ marginRight: 8 }}
                                     type="primary"
                                     size="small"
-                                    onClick={() => { 
+                                    onClick={() => {
                                         // this.expandRow(index, 'edit', true) 
                                         this.props.checktogglebuttons(policy)
                                         this.props.editPolicyModal(policy)
                                     }}
-
                                 >
                                     EDIT
-                        </Button>
+                                </Button>
                                 <Button
                                     type="danger"
                                     size="small"
                                     onClick={() => { this.deletePolicy(policy.id) }}
                                 >
                                     DELETE
-                        </Button>
+                                </Button>
                             </Fragment>) : null
                 ,
                 policy_info:
@@ -272,12 +272,12 @@ class PolicyList extends Component {
                     <Table
                         scroll={{ x: 600 }}
                         className="devices policy_expand"
-                        rowClassName= {(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
                         size="default"
                         bordered
                         expandIcon={(props) => this.customExpandIcon(props)}
                         // onExpand={this.onExpandRow}
-                   
+
                         expandedRowRender={(record) => {
                             // console.log("expandTabSelected", record);
                             // console.log("table row", this.state.expandTabSelected[record.rowKey]);

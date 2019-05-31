@@ -398,8 +398,8 @@ export default class AddPolicy extends Component {
         ];
         return (
             <Fragment>
-                <div className="policy_steps card-container">
-                    <Tabs size="small" type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
+                <div className="policy_steps">
+                    <Tabs tabPosition="left" size="small" type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
                         <TabPane tab="APPS" key="1">
                             <AppList
                                 apk_list={this.state.editAblePolicy.push_apps}

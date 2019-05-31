@@ -118,6 +118,7 @@ class UserList extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
+
             // console.log('this.props.expandr', this.props)
             this.setState({
                 columns: this.props.columns,
