@@ -96,26 +96,27 @@ class Users extends Component {
                             onKeyUp={this.handleSearch2}
                             placeholder={'Search By Device Id'}
                         />
-                    </div>),
+                    </div>
+                ),
                 dataIndex: 'devices',
                 className: 'row',
                 children: [
                     {
-                        title: (<span>
-                            DEVICES
-                    <Popover placement="top" content={question_txt}>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover>
-                        </span>),
+                        title: (
+                            <span>
+                                DEVICES
+                                <Popover placement="top" content={question_txt}>
+                                    <span className="helping_txt"><Icon type="info-circle" /></span>
+                                </Popover>
+                            </span>
+                        ),
                         align: "center",
                         dataIndex: 'devices',
                         key: "devices",
                         className: 'row',
-                        defaultSortOrder: 'descend',
                         onFilter: (value, record) => record.devices.indexOf(value) === 0,
                         sorter: (a, b) => { return a.devices - b.devices },
-
-
+                    
                         // sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -174,6 +175,31 @@ class Users extends Component {
                 align: "center",
                 dataIndex: 'tokens',
                 key: "tokens",
+            },
+            {
+                title: (
+                    <Input.Search
+                        name="created_at"
+                        key="created_at"
+                        id="created_at"
+                        className="search_heading"
+                        onKeyUp={this.handleSearch}
+                        autoComplete="new-password"
+                        placeholder="Date Registered"
+                    />
+                ),
+                dataIndex: 'created_at',
+                className: 'row',
+                children: [{
+                    title: 'DATE REGISTERED',
+                    dataIndex: 'created_at',
+                    align: "center",
+                    key: 'created_at',
+                    className: '',
+                    sorter: (a, b) => { return a.created_at.localeCompare(b.created_at.toString()) },
+                    sortDirections: ['ascend', 'descend'],
+
+                }]
             },
         ];
         this.state = {
