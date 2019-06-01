@@ -137,16 +137,20 @@ export default class AddPolicy extends Component {
                     main_system_control = editAblePolicy.app_list.find(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE);
                     main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
 
+                    console.log('1223', editAblePolicy.app_list)
+
                     let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
-                    // console.log(seccure_index, 'sdfdsfa')
+                    console.log(seccure_index, 'sdfdsfa')
                     if (seccure_index > -1) {
                         editAblePolicy.app_list.splice(seccure_index, 1)
                     }
                     let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE);
+                    console.log('system_index', systemcontrols_index)
                     if (systemcontrols_index > -1) {
                         editAblePolicy.app_list.splice(systemcontrols_index, 1)
                     }
 
+                    console.log('object,', editAblePolicy.app_list)
                 }
             }
 
@@ -172,6 +176,18 @@ export default class AddPolicy extends Component {
             if (this.props.editAblePolicy.length) {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
                 // console.log(this.state.first, 'eidted dsddffffffff', editAblePolicy);
+
+                let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                // console.log(seccure_index, 'sdfdsfa')
+                if (seccure_index > -1) {
+                    editAblePolicy.app_list.splice(seccure_index, 1)
+                }
+                let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE);
+                if (systemcontrols_index > -1) {
+                    editAblePolicy.app_list.splice(systemcontrols_index, 1)
+                }
+
+                console.log(editAblePolicy, 'chceck', systemcontrols_index)
 
                 if (this.state.main_extension == undefined) {
                     let main_extension = {};
@@ -447,6 +463,10 @@ export default class AddPolicy extends Component {
                         </TabPane>
                         <TabPane tab="SETTINGS PERMISSION" key="3">
 
+
+                            {
+                                this.state.main_extension != undefined ?
+
                             <div>
                                 <Row>
                                     <Col span={7} className="pr-0">
@@ -491,7 +511,7 @@ export default class AddPolicy extends Component {
                                     }}
                                 />
 
-                            </div>
+                            </div> : null }
                             <AppList
                                 dataLength={this.state.editAblePolicy.secure_apps.length}
                                 allExtensions={this.state.editAblePolicy.secure_apps}
@@ -514,6 +534,9 @@ export default class AddPolicy extends Component {
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">
                             <div>
+                                {
+                                    this.state.main_system_control != undefined ?
+                                
                                 <div>
                                     <Row>
                                         <Col span={7} className="pr-0">
@@ -556,6 +579,7 @@ export default class AddPolicy extends Component {
                                     />
 
                                 </div>
+                                 :null }
                                 <Table
                                     pagination={false}
                                     dataSource={this.renderSystemPermissions()}

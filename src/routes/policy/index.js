@@ -347,14 +347,14 @@ class Policy extends Component {
     handlePolicyModal = (visible) => {
         let _this = this;
         Modal.confirm({
-            title: 'Do you Want to Save the Policy?',
+            title: 'would you like to Save Policy before closing??',
             okText: 'Yes',
             cancelText: 'No',
             onOk() {
-                _this.setState({ 
+                _this.setState({
                     goToLastTab: true,
                     formRefresh: false
-                 })
+                })
             },
             onCancel() {
                 _this.props.resetAddPolicyForm()
@@ -386,12 +386,29 @@ class Policy extends Component {
     }
 
     editPolicyModalHide = () => {
-        console.log('cancel called')
-        this.props.resetPlicies();
-        this.setState({
-            editPolicyModal: false
-        })
-        this.refs.editPolicy.reset_steps();
+
+        let _this = this;
+        Modal.confirm({
+            title: 'would you like to Save Policy before closing?',
+            okText: 'Yes',
+            cancelText: 'No',
+            onOk() {
+              
+                //   console.log('OK');
+            },
+            onCancel() {
+
+                _this.props.resetPlicies();
+                _this.setState({
+                    editPolicyModal: false
+                })
+                _this.refs.editPolicy.reset_steps();
+                //   console.log('Cancel');
+            },
+        });
+
+        // console.log('cancel called')
+
 
     }
 

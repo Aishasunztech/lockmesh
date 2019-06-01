@@ -143,7 +143,7 @@ class AppList extends Component {
     handleCheckedAll = (value, key) => {
 
         //   console.log('check all handling', value,key);
-        console.log("handleCheckedAll");
+        // console.log("handleCheckedAll");
         if (key === "guestAll") {
             key = 'guest';
         } else if (key === "encryptedAll") {

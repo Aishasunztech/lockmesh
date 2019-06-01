@@ -125,7 +125,7 @@ class AddPolicy extends Component {
             secure_apps = main_extension.subExtension
         }
 
-        if(this.state.main_system_control){
+        if (this.state.main_system_control) {
             this.state.appPermissions.push(this.state.main_system_control)
         }
 
@@ -200,9 +200,16 @@ class AddPolicy extends Component {
 
         let main_system_control = {};
         if (this.props.appPermissions.length) {
-            main_system_control = this.props.appPermissions.find(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE)
-            console.log(main_system_control, 'dsfksd')
+            let main_system_control_index = this.props.appPermissions.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE)
+            // console.log(main_system_control_index, 'dsfksd');
+            if (main_system_control_index > -1) {
+                main_system_control = this.props.appPermissions[main_system_control_index];
+                this.props.appPermissions.splice(main_system_control_index, 1);
+            }
+
         }
+
+       
         this.setState({
             dealerApps: this.props.dealerApps,
             appPermissions: this.props.appPermissions,
@@ -233,6 +240,15 @@ class AddPolicy extends Component {
                 this.setState({ tabSelected: '5' })
             }
 
+            if (this.props.appPermissions.length) {
+                let main_system_control_index = this.props.appPermissions.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE)
+                // console.log(main_system_control_index, 'dsfksd');
+                if (main_system_control_index > -1) {
+                    this.props.appPermissions.splice(main_system_control_index, 1);
+                }
+            }
+
+            // console.log('updated called')
             this.setState({
                 dealerApps: this.props.dealerApps,
                 appPermissions: this.props.appPermissions,
@@ -341,7 +357,7 @@ class AddPolicy extends Component {
     }
 
     handleChecked = (value, key) => {
-        if(this.state.main_system_control){
+        if (this.state.main_system_control) {
             this.state.main_system_control[key] = value
         }
         this.setState({
@@ -410,7 +426,7 @@ class AddPolicy extends Component {
 
                         </TabPane>
                         <TabPane tab="SETTINGS PERMISSION" key="3">
-                            
+
                             <AppList
                                 allExtensions={this.state.allExtensions}
                                 dataLength={this.state.allExtensions.length}
