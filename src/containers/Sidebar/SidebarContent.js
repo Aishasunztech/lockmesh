@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Menu, Icon } from "antd";
+import { Menu, Icon, Badge } from "antd";
 import { Link } from "react-router-dom";
 
 import CustomScrollbars from "util/CustomScrollbars";
@@ -58,13 +58,20 @@ class SidebarContent extends Component {
               // devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
-            />            
-            
-            <ul className="gx-app-nav">
-            {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN )?(localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') :null}           
-              {/* <li><i className="icon icon-search-new"/></li>
-              <li><i className="icon icon-notification"/></li>
-              <li><i className="icon icon-chat-new"/></li> */}
+            />
+
+            <ul className="gx-app-nav mt-8">
+              <li className="font_14">
+                PIN : <Link to="#">
+                  {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
+                </Link>
+              </li>
+              <li></li>
+              <li>
+                {/* <a className="head-example">
+                  <i className="icon icon-notification notification_icn" ></i>
+                </a> */}
+              </li>
             </ul>
           </div>
           {/* <CustomScrollbars className="gx-layout-sider-scrollbar"> */}
@@ -72,7 +79,9 @@ class SidebarContent extends Component {
             ?
             <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
               <Menu.Item key="app">
-                <Link to="/apk-list/autoupdate"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
+                <Link to="/apk-list/autoupdate"><i className="icon icon-apps" />
+                  <IntlMessages id="sidebar.app" />
+                </Link>
               </Menu.Item>
             </Menu>
             :

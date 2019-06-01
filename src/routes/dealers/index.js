@@ -639,7 +639,7 @@ class Dealers extends Component {
                                 {/* <AddDealer ref='addDealer'  /> */}
                                 <Modal
                                   visible={this.state.visible_DealerModal}
-                                  title="Title"
+                                  title="Add Dealer"
                                   onOk={this.handleOk}
                                   onCancel={this.handleCancel}
                                   footer={null}

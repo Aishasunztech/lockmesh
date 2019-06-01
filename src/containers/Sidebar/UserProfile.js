@@ -53,7 +53,7 @@ class UserProfile extends Component {
           />
           <span className="gx-avatar-name">
             {(localStorage.getItem('name') === '' || localStorage.getItem('name') === null || localStorage.getItem('name') === undefined) ? localStorage.getItem('dealerName') : localStorage.getItem('name')}
-            <i className="icon icon-chevron-down gx-fs-xxs gx-ml-2" />            
+            <i className="icon icon-chevron-down gx-fs-xxs gx-ml-2" />
 
           </span>
         </Popover>

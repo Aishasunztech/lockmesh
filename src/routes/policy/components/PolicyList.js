@@ -122,7 +122,7 @@ class PolicyList extends Component {
                         (
                             <Fragment>
                                 <Button
-                                    style={{ marginRight: 8 }}
+                                    style={{ marginRight: 7, marginLeft: 7 }}
                                     type="primary"
                                     size="small"
                                     onClick={() => {
@@ -134,6 +134,7 @@ class PolicyList extends Component {
                                     EDIT
                                 </Button>
                                 <Button
+                                    style={{ marginRight: 7 }}
                                     type="danger"
                                     size="small"
                                     onClick={() => { this.deletePolicy(policy.id) }}

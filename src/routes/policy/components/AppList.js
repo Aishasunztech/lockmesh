@@ -111,7 +111,7 @@ class AppList extends Component {
         // console.log(nextProps.encryptedAll, 'ffffffffffffff')
 
         if (this.props !== nextProps) {
-    
+
             if (nextProps.allExtensions) {
                 let index = nextProps.allExtensions.findIndex(item => item.uniqueName == SECURE_SETTING);
                 if (index > -1) {
@@ -167,7 +167,7 @@ class AppList extends Component {
 
     }
 
-    handleChecked = (e, key, app_id, main='') => {
+    handleChecked = (e, key, app_id, main = '') => {
         if (this.props.edit) {
             // console.log('handle checked is called', e, key, app_id, this.props.rowId)
             if (this.props.apps) this.props.handleEditPolicy(e, key, app_id, 'push_apps', this.props.rowId)
@@ -401,48 +401,53 @@ class AppList extends Component {
                     (this.props.pageType == 'allExtensions' && !this.props.edit) ?
                         <div>
                             <Row>
-                                <Col span={7} className="pr-0">
+                                <Col span={6} className="">
+
+                                </Col>
+                                <Col span={3} className="">
                                     <img src={require("assets/images/setting.png")} />
                                 </Col>
-                                <Col span={17} className="pl-6">
-                                    <h5>Secure Settings Permission</h5>
+                                <Col span={15} className="pl-0">
+                                    <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
                                 </Col>
                             </Row>
-                            <span>guest: </span>
-
-                            <Switch
-                                size="small"
-                                checked={(this.state.mainExtension.guest === true || this.state.mainExtension.guest === 1) ? true : false}
-                                disabled={this.props.isSwitch ? false : true}
-                                onClick={(e) => {
-                                    this.handleChecked(e, "guest", '', 'main');
-                                }}
-                            />
-
-                            <span>Encrypted: </span>
-
-                            <Switch
-                                size="small"
-                                disabled={this.props.isSwitch ? false : true}
-                                checked={(this.state.mainExtension.encrypted === true || this.state.mainExtension.encrypted === 1) ? true : false}
-                                onClick={(e) => {
-                                    // console.log("encrypted", e);
-                                    this.handleChecked(e, "encrypted", '', 'main');
-                                }}
-                            />
-
-                            <span>Enable: </span>
-
-                            <Switch
-                                size="small"
-                                disabled={this.props.isSwitch ? false : true}
-                                checked={(this.state.mainExtension.enable === true || this.state.mainExtension.enable === 1) ? true : false}
-                                onClick={(e) => {
-                                    // console.log("encrypted", e);
-                                    this.handleChecked(e, "enable", '', 'main');
-                                }}
-                            />
-
+                            <Row>
+                                <Col span={8} className="text-center">
+                                    <span>Guest: </span>
+                                    <Switch
+                                        size="small"
+                                        checked={(this.state.mainExtension.guest === true || this.state.mainExtension.guest === 1) ? true : false}
+                                        disabled={this.props.isSwitch ? false : true}
+                                        onClick={(e) => {
+                                            this.handleChecked(e, "guest", '', 'main');
+                                        }}
+                                    />
+                                </Col>
+                                <Col span={8} className="text-center">
+                                    <span>Encrypted: </span>
+                                    <Switch
+                                        size="small"
+                                        disabled={this.props.isSwitch ? false : true}
+                                        checked={(this.state.mainExtension.encrypted === true || this.state.mainExtension.encrypted === 1) ? true : false}
+                                        onClick={(e) => {
+                                            // console.log("encrypted", e);
+                                            this.handleChecked(e, "encrypted", '', 'main');
+                                        }}
+                                    />
+                                </Col>
+                                <Col span={8} className="text-center">
+                                    <span>Enable: </span>
+                                    <Switch
+                                        size="small"
+                                        disabled={this.props.isSwitch ? false : true}
+                                        checked={(this.state.mainExtension.enable === true || this.state.mainExtension.enable === 1) ? true : false}
+                                        onClick={(e) => {
+                                            // console.log("encrypted", e);
+                                            this.handleChecked(e, "enable", '', 'main');
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
                         </div> : false
                 }
 

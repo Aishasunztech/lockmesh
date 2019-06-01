@@ -24,17 +24,17 @@ export default class AppDropdown extends Component {
     }
     componentWillReceiveProps(nextProps) {
         // if(this.props !== nextProps){
-            // alert("hello");
-            // console.log("appdropdown nextprops", nextProps);
-            // this.state[this.checked_app_id.key] = this.checked_app_id.value;
-            // this.setState({
-            //     guestAll: nextProps.guestAll,
-            //     encryptedAll: nextProps.encryptedAll,
-            //     enableAll: nextProps.enableAll,
-            // })
+        // alert("hello");
+        // console.log("appdropdown nextprops", nextProps);
+        // this.state[this.checked_app_id.key] = this.checked_app_id.value;
+        // this.setState({
+        //     guestAll: nextProps.guestAll,
+        //     encryptedAll: nextProps.encryptedAll,
+        //     enableAll: nextProps.enableAll,
+        // })
         // }
     }
-    handleCheckedAll = (e,key) => {
+    handleCheckedAll = (e, key) => {
         // console.log("hello world");
         // console.log(e.target.checked,key);
         // this.props.handleCheckedAll(key, e.target.checked);
@@ -56,7 +56,7 @@ export default class AppDropdown extends Component {
     }
     render() {
         return (
-            <Popover className="list_d_down" placement="bottomLeft" content={this.renderDropdown()} trigger="click">
+            <Popover className="list_d_down" placement="bottomRight" content={this.renderDropdown()} trigger="click">
                 <a><Icon type="ellipsis" /></a>
             </Popover>
         )

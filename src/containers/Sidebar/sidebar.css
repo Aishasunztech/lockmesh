@@ -78,7 +78,12 @@
 }
 
 .ant-layout-sider-collapsed .gx-sidebar-notifications {
-    padding: 15px 10px 36px;
+    padding: 15px 10px 5px;
+}
+
+.gx-app-nav li {
+    padding: 0 10px 0 25px;
+    font-size: 26px;
 }
 
 @media screen and (max-width: 768px) {
