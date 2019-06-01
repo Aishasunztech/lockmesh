@@ -280,9 +280,9 @@ class AppList extends Component {
             key: app_id,
             app_name:
                 <Fragment>
-                    <Avatar className="perm_icons" src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
+                    <Avatar className="perm_icons ml-6" src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
 
-                    <div className="line_break2">{label}</div>
+                    <div className="line_break2 line_break22">{label}</div>
                 </Fragment>,
             guest:
                 // this.props.isSwitch ?
@@ -429,9 +429,9 @@ class AppList extends Component {
                                     {
                                         this.props.addAppsButton ?
                                             this.props.apps ?
-                                                <Button size="small" type="primary" onClick={() => this.props.addApps('push_apps')} >Add Push Apps</Button>
+                                                <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('push_apps')} >Add Push Apps</Button>
                                                 : this.props.appPermissions ?
-                                                    <Button size="small" type="primary" onClick={() => this.props.addApps('app_list')} >Add Permissions</Button>
+                                                    <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('app_list')} >Add Permissions</Button>
                                                     : false
                                             : false
 

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Modal, Progress } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
+import BackBtn from './back';
 import {
   getDeviceDetails,
   getDeviceApps,
@@ -505,27 +506,32 @@ class ConnectDevice extends Component {
                           </div>
                         </div>
                         {this.renderScreen()}
+                        <DeviceActions
+                          undoApplications={this.undoAction}
+                          redoApplications={this.redoAction}
+                          applyActionButton={this.applyActionButton}
+                          clearApplications={this.props.clearApplications}
+                          applyBtn={this.props.applyBtn}
+                          undoBtn={this.props.undoBtn}
+                          redoBtn={this.props.redoBtn}
+                          clearBtn={this.props.clearBtn}
+                        />
                         <Button.Group className="nav_btn_grp">
-                          <Button type="default" icon="left" className="nav_btn" onClick={() => {
+
+                          <Button type="default" className="nav_btn" onClick={() => {
                             this.onBackHandler();
-                          }} />
+                          }} >
+                            <Icon className="back_btn" component={BackBtn} />
+                          </Button>
                           <Button type="default" className="nav_btn" onClick={() => {
                             this.changePage("main_menu")
                           }} />
                           {/* <Button type="default" icon="border" className="nav_btn" /> */}
-                        </Button.Group>
 
+                        </Button.Group>
                       </div>
-                      <DeviceActions
-                        undoApplications={this.undoAction}
-                        redoApplications={this.redoAction}
-                        applyActionButton={this.applyActionButton}
-                        clearApplications={this.props.clearApplications}
-                        applyBtn={this.props.applyBtn}
-                        undoBtn={this.props.undoBtn}
-                        redoBtn={this.props.redoBtn}
-                        clearBtn={this.props.clearBtn}
-                      />
+
+
                     </Card>
                   </Col>
                   <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
