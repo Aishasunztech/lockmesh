@@ -86,7 +86,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 171,
                 name: (<a href="javascript:void(0)">{titleCase(DEVICE_MODE)}:</a>),
-                value: device_details.online ? (device_details.online == "On") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A"
+                value: device_details.online ? (device_details.online == "online") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A"
             },
             {
                 key: 102,
