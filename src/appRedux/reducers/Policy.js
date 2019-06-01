@@ -49,9 +49,9 @@ const initialState = {
     appPermissions: [],
     allExtensionsCopy: [],
     appPermissionsCopy: [],
-    systemPermissions: { "wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
-    systemPermissionsCopy: { "wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
-    systemPermissionsdump: { "wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
+    systemPermissions: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
+    systemPermissionsCopy: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
+    systemPermissionsdump: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
 
     guestAlldealerApps: false,
     encryptedAlldealerApps: false,

@@ -288,7 +288,7 @@ export default class AddPolicy extends Component {
                 name: 'Wifi',
                 action:
                     // this.props.isSwitch ?
-                    <Switch disabled checked={controls.wifi_status} onClick={(e) => this.props.handleEditPolicy(e, 'wifi_status', '', 'controls', this.state.editAblePolicy.id)} size="small" />
+                    <Switch checked={controls.wifi_status} onClick={(e) => this.props.handleEditPolicy(e, 'wifi_status', '', 'controls', this.state.editAblePolicy.id)} size="small" />
                 // : <span style={{ color: (controls.wifi_status === true || controls.wifi_status === 1) ? 'green' : 'red' }} >{(controls.wifi_status === true || controls.wifi_status === 1) ? 'On' : 'Off'}</span>
             }, {
                 rowKey: 'bluetooth_status',

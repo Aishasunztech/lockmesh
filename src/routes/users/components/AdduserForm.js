@@ -19,14 +19,58 @@ class AddUserForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            // console.log('form', values);
+            console.log(err,'form', values.name);
+            if(values.name === ''){
+                this.setState({
+                    validateStatus: 'error',
+                    help: 'Name is Required'
+                })
+            }
             if (!err) {
+
+               
+            if (/[^A-Za-z \d]/.test( values.name)) {
+                this.setState({
+                    validateStatus: 'error',
+                    help: 'Please insert only alphabets and numbers'
+                })
+            } else {
                 this.props.AddUserHandler(values);
                 this.props.handleCancel();
                 this.handleReset();
+
             }
+        }
+
         });
     }
+    handleNameValidation = (event) => {
+        var fieldvalue = event.target.value;
+
+        console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
+        console.log('vlaue', fieldvalue)
+
+        if(fieldvalue === ''){
+            this.setState({
+                validateStatus: 'error',
+                help: 'Name is Required'
+            })
+        }
+        if (/[^A-Za-z \d]/.test(fieldvalue)) {
+            this.setState({
+                validateStatus: 'error',
+                help: 'Please insert only alphabets and numbers'
+            })
+        }
+        else {
+            this.setState({
+                validateStatus: 'success',
+                help: null,
+            })
+        }
+    }
+
+
     componentDidMount() {
     }
     handleReset = () => {
@@ -62,15 +106,18 @@ class AddUserForm extends Component {
                     label="Name"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
+                    validateStatus={this.state.validateStatus}
+                    help={this.state.help}
                 >
                     {this.props.form.getFieldDecorator('name', {
                         initialValue: this.props.user ? this.props.user.user_name : '',
                         rules: [
                             {
                                 required: true, message: 'Name is Required !',
-                            }],
+                            }
+                        ],
                     })(
-                        <Input />
+                        <Input onChange={(e) => this.handleNameValidation(e)} />
                     )}
                 </Form.Item>
                 <Form.Item
@@ -88,7 +135,7 @@ class AddUserForm extends Component {
                             required: true, message: 'Email is Required !',
                         }],
                     })(
-                        <Input />
+                        <Input onChange={(e) => this.check} />
                     )}
                 </Form.Item>
                 <Form.Item className="edit_ftr_btn"

@@ -7,6 +7,7 @@ export default class editDealer extends Component {
         super(props);
         this.state = {
             visible: false,
+            validateStatus: 'success'
         }
     }
 
@@ -22,16 +23,86 @@ export default class editDealer extends Component {
         });
     }
 
+    handleNameValidation = (event) => {
+        var fieldvalue = event.target.value;
+
+        console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
+        console.log('vlaue', fieldvalue)
+
+
+        if (/[^A-Za-z \d]/.test(fieldvalue)) {
+            this.setState({
+                validateStatus: 'error',
+                help2: 'Please insert only alphabets and numbers',
+                dealer_name: fieldvalue,
+            })
+        }
+        else {
+            this.setState({
+                validateStatus: 'success',
+                help2: null,
+                dealer_name: fieldvalue,
+            })
+        }
+    }
+
+
+    handleEmailValidation = (event) => {
+        var fieldvalue = event.target.value;
+        
+        if (/^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/.test(fieldvalue)) {
+            this.setState({
+                status: 'success',
+                help: null,
+                dealer_email: fieldvalue,
+            })
+        }
+        else {
+            this.setState({
+                status: 'error',
+                help: 'Please insert Valid Email',
+                dealer_email: fieldvalue,
+            })
+            
+        }
+    }
+
     handleSubmit = (e) => {
         let formData = { 'dealer_id': this.state.dealer_id, 'name': this.state.dealer_name, 'email': this.state.dealer_email }
         e.preventDefault();
 
+        let error = false;
+
         let chcek = /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/;
-        if ((this.state.dealer_name === '') || (chcek.test(this.state.dealer_email) == false)) {
-            message.error('Invalid data');
+        if (chcek.test(this.state.dealer_email) == false) {
+            // message.error('Invalid data');
+            this.setState({
+            status: 'error',
+            help: 'Please insert Valid Email'
+            })
+            error= true;
+        }
+        if (/[^A-Za-z \d]/.test(this.state.dealer_name) ) {
+            this.setState({
+                validateStatus: 'error',
+                help2: 'Please insert only alphabets and numbers'
+            })
+
+            error= true;
         }
 
-        else {
+        if (this.state.dealer_name === '') {
+            this.setState({
+                validateStatus: 'error',
+                help2: 'Please Insert dealer Name'
+            })
+
+            error= true;
+        }
+
+
+
+        if(!error) {
 
             func(formData);
             this.handleCancel();
@@ -71,10 +142,10 @@ export default class editDealer extends Component {
                             label="Name* "
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
-                            validateStatus={this.state.status}
-                            help={this.state.help}
+                            validateStatus={this.state.validateStatus}
+                            help={this.state.help2}
                         >
-                            <Input autoComplete="new-password" type='text' value={this.state.dealer_name} onChange={(event) => this.setState({ dealer_name: event.target.value })} />
+                            <Input autoComplete="new-password" type='text' value={this.state.dealer_name} onChange={(event) => this.handleNameValidation(event)} />
 
                         </Form.Item>
                         <Form.Item
@@ -84,7 +155,7 @@ export default class editDealer extends Component {
                             validateStatus={this.state.status}
                             help={this.state.help}
                         >
-                            <Input type='email' autoComplete="new-password" value={this.state.dealer_email} onChange={(event) => this.setState({ dealer_email: event.target.value })} />
+                            <Input type='email' autoComplete="new-password" value={this.state.dealer_email} onChange={(event) => this.handleEmailValidation(event)} />
 
                         </Form.Item>
                         <Form.Item
