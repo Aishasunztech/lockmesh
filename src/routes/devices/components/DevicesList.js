@@ -176,7 +176,7 @@ class DevicesList extends Component {
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 dealer_name: checkValue(device.dealer_name),
-                online: device.online === 'Online' ? (<span style={{ color: "green" }}>{device.online}</span>) : (<span style={{ color: "red" }}>{device.online}</span>),
+                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online}</span>) : (<span style={{ color: "red" }}>{device.online}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 start_date: checkValue(device.start_date),
