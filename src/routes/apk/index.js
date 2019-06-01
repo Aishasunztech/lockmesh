@@ -168,7 +168,7 @@ class Apk extends React.Component {
 
                 values.map((value) => {
                     // console.log(APK_PERMISSION, value, "columns", column);
-                    if (value === APK_PERMISSION && column.dataIndex == 'permission') {
+                    if ((value === APK_PERMISSION && column.dataIndex == 'permission') ||(value === APK_SHOW_ON_DEVICE && column.dataIndex == 'apk_status')) {
                         // console.log('......... ......', column.title)
                         if (column.title.props.children[0] === value) {
                             dumydata[index].className = '';

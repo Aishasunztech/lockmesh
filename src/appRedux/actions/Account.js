@@ -24,15 +24,28 @@ export function importCSV(formData, fieldName) {
         // });
         RestService.importCSV(formData, fieldName).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('duplicated data', response.data)
-                if (response.data.duplicateData.length) {
-                    // console.log('duplicated data', response.data);
-                    dispatch({
-                        type: DUPLICATE_SIM_IDS,
-                        payload: response.data,
-                        showMsg: true,
-                    })
-                } else {
+                console.log('duplicated data', response.data)
+                if(response.data.status){
+                    if (response.data.duplicateData.length) {
+                        // console.log('duplicated data', response.data);
+                        dispatch({
+                            type: DUPLICATE_SIM_IDS,
+                            payload: response.data,
+                            showMsg: true,
+                        })
+                    } else {
+                        dispatch({
+                            type: IMPORT_CSV,
+                            payload: response.data,
+                            showMsg: true,
+                        })
+                        dispatch({
+                            type: IMPORT_CSV,
+                            payload: response.data,
+                            showMsg: false,
+                        })
+                    }
+                }else{
                     dispatch({
                         type: IMPORT_CSV,
                         payload: response.data,
@@ -44,6 +57,7 @@ export function importCSV(formData, fieldName) {
                         showMsg: false,
                     })
                 }
+               
 
             } else {
                 dispatch({
