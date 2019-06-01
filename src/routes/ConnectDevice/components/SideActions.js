@@ -7,6 +7,8 @@ import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress 
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
+
+import { componentSearch } from '../../utils/commonUtils';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
@@ -44,6 +46,9 @@ import {
 import { PUSH_APPS, PULL_APPS, POLICY } from "../../../constants/ActionTypes"
 
 const confirm = Modal.confirm;
+var coppyList = [];
+var status = true;
+
 
 class PasswordModal extends Component {
     // console.log('object,', props.actionType)
@@ -95,7 +100,7 @@ const DealerAppModal = (props) => {
                         className="search_heading1"
                         onKeyUp={
                             (e) => {
-                                this.handleComponentSearch(e, 'push_apps')
+                                props.handleComponentSearch(e, 'push_apps')
                             }
                         }
                         autoComplete="new-password"
@@ -140,7 +145,7 @@ const PullAppModal = (props) => {
                         className="search_heading1"
                         onKeyUp={
                             (e) => {
-                                this.handleComponentSearch(e, 'pull_apps')
+                                props.handleComponentSearch(e, 'pull_apps')
                             }
                         }
                         autoComplete="new-password"
@@ -220,6 +225,7 @@ class SideActions extends Component {
             actionType: PUSH_APPS,
             selectedApps: [],
             activities: [],
+            apk_list:[],
             policyId: '',
             showChangesModal: false,
             applyPolicyConfirm: false,
@@ -238,7 +244,8 @@ class SideActions extends Component {
             profileName: this.props.profileName,
             activities: this.props.activities,
             changedCtrls: this.props.changedCtrls,
-            isSaveProfileBtn: this.props.isSaveProfileBtn
+            isSaveProfileBtn: this.props.isSaveProfileBtn,
+            apk_list: this.props.apk_list
         });
 
 
@@ -256,7 +263,8 @@ class SideActions extends Component {
                 profileName: nextProps.profileName,
                 pullAppsModal: nextProps.pullAppsModal,
                 activities: nextProps.activities,
-                isSaveProfileBtn: nextProps.isSaveProfileBtn
+                isSaveProfileBtn: nextProps.isSaveProfileBtn,
+                apk_list: nextProps.apk_list
             })
         }
         if (nextProps.applyPolicyConfirm) {
@@ -335,6 +343,40 @@ class SideActions extends Component {
             },
         });
     }
+
+    handleComponentSearch = (value) => {
+        //    console.log('values sr', value)   
+        try {
+            if (value.length) {
+
+                if (status) {
+                    // console.log('status')
+                    coppyList = this.state.apk_list;
+                    status = false;
+                }
+                // console.log(this.state.users,'coppy de', coppyDevices)
+                let foundList = componentSearch(coppyList, value);
+                // console.log('found devics', foundPolicies)
+                if (foundList.length) {
+                    this.setState({
+                        apk_list: foundList,
+                    })
+                } else {
+                    this.setState({
+                        apk_list: []
+                    })
+                }
+            } else {
+                status = true;
+
+                this.setState({
+                    apk_list: coppyList,
+                })
+            }
+        } catch (error) {
+        }
+    }
+
 
     showPushAppsModal = (visible) => {
         this.setState({
@@ -667,7 +709,8 @@ class SideActions extends Component {
                 <DealerAppModal
                     pushAppsModal={this.props.pushAppsModal}
                     showPushAppsModal={this.props.showPushAppsModal}
-                    apk_list={this.props.apk_list}
+                    handleComponentSearch={this.handleComponentSearch}
+                    apk_list={this.state.apk_list}
                     onSelectChange={this.onSelectChange}
                     selectedAppKeys={this.state.selectedAppKeys}
                     showSelectedAppsModal={this.showSelectedAppsModal}
@@ -680,6 +723,7 @@ class SideActions extends Component {
                 <PullAppModal
                     pullAppsModal={this.state.pullAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
+                    handleComponentSearch={this.handleComponentSearch}
                     apk_list={this.props.apk_list}
                     onSelectChange={this.onSelectChange}
                     showSelectedAppsModal={this.showSelectedAppsModal}

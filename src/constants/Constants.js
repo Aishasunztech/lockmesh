@@ -38,4 +38,5 @@ export const POLICY = 'policy';
 // Constant Package Names
 export const Main_SETTINGS = 'com.android.settingsSettings';
 export const SECURE_SETTING = 'com.secureSetting.SecureSettingsMainSecure Settings';
+export const SYSTEM_CONTROLS_UNIQUE = 'com.secure.systemcontrolSystem Control';
 
