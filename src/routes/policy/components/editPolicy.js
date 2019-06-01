@@ -467,51 +467,54 @@ export default class AddPolicy extends Component {
                             {
                                 this.state.main_extension != undefined ?
 
-                            <div>
-                                <Row>
-                                    <Col span={7} className="pr-0">
-                                        <img src={require("assets/images/setting.png")} />
-                                    </Col>
-                                    <Col span={17} className="pl-6">
-                                        <h5>Secure Settings Permission</h5>
-                                    </Col>
-                                </Row>
-                                <span>guest: </span>
+                                    <div>
+                                        <Row>
+                                            <Col span={6} className="">
+                                            </Col>
+                                            <Col span={3} className="">
+                                                <img src={require("assets/images/setting.png")} />
+                                            </Col>
+                                            <Col span={15} className="pl-0">
+                                                <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col span={8} className="text-center">
+                                                <span>Guest: </span>
+                                                <Switch
+                                                    size="small"
+                                                    checked={(this.state.main_extension.guest === true || this.state.main_extension.guest === 1) ? true : false}
 
-                                <Switch
-                                    size="small"
-                                    checked={(this.state.main_extension.guest === true || this.state.main_extension.guest === 1) ? true : false}
-                                  
-                                    onClick={(e) => {
-                                        this.handleChecked2(e, "guest", '', 'main');
-                                    }}
-                                />
+                                                    onClick={(e) => {
+                                                        this.handleChecked2(e, "guest", '', 'main');
+                                                    }}
+                                                />
+                                            </Col>
+                                            <Col span={8} className="text-center">
+                                                <span>Encrypted: </span>
+                                                <Switch
+                                                    size="small"
 
-                                <span>Encrypted: </span>
-
-                                <Switch
-                                    size="small"
-                                
-                                    checked={(this.state.main_extension.encrypted === true || this.state.main_extension.encrypted === 1) ? true : false}
-                                    onClick={(e) => {
-                                        // console.log("encrypted", e);
-                                        this.handleChecked2(e, "encrypted", '', 'main');
-                                    }}
-                                />
-
-                                <span>Enable: </span>
-
-                                <Switch
-                                    size="small"
-                            
-                                    checked={(this.state.main_extension.enable === true || this.state.main_extension.enable === 1) ? true : false}
-                                    onClick={(e) => {
-                                        // console.log("encrypted", e);
-                                        this.handleChecked2(e, "enable", '', 'main');
-                                    }}
-                                />
-
-                            </div> : null }
+                                                    checked={(this.state.main_extension.encrypted === true || this.state.main_extension.encrypted === 1) ? true : false}
+                                                    onClick={(e) => {
+                                                        // console.log("encrypted", e);
+                                                        this.handleChecked2(e, "encrypted", '', 'main');
+                                                    }}
+                                                />
+                                            </Col>
+                                            <Col span={8} className="text-center">
+                                                <span>Enable: </span>
+                                                <Switch
+                                                    size="small"
+                                                    checked={(this.state.main_extension.enable === true || this.state.main_extension.enable === 1) ? true : false}
+                                                    onClick={(e) => {
+                                                        // console.log("encrypted", e);
+                                                        this.handleChecked2(e, "enable", '', 'main');
+                                                    }}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </div> : null}
                             <AppList
                                 dataLength={this.state.editAblePolicy.secure_apps.length}
                                 allExtensions={this.state.editAblePolicy.secure_apps}
@@ -536,50 +539,55 @@ export default class AddPolicy extends Component {
                             <div>
                                 {
                                     this.state.main_system_control != undefined ?
-                                
-                                <div>
-                                    <Row>
-                                        <Col span={7} className="pr-0">
-                                            <img src={require("assets/images/setting.png")} />
-                                        </Col>
-                                        <Col span={17} className="pl-6">
-                                            <h5>System Settings Permission</h5>
-                                        </Col>
-                                    </Row>
-                                    <span>guest: </span>
 
-                                    <Switch
-                                        size="small"
-                                        checked={(this.state.main_system_control.guest === true || this.state.main_system_control.guest === 1) ? true : false}
-                                        onClick={(e) => {
-                                            this.handleChecked(e, "guest", '', 'main');
-                                        }}
-                                    />
+                                        <div>
+                                            <Row>
+                                                <Col span={6} className="">
+                                                </Col>
+                                                <Col span={3} className="">
+                                                    <img src={require("assets/images/setting.png")} />
+                                                </Col>
+                                                <Col span={15} className="pl-0">
+                                                    <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
+                                                </Col>
+                                            </Row>
+                                            <Row className="mb-8">
+                                                <Col span={8} className="text-center">
+                                                    <span>Guest: </span>
+                                                    <Switch
+                                                        size="small"
+                                                        checked={(this.state.main_system_control.guest === true || this.state.main_system_control.guest === 1) ? true : false}
+                                                        onClick={(e) => {
+                                                            this.handleChecked(e, "guest", '', 'main');
+                                                        }}
+                                                    />
+                                                </Col>
+                                                <Col span={8} className="text-center">
+                                                    <span>Encrypted: </span>
+                                                    <Switch
+                                                        size="small"
+                                                        checked={(this.state.main_system_control.encrypted === true || this.state.main_system_control.encrypted === 1) ? true : false}
+                                                        onClick={(e) => {
+                                                            // console.log("encrypted", e);
+                                                            this.handleChecked(e, "encrypted", '', 'main');
+                                                        }}
+                                                    />
+                                                </Col>
+                                                <Col span={8} className="text-center">
+                                                    <span>Enable: </span>
+                                                    <Switch
+                                                        size="small"
+                                                        checked={(this.state.main_system_control.enable === true || this.state.main_system_control.enable === 1) ? true : false}
+                                                        onClick={(e) => {
+                                                            // console.log("encrypted", e);
+                                                            this.handleChecked(e, "enable", '', 'main');
+                                                        }}
+                                                    />
 
-                                    <span>Encrypted: </span>
-
-                                    <Switch
-                                        size="small"
-                                        checked={(this.state.main_system_control.encrypted === true || this.state.main_system_control.encrypted === 1) ? true : false}
-                                        onClick={(e) => {
-                                            // console.log("encrypted", e);
-                                            this.handleChecked(e, "encrypted", '', 'main');
-                                        }}
-                                    />
-
-                                    <span>Enable: </span>
-
-                                    <Switch
-                                        size="small"
-                                        checked={(this.state.main_system_control.enable === true || this.state.main_system_control.enable === 1) ? true : false}
-                                        onClick={(e) => {
-                                            // console.log("encrypted", e);
-                                            this.handleChecked(e, "enable", '', 'main');
-                                        }}
-                                    />
-
-                                </div>
-                                 :null }
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                        : null}
                                 <Table
                                     pagination={false}
                                     dataSource={this.renderSystemPermissions()}
@@ -613,7 +621,7 @@ export default class AddPolicy extends Component {
                             </Form>
                         </TabPane>
                     </Tabs>
-                    <div className="text-right">
+                    <div className="text-center">
                         <Button className="mt-10" onClick={() => this.onCancel()}>Cancel</Button>
                         <Button className="mt-10" type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
                     </div>

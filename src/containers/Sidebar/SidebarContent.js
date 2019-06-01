@@ -68,9 +68,9 @@ class SidebarContent extends Component {
               </li>
               <li></li>
               <li>
-                <a className="head-example">
+                {/* <a className="head-example">
                   <i className="icon icon-notification notification_icn" ></i>
-                </a>
+                </a> */}
               </li>
             </ul>
           </div>

@@ -209,7 +209,7 @@ class AddPolicy extends Component {
 
         }
 
-       
+
         this.setState({
             dealerApps: this.props.dealerApps,
             appPermissions: this.props.appPermissions,
@@ -446,44 +446,53 @@ class AddPolicy extends Component {
                             <div>
                                 <div>
                                     <Row>
-                                        <Col span={7} className="pr-0">
+                                        <Col span={6} className="">
+                                        </Col>
+                                        <Col span={3} className="">
                                             <img src={require("assets/images/setting.png")} />
                                         </Col>
-                                        <Col span={17} className="pl-6">
-                                            <h5>System Settings Permission</h5>
+                                        <Col span={15} className="pl-0">
+                                            <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
                                         </Col>
                                     </Row>
-                                    <span>guest: </span>
 
-                                    <Switch
-                                        size="small"
-                                        checked={(this.state.main_system_control.guest === true || this.state.main_system_control.guest === 1) ? true : false}
-                                        onClick={(e) => {
-                                            this.handleChecked(e, "guest", '', 'main');
-                                        }}
-                                    />
+                                    <Row className="mb-8">
+                                        <Col span={8} className="text-center">
+                                            <span>Guest: </span>
+                                            <Switch
+                                                size="small"
+                                                checked={(this.state.main_system_control.guest === true || this.state.main_system_control.guest === 1) ? true : false}
+                                                onClick={(e) => {
+                                                    this.handleChecked(e, "guest", '', 'main');
+                                                }}
+                                            />
+                                        </Col>
+                                        <Col span={8} className="text-center">
+                                            <span>Encrypted: </span>
+                                            <Switch
+                                                size="small"
+                                                checked={(this.state.main_system_control.encrypted === true || this.state.main_system_control.encrypted === 1) ? true : false}
+                                                onClick={(e) => {
+                                                    // console.log("encrypted", e);
+                                                    this.handleChecked(e, "encrypted", '', 'main');
+                                                }}
+                                            />
+                                        </Col>
+                                        <Col span={8} className="text-center">
+                                            <span>Enable: </span>
+                                            <Switch
+                                                size="small"
+                                                checked={(this.state.main_system_control.enable === true || this.state.main_system_control.enable === 1) ? true : false}
+                                                onClick={(e) => {
+                                                    // console.log("encrypted", e);
+                                                    this.handleChecked(e, "enable", '', 'main');
+                                                }}
+                                            />
+                                        </Col>
+                                    </Row>
 
-                                    <span>Encrypted: </span>
 
-                                    <Switch
-                                        size="small"
-                                        checked={(this.state.main_system_control.encrypted === true || this.state.main_system_control.encrypted === 1) ? true : false}
-                                        onClick={(e) => {
-                                            // console.log("encrypted", e);
-                                            this.handleChecked(e, "encrypted", '', 'main');
-                                        }}
-                                    />
 
-                                    <span>Enable: </span>
-
-                                    <Switch
-                                        size="small"
-                                        checked={(this.state.main_system_control.enable === true || this.state.main_system_control.enable === 1) ? true : false}
-                                        onClick={(e) => {
-                                            // console.log("encrypted", e);
-                                            this.handleChecked(e, "enable", '', 'main');
-                                        }}
-                                    />
 
                                 </div>
                                 <Table
@@ -521,7 +530,7 @@ class AddPolicy extends Component {
                     </Tabs>
 
                     <div className="add-policy-footer">
-                        {this.state.tabSelected !== '1' ? <Button type="primary" onClick={() => this.prev_tab()}>Previous</Button> : false}
+                        {this.state.tabSelected !== '1' ? <Button type="default" onClick={() => this.prev_tab()}>Previous</Button> : false}
                         {this.state.tabSelected !== '5' ? <Button type="primary" onClick={() => this.next_tab()}>Next</Button> : false}
                         {this.state.tabSelected === '5' ? <Button type="primary" onClick={() => this.savePolicy()}>Save</Button> : false}
                     </div>
