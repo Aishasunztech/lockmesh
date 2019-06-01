@@ -15,7 +15,6 @@ export default class ListApk extends Component {
             visible: true,
         });
     }
-
     handleOk = (e) => {
         // console.log(e);
         this.setState({
@@ -58,6 +57,7 @@ export default class ListApk extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
+            // console.log(this.props.columns);
             this.setState({
                 columns: this.props.columns
             })
@@ -172,17 +172,17 @@ export default class ListApk extends Component {
         }
     }
 
-    onExpandRow =(expanded, record) => {
+    onExpandRow = (expanded, record) => {
         // console.log(expanded, 'data is expanded', record);
-        if(expanded){
-            if(!this.state.expandedRowKeys.includes(record.rowKey)){
+        if (expanded) {
+            if (!this.state.expandedRowKeys.includes(record.rowKey)) {
                 this.state.expandedRowKeys.push(record.rowKey);
-                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
             }
-        }else if(!expanded){
-            if(this.state.expandedRowKeys.includes(record.rowKey)){
-               let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
-                this.setState({expandedRowKeys: list})
+        } else if (!expanded) {
+            if (this.state.expandedRowKeys.includes(record.rowKey)) {
+                let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+                this.setState({ expandedRowKeys: list })
             }
         }
     }
@@ -198,7 +198,7 @@ export default class ListApk extends Component {
                     // rowSelection={rowSelection}
                     // expandableRowIcon={<Icon type="right" />}
                     // collapsedRowIcon={<Icon type="down" />}
-                    rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
+                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                     expandIcon={(props) => this.customExpandIcon(props)}
                     expandedRowRender={(record) => {
                         // console.log("table row", record);

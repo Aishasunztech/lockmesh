@@ -93,7 +93,7 @@ const DealerAppModal = (props) => {
             width="780px"
             title={
                 <div className="pp_popup">Select Apps
-                <Input.Search
+                {/* <Input.Search
                         name="push_apps"
                         key="push_apps"
                         id="push_apps"
@@ -105,7 +105,7 @@ const DealerAppModal = (props) => {
                         }
                         autoComplete="new-password"
                         placeholder="Search Apps"
-                    />
+                    /> */}
                     <br /> Device ID: {props.device.device_id}
                 </div>}
             visible={props.pushAppsModal}
@@ -138,7 +138,7 @@ const PullAppModal = (props) => {
             width="650px"
             title={
                 <div className="pp_popup">Select Apps
-                <Input.Search
+                {/* <Input.Search
                         name="pull_apps"
                         key="pull_apps"
                         id="pull_apps"
@@ -150,7 +150,7 @@ const PullAppModal = (props) => {
                         }
                         autoComplete="new-password"
                         placeholder="Search Apps"
-                    />
+                    /> */}
                     <br /> Device ID: {props.device.device_id} </div>}
             visible={props.pullAppsModal}
             onOk={() => {
@@ -225,7 +225,7 @@ class SideActions extends Component {
             actionType: PUSH_APPS,
             selectedApps: [],
             activities: [],
-            apk_list:[],
+            apk_list: [],
             policyId: '',
             showChangesModal: false,
             applyPolicyConfirm: false,
@@ -356,7 +356,7 @@ class SideActions extends Component {
                 }
                 // console.log(this.state.users,'coppy de', coppyDevices)
                 let foundList = componentSearch(coppyList, value);
-                // console.log('found devics', foundPolicies)
+                console.log('found devics', foundList)
                 if (foundList.length) {
                     this.setState({
                         apk_list: foundList,
