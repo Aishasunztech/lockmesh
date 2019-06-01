@@ -265,7 +265,7 @@ class PolicyList extends Component {
         }
     }
     render() {
-        console.log(this.state.expandedRowKeys, 'keys are')
+        // console.log(this.state.expandedRowKeys, 'keys are')
         return (
             <Fragment>
                 <Card>

@@ -16,7 +16,8 @@ import {
     ADD_APPS_TO_POLICIES,
     REMOVE_APPS_FROM_POLICIES,
     CHECK_TOGGLE_BUTTONS,
-    RESET_POLICY
+    RESET_POLICY,
+    RESET_ADD_POLICY_FORM
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -118,7 +119,7 @@ export function savePolicy(data) {
 
 }
 
-export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName = '') {
+export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName = '', main='') {
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_APP_POLICY,
@@ -127,7 +128,8 @@ export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName =
                 key: key,
                 app_id: app_id,
                 stateToUpdate: stateToUpdate,
-                uniqueName: uniqueName
+                uniqueName: uniqueName,
+                main: main
             }
         })
     }
@@ -197,6 +199,14 @@ export function handleEditPolicy(e, key, id, stateToUpdate = '', rowId, uniqueNa
                 stateToUpdate: stateToUpdate,
                 uniqueName: uniqueName
             }
+        })
+    }
+}
+
+export function resetAddPolicyForm(){
+    return(dispatch) => {
+        dispatch({
+            type: RESET_ADD_POLICY_FORM
         })
     }
 }

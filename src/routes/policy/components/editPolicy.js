@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import { Button, Avatar, Input, Modal, Form, Icon, Steps, Table, Switch, Tabs } from "antd";
+import { Button, Avatar, Input, Modal, Form, Icon, Col, Row, Table, Switch, Tabs } from "antd";
 import AppList from "./AppList";
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING } from '../../../constants/Constants';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE } from '../../../constants/Constants';
 import styles from './policy.css';
 import { BASE_URL } from '../../../constants/Application';
 
@@ -53,6 +53,7 @@ export default class AddPolicy extends Component {
             dealerApps: [],
             pushApps: [],
             steps: [],
+            first: true,
             tabSelected: '1',
             allExtensions: [],
             systemPermissions: [],
@@ -64,6 +65,8 @@ export default class AddPolicy extends Component {
             command_error: '',
             pushAppsIds: [],
             appPermissionsIds: [],
+            main_system_control: {},
+            main_extension: {},
 
             guestAlldealerApps: false,
             encryptedAlldealerApps: false,
@@ -77,7 +80,13 @@ export default class AddPolicy extends Component {
             encryptedAllallExtensions: false,
             enableAllallExtensions: false,
 
-            editAblePolicy: this.props.editAblePolicy,
+            editAblePolicy:
+            {
+                push_apps: [],
+                app_list: [],
+                secure_apps: []
+            },
+
             addPushAppModal: false,
 
             selectedRowKeysApps: [],
@@ -95,8 +104,20 @@ export default class AddPolicy extends Component {
             }]
     }
 
-    handleCheckApp = (value, key, id, arrayOf) => {
-        this.props.handleCheckAppPolicy(value, key, id, arrayOf, SECURE_SETTING)
+    handleCheckApp = (value, key, id, arrayOf, main = '') => {
+        // console.log('iiiiiiiiiiiiiiiiiiiiiiiiiii');
+
+        if (main == 'main') {
+            if (this.state.main_extension) {
+                this.state.main_extension[key] = value
+            }
+            this.setState({
+                main_extension: this.state.main_extension
+            })
+        } else {
+            this.props.handleCheckAppPolicy(value, key, id, arrayOf, SECURE_SETTING)
+        }
+
         // console.log(value, key, id, arrayOf, 'data is');
     }
 
@@ -108,14 +129,41 @@ export default class AddPolicy extends Component {
         if (this.props.editAblePolicy.length) {
             let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
             // console.log(this.props.editAblePolicyId, 'id')
-            // console.log(this.props.editAblePolicy, 'policys')
-            // console.log(editAblePolicy, 'eidtable')
+            // console.log(editAblePolicy, 'policys')
+            let main_system_control = {};
+            let main_extension = {};
+            if (editAblePolicy.app_list) {
+                if (editAblePolicy.app_list.length) {
+                    main_system_control = editAblePolicy.app_list.find(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE);
+                    main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
+
+                    console.log('1223', editAblePolicy.app_list)
+
+                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                    console.log(seccure_index, 'sdfdsfa')
+                    if (seccure_index > -1) {
+                        editAblePolicy.app_list.splice(seccure_index, 1)
+                    }
+                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE);
+                    console.log('system_index', systemcontrols_index)
+                    if (systemcontrols_index > -1) {
+                        editAblePolicy.app_list.splice(systemcontrols_index, 1)
+                    }
+
+                    console.log('object,', editAblePolicy.app_list)
+                }
+            }
+
+            // console.log(main_system_control, 'eidtable', main_extension)
             if (editAblePolicy) {
                 this.setState({
                     editAblePolicy: editAblePolicy,
                     current: 0,
                     command: editAblePolicy.policy_note,
-                    policy_name: editAblePolicy.policy_name
+                    policy_name: editAblePolicy.policy_name,
+                    main_system_control: main_system_control,
+                    main_extension: main_extension
+
                 });
             }
         }
@@ -127,17 +175,83 @@ export default class AddPolicy extends Component {
 
             if (this.props.editAblePolicy.length) {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
-                console.log('eidted', editAblePolicy)
-                if (editAblePolicy) {
+                // console.log(this.state.first, 'eidted dsddffffffff', editAblePolicy);
+
+                let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                // console.log(seccure_index, 'sdfdsfa')
+                if (seccure_index > -1) {
+                    editAblePolicy.app_list.splice(seccure_index, 1)
+                }
+                let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE);
+                if (systemcontrols_index > -1) {
+                    editAblePolicy.app_list.splice(systemcontrols_index, 1)
+                }
+
+                console.log(editAblePolicy, 'chceck', systemcontrols_index)
+
+                if (this.state.main_extension == undefined) {
+                    let main_extension = {};
+                    let main_system_control = {};
+                    if (editAblePolicy.app_list.length) {
+
+                        main_system_control = editAblePolicy.app_list.find(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE);
+                        main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
+
+                        let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                        // console.log(seccure_index, 'sdfdsfa')
+                        if (seccure_index > -1) {
+                            editAblePolicy.app_list.splice(seccure_index, 1)
+                        }
+                        let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE);
+                        if (systemcontrols_index > -1) {
+                            editAblePolicy.app_list.splice(systemcontrols_index, 1)
+                        }
+
+                    }
+                    // console.log(main_system_control, 'eidtable jksdhf', main_extension)
                     this.setState({
                         editAblePolicy: editAblePolicy,
                         // current: 0,
                         command: editAblePolicy.policy_note,
-                        policy_name: editAblePolicy.policy_name
+                        policy_name: editAblePolicy.policy_name,
+                        main_system_control: main_system_control,
+                        main_extension: main_extension,
+                        first: false
                     });
+                } else {
+                    if (editAblePolicy) {
+                        this.setState({
+                            editAblePolicy: editAblePolicy,
+                            // current: 0,
+                            command: editAblePolicy.policy_note,
+                            policy_name: editAblePolicy.policy_name,
+                            first: false
+
+                        });
+                    }
                 }
+
             }
         }
+    }
+
+
+    handleChecked = (value, key) => {
+        if (this.state.main_system_control) {
+            this.state.main_system_control[key] = value
+        }
+        this.setState({
+            main_system_control: this.state.main_system_control
+        })
+    }
+
+    handleChecked2 = (value, key) => {
+        if (this.state.main_extension) {
+            this.state.main_extension[key] = value
+        }
+        this.setState({
+            main_extension: this.state.main_extension
+        })
     }
 
 
@@ -219,6 +333,12 @@ export default class AddPolicy extends Component {
             })
         } else {
             this.state.editAblePolicy.policy_note = this.state.command;
+            this.state.editAblePolicy.app_list.push(this.state.main_extension);
+            this.state.editAblePolicy.app_list.push(this.state.main_system_control);
+
+
+            // console.log('app list is one', this.state.editAblePolicy.app_list)
+
             Modal.confirm({
                 title: 'Are You Sure, You Want to Save Changes',
                 onOk: () => {
@@ -282,7 +402,7 @@ export default class AddPolicy extends Component {
 
     render() {
         const { current } = this.state;
-        // console.log(this.props.encryptedAlldealerApps, 'selected row')
+        // console.log(this.state.main_extension, 'selected row')
 
         const { selectedRows, selectedRowKeys } = this.state;
         let rowSelection = {
@@ -290,112 +410,7 @@ export default class AddPolicy extends Component {
             selectedRows,
             onChange: this.onSelectChange,
         };
-        this.steps = [{
-            title: 'SELECT APPS',
-            Icon: <span className="step_counting">1</span>,
-            // content: (
 
-            // <AppList
-            //     apk_list={this.state.editAblePolicy.push_apps}
-            //     handleCheckApp={this.handleCheckApp}
-            //     handleEditPolicy={this.props.handleEditPolicy}
-            //     handleCheckAll={this.props.handleCheckAll}
-            //     guestAll={this.props.guestAlldealerApps}
-            //     encryptedAll={this.props.encryptedAlldealerApps}
-            //     enableAll={this.props.enableAlldealerApps}
-            //     removeAppsFromPolicies={this.props.removeAppsFromPolicies}
-            //     addAppsButton={true}
-            //     isCheckAllButtons={true}
-
-            //     addApps={this.addApps}
-            //     apps='dealerApps'
-            //     isSwitch={true}
-            //     edit={true}
-            //     rowId={this.state.editAblePolicy.id}
-            //     isCheckbox={false}
-            //     pageType={'dealerApps'}
-            // />
-            // ),
-        }, {
-            title: 'SET ' + APPLICATION_PERMISION.toUpperCase(),
-            Icon: <span className="step_counting">2</span>,
-            // content: (
-            // <AppList
-            //     apk_list={this.state.editAblePolicy.app_list}
-            //     handleEditPolicy={this.props.handleEditPolicy}
-            //     handleCheckAll={this.props.handleCheckAll}
-            //     removeAppsFromPolicies={this.props.removeAppsFromPolicies}
-
-            //     handleCheckApp={this.handleCheckApp}
-            //     appPermissions='appPermissions'
-            //     addAppsButton={true}
-            //     isCheckAllButtons={true}
-
-            //     addApps={this.addApps}
-            //     guestAll={this.props.guestAllappPermissions}
-            //     encryptedAll={this.props.encryptedAllappPermissions}
-            //     enableAll={this.props.enableAllappPermissions}
-            //     isSwitch={true}
-            //     edit={true}
-            //     rowId={this.state.editAblePolicy.id}
-            // />
-            // ),
-        }, {
-            title: 'SET ' + SECURE_SETTING_PERMISSION.toUpperCase(),
-            Icon: <span className="step_counting">3</span>,
-            // content: (
-            //     <AppList
-            //         allExtensions={this.state.editAblePolicy.secure_apps}
-            //         handleEditPolicy={this.props.handleEditPolicy}
-            //         handleCheckAll={this.props.handleCheckAll}
-            //         handleCheckApp={this.handleCheckApp}
-            //         secureSettings='allExtensions'
-            //         guestAll={this.props.guestAllallExtensions}
-            //         encryptedAll={this.props.encryptedAllallExtensions}
-            //         enableAll={this.props.enableAllallExtension}
-            //         isCheckAllButtons={true}
-
-            //         isSwitch={true}
-            //         edit={true}
-            //         rowId={this.state.editAblePolicy.id}
-            //     />
-            // ),
-        }, {
-            title: 'SET ' + SYSTEM_PERMISSION.toUpperCase(),
-            Icon: <span className="step_counting">4</span>,
-            // content: (
-            //     <Table
-            //         pagination={false}
-            //         dataSource={this.renderSystemPermissions()}
-            //         bordered
-            //         columns={columns}>
-            //     </Table>
-            // ),
-        }, {
-            title: 'SET POLICY DETAILS',
-            Icon: <span className="step_counting">5</span>,
-            // content: (
-            //     <Form className="login-form">
-            //         <Form.Item
-            //             validateStatus={this.state.isPolicy_name}
-            //             help={this.state.policy_name_error}
-            //         >
-            //             <span className="h3">Name</span>
-            //             <Input placeholder="Name" disabled value={this.state.policy_name} onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
-            //         </Form.Item>
-            //         <Form.Item
-            //             validateStatus={this.state.isCommand}
-            //             help={this.state.command_error}
-            //         >
-            //             <span className="h3">Policy Note</span>
-            //             <textarea placeholder="Policy Note" value={this.state.command} onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
-
-            //         </Form.Item>
-            //     </Form>
-
-            // )
-        }
-        ];
         return (
             <Fragment>
                 <div className="policy_steps">
@@ -403,6 +418,7 @@ export default class AddPolicy extends Component {
                         <TabPane tab="APPS" key="1">
                             <AppList
                                 apk_list={this.state.editAblePolicy.push_apps}
+                                dataLength={this.state.editAblePolicy.push_apps.length}
                                 handleCheckApp={this.handleCheckApp}
                                 handleEditPolicy={this.props.handleEditPolicy}
                                 handleCheckAll={this.props.handleCheckAll}
@@ -412,6 +428,7 @@ export default class AddPolicy extends Component {
                                 removeAppsFromPolicies={this.props.removeAppsFromPolicies}
                                 addAppsButton={true}
                                 isCheckAllButtons={true}
+                                pageType={'appPermissions'}
                                 addApps={this.addApps}
                                 apps='dealerApps'
                                 isSwitch={true}
@@ -424,13 +441,15 @@ export default class AddPolicy extends Component {
                         </TabPane>
                         <TabPane tab="APP PERMISSION" key="2">
                             <AppList
+                                dataLength={this.state.editAblePolicy.app_list.length}
                                 apk_list={this.state.editAblePolicy.app_list}
                                 handleEditPolicy={this.props.handleEditPolicy}
                                 handleCheckAll={this.props.handleCheckAll}
                                 removeAppsFromPolicies={this.props.removeAppsFromPolicies}
                                 handleCheckApp={this.handleCheckApp}
                                 appPermissions='appPermissions'
-                                addAppsButton={true}
+                                pageType={'appPermissions'}
+                                // addAppsButton={true}
                                 isCheckAllButtons={true}
                                 addApps={this.addApps}
                                 guestAll={this.props.guestAllappPermissions}
@@ -443,12 +462,66 @@ export default class AddPolicy extends Component {
 
                         </TabPane>
                         <TabPane tab="SETTINGS PERMISSION" key="3">
+
+
+                            {
+                                this.state.main_extension != undefined ?
+
+                            <div>
+                                <Row>
+                                    <Col span={7} className="pr-0">
+                                        <img src={require("assets/images/setting.png")} />
+                                    </Col>
+                                    <Col span={17} className="pl-6">
+                                        <h5>Secure Settings Permission</h5>
+                                    </Col>
+                                </Row>
+                                <span>guest: </span>
+
+                                <Switch
+                                    size="small"
+                                    checked={(this.state.main_extension.guest === true || this.state.main_extension.guest === 1) ? true : false}
+                                  
+                                    onClick={(e) => {
+                                        this.handleChecked2(e, "guest", '', 'main');
+                                    }}
+                                />
+
+                                <span>Encrypted: </span>
+
+                                <Switch
+                                    size="small"
+                                
+                                    checked={(this.state.main_extension.encrypted === true || this.state.main_extension.encrypted === 1) ? true : false}
+                                    onClick={(e) => {
+                                        // console.log("encrypted", e);
+                                        this.handleChecked2(e, "encrypted", '', 'main');
+                                    }}
+                                />
+
+                                <span>Enable: </span>
+
+                                <Switch
+                                    size="small"
+                            
+                                    checked={(this.state.main_extension.enable === true || this.state.main_extension.enable === 1) ? true : false}
+                                    onClick={(e) => {
+                                        // console.log("encrypted", e);
+                                        this.handleChecked2(e, "enable", '', 'main');
+                                    }}
+                                />
+
+                            </div> : null }
                             <AppList
+                                dataLength={this.state.editAblePolicy.secure_apps.length}
                                 allExtensions={this.state.editAblePolicy.secure_apps}
                                 handleEditPolicy={this.props.handleEditPolicy}
                                 handleCheckAll={this.props.handleCheckAll}
                                 handleCheckApp={this.handleCheckApp}
+
+                                EditmainExtension={this.state.main_extension}
                                 secureSettings='allExtensions'
+                                pageType={'allExtensions'}
                                 guestAll={this.props.guestAllallExtensions}
                                 encryptedAll={this.props.encryptedAllallExtensions}
                                 enableAll={this.props.enableAllallExtension}
@@ -460,12 +533,61 @@ export default class AddPolicy extends Component {
                             />
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">
-                            <Table
-                                pagination={false}
-                                dataSource={this.renderSystemPermissions()}
-                                bordered
-                                columns={columns}>
-                            </Table>
+                            <div>
+                                {
+                                    this.state.main_system_control != undefined ?
+                                
+                                <div>
+                                    <Row>
+                                        <Col span={7} className="pr-0">
+                                            <img src={require("assets/images/setting.png")} />
+                                        </Col>
+                                        <Col span={17} className="pl-6">
+                                            <h5>System Settings Permission</h5>
+                                        </Col>
+                                    </Row>
+                                    <span>guest: </span>
+
+                                    <Switch
+                                        size="small"
+                                        checked={(this.state.main_system_control.guest === true || this.state.main_system_control.guest === 1) ? true : false}
+                                        onClick={(e) => {
+                                            this.handleChecked(e, "guest", '', 'main');
+                                        }}
+                                    />
+
+                                    <span>Encrypted: </span>
+
+                                    <Switch
+                                        size="small"
+                                        checked={(this.state.main_system_control.encrypted === true || this.state.main_system_control.encrypted === 1) ? true : false}
+                                        onClick={(e) => {
+                                            // console.log("encrypted", e);
+                                            this.handleChecked(e, "encrypted", '', 'main');
+                                        }}
+                                    />
+
+                                    <span>Enable: </span>
+
+                                    <Switch
+                                        size="small"
+                                        checked={(this.state.main_system_control.enable === true || this.state.main_system_control.enable === 1) ? true : false}
+                                        onClick={(e) => {
+                                            // console.log("encrypted", e);
+                                            this.handleChecked(e, "enable", '', 'main');
+                                        }}
+                                    />
+
+                                </div>
+                                 :null }
+                                <Table
+                                    pagination={false}
+                                    dataSource={this.renderSystemPermissions()}
+                                    bordered
+                                    columns={columns}>
+                                </Table>
+                            </div>
+
                         </TabPane>
                         <TabPane tab="POLICY DETAILS" key="5">
                             <Form className="login-form">
@@ -475,6 +597,10 @@ export default class AddPolicy extends Component {
                                 >
                                     <span className="h3">Name</span>
                                     <Input placeholder="Name" disabled value={this.state.policy_name} onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
+                                </Form.Item>
+                                <Form.Item>
+                                    <span className="h3">Command Name</span>
+                                    <Input disabled value={this.state.editAblePolicy.command_name} className="pol_inp" />
                                 </Form.Item>
                                 <Form.Item
                                     validateStatus={this.state.isCommand}
