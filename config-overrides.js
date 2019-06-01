@@ -30,15 +30,11 @@ const options = {
 
 
 const overrideProcessEnv = value => config => {
-  // console.log(config.plugins[8].config.clientsClaim);
   config.resolve.modules = [
     path.join(__dirname, 'src')
   ].concat(config.resolve.modules);
-  // config.plugins.push(new workboxPlugin.GenerateSW({
-  //   swDest: '/service-worker.js',
-  //   clientsClaim: true,
-  //   skipWaiting: true,
-  // }));
+  
+
   config.plugins.push(new AntDesignThemePlugin(options));
   config.plugins.forEach((obj) => {
     if (obj.config) {
@@ -47,12 +43,6 @@ const overrideProcessEnv = value => config => {
       }
     }
   });
-  // config.plugins[8].config.skipWaiting = true;
-  // config.plugins.push(new workboxPlugin.GenerateSW({
-  //   swDest: '/service-worker.js',
-  //   clientsClaim: true,
-  //   skipWaiting: true,
-  // }));
 
   return config;
 };
