@@ -167,7 +167,7 @@ export function SavePolicyChanges(record) {
         RestService.SavePolicyChanges(record).then((response) => {
             //  console.log('conect device method call', data);
             if (RestService.checkAuth(response.data)) {
-                console.log('response', response.data);
+                // console.log('response', response.data);
                 if (response.data) {
                     dispatch({
                         type: SAVE_POLICY_CHANGES,

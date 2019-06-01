@@ -80,25 +80,23 @@ export function importCSV(formData, fieldName) {
 
 export function insertNewData(newData) {
     return (dispatch) => {
-        if(newData.submit){
+        if (newData.submit) {
             RestService.saveNewData(newData).then((response) => {
-                console.log('response', response)
                 if (RestService.checkAuth(response.data)) {
-                   
-                        console.log('success', response.data)
-                        dispatch({
-                            type: NEW_DATA_INSERTED,
-                            payload: response.data,
-                            showMsg: true,
-                        })
-                  
+
+                    dispatch({
+                        type: NEW_DATA_INSERTED,
+                        payload: response.data,
+                        showMsg: true,
+                    })
+
                 } else {
                     dispatch({
                         type: INVALID_TOKEN
                     })
                 }
             })
-        }else{
+        } else {
             dispatch({
                 type: NEW_DATA_INSERTED,
                 payload: {
@@ -108,7 +106,7 @@ export function insertNewData(newData) {
                 showMsg: false,
             })
         }
-       
+
     }
 }
 
@@ -187,7 +185,6 @@ export function getUsedChatIds() {
         // alert("hello");
         RestService.getUsedChatIds().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('response', response.data);
                 dispatch({
                     type: GET_USED_CHAT_IDS,
                     payload: response.data.data

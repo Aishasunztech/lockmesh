@@ -7,6 +7,14 @@ import registerServiceWorker from './registerServiceWorker';
 // Add this import:
 import {AppContainer} from 'react-hot-loader';
 
+function noop() {}
+
+if (process.env.NODE_ENV !== 'development') {
+  console.log = noop;
+  console.warn = noop;
+  console.error = noop;
+}
+
 // Wrap the rendering in a function:
 const render = Component => {
   ReactDOM.render(

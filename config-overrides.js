@@ -3,7 +3,6 @@ const AntDesignThemePlugin = require('antd-theme-webpack-plugin');
 const { override, fixBabelImports, addLessLoader } = require('customize-cra')
 // const workboxPlugin = require('workbox-webpack-plugin');
 // const publicUrl = new URL(process.env.PUBLIC_URL);
-// console.log(publicUrl);
 
 
 const options = {

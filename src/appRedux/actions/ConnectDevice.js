@@ -370,7 +370,7 @@ export function applySetting(app_list, passwords, extensions, controls, device_i
             controls: controls,
             subExtensions: extensions
         }
-        console.log("hello setting", device_setting);
+        // console.log("hello setting", device_setting);
 
         RestService.applySettings(device_setting, device_id, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -446,7 +446,7 @@ export function undoExtensions() {
     }
 }
 export function redoExtensions() {
-    console.log('redo ex action')
+    // console.log('redo ex action')
     return (dispatch) => {
         dispatch({
             type: REDO_EXTENSIONS
@@ -599,7 +599,7 @@ export function handleCheckAll(keyAll, key, value) {
 }
 
 export function handleCheckAllExtension(keyAll, key, value, uniqueName) {
-    console.log('actoin is called')
+    // console.log('actoin is called')
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_ALL_EXTENSION,

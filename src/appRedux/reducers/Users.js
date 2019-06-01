@@ -58,7 +58,7 @@ export default (state = initialState, action) => {
                 users_list: result,
             }
         case EDIT_USERS:
-            console.log('item added is:', action.response)
+            // console.log('item added is:', action.response)
             if (action.response.status) {
                 let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.userData.user_id));
                 state.users_list[objIndex4] = action.response.user[0];

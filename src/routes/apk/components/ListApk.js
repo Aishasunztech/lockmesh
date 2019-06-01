@@ -188,10 +188,9 @@ export default class ListApk extends Component {
     }
 
     render() {
-
-        const rowSelection = {
-            onChange: this.onSelectChange,
-        };
+        // const rowSelection = {
+        //     onChange: this.onSelectChange,
+        // };
 
         return (
             <Card>

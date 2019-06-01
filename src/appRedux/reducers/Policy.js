@@ -278,7 +278,7 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY_CHANGES: {
-            console.log('response is', action.payload.response)
+            // console.log('response is', action.payload.response)
 
             if (action.payload.response.status) {
                 success({
@@ -297,7 +297,7 @@ export default (state = initialState, action) => {
 
 
         case RESET_POLICY: {
-            console.log(state.copyPolicies, 'copypolicies')
+            // console.log(state.copyPolicies, 'copypolicies')
             return {
                 ...state,
                 policies: state.copyPolicies,
@@ -449,7 +449,7 @@ export default (state = initialState, action) => {
             else if (action.payload.stateToUpdate === 'appPermissions') {
                 let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
                 changedApps.forEach(app => {
-                    console.log(app.id,'====', action.payload.app_id ,app)
+                    // console.log(app.id,'====', action.payload.app_id ,app)
                     if (app.id === action.payload.app_id) {
                         app.isChanged = true;
                         app[action.payload.key] = action.payload.value;
@@ -557,7 +557,7 @@ export default (state = initialState, action) => {
 
         case CHECK_HANDLE_ALL_POLICY: {
 
-            console.log('reducer', action.payload);
+            // console.log('reducer', action.payload);
             let changedState = JSON.parse(JSON.stringify(state.policies));
             let chandedRowIndex = changedState.findIndex((item) => item.id == action.payload.rowId)
 
@@ -587,12 +587,12 @@ export default (state = initialState, action) => {
                 changedState[chandedRowIndex]['push_apps'].forEach(app => {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
-                    console.log(action.payload.key, 'value', action.payload.value)
+                    // console.log(action.payload.key, 'value', action.payload.value)
                 });
 
                 state.policies = JSON.parse(JSON.stringify(changedState));
 
-                console.log(state.policies, 'updated')
+                // console.log(state.policies, 'updated')
                 return {
                     ...state,
                     policies: state.policies,

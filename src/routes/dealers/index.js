@@ -628,7 +628,6 @@ class Dealers extends Component {
 
 
     render() {
-           console.log('this is the refs',this.refs)
         // console.log(this.state.columns, window.location.pathname.split("/").pop(), this.state.options)
         return (
 
