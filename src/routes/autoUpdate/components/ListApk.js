@@ -177,49 +177,19 @@ export default class ListApk extends Component {
 
         return (
             <Card>
-                {(this.props.link)
-                    ?
-
-
-                    <Table
-                        // rowSelection={rowSelection}
-                        // expandableRowIcon={<Icon type="right" />
-                        className="gx-table-responsive apklist_table"
-                        size="midddle"
-                        bordered
-                        columns={this.state.columns}
-                        dataSource={this.renderList(this.props.apk_list)}
-                        pagination={{ pageSize: Number(this.state.pagination) }}
-                        className="devices"
-                        scroll={{ x: 500 }}
-                        rowKey="apk_id"
-                    /> :
-                    <Table
-                        // rowSelection={rowSelection}
-                        // expandableRowIcon={<Icon type="right" />}
-                        // collapsedRowIcon={<Icon type="down" />}
-
-                        expandIcon={(props) => this.customExpandIcon(props)}
-                        expandedRowRender={(record) => {
-                            // console.log("table row", record);
-                            return (
-                                <Permissions record={record} />
-                            );
-
-                        }}
-                        expandIconColumnIndex={1}
-                        expandIconAsCell={false}
-                        className="gx-table-responsive apklist_table"
-                        size="midddle"
-                        bordered
-                        columns={this.state.columns}
-                        dataSource={this.renderList(this.props.apk_list)}
-                        pagination={{ pageSize: Number(this.state.pagination) }}
-                        className="devices"
-                        scroll={{ x: 500 }}
-                        rowKey="apk_id"
-                    />
-                }
+                <Table
+                    // rowSelection={rowSelection}
+                    // expandableRowIcon={<Icon type="right" />
+                    className="gx-table-responsive apklist_table"
+                    size="midddle"
+                    bordered
+                    columns={this.state.columns}
+                    dataSource={this.renderList(this.props.apk_list)}
+                    pagination={{ pageSize: Number(this.state.pagination) }}
+                    className="devices"
+                    scroll={{ x: 500 }}
+                    rowKey="apk_id"
+                />
                 <EditApk ref='editApk' getApkList={this.props.getApkList} />
             </Card>
         )

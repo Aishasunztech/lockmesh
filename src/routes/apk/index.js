@@ -297,6 +297,7 @@ class Apk extends React.Component {
     }
 
     render() {
+        // console.log(this.state.columns);
         if (this.props.user.type === 'dealer') {
             this.state.columns[0].className = 'hide';
         } else {

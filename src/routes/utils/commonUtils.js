@@ -116,8 +116,6 @@ export function componentSearch(arr, search) {
         if(obk == 'dealer_id')
         temp = temp.toString()
         if ((typeof temp) === 'string') {
-
-
           if (temp.toLowerCase().includes(search.toLowerCase())) {
             foundDevices.push(el);
             return true;

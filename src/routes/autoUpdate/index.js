@@ -49,7 +49,7 @@ const question_txt = (
 var status = true;
 var coppyApks = [];
 
-class Apk extends React.Component {
+class AutoUpdate extends React.Component {
 
     constructor(props) {
         super(props);
@@ -480,4 +480,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Apk);
+export default connect(mapStateToProps, mapDispatchToProps)(AutoUpdate);

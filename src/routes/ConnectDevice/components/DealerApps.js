@@ -21,11 +21,6 @@ const DealerApps = (props) => {
             defaultSortOrder: "ascend"
         },
         {
-            title: 'APP LOGO',
-            dataIndex: 'apk_logo',
-            key: 'apk_logo',
-        },
-        {
             title: 'GUEST',
             dataIndex: 'guest',
             key: 'guest'
@@ -110,11 +105,6 @@ const DealerApps = (props) => {
                 sortDirections: ['ascend', 'descend'],
                 // sortOrder:"ascend",
                 defaultSortOrder: "ascend"
-            },
-            {
-                title: 'APP LOGO',
-                dataIndex: 'apk_logo',
-                key: 'apk_logo',
             },
         ];
     }

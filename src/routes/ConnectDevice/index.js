@@ -442,8 +442,8 @@ class ConnectDevice extends Component {
   render() {
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
-    let onlineStatus = (this.props.device_details.online === 'off') ? 'Offline' : 'Online';
-    let onlineColor = (onlineStatus === 'Offline') ? { color: 'red' } : { color: 'green' }
+    let onlineStatus = this.props.device_details.online
+    let onlineColor = (onlineStatus === 'offline') ? { color: 'red' } : { color: 'green' }
     let totalApps = (this.props.noOfApp_push_pull == undefined || this.props.noOfApp_push_pull == 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
     let completeApps = (this.props.noOfApp_pushed_pulled == undefined) ? 0 : this.props.noOfApp_pushed_pulled
     let completeStep = this.props.complete_policy_step;
@@ -458,25 +458,28 @@ class ConnectDevice extends Component {
             </div> :
             (this.props.is_in_process || this.props.is_push_apps == 1 || policy_loading == 1) ?
               <div>
-                {(this.props.device_details.online == 'On') ?
+
+                <CircularProgress />
+
+                {/* {(this.props.device_details.online == 'online') ?
                   null : <CircularProgress />
-                }
-                <Modal
+                } */}
+                {/* <Modal
                   width='auto'
                   centered
                   maskClosable={false}
-                  visible={(this.props.device_details.online == 'On') ? true : false}
+                  visible={(this.props.device_details.online == 'online') ? true : false}
                   footer={null}
                   closable={false}
-                >
-                  {(policy_loading == 1) ?
+                > */}
+                {/* {(policy_loading == 1) ?
 
                     <Progress className='prog' type="circle" percent={(completeStep / 4) * 100} format={percent => `Step ${completeStep} of ${4}`} />
                     :
                     <Progress className='prog' type="circle" percent={(completeApps / totalApps) * 100} format={percent => `${completeApps} of ${totalApps}`} />
-                  }
-                  {/* <Progress type="circle" percent={100} /> */}
-                </Modal>
+                  } */}
+                {/* <Progress type="circle" percent={100} /> */}
+                {/* </Modal> */}
 
                 {/* <ProgressBar
                   total={}
@@ -575,7 +578,7 @@ class ConnectDevice extends Component {
                     isDuressPwd={this.props.isDuressPwd}
                     isEncryptedPwd={this.props.isEncryptedPwd}
                     isGuestPwd={this.props.isGuestPwd}
-                    controls={{'controls' : this.state.changedCtrls } }
+                    controls={{ 'controls': this.state.changedCtrls }}
                     showChangedControls={true}
                   />
                 </Modal>
