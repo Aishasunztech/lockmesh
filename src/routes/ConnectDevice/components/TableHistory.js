@@ -3,6 +3,7 @@ import { Table, Button } from "antd";
 
 import AppList from "./AppList";
 import DeviceSettings from './DeviceSettings';
+import styles from './Applist.css';
 
 import {
     SECURE_SETTING,
@@ -67,50 +68,78 @@ const renderColumn = (type) => {
     ]
 }
 
-const TableHistory = (props) => {
-    // console.log("props", props);
+class TableHistory extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            expandedRowKeys: [],
+        }
+    }
 
-    return (
-        <Table
-            style={{ margin: 0, padding: 0 }}
-            size='default'
-            bordered
-            columns={renderColumn(props.type)}
-            align='center'
-            dataSource={renderList(props.histories, props.type, props.applyHistory)}
-            pagination={false}
-            expandedRowRender={record => {
-                // console.log("record", record);
+    onExpandRow =(expanded, record) => {
+        // console.log(expanded, 'data is expanded', record);
+        if(expanded){
+            if(!this.state.expandedRowKeys.includes(record.key)){
+                this.state.expandedRowKeys.push(record.key);
+                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+            }
+        }else if(!expanded){
+            if(this.state.expandedRowKeys.includes(record.key)){
+               let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                this.setState({expandedRowKeys: list})
+            }
+        }
+    }
 
-                let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
-                let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
+    render() {
+        // const TableHistory = (props) => {
+        // console.log("props", props);
 
-                let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
-               let push_apps = record.push_apps == null || record.push_apps == 'null' ? [] : record.push_apps;
-                // console.log("app_list: ", app_list);
-                // console.log("extensions: ", extensions);
-                // console.log("push_apps: ", push_apps);
+        return (
+            <Table
+                style={{ margin: 0, padding: 0 }}
+                rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
+                size='default'
+                bordered
+                columns={renderColumn(this.props.type)}
+                align='center'
+                dataSource={renderList(this.props.histories, this.props.type, this.props.applyHistory)}
+                pagination={false}
+                onExpand={this.onExpandRow}
+                expandedRowRender={record => {
+                    // console.log("record", record);
 
-                return (
-                    <DeviceSettings
-                        app_list={app_list}
-                        extensions={extensions}
-                        extensionUniqueName={SECURE_SETTING}
-                        // isAdminPwd={this.props.isAdminPwd}
-                        // isDuressPwd={this.props.isDuressPwd}
-                        // isEncryptedPwd={this.props.isEncryptedPwd}
-                        // isGuestPwd={this.props.isGuestPwd}
-                        show_all_apps={true}
-                        controls={{ controls }}
-                        isPushApps={true}
-                        push_apps={push_apps}
-                    
-                    />
-                );
-            }}
-        />
-    )
+                    let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
+                    let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
 
+                    let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
+                    let push_apps = record.push_apps == null || record.push_apps == 'null' ? [] : record.push_apps;
+                    // console.log("app_list: ", app_list);
+                    // console.log("extensions: ", extensions);
+                    // console.log("push_apps: ", push_apps);
+
+                    return (
+                        <DeviceSettings
+                            app_list={app_list}
+                            extensions={extensions}
+                            extensionUniqueName={SECURE_SETTING}
+                            // isAdminPwd={this.props.isAdminPwd}
+                            // isDuressPwd={this.props.isDuressPwd}
+                            // isEncryptedPwd={this.props.isEncryptedPwd}
+                            // isGuestPwd={this.props.isGuestPwd}
+                            show_all_apps={true}
+                            controls={{ controls }}
+                            isPushApps={true}
+                            push_apps={push_apps}
+
+                        />
+                    );
+                }}
+            />
+        )
+    }
 }
+
+// }
 
 export default TableHistory;

@@ -8,6 +8,7 @@ import NewDevice from '../../components/NewDevices';
 import { Icon } from "antd";
 import socketIOClient from "socket.io-client";
 import { BASE_URL } from "../../constants/Application"
+import { ADMIN, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 class UserProfile extends Component {
 
   showNotification = () => {
@@ -45,14 +46,17 @@ class UserProfile extends Component {
 
       <div className="gx-flex-row gx-align-items-center gx-mb-4 gx-avatar-row side_bar_main">
         <Popover placement="bottomRight" content={userMenuOptions} trigger="click">
-          <Avatar src={require("../../assets/images/profile-image.png")}
-            className="gx-size-40 gx-pointer gx-mr-3" alt="" />
-          <span className="gx-avatar-name">{(localStorage.getItem('name') === '' || localStorage.getItem('name') === null || localStorage.getItem('name') === undefined) ? localStorage.getItem('dealerName') : localStorage.getItem('name')}<i
-            className="icon icon-chevron-down gx-fs-xxs gx-ml-2" />
+          <Avatar
+            src={require("../../assets/images/profile-image.png")}
+            className="gx-size-40 gx-pointer gx-mr-3"
+            alt=""
+          />
+          <span className="gx-avatar-name">
+            {(localStorage.getItem('name') === '' || localStorage.getItem('name') === null || localStorage.getItem('name') === undefined) ? localStorage.getItem('dealerName') : localStorage.getItem('name')}
+            <i className="icon icon-chevron-down gx-fs-xxs gx-ml-2" />            
 
           </span>
         </Popover>
-
         <NewDevice
           ref='new_device'
           devices={this.props.devices}

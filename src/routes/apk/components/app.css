@@ -7,6 +7,11 @@
     color: #9dceff;
 }
 
+
+.exp_row {
+    background: #e6faff !important;
+}
+
 .manage_sec .ant-card-body {
     height: 229px;
     position: relative;

@@ -476,7 +476,7 @@ const RestService = {
                     elem.enable = false;
                 }
                 delete elem.device_id;
-                delete elem.isChanged;
+                
             });
         }
         return axios.post(BASE_URL + 'users/apply_settings/' + device_id, {

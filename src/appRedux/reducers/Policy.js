@@ -18,7 +18,8 @@ import {
     ADD_APPS_TO_POLICIES,
     REMOVE_APPS_FROM_POLICIES,
     CHECK_TOGGLE_BUTTONS,
-    RESET_POLICY
+    RESET_POLICY,
+    RESET_ADD_POLICY_FORM
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -38,6 +39,7 @@ const initialState = {
     apk_list: [],
     app_list: [],
     dealer_apk_list: [],
+    dealer_apk_listCopy: [],
     showMsg: false,
     isloading: true,
     copyPolicies: [],
@@ -45,7 +47,10 @@ const initialState = {
     options: [POLICY_NAME, POLICY_NOTE],
     allExtensions: [],
     appPermissions: [],
+    allExtensionsCopy: [],
+    appPermissionsCopy: [],
     systemPermissions: { "wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
+    systemPermissionsCopy: { "wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
     systemPermissionsdump: { "wifi_status": true, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
 
     guestAlldealerApps: false,
@@ -83,7 +88,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 policies: action.payload,
-                copyPolicies: action.payload
+                copyPolicies: JSON.parse(JSON.stringify(action.payload))
             }
 
         case APK_LIST: {
@@ -100,7 +105,11 @@ export default (state = initialState, action) => {
                 ...state,
                 appPermissions: action.payload.appPermissions,
                 allExtensions: action.payload.extensions,
-                systemPermissions: initialState.systemPermissionsdump
+                systemPermissions: initialState.systemPermissionsdump,
+
+                appPermissionsCopy: JSON.parse(JSON.stringify(action.payload.appPermissions)),
+                allExtensionsCopy: JSON.parse(JSON.stringify(action.payload.extensions)),
+                systemPermissionsCopy: JSON.parse(JSON.stringify(initialState.systemPermissionsdump))
             }
         }
 
@@ -116,6 +125,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 dealer_apk_list: action.payload,
+                dealer_apk_listCopy: JSON.parse(JSON.stringify(action.payload)),
             }
         }
 
@@ -127,6 +137,29 @@ export default (state = initialState, action) => {
                 ...state,
                 ...checkButtons
             }
+        }
+
+        case RESET_ADD_POLICY_FORM: {
+            return {
+                ...state,
+                appPermissions: state.appPermissionsCopy,
+                allExtensions: state.allExtensionsCopy,
+                systemPermissions: state.systemPermissionsCopy,
+                dealer_apk_list: state.dealer_apk_listCopy,
+                guestAlldealerApps: false,
+                encryptedAlldealerApps: false,
+                enableAlldealerApps: false,
+
+                guestAllappPermissions: false,
+                encryptedAllappPermissions: false,
+                enableAllappPermissions: false,
+
+                guestAllallExtensions: false,
+                encryptedAllallExtensions: false,
+                enableAllallExtensions: false,
+            }
+
+
         }
 
         case ADD_APPS_TO_POLICIES: {
@@ -258,7 +291,7 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
-                copyPolicies: state.policies
+                copyPolicies: JSON.parse(JSON.stringify(state.policies))
             }
         }
 
@@ -363,10 +396,14 @@ export default (state = initialState, action) => {
                 changedExtensions.forEach(extension => {
                     // console.log(extension.uniqueName, '===', action.payload.uniqueName)
                     if (extension.uniqueName === action.payload.uniqueName) {
-                        let objIndex = extension.subExtension.findIndex((obj => obj.id === action.payload.app_id));
-                        if (objIndex > -1) {
-                            extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
-                            extension.subExtension[objIndex].isChanged = true;
+                        if(action.payload.main == 'main'){
+                            extension[action.payload.key] = action.payload.value;
+                        }else{
+                            let objIndex = extension.subExtension.findIndex((obj => obj.id === action.payload.app_id));
+                            if (objIndex > -1) {
+                                extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
+                                extension.subExtension[objIndex].isChanged = true;
+                            }
                         }
                     }
                 });
@@ -412,7 +449,7 @@ export default (state = initialState, action) => {
             else if (action.payload.stateToUpdate === 'appPermissions') {
                 let changedApps = JSON.parse(JSON.stringify(state.appPermissions));
                 changedApps.forEach(app => {
-                    // console.log(app.id,'====', action.payload.app_id ,app)
+                    console.log(app.id,'====', action.payload.app_id ,app)
                     if (app.id === action.payload.app_id) {
                         app.isChanged = true;
                         app[action.payload.key] = action.payload.value;

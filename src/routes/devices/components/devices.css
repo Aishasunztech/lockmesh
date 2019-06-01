@@ -109,8 +109,28 @@
     padding: 8px 8px !important;
 }
 
+.testing {
+    background: #ebf4fa !important;
+}
+
+.exp_row {
+    background: #e6faff !important;
+}
+
 .expand_table .bold {
     font-weight: 500 !important
+}
+
+.dev_tabs.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+    margin: 0 0 0px 3px;
+    font-size: 13px;
+    text-align: center;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.dev_tabs.ant-tabs-bar {
+    border-bottom: 0;
 }
 
 .ant-modal {
@@ -125,17 +145,10 @@
     line-height: 25px;
 }
 
-.dev_tabs .ant-tabs-tab {
-    text-align: center;
-}
-
 .dev_tabs .ant-tabs-bar {
     margin-bottom: 0px;
 }
 
-.dev_tabs .ant-card-bordered {
-    border-top: #fff;
-}
 
 .mb-0 {
     margin-bottom: 0;
@@ -149,6 +162,10 @@
 
 .ant-tabs-tab-active .orange {
     color: #FFA500
+}
+
+.ant-tabs-tab-active .black {
+    color: #333;
 }
 
 .ant-tabs-tab-active .purple {
@@ -197,6 +214,10 @@
 
 .gray:hover {
     color: #999999
+}
+
+.black:hover {
+    color: #333;
 }
 
 .ant-tabs-tab-active {

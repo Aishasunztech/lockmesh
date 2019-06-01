@@ -11,10 +11,24 @@
     overflow: overlay;
 }
 
+.add-policy-modal-content {
+    height: 309px;
+    overflow: overlay
+}
+
+.exp_row {
+    background: #e6faff !important;
+}
+
+.add-policy-modal-content .ant-form-item-control {
+   
+    line-height: 1.3;
+}
+
 .policy_steps .ant-table-tbody>tr>td {
-    font-size: 12px;
+    font-size: 14px;
     text-align: center;
-    padding: 8px 8px !important;
+    padding: 10px 8px !important;
     font-weight: 300;
     width: 25%;
 }
@@ -44,12 +58,16 @@
 } */
 
 .line_break2 {
-    width: 100px;
+    width: 50px;
     margin: 0 0 0 12px;
     display: inline-block;
     text-align: left;
     font-weight: 300;
     vertical-align: middle;
+}
+
+.line_break22 {
+    width: 65%;
 }
 
 .exp_policy .ant-table-tbody>tr>td {
@@ -61,6 +79,12 @@
 
 .policy_popup .ant-modal-body {
     padding: 16px 16px 10px;
+}
+
+.add-policy-footer {
+    text-align: right;
+    margin-top: 10px
+
 }
 
 .policy_popup .ant-steps-item-title {
@@ -89,6 +113,7 @@
 .login-form {
     justify-content: center;
     display: grid;
+    margin-top: 30px;
 }
 
 .login-form .h3 {
@@ -151,7 +176,7 @@
 
 .policy_expand .ant-table-tbody>tr>td {
     padding: 8px 0 8px !important;
-    background: #fff;
+    /* background: #fff; */
 }
 
 .policy_expand .ant-tabs-nav .ant-tabs-tab {
@@ -160,4 +185,16 @@
 
 .policy_expand .ant-tabs-bar {
     margin: 0 0 8px 0;
+}
+
+.ant-tabs .ant-tabs-left-bar .ant-tabs-tab {
+    text-align: center;
+}
+
+.ant-tabs-vertical.ant-tabs-card .ant-tabs-card-bar.ant-tabs-left-bar .ant-tabs-tab-active {
+    padding-bottom: 0;
+}
+
+.policy_steps .ant-tabs .ant-tabs-left-content {
+    height: 310px;
 }

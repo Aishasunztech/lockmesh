@@ -41,7 +41,8 @@ class DevicesList extends Component {
             selectedRowKeys: [],
             self: this,
             redirect: false,
-            user_id: ''
+            user_id: '',
+            expandedRowKeys: [],
         };
         this.renderList = this.renderList.bind(this);
     }
@@ -113,6 +114,7 @@ class DevicesList extends Component {
             let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
             let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
             let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>DELETE</Button>
+            let Unflagbtn = <Button type="defualt" size="small" style={{ margin: '0 8px 0 0', color: "#fff", background: "#000" }} onClick={() => { this.props.unflagConfirm(device) }}> UNFLAG </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
             // console.log('end', device)
@@ -129,19 +131,21 @@ class DevicesList extends Component {
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
-                        : (status === DEVICE_SUSPENDED) ?
-                            (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            : (status === DEVICE_EXPIRED) ?
+                        : (device.flagged !== 'Not flagged') ?
+                            (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                            : (status === DEVICE_SUSPENDED) ?
                                 (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
-                                    (<Fragment>{DeleteBtn}</Fragment>)
-                                    : (status === DEVICE_PENDING_ACTIVATION) ?
-                                        (<Fragment><Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment></Fragment>)
-                                        : (device.status === DEVICE_PRE_ACTIVATION) ?
-                                            false
-                                            : (status === DEVICE_EXPIRED) ?
-                                                (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
-                                                : false
+                                : (status === DEVICE_EXPIRED) ?
+                                    (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                    : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
+                                        (<Fragment>{DeleteBtn}</Fragment>)
+                                        : (status === DEVICE_PENDING_ACTIVATION) ?
+                                            (<Fragment><Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment></Fragment>)
+                                            : (device.status === DEVICE_PRE_ACTIVATION) ?
+                                                false
+                                                : (status === DEVICE_EXPIRED) ?
+                                                    (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
+                                                    : false
 
 
                 ),
@@ -263,6 +267,21 @@ class DevicesList extends Component {
         })
     }
 
+    onExpandRow = (expanded, record) => {
+        console.log(expanded, 'data is expanded', record);
+        if (expanded) {
+            if (!this.state.expandedRowKeys.includes(record.key)) {
+                this.state.expandedRowKeys.push(record.key);
+                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
+            }
+        } else if (!expanded) {
+            if (this.state.expandedRowKeys.includes(record.key)) {
+                let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                this.setState({ expandedRowKeys: list })
+            }
+        }
+    }
+
     // componentWillReceiveProps() {
     //     this.setState({
     //         devices: this.props.devices,
@@ -273,8 +292,7 @@ class DevicesList extends Component {
 
     render() {
 
-        // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
-
+        // console.log(this.state.expandedRowKeys, 'selected keys', )
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state
         if (redirect) {
@@ -329,10 +347,15 @@ class DevicesList extends Component {
                 <Card>
                     <Table
                         ref='tablelist'
+                        rowClassName={(record, index) => {
+                            console.log(record, 'df', index)
+                            // this.state.expandedRowKeys.includes(record.key) ? 'testing' : ''
+                        }
+                        }
                         className="devices"
                         rowSelection={rowSelection}
-                        rowClassName={() => 'editable-row'}
-                        size="default"
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
+                        size="middle"
                         bordered
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.devices)}
@@ -346,7 +369,7 @@ class DevicesList extends Component {
                             x: 500,
                             // y: 600 
                         }}
-
+                        onExpand={this.onExpandRow}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log('record is', record)
@@ -577,6 +600,8 @@ class DevicesList extends Component {
 
 }
 
+const confirm = Modal.confirm;
+
 export default class Tab extends Component {
     constructor(props) {
         super(props)
@@ -603,6 +628,23 @@ export default class Tab extends Component {
         this.refs.devciesList.handlePagination(value);
     }
 
+    unflagConfirm = (device) => {
+        let _this = this;
+        confirm({
+            title: 'Do you really want to unflag the device ' + device.device_id,
+            okText: 'Yes',
+            cancelText: 'No',
+            onOk() {
+                _this.props.unflagged(device.device_id)
+                _this.props.activateDevice(device)
+                // console.log('OK');
+            },
+            onCancel() {
+                // console.log('Cancel');
+            },
+        });
+    }
+
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
@@ -621,47 +663,50 @@ export default class Tab extends Component {
         // console.log('columsns', this.state.devices)
         return (
             <Fragment>
-                <Tabs type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
+               <div>
+                    <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
+                        <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
+                        </TabPane>
+                        <TabPane tab={<span className="green">Active ({this.props.activeDevices})</span>} key="4" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="red">Expired ({this.props.expireDevices})</span>} key="6" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="green">Trial ({this.props.trialDevices})</span>} key="9" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="blue">Pre Activated ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="gray">Pending Activation ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="purple">Transfer (0)</span>} key="8" forceRender={true}>
+                            <h2 className="coming_s">Coming Soon</h2>
+                        </TabPane>
+                        <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
+                        </TabPane>
+                        <TabPane tab={<span className="black">Flagged ({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
+                        </TabPane>
 
-                    </TabPane>
-                    <TabPane tab={<span className="green">Active ({this.props.activeDevices})</span>} key="4" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="red">Expired ({this.props.expireDevices})</span>} key="6" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="green">Trial ({this.props.trialDevices})</span>} key="9" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="blue">Pre Activated ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="gray">Pending Activation ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
-                    </TabPane>
-                    <TabPane tab={<span className="purple">Transfer (0)</span>} key="8" forceRender={true}>
-                        <h2 className="coming_s">Coming Soon</h2>
-                    </TabPane>
-                    <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
-                    </TabPane>
-
-                </Tabs>
-                <DevicesList
-                    devices={this.state.devices}
-                    suspendDevice={this.props.suspendDevice}
-                    activateDevice={this.props.activateDevice}
-                    columns={this.props.columns}
-                    rejectDevice={this.props.rejectDevice}
-                    selectedOptions={this.state.selectedOptions}
-                    ref="devciesList"
-                    pagination={this.props.pagination}
-                    addDevice={this.props.addDevice}
-                    editDevice={this.props.editDevice}
-                    tabselect={this.state.tabselect}
-                    deleteUnlinkDevice={this.props.deleteUnlinkDevice}
-                    resetTabSelected={this.resetTabSelected}
-                    user={this.props.user}
-                    history={this.props.history}
-
-                />
+                    </Tabs>
+                    <DevicesList
+                        devices={this.state.devices}
+                        suspendDevice={this.props.suspendDevice}
+                        activateDevice={this.props.activateDevice}
+                        columns={this.props.columns}
+                        rejectDevice={this.props.rejectDevice}
+                        selectedOptions={this.state.selectedOptions}
+                        ref="devciesList"
+                        pagination={this.props.pagination}
+                        addDevice={this.props.addDevice}
+                        editDevice={this.props.editDevice}
+                        tabselect={this.state.tabselect}
+                        deleteUnlinkDevice={this.props.deleteUnlinkDevice}
+                        resetTabSelected={this.resetTabSelected}
+                        user={this.props.user}
+                        unflagConfirm={this.unflagConfirm}
+                        history={this.props.history}
+                    />
+                </div>
             </Fragment>
         )
     }

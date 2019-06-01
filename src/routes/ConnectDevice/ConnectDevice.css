@@ -1,13 +1,13 @@
 .deviceImg {
     width: 311px;
     margin: 0 auto;
-    height: 533px;
+    height: 579px;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;
     border-radius: 26px;
     position: relative;
-    border: 2px solid #000;
+    border: 6px solid #292929;
 }
 
 .deviceImg .not_syn_txt {
@@ -23,9 +23,9 @@
 
 .status_bar {
     border-bottom: 1px solid #cccccc;
-    padding-top: 55px;
+    padding-top: 59px;
     text-align: center;
-    margin: 0px 6px 27px 5px;
+    margin: 0px 0px 26px 0px;
 }
 
 .status_bar h5 {
@@ -34,12 +34,14 @@
 }
 
 .offline_st {
-    border: 1px solid #e8e8e8
+    border: 1px solid #e8e8e8;
+    border-top: 0;
 }
 
 .active_st {
     border: 1px solid #e8e8e8;
     border-right: 0;
+    border-top: 0;
 }
 
 .active_st h5 {
@@ -70,6 +72,14 @@
     background-color: #fff;
 }
 
+.nav_btn .back_btn {
+    line-height: 0;
+    font-size: 26px;
+    margin-top: 10px;
+    color: #8a8a8a;
+    margin-left: 15px;
+}
+
 .ant-table-tbody>tr>td {
     font-size: 12px;
     text-align: center;
@@ -78,7 +88,7 @@
 }
 
 .deviceImg .ant-table-scroll {
-    width: 295px;
+    width: 298px;
     margin: 23px auto 0;
     border-radius: 0px;
 }
@@ -101,9 +111,40 @@
     margin-top: 16px !important;
     margin-right: 0 !important;
     margin-bottom: 0 !important;
-    width: 25%;
+    width: 25.2%;
     padding: 0;
     line-height: 20px;
+    border-radius: 0 !important;
+
+}
+
+.act_b_grp.ant-btn-group .ant-btn {
+    padding: 0 4px;
+}
+
+.act_b_grp .action_btn {
+    border-radius: 0 !important;
+}
+
+.act_b_grp .ant-btn>.anticon+span {
+    margin-left: 4px;
+    font-size: 12px;
+}
+
+.act_b_grp {
+    margin-right: 0 !important;
+    width: 100.1%;
+    position: absolute;
+    bottom: 45px;
+    left: 0px;
+}
+
+.action_btn i {
+    vertical-align: bottom;
+}
+
+.action_btn .ant-btn>.anticon+span {
+    margin-left: 4px;
 }
 
 .deviceImg .ant-table-thead>tr>th {
@@ -121,6 +162,10 @@
 th.device_info {
     font-size: 13px;
     padding: 4px 4px !important;
+}
+
+.exp_row {
+    background: #e6faff !important;
 }
 
 .left_bar .ant-table-tbody>tr>td {
@@ -141,7 +186,7 @@ th.device_info {
 }
 
 .deviceImg .ant-spin-container {
-    width: 297px;
+    width: 299px;
     margin: 0px auto;
     padding: 0;
 }
@@ -269,7 +314,7 @@ th.device_info {
 
 .sec_head1 {
     margin: 25px 0px 0px;
-    border-top: 1px solid #e8e8e8;
+    border-top: 0;
     padding: 12px 0;
     border-bottom: 1px solid #e8e8e8;
 }
@@ -278,7 +323,7 @@ th.device_info {
     margin-right: 10px;
 }
 
-.prog ,
+.prog,
 .prog .ant-progress-circle {
     margin-right: 0 !important;
     margin-bottom: 0 !important
@@ -300,11 +345,11 @@ th.device_info {
     }
 
     .deviceImg .ant-table-scroll {
-        width: 256px;
+        width: 257px;
     }
 
     .deviceImg .ant-spin-container {
-        width: 260px;
+        width: 258px;
     }
 
     .deviceImg .ant-table-thead>tr>th {

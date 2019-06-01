@@ -152,7 +152,7 @@ class SettingAppPermissions extends Component {
             </Col>
           </Row>
           <div className="sec_set_table">
-            <Table dataSource={this.renderApps()} columns={columns} pagination={false} scroll={{ y: 273 }} />
+            <Table dataSource={this.renderApps()} columns={columns} pagination={false} scroll={{ y: 276 }} />
           </div>
 
         </Fragment>

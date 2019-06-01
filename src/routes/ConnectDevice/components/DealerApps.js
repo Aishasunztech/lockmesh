@@ -121,6 +121,8 @@ const DealerApps = (props) => {
     return (
         <Fragment>
             <Table
+                className="push_apps"
+                pagination={false}
                 scroll={{ x: 500 }}
                 bordered
                 rowSelection={(props.isSwitchable) ? rowSelection : null}

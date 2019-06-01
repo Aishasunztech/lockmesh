@@ -13,7 +13,7 @@ import {
     handleCheckAll, defaultPolicyChange,
     getAppPermissions, addAppsToPolicies,
     removeAppsFromPolicies, checktogglebuttons,
-    resetPlicies
+    resetPlicies, resetAddPolicyForm
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -196,7 +196,9 @@ class Policy extends Component {
         this.state = {
             policyModal: false,
             policies: (this.props.policies) ? this.props.policies : [],
+            formRefresh: false,
             current: 0,
+            goToLastTab: false,
             editPolicyModal: false,
             guestAlldealerApps: false,
             enableAlldealerApps: false,
@@ -343,8 +345,35 @@ class Policy extends Component {
     }
 
     handlePolicyModal = (visible) => {
+        let _this = this;
+        Modal.confirm({
+            title: 'would you like to Save Policy before closing??',
+            okText: 'Yes',
+            cancelText: 'No',
+            onOk() {
+                _this.setState({
+                    goToLastTab: true,
+                    formRefresh: false
+                })
+            },
+            onCancel() {
+                _this.props.resetAddPolicyForm()
+                _this.setState({
+                    policyModal: visible,
+                    goToLastTab: false,
+                    formRefresh: true
+                });
+            },
+        });
+
+    }
+
+    handlePolicyModal2 = (visible) => {
         this.setState({
-            policyModal: visible
+            policyModal: visible,
+            goToLastTab: false,
+            formRefresh: true
+
         });
     }
 
@@ -357,12 +386,29 @@ class Policy extends Component {
     }
 
     editPolicyModalHide = () => {
-        console.log('cancel called')
-        this.props.resetPlicies();
-        this.setState({
-            editPolicyModal: false
-        })
-        this.refs.editPolicy.reset_steps();
+
+        let _this = this;
+        Modal.confirm({
+            title: 'would you like to Save Policy before closing?',
+            okText: 'Yes',
+            cancelText: 'No',
+            onOk() {
+              
+                //   console.log('OK');
+            },
+            onCancel() {
+
+                _this.props.resetPlicies();
+                _this.setState({
+                    editPolicyModal: false
+                })
+                _this.refs.editPolicy.reset_steps();
+                //   console.log('Cancel');
+            },
+        });
+
+        // console.log('cancel called')
+
 
     }
 
@@ -374,10 +420,8 @@ class Policy extends Component {
     }
 
 
-
-
     render() {
-        console.log('sdaf asdf asf', this.state.policies)
+
         return (
             <Fragment>
                 <AppFilter
@@ -389,7 +433,7 @@ class Policy extends Component {
                     // options={this.state.options}
                     isAddButton={true}
                     AddPolicyModel={true}
-                    handlePolicyModal={this.handlePolicyModal}
+                    handlePolicyModal={this.handlePolicyModal2}
 
                     handleCheckChange={this.handleCheckChange}
                     handlePagination={this.handlePagination}
@@ -422,20 +466,24 @@ class Policy extends Component {
                 />
                 <Modal
                     maskClosable={false}
-                    width="700px"
+                    width="730px"
                     className="policy_popup"
                     visible={this.state.policyModal}
                     title="Add Policy"
-                    onOk={() => this.handlePolicyModal(false)}
+                    onOk={() => this.handlePolicyModal2(false)}
                     onCancel={() => this.handlePolicyModal(false)}
+                    destroyOnClose={true}
                     okText="Save"
                     footer={null}
+                    ref='modal'
                 >
                     <AddPolicy
                         apk_list={this.props.apk_list}
                         app_list={this.props.app_list}
-                        handlePolicyModal={this.handlePolicyModal}
+                        handlePolicyModal={this.handlePolicyModal2}
                         getPolicies={this.props.getPolicies}
+                        goToLastTab={this.state.goToLastTab}
+                        refreshForm={this.state.formRefresh}
                         ref='addPolicy'
                     />
                 </Modal>
@@ -444,6 +492,7 @@ class Policy extends Component {
                     width="730px"
                     className="policy_popup"
                     visible={this.state.editPolicyModal}
+                    // destroyOnClose={true}
                     title="Edit Policy"
                     onOk={() => this.handlePolicyModal(false)}
                     onCancel={() => this.editPolicyModalHide()}
@@ -496,7 +545,8 @@ function mapDispatchToProps(dispatch) {
         defaultPolicyChange: defaultPolicyChange,
         removeAppsFromPolicies: removeAppsFromPolicies,
         checktogglebuttons: checktogglebuttons,
-        resetPlicies: resetPlicies
+        resetPlicies: resetPlicies,
+        resetAddPolicyForm: resetAddPolicyForm
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);
