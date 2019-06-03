@@ -83,96 +83,113 @@ class PasswordModal extends Component {
     }
 }
 
+class DealerAppModal extends Component {
+    // const PullAppModal = (props) => {
 
-const DealerAppModal = (props) => {
-    return (
-        <Modal
-            // closable={false}
-            maskClosable={false}
-            style={{ top: 20 }}
-            width="780px"
-            title={
-                <div className="pp_popup">Select Apps
-                {/* <Input.Search
-                        name="push_apps"
-                        key="push_apps"
-                        id="push_apps"
-                        className="search_heading1"
-                        onKeyUp={
-                            (e) => {
-                                props.handleComponentSearch(e, 'push_apps')
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        // const DealerAppModal = (props) => {
+        return (
+            <Modal
+                maskClosable={false}
+                destroyOnClose={true}
+                style={{ top: 20 }}
+                width="780px"
+                title={
+                    <div className="pp_popup">Select Apps
+                <Input.Search
+                            name="push_apps"
+                            key="push_apps"
+                            id="push_apps"
+                            className="search_heading1"
+                            onKeyUp={
+                                (e) => {
+                                    this.props.handleComponentSearch(e.target.value, 'push_apps')
+                                }
                             }
-                        }
-                        autoComplete="new-password"
-                        placeholder="Search Apps"
-                    /> */}
-                    <br /> Device ID: {props.device.device_id}
-                </div>}
-            visible={props.pushAppsModal}
-            onOk={() => {
-                if (props.selectedApps.length) {
-                    props.showPushAppsModal(false);
-                    props.showSelectedAppsModal(true);
-                }
-            }}
-            onCancel={() => { props.showPushAppsModal(false); props.resetSeletedRows() }}
-            okText="Push Apps"
-        >
-            <DealerApps
-                apk_list={props.apk_list}
-                onSelectChange={props.onSelectChange}
-                isSwitchable={true}
-                selectedApps={props.selectedApps}
-                selectedAppKeys={props.selectedAppKeys}
-                handleChecked={props.handleChecked}
-            />
-        </Modal>
-    )
+                            autoComplete="new-password"
+                            placeholder="Search Apps"
+                        />
+                        <br /> Device ID: {this.props.device.device_id}
+                    </div>}
+                visible={this.props.pushAppsModal}
+                onOk={() => {
+                    if (this.props.selectedApps.length) {
+                        this.props.showPushAppsModal(false);
+                        this.props.showSelectedAppsModal(true);
+                    }
+                }}
+                onCancel={() => { this.props.showPushAppsModal(false); this.props.resetSeletedRows() }}
+                okText="Push Apps"
+            >
+                <DealerApps
+                    apk_list={this.props.apk_list}
+                    onSelectChange={this.props.onSelectChange}
+                    isSwitchable={true}
+                    selectedApps={this.props.selectedApps}
+                    selectedAppKeys={this.props.selectedAppKeys}
+                    handleChecked={this.props.handleChecked}
+                />
+            </Modal>
+        )
+    }
 }
-const PullAppModal = (props) => {
-    return (
-        <Modal
-            // closable={false}
-            maskClosable={false}
-            style={{ top: 20 }}
-            width="650px"
-            title={
-                <div className="pp_popup">Select Apps
-                {/* <Input.Search
-                        name="pull_apps"
-                        key="pull_apps"
-                        id="pull_apps"
-                        className="search_heading1"
-                        onKeyUp={
-                            (e) => {
-                                props.handleComponentSearch(e, 'pull_apps')
+class PullAppModal extends Component {
+    // const PullAppModal = (props) => {
+
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+
+        return (
+            <Modal
+                maskClosable={false}
+                destroyOnClose={true}
+                style={{ top: 20 }}
+                width="650px"
+                title={
+                    <div className="pp_popup">Select Apps
+                    <Input.Search
+                            name="pull_apps"
+                            key="pull_apps"
+                            id="pull_apps"
+                            className="search_heading1"
+                            onKeyUp={
+                                (e) => {
+                                    this.props.handleComponentSearch(e.target.value, 'pull_apps')
+                                }
                             }
-                        }
-                        autoComplete="new-password"
-                        placeholder="Search Apps"
-                    /> */}
-                    <br /> Device ID: {props.device.device_id} </div>}
-            visible={props.pullAppsModal}
-            onOk={() => {
-                if (props.selectedApps.length) {
-                    props.showPullAppsModal(false);
-                    props.showSelectedAppsModal(true);
-                }
-            }}
-            onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
-            okText="Pull Apps"
-        >
-            <DealerApps
-                apk_list={props.apk_list}
-                onSelectChange={props.onSelectChange}
-                isSwitchable={true}
-                selectedApps={props.selectedApps}
-                selectedAppKeys={props.selectedAppKeys}
-                handleChecked={props.handleChecked}
-                type={props.actionType == PUSH_APPS ? "push" : 'pull'}
-            />
-        </Modal>
-    )
+                            autoComplete="new-password"
+                            placeholder="Search Apps"
+                        />
+                        <br /> Device ID: {this.props.device.device_id} </div>}
+                visible={this.props.pullAppsModal}
+                onOk={() => {
+                    if (this.props.selectedApps.length) {
+                        this.props.showPullAppsModal(false);
+                        this.props.showSelectedAppsModal(true);
+                    }
+                }}
+                onCancel={() => { this.props.showPullAppsModal(false); this.props.resetSeletedRows(); }}
+                okText="Pull Apps"
+            >
+                <DealerApps
+                    apk_list={this.props.apk_list}
+                    onSelectChange={this.props.onSelectChange}
+                    isSwitchable={true}
+                    selectedApps={this.props.selectedApps}
+                    selectedAppKeys={this.props.selectedAppKeys}
+                    handleChecked={this.props.handleChecked}
+                    type={this.props.actionType == PUSH_APPS ? "push" : 'pull'}
+                />
+            </Modal>
+        )
+    }
 }
 
 const SelectedApps = (props) => {
@@ -345,16 +362,18 @@ class SideActions extends Component {
     }
 
     handleComponentSearch = (value) => {
+        // alert('its working', value)
         //    console.log('values sr', value)   
         try {
+            console.log(value, 'value')
             if (value.length) {
-
+                console.log(value, 'value')
                 if (status) {
-                    // console.log('status')
+                    console.log('status')
                     coppyList = this.state.apk_list;
                     status = false;
                 }
-                // console.log(this.state.users,'coppy de', coppyDevices)
+                console.log(this.state.apk_list, 'coppy de', coppyList)
                 let foundList = componentSearch(coppyList, value);
                 console.log('found devics', foundList)
                 if (foundList.length) {
@@ -374,6 +393,7 @@ class SideActions extends Component {
                 })
             }
         } catch (error) {
+            console.log(error, 'error')
         }
     }
 
@@ -724,7 +744,7 @@ class SideActions extends Component {
                     pullAppsModal={this.state.pullAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
-                    apk_list={this.props.apk_list}
+                    apk_list={this.state.apk_list}
                     onSelectChange={this.onSelectChange}
                     showSelectedAppsModal={this.showSelectedAppsModal}
                     selectedApps={this.state.selectedApps}
