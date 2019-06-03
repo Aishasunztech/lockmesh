@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
-import { Input, Modal, Select,Button   } from "antd";
+import { Input, Modal, Select, Button } from "antd";
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 // import {getDevicesList} from '../../appRedux/actions/Devices';
@@ -24,20 +24,20 @@ import {
     DEALER_ACTION
 } from '../../constants/DealerConstants';
 import { isArray } from "util";
- 
+
 var coppydealers = [];
 var status = true;
 class Dealers extends Component {
 
     constructor(props) {
         super(props);
-      
-        const columns = [ {
+
+        const columns = [{
             title: '#',
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
-        },{
+        }, {
             title: '',
             dataIndex: 'accounts',
             align: 'center',
@@ -246,33 +246,33 @@ class Dealers extends Component {
             loading_DealerModal: false,
             visible_DealerModal: false,
             pagination: 10,
-            tabselect: '1'
+            tabselect: '1',
         };
         this.handleChange = this.handleChange.bind(this);
     }
 
     showAddDealer = () => {
         this.setState({
-          visible_DealerModal: true,
+            visible_DealerModal: true,
         });
- 
-      };
-    
-      handleOk = () => {
+
+    };
+
+    handleOk = () => {
         this.setState({ loading_DealerModal: true });
         setTimeout(() => {
-          this.setState({ loading_DealerModal: false, visible_DealerModal: false });
+            this.setState({ loading_DealerModal: false, visible_DealerModal: false });
         }, 3000);
-      };
-    
-      handleCancel = () => {
+    };
+
+    handleCancel = () => {
         this.setState({ visible_DealerModal: false });
-      };
-    
+    };
+
     showModal = () => {
         this.setState({
             visible: true,
-        }); 
+        });
     }
 
 
@@ -393,7 +393,7 @@ class Dealers extends Component {
                     return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
                 }}
                 onChange={this.handleChange}
-                 >
+            >
                 <Select.Option value="all">All</Select.Option>
                 <Select.Option value="active">Active</Select.Option>
                 <Select.Option value="suspended">Suspended</Select.Option>
@@ -560,8 +560,8 @@ class Dealers extends Component {
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
             this.handleCheckChange(this.props.selectedOptions)
         }
-       
-        if(this.props.dealers !== prevProps.dealers){
+
+        if (this.props.dealers !== prevProps.dealers) {
             this.setState({
                 dealers: this.props.dealers
             })
@@ -636,18 +636,22 @@ class Dealers extends Component {
                     this.props.isloading ? <CircularProgress /> :
 
                         <div>
-                                {/* <AddDealer ref='addDealer'  /> */}
-                                <Modal
-                                  visible={this.state.visible_DealerModal}
-                                  title="Add Dealer"
-                                  onOk={this.handleOk}
-                                  onCancel={this.handleCancel}
-                                  footer={null}
-                                >  
-                              <AddDealer handleCancel={this.handleCancel}   dealersList={this.state.dealers}/>
-                                      
-                                </Modal>
-                                
+                            {/* <AddDealer ref='addDealer'  /> */}
+                            <Modal
+                                visible={this.state.visible_DealerModal}
+                                title=  {'Add ' + this.state.dealer_type}
+                                onOk={this.handleOk}
+                                onCancel={this.handleCancel}
+                                footer={null}
+                            >
+                                <AddDealer
+                                    handleCancel={this.handleCancel}
+                                    dealersList={this.state.dealers}
+                                    dealer_type={this.state.dealer_type}
+                                />
+
+                            </Modal>
+
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search Dealer"
@@ -667,8 +671,8 @@ class Dealers extends Component {
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
                                 testfunc={this.testfunc}
-                               addDealer= {this.showAddDealer}
-                                //  toLink={"/create-dealer/" + this.state.dealer_type}
+                                addDealer={this.showAddDealer}
+                            //  toLink={"/create-dealer/" + this.state.dealer_type}
 
                             />
                             <DealerList
@@ -700,7 +704,7 @@ class Dealers extends Component {
 
                     </Card> */}
                             <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
-                         
+
 
                         </div>
                 }
@@ -734,7 +738,7 @@ class Dealers extends Component {
                         if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDealers.push(dealer);
                         }
-                        if(isArray(dealer[e.target.name])){
+                        if (isArray(dealer[e.target.name])) {
                             console.log('is it working', e.target.name)
                             if (dealer[e.target.name][0]['total'].includes(e.target.value)) {
                                 demoDealers.push(dealer);

@@ -180,7 +180,7 @@ class AddDealer extends Component {
                     </Form.Item>
 
                     <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
-                        <Button className='submitButton' onClick={this.handleSubmit}  >Add Dealer</Button>
+                        <Button className='submitButton' onClick={this.handleSubmit}  >{'Add '+ this.props.dealer_type}</Button>
                         {/* <Button className='submitButton' onClick={this.showModal}  >Add Dealer </Button> */}
                     </div>
 
