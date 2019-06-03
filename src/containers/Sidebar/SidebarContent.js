@@ -62,7 +62,7 @@ class SidebarContent extends Component {
 
             <ul className="gx-app-nav mt-8">
               <li className="font_14">
-                PIN : <Link to="#">
+                {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN)?'PIN :':null} <Link to="#">
                   {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
                 </Link>
               </li>
