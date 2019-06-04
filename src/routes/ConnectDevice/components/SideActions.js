@@ -193,6 +193,12 @@ class PullAppModal extends Component {
     }
 }
 
+
+
+
+
+
+
 const SelectedApps = (props) => {
     console.log('selected app are', props.selectedApps)
     return (
