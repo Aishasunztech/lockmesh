@@ -388,7 +388,7 @@ class ConnectDevice extends Component {
   componentWillUnmount() {
     this.onBackHandler();
   }
-  refreshDevice = (deviceId) => {
+  refreshDevice = (deviceId, type = false) => {
 
     this.props.startLoading();
 
@@ -396,20 +396,36 @@ class ConnectDevice extends Component {
       deviceId = isBase64(this.props.match.params.device_id);
     }
     // console.log('ref', deviceId)
-    this.props.getDeviceDetails(deviceId);
-    this.props.getAppJobQueue(deviceId);
-    this.props.getDeviceApps(deviceId);
-    this.props.getProfiles(deviceId);
-    this.props.getPolicies(deviceId);
-    this.props.getDeviceHistories(deviceId);
-    this.props.getImeiHistory(deviceId);
-    this.props.reSyncDevice(deviceId);
-    this.props.getDealerApps();
-    this.props.getActivities(deviceId)
-    this.onBackHandler();
-    setTimeout(() => {
-      this.props.endLoading();
-    }, 2000);
+    if (type) {
+      this.props.reSyncDevice(deviceId);
+      setTimeout(() => {
+        this.props.getDeviceDetails(deviceId);
+        this.props.getAppJobQueue(deviceId);
+        this.props.getDeviceApps(deviceId);
+        this.props.getProfiles(deviceId);
+        this.props.getPolicies(deviceId);
+        this.props.getDeviceHistories(deviceId);
+        this.props.getImeiHistory(deviceId);
+        this.props.getDealerApps();
+        this.props.getActivities(deviceId)
+        this.onBackHandler();
+        this.props.endLoading();
+      }, 10000);
+    } else {
+      this.props.getDeviceDetails(deviceId);
+      this.props.getAppJobQueue(deviceId);
+      this.props.getDeviceApps(deviceId);
+      this.props.getProfiles(deviceId);
+      this.props.getPolicies(deviceId);
+      this.props.getDeviceHistories(deviceId);
+      this.props.getImeiHistory(deviceId);
+      this.props.getDealerApps();
+      this.props.getActivities(deviceId)
+      this.onBackHandler();
+      setTimeout(() => {
+        this.props.endLoading();
+      },3000);
+    }
   }
   undoAction = () => {
     let pageName = this.props.pageName;

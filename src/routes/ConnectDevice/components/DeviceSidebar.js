@@ -233,7 +233,7 @@ export default class DeviceSidebar extends Component {
                 title: (
                     <div>
                         <a className="ref-btn" onClick={() => {
-                            this.props.refreshDevice(device_details.device_id)
+                            this.props.refreshDevice(device_details.device_id, true)
                         }}>
                             <Icon type="sync" spin className="loading_icon" />
                             <Icon type="reload" /> Refresh</a>
