@@ -445,7 +445,7 @@ class Customizer extends Component {
                   </Row>
                 </div>
               </Card>
-              <Button type="primary" size="small" className="open_btn">Open</Button>
+              <Button type="primary" size="small" className="open_btn open_btn1">Open</Button>
             </a>
           </div>
         </Col>

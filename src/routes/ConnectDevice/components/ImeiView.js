@@ -206,6 +206,7 @@ export default class ImeiView extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
+                    bodyStyle={{ height: 500, overflow: "overlay" }}
                 >
                     <Row>
                         <Col span={11} md={11} sm={23} xs={23} className="p-16 imei_col_11" >
@@ -272,6 +273,7 @@ export default class ImeiView extends Component {
                                         },
                                     ]}
                                     bordered
+                                    pagination={false}
                                     dataSource={this.renderList(this.state.imei1List, 'IMEI 1')}
                                     scroll={{}}
                                 />
@@ -342,6 +344,7 @@ export default class ImeiView extends Component {
                                         },
                                     ]}
                                     bordered
+                                    pagination={false}
                                     dataSource={this.renderList(this.state.imei2List, 'IMEI 2')}
                                     scroll={{}}
                                 />

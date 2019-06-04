@@ -156,7 +156,7 @@ class Profile extends Component {
                 },
                 {
                     key: 6,
-                    name: <a>Login History :</a>,
+                    name: <a>Login History</a>,
                     value: <Button size="small" type='primary' onClick={() => { this.showLoginHistory() }} >  Open </Button>,
                 }
 
@@ -185,7 +185,7 @@ class Profile extends Component {
                     <Row>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <Card className="manage_sec_pro" style={{ borderRadius: 12 }}>
+                                <Card className="manage_sec_pro height_auto" style={{ borderRadius: 12 }}>
                                     <div className="profile_table">
                                         <Row>
                                             <Col span={24}>
@@ -227,7 +227,7 @@ class Profile extends Component {
 
                                         </div>
                                     </Card>
-                                    <Button type="primary" size="small" className="open_btn">Open</Button>
+                                    <Button type="primary" size="small" className="open_btn open_btn1">Open</Button>
                                 </a>
                             </div>
                             <Modal
@@ -283,6 +283,7 @@ class Profile extends Component {
                     onOk={this.handleOk1}
                     onCancel={this.handleCancelHistory}
                     footer={false}
+                    bodyStyle={{ height: 500, overflow: "overlay" }}
                 >
                     <Fragment>
                         {/* <div className="row">
@@ -337,7 +338,6 @@ class Profile extends Component {
                             ]}
                             bordered
                             dataSource={this.renderList(this.props.loginHistory)}
-                            scroll={{ y: 400 }}
                             pagination={false}
                         />
                     </Fragment>

@@ -28,7 +28,7 @@ class Permissions extends Component {
       showDealersModal: false,
       dealer_ids: [],
       dealerList: [],
-      dealerListForModal:[],
+      dealerListForModal: [],
       permissions: [],
       hideDefaultSelections: false,
       removeSelectedDealersModal: false,
@@ -95,7 +95,7 @@ class Permissions extends Component {
     let permissions = this.state.permissions;
     let selectedRows = this.state.selectedRowKeys;
     // var dList = this.state.dealerList; arfan
-    var dList = this.state.dealerListForModal;    
+    var dList = this.state.dealerListForModal;
     var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
     var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
     var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
@@ -405,12 +405,13 @@ class Permissions extends Component {
                 <Table
                   columns={this.listDealerCols}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
+                  pagination={false}
                 />
               </Col>
           }
         </Row>
         <Modal
-        maskClosable={false}
+          maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Add Dealer to permissions list for this App"
@@ -422,6 +423,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
+          bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <DealerList
             columns={this.addDealerColsInModal}
@@ -436,7 +438,7 @@ class Permissions extends Component {
 
         {/*  remove except selected */}
         <Modal
-        maskClosable={false}
+          maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Remove Dealers from permissions list for this App"
@@ -462,7 +464,7 @@ class Permissions extends Component {
 
         {/*  Add Except selected */}
         <Modal
-        maskClosable={false}
+          maskClosable={false}
           width='665px'
           className="permiss_tabl"
           title="Add Dealers to permissions list for this App"

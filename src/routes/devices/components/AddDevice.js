@@ -84,6 +84,7 @@ export default class AddDevice extends Component {
                     footer={null}
                     className="edit_form"
                     destroyOnClose={true}
+                    bodyStyle={{ height: 500, overflow: "overlay" }}
                 >
                     <AddForm
                         device={this.state.device}

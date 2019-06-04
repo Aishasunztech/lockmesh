@@ -395,25 +395,25 @@ class Permissions extends Component {
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" span={4}>
+          <Col className="gutter-row" span={4} sm={5} xs={5} md={5}>
             <div className="gutter-box"><h2>Permission List</h2> </div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row" span={2} sm={2} xs={2} md={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
           </Col>
-          <Col className="gutter-row" span={3}>
+          <Col className="gutter-row" span={4} sm={4} xs={5} md={4}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row" span={2} sm={2} xs={2} md={2}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealersConfirm() }}>Add All</Button></div>
           </Col>
-          <Col className="gutter-row" span={2}>
+          <Col className="gutter-row" span={3} sm={3} xs={3} md={3}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealersConfirm() }}>Remove All</Button></div>
           </Col>
-          <Col className="gutter-row" span={3}>
+          <Col className="gutter-row" span={3} sm={4} xs={5} md={3}>
             <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
           </Col>
-          <Col className="gutter-row" span={4}>
+          <Col className="gutter-row" span={4} sm={4} xs={5} md={4}>
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
@@ -436,6 +436,7 @@ class Permissions extends Component {
                 <Table
                   columns={this.listDealerCols}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
+                  pagination={false}
                 />
               </Col>
           }
@@ -453,6 +454,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
+          bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <DealerList
             columns={this.addDealerColsInModal}
@@ -505,6 +507,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.addSelectedDealersModal(false)
           }}
+          bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <DealerList
             columns={this.addDealerColsInModal}
@@ -516,7 +519,7 @@ class Permissions extends Component {
           // selectedDealers={[]}
           />
         </Modal>
-      </Fragment >
+      </Fragment>
     )
   }
 }
