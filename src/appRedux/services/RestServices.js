@@ -325,7 +325,9 @@ const RestService = {
 
     updateUserProfile: (formData) => {
         return axios.put(BASE_URL + 'users/updateProfile/' + formData, formData, RestService.getHeader());
-
+    },
+    getLoginHistory: () => {
+        return axios.get(BASE_URL + 'users/login_history', RestService.getHeader());
     },
 
     getDeviceHistory: (device_id = "") => {
@@ -476,7 +478,7 @@ const RestService = {
                     elem.enable = false;
                 }
                 delete elem.device_id;
-                
+
             });
         }
         return axios.post(BASE_URL + 'users/apply_settings/' + device_id, {
