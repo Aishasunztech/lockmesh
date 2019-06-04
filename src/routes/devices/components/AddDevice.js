@@ -83,6 +83,7 @@ export default class AddDevice extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
+                    destroyOnClose={true}
                 >
                     <AddForm
                         device={this.state.device}

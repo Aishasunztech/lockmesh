@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
 import { Input, Button, Icon, Select } from "antd";
