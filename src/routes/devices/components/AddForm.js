@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import AddUser from '../../users/components/AddUser';
 
+import AddSimPermission from './AddSimPermission'
+
 import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
-import { getProfiles } from "../../../appRedux/actions/ConnectDevice";
+import { getPolicies } from "../../../appRedux/actions/ConnectDevice";
 import {
     addUser,
     getUserList
@@ -56,7 +58,7 @@ class AddDevice extends Component {
         this.props.getSimIDs();
         this.props.getChatIDs();
         this.props.getPGPEmails();
-        this.props.getProfiles();
+        this.props.getPolicies();
         this.props.getUserList();
     }
     componentWillReceiveProps(nextProps) {
@@ -103,9 +105,13 @@ class AddDevice extends Component {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
     }
+    handleSimPermissionModal = () => {
+        let handleSubmit = this.props.addSimPermission;
+        this.refs.add_sim_permission.showModal(handleSubmit);
+    }
 
     render() {
-        console.log(this.state.client_id, 'id is', this.state.pgp_email);
+        console.log('id is', this.props.policies);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
@@ -247,7 +253,7 @@ class AddDevice extends Component {
                                         showSearch
                                         placeholder="Select PGP Emails"
                                         optionFilterProp="children"
-                                         onChange={(e) => this.setState({pgp_email: e}) }
+                                        onChange={(e) => this.setState({ pgp_email: e })}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         // defaultValue={this.state.pgp_email}
@@ -276,7 +282,7 @@ class AddDevice extends Component {
                                         showSearch
                                         placeholder="Select Chat ID"
                                         optionFilterProp="children"
-                                        onChange={(value)=> this.setState({chat_id: value})}
+                                        onChange={(value) => this.setState({ chat_id: value })}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -297,7 +303,7 @@ class AddDevice extends Component {
                                     initialValue: this.state.client_id,
 
                                 })(
-                                    <Input value={this.state.client_id} onChange={e=> this.setState({client_id: e.target.value})} />
+                                    <Input value={this.state.client_id} onChange={e => this.setState({ client_id: e.target.value })} />
                                 )}
                             </Form.Item>
 
@@ -310,10 +316,11 @@ class AddDevice extends Component {
                                     initialValue: this.state.sim_id
                                 })(
                                     <Select
+                                        // className="pos_rel"
                                         showSearch
                                         placeholder="Select Sim ID"
                                         optionFilterProp="children"
-                                        onChange={(value)=> this.setState({sim_id: value})}
+                                        onChange={(value) => this.setState({ sim_id: value })}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -324,32 +331,18 @@ class AddDevice extends Component {
                                         })}
                                     </Select>,
                                 )}
+                                {/* <Button
+                                    className="add_sim_permission_btn"
+                                    type="primary"
+                                    onClick={() => this.handleSimPermissionModal()}
+                                >
+                                    Add Permissions
+                                </Button> */}
+
+
                             </Form.Item>
 
-                            {/* <Form.Item
-                    label="Policy "
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 14 }}
-                >
-                    {this.props.form.getFieldDecorator('policy_id', {
-                    initialValue: '',
-                    })(
-                        <Select
-                            showSearch
-                            placeholder="Select Policy"
-                            optionFilterProp="children"
-                            // onChange={handleChange}
-                            // onFocus={handleFocus}
-                            // onBlur={handleBlur}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        >
-                            <Select.Option value="">Select Policy</Select.Option>
-                            {this.props.policies.map((policy,index) =>{
-                                return (<Select.Option key={index} value={policy.id}>{policy.name}</Select.Option>)
-                            })}
-                        </Select>,
-                    )}
-                </Form.Item> */}
+
                             {(this.props.preActive) ? null :
                                 <Form.Item
                                     label="Model"
@@ -362,6 +355,30 @@ class AddDevice extends Component {
                                         <Input />
                                     )}
                                 </Form.Item>} </Fragment> : null}
+                    <Form.Item
+                        label="Policy "
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('policy_id', {
+                            initialValue: '',
+                        })(
+                            <Select
+                                showSearch
+                                placeholder="Select Policy"
+                                optionFilterProp="children"
+                                // onChange={handleChange}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            >
+                                <Select.Option value="">Select Policy</Select.Option>
+                                {this.props.policies.map((policy, index) => {
+                                    return (<Select.Option key={index} value={policy.id}>{policy.policy_name}</Select.Option>)
+                                })}
+                            </Select>,
+                        )}
+                    </Form.Item>
                     <Form.Item
                         label="Start Date "
                         labelCol={{ span: 8 }}
@@ -509,6 +526,7 @@ class AddDevice extends Component {
                     </Form.Item>
                 </Form>
                 <AddUser ref="add_user" />
+                <AddSimPermission ref="add_sim_permission" />
             </div>
         )
 
@@ -525,9 +543,11 @@ function mapDispatchToProps(dispatch) {
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs,
         getPGPEmails: getPGPEmails,
-        getProfiles: getProfiles,
+        // getProfiles: getProfiles,
+        getPolicies: getPolicies,
         addUser: addUser,
-        getUserList: getUserList
+        getUserList: getUserList,
+        addSimPermission: null
     }, dispatch);
 }
 var mapStateToProps = ({ routing, devices, device_details, users }) => {
@@ -537,7 +557,7 @@ var mapStateToProps = ({ routing, devices, device_details, users }) => {
         sim_ids: devices.sim_ids,
         chat_ids: devices.chat_ids,
         pgp_emails: devices.pgp_emails,
-        policies: device_details.profiles,
+        policies: device_details.policies,
         users_list: users.users_list,
         isloading: users.addUserFlag
     };

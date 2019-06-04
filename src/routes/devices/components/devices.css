@@ -270,6 +270,13 @@
     width: 40%;
     padding: 0;
 }
+.add_sim_permission_btn {
+    position: absolute;
+    left: 230px;
+    top: -9px;
+    width: 55%;
+    padding: 0;
+}
 
 .dev_radio_btn {
     width: 35%;
