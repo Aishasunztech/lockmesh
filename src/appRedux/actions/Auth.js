@@ -14,7 +14,8 @@ import {
   BEFORE_COMPONENT_ALLOWED,
   TWO_FACTOR_AUTH,
   VERIFY_CODE,
-  GOTO_LOGIN
+  GOTO_LOGIN,
+  LOGIN_HISTORY
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -35,7 +36,7 @@ export const loginUser = (user) => {
           }
         });
       } else {
-        if(resp.data.two_factor_auth){
+        if (resp.data.two_factor_auth) {
           dispatch({
             type: VERIFY_CODE,
             payload: resp.data
@@ -70,7 +71,7 @@ export const loginUser = (user) => {
 export const verifyCode = (verifyForm) => {
   return (dispatch) => {
     RestService.verifyCode(verifyForm).then((response) => {
-      if(response.data.status){
+      if (response.data.status) {
         let payload = {
           id: response.data.user.id,
           connected_dealer: response.data.user.connected_dealer,
@@ -118,10 +119,10 @@ export const twoFactorAuth = (isEnable) => {
   }
 }
 
-export const goToLogin = ()=>{
+export const goToLogin = () => {
   return (dispatch) => {
     dispatch({
-      type:GOTO_LOGIN
+      type: GOTO_LOGIN
     })
   }
 }
@@ -185,6 +186,31 @@ export const updateUserProfile = (fromData) => {
 
           dispatch({
             type: UPDATE_PROFILE,
+            response: resp.data
+          });
+
+        } else {
+          dispatch({
+            type: INVALID_RESPONSE
+          });
+        }
+      } else {
+        dispatch({
+          type: INVALID_TOKEN
+        });
+      }
+    });
+  }
+};
+export const getLoginHistory = () => {
+  return (dispatch) => {
+    // alert("hello");
+    RestService.getLoginHistory().then((resp) => {
+      if (RestService.checkAuth(resp.data)) {
+        if (resp.data.status === true) {
+
+          dispatch({
+            type: LOGIN_HISTORY,
             response: resp.data
           });
 

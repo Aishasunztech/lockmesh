@@ -34,6 +34,7 @@ export const TWO_FACTOR_AUTH = 'TWO_FACTOR_AUTH';
 export const VERIFY_CODE = 'VERIFY_CODE';
 export const CODE_VERIFIED = 'CODE_VERIFIED';
 export const GOTO_LOGIN = 'GOTO_LOGIN';
+export const LOGIN_HISTORY = 'LOGIN_HISTORY';
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
 export const SUSPEND_DEVICE = 'SUSPEND_DEVICE';

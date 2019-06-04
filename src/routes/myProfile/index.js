@@ -1,16 +1,17 @@
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { updatePassword } from "../../appRedux/actions/Dealers";
-import { updateUserProfile, twoFactorAuth } from "../../appRedux/actions/Auth";
-import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch } from 'antd';
+import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
+import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch, Input } from 'antd';
 import ChangePassword from './components/changePassword';
 import ChangeProfile from './components/change_profile';
 import BASE_URL from '../../constants/Application';
 import Customizer1 from './components/Customizer';
 import styles from './components/profile.css';
+import { componentSearch, getFormattedDate } from '../utils/commonUtils';
 import {
     SDEALER
 } from "../../constants/Constants";
@@ -19,7 +20,10 @@ import {
 
 class Profile extends Component {
 
-    state = { visible: false }
+    state = {
+        visible: false,
+        historyModel: false
+    }
     showModal1 = () => {
         this.setState({
             visible: true,
@@ -46,7 +50,56 @@ class Profile extends Component {
     twoFactorAuth = (e) => {
         this.props.twoFactorAuth(e);
     }
+
+    showLoginHistory = () => {
+        this.setState({
+            historyModel: true
+        })
+    }
+
+    handleCancelHistory = () => {
+        this.setState({
+            historyModel: false
+        })
+    }
+    componentDidMount = () => {
+        this.props.getLoginHistory()
+    }
+    renderList = (history) => {
+        let data = history.map((data, index) => {
+            if (data.ip_address.substr(0, 7) == "::ffff:") {
+                data.ip_address = data.ip_address.substr(7)
+            }
+            if (index == 0) {
+                return {
+                    key: index,
+                    tableIndex: index + 1,
+                    imei: data.ip_address + ' (CURRENT)',
+                    changed_time: getFormattedDate(data.created_at)
+                }
+            } else if (index == 1) {
+                return {
+                    key: index,
+                    tableIndex: index + 1,
+                    imei: data.ip_address + " (LAST)",
+                    changed_time: getFormattedDate(data.created_at)
+                }
+            } else {
+                return {
+                    key: index,
+                    tableIndex: index + 1,
+                    imei: data.ip_address,
+                    changed_time: getFormattedDate(data.created_at)
+                }
+
+            }
+        })
+
+        return data;
+    }
+
     render() {
+        console.log(this.props.loginHistory);
         let columnData = null
         let commonColumns = [
             {
@@ -72,7 +125,7 @@ class Profile extends Component {
                 key: 5,
                 name: <a>Devices</a>,
                 value: this.props.profile.type == 'admin' ? 'All' : this.props.profile.connected_devices,
-            }
+            },
         ]
 
         if (this.props.profile.type === SDEALER) {
@@ -100,7 +153,13 @@ class Profile extends Component {
                     key: 7,
                     name: <a>Token</a>,
                     value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
+                },
+                {
+                    key: 6,
+                    name: <a>Login History :</a>,
+                    value: <Button size="small" type='primary' onClick={() => { this.showLoginHistory() }} >  Open </Button>,
                 }
+
             ];
         }
         // console.log('datasource', dataSource);
@@ -217,6 +276,74 @@ class Profile extends Component {
                     updateUserProfile={this.props.updateUserProfile}
                 />
 
+                <Modal
+                    maskClosable={false}
+                    title={<div>Login History </div>}
+                    visible={this.state.historyModel}
+                    onOk={this.handleOk1}
+                    onCancel={this.handleCancelHistory}
+                    footer={false}
+                >
+                    <Fragment>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <Input.Search
+                                    name="imei1"
+                                    key="imei1"
+                                    id="imei1"
+                                    className="search_heading1"
+                                    onKeyUp={
+                                        (e) => {
+                                            this.handleComponentSearch(e, 'imei1')
+                                        }
+                                    }
+                                    autoComplete="new-password"
+                                    placeholder="Search"
+                                />
+                            </div>
+                        </div>
+                        <Table
+                            columns={[
+                                {
+                                    title: 'No.',
+                                    align: "center",
+                                    dataIndex: 'tableIndex',
+                                    key: "tableIndex",
+                                    className: '',
+                                    sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
+                                    sortDirections: ['ascend', 'descend'],
+
+                                },
+                                {
+                                    title: "IP Address",
+                                    align: "center",
+                                    dataIndex: 'imei',
+                                    key: "imei",
+                                    className: '',
+                                    sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
+                                    sortDirections: ['ascend', 'descend'],
+
+                                },
+                                {
+                                    title: 'Date',
+                                    align: "center",
+                                    dataIndex: 'changed_time',
+                                    key: "changed_time",
+                                    className: '',
+                                    sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
+                                    sortDirections: ['ascend', 'descend'],
+
+                                },
+                            ]}
+                            bordered
+                            dataSource={this.renderList(this.props.loginHistory)}
+                            scroll={{ y: 400 }}
+                            pagination={false}
+                        />
+                    </Fragment>
+
+                </Modal>
+
             </div>
         )
     }
@@ -225,7 +352,8 @@ class Profile extends Component {
 var matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
         twoFactorAuth: twoFactorAuth,
-        updatePassword, updateUserProfile
+        updatePassword, updateUserProfile,
+        getLoginHistory: getLoginHistory
     }, dispatch);
 }
 
@@ -234,8 +362,8 @@ var mapStateToProps = ({ auth }) => {
     // console.log('ooo', state.auth);
     // console.log(auth.authUser);
     return {
-        profile: auth.authUser
-
+        profile: auth.authUser,
+        loginHistory: auth.loginHistory
     };
 }
 

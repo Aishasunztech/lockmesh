@@ -15,7 +15,8 @@ import {
   TWO_FACTOR_AUTH,
   VERIFY_CODE,
   CODE_VERIFIED,
-  GOTO_LOGIN
+  GOTO_LOGIN,
+  LOGIN_HISTORY
 } from "../../constants/ActionTypes";
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
@@ -48,6 +49,7 @@ const INIT_STATE = {
     two_factor_auth: localStorage.getItem('two_factor_auth') === null ? false : localStorage.getItem('two_factor_auth'),
     verified: false
   },
+  loginHistory: []
 };
 
 
@@ -242,6 +244,13 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         initURL: '/invalid_page'
+      }
+      break;
+    }
+    case LOGIN_HISTORY: {
+      return {
+        ...state,
+        loginHistory: action.response.data
       }
       break;
     }
