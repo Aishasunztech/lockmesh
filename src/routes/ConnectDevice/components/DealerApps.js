@@ -36,11 +36,12 @@ const DealerApps = (props) => {
             key: 'enable'
         },
     ];
-    const renderApps = (apk_list, isSwitchable, selectedApps) => {
-        // console.log(selectedApps);
+    
+    const renderApps = (apk_list, isSwitchable, selectedAppKeys) => {
+        console.log(props.selectedAppKeys);
         return apk_list.map((app) => {
 
-            let isAvailable = (selectedApps.length) ? selectedApps.find(el => (el.apk_id === app.apk_id) ? true : false) : false;
+            let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false: false;
             // let isAvailable = false;
             // console.log('isAvailable', isAvailable);
             return {
@@ -52,25 +53,28 @@ const DealerApps = (props) => {
                 apk: app.apk ? app.apk : 'N/A',
                 apk_name: app.apk_name ? app.apk_name : 'N/A',
                 apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-                guest: ((isSwitchable) ?
+                guest: ((isSwitchable || props.disabledSwitch) ?
                     <Switch
-
+                        defaultChecked={app.guest === true || app.guest == 1 ? true : false}
                         disabled={!isAvailable}
                         size={"small"}
                         onClick={(e) => {
                             props.handleChecked(e, "guest", app.apk_id);
                         }}
                     /> : (app.guest === true) ? 'On' : 'Off'),
-                encrypted: ((isSwitchable) ?
+                encrypted: ((isSwitchable || props.disabledSwitch) ?
                     <Switch
+                    defaultChecked={app.encrypted === true || app.encrypted == 1 ? true : false}
+
                         disabled={!isAvailable}
                         size={"small"}
                         onClick={(e) => {
                             props.handleChecked(e, "encrypted", app.apk_id);
                         }}
                     /> : (app.encrypted === true) ? 'On' : 'Off'),
-                enable: ((isSwitchable) ?
+                enable: ((isSwitchable || props.disabledSwitch) ?
                     <Switch
+                    defaultChecked={app.enable === true || app.enable == 1 ? true : false}
                         disabled={!isAvailable}
                         size={"small"}
                         onClick={(e) => {
@@ -119,7 +123,7 @@ const DealerApps = (props) => {
                 bordered
                 rowSelection={(props.isSwitchable) ? rowSelection : null}
                 columns={columns}
-                dataSource={renderApps(props.apk_list, props.isSwitchable, props.selectedApps)}
+                dataSource={renderApps(props.apk_list, props.isSwitchable, props.selectedAppKeys)}
             />
         </Fragment>
     )

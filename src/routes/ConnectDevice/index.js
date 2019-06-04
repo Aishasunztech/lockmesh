@@ -424,7 +424,7 @@ class ConnectDevice extends Component {
       this.onBackHandler();
       setTimeout(() => {
         this.props.endLoading();
-      },3000);
+      }, 3000);
     }
   }
   undoAction = () => {

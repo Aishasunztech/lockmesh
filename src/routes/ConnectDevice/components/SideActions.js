@@ -117,7 +117,6 @@ const DealerAppModal = (props) => {
             }}
             onCancel={() => { props.showPushAppsModal(false); props.resetSeletedRows() }}
             okText="Push Apps"
-            destroyOnClose={true}
         >
             <DealerApps
                 apk_list={props.apk_list}
@@ -162,7 +161,6 @@ const PullAppModal = (props) => {
             }}
             onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
             okText="Pull Apps"
-            destroyOnClose={true}
         >
             <DealerApps
                 apk_list={props.apk_list}
@@ -193,7 +191,6 @@ const SelectedApps = (props) => {
             }}
             onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
             okText={props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps'}
-            destroyOnClose={true}
         >
             <DealerApps
                 apk_list={props.apk_list}
@@ -401,7 +398,7 @@ class SideActions extends Component {
 
     pushApps = () => {
         if (this.state.selectedApps.length) {
-            // console.log("save pushed apps", this.state.selectedApps);
+            console.log("save pushed apps", this.state.selectedApps);
         } else {
 
         }
