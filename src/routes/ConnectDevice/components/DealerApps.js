@@ -108,6 +108,8 @@ const DealerApps = (props) => {
             },
         ];
     }
+
+    console.log('apk list is updated', props.apk_list)
     return (
         <Fragment>
             <Table
