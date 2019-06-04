@@ -137,6 +137,7 @@ class DealerAppModal extends Component {
         )
     }
 }
+
 class PullAppModal extends Component {
     // const PullAppModal = (props) => {
 
@@ -193,6 +194,7 @@ class PullAppModal extends Component {
 }
 
 const SelectedApps = (props) => {
+    console.log('selected app are', props.selectedApps)
     return (
         <Modal
             // closable={false}
@@ -215,6 +217,7 @@ const SelectedApps = (props) => {
                 isSwitchable={false}
                 selectedApps={props.selectedApps}
                 type={props.actionType == PUSH_APPS ? "push" : 'pull'}
+                disabledSwitch={true}
             />
         </Modal>
     )
@@ -263,7 +266,8 @@ class SideActions extends Component {
             activities: this.props.activities,
             changedCtrls: this.props.changedCtrls,
             isSaveProfileBtn: this.props.isSaveProfileBtn,
-            apk_list: this.props.apk_list
+            apk_list: this.props.apk_list,
+            // selectedApps: this.props.apk_list
         });
 
 
@@ -282,7 +286,8 @@ class SideActions extends Component {
                 pullAppsModal: nextProps.pullAppsModal,
                 activities: nextProps.activities,
                 isSaveProfileBtn: nextProps.isSaveProfileBtn,
-                apk_list: nextProps.apk_list
+                apk_list: nextProps.apk_list,
+                // selectedApps: nextProps.apk_list
             })
         }
         if (nextProps.applyPolicyConfirm) {
@@ -306,13 +311,25 @@ class SideActions extends Component {
         // alert('hello');
         this.setState({
             pwdConfirmModal: visible,
-            actionType: actionType
+            actionType: actionType,
+            selectedApps: JSON.parse(JSON.stringify(this.state.apk_list)),
         })
     }
 
     showSelectedAppsModal = (visible) => {
+        let dumyList = [];
+        if (this.state.selectedAppKeys.length && this.state.selectedApps.length) {
+
+            for (let app of this.state.selectedApps) {
+                console.log(this.state.selectedAppKeys.includes(app.apk_id), 'checking')
+                if (this.state.selectedAppKeys.includes(app.apk_id)) {
+                    dumyList.push(app)
+                }
+            }
+        }
         this.setState({
-            selectedAppsModal: visible
+            selectedAppsModal: visible,
+            selectedApps: dumyList
         })
     }
 
@@ -400,9 +417,16 @@ class SideActions extends Component {
 
 
     showPushAppsModal = (visible) => {
-        this.setState({
-            pushAppsModal: visible,
-        })
+        if (visible) {
+            this.setState({
+                pushAppsModal: visible,
+                selectedApps: this.state.apk_list
+            })
+        } else {
+            this.setState({
+                pushAppsModal: visible
+            })
+        }
     }
 
     showPullAppsModal = (visible) => {
@@ -417,43 +441,53 @@ class SideActions extends Component {
         })
     }
 
+
     pushApps = () => {
+
         if (this.state.selectedApps.length) {
             // console.log("save pushed apps", this.state.selectedApps);
         } else {
-
         }
     }
+
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
         let selectedApps = selectedRows;
 
-        selectedApps.map(el => {
-            if (typeof (el.guest) !== Boolean) {
-                el.guest = false
-            }
 
-            if (typeof (el.encrypted) !== Boolean) {
-                el.encrypted = false
-            }
+        // selectedApps.map(el => {
+        //     if (typeof (el.guest) !== Boolean) {
+        //         el.guest = false
+        //     }
 
-            if (typeof (el.enable) !== Boolean) {
-                el.enable = false
-            }
-        });
+        //     if (typeof (el.encrypted) !== Boolean) {
+        //         el.encrypted = false
+        //     }
+
+        //     if (typeof (el.enable) !== Boolean) {
+        //         el.enable = false
+        //     }
+        // });
+
+
         this.setState({
-            selectedApps: selectedApps,
+            // selectedApps: selectedApps,
             selectedAppKeys: selectedRowKeys
         })
+
     }
+
     handleChecked = (e, key, app_id) => {
-        // console.log("handlechecked", e, key, app_id);
+        console.log("handlechecked", e, key, app_id);
         this.state.selectedApps.map((el) => {
             if (el.apk_id === app_id) {
                 el[key] = e;
             }
         })
+
+        console.log('sate of selected app ', this.state.selectedApps)
     }
+
     handleFlag(flagged) {
         if (flagged == 'Unflag') {
             showConfirm(this.props.device, this.props.unflagged, this, "Do you really want to unflag the device ", 'flagged')
@@ -461,6 +495,7 @@ class SideActions extends Component {
             this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
         }
     }
+
 
     applyHistory = (historyId, name = '') => {
         const historyType = this.state.historyType;
@@ -477,19 +512,21 @@ class SideActions extends Component {
                 policyName: name,
                 historyModal: false
             })
-
         }
     }
 
+
     applyPushApps = () => {
         this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
-        this.setState({ selectedApps: [] })
+        this.setState({ selectedApps: [], selectedAppKeys: [], })
     }
+
 
     applyPullApps = () => {
         this.props.applyPullApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
-        this.setState({ selectedApps: [] })
+        this.setState({ selectedApps: [], selectedAppKeys: [], })
     }
+
     resetSeletedRows = () => {
         // console.log('table ref')
         this.setState({
@@ -499,7 +536,7 @@ class SideActions extends Component {
     }
 
     render() {
-        // console.log(this.state.historyType,'history', this.props.policies)
+        console.log(this.state.apk_list, 'list apk')
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'Flag';

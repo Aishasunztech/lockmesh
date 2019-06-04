@@ -36,11 +36,12 @@ const DealerApps = (props) => {
             key: 'enable'
         },
     ];
-    const renderApps = (apk_list, isSwitchable, selectedApps) => {
-        // console.log(selectedApps);
+    
+    const renderApps = (apk_list, isSwitchable, selectedAppKeys) => {
+        console.log(props.selectedAppKeys);
         return apk_list.map((app) => {
 
-            let isAvailable = (selectedApps.length) ? selectedApps.find(el => (el.apk_id === app.apk_id) ? true : false) : false;
+            let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false: false;
             // let isAvailable = false;
             // console.log('isAvailable', isAvailable);
             return {
@@ -119,7 +120,7 @@ const DealerApps = (props) => {
                 bordered
                 rowSelection={(props.isSwitchable) ? rowSelection : null}
                 columns={columns}
-                dataSource={renderApps(props.apk_list, props.isSwitchable, props.selectedApps)}
+                dataSource={renderApps(props.apk_list, props.isSwitchable, props.selectedAppKeys)}
             />
         </Fragment>
     )
