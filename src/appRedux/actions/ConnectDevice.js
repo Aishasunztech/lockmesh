@@ -356,7 +356,7 @@ export function loadDeviceProfile(app_list) {
     };
 }
 
-export function applySetting(app_list, passwords, extensions, controls, device_id, usr_acc_id) {
+export function applySetting(app_list, passwords, extensions, controls, device_id, usr_acc_id, type = 'setting', name = '') {
 
     return (dispatch) => {
         let device_setting = {
@@ -368,7 +368,9 @@ export function applySetting(app_list, passwords, extensions, controls, device_i
                 duress_password: (passwords.duressPwd === '') ? null : passwords.duressPwd
             },
             controls: controls,
-            subExtensions: extensions
+            subExtensions: extensions,
+            type: type,
+            name: name
         }
         // console.log("hello setting", device_setting);
 
@@ -381,7 +383,8 @@ export function applySetting(app_list, passwords, extensions, controls, device_i
                         payload: {
                             showMessage: true,
                             messageType: 'success',
-                            messageText: response.data.msg
+                            messageText: response.data.msg,
+                            type: type
                         }
                     })
                     dispatch({
@@ -662,6 +665,7 @@ export function hanldeProfileInput(profileType, profileValue) {
 export function saveProfile(app_list, passwords = null, profileName, usr_acc_id, controls, extensions) {
     return (dispatch) => {
         let pwd = {};
+        // console.log(passwords);
         if (passwords != null) {
             pwd = {
                 admin_password: (passwords.adminPwd === '') ? null : passwords.adminPwd,

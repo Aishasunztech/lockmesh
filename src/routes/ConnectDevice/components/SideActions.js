@@ -35,7 +35,8 @@ import {
     writeImei,
     getActivities,
     hidePolicyConfirm,
-    applyPolicy
+    applyPolicy,
+    applySetting
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -339,7 +340,9 @@ class SideActions extends Component {
     }
 
     onInputChange = (e) => {
-        this.props.hanldeProfileInput(this.state.saveProfileType, e.target.value);
+        this.setState({
+            profileName: e.target.value
+        })
 
     }
     saveProfile = () => {
@@ -498,15 +501,14 @@ class SideActions extends Component {
     }
 
 
-    applyHistory = (historyId, name = '') => {
+    applyHistory = (historyId, name = '', history) => {
         const historyType = this.state.historyType;
         if (historyType === 'history') {
 
         } else if (historyType === "profile") {
-
+            showConfirmProfile(this, name, history)
         } else if (historyType === POLICY) {
 
-            console.log(name);
             this.showPwdConfirmModal(true, POLICY)
             this.setState({
                 policyId: historyId,
@@ -564,7 +566,7 @@ class SideActions extends Component {
                                 </Button>
 
                                 <Button
-                                    disabled
+                                    // disabled
                                     type="primary"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showHistoryModal(true, "profile")}
@@ -599,6 +601,7 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
+                                    disabled={this.props.authUser.type == ADMIN ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
@@ -608,10 +611,17 @@ class SideActions extends Component {
 
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
                                     <Button type="primary " style={{ width: "100%", marginBottom: 15 }}
-                                        disabled={this.state.isSaveProfileBtn ? false : true}
+                                        // disabled={this.state.isSaveProfileBtn ? false : true}
                                         onClick={() => {
-                                            // this.showSaveProfileModal(true, 'profile') 
-                                            this.setState({ showChangesModal: true })
+                                            // if (this.state.isSaveProfileBtn) {
+                                            this.showSaveProfileModal(true, 'profile')
+                                            // }
+                                            // else {
+                                            //     Modal.warning({
+                                            //         title: "Please Change some setting to save Profile"
+                                            //     })
+                                            // }
+                                            // this.setState({ showChangesModal: true })
                                         }} >
                                         <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
                                         </Button>
@@ -756,13 +766,13 @@ class SideActions extends Component {
 
                     visible={this.state.saveProfileModal}
                     onOk={() => {
+                        this.setState({ profileName: '' })
                         this.saveProfile();
                     }}
-                    onCancel={() => this.showSaveProfileModal(false)}
+                    onCancel={() => { this.setState({ profileName: '' }); this.showSaveProfileModal(false) }}
                     okText='Save'
-
                 >
-                    <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
+                    <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
 
                 <DealerAppModal
@@ -851,7 +861,7 @@ class SideActions extends Component {
                     device={this.props.device}
 
                 />
-            </div>
+            </div >
         )
     }
     handleSuspendDevice = (device, _this) => {
@@ -882,6 +892,7 @@ function mapDispatchToProps(dispatch) {
         getActivities: getActivities,
         hidePolicyConfirm: hidePolicyConfirm,
         applyPolicy: applyPolicy,
+        applySetting: applySetting,
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
@@ -957,6 +968,18 @@ function showConfirmPolcy(_this) {
         },
         onCancel() {
             _this.props.hidePolicyConfirm()
+        },
+    });
+}
+function showConfirmProfile(_this, name, profile) {
+    confirm({
+        title: "Do you want to apply " + name + " profile on device?",
+        onOk() {
+            _this.props.applySetting(profile.app_list, profile.passwords, profile.secure_apps, profile.controls, _this.props.device.device_id, _this.props.device.id, 'profile', name)
+            _this.props.refreshDevice(_this.props.device.device_id, true)
+            _this.props.showHistoryModal(false);
+        },
+        onCancel() {
         },
     });
 }
