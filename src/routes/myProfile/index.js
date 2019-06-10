@@ -99,7 +99,7 @@ class Profile extends Component {
     }
 
     render() {
-        console.log(this.props.loginHistory);
+        // console.log(this.props.loginHistory);
         let columnData = null
         let commonColumns = [
             {
@@ -286,7 +286,7 @@ class Profile extends Component {
                     bodyStyle={{ height: 500, overflow: "overlay" }}
                 >
                     <Fragment>
-                        <div className="row">
+                        {/* <div className="row">
                             <div className="col-md-12">
                                 <Input.Search
                                     name="imei1"
@@ -302,7 +302,7 @@ class Profile extends Component {
                                     placeholder="Search"
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         <Table
                             columns={[
                                 {
