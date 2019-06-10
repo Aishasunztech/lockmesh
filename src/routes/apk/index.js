@@ -168,7 +168,7 @@ class Apk extends React.Component {
 
                 values.map((value) => {
                     // console.log(APK_PERMISSION, value, "columns", column);
-                    if ((value === APK_PERMISSION && column.dataIndex == 'permission') ||(value === APK_SHOW_ON_DEVICE && column.dataIndex == 'apk_status')) {
+                    if ((value === APK_PERMISSION && column.dataIndex == 'permission') || (value === APK_SHOW_ON_DEVICE && column.dataIndex == 'apk_status')) {
                         // console.log('......... ......', column.title)
                         if (column.title.props.children[0] === value) {
                             dumydata[index].className = '';
@@ -239,8 +239,47 @@ class Apk extends React.Component {
             alert("hello");
         }
     }
+
+
+
     handleChange = (value) => {
-        // alert(value);
+
+        switch (value) {
+            case 'active':
+                this.setState({
+                    apk_list: this.filterList('On', this.props.apk_list),
+                    column: this.columns,
+     
+                })
+
+                break;
+            case 'disabled':
+                this.setState({
+                    apk_list: this.filterList('Off', this.props.apk_list),
+                    column: this.columns,
+          
+                })
+                break;
+
+                default:
+                    this.setState({
+                        apk_list: this.props.apk_list,
+                        column: this.columns,
+                     
+                    })
+                break;
+        }
+    }
+    
+    filterList = (type, dealers) => {
+        let dumyDealers = [];
+        dealers.filter(function (apk) {
+            let dealerStatus = apk.apk_status ;
+            if (dealerStatus === type) {
+                dumyDealers.push(apk);
+            }
+        });
+        return dumyDealers;
     }
 
 
@@ -264,6 +303,7 @@ class Apk extends React.Component {
         // this.props.getApkList();
         // this.props.getDropdown('apk');
     }
+
     handleFilterOptions = () => {
         return (
             <Select
