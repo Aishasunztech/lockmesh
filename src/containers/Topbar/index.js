@@ -57,7 +57,7 @@ class Topbar extends Component {
                  }}
               />
             </div> : null}
-          <Link to="/" className="gx-d-block gx-d-lg-none gx-pointer">LockMesh</Link>
+          <Link to="/" className="gx-d-block gx-d-lg-none gx-pointer">TitanLocker</Link>
 
           <SearchBox styleName="gx-d-none gx-d-lg-block gx-lt-icon-search-bar-lg"
                      placeholder="Search in app..."

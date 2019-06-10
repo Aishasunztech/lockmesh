@@ -57,7 +57,7 @@ class VerifyAuthCode extends Component {
 
                             </div>
                             <div className="gx-app-logo">
-                                <p className="mb-0" style={{ fontSize: 18 }}><Icon type='lock' /> LockMesh</p>
+                                <p className="mb-0" style={{ fontSize: 18 }}><Icon type='lock' /> TitanLocker</p>
                                 {/* <img alt="example" src={require("assets/images/logo.png")}/> */}
                             </div>
                         </div>
