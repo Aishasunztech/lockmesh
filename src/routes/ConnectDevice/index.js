@@ -390,7 +390,7 @@ class ConnectDevice extends Component {
   componentWillUnmount() {
     this.onBackHandler();
   }
-  refreshDevice = (deviceId, type = false) => {
+  refreshDevice = (deviceId, resync = false) => {
 
     this.props.startLoading();
 
@@ -398,7 +398,7 @@ class ConnectDevice extends Component {
       deviceId = isBase64(this.props.match.params.device_id);
     }
     // console.log('ref', deviceId)
-    if (type) {
+    if (resync) {
       this.props.reSyncDevice(deviceId);
       setTimeout(() => {
         this.props.getDeviceDetails(deviceId);

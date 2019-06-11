@@ -4,6 +4,7 @@ import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
 import { Tabs } from 'antd';
 import EditApk from './editDealer';
+import { ADMIN } from '../../../constants/Constants';
 const TabPane = Tabs.TabPane;
 
 let data = [];
@@ -102,6 +103,11 @@ class DealerList extends Component {
 
                     </Button>
                     <Button type="primary" style={{ margin: '0 0 0 8px' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >PASSWORD RESET</Button>
+                    {(this.props.user.type === ADMIN) ?
+                        <Button style={{ margin: '0 0 0 8px' }} size='small' onClick={() => { }} >CONNECT</Button>
+                        :
+                        null
+                    }
                 </span>,
                 'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
                 'counter': ++index,
@@ -215,6 +221,7 @@ export default class Tab extends Component {
                     pagination={this.props.pagination}
                     editDealer={this.props.editDealer}
                     updatePassword={this.props.updatePassword}
+                    user={this.props.user}
                 />
             </Fragment>
 

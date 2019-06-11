@@ -1,4 +1,4 @@
- import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
 import { Input, Button, Icon, Select } from "antd";
@@ -64,7 +64,7 @@ import {
     getPagination
 } from '../../appRedux/actions/Common';
 
-import {unflagged} from '../../appRedux/actions/ConnectDevice';
+import { unflagged } from '../../appRedux/actions/ConnectDevice';
 
 import {
     getNotification
@@ -863,12 +863,14 @@ class Devices extends Component {
         if (type == DEVICE_FLAGGED) {
             // console.log('11111 flagged', type)
             devices.filter(function (device) {
-                // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
-                let deviceStatus = device.flagged;
-                // console.log('22222 flagged', device.flagged)
-                if (deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') {
-                    // console.log('3333333 flagged', device.flagged)
-                    dumyDevices.push(device);
+                if (device.finalStatus !== DEVICE_UNLINKED) {
+                    // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
+                    let deviceStatus = device.flagged;
+                    // console.log('22222 flagged', device.flagged)
+                    if (deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') {
+                        // console.log('3333333 flagged', device.flagged)
+                        dumyDevices.push(device);
+                    }
                 }
             });
         } else {
@@ -931,10 +933,10 @@ class Devices extends Component {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
         }
-        else if(value == DEVICE_FLAGGED) {
+        else if (value == DEVICE_FLAGGED) {
             let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
-           
-            if(indexFlagged > -1){
+
+            if (indexFlagged > -1) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
             let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
@@ -987,14 +989,14 @@ class Devices extends Component {
                     copy_status: true
                 })
                 break;
-                case DEVICE_FLAGGED:
-                    this.setState({
-                        devices: this.state.flaggedDevices,
-                        column: this.columns,
-                        tabselect: '10',
-                        copy_status: true
-                    })
-                    break;
+            case DEVICE_FLAGGED:
+                this.setState({
+                    devices: this.state.flaggedDevices,
+                    column: this.columns,
+                    tabselect: '10',
+                    copy_status: true
+                })
+                break;
             case DEVICE_EXPIRED:
                 this.setState({
                     devices: this.state.expireDevices,
@@ -1094,10 +1096,10 @@ class Devices extends Component {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
         }
-        else if(value == '10') {
+        else if (value == '10') {
             let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
-           
-            if(indexFlagged > -1){
+
+            if (indexFlagged > -1) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
             let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
