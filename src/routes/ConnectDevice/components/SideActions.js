@@ -558,7 +558,7 @@ class SideActions extends Component {
                                     placement="bottom"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
-                                    disabled={this.props.authUser.type == ADMIN ? false : true}
+                                    disabled={(this.props.authUser.type == ADMIN || this.props.authUser.type == DEALER) ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
