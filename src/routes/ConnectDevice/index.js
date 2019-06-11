@@ -382,7 +382,8 @@ class ConnectDevice extends Component {
 
     this.onCancel();
     let deviceId = atob(this.props.match.params.device_id);
-    this.props.getDeviceApps(deviceId)
+    this.props.getDeviceApps(deviceId);
+    this.props.getActivities(deviceId);
 
     // console.log('app after push ', app_list)
   }
