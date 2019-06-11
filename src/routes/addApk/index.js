@@ -72,6 +72,11 @@ class AddApk extends Component {
                     'name': values.name,
                     'size': size
                 }
+
+                if(this.props.autoUpdate){
+                    form_data.autoUpdate = true;
+                }
+
                 this.props.addApk(form_data)
                 this.props.hideUploadApkModal();
 

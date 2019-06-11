@@ -246,7 +246,7 @@ class Dealers extends Component {
             loading_DealerModal: false,
             visible_DealerModal: false,
             pagination: 10,
-            tabselect: '1',
+            tabselect: '2',
         };
         this.handleChange = this.handleChange.bind(this);
     }

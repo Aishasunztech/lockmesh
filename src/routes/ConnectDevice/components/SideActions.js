@@ -117,8 +117,8 @@ class DealerAppModal extends Component {
                     </div>}
                 visible={this.props.pushAppsModal}
                 onOk={() => {
-                    if (this.props.selectedApps.length) {
-                        this.props.showPushAppsModal(false);
+                    if (this.props.selectedAppKeys.length) {
+                        // this.props.showPushAppsModal(false);
                         this.props.showSelectedAppsModal(true);
                     }
                 }}
@@ -171,8 +171,8 @@ class PullAppModal extends Component {
                         <br /> Device ID: {this.props.device.device_id} </div>}
                 visible={this.props.pullAppsModal}
                 onOk={() => {
-                    if (this.props.selectedApps.length) {
-                        this.props.showPullAppsModal(false);
+                    if (this.props.selectedAppKeys.length) {
+                        // this.props.showPullAppsModal(false);
                         this.props.showSelectedAppsModal(true);
                     }
                 }}
@@ -207,9 +207,15 @@ const SelectedApps = (props) => {
             onOk={() => {
                 props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
                 props.showSelectedAppsModal(false);
+                props.showPushAppsModal(false)
+                props.showPullAppsModal(false)
                 props.resetSeletedRows()
             }}
-            onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
+            // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
+            onCancel={() => { props.actionType == PUSH_APPS ?  props.showPushAppsModal(true) : props.showPullAppsModal(true);
+                props.showSelectedAppsModal(false);
+             }}
+            cancelText='Back'
             okText={props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps'}
             destroyOnClose={true}
         >
@@ -246,6 +252,7 @@ class SideActions extends Component {
             disabled: false,
             actionType: PUSH_APPS,
             selectedApps: [],
+            selectedApps2: [],
             activities: [],
             apk_list: [],
             policyId: '',
@@ -330,7 +337,7 @@ class SideActions extends Component {
         }
         this.setState({
             selectedAppsModal: visible,
-            selectedApps: dumyList
+            selectedApps2: dumyList
         })
     }
 
@@ -418,6 +425,7 @@ class SideActions extends Component {
 
 
     showPushAppsModal = (visible) => {
+        console.log('is callrd')
         if (visible) {
             this.setState({
                 pushAppsModal: visible,
@@ -470,7 +478,6 @@ class SideActions extends Component {
         //     }
         // });
 
-
         this.setState({
             // selectedApps: selectedApps,
             selectedAppKeys: selectedRowKeys
@@ -518,14 +525,16 @@ class SideActions extends Component {
 
 
     applyPushApps = () => {
-        this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+        this.props.applyPushApps(this.state.selectedApps2, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
+        this.props.getActivities(this.props.device_id)
     }
 
 
     applyPullApps = () => {
-        this.props.applyPullApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+        this.props.applyPullApps(this.state.selectedApps2, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
+        this.props.getActivities(this.props.device_id)
     }
 
     resetSeletedRows = () => {
@@ -533,6 +542,7 @@ class SideActions extends Component {
         this.setState({
             selectedAppKeys: [],
             selectedApps: [],
+            apk_list: this.props.apk_list
         })
     }
 
@@ -805,11 +815,13 @@ class SideActions extends Component {
                     selectedAppsModal={this.state.selectedAppsModal}
                     showSelectedAppsModal={this.showSelectedAppsModal}
                     applyPushApps={this.applyPushApps}
-                    apk_list={this.state.selectedApps}
+                    apk_list={this.state.selectedApps2}
                     selectedApps={this.state.selectedApps}
                     resetSeletedRows={this.resetSeletedRows}
                     applyPullApps={this.applyPullApps}
                     actionType={this.state.actionType}
+                    showPushAppsModal={this.props.showPushAppsModal}
+                    showPullAppsModal={this.props.showPullAppsModal}
                     device={this.props.device}
                 />
 

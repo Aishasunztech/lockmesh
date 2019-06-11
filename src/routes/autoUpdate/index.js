@@ -120,6 +120,8 @@ class AutoUpdate extends React.Component {
         this.confirm({
             title: 'Are you sure, you want to delete the Apk ?',
             content: '',
+            okText: 'Yes',
+            cancelText: 'No',
             onOk: () => {
                 this.props.deleteApk(appId);
                 return new Promise((resolve, reject) => {
@@ -364,7 +366,7 @@ class AutoUpdate extends React.Component {
                                     footer={null}
                                 >
                                     <AddApk
-
+                                        autoUpdate={true}
                                         hideUploadApkModal={this.hideUploadApkModal}
                                         ref='uploadApk'
                                     />
