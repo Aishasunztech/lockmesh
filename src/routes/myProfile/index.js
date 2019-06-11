@@ -282,6 +282,7 @@ class Profile extends Component {
                     visible={this.state.historyModel}
                     onOk={this.handleOk1}
                     onCancel={this.handleCancelHistory}
+                    className="login_history"
                     footer={false}
                     bodyStyle={{ height: 500, overflow: "overlay" }}
                 >
