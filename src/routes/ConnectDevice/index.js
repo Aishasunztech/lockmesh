@@ -373,7 +373,8 @@ class ConnectDevice extends Component {
         duressPwd: this.props.duressPwd,
       },
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      this.state.controls.controls,
+      // this.state.controls.controls,
+      this.state.changedCtrls,
       this.state.device_id,
       this.props.user_acc_id,
       null, null,
@@ -381,7 +382,8 @@ class ConnectDevice extends Component {
 
     this.onCancel();
     let deviceId = atob(this.props.match.params.device_id);
-    this.props.getDeviceApps(deviceId)
+    this.props.getDeviceApps(deviceId);
+    this.props.getActivities(deviceId);
 
     // console.log('app after push ', app_list)
   }

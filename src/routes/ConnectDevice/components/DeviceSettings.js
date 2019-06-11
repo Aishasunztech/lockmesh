@@ -336,20 +336,23 @@ export default class TableHistory extends Component {
                                     />
 
                                 </div> : false : false
-                        : this.props.showChangedControls == undefined ? <div>
-                            <Divider> {SYSTEM_PERMISSION}</Divider>
-                            <Table
-                                style={{ margin: 0, padding: 0 }}
-                                size='default'
-                                bordered={false}
-                                columns={this.controlColumns}
-                                align='center'
-                                dataSource={this.cotrolsValues()}
-                                pagination={false}
+                        : this.props.showChangedControls == undefined ?
+                            Object.entries(this.state.controls).length > 0 ?
+                                Object.entries(this.state.controls.controls).length > 0 ?
+                                    <div>
+                                        <Divider> {SYSTEM_PERMISSION}</Divider>
+                                        <Table
+                                            style={{ margin: 0, padding: 0 }}
+                                            size='default'
+                                            bordered={false}
+                                            columns={this.controlColumns}
+                                            align='center'
+                                            dataSource={this.cotrolsValues()}
+                                            pagination={false}
 
-                            />
+                                        />
 
-                        </div> : false
+                                    </div> : false : false : false
                 }
                 {(this.props.type === 'profile') ?
 

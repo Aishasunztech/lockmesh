@@ -217,6 +217,8 @@ export default class ImeiView extends Component {
                                 type='IMEI1'
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
+                                getActivities={this.props.getActivities}
+
                             />
                             <Fragment>
                                 <div className="row">
@@ -288,6 +290,7 @@ export default class ImeiView extends Component {
                                 type='IMEI2'
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
+                                getActivities={this.props.getActivities}
                             />
                             <Fragment>
 

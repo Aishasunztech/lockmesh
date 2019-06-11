@@ -36,7 +36,8 @@ import {
     getActivities,
     hidePolicyConfirm,
     applyPolicy,
-    applySetting
+    applySetting,
+    getProfiles
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -118,8 +119,8 @@ class DealerAppModal extends Component {
                     </div>}
                 visible={this.props.pushAppsModal}
                 onOk={() => {
-                    if (this.props.selectedApps.length) {
-                        this.props.showPushAppsModal(false);
+                    if (this.props.selectedAppKeys.length) {
+                        // this.props.showPushAppsModal(false);
                         this.props.showSelectedAppsModal(true);
                     }
                 }}
@@ -172,8 +173,8 @@ class PullAppModal extends Component {
                         <br /> Device ID: {this.props.device.device_id} </div>}
                 visible={this.props.pullAppsModal}
                 onOk={() => {
-                    if (this.props.selectedApps.length) {
-                        this.props.showPullAppsModal(false);
+                    if (this.props.selectedAppKeys.length) {
+                        // this.props.showPullAppsModal(false);
                         this.props.showSelectedAppsModal(true);
                     }
                 }}
@@ -208,9 +209,16 @@ const SelectedApps = (props) => {
             onOk={() => {
                 props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
                 props.showSelectedAppsModal(false);
+                props.showPushAppsModal(false)
+                props.showPullAppsModal(false)
                 props.resetSeletedRows()
             }}
-            onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
+            // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
+            onCancel={() => {
+                props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
+                props.showSelectedAppsModal(false);
+            }}
+            cancelText='Back'
             okText={props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps'}
             destroyOnClose={true}
         >
@@ -247,6 +255,7 @@ class SideActions extends Component {
             disabled: false,
             actionType: PUSH_APPS,
             selectedApps: [],
+            selectedApps2: [],
             activities: [],
             apk_list: [],
             policyId: '',
@@ -323,7 +332,7 @@ class SideActions extends Component {
         if (this.state.selectedAppKeys.length && this.state.selectedApps.length) {
 
             for (let app of this.state.selectedApps) {
-                console.log(this.state.selectedAppKeys.includes(app.apk_id), 'checking')
+                // console.log(this.state.selectedAppKeys.includes(app.apk_id), 'checking')
                 if (this.state.selectedAppKeys.includes(app.apk_id)) {
                     dumyList.push(app)
                 }
@@ -331,7 +340,7 @@ class SideActions extends Component {
         }
         this.setState({
             selectedAppsModal: visible,
-            selectedApps: dumyList
+            selectedApps2: dumyList
         })
     }
 
@@ -363,7 +372,8 @@ class SideActions extends Component {
                     duressPwd: this.props.duressPwd,
                 }, this.state.saveProfileType, this.state.policyName, this.props.usr_acc_id);
         }
-        this.showSaveProfileModal(false)
+        this.showSaveProfileModal(false);
+        this.props.getProfiles(this.props.device.device_id)
     }
     transferDeviceProfile = (device_id) => {
         let _this = this;
@@ -421,6 +431,7 @@ class SideActions extends Component {
 
 
     showPushAppsModal = (visible) => {
+        console.log('is callrd')
         if (visible) {
             this.setState({
                 pushAppsModal: visible,
@@ -473,7 +484,6 @@ class SideActions extends Component {
         //     }
         // });
 
-
         this.setState({
             // selectedApps: selectedApps,
             selectedAppKeys: selectedRowKeys
@@ -520,14 +530,16 @@ class SideActions extends Component {
 
 
     applyPushApps = () => {
-        this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+        this.props.applyPushApps(this.state.selectedApps2, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
+        this.props.getActivities(this.props.device_id)
     }
 
 
     applyPullApps = () => {
-        this.props.applyPullApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+        this.props.applyPullApps(this.state.selectedApps2, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
+        this.props.getActivities(this.props.device_id)
     }
 
     resetSeletedRows = () => {
@@ -535,11 +547,12 @@ class SideActions extends Component {
         this.setState({
             selectedAppKeys: [],
             selectedApps: [],
+            apk_list: this.props.apk_list
         })
     }
 
     render() {
-        console.log(this.state.apk_list, 'list apk')
+        // console.log(this.state.apk_list, 'list apk')
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'Flag';
@@ -815,11 +828,13 @@ class SideActions extends Component {
                     selectedAppsModal={this.state.selectedAppsModal}
                     showSelectedAppsModal={this.showSelectedAppsModal}
                     applyPushApps={this.applyPushApps}
-                    apk_list={this.state.selectedApps}
+                    apk_list={this.state.selectedApps2}
                     selectedApps={this.state.selectedApps}
                     resetSeletedRows={this.resetSeletedRows}
                     applyPullApps={this.applyPullApps}
                     actionType={this.state.actionType}
+                    showPushAppsModal={this.props.showPushAppsModal}
+                    showPullAppsModal={this.props.showPullAppsModal}
                     device={this.props.device}
                 />
 
@@ -853,6 +868,7 @@ class SideActions extends Component {
                     device={this.props.device}
                     imei_list={this.props.imei_list}
                     writeImei={this.props.writeImei}
+                    getActivities={this.props.getActivities}
                 />
 
                 <Activity
@@ -893,6 +909,7 @@ function mapDispatchToProps(dispatch) {
         hidePolicyConfirm: hidePolicyConfirm,
         applyPolicy: applyPolicy,
         applySetting: applySetting,
+        getProfiles: getProfiles
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
