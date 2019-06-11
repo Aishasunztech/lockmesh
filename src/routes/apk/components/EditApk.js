@@ -104,6 +104,7 @@ class EditApkForm extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
+        // console.log(this.props.app.apk_id);
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 form_data = {
@@ -116,7 +117,6 @@ class EditApkForm extends Component {
                     'packageName': packageName,
                     'details': details
                 }
-                // console.log(form_data);
                 this.props.editApk(form_data);
                 this.props.getApkList();
                 this.props.handleCancel();
@@ -153,8 +153,8 @@ class EditApkForm extends Component {
         if (/[^A-Za-z. \d]/.test(value)) {
             callback('Please insert a valid name.');
         } else {
-
-            let response = await RestService.checkApkName(value).then((response) => {
+            // console.log(value);
+            let response = await RestService.checkApkName(value, this.props.app.apk_id).then((response) => {
                 if (RestService.checkAuth(response.data)) {
                     if (response.data.status) {
                         return true
