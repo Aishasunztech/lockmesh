@@ -713,7 +713,7 @@ class SideActions extends Component {
                     </Card>
                 </div>
                 <Modal
-                    title={<div>{this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
+                    title={<div>{(this.state.historyType == 'profile') ? "Load Profile" : this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}
@@ -773,6 +773,7 @@ class SideActions extends Component {
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
+                    title={<div> Save Profile <br /> Device ID:  {this.props.device.device_id} </div>}
                     closable={false}
                     maskClosable={false}
                     style={{ top: 20 }}
