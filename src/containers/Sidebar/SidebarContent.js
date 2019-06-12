@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Menu, Icon, Badge } from "antd";
+import { Menu, Icon, Badge, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -68,6 +68,23 @@ class SidebarContent extends Component {
     if (this.props.pathname !== nextprops.pathname) {
       this.props.getNewDevicesList();
     }
+  }
+
+  logout = () => {
+    let _this = this;
+    Modal.confirm({
+      title: 'Are you sure you want to logout?',
+      okText: 'Yes',
+      cancelText: 'No',
+
+      onOk() {
+        _this.props.logout()
+        // console.log('OK');
+      },
+      onCancel() {
+        // console.log('Cancel');
+      },
+    })
   }
 
   render() {
@@ -156,7 +173,10 @@ class SidebarContent extends Component {
               <Menu.Item key="profile">
                 <Link to="/profile"><i className="icon icon-contacts" /> <IntlMessages id="sidebar.profile" /></Link>
               </Menu.Item>
-              <Menu.Item key="logout" onClick={(e) => { this.props.logout() }}>
+              <Menu.Item key="logout" onClick={(e) => {
+                // this.props.logout() 
+                this.logout()
+              }}>
                 {/* <Link to="/logout"> */}
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
