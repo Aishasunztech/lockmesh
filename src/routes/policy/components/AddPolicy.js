@@ -7,7 +7,7 @@ import styles from './policy.css';
 import { bindActionCreators } from "redux";
 import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
 import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy, handleCheckAllAppPolicy } from '../../../appRedux/actions/Policy';
-
+import RestService from '../../../appRedux/services/RestServices'
 const TextArea = Input;
 const TabPane = Tabs.TabPane;
 const columns = [{
@@ -308,8 +308,9 @@ class AddPolicy extends Component {
 
     }
 
-    policyNameChange = (e) => {
-
+    policyNameChange = async (e) => {
+        let response = true
+        let value = e.target.value
         if (/[^A-Za-z \d]/.test(e.target.value)) {
             this.setState({
                 policy_name: e.target.value,
@@ -324,14 +325,31 @@ class AddPolicy extends Component {
                 policy_name_error: "Please Input Policy Name"
             })
         }
-
         else {
-            this.setState({
-                policy_name: e.target.value,
-                isPolicy_name: 'success',
-                disabledCommand: '#' + e.target.value.replace(/ /g, '_'),
-                policy_name_error: ''
-            })
+            response = await RestService.checkPolicyName(e.target.value).then((response) => {
+                if (RestService.checkAuth(response.data)) {
+                    if (response.data.status) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+            });
+            if (response) {
+                this.setState({
+                    policy_name: value,
+                    isPolicy_name: 'success',
+                    disabledCommand: '#' + value.replace(/ /g, '_'),
+                    policy_name_error: ''
+                })
+            } else {
+                this.setState({
+                    isPolicy_name: 'error',
+                    policy_name: value,
+                    policy_name_error: "Policy name already taken please use another name."
+                })
+            }
         }
 
     }
@@ -384,7 +402,7 @@ class AddPolicy extends Component {
 
     render() {
         // console.log(this.state.main_system_control,'console the applist', this.state.appPermissions);
-
+        // const { getFieldDecorator } = this.props.form;
         return (
             <Fragment>
                 <div className="policy_steps card-container">
@@ -509,9 +527,26 @@ class AddPolicy extends Component {
                                 <Form.Item
                                     validateStatus={this.state.isPolicy_name}
                                     help={this.state.policy_name_error}
+                                    style={{ width: '220px' }}
                                 >
                                     <span className="h3">Name</span>
+                                    {/* {getFieldDecorator('policy_name', {
+
+                                        rules: [{
+                                            required: true, message: '',
+                                        },
+                                        {
+                                            validator: this.validateAkpFile,
+                                        }
+                                        ],
+
+                                    })( */}
                                     <Input placeholder="Name" value={this.state.policy_name} onChange={(e) => this.policyNameChange(e)} className="pol_inp" />
+                                    {/* )} */}
+
+
+
+
                                 </Form.Item>
                                 <Form.Item>
                                     <span className="h3">Command</span>
@@ -597,5 +632,7 @@ var mapStateToProps = ({ device_details, policies }) => {
 
     }
 }
+// const WrappedNormalApkForm = Form.create('name', 'add_policy')(AddPolicy);
 
+// export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalApkForm);
 export default connect(mapStateToProps, mapDispatchToProps)(AddPolicy);
