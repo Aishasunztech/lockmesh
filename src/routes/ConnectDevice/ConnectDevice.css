@@ -89,8 +89,9 @@
 
 .deviceImg .ant-table-scroll {
     width: 298px;
-    margin: 23px auto 0;
+    margin: 0;
     border-radius: 0px;
+    padding-top: 23px;
 }
 
 .ant-table-small {

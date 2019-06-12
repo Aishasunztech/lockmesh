@@ -1053,6 +1053,110 @@ class Account extends Component {
                                 </Modal>
                             </div>
                         </Col>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8} >
+                            <Modal
+                                maskClosable={false}
+                                title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! Duplicate Data</span></div>}
+                                visible={this.state.duplicate_modal_show}
+                                onOk={this.InsertNewData}
+                                onCancel={this.handleCancelDuplicate}
+                                okText='Submit'
+                                okButtonProps={{
+                                    disabled: this.state.newData.length ? false : true
+                                }}
+                            >
+
+                                <Table
+                                    bordered
+                                    columns={duplicateModalColumns}
+                                    dataSource={
+                                        this.state.duplicate_ids.map(row => {
+                                            if (this.state.duplicate_data_type == 'chat_id') {
+                                                return {
+                                                    key: row.chat_id,
+                                                    chat_id: row.chat_id
+                                                }
+                                            } else if (this.state.duplicate_data_type == 'pgp_email') {
+                                                return {
+                                                    key: row.pgp_email,
+                                                    pgp_email: row.pgp_email
+                                                }
+                                            }
+                                            else if (this.state.duplicate_data_type == 'sim_id') {
+                                                return {
+                                                    key: row.id,
+                                                    sim_id: row[this.state.duplicate_data_type],
+                                                    start_date: row.start_date,
+                                                    expiry_date: row.expiry_date
+                                                }
+                                            }
+
+                                        })
+                                    }
+
+                                    pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
+
+                                />
+                                <span className="warning_hr">
+                                    <hr />
+                                </span>
+                                <h2>New Data</h2>
+
+                                <Table
+                                    bordered
+                                    columns={duplicateModalColumns}
+                                    dataSource={
+                                        this.state.newData.map(row => {
+                                            if (this.state.duplicate_data_type == 'chat_id') {
+                                                return {
+                                                    key: row.chat_id,
+                                                    chat_id: row.chat_id
+                                                }
+                                            } else if (this.state.duplicate_data_type == 'pgp_email') {
+                                                return {
+                                                    key: row.pgp_email,
+                                                    pgp_email: row.pgp_email
+                                                }
+                                            }
+                                            else if (this.state.duplicate_data_type == 'sim_id') {
+                                                return {
+                                                    key: row.id,
+                                                    sim_id: row[this.state.duplicate_data_type],
+                                                    start_date: row.start_date,
+                                                    expiry_date: row.expiry_date
+                                                }
+                                            }
+
+                                        })
+                                    }
+
+                                    pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
+
+                                />
+                            </Modal>
+                            <div>
+                                <Link to="#" onClick={this.showModal}>
+                                    <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                        <div>
+                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
+                                            <Divider className="mb-0" />
+                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                    <Icon type="database" className="and_icon" />
+                                                </Col>
+                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                    <p style={{}}>
+                                                        This feature allows you to keep a backup of the complete system database for offline safekeeping
+                                                    </p>
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                    </Card>
+                                    <Button type="primary" size="small" className="open_btn">Open</Button>
+                                </Link>
+                            </div>
+                        </Col>
+
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
