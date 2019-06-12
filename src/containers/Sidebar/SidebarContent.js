@@ -99,14 +99,14 @@ class SidebarContent extends Component {
               <br />
 
               <li>
-                <i className="icon" >
+                <i className="icon icon-dollar" >
                   <Icon type="dollar" />
                 </i>
               </li>
               <li><i className="icon icon-chat-new" /></li>
               <li>
                 <a className="head-example">
-                  <Badge count={this.props.devices.length} style={{fontSize:'26px'}}>
+                  <Badge count={this.props.devices.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -177,7 +177,7 @@ class SidebarContent extends Component {
 
 const mapStateToProps = ({ settings, devices, device3 }) => {
   const { navStyle, themeType, locale, pathname } = settings;
-  
+
   return {
     navStyle,
     themeType,
