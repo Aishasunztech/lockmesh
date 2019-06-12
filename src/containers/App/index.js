@@ -29,6 +29,7 @@ import {
   NAV_STYLE_INSIDE_HEADER_HORIZONTAL
 } from "../../constants/ThemeSetting";
 import RestrictedRoute from "./RestrictedRoute";
+import { APP_TITLE } from "../../constants/Application";
 
 class App extends Component {
 
@@ -80,6 +81,10 @@ class App extends Component {
     }
   }
 
+  componentDidMount() {
+    document.title = APP_TITLE + ' - Admin Dashboard'
+  }
+
   render() {
 
     const { match, location, layoutType, navStyle, locale, authUser, initURL } = this.props;
@@ -88,7 +93,7 @@ class App extends Component {
       if (authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null) {
         return (<Redirect to={'/login'} />);
       } else if ((initURL === '' || initURL === '/' || initURL === '/login')) {
-          return (<Redirect to={'/devices'} />);
+        return (<Redirect to={'/devices'} />);
 
       } else {
         return (<Redirect to={initURL} />);

@@ -11,6 +11,7 @@ import {
 import IntlMessages from "util/IntlMessages";
 import CircularProgress from "components/CircularProgress/index";
 import { AUTO_UPDATE_ADMIN } from "../constants/Constants";
+import { APP_TITLE } from "../constants/Application";
 
 const FormItem = Form.Item;
 
@@ -66,7 +67,7 @@ class Login extends React.Component {
               <div className="gx-app-logo-wid">
               </div>
               <div className="gx-app-logo">
-                <p className="mb-0" style={{ fontSize: 18 }}><Icon type='lock' /> LockMesh</p>
+                <p className="mb-0" style={{ fontSize: 18 }}><Icon type='lock' />{APP_TITLE}</p>
               </div>
             </div>
             <div className="gx-app-login-content">
