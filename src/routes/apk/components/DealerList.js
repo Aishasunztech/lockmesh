@@ -22,6 +22,7 @@ const DealerList = (props) => {
                 dataSource={props.dealers}
                 columns={props.columns}
                 hideDefaultSelections={props.hideDefaultSelections}
+                pagination={false}
             />
         </Fragment>
     )

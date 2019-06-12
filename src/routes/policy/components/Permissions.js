@@ -427,6 +427,7 @@ class Permissions extends Component {
                 <Table
                   columns={this.listDealerCols}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
+                  pagination={false}
                 />
               </Col>
           }
@@ -444,6 +445,7 @@ class Permissions extends Component {
           onCancel={() => {
             this.showDealersModal(false)
           }}
+          bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <DealerList
             columns={this.addDealerColsInModal}

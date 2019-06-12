@@ -58,8 +58,7 @@
 }
 
 .profile_table .ant-table-body {
-    max-height: 190px;
-    overflow: overlay;
+    max-height: fit-content;
 }
 
 .diamond_icon {
