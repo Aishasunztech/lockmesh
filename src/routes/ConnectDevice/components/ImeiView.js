@@ -153,12 +153,13 @@ export default class ImeiView extends Component {
         var i = 0;
         let imeiLength = imei_list.length
         let data = (type === 'IMEI 1') ? imei_list.map((device, index) => {
+            let imei = (device.imei1 !== 'null') ? device.imei1 : 'N/A'
             if (device.orignal_imei1 === device.imei1) {
                 i++
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: device.imei1 + ' (ORIGNAL)',
+                    imei: imei + ' (ORIGNAL)',
                     changed_time: getFormattedDate(device.created_at)
                 }
             } else {
@@ -166,19 +167,19 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: (imeiLength === i) ? device.imei1 + ' (CURRENT)' : device.imei1,
+                    imei: (imeiLength === i) ? imei + ' (CURRENT)' : imei,
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
         }) : imei_list.map((device, index) => {
-
+            let imei = (device.imei2 !== 'null') ? device.imei2 : 'N/A'
             // console.log("original", device, "imei2", device.imei2);
             if (device.orignal_imei2 === device.imei2) {
                 i++
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: device.imei2 + ' (ORIGNAL)',
+                    imei: imei + ' (ORIGNAL)',
                     changed_time: getFormattedDate(device.created_at)
                 }
             } else {
@@ -186,7 +187,7 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: (imeiLength === i) ? device.imei2 + ' (CURRENT)' : device.imei2,
+                    imei: (imeiLength === i) ? imei + ' (CURRENT)' : imei,
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
@@ -216,6 +217,8 @@ export default class ImeiView extends Component {
                                 type='IMEI1'
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
+                                getActivities={this.props.getActivities}
+
                             />
                             <Fragment>
                                 <div className="row">
@@ -287,6 +290,7 @@ export default class ImeiView extends Component {
                                 type='IMEI2'
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
+                                getActivities={this.props.getActivities}
                             />
                             <Fragment>
 

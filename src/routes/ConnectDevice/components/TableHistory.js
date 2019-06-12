@@ -31,7 +31,9 @@ const renderList = (histories, type, callback) => {
                     className="mb-0"
                     onClick={() => {
                         if (type === POLICY) {
-                            callback(history.id, history.policy_name);
+                            callback(history.id, history.policy_name, history);
+                        } else {
+                            callback(history.id, history.profile_name, history);
                         }
                         // this.applyProfile(history.app_list)
                     }}
@@ -41,7 +43,8 @@ const renderList = (histories, type, callback) => {
             app_list: history.app_list,
             controls: history.controls,
             secure_apps: history.secure_apps,
-            push_apps: history.push_apps
+            push_apps: history.push_apps,
+            passwords: history.passwords
         })
     })
 }
@@ -76,17 +79,17 @@ class TableHistory extends Component {
         }
     }
 
-    onExpandRow =(expanded, record) => {
+    onExpandRow = (expanded, record) => {
         // console.log(expanded, 'data is expanded', record);
-        if(expanded){
-            if(!this.state.expandedRowKeys.includes(record.key)){
+        if (expanded) {
+            if (!this.state.expandedRowKeys.includes(record.key)) {
                 this.state.expandedRowKeys.push(record.key);
-                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
             }
-        }else if(!expanded){
-            if(this.state.expandedRowKeys.includes(record.key)){
-               let list = this.state.expandedRowKeys.filter(item => item != record.key)
-                this.setState({expandedRowKeys: list})
+        } else if (!expanded) {
+            if (this.state.expandedRowKeys.includes(record.key)) {
+                let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                this.setState({ expandedRowKeys: list })
             }
         }
     }
@@ -98,7 +101,7 @@ class TableHistory extends Component {
         return (
             <Table
                 style={{ margin: 0, padding: 0 }}
-                rowClassName= {(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
+                rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
                 size='default'
                 bordered
                 columns={renderColumn(this.props.type)}
@@ -107,13 +110,14 @@ class TableHistory extends Component {
                 pagination={false}
                 onExpand={this.onExpandRow}
                 expandedRowRender={record => {
-                    // console.log("record", record);
+                    console.log("record", record);
 
                     let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
                     let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
 
                     let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
                     let push_apps = record.push_apps == null || record.push_apps == 'null' ? [] : record.push_apps;
+                    let passwords = record.passwords;
                     // console.log("app_list: ", app_list);
                     // console.log("extensions: ", extensions);
                     // console.log("push_apps: ", push_apps);
@@ -127,10 +131,12 @@ class TableHistory extends Component {
                             // isDuressPwd={this.props.isDuressPwd}
                             // isEncryptedPwd={this.props.isEncryptedPwd}
                             // isGuestPwd={this.props.isGuestPwd}
+                            passwords={passwords}
                             show_all_apps={true}
                             controls={{ controls }}
                             isPushApps={true}
                             push_apps={push_apps}
+                            type={this.props.type}
 
                         />
                     );

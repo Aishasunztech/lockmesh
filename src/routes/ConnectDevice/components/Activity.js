@@ -170,17 +170,17 @@ export default class Activity extends Component {
         });
     }
 
-    onExpandRow =(expanded, record) => {
+    onExpandRow = (expanded, record) => {
         // console.log(expanded, 'data is expanded', record);
-        if(expanded){
-            if(!this.state.expandedRowKeys.includes(record.key)){
+        if (expanded) {
+            if (!this.state.expandedRowKeys.includes(record.key)) {
                 this.state.expandedRowKeys.push(record.key);
-                this.setState({expandedRowKeys: this.state.expandedRowKeys})
+                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
             }
-        }else if(!expanded){
-            if(this.state.expandedRowKeys.includes(record.key)){
-               let list = this.state.expandedRowKeys.filter(item => item != record.key)
-                this.setState({expandedRowKeys: list})
+        } else if (!expanded) {
+            if (this.state.expandedRowKeys.includes(record.key)) {
+                let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                this.setState({ expandedRowKeys: list })
             }
         }
     }
@@ -190,6 +190,7 @@ export default class Activity extends Component {
         let data = this.state.activities;
         if (data.length) {
             return data.map((row, index) => {
+                console.log(row.data);
                 return {
                     key: index,
                     action_name: row.action_name.toUpperCase(),
@@ -201,8 +202,8 @@ export default class Activity extends Component {
     }
     render() {
 
-            // console.log(this.state.activities[16], 'activities to')
-        
+        // console.log(this.state.activities[16], 'activities to')
+
         const { visible, loading } = this.state;
         return (
             <div>
@@ -254,11 +255,11 @@ export default class Activity extends Component {
                             },
                         ]}
                         bordered
-                        rowClassName= {(record, index) => 
+                        rowClassName={(record, index) =>
                             this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''
                             // console.log(this.state.expandedRowKeys,'row is', record.key , 'check' , this.state.expandedRowKeys.includes(record.key))
                             //  this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''
-                            }
+                        }
                         onExpand={this.onExpandRow}
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
@@ -335,9 +336,33 @@ export default class Activity extends Component {
                                     />
                                 )
                             }
+                            else if (record.action_name == 'PROFILE APPLIED') {
+                                return (
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='middle'
+                                        bordered={false}
+                                        columns={[{
+                                            title: 'PROFILE NAME',
+                                            dataIndex: 'profile_name',
+                                            key: '1',
+                                            render: text => <a href="javascript:;">{text}</a>,
+                                        }]}
+                                        align='center'
+                                        dataSource={[
+                                            {
+                                                key: record.data.id,
+                                                profile_name: record.data.profile_name
+                                            }
+                                        ]
+                                        }
+                                        pagination={false}
+                                    />
+                                )
+                            }
 
 
-                            
+
                             else if (record.action_name == 'SETTING CHANGED') {
                                 let controls = {
                                     'controls': JSON.parse(record.data.controls)

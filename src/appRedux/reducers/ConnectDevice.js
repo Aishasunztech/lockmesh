@@ -460,14 +460,14 @@ export default (state = initialState, action) => {
 
         case SHOW_MESSAGE: {
 
-            if(action.payload.showMessage){
+            if (action.payload.showMessage) {
                 if (action.payload.messageType === 'success') {
                     success({
                         title: action.payload.messageText,
                     })
                 } else {
                     error({
-                        title: this.props.messageText,
+                        title: action.payload.messageText,
                     })
                 }
             }
@@ -664,8 +664,8 @@ export default (state = initialState, action) => {
             // if (action.payload.key == 'wifi_status') {
             //     changedControls[action.payload.key] = true;
             // } else {
-                changedControls.controls[action.payload.key] = action.payload.value;
-               state.changedCtrls[action.payload.key] = action.payload.value;
+            changedControls.controls[action.payload.key] = action.payload.value;
+            state.changedCtrls[action.payload.key] = action.payload.value;
             // }
 
             state.controls = JSON.parse(JSON.stringify(changedControls));

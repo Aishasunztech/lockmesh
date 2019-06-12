@@ -66,7 +66,7 @@ export default class TableHistory extends Component {
     }
 
     cotrolsValues = () => {
-        console.log(this.state.controls);
+        // console.log(this.state.controls);
         if (Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object) {
 
             let data = [];
@@ -226,12 +226,13 @@ export default class TableHistory extends Component {
     }
 
     renderData = (datalist) => {
+        // console.log(JSON.parse(datalist));
 
         if (datalist.length > 0) {
             return (
                 datalist.map((item, index) => {
 
-
+                    // console.log(item);
                     return {
                         key: item.app_id,
                         label: item.label == undefined || item.label == 'undefined' ? item.apk_name : item.label,
@@ -262,12 +263,13 @@ export default class TableHistory extends Component {
 
     render() {
         // console.log(this.props.extensions, 'data li s t of exte')
+        // console.log(this.props.passwords);
         return (
             <div>
                 {/* {
                     this.state.applist.length ? */}
                 {
-                    this.props.isPushApps ?
+                    this.props.isPushApps == true && this.props.type !== 'profile' ?
                         <div>
                             <Divider > PUSH APPS </Divider>
                             <Table
@@ -315,57 +317,78 @@ export default class TableHistory extends Component {
                         : false}
                 {
                     this.props.showChangedControls ?
-                    Object.entries(this.state.controls).length > 0 ?
-                    Object.entries(this.state.controls.controls).length > 0 ?
-
-                            <div>
-                                {console.log('if',  Object.entries(this.state.controls.controls).length > 0)}
-                                <Divider> {SYSTEM_PERMISSION}</Divider>
-
-                                <Table
-                                    style={{ margin: 0, padding: 0 }}
-                                    size='default'
-                                    bordered={false}
-                                    columns={this.controlColumns}
-                                    align='center'
-                                    dataSource={this.cotrolsValues()}
-                                    pagination={false}
-
-                                />
-
-                            </div> : false : false
-                        : this.props.showChangedControls == undefined ? 
                         Object.entries(this.state.controls).length > 0 ?
-                        Object.entries(this.state.controls.controls).length > 0 ?
-                        <div>
-                            <Divider> {SYSTEM_PERMISSION}</Divider>
-                            <Table
-                                style={{ margin: 0, padding: 0 }}
-                                size='default'
-                                bordered={false}
-                                columns={this.controlColumns}
-                                align='center'
-                                dataSource={this.cotrolsValues()}
-                                pagination={false}
+                            Object.entries(this.state.controls.controls).length > 0 ?
 
-                            />
+                                <div>
+                                    {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
+                                    <Divider> {SYSTEM_PERMISSION}</Divider>
 
-                        </div> : false: false: false
+                                    <Table
+                                        style={{ margin: 0, padding: 0 }}
+                                        size='default'
+                                        bordered={false}
+                                        columns={this.controlColumns}
+                                        align='center'
+                                        dataSource={this.cotrolsValues()}
+                                        pagination={false}
+
+                                    />
+
+                                </div> : false : false
+                        : this.props.showChangedControls == undefined ?
+                            Object.entries(this.state.controls).length > 0 ?
+                                Object.entries(this.state.controls.controls).length > 0 ?
+                                    <div>
+                                        <Divider> {SYSTEM_PERMISSION}</Divider>
+                                        <Table
+                                            style={{ margin: 0, padding: 0 }}
+                                            size='default'
+                                            bordered={false}
+                                            columns={this.controlColumns}
+                                            align='center'
+                                            dataSource={this.cotrolsValues()}
+                                            pagination={false}
+
+                                        />
+
+                                    </div> : false : false : false
+                }
+                {(this.props.type === 'profile') ?
+
+                    <div>
+                        {
+                            this.props.passwords.admin_password || this.props.passwords.guest_password || this.props.passwords.encrypted_password || this.props.passwords.duress_password ?
+                                <Divider> {MANAGE_PASSWORDS} </Divider> : false
+                        }
+                        {
+                            this.props.passwords.admin_password ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
+                        }{
+                            this.props.passwords.encrypted_password ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
+                        }{
+                            this.props.passwords.guest_password ? <div><Badge status="processing" text='Guest Password is changed' /></div> : false
+                        }{
+                            this.props.passwords.duress_password ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false
+                        }
+                    </div>
+                    :
+                    <div>
+                        {
+                            this.props.isAdminPwd || this.props.isEncryptedPwd || this.props.isGuestPwd || this.props.isDuressPwd ?
+                                <Divider> {MANAGE_PASSWORDS} </Divider> : false
+                        }
+                        {
+                            this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
+                        }{
+                            this.props.isEncryptedPwd ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
+                        }{
+                            this.props.isGuestPwd ? <div><Badge status="processing" text='Guest Password is changed' /></div> : false
+                        }{
+                            this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false
+                        }
+                    </div>
                 }
 
-                {
-                    this.props.isAdminPwd || this.props.isEncryptedPwd || this.props.isGuestPwd || this.props.isDuressPwd ?
-                        <Divider> {MANAGE_PASSWORDS} </Divider> : false
-                }
-                {
-                    this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
-                }{
-                    this.props.isEncryptedPwd ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
-                }{
-                    this.props.isGuestPwd ? <div><Badge status="processing" text='Guest Password is changed' /></div> : false
-                }{
-                    this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false
-                }
 
             </div>
         )

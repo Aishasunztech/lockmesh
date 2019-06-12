@@ -35,7 +35,9 @@ import {
     writeImei,
     getActivities,
     hidePolicyConfirm,
-    applyPolicy
+    applyPolicy,
+    applySetting,
+    getProfiles
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -212,9 +214,10 @@ const SelectedApps = (props) => {
                 props.resetSeletedRows()
             }}
             // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
-            onCancel={() => { props.actionType == PUSH_APPS ?  props.showPushAppsModal(true) : props.showPullAppsModal(true);
+            onCancel={() => {
+                props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
                 props.showSelectedAppsModal(false);
-             }}
+            }}
             cancelText='Back'
             okText={props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps'}
             destroyOnClose={true}
@@ -329,7 +332,7 @@ class SideActions extends Component {
         if (this.state.selectedAppKeys.length && this.state.selectedApps.length) {
 
             for (let app of this.state.selectedApps) {
-                console.log(this.state.selectedAppKeys.includes(app.apk_id), 'checking')
+                // console.log(this.state.selectedAppKeys.includes(app.apk_id), 'checking')
                 if (this.state.selectedAppKeys.includes(app.apk_id)) {
                     dumyList.push(app)
                 }
@@ -346,7 +349,9 @@ class SideActions extends Component {
     }
 
     onInputChange = (e) => {
-        this.props.hanldeProfileInput(this.state.saveProfileType, e.target.value);
+        this.setState({
+            profileName: e.target.value
+        })
 
     }
     saveProfile = () => {
@@ -367,7 +372,8 @@ class SideActions extends Component {
                     duressPwd: this.props.duressPwd,
                 }, this.state.saveProfileType, this.state.policyName, this.props.usr_acc_id);
         }
-        this.showSaveProfileModal(false)
+        this.showSaveProfileModal(false);
+        this.props.getProfiles(this.props.device.device_id)
     }
     transferDeviceProfile = (device_id) => {
         let _this = this;
@@ -505,15 +511,14 @@ class SideActions extends Component {
     }
 
 
-    applyHistory = (historyId, name = '') => {
+    applyHistory = (historyId, name = '', history) => {
         const historyType = this.state.historyType;
         if (historyType === 'history') {
 
         } else if (historyType === "profile") {
-
+            showConfirmProfile(this, name, history)
         } else if (historyType === POLICY) {
 
-            console.log(name);
             this.showPwdConfirmModal(true, POLICY)
             this.setState({
                 policyId: historyId,
@@ -547,7 +552,7 @@ class SideActions extends Component {
     }
 
     render() {
-        console.log(this.state.apk_list, 'list apk')
+        // console.log(this.state.apk_list, 'list apk')
         const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
         const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'Flag';
@@ -566,7 +571,7 @@ class SideActions extends Component {
                                     placement="bottom"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
-                                    disabled={this.props.authUser.type == ADMIN ? false : true}
+                                    disabled={(this.props.authUser.type == ADMIN || this.props.authUser.type == DEALER) ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
@@ -574,7 +579,7 @@ class SideActions extends Component {
                                 </Button>
 
                                 <Button
-                                    disabled
+                                    // disabled
                                     type="primary"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showHistoryModal(true, "profile")}
@@ -609,6 +614,7 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
+                                    disabled={this.props.authUser.type == ADMIN ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
@@ -618,10 +624,17 @@ class SideActions extends Component {
 
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
                                     <Button type="primary " style={{ width: "100%", marginBottom: 15 }}
-                                        disabled={this.state.isSaveProfileBtn ? false : true}
+                                        // disabled={this.state.isSaveProfileBtn ? false : true}
                                         onClick={() => {
-                                            // this.showSaveProfileModal(true, 'profile') 
-                                            this.setState({ showChangesModal: true })
+                                            // if (this.state.isSaveProfileBtn) {
+                                            this.showSaveProfileModal(true, 'profile')
+                                            // }
+                                            // else {
+                                            //     Modal.warning({
+                                            //         title: "Please Change some setting to save Profile"
+                                            //     })
+                                            // }
+                                            // this.setState({ showChangesModal: true })
                                         }} >
                                         <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
                                         </Button>
@@ -766,13 +779,13 @@ class SideActions extends Component {
 
                     visible={this.state.saveProfileModal}
                     onOk={() => {
+                        this.setState({ profileName: '' })
                         this.saveProfile();
                     }}
-                    onCancel={() => this.showSaveProfileModal(false)}
+                    onCancel={() => { this.setState({ profileName: '' }); this.showSaveProfileModal(false) }}
                     okText='Save'
-
                 >
-                    <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
+                    <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
 
                 <DealerAppModal
@@ -855,6 +868,7 @@ class SideActions extends Component {
                     device={this.props.device}
                     imei_list={this.props.imei_list}
                     writeImei={this.props.writeImei}
+                    getActivities={this.props.getActivities}
                 />
 
                 <Activity
@@ -863,7 +877,7 @@ class SideActions extends Component {
                     device={this.props.device}
 
                 />
-            </div>
+            </div >
         )
     }
     handleSuspendDevice = (device, _this) => {
@@ -894,6 +908,8 @@ function mapDispatchToProps(dispatch) {
         getActivities: getActivities,
         hidePolicyConfirm: hidePolicyConfirm,
         applyPolicy: applyPolicy,
+        applySetting: applySetting,
+        getProfiles: getProfiles
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth }, otherProps) => {
@@ -969,6 +985,18 @@ function showConfirmPolcy(_this) {
         },
         onCancel() {
             _this.props.hidePolicyConfirm()
+        },
+    });
+}
+function showConfirmProfile(_this, name, profile) {
+    confirm({
+        title: "Do you want to apply " + name + " profile on device?",
+        onOk() {
+            _this.props.applySetting(profile.app_list, profile.passwords, profile.secure_apps, profile.controls, _this.props.device.device_id, _this.props.device.id, 'profile', name)
+            _this.props.refreshDevice(_this.props.device.device_id, true)
+            _this.props.showHistoryModal(false);
+        },
+        onCancel() {
         },
     });
 }

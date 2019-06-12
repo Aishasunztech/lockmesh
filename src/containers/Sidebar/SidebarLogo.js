@@ -11,6 +11,7 @@ import {
   TAB_SIZE,
   THEME_TYPE_LITE
 } from "../../constants/ThemeSetting";
+import { APP_TITLE } from "../../constants/Application";
 
 
 class SidebarLogo extends Component {
@@ -47,10 +48,10 @@ class SidebarLogo extends Component {
 
         <Link to="/" className="gx-site-logo">
           {navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR && width >= TAB_SIZE ?
-            <p className="mb-0" style={{ fontSize: 18 }}>LockMesh</p> :
+            <p className="mb-0" style={{ fontSize: 18 }}>{APP_TITLE}</p> :
             themeType === THEME_TYPE_LITE ?
-              <p className="mb-0" style={{ fontSize: 18 }}>LockMesh</p>  :
-              <p className="mb-0" style={{ fontSize: 18 }}>LockMesh</p>}
+              <p className="mb-0" style={{ fontSize: 18 }}>{APP_TITLE}</p>  :
+              <p className="mb-0" style={{ fontSize: 18 }}>{APP_TITLE}</p>}
 
         </Link>
 

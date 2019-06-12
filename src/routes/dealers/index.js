@@ -639,7 +639,7 @@ class Dealers extends Component {
                             {/* <AddDealer ref='addDealer'  /> */}
                             <Modal
                                 visible={this.state.visible_DealerModal}
-                                title=  {'Add ' + this.state.dealer_type}
+                                title={'Add ' + this.state.dealer_type}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
                                 footer={null}
@@ -688,6 +688,7 @@ class Dealers extends Component {
                                 tabselect={this.state.tabselect}
                                 handleChangetab={this.handleChangetab}
                                 updatePassword={this.props.updatePassword}
+                                user={this.props.user}
                                 ref='dealerList'
 
                             />
@@ -777,7 +778,7 @@ var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
     // console.log(state.dealers.isloading);
     // console.log('state.dealer', state.dealers);
-    //  console.log("selected options Dealer", state);
+    // console.log("selected options Dealer", state);
     return {
         isloading: state.dealers.isloading,
         dealers: state.dealers.dealers,
@@ -785,7 +786,8 @@ var mapStateToProps = (state) => {
         suspended: state.dealers.suspended,
         selectedOptions: state.dealers.selectedOptions,
         DisplayPages: state.dealers.DisplayPages,
-        action: state.action
+        action: state.action,
+        user: state.auth.authUser
     };
 }
 
