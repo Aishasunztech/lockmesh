@@ -57,20 +57,21 @@
     margin-right: 40px;
 }
 
+
+
 .login_history ::-webkit-scrollbar {
     width: 10px;
-    /* This is more usable for users trying to click it. */
-    background-color: rgba(100, 100, 100, 0.1);
+    background-color: #e0e0e0;
     -webkit-border-radius: 100px;
 }
 
 .login_history ::-webkit-scrollbar-thumb {
-    background: rgba(100, 100, 100, 0.1);
+    background: #efefef;
     border-radius: 10px;
 }
 
 .login_history ::-webkit-scrollbar-thumb:hover {
-    background: rgba(100, 100, 100, 0.1);
+    background: #efefef;
 }
 
 .dealer_value {
