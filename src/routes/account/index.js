@@ -1155,15 +1155,18 @@ class Account extends Component {
 
 
                             <Modal
+                                width="400px"
+                                className="back_db"
                                 maskClosable={false}
                                 title={<div>BACKUP DATABASE</div>}
                                 visible={this.state.showBackupModal}
                                 onOk={this.createBackupDB}
                                 onCancel={this.handleCancel}
                                 okText='BACKUP NOW'
+                                centered
                             >
                                 <div>
-                                    <p>Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated file first and open in Excel. </p>
+                                    <p style={{ margin: 13 }}>Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated Files first and open in Excel. </p>
                                 </div>
                             </Modal>
                             <div className="contenar" >

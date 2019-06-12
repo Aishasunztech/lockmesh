@@ -357,12 +357,23 @@ class SideActions extends Component {
     saveProfile = () => {
 
         if (this.state.saveProfileType === "profile" && this.state.profileName !== '') {
+let exts = [];
+            if(this.props.extensions.length){
+                // console.log('saved profile will be', this.props.extensions);
+                for(let extension of this.props.extensions){
+                    if(extension.uniqueName == SECURE_SETTING){
+                      exts =  extension.subExtension
+                    //   console.log(exts, 'sddsdsdsdsdsdsdsd')
+                    }
+                }
+            }
+
             this.props.saveProfile(this.props.app_list, {
                 adminPwd: this.props.adminPwd,
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
                 duressPwd: this.props.duressPwd,
-            }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, this.props.extensions);
+            }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, exts);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
             this.props.savePolicy(this.props.app_list,
                 {
@@ -397,17 +408,17 @@ class SideActions extends Component {
         // alert('its working', value)
         //    console.log('values sr', value)   
         try {
-            console.log(value, 'value')
+            // console.log(value, 'value')
             if (value.length) {
-                console.log(value, 'value')
+                // console.log(value, 'value')
                 if (status) {
-                    console.log('status')
+                    // console.log('status')
                     coppyList = this.state.apk_list;
                     status = false;
                 }
-                console.log(this.state.apk_list, 'coppy de', coppyList)
+                // console.log(this.state.apk_list, 'coppy de', coppyList)
                 let foundList = componentSearch(coppyList, value);
-                console.log('found devics', foundList)
+                // console.log('found devics', foundList)
                 if (foundList.length) {
                     this.setState({
                         apk_list: foundList,
@@ -431,7 +442,7 @@ class SideActions extends Component {
 
 
     showPushAppsModal = (visible) => {
-        console.log('is callrd')
+        // console.log('is callrd')
         if (visible) {
             this.setState({
                 pushAppsModal: visible,
@@ -729,6 +740,7 @@ class SideActions extends Component {
                         />
                         :
                         (this.state.historyType === "profile") ?
+                        
                             <TableHistory
                                 histories={this.props.profiles}
                                 type={this.state.historyType}
