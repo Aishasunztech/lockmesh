@@ -225,19 +225,21 @@ export default class PolicyInfo extends Component {
                     <TabPane tab={SECURE_SETTING_PERMISSION} key="3">
                         <div>
                             <Row>
-                                <Col span={6} className="">
+                                <Col span={8} className="">
                                 </Col>
-                                <Col span={3} className="">
-                                    <img src={require("assets/images/setting.png")} />
+                                <Col span={2} className="">
+                                    <img src={require("assets/images/setting.png")} className='image_icon' />
                                 </Col>
-                                <Col span={15} className="pl-0">
+                                <Col span={6} className="pl-0">
                                     <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
                                 </Col>
                             </Row>
-                            <Row className="mb-8">
-                                <Col span={8} className="text-center">
+                            <Row className="mb-8"  style={{marginTop: 10}}>
+                            <Col span={6}></Col>
+                                <Col span={4} className="text-center">
                                     <span>Guest: </span>
                                     <Switch
+                                    disabled
                                         size="small"
                                         checked={ this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.guest === true || this.state.secure_setting_app.guest === 1) ? true : false: false}
                                         onClick={(e) => {
@@ -245,9 +247,10 @@ export default class PolicyInfo extends Component {
                                         }}
                                     />
                                 </Col>
-                                <Col span={8} className="text-center">
+                                <Col span={4} className="text-center">
                                     <span>Encrypted: </span>
                                     <Switch
+                                    disabled
                                         size="small"
                                         checked={ this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.encrypted === true || this.state.secure_setting_app.encrypted === 1) ? true : false: false}                                       
                                         onClick={(e) => {
@@ -256,9 +259,10 @@ export default class PolicyInfo extends Component {
                                         }}
                                     />
                                 </Col>
-                                <Col span={8} className="text-center">
+                                <Col span={4} className="text-center">
                                     <span>Enable: </span>
                                     <Switch
+                                    disabled
                                         size="small"
                                         checked={ this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.enable === true || this.state.secure_setting_app.enable === 1) ? true : false: false}                                                                             
                                         onClick={(e) => {
@@ -268,6 +272,7 @@ export default class PolicyInfo extends Component {
                                     />
 
                                 </Col>
+                                <Col span={6}></Col>
                             </Row>
                         </div>
                         <AppList
@@ -288,19 +293,21 @@ export default class PolicyInfo extends Component {
                     <TabPane tab={SYSTEM_PERMISSION} key="4">
                         <div>
                             <Row>
-                                <Col span={6} className="">
+                                <Col span={8} className="">
                                 </Col>
-                                <Col span={3} className="">
-                                    <img src={require("assets/images/setting.png")} />
+                                <Col span={2} className="">
+                                    <img src={require("assets/images/setting.png")} className='image_icon'/>
                                 </Col>
-                                <Col span={15} className="pl-0">
+                                <Col span={6} className="pl-0">
                                     <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
                                 </Col>
                             </Row>
-                            <Row className="mb-8">
-                                <Col span={8} className="text-center">
+                            <Row className="mb-8" style={{marginTop: 10}}>
+                                <Col span={6}></Col>
+                                <Col span={4}className="text-center">
                                     <span>Guest: </span>
                                     <Switch
+                                    disabled
                                         size="small"
                                         checked={ this.state.system_setting_app !== '' ? (this.state.system_setting_app.guest === true || this.state.system_setting_app.guest === 1) ? true : false: false}                                                                                                                     
                                         onClick={(e) => {
@@ -308,9 +315,10 @@ export default class PolicyInfo extends Component {
                                         }}
                                     />
                                 </Col>
-                                <Col span={8} className="text-center">
+                                <Col span={4} className="text-center">
                                     <span>Encrypted: </span>
                                     <Switch
+                                    disabled
                                         size="small"
                                         checked={ this.state.system_setting_app !== '' ? (this.state.system_setting_app.encrypted === true || this.state.system_setting_app.encrypted === 1) ? true : false: false}                                                                                                                                                            
                                         onClick={(e) => {
@@ -319,9 +327,10 @@ export default class PolicyInfo extends Component {
                                         }}
                                     />
                                 </Col>
-                                <Col span={8} className="text-center">
+                                <Col span={4} className="text-center">
                                     <span>Enable: </span>
                                     <Switch
+                                    disabled
                                         size="small"
                                         checked={ this.state.system_setting_app !== '' ? (this.state.system_setting_app.enable === true || this.state.system_setting_app.enable === 1) ? true : false: false}                                                                                                                                                             
                                         onClick={(e) => {
@@ -331,6 +340,7 @@ export default class PolicyInfo extends Component {
                                     />
 
                                 </Col>
+                                <Col span={6}></Col>
                             </Row>
                         </div>
                         <Table

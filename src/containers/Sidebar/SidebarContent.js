@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Menu, Icon, Badge } from "antd";
+import { Menu, Icon, Badge, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -70,6 +70,23 @@ class SidebarContent extends Component {
     }
   }
 
+  logout = () => {
+    let _this = this;
+    Modal.confirm({
+      title: 'Are you sure you want to logout?',
+      okText: 'Yes',
+      cancelText: 'No',
+
+      onOk() {
+        _this.props.logout()
+        // console.log('OK');
+      },
+      onCancel() {
+        // console.log('Cancel');
+      },
+    })
+  }
+
   render() {
     // console.log(addDevice)
     const { themeType, navStyle, pathname, authUser } = this.props;
@@ -106,7 +123,7 @@ class SidebarContent extends Component {
               <li><i className="icon icon-chat-new" /></li>
               <li>
                 <a className="head-example">
-                  <Badge count={this.props.devices.length} style={{fontSize:'26px'}}>
+                  <Badge count={this.props.devices.length} style={{ fontSize: '26px' }}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -156,7 +173,10 @@ class SidebarContent extends Component {
               <Menu.Item key="profile">
                 <Link to="/profile"><i className="icon icon-contacts" /> <IntlMessages id="sidebar.profile" /></Link>
               </Menu.Item>
-              <Menu.Item key="logout" onClick={(e) => { this.props.logout() }}>
+              <Menu.Item key="logout" onClick={(e) => {
+                // this.props.logout() 
+                this.logout()
+              }}>
                 {/* <Link to="/logout"> */}
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
@@ -177,7 +197,7 @@ class SidebarContent extends Component {
 
 const mapStateToProps = ({ settings, devices, device3 }) => {
   const { navStyle, themeType, locale, pathname } = settings;
-  
+
   return {
     navStyle,
     themeType,
