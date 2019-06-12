@@ -1166,8 +1166,9 @@ class Account extends Component {
                                     <p>Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated file first and open in Excel. </p>
                                 </div>
                             </Modal>
-                            <div>
-                                <Link to="#" onClick={this.showBackupModal}>
+                            <div className="contenar" >
+                                {/* <Link to="#" onClick={this.showBackupModal}> */}
+                                <a href="javascript:void(0)" >
                                     <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                         <div>
                                             <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
@@ -1185,7 +1186,11 @@ class Account extends Component {
                                         </div>
                                     </Card>
                                     <Button type="primary" size="small" className="open_btn">Open</Button>
-                                </Link>
+                                    {/* </Link> */}
+                                </a>
+                                <div className="middle">
+                                    <div className="text">Coming Soon</div>
+                                </div>
                             </div>
                         </Col>
 
