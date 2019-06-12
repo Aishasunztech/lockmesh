@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import CustomScrollbars from "util/CustomScrollbars";
 import SidebarLogo from "./SidebarLogo";
 
+// import LogoutIcon from "./logout.svg";
+
 import Auxiliary from "util/Auxiliary";
 import UserProfile from "./UserProfile";
 // import AppsNavigation from "./AppsNavigation";
@@ -53,24 +55,30 @@ class SidebarContent extends Component {
       <Auxiliary>
         <SidebarLogo />
         <div className="gx-sidebar-content ">
-          <div className={`gx-sidebar-notifications ${this.getNoHeaderClass(navStyle)} `}>
+          <div className={`gx-sidebar-notifications text-center ${this.getNoHeaderClass(navStyle)} `}>
             <UserProfile
               // devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
             />
-
+            <span className="font_14">
+              {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
+              {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
+            </span>
             <ul className="gx-app-nav mt-8">
-              <li className="font_14">
-                {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN)?'PIN :':null} <Link to="#">
-                  {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
-                </Link>
-              </li>
-              <li></li>
+
+              <br />
+
               <li>
-                {/* <a className="head-example">
+                <i className="icon" >
+                  <Icon type="dollar" />
+                </i>
+              </li>
+              <li><i className="icon icon-chat-new" /></li>
+              <li>
+                <a className="head-example">
                   <i className="icon icon-notification notification_icn" ></i>
-                </a> */}
+                </a>
               </li>
             </ul>
           </div>
@@ -123,6 +131,13 @@ class SidebarContent extends Component {
 
               <Menu.Item key="profile">
                 <Link to="/profile"><i className="icon icon-contacts" /> <IntlMessages id="sidebar.profile" /></Link>
+              </Menu.Item>
+              <Menu.Item key="logout">
+                <Link to="/logout">
+                  <i className="icon">
+                    <i class="fa fa-sign-out ml-6" aria-hidden="true"></i>
+                  </i>
+                  <IntlMessages id="Logout" /></Link>
               </Menu.Item>
             </Menu>
           }
