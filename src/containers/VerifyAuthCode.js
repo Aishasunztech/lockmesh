@@ -11,6 +11,7 @@ import {
     showAuthLoader,
     goToLogin
 } from "../appRedux/actions/Auth";
+import { APP_TITLE } from '../constants/Application';
 
 class VerifyAuthCode extends Component {
     componentWillReceiveProps(nextProps) {
@@ -57,7 +58,7 @@ class VerifyAuthCode extends Component {
 
                             </div>
                             <div className="gx-app-logo">
-                                <p className="mb-0" style={{ fontSize: 18 }}><Icon type='lock' /> LockMesh</p>
+                                <p className="mb-0" style={{ fontSize: 18 }}><Icon type='lock' /> {APP_TITLE}</p>
                                 {/* <img alt="example" src={require("assets/images/logo.png")}/> */}
                             </div>
                         </div>

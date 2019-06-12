@@ -14,6 +14,7 @@ import Auxiliary from "util/Auxiliary";
 
 import {NAV_STYLE_DRAWER, NAV_STYLE_FIXED, NAV_STYLE_MINI_SIDEBAR, TAB_SIZE} from "../../constants/ThemeSetting";
 import {connect} from "react-redux";
+import { APP_TITLE } from "../../constants/Application";
 
 const {Header} = Layout;
 
@@ -57,7 +58,7 @@ class Topbar extends Component {
                  }}
               />
             </div> : null}
-          <Link to="/" className="gx-d-block gx-d-lg-none gx-pointer">LockMesh</Link>
+          <Link to="/" className="gx-d-block gx-d-lg-none gx-pointer">{APP_TITLE}</Link>
 
           <SearchBox styleName="gx-d-none gx-d-lg-block gx-lt-icon-search-bar-lg"
                      placeholder="Search in app..."

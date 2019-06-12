@@ -1,3 +1,6 @@
+// APP Constants
+export const VERSION = '2.4'
+
 // ACL
 export const ADMIN = "admin";
 export const DEALER = "dealer";
