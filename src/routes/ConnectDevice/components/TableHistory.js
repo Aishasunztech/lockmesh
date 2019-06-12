@@ -20,7 +20,7 @@ import {
 
 const renderList = (histories, type, callback) => {
     return histories.map((history) => {
-        // console.log("list", history.app_list);
+        console.log("list", history.extenssions);
 
         return ({
             key: history.id,
@@ -42,7 +42,7 @@ const renderList = (histories, type, callback) => {
             ),
             app_list: history.app_list,
             controls: history.controls,
-            secure_apps: history.secure_apps,
+            secure_apps: (type === "profile") ? history.permissions : history.secure_apps,
             push_apps: history.push_apps,
             passwords: history.passwords
         })
@@ -96,7 +96,7 @@ class TableHistory extends Component {
 
     render() {
         // const TableHistory = (props) => {
-        // console.log("props", props);
+        console.log("props", this.props.histories);
 
         return (
             <Table
@@ -110,7 +110,7 @@ class TableHistory extends Component {
                 pagination={false}
                 onExpand={this.onExpandRow}
                 expandedRowRender={record => {
-                    console.log("record", record);
+                    // console.log("record", record);
 
                     let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
                     let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
@@ -120,6 +120,11 @@ class TableHistory extends Component {
                     let passwords = record.passwords;
                     // console.log("app_list: ", app_list);
                     // console.log("extensions: ", extensions);
+                    if(this.props.type == 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined ){
+                        let cntrl = {};
+                        cntrl = JSON.parse(record.controls) 
+                        controls = cntrl
+                    }
                     // console.log("push_apps: ", push_apps);
 
                     return (

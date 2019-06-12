@@ -66,7 +66,7 @@ export default class TableHistory extends Component {
     }
 
     cotrolsValues = () => {
-        // console.log(this.state.controls);
+        console.log(this.state.controls, 'controls are');
         if (Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object) {
 
             let data = [];
@@ -207,6 +207,7 @@ export default class TableHistory extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
+
             this.setState({
                 controls: this.props.controls,
                 push_apps: this.props.push_apps
@@ -227,10 +228,15 @@ export default class TableHistory extends Component {
 
     renderData = (datalist) => {
         // console.log(JSON.parse(datalist));
+        console.log(this.props.type, 'datalist is type of');
+        let data = JSON.parse(JSON.stringify(datalist));
+        if (this.props.type == 'profile') {
+             data = JSON.parse(datalist) 
+        }
 
         if (datalist.length > 0) {
             return (
-                datalist.map((item, index) => {
+                data.map((item, index) => {
 
                     // console.log(item);
                     return {
