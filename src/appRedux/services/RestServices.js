@@ -222,7 +222,11 @@ const RestService = {
 
     deleteORStatusPolicy: (data) => {
         //   console.log('api called ')
-        return axios.post(BASE_URL + "users/change_policy_status ", data, RestService.getHeader());
+        return axios.post(BASE_URL + "users/change_policy_status", data, RestService.getHeader());
+    },
+    createBackupDB: () => {
+        //   console.log('api called ')
+        return axios.post(BASE_URL + "users/create_backup_DB", {}, RestService.getHeader());
     },
 
     SavePolicyChanges: (record) => {

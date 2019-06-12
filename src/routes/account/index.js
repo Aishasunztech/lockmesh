@@ -11,7 +11,8 @@ import {
     getUsedPGPEmails,
     getUsedChatIds,
     getUsedSimIds,
-    insertNewData
+    insertNewData,
+    createBackupDB,
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -142,6 +143,11 @@ class Account extends Component {
         }
     }
     createBackupDB = () => {
+
+        this.props.createBackupDB();
+        this.setState({
+            showBackupModal: false
+        })
 
     }
 
@@ -1265,7 +1271,8 @@ function mapDispatchToProps(dispatch) {
         getUsedChatIds: getUsedChatIds,
         getUsedSimIds: getUsedSimIds,
         releaseCSV: releaseCSV,
-        insertNewData: insertNewData
+        insertNewData: insertNewData,
+        createBackupDB: createBackupDB
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {
