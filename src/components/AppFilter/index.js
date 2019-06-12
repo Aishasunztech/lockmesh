@@ -25,7 +25,7 @@ class AppFilter extends Component {
     }
 
     componentDidMount() {
-        //  console.log("componentDidMount selectedOptions appfilter", this.props.selectedOptions);
+         console.log("componentDidMount selectedOptions appfilter", this.props.selectedOptions);
         this.setState({
             selectedDisplayValues: this.props.selectedOptions,
         });
@@ -96,7 +96,15 @@ class AppFilter extends Component {
 
         // console.log(this.props.options);
         const Search = Input.Search;
-        //  console.log('render ...', this.props.selectedOptions);
+         console.log('render props ...', this.props.selectedOptions.length);
+        //  console.log('allSelected val are: ', allSelected)
+         console.log('render state ...', this.state.selectedDisplayValues.length);
+         let allSelectedOpt;
+         if(this.props.selectedOptions.length == this.state.selectedDisplayValues.length){
+             allSelectedOpt = true;
+         } else { allSelectedOpt= false }
+         console.log('allSelectedOpt val are: ', allSelectedOpt)
+
         return (
             // className="gutter-example"
             <Card >
@@ -137,7 +145,7 @@ class AppFilter extends Component {
                                                         {/* required to select item */}
                                                         {/* <input type="checkbox" checked={isSelected} readOnly /> */}
                                                         <Checkbox
-                                                            checked={allSelected} className="slct_all"
+                                                            checked={allSelectedOpt} className="slct_all"
                                                         >SELECT ALL</Checkbox>
                                                     </li>
                                                 );
