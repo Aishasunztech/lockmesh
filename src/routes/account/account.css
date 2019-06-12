@@ -233,6 +233,14 @@
     color: #9dceff;
 }
 
+.back_db {
+    text-align: center !important;
+}
+
+.back_db .ant-modal-footer {
+    text-align: center;
+}
+
 @media screen and (max-width: 992px) {
     .ac_card {
         width: 100%;
