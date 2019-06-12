@@ -460,7 +460,7 @@ class AppList extends Component {
                                     {
                                         this.props.addAppsButton ?
                                             this.props.apps ?
-                                                <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('push_apps')} >Add Push Apps</Button>
+                                                <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('push_apps')} >Add Apps</Button>
                                                 : this.props.appPermissions ?
                                                     <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('app_list')} >Add Permissions</Button>
                                                     : false
