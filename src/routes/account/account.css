@@ -279,7 +279,14 @@
 .text2 {
     line-height: 228px;
 }
-
+.lock_icon2 {
+    border-right: 1px solid #ccc;
+    position: absolute;
+    left: 0;
+    top: 12px;
+    padding: 6px 8px 6px 20px;
+    text-align: left !important;
+}
 .and_icon {
     font-size: 40px;
     border: 4px solid #038fdd;

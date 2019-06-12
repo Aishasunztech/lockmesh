@@ -1138,7 +1138,7 @@ class Account extends Component {
                                 <Link to="#" onClick={this.showModal}>
                                     <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                         <div>
-                                            <h2 style={{ textAlign: "center" }}>Backup Database</h2>
+                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0 0px' }}>
                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
