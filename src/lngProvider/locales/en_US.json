@@ -9,6 +9,7 @@
   "sidebar.account": "Account",
   "sidebar.profile": "Profile",
   "sidebar.app": "App",
+  "sidebar.logut":"Logout",
   "sidebar.dashboard": "Dashboard",
   "sidebar.layouts": "Layouts",
   "sidebar.components.navigation": "Navigation",

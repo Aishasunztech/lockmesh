@@ -599,11 +599,11 @@ let exts = [];
                                     Load Profile
                                 </Button>
                                 <Button
-                                    type="primary"
-                                    style={{ width: "100%", marginBottom: 16 }}
+                                    type="default"
                                     onClick={() => this.showHistoryModal(true, "policy")}
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#009700', color: '#fff' }}
                                 >
-                                    <Icon type="select" />
+                                    <Icon type="lock" className="lock_icon" />
                                     Load Policy
                                 </Button>
                                 <Button
@@ -724,7 +724,7 @@ let exts = [];
                     </Card>
                 </div>
                 <Modal
-                    title={<div>{this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
+                    title={<div>{(this.state.historyType == 'profile') ? "Load Profile" : this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}
@@ -785,6 +785,7 @@ let exts = [];
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
+                    title={<div> Save Profile <br /> Device ID:  {this.props.device.device_id} </div>}
                     closable={false}
                     maskClosable={false}
                     style={{ top: 20 }}

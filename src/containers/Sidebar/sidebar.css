@@ -4,7 +4,7 @@
 }
 
 .side_bar_main.gx-mb-4 {
-    margin-bottom: 0px !important;
+    margin-bottom: 10px !important;
 }
 
 .side_bar_main .notification_icn {
@@ -82,8 +82,8 @@
 }
 
 .gx-app-nav li {
-    padding: 0 10px 0 25px;
-    font-size: 26px;
+    padding: 8px 12px 0 32px;
+    font-size: 24px;
 }
 
 @media screen and (max-width: 768px) {
