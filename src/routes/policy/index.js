@@ -347,7 +347,7 @@ class Policy extends Component {
     handlePolicyModal = (visible) => {
         let _this = this;
         Modal.confirm({
-            title: 'would you like to Save Policy before closing??',
+            title: 'Save changes to Policy?',
             okText: 'Yes',
             cancelText: 'No',
             onOk() {
@@ -389,7 +389,7 @@ class Policy extends Component {
 
         let _this = this;
         Modal.confirm({
-            title: 'would you like to Save Policy before closing?',
+            title: 'Save changes to Policy?',
             okText: 'Yes',
             cancelText: 'No',
             onOk() {

@@ -122,6 +122,7 @@ class Devices extends Component {
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder={titleCase(DEVICE_REMAINING_DAYS)}
+                    // onBlur={(e) => { console.log(e);; e.target.value = ''; }}
                     />
                 ),
                 dataIndex: 'validity',
@@ -148,6 +149,7 @@ class Devices extends Component {
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder={titleCase(DEVICE_ID)}
+                    // onBlur={(e) => { e.target.value = '' }}
                     />
                 ),
                 dataIndex: 'device_id',
@@ -161,6 +163,7 @@ class Devices extends Component {
                         className: '',
                         sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
                         sortDirections: ['ascend', 'descend'],
+
                     }
                 ],
             }, {
@@ -173,6 +176,7 @@ class Devices extends Component {
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder={titleCase(USER_ID)}
+                    // onBlur={(e) => { e.target.value = '' }}
                     />
                 ),
                 dataIndex: 'user_id',
@@ -195,13 +199,14 @@ class Devices extends Component {
             {
                 title: (
                     <Input.Search
-                        name="status"
+                        name="finalStatus"
                         key="status"
                         id="status"
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder={titleCase(DEVICE_STATUS)}
+                        // onBlur={(e) => { e.target.value = '' }}
                     />
                 ),
                 dataIndex: 'status',

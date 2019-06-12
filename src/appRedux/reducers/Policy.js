@@ -390,29 +390,34 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_APP_POLICY: {
             // console.log('reducer', action.payload);
             if (action.payload.stateToUpdate === 'allExtensions') {
-
+                let checkButtons = null;
                 let changedExtensions = JSON.parse(JSON.stringify(state.allExtensions));
 
                 changedExtensions.forEach(extension => {
                     // console.log(extension.uniqueName, '===', action.payload.uniqueName)
+                  
                     if (extension.uniqueName === action.payload.uniqueName) {
-                        if(action.payload.main == 'main'){
+                        if (action.payload.main == 'main') {
                             extension[action.payload.key] = action.payload.value;
-                        }else{
+                        } else {
                             let objIndex = extension.subExtension.findIndex((obj => obj.id === action.payload.app_id));
                             if (objIndex > -1) {
                                 extension.subExtension[objIndex][action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                                 extension.subExtension[objIndex].isChanged = true;
+                              
+                                checkButtons = check_all_apps_buttons(extension.subExtension, 'extenssions')
                             }
                         }
                     }
                 });
 
                 state.allExtensions = JSON.parse(JSON.stringify(changedExtensions));
+                
 
                 return {
                     ...state,
                     allExtensions: [...state.allExtensions],
+                    ...checkButtons
                     // checked_app_id: {
                     //     id: action.payload.app_id,
                     //     key: action.payload.key,
@@ -433,10 +438,12 @@ export default (state = initialState, action) => {
 
                 state.dealer_apk_list = JSON.parse(JSON.stringify(changedApps));
                 let applications = state.dealer_apk_list;
-
+                let checkButtons = check_all_apps_buttons(changedApps, 'push_apps')
+                
                 return {
                     ...state,
                     dealer_apk_list: changedApps,
+                    ...checkButtons,
                     checked_app_id: {
                         id: action.payload.app_id,
                         key: action.payload.key,
@@ -457,10 +464,12 @@ export default (state = initialState, action) => {
                 });
 
                 state.appPermissions = JSON.parse(JSON.stringify(changedApps));
+                let checkButtons = check_all_apps_buttons(changedApps, 'appPermissions')
 
                 return {
                     ...state,
                     appPermissions: changedApps,
+                    ...checkButtons,
                     checked_app_id: {
                         id: action.payload.app_id,
                         key: action.payload.key,
@@ -661,6 +670,51 @@ export default (state = initialState, action) => {
     }
 
 }
+
+
+function check_all_apps_buttons(apps, type) {
+
+    let guestCount = 0;
+    let encryptedCount = 0;
+    let enableCount = 0;
+
+    for (let app of apps) {
+        if (app.guest == true || app.guest == 1) {
+            guestCount += 1;
+        }
+        if (app.encrypted == true || app.encrypted == 1) {
+            encryptedCount += 1;
+        }
+        if (app.enable == true || app.enable == 1) {
+            enableCount += 1;
+        }
+    }
+
+    let guestAll = guestCount == apps.length ? true : false;
+    let encryptedAll = encryptedCount == apps.length ? true : false;
+    let enableAll = enableCount == apps.length ? true : false;
+
+    if (type == 'push_apps') {
+        return {
+            guestAlldealerApps: guestAll,
+            encryptedAlldealerApps: encryptedAll,
+            enableAlldealerApps: enableAll,
+        }
+    } else if (type == 'appPermissions') {
+        return {
+            guestAllappPermissions: guestAll,
+            encryptedAllappPermissions: encryptedAll,
+            enableAllappPermissions: enableAll,
+        }
+    }else if (type == 'extenssions') {
+        return {
+            guestAllallExtensions: guestAll,
+            encryptedAllallExtensions: encryptedAll,
+            enableAllallExtensions: enableAll,
+        }
+    }
+}
+
 
 function checkToggleButtons(policy) {
 
