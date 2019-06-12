@@ -588,11 +588,11 @@ class SideActions extends Component {
                                     Load Profile
                                 </Button>
                                 <Button
-                                    type="primary"
-                                    style={{ width: "100%", marginBottom: 16 }}
+                                    type="default"
                                     onClick={() => this.showHistoryModal(true, "policy")}
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#009700', color: '#fff' }}
                                 >
-                                    <Icon type="select" />
+                                    <Icon type="lock" className="lock_icon" />
                                     Load Policy
                                 </Button>
                                 <Button
