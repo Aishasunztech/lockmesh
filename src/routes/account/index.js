@@ -1076,7 +1076,6 @@ class Account extends Component {
                                                                         <Button size='small' className="pull-right imp_btn" type="dashed">Sample</Button>
                                                                     </a>
 
-
                                                                 </div>
                                                                 <div className="inline_b">
                                                                     <span className="headings">Chat IDs</span>
