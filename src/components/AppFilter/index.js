@@ -25,7 +25,7 @@ class AppFilter extends Component {
     }
 
     componentDidMount() {
-         console.log("componentDidMount selectedOptions appfilter", this.props.selectedOptions);
+        console.log("componentDidMount selectedOptions appfilter", this.props.selectedOptions);
         this.setState({
             selectedDisplayValues: this.props.selectedOptions,
         });
@@ -96,14 +96,16 @@ class AppFilter extends Component {
 
         // console.log(this.props.options);
         const Search = Input.Search;
-         console.log('render props ...', this.props.selectedOptions.length);
+        //  console.log('render props ...', this.props.selectedOptions.length);
         //  console.log('allSelected val are: ', allSelected)
-         console.log('render state ...', this.state.selectedDisplayValues.length);
-         let allSelectedOpt;
-         if(this.props.selectedOptions.length == this.state.selectedDisplayValues.length){
-             allSelectedOpt = true;
-         } else { allSelectedOpt= false }
-         console.log('allSelectedOpt val are: ', allSelectedOpt)
+        //  console.log('render state ...', this.state.selectedDisplayValues.length);
+        let allSelectedOpt;
+        if (this.props.selectedOptions != undefined) {
+            if (this.props.selectedOptions.length == this.state.selectedDisplayValues.length) {
+                allSelectedOpt = true;
+            } else { allSelectedOpt = false }
+            //  console.log('allSelectedOpt val are: ', allSelectedOpt)
+        }
 
         return (
             // className="gutter-example"
@@ -232,52 +234,52 @@ class AppFilter extends Component {
                                         </Button>
 
                                         : (this.props.addDealer) ?
-                                        <Button
-                                            type="primary"
-                                            disabled={(this.props.disableAddButton === true) ? true : false}
-                                            style={{ width: '100%' }}
-                                            onClick={() => this.props.addDealer(true)}
-                                        >
-                                            {this.props.addButtonText}
-                                        </Button>
-                                        :
-                                        (this.props.AddDeviceModal) ?
                                             <Button
                                                 type="primary"
                                                 disabled={(this.props.disableAddButton === true) ? true : false}
                                                 style={{ width: '100%' }}
-                                                onClick={() => this.props.handleDeviceModal(true)}
+                                                onClick={() => this.props.addDealer(true)}
                                             >
                                                 {this.props.addButtonText}
                                             </Button>
                                             :
-                                            (this.props.AddPolicyModel) ?
+                                            (this.props.AddDeviceModal) ?
                                                 <Button
                                                     type="primary"
                                                     disabled={(this.props.disableAddButton === true) ? true : false}
                                                     style={{ width: '100%' }}
-                                                    onClick={() => this.props.handlePolicyModal(true)}
+                                                    onClick={() => this.props.handleDeviceModal(true)}
                                                 >
                                                     {this.props.addButtonText}
                                                 </Button>
-                                                : (this.props.handleUploadApkModal) ?
+                                                :
+                                                (this.props.AddPolicyModel) ?
                                                     <Button
                                                         type="primary"
                                                         disabled={(this.props.disableAddButton === true) ? true : false}
                                                         style={{ width: '100%' }}
-                                                        onClick={() => this.props.handleUploadApkModal(true)}
+                                                        onClick={() => this.props.handlePolicyModal(true)}
                                                     >
                                                         {this.props.addButtonText}
                                                     </Button>
-                                                    :
-                                                    <Button
-                                                        type="primary"
-                                                        disabled={(this.props.disableAddButton === true) ? true : false}
-                                                        style={{ width: '100%' }}
-                                                        onClick={() => this.props.handleUserModal()}
-                                                    >
-                                                        {this.props.addButtonText}
-                                                    </Button>
+                                                    : (this.props.handleUploadApkModal) ?
+                                                        <Button
+                                                            type="primary"
+                                                            disabled={(this.props.disableAddButton === true) ? true : false}
+                                                            style={{ width: '100%' }}
+                                                            onClick={() => this.props.handleUploadApkModal(true)}
+                                                        >
+                                                            {this.props.addButtonText}
+                                                        </Button>
+                                                        :
+                                                        <Button
+                                                            type="primary"
+                                                            disabled={(this.props.disableAddButton === true) ? true : false}
+                                                            style={{ width: '100%' }}
+                                                            onClick={() => this.props.handleUserModal()}
+                                                        >
+                                                            {this.props.addButtonText}
+                                                        </Button>
 
 
                                     : null
