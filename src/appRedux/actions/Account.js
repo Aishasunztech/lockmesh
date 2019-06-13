@@ -220,8 +220,8 @@ export function createBackupDB() {
         // alert("hello");
         RestService.createBackupDB().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log("asdd");
-                RestService.getFile(response.data.path);
+                // console.log("asdd");
+                RestService.getBackupFile(response.data.path);
                 dispatch({
                     type: CREATE_BACKUP_DB,
                     // payload: response.data.data
