@@ -147,7 +147,7 @@ class UserDeviceList extends Component {
             {
                 title: (
                     <Input.Search
-                        name="status"
+                        name="finalStatus"
                         key="status"
                         id="status"
                         className="search_heading"
@@ -472,7 +472,7 @@ class UserDeviceList extends Component {
                 style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
                 text = "Activate";
             }
-            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
+            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`/connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
             // console.log(device.usr_device_id);
             return {
                 rowKey: index,
@@ -528,7 +528,7 @@ class UserDeviceList extends Component {
 
 
     render() {
-        console.log('dealer state', this.state.devicesList);
+        // console.log('dealer state', this.state.devicesList);
         return (
             <Fragment>
                 <Card>

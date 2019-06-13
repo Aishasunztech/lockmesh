@@ -46,11 +46,14 @@ export default class DeviceSidebar extends Component {
         super(props);
         this.state = {
             redirect: false,
-            user_id: ''
+            user_id: '',
+            dealer_id: '',
+            goToPage: '/dealer/dealer'
         };
     }
 
     renderDetailsData(device_details) {
+        console.log(device_details, 'device is')
 
         //  let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
         let color = getColor(device_details.finalStatus)
@@ -132,7 +135,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 7,
                 name: (<a href="javascript:void(0)">{titleCase(DEVICE_DEALER_NAME)}:</a>),
-                value: (<span className="captilize">{checkValue(device_details.dealer_name)}</span>)
+                value: (<span className="captilize"><a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a></span>)
             },
             {
                 key: 8,
@@ -218,6 +221,25 @@ export default class DeviceSidebar extends Component {
         }
     }
 
+    goToDealer = (dealer) => {
+        if (dealer.dealer_id != 'null' && dealer.dealer_id != null) {
+          if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+            this.setState({
+              redirect: true,
+              dealer_id: dealer.dealer_id,
+              goToPage: '/dealer/dealer'
+            })
+          } else {
+            this.setState({
+              redirect: true,
+              dealer_id: dealer.dealer_id,
+              goToPage: '/dealer/sdealer'
+            })
+          }
+    
+        }
+      }
+
     renderDetailsColumns(device_details) {
         return [
             {
@@ -252,12 +274,19 @@ export default class DeviceSidebar extends Component {
 
     render() {
         const { redirect } = this.state
-        if (redirect) {
+        if (redirect && this.state.user_id !== '') {
             return <Redirect to={{
                 pathname: '/users',
                 state: { id: this.state.user_id }
             }} />
         }
+
+        if (redirect && this.state.dealer_id !== '') {
+            return <Redirect to={{
+              pathname: this.state.goToPage,
+              state: { id: this.state.dealer_id }
+            }} />
+          }
         // console.log('device detail', this.props.device_details)
         return (
             <Card>

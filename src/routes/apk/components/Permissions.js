@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
 import { savePermission } from "../../../appRedux/actions/Apk";
 import DealerList from "./DealerList";
+import { Redirect } from 'react-router-dom';
 import CircularProgress from "components/CircularProgress/index";
 
 import { titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
@@ -32,7 +33,10 @@ class Permissions extends Component {
       permissions: [],
       hideDefaultSelections: false,
       removeSelectedDealersModal: false,
-      addSelectedDealersModal: false
+      addSelectedDealersModal: false,
+      redirect: false,
+      dealer_id: '',
+      goToPage: '/dealer/dealer'
     }
 
     this.addDealerCols = dealerColsWithSearch(true, this.handleSearch)
@@ -353,12 +357,31 @@ class Permissions extends Component {
     this.props.savePermission(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
   }
 
+  goToDealer = (dealer) => {
+    if (dealer.dealer_id != 'null' && dealer.dealer_id != null) {
+      if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+        this.setState({
+          redirect: true,
+          dealer_id: dealer.dealer_id,
+          goToPage: '/dealer/dealer'
+        })
+      } else {
+        this.setState({
+          redirect: true,
+          dealer_id: dealer.dealer_id,
+          goToPage: '/dealer/sdealer'
+        })
+      }
+
+    }
+  }
+
   renderDealer(list, permitted = false) {
     let data = [];
     // console.log(list);
     let is_included
     list.map((dealer) => {
-      // console.log('object recrd', this.props.record.permissions);
+      console.log('object recrd', dealer);
       if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);
 
@@ -367,7 +390,7 @@ class Permissions extends Component {
         'key': dealer.dealer_id,
         'row_key': dealer.dealer_id,
         'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-        'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
+        'dealer_name': dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A',
         'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
         'link_code': dealer.link_code ? dealer.link_code : 'N/A',
         'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
@@ -391,6 +414,14 @@ class Permissions extends Component {
     return (data);
   }
   render() {
+
+    const { redirect } = this.state;
+    if (redirect && this.state.dealer_id !== '') {
+      return <Redirect to={{
+        pathname: this.state.goToPage,
+        state: { id: this.state.dealer_id }
+      }} />
+    }
     // console.log('dealer state', this.state.dealerList);
     return (
       <Fragment>

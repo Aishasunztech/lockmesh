@@ -151,7 +151,7 @@ export default class PolicyInfo extends Component {
             })
         }
         if (this.props.policy !== nextProps.policy) {
-            console.log(nextProps.policy, 'next policy is');
+            // console.log(nextProps.policy, 'next policy is');
             let system_setting_app = '';
             let secure_setting_app = '';
             if(nextProps.policy.app_list.length){
@@ -178,7 +178,7 @@ export default class PolicyInfo extends Component {
     }
 
     render() {
-        console.log(this.state.system_setting_app, 'info list is ', this.state.secure_setting_app)
+        // console.log(this.state.system_setting_app, 'info list is ', this.state.secure_setting_app)
 
         const PolicyDetail = [{
             key: 1,

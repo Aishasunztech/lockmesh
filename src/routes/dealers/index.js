@@ -247,6 +247,7 @@ class Dealers extends Component {
             visible_DealerModal: false,
             pagination: 10,
             tabselect: '2',
+            expandedRowsKey:[],
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -418,6 +419,10 @@ class Dealers extends Component {
         this.props.getDropdown(dealer_type);
         this.props.getPagination(dealer_type);
 
+        this.setState({
+            expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
+        })
+
         // this.setState({
         //     //  devices: this.props.devices,
         //     dealer_type: dealer_type
@@ -436,6 +441,12 @@ class Dealers extends Component {
         const dealer_type = nextProps.match.params.dealer_type;
         //    console.log('device type recieved', dealer_type);
 
+        if(this.props !== nextProps){
+            this.setState({
+                expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
+            })
+        }
+
         if (this.state.dealer_type !== dealer_type) {
             this.props.getDealerList(dealer_type);
             // this.props.getDevicesList();
@@ -451,7 +462,7 @@ class Dealers extends Component {
 
     handleComponentSearch = (value) => {
 
-        console.log('searched keyword', value);
+        // console.log('searched keyword', value);
 
         try {
             if (value.length) {
@@ -460,7 +471,7 @@ class Dealers extends Component {
                     status = false;
                 }
                 let founddealers = componentSearch(coppydealers, value);
-                console.log("found dealers", founddealers);
+                // console.log("found dealers", founddealers);
                 if (founddealers.length) {
                     this.setState({
                         dealers: founddealers,
@@ -628,7 +639,7 @@ class Dealers extends Component {
 
 
     render() {
-        // console.log(this.state.columns, window.location.pathname.split("/").pop(), this.state.options)
+        // console.log(this.props.location, 'location is the ')
         return (
 
             <div>
@@ -688,6 +699,8 @@ class Dealers extends Component {
                                 tabselect={this.state.tabselect}
                                 handleChangetab={this.handleChangetab}
                                 updatePassword={this.props.updatePassword}
+                                location={this.props.location}
+                                expandedRowsKey={this.state.expandedRowsKeys}
                                 user={this.props.user}
                                 ref='dealerList'
 
@@ -728,7 +741,7 @@ class Dealers extends Component {
             // console.log(this.state.dealers);
             coppydealers.forEach((dealer) => {
                 // console.log("device", dealer);
-                console.log('dealer amount is', dealer[e.target.name])
+                // console.log('dealer amount is', dealer[e.target.name])
 
                 if (dealer[e.target.name] !== undefined) {
                     if ((typeof dealer[e.target.name]) === 'string') {
@@ -740,7 +753,7 @@ class Dealers extends Component {
                             demoDealers.push(dealer);
                         }
                         if (isArray(dealer[e.target.name])) {
-                            console.log('is it working', e.target.name)
+                            // console.log('is it working', e.target.name)
                             if (dealer[e.target.name][0]['total'].includes(e.target.value)) {
                                 demoDealers.push(dealer);
                             }
