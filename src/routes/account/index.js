@@ -13,6 +13,8 @@ import {
     getUsedSimIds,
     insertNewData,
     createBackupDB,
+    checkPass,
+    showBackupModal
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -22,9 +24,45 @@ import {
     getChatIDs,
     getPGPEmails,
 } from "../../appRedux/actions/Devices";
+import PasswordForm from '../ConnectDevice/components/PasswordForm';
 const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
+
+class PasswordModal extends Component {
+    // console.log('object,', props.actionType)
+    render() {
+        return (
+            <Modal
+                // closable={false}
+                maskClosable={false}
+                style={{ top: 20 }}
+                width="330px"
+                className="push_app"
+                title=""
+                visible={this.props.pwdConfirmModal}
+                footer={false}
+                onOk={() => {
+                }}
+                onCancel={() => {
+                    this.props.showPwdConfirmModal(false)
+                    this.refs.pswdForm.resetFields()
+                }
+                }
+                okText="Push Apps"
+            >
+                <PasswordForm
+                    checkPass={this.props.checkPass}
+                    actionType='back_up'
+                    handleCancel={this.props.showPwdConfirmModal}
+                    ref='pswdForm'
+                />
+            </Modal >
+        )
+    }
+}
+
+
 
 class Account extends Component {
     constructor(props) {
@@ -53,7 +91,8 @@ class Account extends Component {
             duplicate_ids: [],
             newData: [],
             duplicate_modal_show: false,
-            showBackupModal: false
+            showBackupModal: false,
+            pwdConfirmModal: false
 
         }
     }
@@ -119,7 +158,7 @@ class Account extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length) {
+        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length || this.props.backUpModal !== nextProps.backUpModal) {
             // if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length) {
             this.setState({
                 sim_ids: nextProps.sim_ids,
@@ -131,7 +170,8 @@ class Account extends Component {
                 duplicate_modal_show: nextProps.duplicate_modal_show,
                 duplicate_ids: nextProps.duplicate_ids,
                 duplicate_data_type: nextProps.duplicate_data_type,
-                newData: nextProps.newData
+                newData: nextProps.newData,
+                backUpModal: nextProps.backUpModal
             });
         } else if (this.props.duplicate_modal_show !== nextProps.duplicate_modal_show) {
             this.setState({
@@ -146,8 +186,9 @@ class Account extends Component {
 
         this.props.createBackupDB();
         this.setState({
-            showBackupModal: false
+            backUpModal: false
         })
+        this.props.showBackupModal(false)
 
     }
 
@@ -181,6 +222,14 @@ class Account extends Component {
     exportCSV = (fieldName) => {
         this.props.exportCSV(fieldName);
     }
+
+    showPwdConfirmModal = (visible) => {
+        // alert('hello');
+        this.setState({
+            pwdConfirmModal: visible,
+        })
+    }
+
     searchField = (originalData, fieldName, value) => {
         let demoData = [];
         if (value.length) {
@@ -287,7 +336,7 @@ class Account extends Component {
     }
     showBackupModal = () => {
         this.setState({
-            showBackupModal: true,
+            backUpModal: true,
         });
     }
 
@@ -301,9 +350,10 @@ class Account extends Component {
 
     handleCancel = (e) => {
         // console.log(e);
+        this.props.showBackupModal(false)
         this.setState({
             visible1: false,
-            showBackupModal: false,
+            backUpModal: false,
             selectedRowKeys: [],
         });
     }
@@ -1159,7 +1209,7 @@ class Account extends Component {
                                 className="back_db"
                                 maskClosable={false}
                                 title={<div>BACKUP DATABASE</div>}
-                                visible={this.state.showBackupModal}
+                                visible={this.state.backUpModal}
                                 onOk={this.createBackupDB}
                                 onCancel={this.handleCancel}
                                 okText='BACKUP NOW'
@@ -1169,9 +1219,8 @@ class Account extends Component {
                                     <p style={{ margin: 13 }}>Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated Files first and open in Excel. </p>
                                 </div>
                             </Modal>
-                            <div className="contenar" >
-                                {/* <Link to="#" onClick={this.showBackupModal}> */}
-                                <a href="javascript:void(0)" >
+                            <div >
+                                <Link to="#" onClick={() => this.showPwdConfirmModal(true)}>
                                     <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                         <div>
                                             <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
@@ -1189,11 +1238,7 @@ class Account extends Component {
                                         </div>
                                     </Card>
                                     <Button type="primary" size="small" className="open_btn">Open</Button>
-                                    {/* </Link> */}
-                                </a>
-                                <div className="middle">
-                                    <div className="text">Coming Soon</div>
-                                </div>
+                                </Link>
                             </div>
                         </Col>
 
@@ -1257,6 +1302,11 @@ class Account extends Component {
                         </Col>
                     </Row>
                 </div>
+                <PasswordModal
+                    pwdConfirmModal={this.state.pwdConfirmModal}
+                    showPwdConfirmModal={this.showPwdConfirmModal}
+                    checkPass={this.props.checkPass}
+                />
 
             </div >
 
@@ -1280,7 +1330,9 @@ function mapDispatchToProps(dispatch) {
         getUsedSimIds: getUsedSimIds,
         releaseCSV: releaseCSV,
         insertNewData: insertNewData,
-        createBackupDB: createBackupDB
+        createBackupDB: createBackupDB,
+        checkPass: checkPass,
+        showBackupModal: showBackupModal
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {
@@ -1288,7 +1340,7 @@ var mapStateToProps = ({ account, devices }) => {
     // console.log("chat_ids", devices.chat_ids);
     // console.log("used_pgp_emails", account.used_pgp_emails);
     // console.log("used_caht", account.used_chat_ids);
-    // console.log("used_sadas", account.used_sim_ids);
+    // console.log("used_sadas", account.backUpModal);
     return {
         msg: account.msg,
         showMsg: account.showMsg,
@@ -1301,7 +1353,8 @@ var mapStateToProps = ({ account, devices }) => {
         duplicate_data_type: account.duplicate_data_type,
         duplicate_ids: account.duplicate_ids,
         duplicate_modal_show: account.duplicate_modal_show,
-        newData: account.newData
+        newData: account.newData,
+        backUpModal: account.backUpModal
     };
 }
 

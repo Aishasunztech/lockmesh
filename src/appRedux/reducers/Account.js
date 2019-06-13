@@ -6,7 +6,9 @@ import {
     RELEASE_CSV,
     DUPLICATE_SIM_IDS,
     NEW_DATA_INSERTED,
-    CREATE_BACKUP_DB
+    CREATE_BACKUP_DB,
+    SHOW_BACKUP_MODAL,
+    CHECK_BACKUP_PASS
 } from "constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -23,6 +25,7 @@ const initialState = {
     duplicate_modal_show: false,
     duplicate_data_type: '',
     newData: [],
+    backUpModal: false
 };
 
 export default (state = initialState, action) => {
@@ -90,6 +93,7 @@ export default (state = initialState, action) => {
         case CREATE_BACKUP_DB: {
             return {
                 ...state,
+
             }
         }
 
@@ -128,6 +132,30 @@ export default (state = initialState, action) => {
                 }
             }
         }
+        case CHECK_BACKUP_PASS:
+            if (action.payload.PasswordMatch.password_matched) {
+                return {
+                    ...state,
+                    backUpModal: true,
+                }
+            }
+            else {
+                error({
+                    title: "Password Did not Match. Please Try again.",
+                });
+                return {
+                    ...state,
+                    backUpModal: false
+                }
+            }
+        case SHOW_BACKUP_MODAL:
+            // console.log(action.payload);
+
+            return {
+                ...state,
+                backUpModal: action.payload,
+            }
+
         default:
             return state;
     }

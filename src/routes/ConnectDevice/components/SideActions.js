@@ -357,13 +357,13 @@ class SideActions extends Component {
     saveProfile = () => {
 
         if (this.state.saveProfileType === "profile" && this.state.profileName !== '') {
-let exts = [];
-            if(this.props.extensions.length){
+            let exts = [];
+            if (this.props.extensions.length) {
                 // console.log('saved profile will be', this.props.extensions);
-                for(let extension of this.props.extensions){
-                    if(extension.uniqueName == SECURE_SETTING){
-                      exts =  extension.subExtension
-                    //   console.log(exts, 'sddsdsdsdsdsdsdsd')
+                for (let extension of this.props.extensions) {
+                    if (extension.uniqueName == SECURE_SETTING) {
+                        exts = extension.subExtension
+                        //   console.log(exts, 'sddsdsdsdsdsdsdsd')
                     }
                 }
             }
@@ -740,7 +740,7 @@ let exts = [];
                         />
                         :
                         (this.state.historyType === "profile") ?
-                        
+
                             <TableHistory
                                 histories={this.props.profiles}
                                 type={this.state.historyType}
