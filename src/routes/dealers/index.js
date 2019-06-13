@@ -247,6 +247,10 @@ class Dealers extends Component {
             visible_DealerModal: false,
             pagination: 10,
             tabselect: '2',
+            allDealers: [],
+            activeDealers: [],
+            suspendDealers: [],
+            unlinkedDealers: []
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -566,6 +570,14 @@ class Dealers extends Component {
                 dealers: this.props.dealers
             })
         }
+        if (this.props !== prevProps) {
+            this.setState({
+                allDealers: this.props.dealers,
+                activeDealers: this.filterList('active', this.props.dealers),
+                suspendDealers: this.filterList('suspended', this.props.dealers),
+                unlinkedDealers: this.filterList('unlinked', this.props.dealers),
+            })
+        }
 
     }
 
@@ -678,6 +690,10 @@ class Dealers extends Component {
                             <DealerList
                                 columns={this.state.columns}
                                 dealersList={this.state.dealers}
+                                allDealers={this.state.allDealers.length}
+                                activeDealers={this.state.activeDealers.length}
+                                suspendDealers={this.state.suspendDealers.length}
+                                unlinkedDealers={this.state.unlinkedDealers.length}
                                 suspendDealer={this.props.suspendDealer}
                                 activateDealer={this.props.activateDealer}
                                 deleteDealer={this.props.deleteDealer}

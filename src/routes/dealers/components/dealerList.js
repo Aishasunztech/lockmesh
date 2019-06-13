@@ -200,13 +200,13 @@ export default class Tab extends Component {
         return (
             <Fragment>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab="All" key="1" >
+                    <TabPane tab={"All (" + this.props.allDealers + ")"} key="1" >
                     </TabPane>
-                    <TabPane tab={<span className="green">Active</span>} key="2" forceRender={true}>
+                    <TabPane tab={<span className="green">Active ({this.props.activeDealers} )</span>} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="yellow">Suspended</span>} key="4" forceRender={true}>
+                    <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDealers} )</span>} key="4" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="orange">Archived</span>} key="3" forceRender={true}>
+                    <TabPane tab={<span className="orange">Archived ({this.props.unlinkedDealers} )</span>} key="3" forceRender={true}>
                     </TabPane>
                 </Tabs>
                 <DealerList
