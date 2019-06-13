@@ -1181,9 +1181,7 @@ class Account extends Component {
                           <Icon type="database" className="and_icon" />
                         </Col>
                         <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                          <p style={{}}>
-                            This feature allows you to keep a backup of the complete system database for offline safekeeping
-                                                    </p>
+                          <p style={{}}>This feature allows you to keep a backup of the complete system database for offline safekeeping</p>
                         </Col>
                       </Row>
                     </div>
@@ -1196,7 +1194,36 @@ class Account extends Component {
                 </div>
               </div>
             </Col>
-
+            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+              <div>
+                {/* <div className="contenar"> */}
+                <a href="javascript:void(0)">
+                  <Card style={{ borderRadius: 12 }} className="manage_ac">
+                    <div className="profile_table image_1">
+                      <Fragment>
+                        <div className="col-md-12 ac_card">
+                          <h2 style={{ textAlign: "center" }}>Purchase Credits</h2>
+                          <Divider className="mb-0" />
+                          <Row style={{ padding: '12px 0 0px' }}>
+                            <Col span={8} className="" style={{ textAlign: "center" }}>
+                              <Icon type="dollar" className="and_icon" />
+                            </Col>
+                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                              <p style={{}}>Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.</p>
+                            </Col>
+                          </Row>
+                        </div>
+                      </Fragment>
+                    </div>
+                  </Card>
+                  <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
+                </a>
+                {/* <div className="middle">
+                    <div className="text">Coming Soon</div>
+                  </div> */}
+                {/* </div> */}
+              </div>
+            </Col>
             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
               <div>
                 <div className="contenar">
@@ -1226,39 +1253,11 @@ class Account extends Component {
                 </div>
               </div>
             </Col>
-            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-              <div>
-                <div className="contenar">
-                  <a href="javascript:void(0)">
-                    <Card style={{ borderRadius: 12 }} className="manage_ac">
-                      <div className="profile_table image_1">
-                        <Fragment>
-                          <Row>
-                            <div className="col-md-12 ac_card">
-                              <h2 style={{ textAlign: "center" }}> <Icon type="credit-card" /> Payment Gateway</h2>
-                              <Divider className="mb-0" />
-                              <div className="crd_txt">
-                                <p><span className="diamond_icon">&#9670;</span>Add/edit payment gateway</p>
-                                <p><span className="diamond_icon">&#9670;</span>Set permissions</p>
-                                <p><span className="diamond_icon">&#9670;</span>Customize prices and packages</p>
-                                <p className="more_txt">and more...</p>
-                              </div>
-                            </div>
-                          </Row>
-                        </Fragment>
-                      </div>
-                    </Card>
-                  </a>
-                  <div className="middle">
-                    <div className="text">Coming Soon</div>
-                  </div>
-                </div>
-              </div>
-            </Col>
+
           </Row>
         </div>
 
-      </div >
+      </div>
 
 
     );

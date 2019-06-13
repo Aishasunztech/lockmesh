@@ -112,12 +112,9 @@ class SidebarContent extends Component {
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
             <ul className="gx-app-nav mt-8">
-
-              <br />
-
               <li>
                 <i className="icon icon-dollar" >
-                  <Icon type="dollar" />
+                  <Icon type="dollar" className="mb-10"/>
                 </i>
               </li>
               <li><i className="icon icon-chat-new" /></li>
