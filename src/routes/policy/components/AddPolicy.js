@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Tabs, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
 import { connect } from "react-redux";
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE } from '../../../constants/Constants';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS } from '../../../constants/Constants';
 import styles from './policy.css';
 import { bindActionCreators } from "redux";
 import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
@@ -100,24 +100,20 @@ class AddPolicy extends Component {
 
     savePolicy = () => {
 
+        console.log('object of nul', this.state.main_system_control)
+
         if (this.state.pushAppsIds.length) {
             for (let id of this.state.pushAppsIds) {
                 let index = this.state.dealerApps.findIndex(item => item.apk_id == id);
-                this.state.pushApps.push(this.state.dealerApps[index])
+                if (index > -1) {
+                    this.state.pushApps.push(this.state.dealerApps[index])
+                }
+
             }
         }
 
         let appPermissions = [];
         let secure_apps = [];
-
-        // if (this.state.appPermissionsIds.length) {
-        //     // console.log('app permission', this.state.appPermissions)
-        //     for (let id of this.state.appPermissionsIds) {
-        //         let obj = this.state.appPermissions.find(item => item.id == id)
-        //         if (obj) appPermissions.push(obj);
-
-        //     }
-        // }
 
         let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName == SECURE_SETTING)));
         // console.log(main_extension)
@@ -125,13 +121,21 @@ class AddPolicy extends Component {
             secure_apps = main_extension.subExtension
         }
 
-        if (this.state.main_system_control) {
+        if (Object.keys(this.state.main_system_control).length !== 0 && this.state.main_system_control.constructor === Object) {
             this.state.appPermissions.push(this.state.main_system_control)
         }
 
         delete main_extension.subExtension;
-        this.state.appPermissions.push(main_extension);
-        console.log('appPermissions', appPermissions, 'secure_apps', this.state.allExtensions)
+
+        if (main_extension) {
+            console.log(main_extension, 'main extension si')
+            // let main_extension_index = main_extension.findIndex(item => item.uniqueName == SECURE_SETTING)
+            // if (main_extension_index > -1) {
+                this.state.appPermissions.push(main_extension);
+            // }
+        }
+
+        console.log('appPermissions', this.state.appPermissions, 'secure_apps', this.state.allExtensions)
 
         let data = {
             policy_name: this.state.policy_name,
@@ -140,7 +144,6 @@ class AddPolicy extends Component {
             app_list: this.state.appPermissions,
             secure_apps: secure_apps,
             system_permissions: this.state.systemPermissions
-
         }
         // console.log('polcy is', data);
 
@@ -175,7 +178,6 @@ class AddPolicy extends Component {
                     enableAllallExtensions: false,
                 })
             }
-
         }
         else {
             if (this.state.policy_name === '') {
@@ -200,7 +202,7 @@ class AddPolicy extends Component {
 
         let main_system_control = {};
         if (this.props.appPermissions.length) {
-            let main_system_control_index = this.props.appPermissions.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE)
+            let main_system_control_index = this.props.appPermissions.findIndex(item => item.unique_name == Main_SETTINGS)
             // console.log(main_system_control_index, 'dsfksd');
             if (main_system_control_index > -1) {
                 main_system_control = this.props.appPermissions[main_system_control_index];
@@ -241,7 +243,7 @@ class AddPolicy extends Component {
             }
 
             if (this.props.appPermissions.length) {
-                let main_system_control_index = this.props.appPermissions.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE)
+                let main_system_control_index = this.props.appPermissions.findIndex(item => item.unique_name == Main_SETTINGS)
                 // console.log(main_system_control_index, 'dsfksd');
                 if (main_system_control_index > -1) {
                     this.props.appPermissions.splice(main_system_control_index, 1);
@@ -403,6 +405,7 @@ class AddPolicy extends Component {
     render() {
         // console.log(this.state.main_system_control,'console the applist', this.state.appPermissions);
         // const { getFieldDecorator } = this.props.form;
+        console.log(this.state.appPermissions, 'render time')
         return (
             <Fragment>
                 <div className="policy_steps card-container">

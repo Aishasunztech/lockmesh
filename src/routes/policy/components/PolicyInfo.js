@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Tabs, Table, Switch, Row, Col, } from 'antd';
 import Permissions from "./Permissions";
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING } from '../../../constants/Constants';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION,Main_SETTINGS, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING } from '../../../constants/Constants';
 import AppList from "./AppList";
 
 const TabPane = Tabs.TabPane;
@@ -124,7 +124,7 @@ export default class PolicyInfo extends Component {
         let secure_setting_app = '';
 
         if(this.props.policy.app_list.length){
-            let system_control_index = this.props.policy.app_list.findIndex(app => app.unique_name == SYSTEM_CONTROLS_UNIQUE)
+            let system_control_index = this.props.policy.app_list.findIndex(app => app.unique_name == Main_SETTINGS)
             if(system_control_index > -1){
               system_setting_app = this.props.policy.app_list[system_control_index]
             }
@@ -155,7 +155,7 @@ export default class PolicyInfo extends Component {
             let system_setting_app = '';
             let secure_setting_app = '';
             if(nextProps.policy.app_list.length){
-              let system_control_index = nextProps.policy.app_list.findIndex(app => app.unique_name == SYSTEM_CONTROLS_UNIQUE)
+              let system_control_index = nextProps.policy.app_list.findIndex(app => app.unique_name == Main_SETTINGS)
               if(system_control_index > -1){
                 system_setting_app = nextProps.policy.app_list[system_control_index]
               }
