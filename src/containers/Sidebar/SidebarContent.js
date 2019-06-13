@@ -1,34 +1,43 @@
 import React, { Component } from "react";
-import { Menu, Icon, Badge } from "antd";
+import { Menu, Icon, Badge, Modal } from "antd";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-import CustomScrollbars from "util/CustomScrollbars";
+
 import SidebarLogo from "./SidebarLogo";
 
 // import LogoutIcon from "./logout.svg";
 
 import Auxiliary from "util/Auxiliary";
 import UserProfile from "./UserProfile";
+
 // import AppsNavigation from "./AppsNavigation";
+
+import NewDevice from '../../components/NewDevices';
+
+import { getNewDevicesList } from "../../appRedux/actions/Common";
+
 import {
   NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
   NAV_STYLE_NO_HEADER_MINI_SIDEBAR,
   THEME_TYPE_LITE
 } from "../../constants/ThemeSetting";
+
 import IntlMessages from "../../util/IntlMessages";
-import { connect } from "react-redux";
-import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
+
+
+import { logout } from "appRedux/actions/Auth";
+
+import { rejectDevice, addDevice } from '../../appRedux/actions/Devices';
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 
-// import MenuItems from "../MenuItems";
 
 class SidebarContent extends Component {
 
   constructor(props) {
     super(props);
 
-    // console.log("userType", this.state);
   }
 
   getNoHeaderClass = (navStyle) => {
@@ -44,6 +53,39 @@ class SidebarContent extends Component {
     return "";
   };
 
+  showNotification = () => {
+    this.props.getNewDevicesList()
+    this.refs.new_device.showModal();
+    // alert('its working');
+  }
+
+  componentDidMount() {
+    // console.log('get new device', this.props.getNewDevicesList())
+    this.props.getNewDevicesList();
+
+  }
+  componentWillReceiveProps(nextprops) {
+    if (this.props.pathname !== nextprops.pathname) {
+      this.props.getNewDevicesList();
+    }
+  }
+
+  logout = () => {
+    let _this = this;
+    Modal.confirm({
+      title: 'Are you sure you want to logout?',
+      okText: 'Yes',
+      cancelText: 'No',
+
+      onOk() {
+        _this.props.logout()
+        // console.log('OK');
+      },
+      onCancel() {
+        // console.log('Cancel');
+      },
+    })
+  }
 
   render() {
     // console.log(addDevice)
@@ -56,10 +98,14 @@ class SidebarContent extends Component {
         <SidebarLogo />
         <div className="gx-sidebar-content ">
           <div className={`gx-sidebar-notifications text-center ${this.getNoHeaderClass(navStyle)} `}>
-            <UserProfile
-              // devices={this.props.devices}
+            <UserProfile />
+
+            <NewDevice
+              ref='new_device'
+              devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
+
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -70,19 +116,20 @@ class SidebarContent extends Component {
               <br />
 
               <li>
-                <i className="icon" >
+                <i className="icon icon-dollar" >
                   <Icon type="dollar" />
                 </i>
               </li>
               <li><i className="icon icon-chat-new" /></li>
               <li>
                 <a className="head-example">
-                  <i className="icon icon-notification notification_icn" ></i>
+                  <Badge count={this.props.devices.length}>
+                    <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
+                  </Badge>
                 </a>
               </li>
             </ul>
           </div>
-          {/* <CustomScrollbars className="gx-layout-sider-scrollbar"> */}
           {(authUser.type === AUTO_UPDATE_ADMIN)
             ?
             <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
@@ -121,23 +168,21 @@ class SidebarContent extends Component {
               {(authUser.type === ADMIN) ? <Menu.Item key="account">
                 <Link to="/account"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.account" /></Link>
               </Menu.Item> : null}
-              {/* {(authUser.type === "admin") ? <Menu.Item key="policy">
-              <Link to="/policy"><Icon type="file-protect" className="icon" /> <IntlMessages id="sidebar.policy" /></Link>
-            </Menu.Item> : null} */}
 
-              {/* {(authUser.type === "admin") ? <Menu.Item key="apk-list">
-              <Link to="/app"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
-            </Menu.Item> : null} */}
 
               <Menu.Item key="profile">
                 <Link to="/profile"><i className="icon icon-contacts" /> <IntlMessages id="sidebar.profile" /></Link>
               </Menu.Item>
-              <Menu.Item key="logout">
-                <Link to="/logout">
-                  <i className="icon">
-                    <i class="fa fa-sign-out ml-6" aria-hidden="true"></i>
-                  </i>
-                  <IntlMessages id="Logout" /></Link>
+              <Menu.Item key="logout" onClick={(e) => {
+                // this.props.logout() 
+                this.logout()
+              }}>
+                {/* <Link to="/logout"> */}
+                <i className="icon">
+                  <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
+                </i>
+                Logout
+                {/* </Link> */}
               </Menu.Item>
             </Menu>
           }
@@ -148,19 +193,18 @@ class SidebarContent extends Component {
   }
 }
 
-SidebarContent.propTypes = {};
+// SidebarContent.propTypes = {};
+
 const mapStateToProps = ({ settings, devices, device3 }) => {
   const { navStyle, themeType, locale, pathname } = settings;
-  let deviceList = [];
-  //  console.log("testing testing",devices);
-  //  console.log("testing 2testing",settings);
-  devices.devices.map(device => {
-    if ((device.device_status === 0 || device.device_status === '0') && (device.unlink_status === 0 || device.unlink_status === '0')) {
-      deviceList.push(device);
-    }
-  });
-  // console.log("sidebar", deviceList.length);
-  return { navStyle, themeType, locale, pathname, devices: deviceList }
+
+  return {
+    navStyle,
+    themeType,
+    locale,
+    pathname,
+    devices: devices.newDevices,
+  }
 };
-export default connect(mapStateToProps, { rejectDevice, addDevice, getDevicesList })(SidebarContent);
+export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList })(SidebarContent);
 

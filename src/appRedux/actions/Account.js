@@ -11,7 +11,8 @@ import {
     GET_USED_CHAT_IDS,
     GET_USED_SIM_IDS,
     DUPLICATE_SIM_IDS,
-    NEW_DATA_INSERTED
+    NEW_DATA_INSERTED,
+    CREATE_BACKUP_DB
 } from "constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -25,7 +26,7 @@ export function importCSV(formData, fieldName) {
         RestService.importCSV(formData, fieldName).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 console.log('duplicated data', response.data)
-                if(response.data.status){
+                if (response.data.status) {
                     if (response.data.duplicateData.length) {
                         // console.log('duplicated data', response.data);
                         dispatch({
@@ -45,7 +46,7 @@ export function importCSV(formData, fieldName) {
                             showMsg: false,
                         })
                     }
-                }else{
+                } else {
                     dispatch({
                         type: IMPORT_CSV,
                         payload: response.data,
@@ -57,7 +58,7 @@ export function importCSV(formData, fieldName) {
                         showMsg: false,
                     })
                 }
-               
+
 
             } else {
                 dispatch({
@@ -201,6 +202,26 @@ export function getUsedChatIds() {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: GET_USED_CHAT_IDS,
+                    payload: response.data.data
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+export function createBackupDB() {
+    return (dispatch) => {
+        // alert("hello");
+        RestService.createBackupDB().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log("asdd");
+                RestService.getFile(response.data.path);
+                dispatch({
+                    type: CREATE_BACKUP_DB,
                     payload: response.data.data
                 });
 

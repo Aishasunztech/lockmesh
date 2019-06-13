@@ -112,6 +112,11 @@
     margin-left: 2px;
 }
 
+.image_icon {
+    height: 40px;
+    width: 40px
+}
+
 .ant-steps-item-content {
     margin-top: 4px !important;
     margin-bottom: 4px;

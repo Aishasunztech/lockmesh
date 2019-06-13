@@ -157,6 +157,9 @@ export const GET_USED_SIM_IDS = 'GET_USED_SIM_IDS';
 export const RELEASE_CSV = 'RELEASE_CSV';
 export const GET_IMIE_HISTORY = 'GET_IMIE_HISTORY';
 export const WRITE_IMEI = 'WRITE_IMEI';
+export const CREATE_BACKUP_DB = 'CREATE_BACKUP_DB';
+
+
 
 // Policy consts
 export const GET_POLICIES = 'GET_POLICIES'

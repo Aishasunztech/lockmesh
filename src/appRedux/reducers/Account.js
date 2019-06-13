@@ -5,7 +5,8 @@ import {
     GET_USED_SIM_IDS,
     RELEASE_CSV,
     DUPLICATE_SIM_IDS,
-    NEW_DATA_INSERTED
+    NEW_DATA_INSERTED,
+    CREATE_BACKUP_DB
 } from "constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -84,6 +85,11 @@ export default (state = initialState, action) => {
                 duplicate_data_type: action.payload.type,
                 duplicate_modal_show: true,
                 newData: action.payload.newData
+            }
+        }
+        case CREATE_BACKUP_DB: {
+            return {
+                ...state,
             }
         }
 

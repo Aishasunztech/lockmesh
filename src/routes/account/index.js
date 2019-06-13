@@ -11,7 +11,8 @@ import {
     getUsedPGPEmails,
     getUsedChatIds,
     getUsedSimIds,
-    insertNewData
+    insertNewData,
+    createBackupDB,
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -142,6 +143,11 @@ class Account extends Component {
         }
     }
     createBackupDB = () => {
+
+        this.props.createBackupDB();
+        this.setState({
+            showBackupModal: false
+        })
 
     }
 
@@ -1163,8 +1169,9 @@ class Account extends Component {
                                     <p style={{ margin: 13 }}>Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated Files first and open in Excel. </p>
                                 </div>
                             </Modal>
-                            <div>
-                                <Link to="#" onClick={this.showBackupModal}>
+                            <div className="contenar" >
+                                {/* <Link to="#" onClick={this.showBackupModal}> */}
+                                <a href="javascript:void(0)" >
                                     <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                         <div>
                                             <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
@@ -1182,7 +1189,11 @@ class Account extends Component {
                                         </div>
                                     </Card>
                                     <Button type="primary" size="small" className="open_btn">Open</Button>
-                                </Link>
+                                    {/* </Link> */}
+                                </a>
+                                <div className="middle">
+                                    <div className="text">Coming Soon</div>
+                                </div>
                             </div>
                         </Col>
 
@@ -1268,7 +1279,8 @@ function mapDispatchToProps(dispatch) {
         getUsedChatIds: getUsedChatIds,
         getUsedSimIds: getUsedSimIds,
         releaseCSV: releaseCSV,
-        insertNewData: insertNewData
+        insertNewData: insertNewData,
+        createBackupDB: createBackupDB
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {

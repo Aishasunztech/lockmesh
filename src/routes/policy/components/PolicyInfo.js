@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Tabs, Table, Switch } from 'antd';
+import { Tabs, Table, Switch, Row, Col, } from 'antd';
 import Permissions from "./Permissions";
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, POLICY_DETAILS } from '../../../constants/Constants';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING } from '../../../constants/Constants';
 import AppList from "./AppList";
 
 const TabPane = Tabs.TabPane;
@@ -38,6 +38,8 @@ export default class PolicyInfo extends Component {
         this.state = {
             selected: '1',
             policy: [],
+             system_setting_app :'',
+             secure_setting_app :'',
         }
 
     }
@@ -118,22 +120,55 @@ export default class PolicyInfo extends Component {
 
 
     componentDidMount() {
+        let system_setting_app = '';
+        let secure_setting_app = '';
+
+        if(this.props.policy.app_list.length){
+            let system_control_index = this.props.policy.app_list.findIndex(app => app.unique_name == SYSTEM_CONTROLS_UNIQUE)
+            if(system_control_index > -1){
+              system_setting_app = this.props.policy.app_list[system_control_index]
+            }
+
+            let secure_setting_index = this.props.policy.app_list.findIndex(app => app.uniqueName == SECURE_SETTING)
+            if(secure_setting_index > -1){
+              secure_setting_app = this.props.policy.app_list[secure_setting_index]
+            }
+          }
+
         this.setState({
             selected: this.props.selected,
-            policy: this.props.policy
+            policy: this.props.policy,
+            system_setting_app: system_setting_app,
+            secure_setting_app: secure_setting_app,
         })
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.selected !== nextProps.selected) {
-            console.log(this.props, 'object updated', nextProps)
+            // console.log(this.props, 'object updated', nextProps)
             this.setState({
                 selected: nextProps.selected,
             })
         }
         if (this.props.policy !== nextProps.policy) {
+            console.log(nextProps.policy, 'next policy is');
+            let system_setting_app = '';
+            let secure_setting_app = '';
+            if(nextProps.policy.app_list.length){
+              let system_control_index = nextProps.policy.app_list.findIndex(app => app.unique_name == SYSTEM_CONTROLS_UNIQUE)
+              if(system_control_index > -1){
+                system_setting_app = nextProps.policy.app_list[system_control_index]
+              }
+
+              let secure_setting_index = nextProps.policy.app_list.findIndex(app => app.uniqueName == SECURE_SETTING)
+              if(secure_setting_index > -1){
+                secure_setting_app = nextProps.policy.app_list[secure_setting_index]
+              }
+            }
             this.setState({
-                policy: nextProps.policy
+                policy: nextProps.policy,
+                system_setting_app: system_setting_app,
+                secure_setting_app: secure_setting_app,
             })
         }
     }
@@ -143,7 +178,7 @@ export default class PolicyInfo extends Component {
     }
 
     render() {
-        // console.log('info list is ', this.props.policy.push_apps)
+        console.log(this.state.system_setting_app, 'info list is ', this.state.secure_setting_app)
 
         const PolicyDetail = [{
             key: 1,
@@ -157,6 +192,7 @@ export default class PolicyInfo extends Component {
             <div>
                 <Tabs className="exp_tabs_policy" onChange={this.callback} activeKey={this.state.selected} type="card">
                     <TabPane tab="Selected Apps " key="1">
+
                         <AppList
                             apk_list={this.state.policy.push_apps}
                             handleCheckApp={this.handleCheckApp}
@@ -187,6 +223,58 @@ export default class PolicyInfo extends Component {
                         />
                     </TabPane>
                     <TabPane tab={SECURE_SETTING_PERMISSION} key="3">
+                        <div>
+                            <Row>
+                                <Col span={8} className="">
+                                </Col>
+                                <Col span={2} className="">
+                                    <img src={require("assets/images/setting.png")} className='image_icon' />
+                                </Col>
+                                <Col span={6} className="pl-0">
+                                    <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
+                                </Col>
+                            </Row>
+                            <Row className="mb-8"  style={{marginTop: 10}}>
+                            <Col span={6}></Col>
+                                <Col span={4} className="text-center">
+                                    <span>Guest: </span>
+                                    <Switch
+                                    disabled
+                                        size="small"
+                                        checked={ this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.guest === true || this.state.secure_setting_app.guest === 1) ? true : false: false}
+                                        onClick={(e) => {
+                                            this.handleChecked(e, "guest", '', 'main');
+                                        }}
+                                    />
+                                </Col>
+                                <Col span={4} className="text-center">
+                                    <span>Encrypted: </span>
+                                    <Switch
+                                    disabled
+                                        size="small"
+                                        checked={ this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.encrypted === true || this.state.secure_setting_app.encrypted === 1) ? true : false: false}                                       
+                                        onClick={(e) => {
+                                            // console.log("encrypted", e);
+                                            this.handleChecked(e, "encrypted", '', 'main');
+                                        }}
+                                    />
+                                </Col>
+                                <Col span={4} className="text-center">
+                                    <span>Enable: </span>
+                                    <Switch
+                                    disabled
+                                        size="small"
+                                        checked={ this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.enable === true || this.state.secure_setting_app.enable === 1) ? true : false: false}                                                                             
+                                        onClick={(e) => {
+                                            // console.log("encrypted", e);
+                                            this.handleChecked(e, "enable", '', 'main');
+                                        }}
+                                    />
+
+                                </Col>
+                                <Col span={6}></Col>
+                            </Row>
+                        </div>
                         <AppList
                             allExtensions={this.state.policy.secure_apps}
                             handleEditPolicy={this.props.handleEditPolicy}
@@ -203,6 +291,58 @@ export default class PolicyInfo extends Component {
                         />
                     </TabPane>
                     <TabPane tab={SYSTEM_PERMISSION} key="4">
+                        <div>
+                            <Row>
+                                <Col span={8} className="">
+                                </Col>
+                                <Col span={2} className="">
+                                    <img src={require("assets/images/setting.png")} className='image_icon'/>
+                                </Col>
+                                <Col span={6} className="pl-0">
+                                    <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
+                                </Col>
+                            </Row>
+                            <Row className="mb-8" style={{marginTop: 10}}>
+                                <Col span={6}></Col>
+                                <Col span={4}className="text-center">
+                                    <span>Guest: </span>
+                                    <Switch
+                                    disabled
+                                        size="small"
+                                        checked={ this.state.system_setting_app !== '' ? (this.state.system_setting_app.guest === true || this.state.system_setting_app.guest === 1) ? true : false: false}                                                                                                                     
+                                        onClick={(e) => {
+                                            this.handleChecked(e, "guest", '', 'main');
+                                        }}
+                                    />
+                                </Col>
+                                <Col span={4} className="text-center">
+                                    <span>Encrypted: </span>
+                                    <Switch
+                                    disabled
+                                        size="small"
+                                        checked={ this.state.system_setting_app !== '' ? (this.state.system_setting_app.encrypted === true || this.state.system_setting_app.encrypted === 1) ? true : false: false}                                                                                                                                                            
+                                        onClick={(e) => {
+                                            // console.log("encrypted", e);
+                                            this.handleChecked(e, "encrypted", '', 'main');
+                                        }}
+                                    />
+                                </Col>
+                                <Col span={4} className="text-center">
+                                    <span>Enable: </span>
+                                    <Switch
+                                    disabled
+                                        size="small"
+                                        checked={ this.state.system_setting_app !== '' ? (this.state.system_setting_app.enable === true || this.state.system_setting_app.enable === 1) ? true : false: false}                                                                                                                                                             
+                                        onClick={(e) => {
+                                            // console.log("encrypted", e);
+                                            this.handleChecked(e, "enable", '', 'main');
+                                        }}
+                                    />
+
+                                </Col>
+                                <Col span={6}></Col>
+                            </Row>
+                        </div>
                         <Table
                             pagination={false}
                             dataSource={this.renderSystemPermissions(this.state.policy.controls)}
