@@ -572,6 +572,9 @@ const RestService = {
     getFile: (filename) => {
         window.location = BASE_URL + 'users/getFile/' + filename;
     },
+    getBackupFile: (filename) => {
+        window.location = BASE_URL + 'users/getBackupFile/' + filename;
+    },
     postPagenation: (selectedValue, pageName) => {
         return axios.post(BASE_URL + 'users/dealer/postPagination', { selectedValue: selectedValue, pageName: pageName }, RestService.getHeader())
     },

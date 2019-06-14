@@ -43,6 +43,8 @@ class DevicesList extends Component {
             redirect: false,
             user_id: '',
             expandedRowKeys: [],
+            dealer_id: '',
+            goToPage: '/dealer/dealer'
         };
         this.renderList = this.renderList.bind(this);
     }
@@ -74,6 +76,26 @@ class DevicesList extends Component {
             })
         }
     }
+    goToDealer = (dealer) => {
+        if (dealer.dealer_id != 'null' && dealer.dealer_id != null) {
+          if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+            this.setState({
+              redirect: true,
+              dealer_id: dealer.dealer_id,
+              goToPage: '/dealer/dealer'
+            })
+          } else {
+            this.setState({
+              redirect: true,
+              dealer_id: dealer.dealer_id,
+              goToPage: '/dealer/sdealer'
+            })
+          }
+    
+        }
+      }
+
+
     // renderList
     renderList(list) {
         // console.log('list of dec', list)
@@ -175,7 +197,7 @@ class DevicesList extends Component {
 
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                dealer_name: checkValue(device.dealer_name),
+                dealer_name:<a onClick={() => { this.goToDealer(device) }}>{ checkValue(device.dealer_name)}</a>,
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{ device.online.charAt(0).toUpperCase() + device.online.slice(1) }</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1) }</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
@@ -292,15 +314,22 @@ class DevicesList extends Component {
 
     render() {
 
-        // console.log(this.state.expandedRowKeys, 'selected keys', )
+        // console.log(this.state, 'selected keys', )
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state
-        if (redirect) {
+        if (redirect && this.state.user_id !== '') {
             return <Redirect to={{
                 pathname: '/users',
                 state: { id: this.state.user_id }
             }} />
         }
+
+        if (redirect && this.state.dealer_id !== '') {
+            return <Redirect to={{
+              pathname: this.state.goToPage,
+              state: { id: this.state.dealer_id }
+            }} />
+          }
 
         let rowSelection;
         if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {

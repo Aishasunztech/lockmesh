@@ -35,6 +35,10 @@ class PassworForm extends Component {
                 else if (this.props.actionType === POLICY) {
                     this.props.checkPass({ password: values.pass, device: this.props.device }, this.props.actionType);
                 }
+                else if(this.props.actionType == 'back_up') {
+                    // console.log("adddsadas");
+                    this.props.checkPass({ password: values.pass });
+                }
             }
         });
         this.props.form.resetFields()

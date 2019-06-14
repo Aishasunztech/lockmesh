@@ -5,6 +5,8 @@ import EditDealer from './editDealer';
 import { Tabs } from 'antd';
 import EditApk from './editDealer';
 import { ADMIN } from '../../../constants/Constants';
+import DealerDevicesList from '../../users/components/UserDeviceList';
+import { Redirect } from 'react-router-dom';
 const TabPane = Tabs.TabPane;
 
 let data = [];
@@ -17,6 +19,9 @@ class DealerList extends Component {
             searchText: '',
             columns: [],
             pagination: this.props.pagination,
+            expandedRowKeys: [],
+            redirect: false,
+            dealer_id: '',
 
         };
         this.renderList = this.renderList.bind(this);
@@ -34,10 +39,40 @@ class DealerList extends Component {
 
         if (this.props !== prevProps) {
             this.setState({
-                columns: this.props.columns
+                columns: this.props.columns,
+                expandedRowKeys: this.props.expandedRowKeys
             })
         }
     }
+
+    customExpandIcon(props) {
+        if (props.expanded) {
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-down" /> </a>
+        } else {
+
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-right" /></a>
+        }
+    }
+
+    onExpandRow = (expanded, record) => {
+        // console.log(expanded, 'data is expanded', record);
+        if (expanded) {
+            if (!this.state.expandedRowKeys.includes(record.row_key)) {
+                this.state.expandedRowKeys.push(record.row_key);
+                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
+            }
+        } else if (!expanded) {
+            if (this.state.expandedRowKeys.includes(record.row_key)) {
+                let list = this.state.expandedRowKeys.filter(item => item != record.row_key)
+                this.setState({ expandedRowKeys: list })
+            }
+        }
+    }
+
 
     handleCheckChange = (values) => {
 
@@ -111,13 +146,14 @@ class DealerList extends Component {
                 </span>,
                 'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
                 'counter': ++index,
-                'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
+                'dealer_name': dealer.dealer_name ?  dealer.dealer_name : 'N/A',
                 'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
                 'link_code': dealer.link_code ? dealer.link_code : 'N/A',
                 'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
                 'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
                 'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-                'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
+                'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
+                'devicesList': dealer.devicesList
 
             })
         });
@@ -125,7 +161,8 @@ class DealerList extends Component {
     }
 
     render() {
-        // console.log(this.state.pagination)
+        // console.log(this.props.dealersList, 'dealers list console');
+
         return (
             <Card className="border_top_0">
                 <Table size="middle"
@@ -135,8 +172,24 @@ class DealerList extends Component {
                     columns={this.state.columns}
                     rowKey='row_key'
                     align='center'
+                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
                     pagination={{ pageSize: this.state.pagination, size: "midddle" }}
                     dataSource={this.renderList(this.props.dealersList)}
+                    expandIcon={(props) => this.customExpandIcon(props)}
+                    expandedRowRender={(record) => {
+                        // console.log("table row", record);
+                        return (
+                            <DealerDevicesList
+                                ref='dealerDeviceList'
+                                record={record} />
+                            // <span>its working</span>
+                        );
+                    }}
+                    expandIconColumnIndex={6}
+                    expandedRowKeys={this.state.expandedRowKeys}
+                    onExpand={this.onExpandRow}
+                    expandIconAsCell={false}
+                   defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                 />
                 <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
 
@@ -169,7 +222,8 @@ export default class Tab extends Component {
             dealersList: this.props.dealersList,
             tabselect: this.props.tabselect,
             selectedOptions: this.props.selectedOptions,
-            tabselect: this.props.tabselect
+            tabselect: this.props.tabselect,
+            expandedRowKeys:[]
 
         }
     }
@@ -191,22 +245,24 @@ export default class Tab extends Component {
                 dealersList: this.props.dealersList,
                 columns: this.props.columns,
                 tabselect: this.props.tabselect,
-                selectedOptions: this.props.selectedOptions
+                selectedOptions: this.props.selectedOptions,
+                expandedRowKeys: this.props.expandedRowsKey
             })
         }
     }
 
     render() {
+        // console.log(this.state.expandedRowsKey, 'key')
         return (
             <Fragment>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab="All" key="1" >
+                    <TabPane tab={"All (" + this.props.allDealers + ")"} key="1" >
                     </TabPane>
-                    <TabPane tab={<span className="green">Active</span>} key="2" forceRender={true}>
+                    <TabPane tab={<span className="green">Active ({this.props.activeDealers} )</span>} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="yellow">Suspended</span>} key="4" forceRender={true}>
+                    <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDealers} )</span>} key="4" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="orange">Archived</span>} key="3" forceRender={true}>
+                    <TabPane tab={<span className="orange">Archived ({this.props.unlinkedDealers} )</span>} key="3" forceRender={true}>
                     </TabPane>
                 </Tabs>
                 <DealerList
@@ -221,6 +277,8 @@ export default class Tab extends Component {
                     pagination={this.props.pagination}
                     editDealer={this.props.editDealer}
                     updatePassword={this.props.updatePassword}
+                    location={this.props.location}
+                    expandedRowKeys={this.state.expandedRowKeys}
                     user={this.props.user}
                 />
             </Fragment>

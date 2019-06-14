@@ -12,7 +12,9 @@ import {
     GET_USED_SIM_IDS,
     DUPLICATE_SIM_IDS,
     NEW_DATA_INSERTED,
-    CREATE_BACKUP_DB
+    CREATE_BACKUP_DB,
+    CHECK_BACKUP_PASS,
+    SHOW_BACKUP_MODAL
 } from "constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -218,11 +220,11 @@ export function createBackupDB() {
         // alert("hello");
         RestService.createBackupDB().then((response) => {
             if (RestService.checkAuth(response.data)) {
-                console.log("asdd");
-                RestService.getFile(response.data.path);
+                // console.log("asdd");
+                RestService.getBackupFile(response.data.path);
                 dispatch({
                     type: CREATE_BACKUP_DB,
-                    payload: response.data.data
+                    // payload: response.data.data
                 });
 
             } else {
@@ -231,5 +233,35 @@ export function createBackupDB() {
                 });
             }
         });
+    }
+}
+export const checkPass = (user) => {
+    // console.log(user);
+    return (dispatch) => {
+        RestService.checkPass(user).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: CHECK_BACKUP_PASS,
+                    payload: {
+                        PasswordMatch: response.data,
+                    }
+                })
+            }
+            else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+export const showBackupModal = (visible) => {
+    console.log(visible);
+    return (dispatch) => {
+        dispatch({
+            type: SHOW_BACKUP_MODAL,
+            payload: visible
+
+        })
     }
 }
