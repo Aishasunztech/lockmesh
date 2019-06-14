@@ -312,7 +312,7 @@ class Profile extends Component {
                                     dataIndex: 'tableIndex',
                                     key: "tableIndex",
                                     className: '',
-                                    sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
+                                    sorter: (a, b) => { return a.tableIndex - b.tableIndex },
                                     sortDirections: ['ascend', 'descend'],
 
                                 },
