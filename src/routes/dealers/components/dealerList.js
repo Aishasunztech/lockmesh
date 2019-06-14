@@ -185,7 +185,7 @@ class DealerList extends Component {
                             // <span>its working</span>
                         );
                     }}
-                    expandIconColumnIndex={6}
+                    expandIconColumnIndex={2}
                     expandedRowKeys={this.state.expandedRowKeys}
                     onExpand={this.onExpandRow}
                     expandIconAsCell={false}

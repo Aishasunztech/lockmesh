@@ -47,6 +47,39 @@ class Dealers extends Component {
         {
             title: (
                 <Input.Search
+                    name="connected_devices"
+                    key="connected_devices"
+                    id="connected_devices"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder="Devices"
+                    onKeyUp={this.handleSearch}
+
+                />
+            ),
+            dataIndex: 'connected_devices',
+            className: '',
+            children: [
+                {
+                    title: 'DEVICES',
+                    dataIndex: 'connected_devices',
+                    key: 'connected_devices',
+                    // sorter: (a, b) => {
+                    //     console.log(a);
+                    //     // console.log(b);
+                    //     return a.connected_devices.length;
+                    // },
+                    sorter: (a, b) => { return a.connected_devices.localeCompare(b.connected_devices) },
+
+                    align: 'center',
+                    sortDirections: ['ascend', 'descend'],
+                    className: '',
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
                     name="dealer_id"
                     key="dealer_id"
                     id="dealer_id"
@@ -170,39 +203,7 @@ class Dealers extends Component {
             ]
         },
 
-        {
-            title: (
-                <Input.Search
-                    name="connected_devices"
-                    key="connected_devices"
-                    id="connected_devices"
-                    className="search_heading"
-                    autoComplete="new-password"
-                    placeholder="Devices"
-                    onKeyUp={this.handleSearch}
 
-                />
-            ),
-            dataIndex: 'connected_devices',
-            className: '',
-            children: [
-                {
-                    title: 'DEVICES',
-                    dataIndex: 'connected_devices',
-                    key: 'connected_devices',
-                    // sorter: (a, b) => {
-                    //     console.log(a);
-                    //     // console.log(b);
-                    //     return a.connected_devices.length;
-                    // },
-                    sorter: (a, b) => { return a.connected_devices.localeCompare(b.connected_devices) },
-
-                    align: 'center',
-                    sortDirections: ['ascend', 'descend'],
-                    className: '',
-                }
-            ]
-        },
         {
             title: (
                 <Input.Search
@@ -251,7 +252,7 @@ class Dealers extends Component {
             activeDealers: [],
             suspendDealers: [],
             unlinkedDealers: [],
-            expandedRowsKey:[],
+            expandedRowsKey: [],
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -445,7 +446,7 @@ class Dealers extends Component {
         const dealer_type = nextProps.match.params.dealer_type;
         //    console.log('device type recieved', dealer_type);
 
-        if(this.props !== nextProps){
+        if (this.props !== nextProps) {
             this.setState({
                 expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
             })
