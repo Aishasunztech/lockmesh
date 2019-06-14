@@ -13,7 +13,8 @@ import {
     handleCheckAll, defaultPolicyChange,
     getAppPermissions, addAppsToPolicies,
     removeAppsFromPolicies, checktogglebuttons,
-    resetPlicies, resetAddPolicyForm
+    resetPlicies, resetAddPolicyForm,
+    handleAppGotted
 } from "../../appRedux/actions/Policy";
 
 import {
@@ -206,7 +207,8 @@ class Policy extends Component {
 
             guestAllappPermissions: false,
             enableAllappPermissions: false,
-            encryptedAllappPermissions: false
+            encryptedAllappPermissions: false,
+            appsGotted: false,
 
         }
 
@@ -226,7 +228,8 @@ class Policy extends Component {
 
             guestAllappPermissions: this.props.guestAllappPermissions,
             enableAllappPermissions: this.props.enableAllappPermissions,
-            encryptedAllappPermissions: this.props.encryptedAllappPermissions
+            encryptedAllappPermissions: this.props.encryptedAllappPermissions,
+            appsGotted: this.props.appsGotted
         })
         if (this.props.user.type === ADMIN) {
             this.columns.pop()
@@ -249,7 +252,8 @@ class Policy extends Component {
 
                 guestAllappPermissions: this.props.guestAllappPermissions,
                 enableAllappPermissions: this.props.enableAllappPermissions,
-                encryptedAllappPermissions: this.props.encryptedAllappPermissions
+                encryptedAllappPermissions: this.props.encryptedAllappPermissions,
+                appsGotted: this.props.appsGotted
             })
         }
     }
@@ -462,6 +466,8 @@ class Policy extends Component {
                     encryptedAllallExtensions={this.props.encryptedAllallExtensions}
                     enableAllallExtensions={this.props.enableAllallExtension}
                     editPolicyModal={this.editPolicyModal}
+                    handleAppGotted={this.props.handleAppGotted}
+                    appsGotted={this.state.appsGotted}
 
                 />
                 <Modal
@@ -495,7 +501,7 @@ class Policy extends Component {
                     // destroyOnClose={true}
                     title="Edit Policy"
                     onOk={() => this.handlePolicyModal(false)}
-                    onCancel={() => this.editPolicyModalHide()}
+                    onCancel={() => {this.editPolicyModalHide(); this.props.handleAppGotted(false)}}
                     okText="Update"
                     footer={null}
                 >
@@ -520,6 +526,9 @@ class Policy extends Component {
                         guestAllallExtensions={this.props.guestAllallExtensions}
                         encryptedAllallExtensions={this.props.encryptedAllallExtensions}
                         enableAllallExtensions={this.props.enableAllallExtension}
+                        handleAppGotted={this.props.handleAppGotted}
+                        appsGotted={this.state.appsGotted}
+                        getPolicies={this.props.getPolicies}
                         ref='editPolicy'
                     />
                 </Modal>
@@ -546,7 +555,8 @@ function mapDispatchToProps(dispatch) {
         removeAppsFromPolicies: removeAppsFromPolicies,
         checktogglebuttons: checktogglebuttons,
         resetPlicies: resetPlicies,
-        resetAddPolicyForm: resetAddPolicyForm
+        resetAddPolicyForm: resetAddPolicyForm,
+        handleAppGotted: handleAppGotted
         // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);
@@ -571,6 +581,7 @@ var mapStateToProps = ({ policies, auth }) => {
         guestAllallExtensions: policies.guestAll2allExtensions,
         encryptedAllallExtensions: policies.encryptedAll2allExtensions,
         enableAllallExtensions: policies.enableAll2allExtensions,
+        appsGotted: policies.appsGotted
     };
 }
 

@@ -307,6 +307,8 @@ class PolicyList extends Component {
                                         guestAllallExtensions={this.props.guestAllallExtensions}
                                         encryptedAllallExtensions={this.props.encryptedAllallExtensions}
                                         enableAllallExtensions={this.props.enableAllallExtension}
+                                        handleAppGotted={this.props.handleAppGotted}
+                                        appsGotted={this.props.appsGotted}
                                     />
                                 </div>
                             )

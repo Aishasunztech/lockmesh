@@ -19,7 +19,8 @@ import {
     REMOVE_APPS_FROM_POLICIES,
     CHECK_TOGGLE_BUTTONS,
     RESET_POLICY,
-    RESET_ADD_POLICY_FORM
+    RESET_ADD_POLICY_FORM,
+    HANDLE_APPS_GOTTED
 } from "../../constants/ActionTypes";
 import {
     POLICY_NAME,
@@ -77,6 +78,8 @@ const initialState = {
     encryptedAll2allExtensions: false,
     enableAll2allExtensions: false,
     DisplayPages: 10,
+
+    appsGotted: false
 }
 
 export default (state = initialState, action) => {
@@ -88,6 +91,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 policies: action.payload,
+                appsGotted: state.appsGotted,
                 copyPolicies: JSON.parse(JSON.stringify(action.payload))
             }
 
@@ -96,6 +100,13 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: false,
                 apk_list: action.payload,
+            }
+        }
+
+        case HANDLE_APPS_GOTTED: {
+            return{
+                ...state,
+                appsGotted: action.value
             }
         }
 
@@ -353,6 +364,7 @@ export default (state = initialState, action) => {
             state.policies = changedState;
             return {
                 ...state,
+                appsGotted: true,
                 policies: [...state.policies],
                 ...checkButtons
             }

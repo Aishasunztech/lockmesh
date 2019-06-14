@@ -129,22 +129,22 @@ export default class AddPolicy extends Component {
         if (this.props.editAblePolicy.length) {
             let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
             // console.log(this.props.editAblePolicyId, 'id')
-            // console.log(editAblePolicy, 'policys')
+            console.log(editAblePolicy, 'policys')
             let main_system_control = {};
             let main_extension = {};
             if (editAblePolicy.app_list) {
                 if (editAblePolicy.app_list.length) {
-                    main_system_control = editAblePolicy.app_list.find(item => item.unique_name == Main_SETTINGS);
-                    main_extension = editAblePolicy.app_list.find(item => item.unique_name == SECURE_SETTING);
+                    main_system_control = editAblePolicy.app_list.find(item => item.uniqueName == Main_SETTINGS);
+                    main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
 
                     // console.log('1223', editAblePolicy.app_list)
 
-                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SECURE_SETTING);
+                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
                     // console.log(seccure_index, 'sdfdsfa')
                     if (seccure_index > -1) {
                         editAblePolicy.app_list.splice(seccure_index, 1)
                     }
-                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == Main_SETTINGS);
+                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
                     // console.log('system_index', systemcontrols_index)
                     if (systemcontrols_index > -1) {
                         editAblePolicy.app_list.splice(systemcontrols_index, 1)
@@ -177,12 +177,12 @@ export default class AddPolicy extends Component {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
                 // console.log('eidted dsddffffffff', editAblePolicy);
 
-                let seccure_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SECURE_SETTING);
+                let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
                 // console.log(seccure_index, 'sdfdsfa')
                 if (seccure_index > -1) {
                     editAblePolicy.app_list.splice(seccure_index, 1)
                 }
-                let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == Main_SETTINGS);
+                let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
                 if (systemcontrols_index > -1) {
                     editAblePolicy.app_list.splice(systemcontrols_index, 1)
                 }
@@ -194,15 +194,15 @@ export default class AddPolicy extends Component {
                     let main_system_control = {};
                     if (editAblePolicy.app_list.length) {
 
-                        main_system_control = editAblePolicy.app_list.find(item => item.unique_name == Main_SETTINGS);
-                        main_extension = editAblePolicy.app_list.find(item => item.unique_name == SECURE_SETTING);
+                        main_system_control = editAblePolicy.app_list.find(item => item.uniqueName == Main_SETTINGS);
+                        main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
 
-                        let seccure_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SECURE_SETTING);
+                        let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
                         // console.log(seccure_index, 'sdfdsfa')
                         if (seccure_index > -1) {
                             editAblePolicy.app_list.splice(seccure_index, 1)
                         }
-                        let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == Main_SETTINGS);
+                        let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
                         if (systemcontrols_index > -1) {
                             editAblePolicy.app_list.splice(systemcontrols_index, 1)
                         }
@@ -358,7 +358,10 @@ export default class AddPolicy extends Component {
                 onOk: () => {
                     this.props.SavePolicyChanges(this.state.editAblePolicy);
                     this.props.editPolicyModalHide();
+                    this.props.getPolicies();
+                    this.props.handleAppGotted(true)
                     this.setState({ tabSelected: '1' })
+                    
                 },
                 okText: 'Save',
             });
