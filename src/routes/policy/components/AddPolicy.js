@@ -100,7 +100,7 @@ class AddPolicy extends Component {
 
     savePolicy = () => {
 
-        console.log('object of nul', this.state.main_system_control)
+        // console.log('object of nul', this.state.main_system_control)
 
         if (this.state.pushAppsIds.length) {
             for (let id of this.state.pushAppsIds) {
@@ -128,14 +128,18 @@ class AddPolicy extends Component {
         delete main_extension.subExtension;
 
         if (main_extension) {
-            console.log(main_extension, 'main extension si')
+            console.log(main_extension, 'main extension si');
+
+            main_extension.unique_name =  main_extension.uniqueName;
+            
+            delete main_extension.uniqueName;
             // let main_extension_index = main_extension.findIndex(item => item.uniqueName == SECURE_SETTING)
             // if (main_extension_index > -1) {
-                this.state.appPermissions.push(main_extension);
+            this.state.appPermissions.push(main_extension);
             // }
         }
 
-        console.log('appPermissions', this.state.appPermissions, 'secure_apps', this.state.allExtensions)
+        // console.log('appPermissions', this.state.appPermissions, 'secure_apps', this.state.allExtensions)
 
         let data = {
             policy_name: this.state.policy_name,
@@ -310,25 +314,13 @@ class AddPolicy extends Component {
 
     }
 
-    policyNameChange = async (e) => {
+    policyNameChange = async (rule, value, callback) => {
         let response = true
-        let value = e.target.value
-        if (/[^A-Za-z \d]/.test(e.target.value)) {
-            this.setState({
-                policy_name: e.target.value,
-                isPolicy_name: 'error',
-                policy_name_error: "Please insert only alphabets and numbers.",
-                disabledCommand: '#' + e.target.value.replace(/ /g, '_')
-            })
-        } else if (e.target.value === '') {
-            this.setState({
-                isPolicy_name: 'error',
-                policy_name: e.target.value,
-                policy_name_error: "Please Input Policy Name"
-            })
+        if (/[^A-Za-z \d]/.test(value)) {
+            callback("Please insert only alphabets and numbers.")
         }
         else {
-            response = await RestService.checkPolicyName(e.target.value).then((response) => {
+            response = await RestService.checkPolicyName(value).then((response) => {
                 if (RestService.checkAuth(response.data)) {
                     if (response.data.status) {
                         return true
@@ -339,18 +331,15 @@ class AddPolicy extends Component {
                 }
             });
             if (response) {
+                callback()
                 this.setState({
                     policy_name: value,
-                    isPolicy_name: 'success',
+                    // isPolicy_name: 'success',
                     disabledCommand: '#' + value.replace(/ /g, '_'),
-                    policy_name_error: ''
+                    // policy_name_error: ''
                 })
             } else {
-                this.setState({
-                    isPolicy_name: 'error',
-                    policy_name: value,
-                    policy_name_error: "Policy name already taken please use another name."
-                })
+                callback("Policy name already taken please use another name.")
             }
         }
 
@@ -404,7 +393,7 @@ class AddPolicy extends Component {
 
     render() {
         // console.log(this.state.main_system_control,'console the applist', this.state.appPermissions);
-        // const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator } = this.props.form;
         console.log(this.state.appPermissions, 'render time')
         return (
             <Fragment>
@@ -528,28 +517,24 @@ class AddPolicy extends Component {
                         <TabPane tab="POLICY DETAILS" key="5">
                             <Form className="login-form">
                                 <Form.Item
-                                    validateStatus={this.state.isPolicy_name}
-                                    help={this.state.policy_name_error}
+                                    // validateStatus={this.state.isPolicy_name}
+                                    // help={this.state.policy_name_error}
                                     style={{ width: '220px' }}
                                 >
                                     <span className="h3">Name</span>
-                                    {/* {getFieldDecorator('policy_name', {
+                                    {getFieldDecorator('policy_name', {
 
                                         rules: [{
-                                            required: true, message: '',
+                                            required: true, message: 'Please Input Policy Name.',
                                         },
                                         {
-                                            validator: this.validateAkpFile,
+                                            validator: this.policyNameChange,
                                         }
                                         ],
 
-                                    })( */}
-                                    <Input placeholder="Name" value={this.state.policy_name} onChange={(e) => this.policyNameChange(e)} className="pol_inp" />
-                                    {/* )} */}
-
-
-
-
+                                    })(
+                                        <Input placeholder="Name" className="pol_inp" />
+                                    )}
                                 </Form.Item>
                                 <Form.Item>
                                     <span className="h3">Command</span>
@@ -601,7 +586,7 @@ class AddPolicy extends Component {
         );
     }
 }
-
+const WrappedNormalApkForm = Form.create('name', 'add_apk')(AddPolicy);
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getDealerApps: getDealerApps,
@@ -638,4 +623,4 @@ var mapStateToProps = ({ device_details, policies }) => {
 // const WrappedNormalApkForm = Form.create('name', 'add_policy')(AddPolicy);
 
 // export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalApkForm);
-export default connect(mapStateToProps, mapDispatchToProps)(AddPolicy);
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalApkForm);

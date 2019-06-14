@@ -135,16 +135,16 @@ export default class AddPolicy extends Component {
             if (editAblePolicy.app_list) {
                 if (editAblePolicy.app_list.length) {
                     main_system_control = editAblePolicy.app_list.find(item => item.unique_name == Main_SETTINGS);
-                    main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
+                    main_extension = editAblePolicy.app_list.find(item => item.unique_name == SECURE_SETTING);
 
                     // console.log('1223', editAblePolicy.app_list)
 
-                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SECURE_SETTING);
                     // console.log(seccure_index, 'sdfdsfa')
                     if (seccure_index > -1) {
                         editAblePolicy.app_list.splice(seccure_index, 1)
                     }
-                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
+                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == Main_SETTINGS);
                     // console.log('system_index', systemcontrols_index)
                     if (systemcontrols_index > -1) {
                         editAblePolicy.app_list.splice(systemcontrols_index, 1)
@@ -175,19 +175,19 @@ export default class AddPolicy extends Component {
 
             if (this.props.editAblePolicy.length) {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
-                console.log('eidted dsddffffffff', editAblePolicy);
+                // console.log('eidted dsddffffffff', editAblePolicy);
 
-                let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                let seccure_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SECURE_SETTING);
                 // console.log(seccure_index, 'sdfdsfa')
                 if (seccure_index > -1) {
                     editAblePolicy.app_list.splice(seccure_index, 1)
                 }
-                let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
+                let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.unique_name == Main_SETTINGS);
                 if (systemcontrols_index > -1) {
                     editAblePolicy.app_list.splice(systemcontrols_index, 1)
                 }
 
-                console.log(editAblePolicy, 'chceck', systemcontrols_index)
+                // console.log(editAblePolicy, 'chceck', systemcontrols_index)
 
                 if (this.state.main_extension == undefined && this.state.main_extension == {}) {
                     let main_extension = {};
@@ -195,9 +195,9 @@ export default class AddPolicy extends Component {
                     if (editAblePolicy.app_list.length) {
 
                         main_system_control = editAblePolicy.app_list.find(item => item.unique_name == Main_SETTINGS);
-                        main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
+                        main_extension = editAblePolicy.app_list.find(item => item.unique_name == SECURE_SETTING);
 
-                        let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                        let seccure_index = editAblePolicy.app_list.findIndex(item => item.unique_name == SECURE_SETTING);
                         // console.log(seccure_index, 'sdfdsfa')
                         if (seccure_index > -1) {
                             editAblePolicy.app_list.splice(seccure_index, 1)
@@ -280,7 +280,7 @@ export default class AddPolicy extends Component {
 
     renderSystemPermissions = () => {
         const { controls } = this.state.editAblePolicy;
-        console.log(controls)
+        // console.log(controls)
         if (controls) {
 
             return [{
@@ -332,16 +332,16 @@ export default class AddPolicy extends Component {
                 command_error: "Please Input Policy Note"
             })
         } else {
-            console.log(this.state.editAblePolicy.app_list, 'policy while editing')
+            // console.log(this.state.editAblePolicy.app_list, 'policy while editing')
             this.state.editAblePolicy.policy_note = this.state.command;
             if (this.state.main_extension !== null && this.state.main_extension !== '' && this.state.main_extension !== {} && this.state.main_extension !== undefined && this.state.main_extension !== "undefined") {
                 this.state.editAblePolicy.app_list.push(this.state.main_extension);
-                console.log('if is called 1')
+                // console.log('if is called 1')
             }
 
             if (this.state.main_system_control !== null && this.state.main_system_control !== '' && this.state.main_extension !== {} && this.state.main_extension !== undefined && this.state.main_extension !== "undefined") {
                 this.state.editAblePolicy.app_list.push(this.state.main_system_control);
-                console.log('if is called 2')
+                // console.log('if is called 2')
             }
 
             if(this.state.editAblePolicy.app_list.length){
@@ -351,7 +351,7 @@ export default class AddPolicy extends Component {
                 }
             }
 
-            console.log(this.state.main_extension, 'app list is one', this.state.editAblePolicy.app_list)
+            // console.log(this.state.main_extension, 'app list is one', this.state.editAblePolicy.app_list)
 
             Modal.confirm({
                 title: 'Are You Sure, You Want to Save Changes',
@@ -416,7 +416,7 @@ export default class AddPolicy extends Component {
 
     render() {
         const { current } = this.state;
-        console.log(this.state.editAblePolicy.app_list, 'selected row for error')
+        // console.log(this.state.editAblePolicy.app_list, 'selected row for error')
 
         const { selectedRows, selectedRowKeys } = this.state;
         let rowSelection = {
