@@ -17,7 +17,8 @@ import {
     REMOVE_APPS_FROM_POLICIES,
     CHECK_TOGGLE_BUTTONS,
     RESET_POLICY,
-    RESET_ADD_POLICY_FORM
+    RESET_ADD_POLICY_FORM,
+    HANDLE_APPS_GOTTED
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -130,6 +131,17 @@ export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName =
                 stateToUpdate: stateToUpdate,
                 uniqueName: uniqueName,
                 main: main
+            }
+        })
+    }
+}
+
+export function handleAppGotted(value) {
+    return (dispatch) => {
+        dispatch({
+            type: HANDLE_APPS_GOTTED,
+            payload: {
+                value: value,
             }
         })
     }
