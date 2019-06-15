@@ -53,6 +53,7 @@ import {
     APPLY_POLICY,
     CLEAR_APPLICATIONS,
     SAVE_PROFILE,
+    EDIT_DEVICE
 } from "../../constants/ActionTypes";
 
 import {
@@ -309,6 +310,23 @@ export default (state = initialState, action) => {
                 ...check
             }
         }
+
+        case EDIT_DEVICE: {
+            if(action.response.status){
+              if(action.response.data.length){
+                  state.device = action.response.data[0];
+              }
+
+              return{
+                  ...state,
+                //   device: state.device
+              }
+
+
+            }
+        }
+
+
         case GET_PROFILES: {
             return {
                 ...state,
