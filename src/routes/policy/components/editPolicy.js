@@ -489,7 +489,8 @@ export default class AddPolicy extends Component {
                                             <Col span={6} className="">
                                             </Col>
                                             <Col span={3} className="">
-                                                <img src={require("assets/images/setting.png")} />
+                                            <Avatar src={`${BASE_URL}users/getFile/${this.state.main_extension.icon}`} style={{ width: "30px", height: "30px" }} />
+                                                {/* <img src={require("assets/images/setting.png")} /> */}
                                             </Col>
                                             <Col span={15} className="pl-0">
                                                 <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
@@ -562,7 +563,9 @@ export default class AddPolicy extends Component {
                                                 <Col span={6} className="">
                                                 </Col>
                                                 <Col span={3} className="">
-                                                    <img src={require("assets/images/setting.png")} />
+                                            <Avatar src={`${BASE_URL}users/getFile/${this.state.main_system_control.icon}`} style={{ width: "30px", height: "30px" }} />
+
+                                                    {/* <img src={require("assets/images/setting.png")} /> */}
                                                 </Col>
                                                 <Col span={15} className="pl-0">
                                                     <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>

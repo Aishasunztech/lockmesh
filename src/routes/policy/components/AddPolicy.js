@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import { Tabs, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
+import { Tabs, Button, Row, Col, Avatar, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
 import { connect } from "react-redux";
+import { BASE_URL } from '../../../constants/Application';
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS } from '../../../constants/Constants';
 import styles from './policy.css';
 import { bindActionCreators } from "redux";
@@ -435,7 +436,8 @@ class AddPolicy extends Component {
                                         <Col span={6} className="">
                                         </Col>
                                         <Col span={3} className="">
-                                            <img src={require("assets/images/setting.png")} />
+                                        <Avatar src={`${BASE_URL}users/getFile/${this.state.main_system_control.icon}`} style={{ width: "30px", height: "30px" }} />
+                                            {/* <img src={require("assets/images/setting.png")} /> */}
                                         </Col>
                                         <Col span={15} className="pl-0">
                                             <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
