@@ -138,7 +138,23 @@ class SidebarContent extends Component {
                   <IntlMessages id="sidebar.app" />
                 </Link>
               </Menu.Item>
+              <Menu.Item key="logout" onClick={(e) => {
+                // this.props.logout() 
+                this.logout()
+              }}>
+                {/* <Link to="/logout"> */}
+                <i className="icon">
+                  <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
+                </i>
+                Logout
+                {/* </Link> */}
+              </Menu.Item>
+
+
+
             </Menu>
+
+
             :
 
             <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
