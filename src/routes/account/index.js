@@ -1219,26 +1219,62 @@ class Account extends Component {
                                     <p style={{ margin: 13 }}>Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated Files first and open in Excel. </p>
                                 </div>
                             </Modal>
-                            <div >
-                                <Link to="#" onClick={() => this.showPwdConfirmModal(true)}>
-                                    <Card className="manage_ac" style={{ borderRadius: 12 }}>
-                                        <div>
-                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
-                                            <Divider className="mb-0" />
-                                            <Row style={{ padding: '12px 0 0px' }}>
-                                                <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                    <Icon type="database" className="and_icon" />
-                                                </Col>
-                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                    <p style={{}}>
-                                                        This feature allows you to keep a backup of the complete system database for offline safekeeping
+                            <div>
+                                <div className="contenar">
+                                    <a href="javascript:void(0)">
+                                        {/* <Link to="#" onClick={() => this.showPwdConfirmModal(true)}> */}
+                                        <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                            <div>
+                                                <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
+                                                <Divider className="mb-0" />
+                                                <Row style={{ padding: '12px 0 0px' }}>
+                                                    <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                        <Icon type="database" className="and_icon" />
+                                                    </Col>
+                                                    <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                        <p style={{}}>
+                                                            This feature allows you to keep a backup of the complete system database for offline safekeeping
                                                     </p>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </Card>
-                                    <Button type="primary" size="small" className="open_btn">Open</Button>
-                                </Link>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn">Open</Button>
+                                        {/* </Link> */}
+                                    </a>
+                                    <div className="middle">
+                                        <div className="text">Coming Soon</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                            <div>
+                                <div className="contenar">
+                                    <a href="javascript:void(0)">
+                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                            <div className="profile_table image_1">
+                                                <Fragment>
+                                                    <div className="col-md-12 ac_card">
+                                                        <h2 style={{ textAlign: "center" }}>Purchase Credits</h2>
+                                                        <Divider className="mb-0" />
+                                                        <Row style={{ padding: '12px 0 0px' }}>
+                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                <Icon type="dollar" className="and_icon" />
+                                                            </Col>
+                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                <p style={{}}>Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.</p>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                </Fragment>
+                                            </div>
+                                        </Card>
+                                        <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
+                                    </a>
+                                    {/* <div className="middle"><div className="text">Coming Soon</div></div> */}
+                                    {/* </div> */}
+                                </div>
                             </div>
                         </Col>
 
@@ -1271,35 +1307,6 @@ class Account extends Component {
                                 </div>
                             </div>
                         </Col>
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <div>
-                                <div className="contenar">
-                                    <a href="javascript:void(0)">
-                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
-                                            <div className="profile_table image_1">
-                                                <Fragment>
-                                                    <Row>
-                                                        <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="credit-card" /> Payment Gateway</h2>
-                                                            <Divider className="mb-0" />
-                                                            <div className="crd_txt">
-                                                                <p><span className="diamond_icon">&#9670;</span>Add/edit payment gateway</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Set permissions</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Customize prices and packages</p>
-                                                                <p className="more_txt">and more...</p>
-                                                            </div>
-                                                        </div>
-                                                    </Row>
-                                                </Fragment>
-                                            </div>
-                                        </Card>
-                                    </a>
-                                    <div className="middle">
-                                        <div className="text">Coming Soon</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
                     </Row>
                 </div>
                 <PasswordModal
@@ -1308,7 +1315,7 @@ class Account extends Component {
                     checkPass={this.props.checkPass}
                 />
 
-            </div >
+            </div>
 
 
         );
