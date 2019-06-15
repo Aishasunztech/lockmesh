@@ -3,6 +3,7 @@ import { Button, Avatar, Input, Modal, Form, Icon, Col, Row, Table, Switch, Tabs
 import AppList from "./AppList";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS } from '../../../constants/Constants';
 import styles from './policy.css';
+import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
 
 const TextArea = Input;
@@ -45,7 +46,7 @@ const data = [
     }
 ];
 
-export default class AddPolicy extends Component {
+class EditPolicy extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -59,6 +60,7 @@ export default class AddPolicy extends Component {
             systemPermissions: [],
             policy_name: '',
             command: '',
+            command_name:'',
             isCommand: 'success',
             isPolicy_name: 'success',
             policy_name_error: '',
@@ -161,6 +163,7 @@ export default class AddPolicy extends Component {
                     current: 0,
                     command: editAblePolicy.policy_note,
                     policy_name: editAblePolicy.policy_name,
+                    command_name: '#' + editAblePolicy.policy_name.replace(/ /g, '_'),
                     main_system_control: main_system_control,
                     main_extension: main_extension
 
@@ -208,12 +211,13 @@ export default class AddPolicy extends Component {
                         }
 
                     }
-                    // console.log(main_system_control, 'eidtable jksdhf', main_extension)
+                    console.log('compoent did update')
                     this.setState({
                         editAblePolicy: editAblePolicy,
                         // current: 0,
                         command: editAblePolicy.policy_note,
                         policy_name: editAblePolicy.policy_name,
+                        command_name: '#' + editAblePolicy.policy_name.replace(/ /g, '_'),
                         main_system_control: main_system_control,
                         main_extension: main_extension,
                         first: false
@@ -225,6 +229,7 @@ export default class AddPolicy extends Component {
                             // current: 0,
                             command: editAblePolicy.policy_note,
                             policy_name: editAblePolicy.policy_name,
+                            command_name: '#' + editAblePolicy.policy_name.replace(/ /g, '_'),
                             first: false
 
                         });
@@ -326,48 +331,48 @@ export default class AddPolicy extends Component {
 
     SavePolicyChanges = () => {
 
-        if (this.state.command === '') {
-            this.setState({
-                isCommand: 'error',
-                command_error: "Please Input Policy Note"
-            })
-        } else {
-            // console.log(this.state.editAblePolicy.app_list, 'policy while editing')
-            this.state.editAblePolicy.policy_note = this.state.command;
-            if (this.state.main_extension !== null && this.state.main_extension !== '' && this.state.main_extension !== {} && this.state.main_extension !== undefined && this.state.main_extension !== "undefined") {
-                this.state.editAblePolicy.app_list.push(this.state.main_extension);
-                // console.log('if is called 1')
-            }
+     
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            // console.log(values, 'fomr values')
+            if (!err) {
+                // console.log(this.state.editAblePolicy.app_list, 'policy while editing')
+                this.state.editAblePolicy.policy_note = values.command;
+                this.state.editAblePolicy.policy_name = values.policy_name;
 
-            if (this.state.main_system_control !== null && this.state.main_system_control !== '' && this.state.main_extension !== {} && this.state.main_extension !== undefined && this.state.main_extension !== "undefined") {
-                this.state.editAblePolicy.app_list.push(this.state.main_system_control);
-                // console.log('if is called 2')
-            }
-
-            if(this.state.editAblePolicy.app_list.length){
-                let indexforDel = this.state.editAblePolicy.app_list.findIndex(item => item == undefined || item == "undefined" || item == '' || item == null || item == {})
-                if (indexforDel > -1) {
-                    this.state.editAblePolicy.app_list.splice(indexforDel, 1)
+                if (this.state.main_extension !== null && this.state.main_extension !== '' && this.state.main_extension !== {} && this.state.main_extension !== undefined && this.state.main_extension !== "undefined") {
+                    this.state.editAblePolicy.app_list.push(this.state.main_extension);
+                    // console.log('if is called 1')
                 }
+
+                if (this.state.main_system_control !== null && this.state.main_system_control !== '' && this.state.main_extension !== {} && this.state.main_extension !== undefined && this.state.main_extension !== "undefined") {
+                    this.state.editAblePolicy.app_list.push(this.state.main_system_control);
+                    // console.log('if is called 2')
+                }
+
+                if (this.state.editAblePolicy.app_list.length) {
+                    let indexforDel = this.state.editAblePolicy.app_list.findIndex(item => item == undefined || item == "undefined" || item == '' || item == null || item == {})
+                    if (indexforDel > -1) {
+                        this.state.editAblePolicy.app_list.splice(indexforDel, 1)
+                    }
+                }
+
+                // console.log(this.state.main_extension, 'app list is one', this.state.editAblePolicy.app_list)
+
+                Modal.confirm({
+                    title: 'Are You Sure, You Want to Save Changes',
+                    onOk: () => {
+                        this.props.SavePolicyChanges(this.state.editAblePolicy);
+                        this.props.editPolicyModalHide();
+                        this.props.getPolicies();
+                        this.props.handleAppGotted(true)
+                        this.setState({ tabSelected: '1' })
+
+                    },
+                    okText: 'Save',
+                });
             }
-
-            // console.log(this.state.main_extension, 'app list is one', this.state.editAblePolicy.app_list)
-
-            Modal.confirm({
-                title: 'Are You Sure, You Want to Save Changes',
-                onOk: () => {
-                    this.props.SavePolicyChanges(this.state.editAblePolicy);
-                    this.props.editPolicyModalHide();
-                    this.props.getPolicies();
-                    this.props.handleAppGotted(true)
-                    this.setState({ tabSelected: '1' })
-                    
-                },
-                okText: 'Save',
-            });
-        }
+        })
     }
-
     onSelectChange = selectedRowKeys => {
         // console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys: selectedRowKeys });
@@ -407,21 +412,44 @@ export default class AddPolicy extends Component {
         this.setState({ tabSelected: activeKey })
     }
 
-    // next() {
-    //     const current = this.state.current + 1;
-    //     this.setState({ current });
-    // }
+    policyNameChange = async (rule, value, callback) => {
+        let response = true
+        if (/[^A-Za-z \d]/.test(value)) {
+            callback("Please insert only alphabets and numbers.")
+        }
+        else {
+            response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
+                if (RestService.checkAuth(response.data)) {
+                    if (response.data.status) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+            });
+            if (response) {
+                callback()
+                this.setState({
+                    policy_name: value,
+                    // isPolicy_name: 'success',
+                    command_name: '#' + value.replace(/ /g, '_'),
+                    // policy_name_error: ''
+                })
+            } else {
+                callback("Policy name already taken please use another name.")
+            }
+        }
 
-    // prev() {
-    //     const current = this.state.current - 1;
-    //     this.setState({ current });
-    // }
+    }
+
 
     render() {
         const { current } = this.state;
         // console.log(this.state.editAblePolicy.app_list, 'selected row for error')
 
         const { selectedRows, selectedRowKeys } = this.state;
+        const { getFieldDecorator } = this.props.form;
         let rowSelection = {
             selectedRowKeys,
             selectedRows,
@@ -489,7 +517,7 @@ export default class AddPolicy extends Component {
                                             <Col span={6} className="">
                                             </Col>
                                             <Col span={3} className="">
-                                            <Avatar src={`${BASE_URL}users/getFile/${this.state.main_extension.icon}`} style={{ width: "30px", height: "30px" }} />
+                                                <Avatar src={`${BASE_URL}users/getFile/${this.state.main_extension.icon}`} style={{ width: "30px", height: "30px" }} />
                                                 {/* <img src={require("assets/images/setting.png")} /> */}
                                             </Col>
                                             <Col span={15} className="pl-0">
@@ -563,7 +591,7 @@ export default class AddPolicy extends Component {
                                                 <Col span={6} className="">
                                                 </Col>
                                                 <Col span={3} className="">
-                                            <Avatar src={`${BASE_URL}users/getFile/${this.state.main_system_control.icon}`} style={{ width: "30px", height: "30px" }} />
+                                                    <Avatar src={`${BASE_URL}users/getFile/${this.state.main_system_control.icon}`} style={{ width: "30px", height: "30px" }} />
 
                                                     {/* <img src={require("assets/images/setting.png")} /> */}
                                                 </Col>
@@ -620,23 +648,43 @@ export default class AddPolicy extends Component {
                         <TabPane tab="POLICY DETAILS" key="5">
                             <Form className="login-form">
                                 <Form.Item
-                                    validateStatus={this.state.isPolicy_name}
-                                    help={this.state.policy_name_error}
+                                // validateStatus={this.state.isPolicy_name}
+                                // help={this.state.policy_name_error}
                                 >
                                     <span className="h3">Name</span>
-                                    <Input placeholder="Name" disabled value={this.state.policy_name} onChange={(e) => this.setState({ policy_name: e.target.value, policy_name_error: '', isPolicy_name: 'success' })} className="pol_inp" />
+                                    {getFieldDecorator('policy_name', {
+                                        initialValue: this.state.policy_name,
+                                        rules: [{
+                                            required: true, message: 'Please Input Policy Name.',
+                                        },
+                                        {
+                                            validator: this.policyNameChange,
+                                        }
+                                        ],
+
+                                    })(
+                                        <Input disabled placeholder="Name" className="pol_inp" />
+                                    )}
                                 </Form.Item>
                                 <Form.Item>
                                     <span className="h3">Command Name</span>
-                                    <Input disabled value={this.state.editAblePolicy.command_name} className="pol_inp" />
+                                    <Input disabled value={this.state.command_name} className="pol_inp" />
                                 </Form.Item>
                                 <Form.Item
-                                    validateStatus={this.state.isCommand}
-                                    help={this.state.command_error}
+                                // validateStatus={this.state.isCommand}
+                                // help={this.state.command_error}
                                 >
                                     <span className="h3">Policy Note</span>
-                                    <textarea placeholder="Policy Note" value={this.state.command} onChange={(e) => this.setState({ command: e.target.value, command_error: '', isCommand: 'success' })} className="ant-input"></textarea>
+                                    {getFieldDecorator('command', {
+                                        initialValue: this.state.command,
 
+                                        rules: [{
+                                            required: true, message: 'Please Input Policy Name.',
+                                        }],
+
+                                    })(
+                                        <textarea placeholder="Policy Note" className="ant-input"></textarea>
+                                    )}
                                 </Form.Item>
                             </Form>
                         </TabPane>
@@ -645,29 +693,7 @@ export default class AddPolicy extends Component {
                         <Button className="mt-10" onClick={() => this.onCancel()}>Cancel</Button>
                         <Button className="mt-10" type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
                     </div>
-                    {/* <Steps current={current} labelPlacement="vertical">
-                        {this.steps.map(item => <Steps.Step icon={item.Icon} key={item.title} title={item.title} />)}
-                    </Steps>
-                    <div className="steps-content">{this.steps[current].content}</div>
-                    <div className="steps-action">
-                        {
-                            current > 0
-                            && (
-                                <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                                    Previous
-                            </Button>
-                            )
-                        }
-                        {
-                            current === this.steps.length - 1
-                            && <Button type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
-                        }
-                        {
-                            current < this.steps.length - 1
-                            && <Button type="primary" onClick={() => this.next()}>Next</Button>
 
-                        } */}
-                    {/* </div> */}
 
                     <Modal
                         title="Add Apps"
@@ -698,3 +724,6 @@ export default class AddPolicy extends Component {
         );
     }
 }
+
+const WrappedForm = Form.create({ name: 'add Policy' })(EditPolicy);
+export default WrappedForm;

@@ -204,7 +204,7 @@ export default class PolicyInfo extends Component {
     }
 
     render() {
-        console.log(this.props.appsGotted, 'info list is ', this.state.secure_setting_app)
+        // console.log(this.props.appsGotted, 'info list is ', this.state.secure_setting_app)
 
         const PolicyDetail = [{
             key: 1,

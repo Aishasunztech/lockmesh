@@ -150,9 +150,9 @@ class AddPolicy extends Component {
 
                 this.props.savePolicy(data);
                 this.props.handlePolicyModal(false);
-                this.props.getPolicies();
                 this.props.getDealerApps();
                 this.props.getAppPermissions();
+                this.props.getPolicies();
                 this.setState({
                     current: 0,
                     pushApps: [],
