@@ -197,7 +197,7 @@ class PullAppModal extends Component {
 
 
 const SelectedApps = (props) => {
-    console.log('selected app are', props.selectedApps)
+    // console.log('selected app are', props.selectedApps)
     return (
         <Modal
             // closable={false}
@@ -503,14 +503,14 @@ class SideActions extends Component {
     }
 
     handleChecked = (e, key, app_id) => {
-        console.log("handlechecked", e, key, app_id);
+        // console.log("handlechecked", e, key, app_id);
         this.state.selectedApps.map((el) => {
             if (el.apk_id === app_id) {
                 el[key] = e;
             }
         })
 
-        console.log('sate of selected app ', this.state.selectedApps)
+        // console.log('sate of selected app ', this.state.selectedApps)
     }
 
     handleFlag(flagged) {

@@ -53,7 +53,7 @@ export default class DeviceSidebar extends Component {
     }
 
     renderDetailsData(device_details) {
-        console.log(device_details, 'device is')
+        // console.log(device_details, 'device is')
 
         //  let status = getStatus(device_details.status, device_details.account_status, device_details.unlink_status, device_details.device_status, device_details.activation_status);
         let color = getColor(device_details.finalStatus)

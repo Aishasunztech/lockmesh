@@ -318,7 +318,7 @@ class ConnectDevice extends Component {
   }
 
   applyActionButton = (visible = true) => {
-    console.log(this.state.changedCtrls, 'controls are');
+    // console.log(this.state.changedCtrls, 'controls are');
     // let changedControls = Object.create(null);
     // Object.keys(this.state.controls.controls).map(key => {
     //   if(key == 'bluetooth_status_isChanged'){

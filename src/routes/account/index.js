@@ -1209,9 +1209,10 @@ class Account extends Component {
                                 maskClosable={false}
                                 title={<div>BACKUP DATABASE</div>}
                                 visible={this.state.backUpModal}
-                                onOk={this.createBackupDB}
+                                // onOk={this.createBackupDB}
                                 onCancel={this.handleCancel}
                                 okText='BACKUP NOW'
+                                okButtonDisabled={true}
                                 centered
                             >
                                 <div>

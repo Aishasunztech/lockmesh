@@ -327,8 +327,8 @@ const RestService = {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
     },
     // For check apk name 
-    checkPolicyName: (name, apk_id = '') => {
-        return axios.post(BASE_URL + 'users/check_policy_name', { name }, RestService.getHeader());
+    checkPolicyName: (name, policy_id = '') => {
+        return axios.post(BASE_URL + 'users/check_policy_name', { name, policy_id }, RestService.getHeader());
     },
 
     updateUserProfile: (formData) => {
