@@ -60,7 +60,7 @@ class EditPolicy extends Component {
             systemPermissions: [],
             policy_name: '',
             command: '',
-            command_name:'',
+            command_name: '',
             isCommand: 'success',
             isPolicy_name: 'success',
             policy_name_error: '',
@@ -131,7 +131,7 @@ class EditPolicy extends Component {
         if (this.props.editAblePolicy.length) {
             let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
             // console.log(this.props.editAblePolicyId, 'id')
-            console.log(editAblePolicy, 'policys')
+            // console.log(editAblePolicy, 'policys')
             let main_system_control = {};
             let main_extension = {};
             if (editAblePolicy.app_list) {
@@ -180,17 +180,20 @@ class EditPolicy extends Component {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
                 // console.log('eidted dsddffffffff', editAblePolicy);
 
-                let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
-                // console.log(seccure_index, 'sdfdsfa')
-                if (seccure_index > -1) {
-                    editAblePolicy.app_list.splice(seccure_index, 1)
-                }
-                let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
-                if (systemcontrols_index > -1) {
-                    editAblePolicy.app_list.splice(systemcontrols_index, 1)
-                }
+                // let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                // // console.log(seccure_index, 'sdfdsfa')
+                // if (seccure_index > -1) {
+                //     editAblePolicy.app_list.splice(seccure_index, 1)
+                // }
+                // let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
+                // if (systemcontrols_index > -1) {
+                //     editAblePolicy.app_list.splice(systemcontrols_index, 1)
+                // }
 
-                // console.log(editAblePolicy, 'chceck', systemcontrols_index)
+                // console.log(editAblePolicy, 'chceck', systemcontrols_index);
+
+                // let editAblePolicyPrev = prevProps.editAblePolicy.find(item => item.id == prevProps.editAblePolicyId)
+
 
                 if (this.state.main_extension == undefined && this.state.main_extension == {}) {
                     let main_extension = {};
@@ -209,12 +212,11 @@ class EditPolicy extends Component {
                         if (systemcontrols_index > -1) {
                             editAblePolicy.app_list.splice(systemcontrols_index, 1)
                         }
-
+                        console.log('compoent did update', systemcontrols_index)
                     }
-                    console.log('compoent did update')
+
                     this.setState({
                         editAblePolicy: editAblePolicy,
-                        // current: 0,
                         command: editAblePolicy.policy_note,
                         policy_name: editAblePolicy.policy_name,
                         command_name: '#' + editAblePolicy.policy_name.replace(/ /g, '_'),
@@ -223,6 +225,17 @@ class EditPolicy extends Component {
                         first: false
                     });
                 } else {
+
+                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                    // console.log(seccure_index, 'sdfdsfa')
+                    if (seccure_index > -1) {
+                        editAblePolicy.app_list.splice(seccure_index, 1)
+                    }
+                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
+                    if (systemcontrols_index > -1) {
+                        editAblePolicy.app_list.splice(systemcontrols_index, 1)
+                    }
+
                     if (editAblePolicy) {
                         this.setState({
                             editAblePolicy: editAblePolicy,
@@ -230,7 +243,7 @@ class EditPolicy extends Component {
                             command: editAblePolicy.policy_note,
                             policy_name: editAblePolicy.policy_name,
                             command_name: '#' + editAblePolicy.policy_name.replace(/ /g, '_'),
-                            first: false
+                            // first: false
 
                         });
                     }
@@ -331,38 +344,42 @@ class EditPolicy extends Component {
 
     SavePolicyChanges = () => {
 
-     
+
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log(values, 'fomr values')
             if (!err) {
-                // console.log(this.state.editAblePolicy.app_list, 'policy while editing')
-                this.state.editAblePolicy.policy_note = values.command;
-                this.state.editAblePolicy.policy_name = values.policy_name;
+                // console.log(this.state.editAblePolicy.app_list, 'policy while editing');
+                let dupmVar = JSON.parse(JSON.stringify(this.state.editAblePolicy));
+                dupmVar.policy_note = values.command;
+                dupmVar.policy_name = values.policy_name;
 
                 if (this.state.main_extension !== null && this.state.main_extension !== '' && this.state.main_extension !== {} && this.state.main_extension !== undefined && this.state.main_extension !== "undefined") {
-                    this.state.editAblePolicy.app_list.push(this.state.main_extension);
+                    dupmVar.app_list.push(this.state.main_extension);
                     // console.log('if is called 1')
                 }
 
                 if (this.state.main_system_control !== null && this.state.main_system_control !== '' && this.state.main_extension !== {} && this.state.main_extension !== undefined && this.state.main_extension !== "undefined") {
-                    this.state.editAblePolicy.app_list.push(this.state.main_system_control);
+                    dupmVar.app_list.push(this.state.main_system_control);
                     // console.log('if is called 2')
                 }
 
-                if (this.state.editAblePolicy.app_list.length) {
-                    let indexforDel = this.state.editAblePolicy.app_list.findIndex(item => item == undefined || item == "undefined" || item == '' || item == null || item == {})
+                if (dupmVar.app_list.length) {
+                    let indexforDel = dupmVar.app_list.findIndex(item => item == undefined || item == "undefined" || item == '' || item == null || item == {})
                     if (indexforDel > -1) {
-                        this.state.editAblePolicy.app_list.splice(indexforDel, 1)
+                        dupmVar.app_list.splice(indexforDel, 1)
                     }
                 }
 
-                // console.log(this.state.main_extension, 'app list is one', this.state.editAblePolicy.app_list)
+                // this.state.editAblePolicy.policy_name = values.policy_name;
+
+                // console.log("from data ois", dupmVar)
 
                 Modal.confirm({
                     title: 'Are You Sure, You Want to Save Changes',
                     onOk: () => {
-                        this.props.SavePolicyChanges(this.state.editAblePolicy);
+                        this.props.SavePolicyChanges(dupmVar);
                         this.props.editPolicyModalHide();
+                        this.props.form.resetFields()
                         this.props.getPolicies();
                         this.props.handleAppGotted(true)
                         this.setState({ tabSelected: '1' })
@@ -381,6 +398,7 @@ class EditPolicy extends Component {
 
     reset_steps = () => {
         this.setState({ tabSelected: '1' })
+        this.props.form.resetFields()
     }
 
     onCancel = () => {
@@ -430,8 +448,8 @@ class EditPolicy extends Component {
             });
             if (response) {
                 callback()
-                this.setState({
-                    policy_name: value,
+                this.props.form.setFieldsValue({
+                    // policy_name: value,
                     // isPolicy_name: 'success',
                     command_name: '#' + value.replace(/ /g, '_'),
                     // policy_name_error: ''
@@ -663,12 +681,17 @@ class EditPolicy extends Component {
                                         ],
 
                                     })(
-                                        <Input disabled placeholder="Name" className="pol_inp" />
+                                        <Input placeholder="Name" className="pol_inp" />
                                     )}
                                 </Form.Item>
                                 <Form.Item>
                                     <span className="h3">Command Name</span>
-                                    <Input disabled value={this.state.command_name} className="pol_inp" />
+                                    {getFieldDecorator('command_name', {
+                                        initialValue: '#' + this.state.policy_name.replace(/ /g, '_'),
+
+                                    })(
+                                        <Input disabled className="pol_inp" />
+                                    )}
                                 </Form.Item>
                                 <Form.Item
                                 // validateStatus={this.state.isCommand}
@@ -726,4 +749,5 @@ class EditPolicy extends Component {
 }
 
 const WrappedForm = Form.create({ name: 'add Policy' })(EditPolicy);
+
 export default WrappedForm;
