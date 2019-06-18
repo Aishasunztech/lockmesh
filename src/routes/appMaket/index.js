@@ -133,9 +133,9 @@ class ApkMarket extends React.Component {
                     this.props.isloading ? <CircularProgress /> :
                         <Card >
                             <Row>
-                                <h4 className="sm_top_heading">Move <b>(Avaiable Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices</h4>
+                                <h4 className="sm_top_heading">Move <b>(Available Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices</h4>
                                 <Col md={12} sm={24} xs={24} className="text-center">
-                                    <h4 className="sm_heading1"><b>Avaiable Apps</b></h4>
+                                    <h4 className="sm_heading1"><b>Available Apps</b></h4>
                                 </Col>
                                 <Col md={12} sm={24} xs={24} className="text-center sec_market">
                                     <h4 className="sm_heading1"><b>Secure Market</b></h4>
@@ -147,7 +147,7 @@ class ApkMarket extends React.Component {
 
                                         <div>
                                             <h4 className="sm_heading2">
-                                                <b>Avaiable Apps</b>
+                                                <b>Available Apps</b>
                                             </h4>
 
                                         </div>
