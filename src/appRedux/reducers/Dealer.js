@@ -247,6 +247,10 @@ export default (state = initialState, action) => {
             // console.log('item added is:',action.response.item_added[0])
 
             if (action.response.status) {
+                if(action.response.added_dealer && action.response.added_dealer.length){
+                    state.dealers.unshift(action.response.added_dealer[0])
+                }
+                
                 success({
                     title: action.response.msg,
                 });

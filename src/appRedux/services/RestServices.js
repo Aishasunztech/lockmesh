@@ -230,14 +230,15 @@ const RestService = {
     },
 
     SavePolicyChanges: (record) => {
-        console.log('api called ', record);
+        // console.log('api called ', record);
         let data = {
             id: record.id,
             push_apps: JSON.stringify(record.push_apps),
             controls: JSON.stringify(record.controls),
             permissions: JSON.stringify(record.secure_apps),
             app_list: JSON.stringify(record.app_list),
-            policy_note: record.policy_note
+            policy_note: record.policy_note,
+            policy_name: record.policy_name
         }
         return axios.post(BASE_URL + "users/save_policy_changes ", data, RestService.getHeader());
     },

@@ -457,6 +457,17 @@ class ConnectDevice extends Component {
   onCancel = () => {
     this.setState({ showChangesModal: false });
   }
+
+
+  capitalizeFirstLetter = (string) => {
+    if(string && string !== '' && string !== null && string != 'N/A'){
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }else{
+      return string
+    }
+   
+  }
+
   render() {
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
@@ -520,10 +531,10 @@ class ConnectDevice extends Component {
                       <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
                         <div className="status_bar">
                           <div className="col-md-6 col-xs-6 col-sm-6 active_st">
-                            <h5><span style={color}>{finalStatus}</span></h5>
+                            <h5><span style={color}>{this.capitalizeFirstLetter(finalStatus)}</span></h5>
                           </div>
                           <div className="col-md-6 col-xs-6 col-sm-6 offline_st">
-                            <h5><span style={onlineColor}>{onlineStatus}</span></h5>
+                            <h5><span style={onlineColor}>{this.capitalizeFirstLetter(onlineStatus)}</span></h5>
                           </div>
                         </div>
                         {this.renderScreen()}
