@@ -321,13 +321,19 @@ class Permissions extends Component {
   }
 
   removeAllDealers = () => {
-    let permittedDealers = this.state.permissions;
-    // console.log("permitted dealers", permittedDealers);
+    // let permittedDealers = this.state.permissions;
+    console.log("permitted dealers", this.statedealerList);
+    let dealersID = [];
+    if(this.state.dealerList && this.state.dealerList.length){
+      for(let item of this.state.dealerList){
+        dealersID.push(item.dealer_id);
+      }
+    }
 
     this.setState({
       permissions: []
     })
-    this.props.savePermission(this.props.record.policy_id, JSON.stringify(permittedDealers), 'delete');
+    this.props.savePermission(this.props.record.policy_id, JSON.stringify(dealersID), 'delete');
     // this.state.dealerList.map((dealer)=>{
     //   console.log(dealer);
     // })
