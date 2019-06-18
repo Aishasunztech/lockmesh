@@ -406,7 +406,7 @@ class Policy extends Component {
                 _this.setState({
                     editPolicyModal: false
                 })
-                _this.refs.editPolicy.reset_steps();
+                _this.form.reset_steps();
                 //   console.log('Cancel');
             },
         });
@@ -420,11 +420,12 @@ class Policy extends Component {
         this.setState({
             editPolicyModal: false
         })
-        this.refs.editPolicy.reset_steps();
+        this.form.reset_steps();
     }
 
 
     render() {
+        // console.log(this.refs.editPolicy, 'dsklfsdlkfjlksd', this.refs)
 
         return (
             <Fragment>
@@ -501,7 +502,7 @@ class Policy extends Component {
                     // destroyOnClose={true}
                     title="Edit Policy"
                     onOk={() => this.handlePolicyModal(false)}
-                    onCancel={() => {this.editPolicyModalHide(); this.props.handleAppGotted(false)}}
+                    onCancel={() => {this.editPolicyModalHide(); this.props.handleAppGotted(false) }}
                     okText="Update"
                     footer={null}
                 >
@@ -529,6 +530,7 @@ class Policy extends Component {
                         handleAppGotted={this.props.handleAppGotted}
                         appsGotted={this.state.appsGotted}
                         getPolicies={this.props.getPolicies}
+                        wrappedComponentRef={(form) => this.form = form}
                         ref='editPolicy'
                     />
                 </Modal>
