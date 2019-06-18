@@ -15,6 +15,7 @@ import Users from './users';
 import InvalidPage from "./InvalidPage";
 import FourOFour from "./404/";
 import AppMarket from "./appMaket/index";
+import ManageData from './account/ManageData/index'
 // import Documents from "./documents/index";
 
 const App = ({ match }) => {
@@ -36,6 +37,7 @@ const App = ({ match }) => {
       <Route path={`${match.url}upload-apk`} component={AddApk} />
       <Route path={`${match.url}invalid_page`} component={InvalidPage} />
       <Route path={`${match.url}app-market`} component={AppMarket} />
+      <Route path={`${match.url}account/managedata`} component={ManageData} />
       <Route path="*" component={FourOFour} />
     </Switch>
   </div>)
