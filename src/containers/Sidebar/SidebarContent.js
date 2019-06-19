@@ -114,7 +114,7 @@ class SidebarContent extends Component {
             <ul className="gx-app-nav mt-8">
               <li>
                 <i className="icon icon-dollar" >
-                  <Icon type="dollar" className="mb-10"/>
+                  <Icon type="dollar" className="mb-10" />
                 </i>
               </li>
               <li><i className="icon icon-chat-new" /></li>

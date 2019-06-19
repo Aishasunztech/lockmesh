@@ -43,8 +43,7 @@ class AccountList extends Component {
     renderList(list) {
         data = [];
         if (this.props.tabselect != 'all') {
-
-            list = list.filter(e => e.whitelabel_id == this.props.tabselect);
+            list = list.filter(e => e.used == this.props.tabselect);
         }
         list.map((item, index) => {
             // let label;
@@ -135,22 +134,31 @@ export default class Tab extends Component {
     render() {
         // console.log(this.props.whiteLables);
         return (
-            <AccountList
-                dataList={this.state.dataList}
-                innerTabSelect={this.props.innerTabSelect}
-                tabselect={this.state.tabselect}
-                // suspendDealer={this.props.suspendDealer}
-                // activateDealer={this.props.activateDealer}
-                // deleteDealer={this.props.deleteDealer}
-                // undoDealer={this.props.undoDealer}
-                columns={this.props.columns}
-                // selectedOptions={this.state.selectedOptions}
-                ref="dealerList"
-                pagination={this.props.pagination}
-                // editDealer={this.props.editDealer}
-                // updatePassword={this.props.updatePassword}
-                handleChangeInnerTab={this.props.handleChangeInnerTab}
-            />
+            <Fragment>
+                <Tabs defaultActiveKey="all" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
+                    <TabPane tab="All" key="all" >
+                    </TabPane>
+                    <TabPane tab="Used" key="1" forceRender={true} > </TabPane>
+                    <TabPane tab="Unused" key="0" forceRender={true} > </TabPane>
+
+                </Tabs>
+                <AccountList
+                    dataList={this.state.dataList}
+                    innerTabSelect={this.props.innerTabSelect}
+                    tabselect={this.state.tabselect}
+                    // suspendDealer={this.props.suspendDealer}
+                    // activateDealer={this.props.activateDealer}
+                    // deleteDealer={this.props.deleteDealer}
+                    // undoDealer={this.props.undoDealer}
+                    columns={this.props.columns}
+                    // selectedOptions={this.state.selectedOptions}
+                    ref="dealerList"
+                    pagination={this.props.pagination}
+                    // editDealer={this.props.editDealer}
+                    // updatePassword={this.props.updatePassword}
+                    handleChangeInnerTab={this.props.handleChangeInnerTab}
+                />
+            </Fragment>
 
         )
     }
