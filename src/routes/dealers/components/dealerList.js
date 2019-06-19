@@ -118,6 +118,9 @@ class DealerList extends Component {
     }
 
 
+
+
+    
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
