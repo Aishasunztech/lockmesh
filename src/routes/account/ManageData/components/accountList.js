@@ -70,7 +70,7 @@ class AccountList extends Component {
         // console.log('data list at::', this.props.dataList)
         return (
             <Card>
-                <Tabs defaultActiveKey="1" type='card' tabPosition="left" className="dev_tabs" onChange={this.callback} style={{ width: '10%', float: "left" }}>
+                <Tabs defaultActiveKey="1" type="card" tabPosition="left" className="manage_data" onChange={this.callback}>
                     <TabPane tab="CHAT" key="1" >
                     </TabPane>
                     <TabPane tab="PGP" key="2" forceRender={true}>
@@ -82,11 +82,9 @@ class AccountList extends Component {
 
                 </Tabs>
                 <Table
-                    style={{ width: "90%", float: "right" }}
                     size="middle"
-                    className="gx-table-responsive devices table"
+                    className="gx-table-responsive devices table m_d_table"
                     bordered
-
                     scroll={{ x: 500 }}
                     columns={this.state.columns}
                     rowKey='row_key'

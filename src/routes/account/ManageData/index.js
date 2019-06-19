@@ -9,7 +9,7 @@ import AppFilter from '../../../components/AppFilter';
 // import EditDealer from './components/editDealer';
 import CircularProgress from "components/CircularProgress/index";
 import AccountList from "./components/accountList";
-import styles from './dealers.css'
+import styles from './manage_data.css'
 
 import { componentSearch, getDealerStatus, titleCase } from '../../utils/commonUtils';
 
@@ -499,8 +499,7 @@ class ManageData extends Component {
                                 <Row gutter={16} className="filter_top">
                                     <Col className="col-md-3 col-sm-6 col-xs-12">
                                         <div className="gutter-box">
-                                            <h1>Manage Data</h1>
-
+                                            <h1 style={{ lineHeight: "35px", marginBottom: 0 }}>Manage Data</h1>
                                         </div>
                                     </Col>
                                     <Col className="col-md-7 col-sm-6 col-xs-12">

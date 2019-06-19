@@ -111,19 +111,26 @@ class SidebarContent extends Component {
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
-            <ul className="gx-app-nav mt-8">
+            <ul className="gx-app-nav mt-12" style={{justifyContent:"center"}}>
               <li>
                 <i className="icon icon-dollar" >
-                  <Icon type="dollar" className="mb-10"/>
+                  <Icon type="dollar" className="mb-12" />
                 </i>
               </li>
-              <li><i className="icon icon-chat-new" /></li>
+              <li>
+                <i className="icon icon-chat-new" /></li>
+
               <li>
                 <a className="head-example">
                   <Badge count={this.props.devices.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
+              </li>
+              <li>
+                <i className="icon icon-global" >
+                  <Icon type="global" className="mb-10" />
+                </i>
               </li>
             </ul>
           </div>
@@ -183,8 +190,8 @@ class SidebarContent extends Component {
               </Menu.Item> : null}
 
 
-              <Menu.Item key="profile">
-                <Link to="/profile"><i className="icon icon-contacts" /> <IntlMessages id="sidebar.profile" /></Link>
+              <Menu.Item key="settings">
+                <Link to="/settings"><i className="icon icon-setting" /> <IntlMessages id="sidebar.settings" /></Link>
               </Menu.Item>
               <Menu.Item key="logout" onClick={(e) => {
                 // this.props.logout() 

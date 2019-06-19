@@ -131,7 +131,7 @@ class ApkMarket extends React.Component {
             <div>
                 {
                     this.props.isloading ? <CircularProgress /> :
-                        <Card >
+                        <Card>
                             <Row>
                                 <h4 className="sm_top_heading">Move <b>(Available Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices</h4>
                                 <Col md={12} sm={24} xs={24} className="text-center">

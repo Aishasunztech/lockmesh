@@ -29,7 +29,7 @@ const App = ({ match }) => {
       <Route exact path={`${match.url}dealer/:dealer_type`} component={Dealers} />
       <Route exact path={`${match.url}policy`} component={Policy} />
       <Route exact path={`${match.url}create-dealer/:dealer_type`} component={AddDealer} />
-      <Route path={`${match.url}profile`} component={myProfile} />
+      <Route path={`${match.url}settings`} component={myProfile} />
       <Route path={`${match.url}connect-device/:device_id`} component={ConnectDevice} />
       <Route exact path={`${match.url}apk-list`} component={Apk} />
       <Route path={`${match.url}apk-list/autoupdate`} component={AutoUpdate} />

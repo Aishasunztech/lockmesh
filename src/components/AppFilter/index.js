@@ -109,7 +109,7 @@ class AppFilter extends Component {
 
         return (
             // className="gutter-example"
-            <Card >
+            <Card className="sticky_top_bar">
                 <Row gutter={16} className="filter_top">
                     <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">

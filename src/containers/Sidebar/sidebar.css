@@ -8,7 +8,7 @@
 }
 
 .notification_icn {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .ant-badge .ant-badge-count {
@@ -90,8 +90,8 @@
 }
 
 .gx-app-nav li {
-    padding: 8px 12px 0 32px;
-    font-size: 24px;
+    padding: 0px 14px 0px 14px;
+    font-size: 20px;
 }
 
 @media screen and (max-width: 768px) {
