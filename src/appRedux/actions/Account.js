@@ -14,8 +14,10 @@ import {
     NEW_DATA_INSERTED,
     CREATE_BACKUP_DB,
     CHECK_BACKUP_PASS,
-    SHOW_BACKUP_MODAL
-} from "constants/ActionTypes"
+    SHOW_BACKUP_MODAL,
+    SAVE_ID_PRICES,
+    SAVE_PACKAGE
+} from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
 
@@ -263,5 +265,41 @@ export const showBackupModal = (visible) => {
             payload: visible
 
         })
+    }
+}
+
+export const saveIDPrices = (data) => {
+    return (dispatch) => {
+        RestService.saveIDPrices(data).then((response) => {
+            if(RestService.checkAuth(response.data)){
+                dispatch({
+                    type: SAVE_ID_PRICES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })                
+            }
+        });
+
+    }
+}
+
+export const setPackage = (data) => {
+    return (dispatch) => {
+        RestService.setPackage(data).then((response) => {
+            if(RestService.checkAuth(response.data)){
+                dispatch({
+                    type: SAVE_PACKAGE,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })                
+            }
+        });
+
     }
 }
