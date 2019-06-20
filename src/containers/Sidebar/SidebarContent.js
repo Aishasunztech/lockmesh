@@ -109,7 +109,7 @@ class SidebarContent extends Component {
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
-            <ul className="gx-app-nav mt-12" style={{justifyContent:"center"}}>
+            <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>
               <li>
                 <i className="icon icon-dollar" >
                   <Icon type="dollar" className="mb-10" />
@@ -148,7 +148,7 @@ class SidebarContent extends Component {
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
                 </i>
-                Logout
+                <IntlMessages id="sidebar.logout" />
                 {/* </Link> */}
               </Menu.Item>
 
