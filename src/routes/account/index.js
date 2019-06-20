@@ -81,7 +81,7 @@ class Account extends Component {
             dataVisible: false,
             dataFieldName: '',
             dataFieldTitle: '',
-            purchase_modal:false,
+            purchase_modal: false,
             selectedRowKeys: [],
             duplicate_ids: [],
             newData: [],
@@ -207,7 +207,7 @@ class Account extends Component {
             return originalData;
         }
     }
-    
+
     showModal = () => {
         this.setState({
             visible1: true,
@@ -1013,7 +1013,7 @@ class Account extends Component {
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8} >
-                            
+
                             <Modal
                                 width="400px"
                                 className="back_db"
@@ -1060,7 +1060,7 @@ class Account extends Component {
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
-                                    <a href="javascript:void(0)" onClick={(e)=>{
+                                    <a href="javascript:void(0)" onClick={(e) => {
                                         this.showPurchaseModal(e, true);
                                     }}>
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
@@ -1093,9 +1093,8 @@ class Account extends Component {
 
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                {/* className="contenar" */}
-                                <div className="">
-                                    <a href="javascript:void(0)" onClick={() => this.showPricingModal(true) }>
+                                <div className="contenar">
+                                    <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}>
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
@@ -1103,26 +1102,35 @@ class Account extends Component {
                                                         <div className="col-md-12 ac_card">
                                                             <h2 style={{ textAlign: "center" }}> <Icon type="branches" />  Manage Tokens</h2>
                                                             <Divider className="mb-0" />
-                                                            <div className="crd_txt">
-                                                                <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
-                                                                <p className="more_txt">and more...</p>
-                                                            </div>
+                                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                                <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                    <Icon type="dollar" className="and_icon" />
+                                                                </Col>
+                                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                    <div className="crd_txt">
+                                                                        <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
+                                                                        <p className="more_txt">and more...</p>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+
                                                         </div>
                                                     </Row>
                                                 </Fragment>
                                             </div>
                                         </Card>
+                                        <Button type="primary" size="small" className="open_btn">Open</Button>
                                     </a>
                                     <div className="middle">
                                         <SetPricingModal
-                                            showPricingModal = {this.showPricingModal}
-                                            pricing_modal = {this.state.pricing_modal}
+                                            showPricingModal={this.showPricingModal}
+                                            pricing_modal={this.state.pricing_modal}
                                             // LabelName = {this.props.whiteLabelInfo.name}
-                                            saveIDPrices= {this.props.saveIDPrices}
+                                            saveIDPrices={this.props.saveIDPrices}
                                             setPackage={this.props.setPackage}
-                                            // whitelabel_id={this.props.whiteLabelInfo.id}
+                                        // whitelabel_id={this.props.whiteLabelInfo.id}
 
                                         />
                                     </div>
