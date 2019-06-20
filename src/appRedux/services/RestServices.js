@@ -149,6 +149,17 @@ const RestService = {
     getPGPEmails: () => {
         return axios.get(BASE_URL + 'users/get_pgp_emails', RestService.getHeader());
     },
+    // get All ids
+    getAllSimIDs: () => {
+        return axios.get(BASE_URL + 'users/get_all_sim_ids', RestService.getHeader());
+    },
+    getAllChatIDs: () => {
+        return axios.get(BASE_URL + 'users/get_all_chat_ids', RestService.getHeader());
+    },
+    getAllPGPEmails: () => {
+        return axios.get(BASE_URL + 'users/get_all_pgp_emails', RestService.getHeader());
+    },
+    // get used ids
     getUsedPGPEmails: () => {
         return axios.get(BASE_URL + 'users/get_used_pgp_emails', RestService.getHeader());
     },

@@ -25,9 +25,12 @@ import {
 import { exportCSV } from '../../../appRedux/actions/Account'
 
 import {
-    getSimIDs,
-    getChatIDs,
-    getPGPEmails,
+    // getSimIDs,
+    // getChatIDs,
+    // getPGPEmails,
+    getAllSimIDs,
+    getAllChatIDs,
+    getAllPGPEmails,
 } from "../../../appRedux/actions/Devices";
 
 var copyInnerContent = [];
@@ -339,9 +342,13 @@ class ManageData extends Component {
 
 
     componentDidMount() {
-        this.props.getSimIDs();
-        this.props.getPGPEmails();
-        this.props.getChatIDs();
+        // this.props.getSimIDs();
+        // this.props.getPGPEmails();
+        // this.props.getChatIDs();
+
+        this.props.getAllSimIDs();
+        this.props.getAllPGPEmails();
+        this.props.getAllChatIDs();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -680,9 +687,12 @@ var mapStateToProps = (state) => {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getSimIDs: getSimIDs,
-        getChatIDs: getChatIDs,
-        getPGPEmails: getPGPEmails,
+        // getSimIDs: getSimIDs,
+        // getChatIDs: getChatIDs,
+        // getPGPEmails: getPGPEmails,
+        getAllSimIDs: getAllSimIDs,
+        getAllChatIDs: getAllChatIDs,
+        getAllPGPEmails: getAllPGPEmails,
         exportCSV: exportCSV,
     }, dispatch);
 }
