@@ -593,8 +593,8 @@ class Account extends Component {
                                                     <Icon type="form" className="and_icon" />
                                                 </Col>
                                                 <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                    <p style={{}}><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
-                                                    <p style={{}}><span className="diamond_icon">&#9670;</span>Upload/View/Edit your data</p>
+                                                    <p><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
+                                                    <p><span className="diamond_icon">&#9670;</span>View/Edit your data</p>
                                                     <p><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
                                                     <p className="more_txt">and more...</p>
                                                 </Col>
@@ -1232,7 +1232,7 @@ class Account extends Component {
                                                         <Icon type="database" className="and_icon" />
                                                     </Col>
                                                     <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                        <p style={{}}>
+                                                        <p>
                                                             This feature allows you to keep a backup of the complete system database for offline safekeeping
                                                     </p>
                                                     </Col>
@@ -1262,7 +1262,7 @@ class Account extends Component {
                                                                 <Icon type="dollar" className="and_icon" />
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <p style={{}}>Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.</p>
+                                                                <p>Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.</p>
                                                             </Col>
                                                         </Row>
                                                     </div>
@@ -1279,31 +1279,28 @@ class Account extends Component {
 
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div className="contenar">
-                                    <a href="javascript:void(0)" >
-                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
-                                            <div className="profile_table image_1">
-                                                <Fragment>
-                                                    <Row>
-                                                        <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="branches" />  Manage Tokens</h2>
-                                                            <Divider className="mb-0" />
-                                                            <div className="crd_txt">
-                                                                <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
-                                                                <p className="more_txt">and more...</p>
-                                                            </div>
-                                                        </div>
-                                                    </Row>
-                                                </Fragment>
+                                <a href="javascript:void(0)" >
+                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                        <Fragment>
+                                            <div>
+                                                <h2 style={{ textAlign: "center" }}>Packages and ID's</h2>
+                                                <Divider className="mb-0" />
+                                                <Row style={{ padding: '12px 0 0px' }}>
+                                                    <Col span={7} className="" style={{ textAlign: "center" }}>
+                                                        <Icon type="control" className="and_icon" />
+                                                    </Col>
+                                                    <Col span={16} style={{ padding: 0 }} className="crd_txt">
+                                                        <p><span className="diamond_icon">&#9670;</span>Create Packages and bundles</p>
+                                                        <p><span className="diamond_icon">&#9670;</span>Set Package prices with terms</p>
+                                                        <p><span className="diamond_icon">&#9670;</span>Set ID prices</p>
+                                                        <p className="more_txt">and more...</p>
+                                                    </Col>
+                                                </Row>
                                             </div>
-                                        </Card>
-                                    </a>
-                                    <div className="middle">
-                                        <div className="text">Coming Soon</div>
-                                    </div>
-                                </div>
+                                        </Fragment>
+                                    </Card>
+                                    <Button type="primary" size="small" className="open_btn">Open</Button>
+                                </a>
                             </div>
                         </Col>
                     </Row>

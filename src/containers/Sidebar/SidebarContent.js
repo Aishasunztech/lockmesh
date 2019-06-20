@@ -99,13 +99,11 @@ class SidebarContent extends Component {
         <div className="gx-sidebar-content ">
           <div className={`gx-sidebar-notifications text-center ${this.getNoHeaderClass(navStyle)} `}>
             <UserProfile />
-
             <NewDevice
               ref='new_device'
               devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
-
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -114,7 +112,7 @@ class SidebarContent extends Component {
             <ul className="gx-app-nav mt-12" style={{justifyContent:"center"}}>
               <li>
                 <i className="icon icon-dollar" >
-                  <Icon type="dollar" className="mb-12" />
+                  <Icon type="dollar" className="mb-10" />
                 </i>
               </li>
               <li>
