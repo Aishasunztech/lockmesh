@@ -25,7 +25,6 @@ class AppFilter extends Component {
     }
 
     componentDidMount() {
-        console.log("componentDidMount selectedOptions appfilter", this.props.selectedOptions);
         this.setState({
             selectedDisplayValues: this.props.selectedOptions,
         });
