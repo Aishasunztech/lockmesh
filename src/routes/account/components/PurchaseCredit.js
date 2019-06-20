@@ -44,7 +44,7 @@ class PurchaseCredit extends Component {
                             <Select
                                 showSearch
                                 style={{ width: 200 }}
-                                placeholder="Select a person"
+                                placeholder=""
                                 optionFilterProp="children"
                                 // onChange={onChange}
                                 // onFocus={onFocus}
@@ -67,7 +67,7 @@ class PurchaseCredit extends Component {
                             <Select
                                 showSearch
                                 style={{ width: 200 }}
-                                placeholder="Select a person"
+                                placeholder=""
                                 optionFilterProp="children"
                                 // onChange={onChange}
                                 // onFocus={onFocus}
@@ -100,7 +100,7 @@ class PurchaseCredit extends Component {
                             <Select
                                 showSearch
                                 style={{ width: 200 }}
-                                placeholder="Select a person"
+                                placeholder=""
                                 optionFilterProp="children"
                                 // onChange={onChange}
                                 // onFocus={onFocus}
