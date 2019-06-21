@@ -67,7 +67,7 @@ class Apk extends React.Component {
                     title: APK_ACTION,
                     dataIndex: 'action',
                     key: 'action',
-                    className: 'row'
+                    className: 'row m-0'
                 },
                 {
                     title: (
@@ -249,7 +249,7 @@ class Apk extends React.Component {
                 this.setState({
                     apk_list: this.filterList('On', this.props.apk_list),
                     column: this.columns,
-     
+
                 })
 
                 break;
@@ -257,24 +257,24 @@ class Apk extends React.Component {
                 this.setState({
                     apk_list: this.filterList('Off', this.props.apk_list),
                     column: this.columns,
-          
+
                 })
                 break;
 
-                default:
-                    this.setState({
-                        apk_list: this.props.apk_list,
-                        column: this.columns,
-                     
-                    })
+            default:
+                this.setState({
+                    apk_list: this.props.apk_list,
+                    column: this.columns,
+
+                })
                 break;
         }
     }
-    
+
     filterList = (type, dealers) => {
         let dumyDealers = [];
         dealers.filter(function (apk) {
-            let dealerStatus = apk.apk_status ;
+            let dealerStatus = apk.apk_status;
             if (dealerStatus === type) {
                 dumyDealers.push(apk);
             }

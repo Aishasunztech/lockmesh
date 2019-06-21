@@ -112,23 +112,43 @@ export default class ListApk extends Component {
                     'rowKey': app.apk_id,
                     'apk_id': app.apk_id,
                     'action': (
-                        <Fragment>
-                            <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
-                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
-                            <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
-                                this.props.handleConfirmDelete(app.apk_id);
-                            }}>DELETE</Button>
-
-                        </Fragment>
+                        <custom data-column="ACTION">
+                            <Fragment>
+                                <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
+                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
+                                <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
+                                    this.props.handleConfirmDelete(app.apk_id);
+                                }}>DELETE</Button>
+                            </Fragment>
+                        </custom>
                     ),
-                    'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
+                    'permission': (
+                        <custom data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400 }}>
+                            {app.permission_count}
+                        </custom>
+                    ),
                     "permissions": app.permissions,
-                    'apk_status': (<Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                        this.props.handleStatusChange(e, app.apk_id);
-                    }} />),
-                    'apk': app.apk ? app.apk : 'N/A',
-                    'apk_name': app.apk_name ? app.apk_name : 'N/A',
-                    'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                    'apk_status': (
+                        <custom data-column="SHOW ON DEVICE">
+                            <Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                                this.props.handleStatusChange(e, app.apk_id);
+                            }} />
+                        </custom>
+                    ),
+                    'apk': (
+                        <custom data-column="SHOW ON DEVICE">
+                            {app.apk ? app.apk : 'N/A'}
+                        </custom>
+                    ),
+                    'apk_name': (
+                        <custom data-column="APK NAME">
+                            {app.apk_name ? app.apk_name : 'N/A'}
+                        </custom>
+                    ),
+                    'apk_logo': (
+                        <custom data-column="APK LOGO">
+                            <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
+                        </custom>),
                 }
 
             } else {
@@ -203,7 +223,7 @@ export default class ListApk extends Component {
                     expandedRowRender={(record) => {
                         // console.log("table row", record);
                         return (
-                            <Permissions record={record} />
+                            <Permissions className="exp_row22" record={record} />
                         );
 
                     }}
@@ -217,7 +237,7 @@ export default class ListApk extends Component {
                     dataSource={this.renderList(this.props.apk_list)}
                     pagination={{ pageSize: Number(this.state.pagination) }}
                     className="devices"
-                    scroll={{ x: 500 }}
+                    scroll={{ x: 10 }}
                     rowKey="apk_id"
                 />
                 <EditApk ref='editApk' getApkList={this.props.getApkList} />
