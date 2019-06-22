@@ -177,26 +177,26 @@ export default (state = initialState, action) => {
 
             let policies = state.policies;
             let checkButtons;
-            let policy_index = state.policies.findIndex((item) => item.id == action.payload.policy_id);
+            let policy_index = state.policies.findIndex((item) => item.id === action.payload.policy_id);
             if (policy_index > -1) {
                 for (let app_id of action.payload.apps) {
                     let index1 = 0;
-                    if (action.payload.dataType == 'push_apps') {
-                        index1 = policies[policy_index][action.payload.dataType].findIndex(app => app.apk_id == app_id);
+                    if (action.payload.dataType === 'push_apps') {
+                        index1 = policies[policy_index][action.payload.dataType].findIndex(app => app.apk_id === app_id);
                     } else {
-                        index1 = policies[policy_index][action.payload.dataType].findIndex(app => app.id == app_id);
+                        index1 = policies[policy_index][action.payload.dataType].findIndex(app => app.id === app_id);
                     }
                     // console.log(index1, 'index is ')
-                    if (index1 == -1) {
+                    if (index1 === -1) {
                         let app = null;
-                        if (action.payload.dataType == 'push_apps') {
-                            app = state.dealer_apk_list.find(item => item.apk_id == app_id);
+                        if (action.payload.dataType === 'push_apps') {
+                            app = state.dealer_apk_list.find(item => item.apk_id === app_id);
                             if (app) {
                                 policies[policy_index].push_apps.push(app)
                             }
                         } else {
 
-                            app = state.appPermissions.find(item => item.id == app_id);
+                            app = state.appPermissions.find(item => item.id === app_id);
                             if (app) {
                                 policies[policy_index].app_list.push(app)
                             }
@@ -221,16 +221,16 @@ export default (state = initialState, action) => {
             let policies = state.policies;
             let app_id = action.payload.app_id;
             let checkButtons;
-            let policy_index = state.policies.findIndex((item) => item.id == action.payload.policy_id);
+            let policy_index = state.policies.findIndex((item) => item.id === action.payload.policy_id);
             if (policy_index > -1) {
-                if (action.payload.dataType == 'push_apps') {
-                    let index = policies[policy_index].push_apps.findIndex(item => item.apk_id == app_id);
+                if (action.payload.dataType === 'push_apps') {
+                    let index = policies[policy_index].push_apps.findIndex(item => item.apk_id === app_id);
                     if (index > -1) {
                         policies[policy_index].push_apps.splice(index, 1);
                     }
                 }
-                else if (action.payload.dataType == 'appPermissions') {
-                    let index = policies[policy_index].app_list.findIndex(item => item.apk_id == app_id);
+                else if (action.payload.dataType === 'appPermissions') {
+                    let index = policies[policy_index].app_list.findIndex(item => item.apk_id === app_id);
                     if (index > -1) {
                         policies[policy_index].app_list.splice(index, 1);
                     }
@@ -329,27 +329,27 @@ export default (state = initialState, action) => {
 
             if (rowId >= 0) {
                 let index = -1;
-                if (stateToUpdate == 'app_list') {
-                    index = changedState[rowId][stateToUpdate].findIndex(item => item.id == id);
+                if (stateToUpdate === 'app_list') {
+                    index = changedState[rowId][stateToUpdate].findIndex(item => item.id === id);
                     if (index >= 0) {
                         changedState[rowId][stateToUpdate][index][key] = action.payload.value;
                     }
-                } else if (stateToUpdate == 'push_apps') {
-                    index = changedState[rowId][stateToUpdate].findIndex(item => item.apk_id == id);
+                } else if (stateToUpdate === 'push_apps') {
+                    index = changedState[rowId][stateToUpdate].findIndex(item => item.apk_id === id);
                     if (index >= 0) {
                         changedState[rowId][stateToUpdate][index][key] = action.payload.value;
                     }
-                } else if (stateToUpdate == 'secure_apps') {
+                } else if (stateToUpdate === 'secure_apps') {
                     // console.log('object', changedState)
 
                     // let permissionIndex = changedState[rowId][stateToUpdate].findIndex(item => item.uniqueName == action.payload.uniqueName);
                     // if (permissionIndex >= 0) {
-                    index = changedState[rowId][stateToUpdate].findIndex(item => item.id == id);
+                    index = changedState[rowId][stateToUpdate].findIndex(item => item.id === id);
                     if (index >= 0) {
                         changedState[rowId][stateToUpdate][index][key] = action.payload.value;
                     }
                     // }
-                } else if (stateToUpdate == 'controls') {
+                } else if (stateToUpdate === 'controls') {
                     // console.log(changedState[rowId][stateToUpdate][key], 'changed 0', action.payload.value)
 
                     changedState[rowId][stateToUpdate][key] = action.payload.value;
@@ -374,15 +374,15 @@ export default (state = initialState, action) => {
         case HANDLE_POLICY_STATUS: {
 
             let changedState = state.policies;
-            let index = changedState.findIndex((policy) => policy.id == action.payload.id);
+            let index = changedState.findIndex((policy) => policy.id === action.payload.id);
             if (index >= 0) {
-                if (action.payload.key == 'delete_status') {
+                if (action.payload.key === 'delete_status') {
                     changedState.splice(index, 1);
                     success({
                         title: 'Policy Deleted Successfully',
                     });
 
-                } else if (action.payload.key == 'status') {
+                } else if (action.payload.key === 'status') {
                     changedState[index][action.payload.key] = action.payload.value;
                     message.success('Status Changed Sccessfully');
                     // success({
@@ -409,7 +409,7 @@ export default (state = initialState, action) => {
                     // console.log(extension.uniqueName, '===', action.payload.uniqueName)
                   
                     if (extension.uniqueName === action.payload.uniqueName) {
-                        if (action.payload.main == 'main') {
+                        if (action.payload.main === 'main') {
                             extension[action.payload.key] = action.payload.value;
                         } else {
                             let objIndex = extension.subExtension.findIndex((obj => obj.id === action.payload.app_id));
@@ -580,17 +580,15 @@ export default (state = initialState, action) => {
 
             // console.log('reducer', action.payload);
             let changedState = JSON.parse(JSON.stringify(state.policies));
-            let chandedRowIndex = changedState.findIndex((item) => item.id == action.payload.rowId)
+            let chandedRowIndex = changedState.findIndex((item) => item.id === action.payload.rowId)
 
             if (action.payload.stateToUpdate === 'allExtensions') {
                 state[action.payload.key + 'All2' + action.payload.stateToUpdate] = action.payload.value;
                 changedState[chandedRowIndex]['secure_apps'].forEach(extension => {
-                    // if (extension.uniqueName === action.payload.uniqueName) {
-                    // extension.subExtension.forEach(obj => {
+                    
                     extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                     extension.isChanged = true;
-                    // });
-                    // }
+                    
                 });
 
                 state.policies = JSON.parse(JSON.stringify(changedState));

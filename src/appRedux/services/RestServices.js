@@ -577,6 +577,14 @@ const RestService = {
     checkPass: (user) => {
         return axios.post(BASE_URL + 'users/check_pass', { user }, RestService.getHeader());
     },
+    saveIDPrices: (data) => {
+        // console.log(data, 'data')
+        return axios.put(BASE_URL+ 'users/save-prices', data, RestService.getHeader());
+    },
+    setPackage: (data) => {
+        // console.log(data, 'data')
+        return axios.post(BASE_URL+ 'users/save-package', {data}, RestService.getHeader());
+    },
 
     invalidPage: () => {
 

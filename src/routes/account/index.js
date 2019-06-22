@@ -14,7 +14,9 @@ import {
     insertNewData,
     createBackupDB,
     checkPass,
-    showBackupModal
+    showBackupModal,
+    saveIDPrices,
+    setPackage
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -24,7 +26,11 @@ import {
     getChatIDs,
     getPGPEmails,
 } from "../../appRedux/actions/Devices";
+
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
+import PurchaseCredit from "./components/PurchaseCredit";
+import SetPricingModal from './ManageToken/SetPricingModal';
+
 const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
@@ -75,25 +81,14 @@ class Account extends Component {
             dataVisible: false,
             dataFieldName: '',
             dataFieldTitle: '',
-            sim_ids: [],
-            chat_ids: [],
-            pgp_emails: [],
-            used_pgp_emails: [],
-            used_sim_ids: [],
-            used_chat_ids: [],
-            sim_ids_page: 10,
-            chat_ids_page: 10,
-            pgp_emails_page: 10,
-            used_pgp_emails_page: 10,
-            used_sim_ids_page: 10,
-            used_chat_ids_page: 10,
+            purchase_modal: false,
             selectedRowKeys: [],
             duplicate_ids: [],
             newData: [],
             duplicate_modal_show: false,
             showBackupModal: false,
-            pwdConfirmModal: false
-
+            pwdConfirmModal: false,
+            pricing_modal: false,
         }
     }
 
@@ -106,42 +101,7 @@ class Account extends Component {
         });
     }
 
-    showViewmodal = (dataVisible, dataFieldName = "", dataFieldTitle = "") => {
-        // console.log(dataFieldName);
-        if (dataFieldName === "sim_ids") {
-            this.props.getSimIDs();
-        } else if (dataFieldName === "pgp_emails") {
-            this.props.getPGPEmails();
-        } else if (dataFieldName === "chat_ids") {
-            this.props.getChatIDs();
-        } else if (dataFieldName === "used_pgp_emails") {
-            this.props.getUsedPGPEmails();
-        } else if (dataFieldName === "used_chat_ids") {
-            this.props.getUsedChatIds();
-        } else if (dataFieldName === "used_sim_ids") {
-            this.props.getUsedSimIds();
-        }
-        this.setState({
-            dataVisible: dataVisible,
-            dataFieldName: dataFieldName,
-            dataFieldTitle: dataFieldTitle
-        });
-    }
-
     componentDidMount() {
-        this.props.getSimIDs();
-        this.props.getPGPEmails();
-        this.props.getChatIDs();
-        this.props.getUsedPGPEmails();
-        this.props.getUsedChatIds();
-        this.props.getUsedSimIds();
-        // this.props.getUsedSimIDs()
-        // console.log("this.props.chat_ids", this.props.chat_ids);
-        // this.setState({
-        //     sim_ids: this.props.sim_ids,
-        //     pgp_emails: this.props.pgp_emails,
-        //     chat_ids: this.props.chat_ids,
-        // });
     }
     componentDidUpdate(prevProps, nextProps) {
         if (prevProps !== nextProps) {
@@ -158,26 +118,14 @@ class Account extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length || this.props.backUpModal !== nextProps.backUpModal) {
+        if (this.props.backUpModal !== nextProps.backUpModal) {
             // if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length) {
             this.setState({
-                sim_ids: nextProps.sim_ids,
-                chat_ids: nextProps.chat_ids,
-                pgp_emails: nextProps.pgp_emails,
-                used_pgp_emails: nextProps.used_pgp_emails,
-                used_chat_ids: nextProps.used_chat_ids,
-                used_sim_ids: nextProps.used_sim_ids,
-                duplicate_modal_show: nextProps.duplicate_modal_show,
-                duplicate_ids: nextProps.duplicate_ids,
-                duplicate_data_type: nextProps.duplicate_data_type,
                 newData: nextProps.newData,
                 backUpModal: nextProps.backUpModal
             });
         } else if (this.props.duplicate_modal_show !== nextProps.duplicate_modal_show) {
             this.setState({
-                duplicate_modal_show: nextProps.duplicate_modal_show,
-                duplicate_ids: nextProps.duplicate_ids,
-                duplicate_data_type: nextProps.duplicate_data_type,
                 newData: nextProps.newData
             })
         }
@@ -259,75 +207,6 @@ class Account extends Component {
             return originalData;
         }
     }
-    handleSearch = (e, dataName) => {
-
-        let fieldName = e.target.name;
-        let fieldValue = e.target.value;
-
-        if (dataName === "sim_ids") {
-            let searchedData = this.searchField(this.props.sim_ids, fieldName, fieldValue);
-            this.setState({
-                sim_ids: searchedData
-            });
-        } else if (dataName === "chat_ids") {
-            let searchedData = this.searchField(this.props.chat_ids, fieldName, fieldValue);
-            this.setState({
-                chat_ids: searchedData
-            });
-        } else if (dataName === "pgp_emails") {
-            let searchedData = this.searchField(this.props.pgp_emails, fieldName, fieldValue);
-            this.setState({
-                pgp_emails: searchedData
-            });
-        } else if (dataName === "used_pgp_emails") {
-            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
-            let searchedData = this.searchField(this.props.used_pgp_emails, fieldName, fieldValue);
-            this.setState({
-                used_pgp_emails: searchedData
-            });
-        } else if (dataName === "used_chat_ids") {
-            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
-            let searchedData = this.searchField(this.props.used_chat_ids, fieldName, fieldValue);
-            // console.log(searchedData);
-            this.setState({
-                used_chat_ids: searchedData
-            });
-        } else if (dataName === "used_sim_ids") {
-            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
-            let searchedData = this.searchField(this.props.used_sim_ids, fieldName, fieldValue);
-            this.setState({
-                used_sim_ids: searchedData
-            });
-        }
-    }
-
-    handlePagination = (e, dataName) => {
-        if (dataName === "sim_ids") {
-            this.setState({
-                sim_ids_page: e
-            });
-        } else if (dataName === "chat_ids") {
-            this.setState({
-                chat_ids_page: e
-            });
-        } else if (dataName === "pgp_emails") {
-            this.setState({
-                pgp_emails_page: e
-            });
-        } else if (dataName == "used_pgp_emails") {
-            this.setState({
-                used_pgp_emails_page: e
-            });
-        } else if (dataName == "used_chat_ids") {
-            this.setState({
-                used_chat_ids_page: e
-            });
-        } else if (dataName == "used_sim_ids") {
-            this.setState({
-                used_sim_ids_page: e
-            });
-        }
-    }
 
     showModal = () => {
         this.setState({
@@ -399,6 +278,18 @@ class Account extends Component {
             });
         }
     }
+    showPurchaseModal = (e, visible) => {
+        this.setState({
+            purchase_modal: visible
+        })
+    }
+
+    showPricingModal = (visible) => {
+        this.setState({
+            pricing_modal: visible
+        });
+    }
+
     render() {
 
         if (this.props.showMsg) {
@@ -1122,87 +1013,6 @@ class Account extends Component {
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8} >
-                            <Modal
-                                maskClosable={false}
-                                title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! Duplicate Data</span></div>}
-                                visible={this.state.duplicate_modal_show}
-                                onOk={this.InsertNewData}
-                                onCancel={this.handleCancelDuplicate}
-                                okText='Submit'
-                                okButtonProps={{
-                                    disabled: this.state.newData.length ? false : true
-                                }}
-                            >
-
-                                <Table
-                                    bordered
-                                    columns={duplicateModalColumns}
-                                    dataSource={
-                                        this.state.duplicate_ids.map(row => {
-                                            if (this.state.duplicate_data_type == 'chat_id') {
-                                                return {
-                                                    key: row.chat_id,
-                                                    chat_id: row.chat_id
-                                                }
-                                            } else if (this.state.duplicate_data_type == 'pgp_email') {
-                                                return {
-                                                    key: row.pgp_email,
-                                                    pgp_email: row.pgp_email
-                                                }
-                                            }
-                                            else if (this.state.duplicate_data_type == 'sim_id') {
-                                                return {
-                                                    key: row.id,
-                                                    sim_id: row[this.state.duplicate_data_type],
-                                                    start_date: row.start_date,
-                                                    expiry_date: row.expiry_date
-                                                }
-                                            }
-
-                                        })
-                                    }
-
-                                    pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
-
-                                />
-                                <span className="warning_hr">
-                                    <hr />
-                                </span>
-                                <h2>New Data</h2>
-
-                                <Table
-                                    bordered
-                                    columns={duplicateModalColumns}
-                                    dataSource={
-                                        this.state.newData.map(row => {
-                                            if (this.state.duplicate_data_type == 'chat_id') {
-                                                return {
-                                                    key: row.chat_id,
-                                                    chat_id: row.chat_id
-                                                }
-                                            } else if (this.state.duplicate_data_type == 'pgp_email') {
-                                                return {
-                                                    key: row.pgp_email,
-                                                    pgp_email: row.pgp_email
-                                                }
-                                            }
-                                            else if (this.state.duplicate_data_type == 'sim_id') {
-                                                return {
-                                                    key: row.id,
-                                                    sim_id: row[this.state.duplicate_data_type],
-                                                    start_date: row.start_date,
-                                                    expiry_date: row.expiry_date
-                                                }
-                                            }
-
-                                        })
-                                    }
-
-                                    pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
-
-                                />
-                            </Modal>
-
 
                             <Modal
                                 width="400px"
@@ -1250,7 +1060,9 @@ class Account extends Component {
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
-                                    <a href="javascript:void(0)">
+                                    <a href="javascript:void(0)" onClick={(e) => {
+                                        this.showPurchaseModal(e, true);
+                                    }}>
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
@@ -1271,15 +1083,17 @@ class Account extends Component {
                                         </Card>
                                         <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
                                     </a>
-                                    {/* <div className="middle"><div className="text">Coming Soon</div></div> */}
-                                    {/* </div> */}
+                                    <PurchaseCredit
+                                        showPurchaseModal={this.showPurchaseModal}
+                                        purchase_modal={this.state.purchase_modal}
+                                    />
                                 </div>
                             </div>
                         </Col>
 
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <a href="javascript:void(0)" >
+                                <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)} >
                                     <Card style={{ borderRadius: 12 }} className="manage_ac">
                                         <Fragment>
                                             <div>
@@ -1301,6 +1115,17 @@ class Account extends Component {
                                     </Card>
                                     <Button type="primary" size="small" className="open_btn">Open</Button>
                                 </a>
+                                <div className="middle">
+                                    <SetPricingModal
+                                        showPricingModal={this.showPricingModal}
+                                        pricing_modal={this.state.pricing_modal}
+                                        // LabelName = {this.props.whiteLabelInfo.name}
+                                        saveIDPrices={this.props.saveIDPrices}
+                                        setPackage={this.props.setPackage}
+                                    // whitelabel_id={this.props.whiteLabelInfo.id}
+
+                                    />
+                                </div>
                             </div>
                         </Col>
                     </Row>
@@ -1323,39 +1148,21 @@ class Account extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getSimIDs: getSimIDs,
-        getChatIDs: getChatIDs,
-        getPGPEmails: getPGPEmails,
         importCSV: importCSV,
         exportCSV: exportCSV,
-        getUsedPGPEmails: getUsedPGPEmails,
-        getUsedChatIds: getUsedChatIds,
-        getUsedSimIds: getUsedSimIds,
         releaseCSV: releaseCSV,
         insertNewData: insertNewData,
         createBackupDB: createBackupDB,
         checkPass: checkPass,
-        showBackupModal: showBackupModal
+        showBackupModal: showBackupModal,
+        saveIDPrices: saveIDPrices,
+        setPackage: setPackage
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {
-    // console.log("sim_ids", devices.sim_ids);
-    // console.log("chat_ids", devices.chat_ids);
-    // console.log("used_pgp_emails", account.used_pgp_emails);
-    // console.log("used_caht", account.used_chat_ids);
-    // console.log("used_sadas", account.backUpModal);
     return {
         msg: account.msg,
         showMsg: account.showMsg,
-        sim_ids: devices.sim_ids,
-        chat_ids: devices.chat_ids,
-        pgp_emails: devices.pgp_emails,
-        used_pgp_emails: account.used_pgp_emails,
-        used_chat_ids: account.used_chat_ids,
-        used_sim_ids: account.used_sim_ids,
-        duplicate_data_type: account.duplicate_data_type,
-        duplicate_ids: account.duplicate_ids,
-        duplicate_modal_show: account.duplicate_modal_show,
         newData: account.newData,
         backUpModal: account.backUpModal
     };

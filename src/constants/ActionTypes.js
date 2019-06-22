@@ -200,3 +200,6 @@ export const GET_APP_JOBS = 'GET_APP_JOBS';
 
 
 export const SHOW_BACKUP_MODAL = 'SHOW_BACKUP_MODAL';
+
+export const SAVE_ID_PRICES = 'SAVE_ID_PRICES';
+export const SAVE_PACKAGE = 'SAVE_PACKAGE';

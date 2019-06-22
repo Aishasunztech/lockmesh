@@ -8,8 +8,10 @@ import {
     NEW_DATA_INSERTED,
     CREATE_BACKUP_DB,
     SHOW_BACKUP_MODAL,
-    CHECK_BACKUP_PASS
-} from "constants/ActionTypes";
+    CHECK_BACKUP_PASS,
+    SAVE_ID_PRICES,
+    SAVE_PACKAGE
+} from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
 const success = Modal.success
@@ -31,6 +33,37 @@ const initialState = {
 export default (state = initialState, action) => {
 
     switch (action.type) {
+
+        case SAVE_ID_PRICES: {
+            // console.log(action.response, 'response form save id prices')
+            if(action.response.status){
+                success({
+                    title: action.response.msg
+                })
+            }else{
+                error({
+                    title: action.response.msg
+                })
+            }
+            return{
+                ...state
+            }
+        }
+        case SAVE_PACKAGE: {
+            // console.log(action.response, 'response form save id prices')
+            if(action.response.status){
+                success({
+                    title: action.response.msg
+                })
+            }else{
+                error({
+                    title: action.response.msg
+                })
+            }
+            return{
+                ...state
+            }
+        }
 
         case IMPORT_CSV:
             return {

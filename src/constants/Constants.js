@@ -1,5 +1,5 @@
 // APP Constants
-export const VERSION = '2.8'
+export const VERSION = '3.0'
 
 // ACL
 export const ADMIN = "admin";
@@ -42,3 +42,28 @@ export const POLICY = 'policy';
 export const Main_SETTINGS = 'com.android.settingsSettings';
 export const SECURE_SETTING = 'com.secureSetting.SecureSettingsMainSecure Settings';
 // export const SYSTEM_CONTROLS_UNIQUE = 'com.secure.systemcontrolSystem Control';
+
+
+export const SECURE_LAUNCHER = "com.secure.launcher";
+export const SC = "com.secure.systemcontrol";
+
+
+// Prices Constants
+
+export const sim = 'sim_id';
+export const chat = 'chat_id';
+export const pgp = 'pgp_email';
+export const vpn = 'vpn_id';
+
+export const pkg_features = {
+    chat_id: false,
+    sim_id: false,
+    pgp_email: false,
+    vpn: false
+}
+
+
+export const one_month = '1 month';
+export const three_month = '3 month';
+export const six_month = '6 month';
+export const twelve_month = '12 month'; 
