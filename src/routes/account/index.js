@@ -1060,9 +1060,11 @@ class Account extends Component {
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
-                                    <a href="javascript:void(0)" onClick={(e) => {
-                                        this.showPurchaseModal(e, true);
-                                    }}>
+                                    <a href="javascript:void(0)"
+                                    // onClick={(e) => {
+                                    //     this.showPurchaseModal(e, true);
+                                    // }}
+                                    >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
@@ -1086,6 +1088,7 @@ class Account extends Component {
                                     <PurchaseCredit
                                         showPurchaseModal={this.showPurchaseModal}
                                         purchase_modal={this.state.purchase_modal}
+
                                     />
                                 </div>
                             </div>
@@ -1094,7 +1097,9 @@ class Account extends Component {
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
-                                    <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}>
+                                    <a href="javascript:void(0)"
+                                    // onClick={() => this.showPricingModal(true)}
+                                    >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>

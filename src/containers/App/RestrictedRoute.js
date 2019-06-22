@@ -35,6 +35,9 @@ import NoHeaderNotification from "../Topbar/NoHeaderNotification/index";
 import {
   checkComponent
 } from "../../appRedux/actions/Auth";
+import {
+  clearState
+} from "../../appRedux/actions/ConnectDevice";
 const { Content, Footer } = Layout;
 
 
@@ -55,15 +58,12 @@ class RestrictedRoute extends Component {
 
   }
   componentDidUpdate(prevProps) {
-    // console.log("prevProps", prevProps);
-    // console.log("next props", this.props);
     if (this.props.pathname !== prevProps.pathname && this.pathname !== "/invalid_page") {
-      // alert("hello");
       const componentRoute = this.props.pathname;
-      // this.props.getUser();
-      // console.log(componentRoute);
       this.props.checkComponent(componentRoute);
-
+    }
+    if (prevProps.pathname.includes('/connect-device')) {
+      this.props.clearState()
     }
   }
 
@@ -183,7 +183,8 @@ class RestrictedRoute extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    checkComponent: checkComponent
+    checkComponent: checkComponent,
+    clearState: clearState
   }, dispatch);
 }
 

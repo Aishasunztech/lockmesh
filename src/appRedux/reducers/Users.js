@@ -17,8 +17,8 @@ const initialState = {
     addUserFlag: false,
     subIsloading: false,
     users_list: [],
-    options:[],
-    
+    options: [],
+
     action: '',
     msg: 'no message',
 
@@ -96,7 +96,7 @@ export default (state = initialState, action) => {
         case DELETE_USER:
             if (action.payload.status) {
                 let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.user_id));
-                state.users_list[objIndex4].del_status = 1;
+                state.users_list.splice(objIndex4, 1)
                 success({
                     title: action.payload.msg,
                 });

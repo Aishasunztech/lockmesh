@@ -47,7 +47,8 @@ import {
     POLICY,
     HIDE_POLICY_CONFIRM,
     APPLY_POLICY,
-    CLEAR_APPLICATIONS
+    CLEAR_APPLICATIONS,
+    CLEAR_STATE 
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -62,6 +63,11 @@ export function changePage(pageName) {
     return {
         type: CHANGE_PAGE,
         payload: pageName
+    }
+}
+export function clearState(pageName) {
+    return {
+        type: CLEAR_STATE,
     }
 }
 
