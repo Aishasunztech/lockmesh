@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import ConfirmAutoUpdate from './ConfirmAutoUpdate'
 import { authenticateUpdateUser, resetAuthUpdate } from "../../../appRedux/actions/Apk";
 import { Redirect } from 'react-router-dom';
-import {BASE_URL } from '../../../constants/Application.js';
+import { BASE_URL } from '../../../constants/Application.js';
 
 class Apk extends Component {
     constructor(props) {
@@ -227,19 +227,18 @@ class Apk extends Component {
                                                 <h2 style={{ textAlign: "center" }}>Secure Panel Apk</h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0 0px' }}>
-                                                    <Col span={8} className="" style={{ textAlign: "center", padding: '12px 0 0px' }}>
+                                                    <Col span={8} className="" style={{ textAlign: "center"}}>
                                                         <Icon type="idcard" className="policy_icon" />
                                                     </Col>
-                                                    <Col span={16} style={{ padding: "8 0 0" }}>
-                                                        <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>
+                                                    <Col span={16}>
+                                                        <h5><span className="diamond_icon">&#9670;</span>
                                                             Edit/Create Users and add<br />
                                                             permissions for the Secure Panel Apk<br />
                                                         </h5>
                                                         <h5 style={{ marginBottom: 0 }}><span className="diamond_icon">&#9670;</span>
                                                             Very useful tool for your  <br />
-                                                            Customer Support staff
-                                                          <br /> or fo your staff </h5>
-                                                        <h5 className="more_txt1">and more...</h5>
+                                                            Customer Support staff </h5>
+                                                        <h5 className="more_txt">and more...</h5>
                                                     </Col>
                                                 </Row>
                                             </div>
