@@ -1035,18 +1035,20 @@ class Account extends Component {
                                     <Link to="#" onClick={() => this.showPwdConfirmModal(true)}>
                                         <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
-                                                <Divider className="mb-0" />
-                                                <Row style={{ padding: '12px 0 0px' }}>
-                                                    <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                        <Icon type="database" className="and_icon" />
-                                                    </Col>
-                                                    <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                        <p>
-                                                            This feature allows you to keep a backup of the complete system database for offline safekeeping
+                                                <div>
+                                                    <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
+                                                    <Divider className="mb-0" />
+                                                    <Row style={{ padding: '12px 0 0px' }}>
+                                                        <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                            <Icon type="database" className="and_icon" />
+                                                        </Col>
+                                                        <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                            <p>
+                                                                This feature allows you to keep a backup of the complete system database for offline safekeeping
                                                     </p>
-                                                    </Col>
-                                                </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
                                             </div>
                                         </Card>
                                         <Button type="primary" size="small" className="open_btn">Open</Button>

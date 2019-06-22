@@ -449,25 +449,42 @@ class Permissions extends Component {
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" span={4} sm={10} xs={15} md={5}>
-            <div className="gutter-box"><h2>Permission List</h2> </div>
+          <Col className="gutter-row" sm={10} xs={15} md={5}>
+            <div className="gutter-box text-left">
+              <h2>Permission List</h2>
+            </div>
           </Col>
-          <Col className="gutter-row" span={2} sm={4} xs={9} md={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
+          <Col className="gutter-row" sm={4} xs={9} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.showDealersModal(true) }}>Add</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={4} sm={6} xs={12} md={4}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
+          <Col className="gutter-row" sm={6} xs={12} md={5}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={2} sm={4} xs={12} md={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary" onClick={() => { this.saveAllDealersConfirm() }}>Add All</Button></div>
+          <Col className="gutter-row" sm={4} xs={12} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.saveAllDealersConfirm() }}>Add All</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={3} sm={5} xs={12} md={3}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger" onClick={() => { this.removeAllDealersConfirm() }}>Remove All</Button></div>
+          <Col className="gutter-row" sm={5} xs={12} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+                onClick={() => { this.removeAllDealersConfirm() }}>Remove All</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={3} sm={7} xs={12} md={4}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
+          <Col className="gutter-row" sm={7} xs={12} md={4}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+                onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={4} sm={12} xs={24} md={4}>
+          <Col className="gutter-row" sm={12} xs={24} md={8}>
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
