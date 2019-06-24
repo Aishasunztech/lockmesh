@@ -140,11 +140,7 @@ export default class ListApk extends Component {
                             {app.apk ? app.apk : 'N/A'}
                         </custom>
                     ),
-                    'apk_name': (
-                        <custom data-column="APK NAME">
-                            {app.apk_name ? app.apk_name : 'N/A'}
-                        </custom>
-                    ),
+                    'apk_name': app.apk_name ? app.apk_name : 'N/A',
                     'apk_logo': (
                         <custom data-column="APK LOGO">
                             <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
