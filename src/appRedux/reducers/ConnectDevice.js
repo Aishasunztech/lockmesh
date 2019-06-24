@@ -53,7 +53,8 @@ import {
     APPLY_POLICY,
     CLEAR_APPLICATIONS,
     SAVE_PROFILE,
-    EDIT_DEVICE
+    EDIT_DEVICE,
+    CLEAR_STATE
 } from "../../constants/ActionTypes";
 
 import {
@@ -168,6 +169,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pageName: action.payload
+            }
+        }
+        case CLEAR_STATE: {
+            // console.log("CLEAR STATE FUNCTION");
+            return {
+                ...state,
+                is_push_apps: 0,
+                is_policy_process: 0,
+                noOfApp_push_pull: 0,
+                noOfApp_pushed_pulled: 0,
             }
         }
         case GET_DEVICE_DETAILS: {
@@ -312,15 +323,15 @@ export default (state = initialState, action) => {
         }
 
         case EDIT_DEVICE: {
-            if(action.response.status){
-              if(action.response.data.length){
-                  state.device = action.response.data[0];
-              }
+            if (action.response.status) {
+                if (action.response.data.length) {
+                    state.device = action.response.data[0];
+                }
 
-              return{
-                  ...state,
-                //   device: state.device
-              }
+                return {
+                    ...state,
+                    //   device: state.device
+                }
 
 
             }

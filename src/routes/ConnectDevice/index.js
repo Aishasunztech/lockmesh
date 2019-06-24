@@ -39,7 +39,8 @@ import {
   reSyncDevice,
   getDealerApps,
   getActivities,
-  clearApplications
+  clearApplications,
+  clearState
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -185,7 +186,18 @@ class ConnectDevice extends Component {
     setTimeout(() => {
       this.props.endLoading();
     }, 2000);
+    // window.addEventListener('hashchange', this.componentGracefulUnmount);
   }
+
+  // componentGracefulUnmount = () => {
+  //   console.log("COMPONENT UNMOUNT");
+  //   window.removeEventListener('hashchange', this.componentGracefulUnmount);
+
+  // }
+  // componentWillUnmount() {
+  //   this.componentGracefulUnmount()
+  //   // this.props.clearState()
+  // }
 
   componentDidUpdate(prevProps) {
     if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
@@ -460,12 +472,12 @@ class ConnectDevice extends Component {
 
 
   capitalizeFirstLetter = (string) => {
-    if(string && string !== '' && string !== null && string != 'N/A'){
+    if (string && string !== '' && string !== null && string != 'N/A') {
       return string.charAt(0).toUpperCase() + string.slice(1);
-    }else{
+    } else {
       return string
     }
-   
+
   }
 
   render() {
@@ -681,7 +693,8 @@ function mapDispatchToProps(dispatch) {
     getAppJobQueue: getAppJobQueue,
     ackSinglePushApp: ackSinglePushApp,
     ackSinglePullApp: ackSinglePullApp,
-    ackFinishedPolicyStep: ackFinishedPolicyStep
+    ackFinishedPolicyStep: ackFinishedPolicyStep,
+    clearState: clearState
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket }) => {

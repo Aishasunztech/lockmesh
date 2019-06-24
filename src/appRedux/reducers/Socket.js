@@ -50,7 +50,10 @@ export default (state = initialState, action) => {
                 }
             } else {
                 return {
-                    ...state
+                    ...state,
+                    is_policy_process: 0,
+                    is_push_apps: 0,
+                    is_in_process: false,
                 }
             }
         }
