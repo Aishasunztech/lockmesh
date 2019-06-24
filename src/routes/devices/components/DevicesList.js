@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Button, Card, Tag, Form, Input, Popconfirm, Empty, Icon } from "antd";
+import { Redirect } from 'react-router-dom';
 import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
@@ -18,7 +19,7 @@ import {
     DEVICE_TRIAL,
     ADMIN
 } from '../../../constants/Constants'
-import { Redirect } from 'react-router-dom';
+import IntlMessages from "../../../util/IntlMessages";
 import { isNull } from 'util';
 import { unlink } from 'fs';
 
@@ -78,22 +79,22 @@ class DevicesList extends Component {
     }
     goToDealer = (dealer) => {
         if (dealer.dealer_id != 'null' && dealer.dealer_id != null) {
-          if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
-            this.setState({
-              redirect: true,
-              dealer_id: dealer.dealer_id,
-              goToPage: '/dealer/dealer'
-            })
-          } else {
-            this.setState({
-              redirect: true,
-              dealer_id: dealer.dealer_id,
-              goToPage: '/dealer/sdealer'
-            })
-          }
-    
+            if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+                this.setState({
+                    redirect: true,
+                    dealer_id: dealer.dealer_id,
+                    goToPage: '/dealer/dealer'
+                })
+            } else {
+                this.setState({
+                    redirect: true,
+                    dealer_id: dealer.dealer_id,
+                    goToPage: '/dealer/sdealer'
+                })
+            }
+
         }
-      }
+    }
 
 
     // renderList
@@ -128,9 +129,9 @@ class DevicesList extends Component {
             }
 
             let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)} > SUSPEND</Button>;
-            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}  >SUSPEND</Button>;
+            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}  >ACTIVATE</Button>;
             let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >DELETE</Button>
-            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
+            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}>  <IntlMessages id="button.connect" /></Link></Button>
             let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
             let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
             let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
@@ -197,8 +198,8 @@ class DevicesList extends Component {
 
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                dealer_name:<a onClick={() => { this.goToDealer(device) }}>{ checkValue(device.dealer_name)}</a>,
-                online: device.online === 'online' ? (<span style={{ color: "green" }}>{ device.online.charAt(0).toUpperCase() + device.online.slice(1) }</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1) }</span>),
+                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 start_date: checkValue(device.start_date),
@@ -326,10 +327,10 @@ class DevicesList extends Component {
 
         if (redirect && this.state.dealer_id !== '') {
             return <Redirect to={{
-              pathname: this.state.goToPage,
-              state: { id: this.state.dealer_id }
+                pathname: this.state.goToPage,
+                state: { id: this.state.dealer_id }
             }} />
-          }
+        }
 
         let rowSelection;
         if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {
@@ -692,7 +693,7 @@ export default class Tab extends Component {
         // console.log('columsns', this.state.devices)
         return (
             <Fragment>
-               <div>
+                <div>
                     <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
                         <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
                         </TabPane>

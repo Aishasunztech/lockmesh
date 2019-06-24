@@ -1061,7 +1061,7 @@ class Account extends Component {
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div className="contenar">
+                                <div>
                                     <a href="javascript:void(0)"
                                     // onClick={(e) => {
                                     //     this.showPurchaseModal(e, true);
@@ -1070,7 +1070,7 @@ class Account extends Component {
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
-                                                    <div className="col-md-12 ac_card">
+                                                    <div className="ac_card">
                                                         <h2 style={{ textAlign: "center" }}>Purchase Credits</h2>
                                                         <Divider className="mb-0" />
                                                         <Row style={{ padding: '12px 0 0px' }}>
@@ -1085,12 +1085,11 @@ class Account extends Component {
                                                 </Fragment>
                                             </div>
                                         </Card>
-                                        <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
                                     </a>
+                                    <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
                                     <PurchaseCredit
                                         showPurchaseModal={this.showPurchaseModal}
                                         purchase_modal={this.state.purchase_modal}
-
                                     />
                                 </div>
                             </div>

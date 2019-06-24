@@ -90,8 +90,20 @@
 }
 
 .gx-app-nav li {
-    padding: 0px 14px 0px 14px;
+    padding: 0px 16px 0px 16px;
     font-size: 20px;
+}
+
+.lang_icon .ant-popover-inner-content {
+    padding: 0;
+}
+
+.lang_icon .gx-language-text {
+    margin: 4px 0 0 4px;
+}
+
+.lang_icon .gx-sub-popover li {
+    padding: 12px 0 14px;
 }
 
 @media screen and (max-width: 768px) {

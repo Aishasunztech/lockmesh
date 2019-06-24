@@ -212,7 +212,7 @@ class Apk extends Component {
                                     width="42%"
                                 >
                                     <Row className="d_t_m">
-                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}>Neutral Launcher (BYOD) v1.2</h4>
+                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}>Neutral Launcher (BYOD) v1.2 <b>(Android v8+)</b></h4>
                                         <a href={`${BASE_URL}users/getFile/nlbyod.apk`}>
                                             <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}>Download</Button>
                                         </a>
@@ -227,7 +227,7 @@ class Apk extends Component {
                                                 <h2 style={{ textAlign: "center" }}>Secure Panel Apk</h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0 0px' }}>
-                                                    <Col span={8} className="" style={{ textAlign: "center"}}>
+                                                    <Col span={8} className="" style={{ textAlign: "center" }}>
                                                         <Icon type="idcard" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16}>
