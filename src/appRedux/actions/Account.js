@@ -16,7 +16,11 @@ import {
     CHECK_BACKUP_PASS,
     SHOW_BACKUP_MODAL,
     SAVE_ID_PRICES,
-    SAVE_PACKAGE
+    SAVE_PACKAGE,
+    GET_PRICES,
+    SET_PRICE,
+    RESET_PRICE,
+    GET_PACKAGES
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -269,6 +273,7 @@ export const showBackupModal = (visible) => {
 }
 
 export const saveIDPrices = (data) => {
+    console.log('at action, ', data);
     return (dispatch) => {
         RestService.saveIDPrices(data).then((response) => {
             if(RestService.checkAuth(response.data)){
@@ -301,5 +306,63 @@ export const setPackage = (data) => {
             }
         });
 
+    }
+}
+
+export const getPrices = (data) => {
+    return (dispatch) => {
+        RestService.getPrices(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_PRICES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
+export const getPackages = (data) => {
+    return (dispatch) => {  
+        RestService.getPackages(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: GET_PACKAGES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+
+export const resetPrice = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_PRICE,
+           
+        })
+    }
+}
+
+export const setPrice = (field, value, price_for='') => {
+    return (dispatch) => {
+        dispatch({
+            type: SET_PRICE,
+            payload: {
+                field: field,
+                value: value,
+                price_for: price_for
+            }
+        })
     }
 }

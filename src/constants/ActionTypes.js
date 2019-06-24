@@ -203,3 +203,7 @@ export const SHOW_BACKUP_MODAL = 'SHOW_BACKUP_MODAL';
 
 export const SAVE_ID_PRICES = 'SAVE_ID_PRICES';
 export const SAVE_PACKAGE = 'SAVE_PACKAGE';
+export const GET_PACKAGES ='GET_PACKAGES';
+export const GET_PRICES = 'GET_PRICES';
+export const SET_PRICE = 'SET_PRICE';
+export const RESET_PRICE = 'RESET_PRICE';

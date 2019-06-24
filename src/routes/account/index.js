@@ -15,8 +15,9 @@ import {
     createBackupDB,
     checkPass,
     showBackupModal,
-    saveIDPrices,
-    setPackage
+    // saveIDPrices,
+    // setPackage,
+    getPackages
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -29,7 +30,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import SetPricingModal from './ManageToken/SetPricingModal';
+// import SetPricingModal from './PricesPakages/SetPricingModal';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -1094,7 +1095,9 @@ class Account extends Component {
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
-                                    <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}>
+                                    {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
+                                    <Link to={"/set-prices"}>
+                                    {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
@@ -1122,8 +1125,9 @@ class Account extends Component {
                                             </div>
                                         </Card>
                                         <Button type="primary" size="small" className="open_btn">Open</Button>
-                                    </a>
-                                    <div className="middle">
+                                        {/* </a> */}
+                                    </Link>
+                                    {/* <div className="middle">
                                         <SetPricingModal
                                             showPricingModal={this.showPricingModal}
                                             pricing_modal={this.state.pricing_modal}
@@ -1133,7 +1137,7 @@ class Account extends Component {
                                         // whitelabel_id={this.props.whiteLabelInfo.id}
 
                                         />
-                                    </div>
+                                    </div> */}
                                     {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
                                     </div> */}
@@ -1167,8 +1171,9 @@ function mapDispatchToProps(dispatch) {
         createBackupDB: createBackupDB,
         checkPass: checkPass,
         showBackupModal: showBackupModal,
-        saveIDPrices: saveIDPrices,
-        setPackage: setPackage
+        // saveIDPrices: saveIDPrices,
+        // setPackage: setPackage,
+        getPackages: getPackages
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {
