@@ -69,7 +69,7 @@ class Dealers extends Component {
                     //     // console.log(b);
                     //     return a.connected_devices.length;
                     // },
-                    sorter: (a, b) => { return a.connected_devices.localeCompare(b.connected_devices) },
+                    sorter: (a, b) => { return a.connected_devices - b.connected_devices },
 
                     align: 'center',
                     sortDirections: ['ascend', 'descend'],

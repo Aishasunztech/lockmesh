@@ -206,7 +206,7 @@ class Devices extends Component {
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder={titleCase(DEVICE_STATUS)}
-                        // onBlur={(e) => { e.target.value = '' }}
+                    // onBlur={(e) => { e.target.value = '' }}
                     />
                 ),
                 dataIndex: 'status',
@@ -512,7 +512,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'dealer_name',
                         key: 'dealer_name',
-                        sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+                        sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
