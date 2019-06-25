@@ -206,7 +206,7 @@ class Devices extends Component {
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
                         placeholder={titleCase(DEVICE_STATUS)}
-                        // onBlur={(e) => { e.target.value = '' }}
+                    // onBlur={(e) => { e.target.value = '' }}
                     />
                 ),
                 dataIndex: 'status',

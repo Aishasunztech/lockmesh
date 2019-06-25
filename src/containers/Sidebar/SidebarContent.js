@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Menu, Icon, Badge, Modal } from "antd";
+import { Menu, Icon, Badge, Modal, Popover } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -17,6 +17,7 @@ import NewDevice from '../../components/NewDevices';
 
 import { getNewDevicesList } from "../../appRedux/actions/Common";
 
+
 import {
   NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
   NAV_STYLE_NO_HEADER_MINI_SIDEBAR,
@@ -24,11 +25,13 @@ import {
 } from "../../constants/ThemeSetting";
 
 import IntlMessages from "../../util/IntlMessages";
-
+import languageData from "./languageData";
 
 import { logout } from "appRedux/actions/Auth";
 
 import { rejectDevice, addDevice } from '../../appRedux/actions/Devices';
+
+import { switchLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 
@@ -39,6 +42,20 @@ class SidebarContent extends Component {
     super(props);
 
   }
+
+
+  languageMenu = () => (
+    <ul className="gx-sub-popover">
+      {languageData.map(language =>
+        <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
+          this.props.switchLanguage(language)
+        }>
+          <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`} />
+          <span className="gx-language-text">{language.name}</span>
+        </li>
+      )}
+    </ul>
+  );
 
   getNoHeaderClass = (navStyle) => {
     if (navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR || navStyle === NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR) {
@@ -126,9 +143,13 @@ class SidebarContent extends Component {
                 </a>
               </li>
               <li>
-                <i className="icon icon-global" >
-                  <Icon type="global" className="mb-10" />
-                </i>
+                <Popover overlayClassName="gx-popover-horizantal lang_icon" placement="bottomRight"
+                  content={this.languageMenu()} trigger="click">
+                  <i className="icon icon-global" >
+                    <Icon type="global" className="mb-10" />
+
+                  </i>
+                </Popover>
               </li>
             </ul>
           </div>
@@ -224,5 +245,5 @@ const mapStateToProps = ({ settings, devices, device3 }) => {
     devices: devices.newDevices,
   }
 };
-export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList })(SidebarContent);
+export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage })(SidebarContent);
 
