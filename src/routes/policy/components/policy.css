@@ -194,6 +194,8 @@
     font-weight: 400;
 }
 
+
+
 .policy_expand .ant-tabs-bar {
     margin: 0 0 8px 0;
 }
@@ -208,4 +210,14 @@
 
 .policy_steps .ant-tabs .ant-tabs-left-content {
     height: 310px;
+}
+
+@media only screen and (max-width: 768px) {
+
+    /* tr.ant-table-expanded-row td,
+    .expand_rows .ant-table-tbody>tr>td,
+    .policy_expand .ant-table-tbody>tr>td {
+        padding-left: 50% !important;
+        text-align: left !important;
+    } */
 }

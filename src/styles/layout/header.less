@@ -8,13 +8,14 @@
     padding: @layout-header-padding;
     height: @layout-header-height;
     position: relative;
-    z-index: 10;
+    z-index: 200;
     color: @header-text-color;
     display: none;
 
     @media screen and (max-width: @screen-md-max) {
         padding: @layout-header-padding-res;
         display: flex;
+        z-index: 200;
     }
 
     @media screen and (max-width: @screen-xs-max) {

@@ -15,8 +15,9 @@ import {
     createBackupDB,
     checkPass,
     showBackupModal,
-    saveIDPrices,
-    setPackage
+    // saveIDPrices,
+    // setPackage,
+    getPackages
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -29,7 +30,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import SetPricingModal from './ManageToken/SetPricingModal';
+// import SetPricingModal from './PricesPakages/SetPricingModal';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -484,8 +485,8 @@ class Account extends Component {
                                                     <Icon type="form" className="and_icon" />
                                                 </Col>
                                                 <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                    <p style={{}}><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
-                                                    <p style={{}}><span className="diamond_icon">&#9670;</span>Upload/View/Edit your data</p>
+                                                    <p><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
+                                                    <p><span className="diamond_icon">&#9670;</span>View/Edit your data</p>
                                                     <p><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
                                                     <p className="more_txt">and more...</p>
                                                 </Col>
@@ -1035,18 +1036,20 @@ class Account extends Component {
                                     <Link to="#" onClick={() => this.showPwdConfirmModal(true)}>
                                         <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
-                                                <Divider className="mb-0" />
-                                                <Row style={{ padding: '12px 0 0px' }}>
-                                                    <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                        <Icon type="database" className="and_icon" />
-                                                    </Col>
-                                                    <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                        <p style={{}}>
-                                                            This feature allows you to keep a backup of the complete system database for offline safekeeping
+                                                <div>
+                                                    <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
+                                                    <Divider className="mb-0" />
+                                                    <Row style={{ padding: '12px 0 0px' }}>
+                                                        <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                            <Icon type="database" className="and_icon" />
+                                                        </Col>
+                                                        <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                            <p>
+                                                                This feature allows you to keep a backup of the complete system database for offline safekeeping
                                                     </p>
-                                                    </Col>
-                                                </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </div>
                                             </div>
                                         </Card>
                                         <Button type="primary" size="small" className="open_btn">Open</Button>
@@ -1059,7 +1062,7 @@ class Account extends Component {
                         </Col>
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div className="contenar">
+                                <div>
                                     <a href="javascript:void(0)"
                                     // onClick={(e) => {
                                     //     this.showPurchaseModal(e, true);
@@ -1068,7 +1071,7 @@ class Account extends Component {
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
-                                                    <div className="col-md-12 ac_card">
+                                                    <div className="ac_card">
                                                         <h2 style={{ textAlign: "center" }}>Purchase Credits</h2>
                                                         <Divider className="mb-0" />
                                                         <Row style={{ padding: '12px 0 0px' }}>
@@ -1076,19 +1079,18 @@ class Account extends Component {
                                                                 <Icon type="dollar" className="and_icon" />
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <p style={{}}>Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.</p>
+                                                                <p>Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.</p>
                                                             </Col>
                                                         </Row>
                                                     </div>
                                                 </Fragment>
                                             </div>
                                         </Card>
-                                        <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
                                     </a>
+                                    <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
                                     <PurchaseCredit
                                         showPurchaseModal={this.showPurchaseModal}
                                         purchase_modal={this.state.purchase_modal}
-
                                     />
                                 </div>
                             </div>
@@ -1097,9 +1099,9 @@ class Account extends Component {
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
-                                    <a href="javascript:void(0)"
-                                    // onClick={() => this.showPricingModal(true)}
-                                    >
+                                    {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
+                                    <Link to={"/set-prices"}>
+                                    {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
@@ -1127,8 +1129,9 @@ class Account extends Component {
                                             </div>
                                         </Card>
                                         <Button type="primary" size="small" className="open_btn">Open</Button>
-                                    </a>
-                                    <div className="middle">
+                                        {/* </a> */}
+                                    </Link>
+                                    {/* <div className="middle">
                                         <SetPricingModal
                                             showPricingModal={this.showPricingModal}
                                             pricing_modal={this.state.pricing_modal}
@@ -1138,7 +1141,7 @@ class Account extends Component {
                                         // whitelabel_id={this.props.whiteLabelInfo.id}
 
                                         />
-                                    </div>
+                                    </div> */}
                                     {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
                                     </div> */}
@@ -1152,17 +1155,12 @@ class Account extends Component {
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
                 />
-
             </div>
-
-
         );
-
     }
 }
 
 // export default Account;
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         importCSV: importCSV,
@@ -1172,8 +1170,9 @@ function mapDispatchToProps(dispatch) {
         createBackupDB: createBackupDB,
         checkPass: checkPass,
         showBackupModal: showBackupModal,
-        saveIDPrices: saveIDPrices,
-        setPackage: setPackage
+        // saveIDPrices: saveIDPrices,
+        // setPackage: setPackage,
+        getPackages: getPackages
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {

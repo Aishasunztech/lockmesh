@@ -512,7 +512,6 @@ class ManageData extends Component {
                                     <Col className="col-md-7 col-sm-6 col-xs-12">
                                         <div className="gutter-box">
                                             <Search
-
                                                 placeholder="Search..."
                                                 onChange={e => this.handleComponentSearch(e.target.value)}
                                                 style={{ width: '100%' }}

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Menu, Icon, Badge, Modal } from "antd";
+import { Menu, Icon, Badge, Modal, Popover } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -17,6 +17,7 @@ import NewDevice from '../../components/NewDevices';
 
 import { getNewDevicesList } from "../../appRedux/actions/Common";
 
+
 import {
   NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
   NAV_STYLE_NO_HEADER_MINI_SIDEBAR,
@@ -24,11 +25,13 @@ import {
 } from "../../constants/ThemeSetting";
 
 import IntlMessages from "../../util/IntlMessages";
-
+import languageData from "./languageData";
 
 import { logout } from "appRedux/actions/Auth";
 
 import { rejectDevice, addDevice } from '../../appRedux/actions/Devices';
+
+import { switchLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 
@@ -39,6 +42,20 @@ class SidebarContent extends Component {
     super(props);
 
   }
+
+
+  languageMenu = () => (
+    <ul className="gx-sub-popover">
+      {languageData.map(language =>
+        <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
+          this.props.switchLanguage(language)
+        }>
+          <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`} />
+          <span className="gx-language-text">{language.name}</span>
+        </li>
+      )}
+    </ul>
+  );
 
   getNoHeaderClass = (navStyle) => {
     if (navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR || navStyle === NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR) {
@@ -99,22 +116,20 @@ class SidebarContent extends Component {
         <div className="gx-sidebar-content ">
           <div className={`gx-sidebar-notifications text-center ${this.getNoHeaderClass(navStyle)} `}>
             <UserProfile />
-
             <NewDevice
               ref='new_device'
               devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
-
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
-            <ul className="gx-app-nav mt-12" style={{justifyContent:"center"}}>
+            <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>
               <li>
                 <i className="icon icon-dollar" >
-                  <Icon type="dollar" className="mb-12" />
+                  <Icon type="dollar" className="mb-10" />
                 </i>
               </li>
               <li>
@@ -128,9 +143,13 @@ class SidebarContent extends Component {
                 </a>
               </li>
               <li>
-                <i className="icon icon-global" >
-                  <Icon type="global" className="mb-10" />
-                </i>
+                <Popover overlayClassName="gx-popover-horizantal lang_icon" placement="bottomRight"
+                  content={this.languageMenu()} trigger="click">
+                  <i className="icon icon-global" >
+                    <Icon type="global" className="mb-10" />
+
+                  </i>
+                </Popover>
               </li>
             </ul>
           </div>
@@ -150,7 +169,7 @@ class SidebarContent extends Component {
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
                 </i>
-                Logout
+                <IntlMessages id="sidebar.logout" />
                 {/* </Link> */}
               </Menu.Item>
 
@@ -226,5 +245,5 @@ const mapStateToProps = ({ settings, devices, device3 }) => {
     devices: devices.newDevices,
   }
 };
-export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList })(SidebarContent);
+export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage })(SidebarContent);
 

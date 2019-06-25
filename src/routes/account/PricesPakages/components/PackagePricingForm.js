@@ -3,7 +3,8 @@ import React, { Component, Fragment } from 'react'
 import {
     Form, Input, Row, Col, Button, Select,
 } from "antd";
-import styles from '../managetoken.css';
+// import styles from '../../../whitelabels.css';
+import RestService from '../../../../appRedux/services/RestServices';
 import { one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn } from '../../../../constants/Constants';
 
 class PackagePricingForm extends Component {
@@ -18,26 +19,52 @@ class PackagePricingForm extends Component {
         }
     }
 
+
     setPrice = (fieldName, is_pkg_feature = false, pkg_feature_value = '') => {
         // let value = e.target.value;
         let value = ''
         if (fieldName) {
-            if (is_pkg_feature) {
-                if (pkg_feature_value !== '' && fieldName) {
-                     value = pkg_feature_value;
-                    this.props.setPkgDetail(pkg_feature_value, fieldName, is_pkg_feature);
-                }
+            if (fieldName == 'pkgPrice' && value < 0) {
             } else {
-                 value = this.props.form.getFieldValue(fieldName)
-                // console.log('fiels name', fieldName, 'value', value)
-                if (value !== '' && fieldName) {
-                    this.props.setPkgDetail(value, fieldName, is_pkg_feature);
+                if (is_pkg_feature) {
+                    if (pkg_feature_value !== '' && fieldName) {
+                        value = pkg_feature_value;
+                        this.props.setPkgDetail(pkg_feature_value, fieldName, is_pkg_feature);
+                    }
+                } else {
+                    value = this.props.form.getFieldValue(fieldName)
+                    // console.log('fiels name', fieldName, 'value', value)
+                    if (value !== '' && fieldName) {
+                        this.props.setPkgDetail(value, fieldName, is_pkg_feature);
+                    }
                 }
+                this.setState({
+                    [fieldName]: value
+                })
             }
 
-            this.setState({
-                [fieldName]: value
-            })
+        }
+    }
+
+
+    PackageNameChange = async (rule, value, callback) => {
+        let response = true
+        console.log('value', value)
+        response = await RestService.checkPackageName(value).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            }
+        });
+        console.log(response, 'respoinse ise  d')
+        if (response) {
+            callback()
+        } else {
+            callback("Package name already taken please use another name.")
         }
     }
 
@@ -68,15 +95,18 @@ class PackagePricingForm extends Component {
                                         required: true,
                                         message: 'Please input Package Name!',
                                     },
+                                    {
+                                        validator: this.PackageNameChange,
+                                    }
                                 ],
                             })(<Input />)}
                         </Form.Item>
                     </Col>
                     <Col span={4}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}>Set</Button> */}
+                        <Button type="primary" onClick={() => this.setPrice('pkgName')}>Set</Button>
                     </Col>
-                    <Col span={7}>
-                        {/* <h4 className='priceText'>Price: 51651</h4> */}
+                    <Col span={6}>
+                        <h4 className='priceText'>{this.state.pkgName}</h4>
                     </Col>
                 </Row>
                 <Row>
@@ -92,7 +122,7 @@ class PackagePricingForm extends Component {
                                 ],
                             })(<Select
                                 showSearch
-                                style={{ width: 145 }}
+                                style={{ width: "100%" }}
                                 placeholder="Select a Price"
                                 optionFilterProp="children"
                                 // onChange={onChange}
@@ -112,10 +142,10 @@ class PackagePricingForm extends Component {
                         </Form.Item>
                     </Col>
                     <Col span={4}>
-                        {/* <Button type="primary" onClick={() => this.setPrice('pkgTerms')}>Set</Button> */}
+                        <Button type="primary" onClick={() => this.setPrice('pkgTerms')}>Set</Button>
                     </Col>
                     <Col span={7}>
-                        {/* <h4 className='priceText'>Price: 51651</h4> */}
+                        <h4 className='priceText'>{this.state.pkgTerms}</h4>
                     </Col>
                 </Row>
                 <Row>
@@ -129,7 +159,7 @@ class PackagePricingForm extends Component {
                                         message: 'Please Input Package Price',
                                     },
                                 ],
-                            })(<Input type='number' />)}
+                            })(<Input type='number' min={0} />)}
 
                         </Form.Item>
                     </Col>
@@ -137,7 +167,7 @@ class PackagePricingForm extends Component {
                         <Button type="primary" onClick={() => this.setPrice('pkgPrice')} >Set</Button>
                     </Col>
                     <Col span={7}>
-                        <h4 className='priceText'>Price: {this.state.pkgPrice}</h4>
+                        <h4 className='priceText'>Price: ${this.state.pkgPrice}</h4>
                     </Col>
                 </Row>
 

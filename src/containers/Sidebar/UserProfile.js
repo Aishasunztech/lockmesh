@@ -19,7 +19,7 @@ class UserProfile extends Component {
     return (
 
       <div className="gx-flex-row gx-align-items-center gx-mb-4 gx-avatar-row side_bar_main">
-        <Popover placement="bottomRight"  trigger="lskdjsl">
+        <Popover placement="bottomRight" trigger="lskdjsl">
           <Avatar
             src={require("../../assets/images/profile-image.png")}
             className="gx-size-40 gx-pointer gx-mr-3"

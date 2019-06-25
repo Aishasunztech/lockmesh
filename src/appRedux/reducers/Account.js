@@ -10,7 +10,11 @@ import {
     SHOW_BACKUP_MODAL,
     CHECK_BACKUP_PASS,
     SAVE_ID_PRICES,
-    SAVE_PACKAGE
+    SAVE_PACKAGE,
+    GET_PRICES,
+    SET_PRICE,
+    RESET_PRICE,
+    GET_PACKAGES
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -27,7 +31,12 @@ const initialState = {
     duplicate_modal_show: false,
     duplicate_data_type: '',
     newData: [],
-    backUpModal: false
+    backUpModal: false,
+    prices: {},
+    isPriceChanged: false,
+    pricesCopy: {},
+    packages: [],
+    packagesCopy:[]
 };
 
 export default (state = initialState, action) => {
@@ -63,6 +72,51 @@ export default (state = initialState, action) => {
             return{
                 ...state
             }
+        }
+
+        case GET_PRICES: {
+            console.log(action.response, 'response of get prices')
+
+            return {
+                ...state,
+                prices: action.response.data,
+                pricesCopy: JSON.parse(JSON.stringify(action.response.data))
+
+            }
+        }
+
+        case GET_PACKAGES: {
+            console.log(action.response, 'response of get prices')
+
+            return {
+                ...state,
+                packages: action.response.data,
+                packagesCopy: JSON.parse(JSON.stringify(action.response.data))
+
+            }
+        }
+
+        case RESET_PRICE: {
+            return {
+                ...state,
+                prices: state.pricesCopy,
+                isPriceChanged: false
+            }
+        }
+
+        case SET_PRICE: {
+            let copyPrices = state.prices;
+            let price_for = action.payload.price_for;
+            let field = action.payload.field;
+            if (price_for && price_for !== '') {
+                copyPrices[price_for][field] = action.payload.value;
+            }
+            return {
+                ...state,
+                prices: copyPrices,
+                isPriceChanged: true
+            }
+
         }
 
         case IMPORT_CSV:

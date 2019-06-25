@@ -184,4 +184,8 @@
      .down_icon {
          top: 20px;
      }
+
+     .sticky_top_bar {
+         position: relative;
+     }
  }

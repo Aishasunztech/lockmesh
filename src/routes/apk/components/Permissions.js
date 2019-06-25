@@ -389,10 +389,26 @@ class Permissions extends Component {
       let common = {
         'key': dealer.dealer_id,
         'row_key': dealer.dealer_id,
-        'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-        'dealer_name': dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A',
-        'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-        'link_code': dealer.link_code ? dealer.link_code : 'N/A',
+        'dealer_id': (
+          <custom data-column="DEALER ID">
+            {dealer.dealer_id ? dealer.dealer_id : 'N/A'}
+          </custom>
+        ),
+        'dealer_name': (
+          <custom data-column="DEALER NAME">
+            {dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'}
+          </custom>
+        ),
+        'dealer_email': (
+          <custom data-column="DEALER EMAIL">
+            {dealer.dealer_email ? dealer.dealer_email : 'N/A'}
+          </custom>
+        ),
+        'link_code': (
+          <custom data-column="DEALER PIN">
+            {dealer.link_code ? dealer.link_code : 'N/A'}
+          </custom>
+        ),
         'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
         'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
         'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
@@ -401,12 +417,19 @@ class Permissions extends Component {
 
       if (permitted && is_included) {
 
-        data.push({
-          ...common,
-          'action': (<Button size="small" type="danger" onClick={() => {
-            this.rejectPemission(dealer.dealer_id)
-          }}>Remove</Button>)
-        })
+        data.push(
+          {
+            ...common,
+            'action':
+              (
+                <custom data-column="ACTION">
+                  <Button size="small" type="danger" onClick={() => {
+                    this.rejectPemission(dealer.dealer_id)
+                  }}>Remove</Button>
+                </custom>
+              )
+          }
+        )
       } else if (permitted === false && is_included === false) {
         data.push({ ...common })
       }
@@ -426,25 +449,42 @@ class Permissions extends Component {
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" span={4} sm={5} xs={5} md={5}>
-            <div className="gutter-box"><h2>Permission List</h2> </div>
+          <Col className="gutter-row" sm={10} xs={15} md={5}>
+            <div className="gutter-box text-left">
+              <h2>Permission List</h2>
+            </div>
           </Col>
-          <Col className="gutter-row" span={2} sm={2} xs={2} md={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
+          <Col className="gutter-row" sm={4} xs={9} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.showDealersModal(true) }}>Add</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={4} sm={4} xs={5} md={4}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
+          <Col className="gutter-row" sm={6} xs={12} md={5}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={2} sm={2} xs={2} md={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealersConfirm() }}>Add All</Button></div>
+          <Col className="gutter-row" sm={4} xs={12} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.saveAllDealersConfirm() }}>Add All</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={3} sm={3} xs={3} md={3}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealersConfirm() }}>Remove All</Button></div>
+          <Col className="gutter-row" sm={5} xs={12} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+                onClick={() => { this.removeAllDealersConfirm() }}>Remove All</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={3} sm={4} xs={5} md={3}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
+          <Col className="gutter-row" sm={7} xs={12} md={4}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+                onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={4} sm={4} xs={5} md={4}>
+          <Col className="gutter-row" sm={12} xs={24} md={8}>
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
@@ -459,12 +499,13 @@ class Permissions extends Component {
           </Col>
 
         </Row>
-        <Row gutter={20}>
+        <Row gutter={24}>
 
           {
             this.props.spinloading ? <CircularProgress /> :
-              <Col className="gutter-row" span={20}>
+              <Col className="gutter-row" span={24}>
                 <Table
+                  className="mb-24 expand_rows"
                   columns={this.listDealerCols}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
                   pagination={false}

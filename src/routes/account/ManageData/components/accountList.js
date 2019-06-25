@@ -68,7 +68,7 @@ class AccountList extends Component {
     render() {
         // console.log('data list at::', this.props.dataList)
         return (
-            <Card>
+            <Card bordered={false}>
                 <Tabs defaultActiveKey="1" type="card" tabPosition="left" className="manage_data" onChange={this.callback}>
                     <TabPane tab="CHAT" key="1" >
                     </TabPane>
@@ -133,7 +133,7 @@ export default class Tab extends Component {
         // console.log(this.props.whiteLables);
         return (
             <Fragment>
-                <Tabs defaultActiveKey="all" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
+                <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>
                     <TabPane tab="All" key="all" >
                     </TabPane>
                     <TabPane tab="Used" key="1" forceRender={true} > </TabPane>
