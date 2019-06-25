@@ -32,11 +32,21 @@ const initialState = {
     duplicate_data_type: '',
     newData: [],
     backUpModal: false,
-    prices: {},
+    prices: {
+        sim_id: {},
+        chat_id: {},
+        pgp_email: {},
+        vpn: {}
+    },
     isPriceChanged: false,
-    pricesCopy: {},
+    pricesCopy: {
+        sim_id: {},
+        chat_id: {},
+        pgp_email: {},
+        vpn: {}
+    },
     packages: [],
-    packagesCopy:[]
+    packagesCopy: []
 };
 
 export default (state = initialState, action) => {
@@ -45,35 +55,35 @@ export default (state = initialState, action) => {
 
         case SAVE_ID_PRICES: {
             // console.log(action.response, 'response form save id prices')
-            if(action.response.status){
+            if (action.response.status) {
                 success({
                     title: action.response.msg
                 })
-            }else{
+            } else {
                 error({
                     title: action.response.msg
                 })
             }
-            return{
+            return {
                 ...state,
                 isPriceChanged: false
             }
         }
         case SAVE_PACKAGE: {
             // console.log(action.response, 'response form save id prices')
-            if(action.response.status){
+            if (action.response.status) {
                 success({
                     title: action.response.msg
                 })
-                if(action.response.data.length){
+                if (action.response.data.length) {
                     state.packages.push(action.response.data[0])
                 }
-            }else{
+            } else {
                 error({
                     title: action.response.msg
                 })
             }
-            return{
+            return {
                 ...state
             }
         }
@@ -112,12 +122,12 @@ export default (state = initialState, action) => {
             let copyPrices = JSON.parse(JSON.stringify(state.prices));
             let price_for = action.payload.price_for;
             let field = action.payload.field;
-            
+
             console.log('price for', price_for, 'field', field, 'value', action.payload.value)
             if (price_for && price_for !== '') {
                 copyPrices[price_for][field] = action.payload.value;
             }
-            console.log(copyPrices[price_for] , 'prices are', field)
+            console.log(copyPrices[price_for], 'prices are', field)
             return {
                 ...state,
                 prices: copyPrices,
