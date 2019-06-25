@@ -34,7 +34,7 @@ class PricingForm extends Component {
     }
 
     render() {
-        console.log(this.props.innerTabData, 'props are')
+        console.log(this.props.innerTabData, 'props are for inner tab data')
 
         const { getFieldDecorator } = this.props.form;
         return (

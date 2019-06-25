@@ -15,7 +15,6 @@ import { CLEAR_APPLICATIONS } from '../../constants/ActionTypes';
 import SimTabContent from "../../routes/account/PricesPakages/components/SimTabContent";
 const { TabPane } = Tabs;
 
-
 export default class ItemTabs extends Component {
     constructor(props) {
         super(props)
@@ -32,13 +31,14 @@ export default class ItemTabs extends Component {
         })
     }
     render() {
+        console.log(this.props.prices, 'item tab pos', this.state.innerTabData, this.state.tabSelected)
         return (
             <div>
                 <Tabs
                     tabPosition={'left'}
                     type="card"
                     onChange={(e) => this.tabChaged(e)}
-                    style={{width: '15%', float: 'left'}}
+                    style={{ width: '15%', float: 'left' }}
                 >
                     <TabPane tab={TAB_SIM_ID} key={sim} >
 
@@ -56,11 +56,11 @@ export default class ItemTabs extends Component {
                         {/* {this.props.simTabContent} */}
                     </TabPane>
                 </Tabs>
-                <div style={{width: '83%', float: 'right'}}>
+                <div style={{ width: '83%', float: 'right' }}>
                     <SimTabContent
                         setPrice={this.props.setPrice}
                         innerTab={this.state.tabSelected}
-                        innerTabData={this.state.innerTabData}
+                        innerTabData={this.props.prices ? this.props.prices[this.state.tabSelected] : {}}
                     />
                 </div>
 

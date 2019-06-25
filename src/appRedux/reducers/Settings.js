@@ -82,6 +82,7 @@ const settings = (state = initialSettings, action) => {
       };
 
     case SWITCH_LANGUAGE:
+      // console.log(action.payload, 'lanuage payload')
       return {
         ...state,
         locale: action.payload,

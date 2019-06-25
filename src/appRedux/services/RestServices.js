@@ -595,8 +595,8 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-packages/' + dealer_id, RestService.getHeader());
     },
     checkPackageName: (name) => {
-        console.log(name, 'data')
-        return axios.patch(BASE_URL + 'users/check-package-name', { name, name }, RestService.getHeader());
+        // console.log(name, 'data')
+        return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
     },
 
     invalidPage: () => {

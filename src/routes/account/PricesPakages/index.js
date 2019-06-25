@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Button, Tabs, Table, Card, Input } from 'antd';
+import { Button, Tabs, Table, Card, Input ,Icon} from 'antd';
 
 import {
        getPrices, resetPrice, setPackage,
@@ -85,6 +85,19 @@ class Prices extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
+            },{
+                title: (
+                    <span>
+                        Services
+                        {/* <Popover placement="top" >
+                            <span className="helping_txt"><Icon type="info-circle" /></span>
+                        </Popover> */}
+                    </span>
+                ),
+                align: 'center',
+                dataIndex: 'permission',
+                key: 'permission',
+                className: 'row '
             },
             {
                 title: (
@@ -196,9 +209,10 @@ class Prices extends Component {
     }
 
     componentDidMount() {
-        this.props.getPrices(1);
-        // this.props.getPackages(this.props.id)
-        this.props.getPackages(1)
+        // this.props.getPrices(1);
+        this.props.getPrices()
+        // console.log(this.props.auth.dealerId, 'auth user is')
+        this.props.getPackages()
         this.setState({
             prices: this.props.prices,
             innerTabData: this.props.prices ? this.props.prices[sim] : {},
@@ -219,7 +233,10 @@ class Prices extends Component {
     // }
 
     componentWillReceiveProps(nextProps){
+        // console.log(nextProps.prices, 'next props of prices ')
         if (this.props !== nextProps) {
+        // console.log(nextProps.prices, 'next props of prices ')
+
             this.setState({
                 prices: nextProps.prices,
                 packages: nextProps.packages,
@@ -237,6 +254,7 @@ class Prices extends Component {
 
     renderList = () => {
         if (this.state.packages) {
+            console.log(this.state.packages)
            return this.state.packages.map((item, index) => {
                 return{
                     key: item.id,
@@ -244,12 +262,50 @@ class Prices extends Component {
                     pkg_name: item.pkg_name,
                     pkg_price: "$"+item.pkg_price,
                     pkg_term: item.pkg_term,
-                    pkg_expiry: item.pkg_expiry
+                    pkg_expiry: item.pkg_expiry,
+                    pkg_features: item.pkg_features ? JSON.parse(item.pkg_features) : {},
                 }
             })
         }
             // console.log(this.props.packages, 'packages are')
     }
+
+    customExpandIcon(props) {
+        if (props.expanded) {
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-down" /></a>
+        } else {
+
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-right" /></a>
+        }
+    }
+
+    renderFeatures = (data) => {
+        let features = [];
+        if (Object.keys(data).length !== 0 && data.constructor === Object) {
+
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    console.log(key + " -> " + data[key]);
+                    let name=  key;
+                   name = name.charAt(0).toUpperCase() + name.slice(1);
+                    let dump = {
+                        name: name.replace(/_/g,' '), 
+                        f_value: data[key] ? "yes" : 'No',
+                        rowKey: key
+                    }
+
+                    features.push(dump)
+                }
+            }
+        }
+        console.log(features, 'featues arte')
+        return features
+    }
+
 
     
     handleComponentSearch = (value) => {
@@ -288,6 +344,7 @@ class Prices extends Component {
         })
     }
     render() {
+        console.log(this.state.prices, 'prices are coming')
         return (
             <div>
                 <div>
@@ -353,6 +410,31 @@ class Prices extends Component {
                                     dataSource={this.renderList()}
                                     bordered
                                     pagination={false}
+                                    expandIconAsCell={false}
+                                    expandIcon={(props) => this.customExpandIcon(props)}
+                                    expandIconColumnIndex={3}
+                                    expandedRowRender={record => {
+                                        if (Object.keys(record.pkg_features).length !== 0 && record.pkg_features.constructor === Object) {
+                                            return (
+                                                <div>
+                                                    <Table
+                                                        columns={[
+                                                            { title: 'Service Name', dataIndex: 'name', key: 'name', align: 'center' },
+                                                            { title: 'Included', key: 'f_value', dataIndex: 'f_value', align: 'center' }]}
+                                                        dataSource={this.renderFeatures(record.pkg_features)}
+                                                        pagination={false}
+                                                    />
+                                                </div>)
+                                        } else {
+                                            return (
+                                                <div>
+
+                                                </div>
+                                            )
+                                        }
+
+
+                                    }}
 
                                 />
                             </Tabs.TabPane>
@@ -368,12 +450,12 @@ class Prices extends Component {
                     saveIDPrices={this.props.saveIDPrices}
                     // whitelabel_id={this.props.whiteLabelInfo.id}
                     setPackage={this.props.setPackage}
-                    prices={this.props.prices}
+                    prices={this.state.prices}
                     setPrice={this.props.setPrice}
                     isPriceChanged={this.props.isPriceChanged}
                     resetPrice={this.props.resetPrice}
                     // whitelabel_id={this.props.id}
-                    dealer_id={1}
+                    dealer_id={this.props.auth.dealerId}
                 />
             </div>
         )
@@ -392,9 +474,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-var mapStateToProps = ({ account, authUser }, otherprops) => {
-    console.log(authUser, ' authUser props are')
+var mapStateToProps = ({ account, auth }, otherprops) => {
+    // console.log(auth.authUser, ' authUser props are')
     return {
+        auth: auth.authUser,
         prices: account.prices,
         packages: account.packages,
         isPriceChanged: account.isPriceChanged,

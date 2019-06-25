@@ -70,6 +70,8 @@ export default class PricingModal extends Component {
                         this.setState({
                             pkgPrice: 0,
                             pkg_features: pkg_features,
+                            pkgTerm: '',
+                            pkgName: '',
                         })
                     }
                 // }

@@ -79,10 +79,19 @@ class SidebarContent extends Component {
   componentDidMount() {
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
+    // this.setState({
+    //   locale: this.props.locale
+    // })
 
   }
-  componentWillReceiveProps(nextprops) {
-    if (this.props.pathname !== nextprops.pathname) {
+  componentWillReceiveProps(nextProps) {
+    // if(this.props.locale !== nextProps.locale){
+    //   console.log(this.props.locale, '  ' ,nextProps.locale)
+    //   this.setState({
+    //     locale: nextProps.locale
+    //   })
+    // }
+    if (this.props.pathname !== nextProps.pathname) {
       this.props.getNewDevicesList();
     }
   }
@@ -172,9 +181,6 @@ class SidebarContent extends Component {
                 <IntlMessages id="sidebar.logout" />
                 {/* </Link> */}
               </Menu.Item>
-
-
-
             </Menu>
 
 
@@ -236,6 +242,7 @@ class SidebarContent extends Component {
 
 const mapStateToProps = ({ settings, devices, device3 }) => {
   const { navStyle, themeType, locale, pathname } = settings;
+  // console.log(locale, 'locale langueage is')
 
   return {
     navStyle,

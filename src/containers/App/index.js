@@ -106,6 +106,7 @@ class App extends Component {
     this.setNavStyle(navStyle);
 
     const currentAppLocale = AppLocale[locale.locale];
+    // console.log(currentAppLocale ,'sdfdsfdddddddddddddddddddd')
 
     return (
       <LocaleProvider
