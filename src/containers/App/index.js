@@ -14,7 +14,7 @@ import VerifyAuthCode from "../VerifyAuthCode";
 
 // import SignUp from "../SignUp";
 import { setInitUrl } from "appRedux/actions/Auth";
-import { onLayoutTypeChange, onNavStyleChange, setThemeType } from "appRedux/actions/Setting";
+import { onLayoutTypeChange, onNavStyleChange, setThemeType, getLanguage } from "appRedux/actions/Setting";
 
 import { checkComponent } from "../../appRedux/actions/Auth";
 
@@ -89,7 +89,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    document.title = APP_TITLE + ' - Admin Dashboard'
+    document.title = APP_TITLE + ' - Admin Dashboard';
+    this.props.getLanguage();
   }
 
   componentWillReceiveProps(nextProps){
@@ -162,4 +163,4 @@ const mapStateToProps = ({ settings, auth }) => {
   const { authUser, initURL, isAllowed } = auth;
   return { locale, navStyle, layoutType, authUser, initURL, isAllowed }
 };
-export default connect(mapStateToProps, { setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent })(App);
+export default connect(mapStateToProps, { setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent, getLanguage })(App);

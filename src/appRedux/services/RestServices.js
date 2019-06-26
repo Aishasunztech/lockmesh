@@ -604,6 +604,10 @@ const RestService = {
         return axios.patch(BASE_URL + 'users/save-language', { language }, RestService.getHeader());
     },
 
+    getLanguage: () => {
+
+        return axios.get(BASE_URL + 'users/get-language', RestService.getHeader());
+    },
     
     invalidPage: () => {
 
