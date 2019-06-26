@@ -1,6 +1,6 @@
-import {SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH} from "constants/ActionTypes";
+import {SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH, INVALID_TOKEN} from "constants/ActionTypes";
 import {LAYOUT_TYPE, NAV_STYLE, THEME_COLOR_SELECTION, THEME_TYPE} from "../../constants/ThemeSetting";
-
+import RestService from '../services/RestServices';
 
 export function toggleCollapsedSideNav(navCollapsed) {
   return {type: TOGGLE_COLLAPSED_NAV, navCollapsed};
@@ -26,11 +26,33 @@ export function onLayoutTypeChange(layoutType) {
   return {type: LAYOUT_TYPE, layoutType};
 }
 
+// export function switchLanguage(locale) {
+//   // console.log('switching language');
+//   // console.log(locale);
+//   return {
+//     type: SWITCH_LANGUAGE,
+//     payload: locale
+//   };
+// }
+
+
 export function switchLanguage(locale) {
-  // console.log('switching language');
-  // console.log(locale);
-  return {
-    type: SWITCH_LANGUAGE,
-    payload: locale
-  };
+  return (dispatch) => {
+    RestService.switchLanguage(locale).then((response) => {
+        if (RestService.checkAuth(response.data)) {
+            console.log('response', response.data);
+            if (response.data) {
+                dispatch({
+                  type: SWITCH_LANGUAGE,
+                  payload: locale
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        }
+    })
+  }
 }
+

@@ -38,12 +38,6 @@ import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Const
 
 class SidebarContent extends Component {
 
-  constructor(props) {
-    super(props);
-
-  }
-
-
   languageMenu = () => (
     <ul className="gx-sub-popover">
       {languageData.map(language =>
@@ -79,10 +73,19 @@ class SidebarContent extends Component {
   componentDidMount() {
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
+    // this.setState({
+    //   locale: this.props.locale
+    // })
 
   }
-  componentWillReceiveProps(nextprops) {
-    if (this.props.pathname !== nextprops.pathname) {
+  componentWillReceiveProps(nextProps) {
+    // if(this.props.locale !== nextProps.locale){
+    //   console.log(this.props.locale, '  ' ,nextProps.locale)
+    //   this.setState({
+    //     locale: nextProps.locale
+    //   })
+    // }
+    if (this.props.pathname !== nextProps.pathname) {
       this.props.getNewDevicesList();
     }
   }
@@ -127,14 +130,20 @@ class SidebarContent extends Component {
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
             <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>
+              
+              {/* Price */}
               <li>
                 <i className="icon icon-dollar" >
                   <Icon type="dollar" className="mb-10" />
                 </i>
               </li>
+              
+              {/* Chat Icon */}
               <li>
-                <i className="icon icon-chat-new" /></li>
+                <i className="icon icon-chat-new" />
+              </li>
 
+              {/* Notifications */}
               <li>
                 <a className="head-example">
                   <Badge count={this.props.devices.length}>
@@ -142,6 +151,8 @@ class SidebarContent extends Component {
                   </Badge>
                 </a>
               </li>
+
+              {/* Language Dropdown */}
               <li>
                 <Popover overlayClassName="gx-popover-horizantal lang_icon" placement="bottomRight"
                   content={this.languageMenu()} trigger="click">
@@ -172,9 +183,6 @@ class SidebarContent extends Component {
                 <IntlMessages id="sidebar.logout" />
                 {/* </Link> */}
               </Menu.Item>
-
-
-
             </Menu>
 
 
@@ -236,6 +244,7 @@ class SidebarContent extends Component {
 
 const mapStateToProps = ({ settings, devices, device3 }) => {
   const { navStyle, themeType, locale, pathname } = settings;
+  // console.log(locale, 'locale langueage is')
 
   return {
     navStyle,

@@ -33,6 +33,13 @@ import { APP_TITLE } from "../../constants/Application";
 
 class App extends Component {
 
+  constructor(props){
+    super(props)
+    this.state={
+      re_render:true
+    }
+  }
+
   setLayoutType = (layoutType) => {
     if (layoutType === LAYOUT_TYPE_FULL) {
       document.body.classList.remove('boxed-layout');
@@ -85,6 +92,14 @@ class App extends Component {
     document.title = APP_TITLE + ' - Admin Dashboard'
   }
 
+  componentWillReceiveProps(nextProps){
+    if(this.props.locale != nextProps.locale){
+      this.setState({
+        re_render: !this.state.re_render
+      })
+    }
+  }
+
   render() {
 
     const { match, location, layoutType, navStyle, locale, authUser, initURL } = this.props;
@@ -105,7 +120,10 @@ class App extends Component {
 
     this.setNavStyle(navStyle);
 
+  
+
     const currentAppLocale = AppLocale[locale.locale];
+    // console.log(currentAppLocale ,'sdfdsfdddddddddddddddddddd')
 
     return (
       <LocaleProvider
@@ -123,7 +141,9 @@ class App extends Component {
               authUser={authUser}
               path={`${match.url}`}
               // authUser={authUser}
-              component={MainApp}
+              re_render={this.state.re_render}
+              component= {MainApp}
+
             />
 
           </Switch>

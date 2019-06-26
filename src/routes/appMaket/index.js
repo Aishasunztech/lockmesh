@@ -16,6 +16,7 @@ const UNINSTALL_HELPING_TEXT = (
     <span>Turn toggle OFF to restrict app <br /> from being uninstalled by user</span>
 );
 
+
 class ApkMarket extends React.Component {
     constructor(props) {
         super(props);

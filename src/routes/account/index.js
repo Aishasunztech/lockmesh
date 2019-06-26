@@ -15,8 +15,9 @@ import {
     createBackupDB,
     checkPass,
     showBackupModal,
-    saveIDPrices,
-    setPackage
+    // saveIDPrices,
+    // setPackage,
+    getPackages
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -29,7 +30,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import SetPricingModal from './ManageToken/SetPricingModal';
+// import SetPricingModal from './PricesPakages/SetPricingModal';
 
 const confirm = Modal.confirm;
 const success = Modal.success
@@ -1097,37 +1098,53 @@ class Account extends Component {
 
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)} >
-                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
-                                        <Fragment>
-                                            <div>
-                                                <h2 style={{ textAlign: "center" }}>Packages and ID's</h2>
-                                                <Divider className="mb-0" />
-                                                <Row style={{ padding: '12px 0 0px' }}>
-                                                    <Col span={7} className="" style={{ textAlign: "center" }}>
-                                                        <Icon type="control" className="and_icon" />
-                                                    </Col>
-                                                    <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                        <p><span className="diamond_icon">&#9670;</span>Create Packages and bundles</p>
-                                                        <p><span className="diamond_icon">&#9670;</span>Set Package prices with terms</p>
-                                                        <p><span className="diamond_icon">&#9670;</span>Set ID prices</p>
-                                                        <p className="more_txt">and more...</p>
-                                                    </Col>
-                                                </Row>
+                                <div className="contenar">
+                                    {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
+                                    <Link to={"/set-prices"}>
+                                    {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
+                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                            <div className="profile_table image_1">
+                                                <Fragment>
+                                                    <Row>
+                                                        <div className="col-md-12 ac_card">
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="branches" />  Manage Tokens</h2>
+                                                            <Divider className="mb-0" />
+                                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                                <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                    <Icon type="dollar" className="and_icon" />
+                                                                </Col>
+                                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                    <div className="crd_txt">
+                                                                        <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
+                                                                        <p className="more_txt">and more...</p>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+
+                                                        </div>
+                                                    </Row>
+                                                </Fragment>
                                             </div>
-                                        </Fragment>
-                                    </Card>
-                                    <Button type="primary" size="small" className="open_btn">Open</Button>
-                                </a>
-                                <div className="middle">
-                                    <SetPricingModal
-                                        showPricingModal={this.showPricingModal}
-                                        pricing_modal={this.state.pricing_modal}
-                                        // LabelName = {this.props.whiteLabelInfo.name}
-                                        saveIDPrices={this.props.saveIDPrices}
-                                        setPackage={this.props.setPackage}
-                                    // whitelabel_id={this.props.whiteLabelInfo.id}
-                                    />
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn">Open</Button>
+                                        {/* </a> */}
+                                    </Link>
+                                    {/* <div className="middle">
+                                        <SetPricingModal
+                                            showPricingModal={this.showPricingModal}
+                                            pricing_modal={this.state.pricing_modal}
+                                            // LabelName = {this.props.whiteLabelInfo.name}
+                                            saveIDPrices={this.props.saveIDPrices}
+                                            setPackage={this.props.setPackage}
+                                        // whitelabel_id={this.props.whiteLabelInfo.id}
+
+                                        />
+                                    </div> */}
+                                    {/* <div className="middle">
+                                        <div className="text">Coming Soon</div>
+                                    </div> */}
                                 </div>
                             </div>
                         </Col>
@@ -1153,8 +1170,9 @@ function mapDispatchToProps(dispatch) {
         createBackupDB: createBackupDB,
         checkPass: checkPass,
         showBackupModal: showBackupModal,
-        saveIDPrices: saveIDPrices,
-        setPackage: setPackage
+        // saveIDPrices: saveIDPrices,
+        // setPackage: setPackage,
+        getPackages: getPackages
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices }) => {

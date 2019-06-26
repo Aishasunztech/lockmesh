@@ -53,7 +53,7 @@ export const SC = "com.secure.systemcontrol";
 export const sim = 'sim_id';
 export const chat = 'chat_id';
 export const pgp = 'pgp_email';
-export const vpn = 'vpn_id';
+export const vpn = 'vpn';
 
 export const pkg_features = {
     chat_id: false,

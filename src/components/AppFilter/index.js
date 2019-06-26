@@ -205,6 +205,7 @@ class AppFilter extends Component {
                             />
                         </div>
                     </Col>
+                    {(!this.props.setPrice) ?
                     <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             <Select
@@ -222,6 +223,9 @@ class AppFilter extends Component {
                             </Select>
                         </div>
                     </Col>
+                    :
+                        <Col />
+                    }
                     <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
                         <div className="gutter-box">
                             {
@@ -271,6 +275,15 @@ class AppFilter extends Component {
                                                             disabled={(this.props.disableAddButton === true) ? true : false}
                                                             style={{ width: '100%' }}
                                                             onClick={() => this.props.handleUploadApkModal(true)}
+                                                        >
+                                                            {this.props.addButtonText}
+                                                        </Button>
+                                                        : (this.props.setPrice) ?
+                                                        <Button
+                                                            type="primary"
+                                                            disabled={(this.props.disableAddButton === true) ? true : false}
+                                                            style={{ width: '100%' }}
+                                                            onClick={() => this.props.showPricingModal(true)}
                                                         >
                                                             {this.props.addButtonText}
                                                         </Button>

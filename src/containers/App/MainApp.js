@@ -99,6 +99,8 @@ export class MainApp extends Component {
   render() {
     const {match, width, navStyle} = this.props;
 
+    // console.log(this.props, 'this.props of mainapp')
+
     return (
       <Layout className="gx-app-layout">
         {this.getSidebar(navStyle, width)}

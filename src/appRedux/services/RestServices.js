@@ -578,14 +578,33 @@ const RestService = {
         return axios.post(BASE_URL + 'users/check_pass', { user }, RestService.getHeader());
     },
     saveIDPrices: (data) => {
-        // console.log(data, 'data')
-        return axios.put(BASE_URL+ 'users/save-prices', data, RestService.getHeader());
+        console.log(data, 'save-prices data')
+        return axios.patch(BASE_URL+ 'users/save-prices', data, RestService.getHeader());
     },
     setPackage: (data) => {
         // console.log(data, 'data')
         return axios.post(BASE_URL+ 'users/save-package', {data}, RestService.getHeader());
     },
+    getPrices: (dealer_id) => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-prices/' + dealer_id, RestService.getHeader());
+    },
 
+    getPackages: (dealer_id) => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-packages/' + dealer_id, RestService.getHeader());
+    },
+    checkPackageName: (name) => {
+        // console.log(name, 'data')
+        return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
+    },
+
+    switchLanguage: (language) => {
+        console.log(language, 'language is')
+        return axios.patch(BASE_URL + 'users/save-language', { language }, RestService.getHeader());
+    },
+
+    
     invalidPage: () => {
 
     },

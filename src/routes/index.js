@@ -16,6 +16,7 @@ import InvalidPage from "./InvalidPage";
 import FourOFour from "./404/";
 import AppMarket from "./appMaket/index";
 import ManageData from './account/ManageData/index'
+import SetPrice from './account/PricesPakages/index'
 // import Documents from "./documents/index";
 
 const App = ({ match }) => {
@@ -38,6 +39,7 @@ const App = ({ match }) => {
       <Route path={`${match.url}invalid_page`} component={InvalidPage} />
       <Route path={`${match.url}app-market`} component={AppMarket} />
       <Route path={`${match.url}account/managedata`} component={ManageData} />
+      <Route path={`${match.url}set-prices`} component={SetPrice} />
       <Route path="*" component={FourOFour} />
     </Switch>
   </div>)
