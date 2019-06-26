@@ -310,7 +310,7 @@ export function dealerColsWithSearch(searchBar = false, callBack = null) {
       title: DEALER_NAME,
       dataIndex: 'dealer_name',
       key: 'dealer_name',
-      sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+      sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
       sortDirections: ['ascend', 'descend'],
       className: '',
     },

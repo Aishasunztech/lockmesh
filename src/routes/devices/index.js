@@ -512,7 +512,10 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'dealer_name',
                         key: 'dealer_name',
-                        sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+                        sorter: (a, b) => { 
+                            // console.log(a, 'a is');
+                            return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) 
+                        },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -776,7 +779,8 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 's_dealer_name',
                         key: 's_dealer_name',
-                        sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
+                        sorter: (a, b) => { 
+                            return a.s_dealer_name.localeCompare(b.s_dealer_name) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
