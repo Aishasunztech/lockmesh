@@ -133,7 +133,7 @@ class RestrictedRoute extends Component {
   render() {
     const Component = this.props.component;
     const { width, navStyle, authUser, isAllowed, location, isRequested } = this.props;
-    // console.trace("restricted route allowed", this.props.rest);
+    // console.trace("restricted route allowed", this.props);
 
     return (
       <Route
@@ -147,7 +147,7 @@ class RestrictedRoute extends Component {
               if (isRequested) {
 
                 if (isAllowed || location.pathname === "/invalid_page") {
-                  return <Component {...props} />;
+                  return <Component re_render={this.props.re_render} {...props} />;
                 } else {
                   return <Redirect to={{ pathname: '/invalid_page', state: { from: props.location } }} />
                 }
@@ -188,7 +188,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-var mapStateToProps = ({ routing, auth, settings }, otherProps) => {
+var mapStateToProps = ({ routing, auth, settings }) => {
   const { width, navStyle } = settings;
   return {
     // routing: routing,

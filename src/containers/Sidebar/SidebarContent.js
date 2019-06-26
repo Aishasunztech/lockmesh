@@ -38,12 +38,6 @@ import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Const
 
 class SidebarContent extends Component {
 
-  constructor(props) {
-    super(props);
-
-  }
-
-
   languageMenu = () => (
     <ul className="gx-sub-popover">
       {languageData.map(language =>
@@ -136,14 +130,20 @@ class SidebarContent extends Component {
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
             <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>
+              
+              {/* Price */}
               <li>
                 <i className="icon icon-dollar" >
                   <Icon type="dollar" className="mb-10" />
                 </i>
               </li>
+              
+              {/* Chat Icon */}
               <li>
-                <i className="icon icon-chat-new" /></li>
+                <i className="icon icon-chat-new" />
+              </li>
 
+              {/* Notifications */}
               <li>
                 <a className="head-example">
                   <Badge count={this.props.devices.length}>
@@ -151,6 +151,8 @@ class SidebarContent extends Component {
                   </Badge>
                 </a>
               </li>
+
+              {/* Language Dropdown */}
               <li>
                 <Popover overlayClassName="gx-popover-horizantal lang_icon" placement="bottomRight"
                   content={this.languageMenu()} trigger="click">
