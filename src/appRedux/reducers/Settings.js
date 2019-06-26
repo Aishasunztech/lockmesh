@@ -1,4 +1,4 @@
-import {SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH} from "constants/ActionTypes";
+import { SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH,GET_LANGUAGE } from "constants/ActionTypes";
 import {
   LAYOUT_TYPE,
   LAYOUT_TYPE_FULL,
@@ -7,7 +7,8 @@ import {
   THEME_COLOR_SELECTION,
   THEME_COLOR_SELECTION_PRESET,
   THEME_TYPE,
-  THEME_TYPE_SEMI_DARK
+  THEME_TYPE_SEMI_DARK,
+  
 } from "../../constants/ThemeSetting";
 
 const initialSettings = {
@@ -59,6 +60,16 @@ const settings = (state = initialSettings, action) => {
         ...state,
         width: action.width,
       };
+
+    case GET_LANGUAGE: {
+      if(action.response.status && action.response.data.length){
+        console.log('response is the', action.response.data)
+        return {
+          ...state,
+          locale: action.response.data[0] ? JSON.parse(action.response.data[0]['dealer_language']) : state.locale
+        }
+      }
+    }
     case THEME_TYPE:
       return {
         ...state,
