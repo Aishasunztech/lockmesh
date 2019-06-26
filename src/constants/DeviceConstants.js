@@ -1,3 +1,6 @@
+
+
+
 export const DEVICE_ID = 'DEVICE ID';
 export const DEVICE_REMAINING_DAYS = 'REMAINING DAYS';
 export const DEVICE_FLAGGED = 'FLAGGED';

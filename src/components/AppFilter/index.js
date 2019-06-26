@@ -6,6 +6,8 @@ import Picky from 'react-picky';
 import 'react-picky/dist/picky.css';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
+import IntlMessages from "../../util/IntlMessages";
+
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -147,7 +149,9 @@ class AppFilter extends Component {
                                                         {/* <input type="checkbox" checked={isSelected} readOnly /> */}
                                                         <Checkbox
                                                             checked={allSelectedOpt} className="slct_all"
-                                                        >SELECT ALL</Checkbox>
+                                                        >
+                                                            <IntlMessages id="appfilter.selectall" />
+                                                        </Checkbox>
                                                     </li>
                                                 );
                                             }
