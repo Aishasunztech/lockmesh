@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Tabs, Table, Switch, Row, Col, } from 'antd';
+import { Tabs, Table, Switch, Row, Col, Avatar } from 'antd';
+import { BASE_URL } from '../../../constants/Application';
 import Permissions from "./Permissions";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, Main_SETTINGS, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING } from '../../../constants/Constants';
 import AppList from "./AppList";
@@ -254,7 +255,8 @@ export default class PolicyInfo extends Component {
                                 <Col span={8} className="">
                                 </Col>
                                 <Col span={2} className="">
-                                    <img src={require("assets/images/setting.png")} className='image_icon' />
+                                <Avatar src={`${BASE_URL}users/getFile/${this.state.secure_setting_app.icon}`} style={{ width: "30px", height: "30px" }} />
+                                    {/* <img src={require("assets/images/setting.png")} className='image_icon' /> */}
                                 </Col>
                                 <Col span={6} className="pl-0">
                                     <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
@@ -322,10 +324,11 @@ export default class PolicyInfo extends Component {
                                 <Col span={8} className="">
                                 </Col>
                                 <Col span={2} className="">
-                                    <img src={require("assets/images/setting.png")} className='image_icon' />
+                                <Avatar src={`${BASE_URL}users/getFile/${this.state.system_setting_app.icon}`} style={{ width: "30px", height: "30px" }} />
+                                    {/* <img src={require("assets/images/setting.png")} className='image_icon' /> */}
                                 </Col>
                                 <Col span={6} className="pl-0">
-                                    <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
+                                    <h5 style={{ marginTop: '9px' }}>Android Settings Permission</h5>
                                 </Col>
                             </Row>
                             <Row className="mb-8" style={{ marginTop: 10 }}>

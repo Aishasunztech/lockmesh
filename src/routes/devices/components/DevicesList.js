@@ -128,16 +128,16 @@ class DevicesList extends Component {
                 // icon = 'add'
             }
 
-            let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)}> <IntlMessages id="button.suspend" /></Button>;
-            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> <IntlMessages id="button.activate" /></Button>;
-            let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} ><IntlMessages id="button.delete" /></Button>
-            let ConnectBtn = <Button type="default" size="small" style={style}> <Link to={`connect-device/${btoa(device.device_id)}`.trim()}> <IntlMessages id="button.connect" /></Link></Button>
-            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
-            let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
-            let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>DELETE</Button>
-            let Unflagbtn = <Button type="defualt" size="small" style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }} onClick={() => { this.props.unflagConfirm(device) }}> UNFLAG </Button>;
+            let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)} > SUSPEND</Button>;
+            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}  >UNSUSPEND</Button>;
+            let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >DELETE</Button>
+            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}>  <IntlMessages id="button.connect" /></Link></Button>
+            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
+            let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
+            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
+            let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
+            let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>DELETE</Button>
+            let Unflagbtn = <Button type="defualt" size="small" style={{ margin: '0 8px 0 0', color: "#fff", background: "#000" }} onClick={() => { this.props.unflagConfirm(device) }}> UNFLAG </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
             // console.log('end', device)
@@ -157,7 +157,7 @@ class DevicesList extends Component {
                         : (device.flagged !== 'Not flagged') ?
                             (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                             : (status === DEVICE_SUSPENDED) ?
-                                (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                 : (status === DEVICE_EXPIRED) ?
                                     (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                     : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?

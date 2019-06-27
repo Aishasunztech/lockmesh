@@ -78,10 +78,12 @@ class Permissions extends Component {
   }
 
   showDealersModal = (visible) => {
+
     this.setState({
       showDealersModal: visible,
       dealer_ids: [],
-      selectedRowKeys: []
+      selectedRowKeys: [],
+      dealerListForModal: this.props.dealerList,
     })
   }
 
@@ -494,6 +496,7 @@ class Permissions extends Component {
             this.showDealersModal(false)
           }}
           bodyStyle={{ height: 500, overflow: "overlay" }}
+          destroyOnClose={true}
         >
           <DealerList
             columns={this.addDealerColsInModal}
