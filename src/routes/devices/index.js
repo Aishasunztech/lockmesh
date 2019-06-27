@@ -76,7 +76,7 @@ import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 
@@ -1405,15 +1405,15 @@ class Devices extends Component {
         }, true);
     }
 
+
     refreshComponent = () => {
         this.props.history.push('/devices');
     }
     render() {
-        
-        const searchPlaceholder = <IntlMessages id="appfilter.SearchDevices" />;
-        console.log(searchPlaceholder);
+        // console.log(this.props.locale, 'props are the ')
         return (
             <Fragment>
+                {/* <IntlMessages ref="appfilter" id="appfilter.SearchDevices" />; */}
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
                 {
                     this.props.isloading ? <CircularProgress /> :
@@ -1421,7 +1421,7 @@ class Devices extends Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
-                                searchPlaceholder={"Search Devices"}
+                                searchPlaceholder={convertToLang(this.props.locale, "appfilter.SearchDevices")}
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText="Add Device"
                                 options={this.props.options}
@@ -1553,7 +1553,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-var mapStateToProps = ({ devices, auth }) => {
+var mapStateToProps = ({ devices, auth, settings }) => {
     // console.log('devices AUTH', auth);
     //   console.log(devices.options,'devices OPTION', devices.selectedOptions);
     return {
@@ -1565,7 +1565,8 @@ var mapStateToProps = ({ devices, auth }) => {
         selectedOptions: devices.selectedOptions,
         DisplayPages: devices.DisplayPages,
         user: auth.authUser,
-        socket: auth.socket
+        socket: auth.socket,
+        locale: settings.locale
     };
 }
 

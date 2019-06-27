@@ -313,6 +313,35 @@ class DevicesList extends Component {
 
     // }
 
+
+//     var button = document.getElementById('slide');
+// button.onclick = function () {
+//     var container = document.getElementById('container');
+//     sideScroll(container,'right',25,100,10);
+// };
+
+// var back = document.getElementById('slideBack');
+// back.onclick = function () {
+//     var container = document.getElementById('container');
+//     sideScroll(container,'left',25,100,10);
+// };
+
+// function sideScroll(element,direction,speed,distance,step){
+//     scrollAmount = 0;
+//     var slideTimer = setInterval(function(){
+//         if(direction == 'left'){
+//             element.scrollLeft -= step;
+//         } else {
+//             element.scrollLeft += step;
+//         }
+//         scrollAmount += step;
+//         if(scrollAmount >= distance){
+//             window.clearInterval(slideTimer);
+//         }
+//     }, speed);
+// }
+
+
     render() {
 
         // console.log(this.state, 'selected keys', )
@@ -367,7 +396,7 @@ class DevicesList extends Component {
             rowSelection = null
         }
 
-        // console.log(rowSelection);
+        // console.log(this.refs.tablelist, 'table rof');
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
@@ -378,7 +407,7 @@ class DevicesList extends Component {
                     <Table
                         ref='tablelist'
                         rowClassName={(record, index) => {
-                            console.log(record, 'df', index)
+                            // console.log(record, 'df', index)
                             // this.state.expandedRowKeys.includes(record.key) ? 'testing' : ''
                         }
                         }
@@ -397,7 +426,7 @@ class DevicesList extends Component {
 
                         scroll={{
                             x: 500,
-                            // y: 600 
+                            // y: 250 
                         }}
                         onExpand={this.onExpandRow}
                         expandIcon={(props) => this.customExpandIcon(props)}

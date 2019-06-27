@@ -3,13 +3,15 @@ const languageData = [
     languageId: 'english',
     locale: 'en',
     name: 'English',
-    icon: 'us'
+    icon: 'us',
+    file:'en_US'
   },
   {
     languageId: 'french',
     locale: 'fr',
     name: 'Français',
-    icon: 'fr'
+    icon: 'fr',
+    file:'fr_FR'
   },
   // {
   //   languageId: 'chinese',
