@@ -189,7 +189,7 @@ class PurchaseCredit extends Component {
                             {this.props.form.getFieldDecorator('promo_code', {
                                 initialValue: '',
                             })(
-                                <Input />
+                                <Input disabled />
                             )}
                         </Form.Item>
                         <Form.Item
