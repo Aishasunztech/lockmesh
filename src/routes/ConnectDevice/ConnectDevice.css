@@ -120,7 +120,7 @@
 }
 
 .act_b_grp.ant-btn-group .ant-btn {
-    padding: 0 4px;
+    padding: 0;
 }
 
 .act_b_grp .action_btn {
@@ -129,7 +129,7 @@
 
 .act_b_grp .ant-btn>.anticon+span {
     margin-left: 4px;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .act_b_grp {

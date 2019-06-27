@@ -150,7 +150,7 @@ class AppFilter extends Component {
                                                         <Checkbox
                                                             checked={allSelectedOpt} className="slct_all"
                                                         >
-                                                            <IntlMessages id="appfilter.selectall" />
+                                                            <IntlMessages id="appfilter.SelectAll" />
                                                         </Checkbox>
                                                     </li>
                                                 );

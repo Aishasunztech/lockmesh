@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 import { BASE_URL } from '../../../constants/Application';
+import IntlMessages from "../../../util/IntlMessages";
 import EditDealer from './editDealer';
 import { Tabs } from 'antd';
 import EditApk from './editDealer';
@@ -120,36 +121,36 @@ class DealerList extends Component {
 
 
 
-    
+
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
-            const dealer_status = (dealer.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
+            const dealer_status = (dealer.account_status === "suspended") ? (<IntlMessages id="button.Activate" />) : (<IntlMessages id="button.Suspend" />);
             const button_type = (dealer_status === "ACTIVATE") ? "dashed" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
             data.push({
                 'row_key': dealer.dealer_id,
                 'accounts': <span>
-                    <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', width: '60px' }}
+                    <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', textTransform: "uppercase" }}
                         onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
                         {(dealer.account_status === '') ? <div>{dealer_status}</div> : <div> {dealer_status}</div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 8px 0 0' }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>EDIT</Button>
-                    <Button type={undo_button_type} size='small' style={{ margin: '0', width: '60px' }}
+                    <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}><IntlMessages id="button.Edit" /></Button>
+                    <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
                         onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
-                        {(dealer.unlink_status === 0) ? <div> DELETE</div> : <div> UNDO</div>}
+                        {(dealer.unlink_status === 0) ? <div> <IntlMessages id="button.Delete" /></div> : <div>  <IntlMessages id="button.Undo" /></div>}
 
                     </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >PASSWORD RESET</Button>
+                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} ><IntlMessages id="button.passwordreset" /></Button>
                     {(this.props.user.type === ADMIN) ?
-                        <Button style={{ margin: '0 0 0 8px' }} size='small' onClick={() => { }} >CONNECT</Button>
+                        <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} ><IntlMessages id="button.Connect" /></Button>
                         :
                         null
                     }
                 </span>,
                 'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
                 'counter': ++index,
-                'dealer_name': dealer.dealer_name ?  dealer.dealer_name : 'N/A',
+                'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
                 'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
                 'link_code': dealer.link_code ? dealer.link_code : 'N/A',
                 'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
@@ -192,7 +193,7 @@ class DealerList extends Component {
                     expandedRowKeys={this.state.expandedRowKeys}
                     onExpand={this.onExpandRow}
                     expandIconAsCell={false}
-                   defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
+                    defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                 />
                 <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
 
@@ -226,7 +227,7 @@ export default class Tab extends Component {
             tabselect: this.props.tabselect,
             selectedOptions: this.props.selectedOptions,
             tabselect: this.props.tabselect,
-            expandedRowKeys:[]
+            expandedRowKeys: []
 
         }
     }
@@ -259,13 +260,13 @@ export default class Tab extends Component {
         return (
             <Fragment>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab={"All (" + this.props.allDealers + ")"} key="1" >
+                    <TabPane tab={<span><IntlMessages id="tab.All" /> ({this.props.allDealers})</span>} key="1" >
                     </TabPane>
-                    <TabPane tab={<span className="green">Active ({this.props.activeDealers} )</span>} key="2" forceRender={true}>
+                    <TabPane tab={<span className="green"><IntlMessages id="tab.Active" /> ({this.props.activeDealers})</span>} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDealers} )</span>} key="4" forceRender={true}>
+                    <TabPane tab={<span className="yellow"><IntlMessages id="tab.Suspended" /> ({this.props.suspendDealers})</span>} key="4" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="orange">Archived ({this.props.unlinkedDealers} )</span>} key="3" forceRender={true}>
+                    <TabPane tab={<span className="orange"><IntlMessages id="tab.Archived" /> ({this.props.unlinkedDealers})</span>} key="3" forceRender={true}>
                     </TabPane>
                 </Tabs>
                 <DealerList

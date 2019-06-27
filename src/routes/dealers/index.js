@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 import { Input, Modal, Select, Button } from "antd";
+import IntlMessages from "../../util/IntlMessages";
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 // import {getDevicesList} from '../../appRedux/actions/Devices';
@@ -392,7 +393,7 @@ class Dealers extends Component {
         return (
             <Select
                 showSearch
-                placeholder="Show Dealer"
+                placeholder={<IntlMessages id="appfilter.ShowDealer" />}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {

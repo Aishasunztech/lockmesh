@@ -31,7 +31,7 @@ import AddUser from './components/AddUser';
 var coppyUsers = [];
 var status = true;
 const question_txt = (
-    <div>
+    <div>Appuyez sur > pour afficher la liste des périphériques de cet utilisateur.
         <p>Press <a style={{ fontSize: 14 }}><Icon type="caret-right" /> </a> to View Devices<br></br> list of this User</p>
     </div>
 );

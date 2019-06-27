@@ -481,6 +481,7 @@ class ConnectDevice extends Component {
   }
 
   render() {
+    console.log('render connext page ', this.props)
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
     let onlineStatus = this.props.device_details.online

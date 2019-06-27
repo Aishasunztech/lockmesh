@@ -4,6 +4,7 @@ import URLSearchParams from 'url-search-params'
 import { Redirect, Route, Switch } from "react-router-dom";
 import { LocaleProvider } from "antd";
 import { IntlProvider } from "react-intl";
+import IntlMessages from "../../util/IntlMessages";
 
 import AppLocale from "lngProvider";
 import MainApp from "./MainApp";
@@ -125,7 +126,7 @@ class App extends Component {
 
     const currentAppLocale = AppLocale[locale.locale];
     // console.log(currentAppLocale ,'sdfdsfdddddddddddddddddddd')
-
+    console.log(currentAppLocale.messages, 'connect page messages')
     return (
       <LocaleProvider
         locale={currentAppLocale.antd}
@@ -134,6 +135,7 @@ class App extends Component {
           locale={currentAppLocale.locale}
           messages={currentAppLocale.messages}
         >
+        
 
           <Switch>
             <Route exact path='/login' component={Login} />

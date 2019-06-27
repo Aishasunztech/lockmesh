@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import IntlMessages from "../../../util/IntlMessages";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
@@ -55,20 +56,23 @@ class UserList extends Component {
                         <Button
                             type="primary"
                             size="small"
+                            style={{ textTransform: 'uppercase' }}
                             onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
-                        > EDIT </Button>
+                        >  <IntlMessages id="button.Edit" /> </Button>
                         {(user.devicesList.length === 0) ?
                             (user.del_status == 0) ?
                                 <Button
                                     type="danger"
                                     size="small"
+                                    style={{ textTransform: 'uppercase' }}
                                     onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
-                                > DELETE </Button>
+                                >  <IntlMessages id="button.Delete" /> </Button>
                                 : <Button
                                     type="dashed"
                                     size="small"
+                                    style={{ textTransform: 'uppercase' }}
                                     onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
-                                >UNDO </Button>
+                                ><IntlMessages id="button.Undo" /> </Button>
                             : null
                         }
                     </Fragment >)

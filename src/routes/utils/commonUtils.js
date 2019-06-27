@@ -113,8 +113,8 @@ export function componentSearch(arr, search) {
     obks.some((obk) => {
       if (obk) {
         let temp = el[obk];
-        if(obk == 'dealer_id')
-        temp = temp.toString()
+        if (obk == 'dealer_id')
+          temp = temp.toString()
         if ((typeof temp) === 'string') {
           if (temp.toLowerCase().includes(search.toLowerCase())) {
             foundDevices.push(el);
@@ -161,7 +161,7 @@ export function titleCase(str) {
         return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
       })
     } else {
-      if (word == "id") {
+      if (word == "id" || word == "pgp") {
         return word.toUpperCase();
       } else {
         return word.charAt(0).toUpperCase() + word.substr(1);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styles from './AppList';
 import { Card, Table, Icon } from "antd";
+import IntlMessages from "../../../util/IntlMessages";
 import { getStatus, getColor, checkValue, titleCase } from '../../../routes/utils/commonUtils'
 import { Redirect } from 'react-router-dom';
 import {
@@ -30,7 +31,8 @@ import {
     DEVICE_DEALER_NAME,
     DEVICE_S_DEALER,
     DEVICE_S_DEALER_NAME,
-    USER_ID
+    USER_ID,
+    IP_ADDRESS
 } from '../../../constants/DeviceConstants';
 
 let make_red = 'captilize';
@@ -109,7 +111,7 @@ export default class DeviceSidebar extends Component {
 
             {
                 key: 3,
-                name: (<a href="javascript:void(0)">PGP Email:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(DEVICE_PGP_EMAIL)}:</a>),
                 value: checkValue(device_details.pgp_email)
             },
             {
@@ -186,18 +188,18 @@ export default class DeviceSidebar extends Component {
             },
             {
                 key: 17,
-                name: (<a href="javascript:void(0)">IP Address:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(IP_ADDRESS)}:</a>),
                 value: checkValue(device_details.ip_address)
             },
 
             {
                 key: 172,
-                name: (<a href="javascript:void(0)">S-Dealer:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(DEVICE_S_DEALER)}:</a>),
                 value: checkValue(device_details.s_dealer)
             },
             {
                 key: 173,
-                name: (<a href="javascript:void(0)">S-Dealer Name:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(DEVICE_S_DEALER_NAME)}:</a>),
                 value: checkValue(device_details.s_dealer_name)
             },
             {
@@ -223,22 +225,22 @@ export default class DeviceSidebar extends Component {
 
     goToDealer = (dealer) => {
         if (dealer.dealer_id != 'null' && dealer.dealer_id != null) {
-          if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
-            this.setState({
-              redirect: true,
-              dealer_id: dealer.dealer_id,
-              goToPage: '/dealer/dealer'
-            })
-          } else {
-            this.setState({
-              redirect: true,
-              dealer_id: dealer.dealer_id,
-              goToPage: '/dealer/sdealer'
-            })
-          }
-    
+            if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+                this.setState({
+                    redirect: true,
+                    dealer_id: dealer.dealer_id,
+                    goToPage: '/dealer/dealer'
+                })
+            } else {
+                this.setState({
+                    redirect: true,
+                    dealer_id: dealer.dealer_id,
+                    goToPage: '/dealer/sdealer'
+                })
+            }
+
         }
-      }
+    }
 
     renderDetailsColumns(device_details) {
         return [
@@ -258,7 +260,7 @@ export default class DeviceSidebar extends Component {
                             this.props.refreshDevice(device_details.device_id, true)
                         }}>
                             <Icon type="sync" spin className="loading_icon" />
-                            <Icon type="reload" /> Refresh</a>
+                            <Icon type="reload" /><IntlMessages id="button.Refresh" /> </a>
                         <div>
                             <p style={{ margin: "8px 0" }}>{device_details.device_id}</p>
                         </div>
@@ -283,10 +285,10 @@ export default class DeviceSidebar extends Component {
 
         if (redirect && this.state.dealer_id !== '') {
             return <Redirect to={{
-              pathname: this.state.goToPage,
-              state: { id: this.state.dealer_id }
+                pathname: this.state.goToPage,
+                state: { id: this.state.dealer_id }
             }} />
-          }
+        }
         // console.log('device detail', this.props.device_details)
         return (
             <Card>

@@ -1,6 +1,3 @@
-
-
-
 export const DEVICE_ID = 'DEVICE ID';
 export const DEVICE_REMAINING_DAYS = 'REMAINING DAYS';
 export const DEVICE_FLAGGED = 'FLAGGED';
@@ -28,3 +25,4 @@ export const DEVICE_DEALER_NAME = 'DEALER NAME';
 export const DEVICE_S_DEALER = 'S-DEALER';
 export const DEVICE_S_DEALER_NAME = 'S-DEALER NAME';
 export const USER_ID = 'USER ID';
+export const IP_ADDRESS = 'IP Address';

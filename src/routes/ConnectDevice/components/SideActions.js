@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
+import IntlMessages from "../../../util/IntlMessages";
 import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
@@ -586,9 +586,8 @@ class SideActions extends Component {
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
-                                    Push
+                                    <IntlMessages id="button.Push" />
                                 </Button>
-
                                 <Button
                                     // disabled
                                     type="primary"
@@ -596,15 +595,16 @@ class SideActions extends Component {
                                     onClick={() => this.showHistoryModal(true, "profile")}
                                 >
                                     <Icon type="select" />
-                                    Load Profile
+                                    <IntlMessages id="button.LoadProfile" />
                                 </Button>
                                 <Button
                                     type="default"
+                                    className="btn_break_line"
                                     onClick={() => this.showHistoryModal(true, "policy")}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#009700', color: '#fff' }}
                                 >
                                     <Icon type="lock" className="lock_icon" />
-                                    Load Policy
+                                    <IntlMessages id="button.LoadPolicy" />
                                 </Button>
                                 <Button
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
@@ -612,7 +612,7 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, background: "#eed9c4", color: "#555", border: "1px solid #eab886" }}
                                 >
                                     {/* <Icon type="number" /> */}
-                                    IMEI
+                                    <IntlMessages id="button.IMEI" />
                                 </Button>
                             </Col>
                             <Col
@@ -629,7 +629,7 @@ class SideActions extends Component {
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
-                                    Pull
+                                    <IntlMessages id="button.Pull" />
                                 </Button>
                                 {/* </Tooltip> */}
 
@@ -647,15 +647,16 @@ class SideActions extends Component {
                                             // }
                                             // this.setState({ showChangesModal: true })
                                         }} >
-                                        <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
-                                        </Button>
+                                        <Icon type="save" style={{ fontSize: "14px" }} />
+                                        <IntlMessages id="button.SaveProfile" />
+                                    </Button>
                                     : null}
                                 <Button
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.refs.activity.showModal()}
                                 >
-                                    Activity
+                                    <IntlMessages id="button.Activity" />
                                 </Button>
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button
@@ -663,8 +664,8 @@ class SideActions extends Component {
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                     >
                                         <Icon type="file" />
-                                        SIM
-                                </Button>
+                                        <IntlMessages id="button.SIM" />
+                                    </Button>
                                 </Tooltip>
                             </Col>
                         </Row>
@@ -673,7 +674,7 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
                                 <Tooltip title="Coming Soon">
-                                    <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button>
+                                    <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> <IntlMessages id="button.Transfer" /> </Button>
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
                                 </Tooltip>
                                 <Button type={button_type}
@@ -684,7 +685,9 @@ class SideActions extends Component {
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" /> Wipe Device</Button>
+                                <Button type="default" className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" />
+                                    <IntlMessages id="button.WipeDevice" />
+                                </Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button
@@ -696,13 +699,13 @@ class SideActions extends Component {
                                 <Button
                                     onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
-                                    <Icon type='disconnect' />Unlink</Button>
+                                    <Icon type='disconnect' /><IntlMessages id="button.Unlink" /></Button>
                                 <Button
                                     onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                 >
                                     <Icon type='edit' />
-                                    Edit
+                                    <IntlMessages id="button.Edit" />
                                 </Button>
                             </Col>
                             <Tooltip title="Coming Soon" placement="bottom" >
