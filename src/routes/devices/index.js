@@ -1421,7 +1421,7 @@ class Devices extends Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
-                                searchPlaceholder={<IntlMessages id="appfilter.SearchDevices" />}
+                                searchPlaceholder={"Search Devices"}
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText="Add Device"
                                 options={this.props.options}
