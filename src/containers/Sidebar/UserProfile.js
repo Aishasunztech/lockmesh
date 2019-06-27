@@ -29,7 +29,6 @@ class UserProfile extends Component {
             {(localStorage.getItem('name') === '' || localStorage.getItem('name') === null || localStorage.getItem('name') === undefined) ? localStorage.getItem('dealerName') : localStorage.getItem('name')}
           </span>
         </Popover>
-
       </div>
 
     )

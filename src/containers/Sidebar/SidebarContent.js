@@ -16,6 +16,12 @@ import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 
 import { getNewDevicesList } from "../../appRedux/actions/Common";
+import {
+  getNewCashRequests,
+  getUserCredit,
+  rejectRequest,
+  acceptRequest
+} from "../../appRedux/actions/SideBar";
 
 
 import {
@@ -71,19 +77,26 @@ class SidebarContent extends Component {
   };
 
   showNotification = () => {
+    this.props.getNewCashRequests();
     this.props.getNewDevicesList()
+    this.props.getUserCredit()
     this.refs.new_device.showModal();
+
     // alert('its working');
   }
 
   componentDidMount() {
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
+    this.props.getNewCashRequests();
+    this.props.getUserCredit()
 
   }
   componentWillReceiveProps(nextprops) {
     if (this.props.pathname !== nextprops.pathname) {
       this.props.getNewDevicesList();
+      this.props.getNewCashRequests();
+      this.props.getUserCredit()
     }
   }
 
@@ -110,6 +123,7 @@ class SidebarContent extends Component {
 
     const selectedKeys = pathname.substr(1);
     const defaultOpenKeys = selectedKeys.split('/')[1];
+    // console.log(this.props.user_credit);
     return (
       <Auxiliary>
         <SidebarLogo />
@@ -121,6 +135,10 @@ class SidebarContent extends Component {
               devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
+              authUser={this.props.authUser}
+              requests={this.props.requests}
+              acceptRequest={this.props.acceptRequest}
+              rejectRequest={this.props.rejectRequest}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -128,16 +146,19 @@ class SidebarContent extends Component {
             </span>
             <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>
               <li>
-                <i className="icon icon-dollar" >
-                  <Icon type="dollar" className="mb-10" />
-                </i>
+                <Badge count={this.props.user_credit} overflowCount={999999999}>
+                  <i className="icon icon-dollar" >
+                    <Icon type="dollar" className="mb-10" />
+                  </i>
+                </Badge>
+
               </li>
               <li>
                 <i className="icon icon-chat-new" /></li>
 
               <li>
                 <a className="head-example">
-                  <Badge count={this.props.devices.length}>
+                  <Badge count={this.props.devices.length + this.props.requests.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -204,9 +225,9 @@ class SidebarContent extends Component {
               {(authUser.type === "admin" || authUser.type === "dealer") ? <Menu.Item key="app">
                 <Link to="/app"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
               </Menu.Item> : null}
-              {(authUser.type === ADMIN) ? <Menu.Item key="account">
+              <Menu.Item key="account">
                 <Link to="/account"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.account" /></Link>
-              </Menu.Item> : null}
+              </Menu.Item>
 
 
               <Menu.Item key="settings">
@@ -234,7 +255,7 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, device3 }) => {
+const mapStateToProps = ({ settings, devices, device3, sidebar }) => {
   const { navStyle, themeType, locale, pathname } = settings;
 
   return {
@@ -243,7 +264,9 @@ const mapStateToProps = ({ settings, devices, device3 }) => {
     locale,
     pathname,
     devices: devices.newDevices,
+    requests: sidebar.newRequests,
+    user_credit: sidebar.user_credit,
   }
 };
-export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage })(SidebarContent);
+export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest })(SidebarContent);
 
