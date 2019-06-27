@@ -512,10 +512,7 @@ class Devices extends Component {
                         className: '',
                         dataIndex: 'dealer_name',
                         key: 'dealer_name',
-                        sorter: (a, b) => { 
-                            // console.log(a, 'a is');
-                            return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) 
-                        },
+                        sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]

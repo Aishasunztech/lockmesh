@@ -324,8 +324,8 @@ class Permissions extends Component {
     // let permittedDealers = this.state.permissions;
     console.log("permitted dealers", this.statedealerList);
     let dealersID = [];
-    if(this.state.dealerList && this.state.dealerList.length){
-      for(let item of this.state.dealerList){
+    if (this.state.dealerList && this.state.dealerList.length) {
+      for (let item of this.state.dealerList) {
         dealersID.push(item.dealer_id);
       }
     }
@@ -422,7 +422,7 @@ class Permissions extends Component {
     return (data);
   }
   render() {
-    const {redirect} = this.state;
+    const { redirect } = this.state;
     if (redirect && this.state.dealer_id !== '') {
       return <Redirect to={{
         pathname: this.state.goToPage,
