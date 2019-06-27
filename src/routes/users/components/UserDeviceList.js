@@ -3,6 +3,7 @@ import { Table, Button, Modal, Row, Col, Spin, Input, Card, Select } from "antd"
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import AppFilter from "../../../components/AppFilter";
+import IntlMessages from "../../../util/IntlMessages";
 import {
     DEVICE_ID,
     DEVICE_REMAINING_DAYS,
@@ -536,7 +537,9 @@ class UserDeviceList extends Component {
                         <Col span={6}>
                             <div className="search_heading">
                                 <Search
-                                    placeholder='Search Device'
+                                    placeholder={
+                                        //<IntlMessages id="appfilter.SearchDevices" />
+                                        "Search Devices"}
                                     onChange={e => this.handleComponentSearch(e.target.value)}
                                     style={{ width: '100%' }}
                                 />

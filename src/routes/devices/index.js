@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
 import { Input, Button, Icon, Select } from "antd";
 
+import IntlMessages from "../../util/IntlMessages";
+
 import { bindActionCreators } from "redux";
 
 import {
@@ -1373,7 +1375,7 @@ class Devices extends Component {
         return (
             <Select
                 showSearch
-                placeholder="Show Devices"
+                placeholder={<IntlMessages id="appfilter.ShowDevices" />}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -1382,15 +1384,15 @@ class Devices extends Component {
                 onChange={this.handleChange}
             >
 
-                <Select.Option value="all">All</Select.Option>
-                <Select.Option value={DEVICE_ACTIVATED}>Active</Select.Option>
-                <Select.Option value={DEVICE_EXPIRED}>Expired</Select.Option>
-                <Select.Option value={DEVICE_TRIAL}>Trial</Select.Option>
-                <Select.Option value={DEVICE_SUSPENDED}>Suspended</Select.Option>
-                <Select.Option value={DEVICE_PRE_ACTIVATION}>Pre Activated</Select.Option>
-                <Select.Option value={DEVICE_PENDING_ACTIVATION}>Pending Activation</Select.Option>
-                <Select.Option value={DEVICE_FLAGGED}>Flagged</Select.Option>
-                <Select.Option value={DEVICE_UNLINKED}>Unlinked</Select.Option>
+                <Select.Option value="all"><IntlMessages id="tab.All" /></Select.Option>
+                <Select.Option value={DEVICE_ACTIVATED}><IntlMessages id="tab.Active" /> </Select.Option>
+                <Select.Option value={DEVICE_EXPIRED}><IntlMessages id="tab.Expired" /></Select.Option>
+                <Select.Option value={DEVICE_TRIAL}><IntlMessages id="tab.Trial" /> </Select.Option>
+                <Select.Option value={DEVICE_SUSPENDED}><IntlMessages id="tab.Suspended" /></Select.Option>
+                <Select.Option value={DEVICE_PRE_ACTIVATION}><IntlMessages id="tab.PreActivated" /> </Select.Option>
+                <Select.Option value={DEVICE_PENDING_ACTIVATION}><IntlMessages id="tab.PendingActivation" /></Select.Option>
+                <Select.Option value={DEVICE_FLAGGED}><IntlMessages id="tab.Flagged" /></Select.Option>
+                <Select.Option value={DEVICE_UNLINKED}><IntlMessages id="tab.Unlinked" /></Select.Option>
 
             </Select>
         );
@@ -1407,8 +1409,9 @@ class Devices extends Component {
         this.props.history.push('/devices');
     }
     render() {
-        // dealerColsWithSearch();
-        // console.log(' device for search are', this.state.devices)
+        
+        const searchPlaceholder = <IntlMessages id="appfilter.SearchDevices" />;
+        console.log(searchPlaceholder);
         return (
             <Fragment>
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
@@ -1418,7 +1421,7 @@ class Devices extends Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
-                                searchPlaceholder="Search Device"
+                                searchPlaceholder={<IntlMessages id="appfilter.SearchDevices" />}
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText="Add Device"
                                 options={this.props.options}
@@ -1444,7 +1447,6 @@ class Devices extends Component {
                                 unlinkedDevices={this.state.unlinkedDevices.length}
                                 flaggedDevices={this.state.flaggedDevices.length}
                                 trialDevices={this.state.trialDevices.length}
-
                                 suspendDevice={this.props.suspendDevice}
                                 activateDevice={this.props.activateDevice}
                                 columns={this.state.columns}

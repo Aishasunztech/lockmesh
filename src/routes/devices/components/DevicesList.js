@@ -116,28 +116,28 @@ class DevicesList extends Component {
             // console.log("not avail", status);
             var order = getSortOrder(status)
             let color = getColor(status);
-            var style = { margin: '0', width: '60px' }
-            var text = "EDIT";
+            var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
+            var text = (<IntlMessages id="button.edit" />);
             // var icon = "edit";
 
             // if ((status === 'pending activation') || (device.unlink_status === 1)) {
             if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
                 // console.log('device name', device.name, 'status', device.unlink_status)
-                style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
+                style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
                 text = "ACTIVATE";
                 // icon = 'add'
             }
 
-            let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)} > SUSPEND</Button>;
-            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}  >ACTIVATE</Button>;
-            let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >DELETE</Button>
-            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}>  <IntlMessages id="button.connect" /></Link></Button>
-            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
-            let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
-            let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>DELETE</Button>
-            let Unflagbtn = <Button type="defualt" size="small" style={{ margin: '0 8px 0 0', color: "#fff", background: "#000" }} onClick={() => { this.props.unflagConfirm(device) }}> UNFLAG </Button>;
+            let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)}> <IntlMessages id="button.suspend" /></Button>;
+            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> <IntlMessages id="button.activate" /></Button>;
+            let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} ><IntlMessages id="button.delete" /></Button>
+            let ConnectBtn = <Button type="default" size="small" style={style}> <Link to={`connect-device/${btoa(device.device_id)}`.trim()}> <IntlMessages id="button.connect" /></Link></Button>
+            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
+            let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
+            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
+            let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
+            let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>DELETE</Button>
+            let Unflagbtn = <Button type="defualt" size="small" style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }} onClick={() => { this.props.unflagConfirm(device) }}> UNFLAG </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
             // console.log('end', device)
@@ -695,26 +695,26 @@ export default class Tab extends Component {
             <Fragment>
                 <div>
                     <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                        <TabPane tab={<span className="green">All ({this.props.allDevices})</span>} key="1" >
+                        <TabPane tab={<span className="green"><IntlMessages id="tab.All" /> ({this.props.allDevices})</span>} key="1" >
                         </TabPane>
-                        <TabPane tab={<span className="green">Active ({this.props.activeDevices})</span>} key="4" forceRender={true}>
+                        <TabPane tab={<span className="green"><IntlMessages id="tab.Active" /> ({this.props.activeDevices})</span>} key="4" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="red">Expired ({this.props.expireDevices})</span>} key="6" forceRender={true}>
+                        <TabPane tab={<span className="red"><IntlMessages id="tab.Expired" /> ({this.props.expireDevices})</span>} key="6" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="green">Trial ({this.props.trialDevices})</span>} key="9" forceRender={true}>
+                        <TabPane tab={<span className="green"><IntlMessages id="tab.Trial" /> ({this.props.trialDevices})</span>} key="9" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="yellow">Suspended ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
+                        <TabPane tab={<span className="yellow"><IntlMessages id="tab.Suspended" /> ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="blue">Pre Activated ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
+                        <TabPane tab={<span className="blue"><IntlMessages id="tab.PreActivated" />  ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="gray">Pending Activation ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
+                        <TabPane tab={<span className="gray"><IntlMessages id="tab.PendingActivation" />  ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="purple">Transfer (0)</span>} key="8" forceRender={true}>
-                            <h2 className="coming_s">Coming Soon</h2>
+                        <TabPane tab={<span className="purple"><IntlMessages id="tab.Transfer" /> (0)</span>} key="8" forceRender={true}>
+                            <h2 className="coming_s"><IntlMessages id="tab.ComingSoon" /></h2>
                         </TabPane>
-                        <TabPane tab={<span className="orange">Unlinked ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
+                        <TabPane tab={<span className="orange"><IntlMessages id="tab.Unlinked" /> ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="black">Flagged ({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
+                        <TabPane tab={<span className="black"><IntlMessages id="tab.Flagged" />({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
                         </TabPane>
 
                     </Tabs>
