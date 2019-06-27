@@ -20,9 +20,12 @@ import {
 
 
 
+
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../constants/DeviceConstants';
+
+import appLocale from '../../lngProvider/index';
 
 
 export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
@@ -310,7 +313,7 @@ export function dealerColsWithSearch(searchBar = false, callBack = null) {
       title: DEALER_NAME,
       dataIndex: 'dealer_name',
       key: 'dealer_name',
-      sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+      sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
       sortDirections: ['ascend', 'descend'],
       className: '',
     },
@@ -348,5 +351,21 @@ export function dealerColsWithSearch(searchBar = false, callBack = null) {
     return result;
   } else {
     return child;
+  }
+}
+
+export function convertToLang(locale = {}, id) {
+  // console.log(locale, id, 'data from functions', appLocale)
+  if (Object.keys(locale).length !== 0 && locale.constructor === Object) {
+    for (var key in appLocale) {
+      if (key == locale.locale) {
+        // console.log("Key is ", key, ", value is ", appLocale[key]);
+        let word = appLocale[key].messages[id];
+        if (word) return word;
+        else return 'N/A'
+      }
+    }
+  } else {
+    return 'N/A'
   }
 }

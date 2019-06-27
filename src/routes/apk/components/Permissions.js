@@ -395,9 +395,9 @@ class Permissions extends Component {
           </custom>
         ),
         'dealer_name': (
-          <custom data-column="DEALER NAME">
-            {dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'}
-          </custom>
+          // <custom data-column="DEALER NAME">
+            dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
+          // </custom>
         ),
         'dealer_email': (
           <custom data-column="DEALER EMAIL">
