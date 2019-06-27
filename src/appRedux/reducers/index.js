@@ -11,6 +11,7 @@ import Policy from "./Policy";
 import Users from "./Users";
 import AppMarket from "./AppMarket";
 import Soccket from "./Socket";
+import SideBar from "./SideBar"
 
 
 const reducers = combineReducers({
@@ -25,7 +26,8 @@ const reducers = combineReducers({
   policies: Policy,
   users: Users,
   appMarket: AppMarket,
-  socket: Soccket
+  socket: Soccket,
+  sidebar: SideBar
 });
 
 export default reducers;

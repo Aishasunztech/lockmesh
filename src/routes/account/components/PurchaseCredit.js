@@ -1,48 +1,94 @@
 import React, { Component, Fragment } from 'react'
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider, InputNumber } from "antd";
-
+import RestService from '../../../appRedux/services/RestServices';
+const confirm = Modal.confirm;
 class PurchaseCredit extends Component {
 
 
     constructor(props) {
         super(props);
         this.state = {
-            credits: '',
-            currency: '',
+            credits: 0,
+            currency: 'USD',
             currency_price: '',
             total: '',
-            method: ""
+            method: "CASH",
+            currency_unit_price: 1
         }
     }
 
     onChange = (e, field) => {
         // console.log(e);
         if (field === 'credits') {
-            this.setState({
-                [field]: e,
-                currency_price: e
-            })
+            if (this.state.currency === 'USD') {
+                this.setState({
+                    credits: e,
+                    currency_price: e
+                })
+            }
+            else {
+                this.setState({
+                    credits: e,
+                    currency_price: e * this.state.currency_unit_price
+                })
+            }
         }
         else {
-            this.setState({
-                [field]: e
-            })
+            if (e == 'usd') {
+                this.setState({
+                    currency: 'usd',
+                    currency_price: this.state.credits,
+                    currency_unit_price: 1,
+                })
+            } else {
+                RestService.exchangeCurrency(e).then((response) => {
+                    if (response.data.status) {
+                        if (this.state.credits > 0) {
+                            this.setState({
+                                currency: e,
+                                currency_unit_price: response.data.currency_unit,
+                                currency_price: this.state.credits * response.data.currency_unit
+                            })
+                        } else {
+                            this.setState({
+                                currency: e,
+                                currency_unit_price: response.data.currency_unit,
+                            })
+                        }
+                    }
+                })
+            }
         }
 
     }
-
+    showPurchaseModal = () => {
+        this.props.showPurchaseModal(false)
+        this.props.form.resetFields();
+        this.setState({
+            credits: '',
+            currency: '',
+            currency_price: '',
+            total: '',
+            method: "CASH",
+            currency_unit_price: 1
+        })
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('form', values);
             if (!err) {
+                if (values.method == 'CASH') {
+                    showConfirm(this, <span>Are you sure you want to request for <strong> "{values.credits} Credits"</strong> on <strong>"CASH"</strong> ?'</span>, values)
+                } else {
 
+                }
             }
         });
     }
     render() {
-        // console.log(this.state);
+        console.log(this.state);
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -66,9 +112,8 @@ class PurchaseCredit extends Component {
                 onOk={() => {
                 }}
                 onCancel={(e) => {
-                    this.props.showPurchaseModal(e, false)
-                }
-                }
+                    this.showPurchaseModal()
+                }}
                 okText="Push Apps"
             >
                 <div>
@@ -97,12 +142,13 @@ class PurchaseCredit extends Component {
                             showSearch
                         >
                             {this.props.form.getFieldDecorator('currency', {
-                                initialValue: "",
+                                initialValue: "USD",
                                 rules: [{
                                     required: true, message: 'Please select a currency!',
                                 }],
                             })(
                                 <Select
+                                    // value={this.state.DisplayPages}
                                     showSearch
                                     placeholder="Select Currency"
                                     optionFilterProp="children"
@@ -111,9 +157,13 @@ class PurchaseCredit extends Component {
                                     // onFocus={handleFocus}
                                     // onBlur={handleBlur}
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                // defaultValue="usd"
                                 >
-                                    <Select.Option value="">Select Currency</Select.Option>
-                                    <Select.Option selected value="usd">$ USD</Select.Option>
+                                    {/* <Select.Option value="">Select Currency</Select.Option> */}
+                                    <Select.Option value="USD">USD</Select.Option>
+                                    <Select.Option value="CAD">CAD</Select.Option>
+                                    <Select.Option value="EUR">EUR</Select.Option>
+                                    <Select.Option value="BTC">BTC(bitcoin)</Select.Option>
                                     {/* <Select.Option value="">Select PGP Email</Select.Option> */}
 
                                 </Select>
@@ -139,7 +189,7 @@ class PurchaseCredit extends Component {
                             {this.props.form.getFieldDecorator('promo_code', {
                                 initialValue: '',
                             })(
-                                <Input />
+                                <Input disabled />
                             )}
                         </Form.Item>
                         <Form.Item
@@ -162,11 +212,12 @@ class PurchaseCredit extends Component {
                                     // onFocus={handleFocus}
                                     // onBlur={handleBlur}
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    disabled
                                 >
                                     <Select.Option value="">Select Payment Method</Select.Option>
-                                    <Select.Option value="cash">CASH</Select.Option>
-                                    <Select.Option value="btc">BITCOIN</Select.Option>
-                                    <Select.Option value="credit_card">CREDIT CARD</Select.Option>
+                                    <Select.Option value="CASH">CASH</Select.Option>
+                                    <Select.Option value="BTC">BITCOIN</Select.Option>
+                                    <Select.Option value="CREDIT">CREDIT CARD</Select.Option>
                                 </Select>,
                             )}
                         </Form.Item>
@@ -187,7 +238,7 @@ class PurchaseCredit extends Component {
                                 sm: { span: 24, offset: 0 },
                             }}
                         >
-                            <Button key="back" type="button" onClick={(e) => { this.props.showPurchaseModal(e, false); }} >Cancel</Button>
+                            <Button key="back" type="button" onClick={(e) => { this.showPurchaseModal(); }} >Cancel</Button>
                             <Button type="primary" htmlType="submit">Submit</Button>
                         </Form.Item>
                     </Form>
@@ -199,3 +250,26 @@ class PurchaseCredit extends Component {
 
 PurchaseCredit = Form.create()(PurchaseCredit);
 export default PurchaseCredit;
+
+
+function showConfirm(_this, msg, values) {
+    confirm({
+        title: 'WARNNING!',
+        content: msg,
+        okText: "Confirm",
+        onOk() {
+            _this.props.purchaseCredits(values)
+            _this.props.showPurchaseModal(false)
+            _this.props.form.resetFields();
+            _this.setState({
+                credits: '',
+                currency: '',
+                currency_price: '',
+                total: '',
+                method: "CASH",
+                currency_unit_price: 1
+            })
+        },
+        onCancel() { },
+    });
+}

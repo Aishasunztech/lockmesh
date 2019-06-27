@@ -126,19 +126,19 @@ export default (state = initialState, action) => {
                 devices: action.payload,
             }
 
-            case UNFLAG_DEVICE: {
-                if (action.response.status) {
-                    // console.log('unflaged', action.response.device_id)
-                    let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.device_id));
-                    if (objIndex !== -1) {
-                        state.devices[objIndex].flagged = 'Not flagged';
-                    }
-                    return {
-                        ...state,
-                        devices: [...state.devices]
-                    }
+        case UNFLAG_DEVICE: {
+            if (action.response.status) {
+                // console.log('unflaged', action.response.device_id)
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.device_id));
+                if (objIndex !== -1) {
+                    state.devices[objIndex].flagged = 'Not flagged';
+                }
+                return {
+                    ...state,
+                    devices: [...state.devices]
                 }
             }
+        }
 
         case NEW_DEVICES_LIST:
             // console.log('reducer new device', action.payload);
