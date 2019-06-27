@@ -440,7 +440,7 @@ class AddPolicy extends Component {
                                             {/* <img src={require("assets/images/setting.png")} /> */}
                                         </Col>
                                         <Col span={15} className="pl-0">
-                                            <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
+                                            <h5 style={{ marginTop: '9px' }}>Android Settings Permission</h5>
                                         </Col>
                                     </Row>
 
