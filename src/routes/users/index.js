@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import IntlMessages from "../../util/IntlMessages";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
@@ -49,7 +50,7 @@ class Users extends Component {
                 className: 'row',
             },
             {
-                title: 'ACTION',
+                title: (<IntlMessages id="usersColHeading.Action" />),
                 align: "center",
                 dataIndex: 'action',
                 key: "action",
@@ -116,7 +117,7 @@ class Users extends Component {
                         className: 'row',
                         onFilter: (value, record) => record.devices.indexOf(value) === 0,
                         sorter: (a, b) => { return a.devices - b.devices },
-                    
+
                         // sortDirections: ['ascend', 'descend'],
                     }
                 ],

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 import { Input, Modal, Select, Button } from "antd";
 import IntlMessages from "../../util/IntlMessages";
+import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../utils/commonUtils';
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 // import {getDevicesList} from '../../appRedux/actions/Devices';
@@ -14,7 +15,7 @@ import CircularProgress from "components/CircularProgress/index";
 import DealerList from "./components/dealerList";
 import styles from './dealers.css'
 
-import { componentSearch, getDealerStatus, titleCase } from '../utils/commonUtils';
+
 import {
     DEALER_ID,
     DEALER_NAME,
@@ -679,7 +680,7 @@ class Dealers extends Component {
 
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder="Search Dealer"
+                                searchPlaceholder={convertToLang(this.props.locale, "appfilter.SearchDealer")}
                                 defaultPagingValue={this.props.DisplayPages}
                                 addButtonText={"Add " + this.state.dealer_type}
                                 selectedOptions={this.props.selectedOptions}
@@ -818,7 +819,8 @@ var mapStateToProps = (state) => {
         selectedOptions: state.dealers.selectedOptions,
         DisplayPages: state.dealers.DisplayPages,
         action: state.action,
-        user: state.auth.authUser
+        user: state.auth.authUser,
+        locale: state.settings.locale
     };
 }
 

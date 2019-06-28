@@ -26,6 +26,7 @@ import { Input } from 'antd';
 import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../constants/DeviceConstants';
 
 import appLocale from '../../lngProvider/index';
+import { cloneableGenerator } from 'redux-saga/utils';
 
 
 export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
@@ -361,6 +362,7 @@ export function convertToLang(locale = {}, id) {
       if (key == locale.locale) {
         // console.log("Key is ", key, ", value is ", appLocale[key]);
         let word = appLocale[key].messages[id];
+        console.log(locale, word, 'function data is the')
         if (word) return word;
         else return 'N/A'
       }

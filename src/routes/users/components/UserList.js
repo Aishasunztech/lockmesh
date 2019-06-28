@@ -38,7 +38,7 @@ class UserList extends Component {
     }
 
     renderList(list) {
-        console.log(list);
+        // console.log(list);
 
         let user_list = list.filter((data) => {
             // if (data.type === "policy") {
@@ -75,7 +75,7 @@ class UserList extends Component {
                                 ><IntlMessages id="button.Undo" /> </Button>
                             : null
                         }
-                    </Fragment >)
+                    </Fragment>)
                 ,
                 user_id: user.user_id,
                 counter: ++index,
