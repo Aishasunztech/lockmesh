@@ -20,6 +20,7 @@
   "button.ok": "Ok",
   "button.Cancel": "Annuler",
   "button.Suspend": "Suspendre",
+  "button.Unsuspend": "Unsuspendre",
   "button.Edit": "Modifier",
   "button.passwordreset": "Réinitialiser le mot de passe",
   "button.submit": "Soumettre",

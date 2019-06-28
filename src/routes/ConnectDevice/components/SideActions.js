@@ -564,8 +564,8 @@ class SideActions extends Component {
 
     render() {
         // console.log(this.state.apk_list, 'list apk')
-        const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
-        const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
+        const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "Suspend";
+        const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flagged = (this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'Flag';
         return (
             <div className="gutter-box bordered">
@@ -678,7 +678,7 @@ class SideActions extends Component {
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
                                 </Tooltip>
                                 <Button type={button_type}
-                                    onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
+                                    onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
                                     disabled={(flagged === 'Unflag') ? 'disabled' : ''}
                                 >

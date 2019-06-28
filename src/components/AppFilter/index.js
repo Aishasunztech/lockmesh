@@ -94,19 +94,19 @@ class AppFilter extends Component {
             fullScreenClass1 = "col-md-3";
             fullScreenClass2 = "col-md-2";
         }
-
+        // console.log('-------------------');
         // console.log(this.props.options);
         const Search = Input.Search;
         //  console.log('render props ...', this.props.selectedOptions.length);
-        //  console.log('allSelected val are: ', allSelected)
+        //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
         //  console.log('render state ...', this.state.selectedDisplayValues.length);
-        let allSelectedOpt;
-        if (this.props.selectedOptions != undefined) {
-            if (this.props.selectedOptions.length == this.state.selectedDisplayValues.length) {
-                allSelectedOpt = true;
-            } else { allSelectedOpt = false }
-            //  console.log('allSelectedOpt val are: ', allSelectedOpt)
-        }
+        let allSelectedOpt = false;
+        // if (this.props.options != undefined) {
+        //     if (this.props.options.length == this.state.selectedDisplayValues.length) {
+        //         allSelectedOpt = true;
+        //     } else { allSelectedOpt = false }
+        //     //  console.log('allSelectedOpt val are: ', allSelectedOpt)
+        // }   
 
         return (
             // className="gutter-example"

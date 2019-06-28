@@ -129,7 +129,7 @@ class DevicesList extends Component {
             }
 
             let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)}> <IntlMessages id="button.Suspend" /></Button>;
-            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> <IntlMessages id="button.Activate" /></Button>;
+            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> <IntlMessages id="button.Unsuspend" /></Button>;
             let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} ><IntlMessages id="button.Delete" /></Button>
             let ConnectBtn = <Button type="default" size="small" style={style}> <Link to={`connect-device/${btoa(device.device_id)}`.trim()}> <IntlMessages id="button.Connect" /></Link></Button>
             let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
@@ -157,7 +157,7 @@ class DevicesList extends Component {
                         : (device.flagged !== 'Not flagged') ?
                             (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                             : (status === DEVICE_SUSPENDED) ?
-                                (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                 : (status === DEVICE_EXPIRED) ?
                                     (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                     : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
@@ -314,32 +314,32 @@ class DevicesList extends Component {
     // }
 
 
-//     var button = document.getElementById('slide');
-// button.onclick = function () {
-//     var container = document.getElementById('container');
-//     sideScroll(container,'right',25,100,10);
-// };
+    //     var button = document.getElementById('slide');
+    // button.onclick = function () {
+    //     var container = document.getElementById('container');
+    //     sideScroll(container,'right',25,100,10);
+    // };
 
-// var back = document.getElementById('slideBack');
-// back.onclick = function () {
-//     var container = document.getElementById('container');
-//     sideScroll(container,'left',25,100,10);
-// };
+    // var back = document.getElementById('slideBack');
+    // back.onclick = function () {
+    //     var container = document.getElementById('container');
+    //     sideScroll(container,'left',25,100,10);
+    // };
 
-// function sideScroll(element,direction,speed,distance,step){
-//     scrollAmount = 0;
-//     var slideTimer = setInterval(function(){
-//         if(direction == 'left'){
-//             element.scrollLeft -= step;
-//         } else {
-//             element.scrollLeft += step;
-//         }
-//         scrollAmount += step;
-//         if(scrollAmount >= distance){
-//             window.clearInterval(slideTimer);
-//         }
-//     }, speed);
-// }
+    // function sideScroll(element,direction,speed,distance,step){
+    //     scrollAmount = 0;
+    //     var slideTimer = setInterval(function(){
+    //         if(direction == 'left'){
+    //             element.scrollLeft -= step;
+    //         } else {
+    //             element.scrollLeft += step;
+    //         }
+    //         scrollAmount += step;
+    //         if(scrollAmount >= distance){
+    //             window.clearInterval(slideTimer);
+    //         }
+    //     }, speed);
+    // }
 
 
     render() {

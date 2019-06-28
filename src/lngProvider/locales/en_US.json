@@ -21,6 +21,7 @@
   "button.ok": "Ok",
   "button.Cancel": "Cancel",
   "button.Suspend": "Suspend",
+  "button.Unsuspend": "Unsuspend",
   "button.Edit": "Edit",
   "button.passwordreset": "Password Reset",
   "button.submit": "Submit",

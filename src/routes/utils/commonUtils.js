@@ -362,7 +362,7 @@ export function convertToLang(locale = {}, id) {
       if (key == locale.locale) {
         // console.log("Key is ", key, ", value is ", appLocale[key]);
         let word = appLocale[key].messages[id];
-        console.log(locale, word, 'function data is the')
+        // console.log(locale, word, 'function data is the')
         if (word) return word;
         else return 'N/A'
       }

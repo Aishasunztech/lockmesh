@@ -20,7 +20,8 @@ import {
     GET_PRICES,
     SET_PRICE,
     RESET_PRICE,
-    GET_PACKAGES
+    GET_PACKAGES,
+    PURCHASE_CREDITS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -276,7 +277,7 @@ export const saveIDPrices = (data) => {
     console.log('at action, ', data);
     return (dispatch) => {
         RestService.saveIDPrices(data).then((response) => {
-            if(RestService.checkAuth(response.data)){
+            if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: SAVE_ID_PRICES,
                     response: response.data
@@ -284,7 +285,7 @@ export const saveIDPrices = (data) => {
             } else {
                 dispatch({
                     type: INVALID_TOKEN
-                })                
+                })
             }
         });
 
@@ -294,7 +295,7 @@ export const saveIDPrices = (data) => {
 export const setPackage = (data) => {
     return (dispatch) => {
         RestService.setPackage(data).then((response) => {
-            if(RestService.checkAuth(response.data)){
+            if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: SAVE_PACKAGE,
                     response: response.data
@@ -302,7 +303,7 @@ export const setPackage = (data) => {
             } else {
                 dispatch({
                     type: INVALID_TOKEN
-                })                
+                })
             }
         });
 
@@ -328,7 +329,7 @@ export const getPrices = (data) => {
 }
 
 export const getPackages = (data) => {
-    return (dispatch) => {  
+    return (dispatch) => {
         RestService.getPackages(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
@@ -349,12 +350,12 @@ export const resetPrice = () => {
     return (dispatch) => {
         dispatch({
             type: RESET_PRICE,
-           
+
         })
     }
 }
 
-export const setPrice = (field, value, price_for='') => {
+export const setPrice = (field, value, price_for = '') => {
     return (dispatch) => {
         dispatch({
             type: SET_PRICE,
@@ -364,5 +365,22 @@ export const setPrice = (field, value, price_for='') => {
                 price_for: price_for
             }
         })
+    }
+}
+export const purchaseCredits = (data) => {
+    return (dispatch) => {
+        console.log(data);
+        RestService.purchaseCredits(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: PURCHASE_CREDITS,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
     }
 }

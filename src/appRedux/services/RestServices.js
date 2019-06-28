@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../../constants/Application';
+import { BASE_URL, SUPERADMIN_URL } from '../../constants/Application';
 import io from "socket.io-client";
 
 const RestService = {
@@ -138,7 +138,6 @@ const RestService = {
         return axios.get(BASE_URL + 'users/new/devices',
             RestService.getHeader()
         )
-
     },
     getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
@@ -579,11 +578,11 @@ const RestService = {
     },
     saveIDPrices: (data) => {
         console.log(data, 'save-prices data')
-        return axios.patch(BASE_URL+ 'users/save-prices', data, RestService.getHeader());
+        return axios.patch(BASE_URL + 'users/save-prices', data, RestService.getHeader());
     },
     setPackage: (data) => {
         // console.log(data, 'data')
-        return axios.post(BASE_URL+ 'users/save-package', {data}, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/save-package', { data }, RestService.getHeader());
     },
     getPrices: (dealer_id) => {
         // console.log(dealer_id, 'whte label on get price')
@@ -595,8 +594,11 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-packages/' + dealer_id, RestService.getHeader());
     },
     checkPackageName: (name) => {
-        // console.log(name, 'data')
+
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
+    },
+    purchaseCredits: (data) => {
+        return axios.post(BASE_URL + 'users/purchase_credits', { data }, RestService.getHeader());
     },
 
     switchLanguage: (language) => {
@@ -689,6 +691,29 @@ const RestService = {
 
     defaultPolicyChange: (enable, policy_id) => {
         return axios.post(BASE_URL + 'users/set_default_policy', { enable, policy_id }, RestService.getHeader())
+    },
+    getNewCashRequests: () => {
+        return axios.get(BASE_URL + 'users/newRequests',
+            RestService.getHeader()
+        )
+    },
+    getUserCredit: () => {
+        return axios.get(BASE_URL + 'users/get_user_credits',
+            RestService.getHeader()
+        )
+    },
+    exchangeCurrency: (e) => {
+        return axios.get(SUPERADMIN_URL + 'pub/exchange-currency/' + e,
+            RestService.getHeader()
+        )
+    },
+    rejectRequest: (request) => {
+        // console.log(device);
+        return axios.put(BASE_URL + 'users/delete_request/' + request.id, request, RestService.getHeader());
+    },
+    acceptRequest: (request) => {
+        // console.log(device);
+        return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
     },
 
 
