@@ -464,7 +464,8 @@ class EditPolicy extends Component {
 
     render() {
         const { current } = this.state;
-        // console.log(this.state.editAblePolicy.app_list, 'selected row for error')
+        console.log(this.state.editAblePolicy.app_list, 'selected row for error')
+        console.log('main_extension --------- ', this.state.main_extension)
 
         const { selectedRows, selectedRowKeys } = this.state;
         const { getFieldDecorator } = this.props.form;

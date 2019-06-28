@@ -164,7 +164,7 @@ class DealerList extends Component {
     }
 
     render() {
-        // console.log(this.props.dealersList, 'dealers list console');
+        console.log(this.props.dealersList, 'dealers list console');
 
         return (
             <Card className="border_top_0">

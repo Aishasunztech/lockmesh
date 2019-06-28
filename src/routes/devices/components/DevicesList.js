@@ -48,6 +48,7 @@ class DevicesList extends Component {
             goToPage: '/dealer/dealer'
         };
         this.renderList = this.renderList.bind(this);
+        this.sideScroll = this.sideScroll.bind(this);
     }
 
     customExpandIcon(props) {
@@ -313,6 +314,46 @@ class DevicesList extends Component {
 
     // }
 
+    scrollBack = () => {
+        let element = document.getElementById('scrolltablelist') ;
+        console.log(element.scrollLeft)
+        element.scrollLeft += 100;
+        console.log(element.scrollLeft)
+        // var element = this.refs.tablelist; //document.getElementsByClassName("scrolltablelist");
+        // console.log(element)
+        // this.sideScroll(element, 'left', 25, 100, 10);
+    }
+
+    scrollNext = () => {
+        console.log('hi scroll next')
+        var element = this.refs.tablelist; // document.getElementsByClassName("scrolltablelist");  // ant-table-body   scrolltablelist  ant-table-scroll
+        this.sideScroll(element, 'right', 25, 100, 10);
+    }
+
+    sideScroll(element, direction, speed, distance, step) {
+        console.log('hi sideScroll function')
+        // element.props.scroll.x=15;
+        // element.props.style.scrollMargin="100px";
+        console.log('element is: ', element.props);
+        // console.log('direction is: ', direction);
+        // console.log('speed is: ', speed);
+        // console.log('distance is: ', distance);
+        // console.log('step is: ', step)
+
+        var scrollAmount = 0;
+        // var slideTimer = setInterval(function () {
+        //     if (direction == 'left') {
+        //         element.scrollLeft -= step;
+        //     } else {
+        //         element.scrollLeft += step;
+        //     }
+        //     scrollAmount += step;
+        //     if (scrollAmount >= distance) {
+        //         window.clearInterval(slideTimer);
+        //     }
+        // }, speed);
+    }
+
     render() {
 
         // console.log(this.state, 'selected keys', )
@@ -375,230 +416,236 @@ class DevicesList extends Component {
                 <SuspendDevice ref="suspend"
                     suspendDevice={suspendDevice} />
                 <Card>
-                    <Table
-                        ref='tablelist'
-                        rowClassName={(record, index) => {
-                            console.log(record, 'df', index)
-                            // this.state.expandedRowKeys.includes(record.key) ? 'testing' : ''
-                        }
-                        }
-                        className="devices"
-                        rowSelection={rowSelection}
-                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
-                        size="middle"
-                        bordered
-                        columns={this.state.columns}
-                        dataSource={this.renderList(this.props.devices)}
-                        pagination={{
-                            pageSize: Number(this.state.pagination),
-                            size: "midddle",
-                            // showSizeChanger:true 
-                        }}
+                    <div >
+                        <Table
+                            // id="test"
+                            style={{
+                                // whiteSpace: 'nowrap'
+                                // scrollMargin:"100px"
+                                // scrollMarginLeft: "1000px"
+                            }}
+                            id='scrolltablelist'
+                            ref='tablelist'
+                            className="devices"
+                            rowSelection={rowSelection}
+                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
+                            size="middle"
+                            bordered
+                            columns={this.state.columns}
+                            dataSource={this.renderList(this.props.devices)}
+                            pagination={{
+                                pageSize: Number(this.state.pagination),
+                                size: "midddle",
+                            }}
 
-                        scroll={{
-                            x: 500,
-                            // y: 600 
-                        }}
-                        onExpand={this.onExpandRow}
-                        expandIcon={(props) => this.customExpandIcon(props)}
-                        expandedRowRender={(record) => {
-                            // console.log('record is', record)
-                            let showRecord = [];
-                            let showRecord2 = [];
+                            scroll={{
+                                x: true,
+                                // y: 600 
+                            }}
+                            // useFixedHeader={true}
+                            onExpand={this.onExpandRow}
+                            expandIcon={(props) => this.customExpandIcon(props)}
+                            expandedRowRender={(record) => {
+                                // console.log('record is', record)
+                                let showRecord = [];
+                                let showRecord2 = [];
 
-                            this.props.columns.map((column, index) => {
-                                if (column.className === "row") {
-                                } else if (column.className === "hide") {
-                                    let title = column.children[0].title;
-                                    if (title === "SIM ID" || title === "IMEI 1" || title === "SIM 1" || title === "IMEI 2" || title === "SIM 2") {
-                                        showRecord2.push({
-                                            name: title,
-                                            values: record[column.dataIndex],
-                                            rowKey: title
-                                        });
-                                    } else {
-                                        if (title === "STATUS" || title === "DEALER NAME" || title === "S-DEALER Name") {
-                                            if (record[column.dataIndex][0]) {
-                                                showRecord.push({
-                                                    name: title,
-                                                    values: record[column.dataIndex][0].toUpperCase() + record[column.dataIndex].substring(1, record[column.dataIndex].length).toLowerCase(),
-                                                    rowKey: title
-                                                });
-                                            }
-
-                                        } else {
-
-                                            showRecord.push({
+                                this.props.columns.map((column, index) => {
+                                    if (column.className === "row") {
+                                    } else if (column.className === "hide") {
+                                        let title = column.children[0].title;
+                                        if (title === "SIM ID" || title === "IMEI 1" || title === "SIM 1" || title === "IMEI 2" || title === "SIM 2") {
+                                            showRecord2.push({
                                                 name: title,
                                                 values: record[column.dataIndex],
                                                 rowKey: title
                                             });
+                                        } else {
+                                            if (title === "STATUS" || title === "DEALER NAME" || title === "S-DEALER Name") {
+                                                if (record[column.dataIndex][0]) {
+                                                    showRecord.push({
+                                                        name: title,
+                                                        values: record[column.dataIndex][0].toUpperCase() + record[column.dataIndex].substring(1, record[column.dataIndex].length).toLowerCase(),
+                                                        rowKey: title
+                                                    });
+                                                }
+
+                                            } else {
+
+                                                showRecord.push({
+                                                    name: title,
+                                                    values: record[column.dataIndex],
+                                                    rowKey: title
+                                                });
+                                            }
                                         }
                                     }
-                                }
-                            });
-                            // console.log("cols",this.props.columns);
-                            // console.log("toShow", record);
-                            // if (record.batchData.length) {
-                            //     return(
-                            //     <Table
-                            //         ref='tablelist'
-                            //         className="devices"
-                            //         rowSelection={rowSelection}
-                            //         rowClassName={() => 'editable-row'}
-                            //         size="middle"
-                            //         bordered
-                            //         columns={this.state.columns}
-                            //         dataSource={this.renderList(record.batchData)}
-                            //         // pagination={{
-                            //         //     pageSize: Number(this.state.pagination),
-                            //         //     size: "midddle",
-                            //         //     // showSizeChanger:true 
-                            //         // }}
+                                });
+                                // console.log("cols",this.props.columns);
+                                // console.log("toShow", record);
+                                // if (record.batchData.length) {
+                                //     return(
+                                //     <Table
+                                //         ref='tablelist'
+                                //         className="devices"
+                                //         rowSelection={rowSelection}
+                                //         rowClassName={() => 'editable-row'}
+                                //         size="middle"
+                                //         bordered
+                                //         columns={this.state.columns}
+                                //         dataSource={this.renderList(record.batchData)}
+                                //         // pagination={{
+                                //         //     pageSize: Number(this.state.pagination),
+                                //         //     size: "midddle",
+                                //         //     // showSizeChanger:true 
+                                //         // }}
 
-                            //         scroll={{
-                            //             x: 500,
-                            //             // y: 600 
-                            //         }}
+                                //         scroll={{
+                                //             x: 500,
+                                //             // y: 600 
+                                //         }}
 
-                            //         expandIcon={(props) => this.customExpandIcon(props)}
-                            //         expandedRowRender={(record) => {
-                            //             let showRecord = [];
-                            //             let showRecord2 = [];
+                                //         expandIcon={(props) => this.customExpandIcon(props)}
+                                //         expandedRowRender={(record) => {
+                                //             let showRecord = [];
+                                //             let showRecord2 = [];
 
-                            //             this.props.columns.map((column, index) => {
-                            //                 if (column.className === "row") {
-                            //                 } else if (column.className === "hide") {
-                            //                     let title = column.children[0].title;
-                            //                     if (title === "SIM ID" || title === "IMEI 1" || title === "SIM 1" || title === "IMEI 2" || title === "SIM 2") {
-                            //                         showRecord2.push({
-                            //                             name: title,
-                            //                             values: record[column.dataIndex],
-                            //                             rowKey: title
-                            //                         });
-                            //                     } else {
-                            //                         if (title === "STATUS" || title === "DEALER NAME" || title === "S-DEALER Name") {
-                            //                             if (record[column.dataIndex][0]) {
-                            //                                 showRecord.push({
-                            //                                     name: title,
-                            //                                     values: record[column.dataIndex][0].toUpperCase() + record[column.dataIndex].substring(1, record[column.dataIndex].length).toLowerCase(),
-                            //                                     rowKey: title
-                            //                                 });
-                            //                             }
+                                //             this.props.columns.map((column, index) => {
+                                //                 if (column.className === "row") {
+                                //                 } else if (column.className === "hide") {
+                                //                     let title = column.children[0].title;
+                                //                     if (title === "SIM ID" || title === "IMEI 1" || title === "SIM 1" || title === "IMEI 2" || title === "SIM 2") {
+                                //                         showRecord2.push({
+                                //                             name: title,
+                                //                             values: record[column.dataIndex],
+                                //                             rowKey: title
+                                //                         });
+                                //                     } else {
+                                //                         if (title === "STATUS" || title === "DEALER NAME" || title === "S-DEALER Name") {
+                                //                             if (record[column.dataIndex][0]) {
+                                //                                 showRecord.push({
+                                //                                     name: title,
+                                //                                     values: record[column.dataIndex][0].toUpperCase() + record[column.dataIndex].substring(1, record[column.dataIndex].length).toLowerCase(),
+                                //                                     rowKey: title
+                                //                                 });
+                                //                             }
 
-                            //                         } else {
+                                //                         } else {
 
-                            //                             showRecord.push({
-                            //                                 name: title,
-                            //                                 values: record[column.dataIndex],
-                            //                                 rowKey: title
-                            //                             });
-                            //                         }
-                            //                     }
-                            //                 }
-                            //             });
+                                //                             showRecord.push({
+                                //                                 name: title,
+                                //                                 values: record[column.dataIndex],
+                                //                                 rowKey: title
+                                //                             });
+                                //                         }
+                                //                     }
+                                //                 }
+                                //             });
 
-                            //             return (
-                            //                 <Fragment>
-                            //                     <div className="col-md-4 expand_table">
-                            //                         <Table
-                            //                             pagination={false}
-                            //                             columns={
-                            //                                 [
-                            //                                     {
-                            //                                         title: "Name",
-                            //                                         dataIndex: 'name',
-                            //                                         key: "name",
-                            //                                         align: "center",
-                            //                                         className: "bold"
-                            //                                     }, {
-                            //                                         title: "Value",
-                            //                                         dataIndex: "values",
-                            //                                         key: "value",
-                            //                                         align: "center"
-                            //                                     }
-                            //                                 ]
-                            //                             }
-                            //                             dataSource={showRecord}
-                            //                         />
-                            //                     </div>
-                            //                     <div className="col-md-4 expand_table">
-                            //                         <Table
-                            //                             pagination={false}
-                            //                             columns={
-                            //                                 [
-                            //                                     {
-                            //                                         title: "Name",
-                            //                                         dataIndex: 'name',
-                            //                                         key: "name",
-                            //                                         align: "center",
-                            //                                         className: "bold"
-                            //                                     }, {
-                            //                                         title: "Value",
-                            //                                         dataIndex: "values",
-                            //                                         key: "value",
-                            //                                         align: "center"
-                            //                                     }
-                            //                                 ]
-                            //                             }
-                            //                             dataSource={showRecord2}
-                            //                         />
-                            //                     </div>
-                            //                 </Fragment>)
-                            //     }} /> )
-                            //         }else{
-                            return (
-                                <Fragment>
-                                    <div className="col-md-4 expand_table">
-                                        <Table
-                                            pagination={false}
-                                            columns={
-                                                [
-                                                    {
-                                                        title: "Name",
-                                                        dataIndex: 'name',
-                                                        key: "name",
-                                                        align: "center",
-                                                        className: "bold"
-                                                    }, {
-                                                        title: "Value",
-                                                        dataIndex: "values",
-                                                        key: "value",
-                                                        align: "center"
-                                                    }
-                                                ]
-                                            }
-                                            dataSource={showRecord}
-                                        />
-                                    </div>
-                                    <div className="col-md-4 expand_table">
-                                        <Table
-                                            pagination={false}
-                                            columns={
-                                                [
-                                                    {
-                                                        title: "Name",
-                                                        dataIndex: 'name',
-                                                        key: "name",
-                                                        align: "center",
-                                                        className: "bold"
-                                                    }, {
-                                                        title: "Value",
-                                                        dataIndex: "values",
-                                                        key: "value",
-                                                        align: "center"
-                                                    }
-                                                ]
-                                            }
-                                            dataSource={showRecord2}
-                                        />
-                                    </div>
-                                </Fragment>)
-                            // }
+                                //             return (
+                                //                 <Fragment>
+                                //                     <div className="col-md-4 expand_table">
+                                //                         <Table
+                                //                             pagination={false}
+                                //                             columns={
+                                //                                 [
+                                //                                     {
+                                //                                         title: "Name",
+                                //                                         dataIndex: 'name',
+                                //                                         key: "name",
+                                //                                         align: "center",
+                                //                                         className: "bold"
+                                //                                     }, {
+                                //                                         title: "Value",
+                                //                                         dataIndex: "values",
+                                //                                         key: "value",
+                                //                                         align: "center"
+                                //                                     }
+                                //                                 ]
+                                //                             }
+                                //                             dataSource={showRecord}
+                                //                         />
+                                //                     </div>
+                                //                     <div className="col-md-4 expand_table">
+                                //                         <Table
+                                //                             pagination={false}
+                                //                             columns={
+                                //                                 [
+                                //                                     {
+                                //                                         title: "Name",
+                                //                                         dataIndex: 'name',
+                                //                                         key: "name",
+                                //                                         align: "center",
+                                //                                         className: "bold"
+                                //                                     }, {
+                                //                                         title: "Value",
+                                //                                         dataIndex: "values",
+                                //                                         key: "value",
+                                //                                         align: "center"
+                                //                                     }
+                                //                                 ]
+                                //                             }
+                                //                             dataSource={showRecord2}
+                                //                         />
+                                //                     </div>
+                                //                 </Fragment>)
+                                //     }} /> )
+                                //         }else{
+                                return (
+                                    <Fragment>
+                                        <div className="col-md-4 expand_table">
+                                            <Table
+                                                pagination={false}
+                                                columns={
+                                                    [
+                                                        {
+                                                            title: "Name",
+                                                            dataIndex: 'name',
+                                                            key: "name",
+                                                            align: "center",
+                                                            className: "bold"
+                                                        }, {
+                                                            title: "Value",
+                                                            dataIndex: "values",
+                                                            key: "value",
+                                                            align: "center"
+                                                        }
+                                                    ]
+                                                }
+                                                dataSource={showRecord}
+                                            />
+                                        </div>
+                                        <div className="col-md-4 expand_table">
+                                            <Table
+                                                pagination={false}
+                                                columns={
+                                                    [
+                                                        {
+                                                            title: "Name",
+                                                            dataIndex: 'name',
+                                                            key: "name",
+                                                            align: "center",
+                                                            className: "bold"
+                                                        }, {
+                                                            title: "Value",
+                                                            dataIndex: "values",
+                                                            key: "value",
+                                                            align: "center"
+                                                        }
+                                                    ]
+                                                }
+                                                dataSource={showRecord2}
+                                            />
+                                        </div>
+                                    </Fragment>)
+                                // }
 
-                        }
-                        }
-                    />
+                            }
+                            }
+                        />
+                    </div>
+                    <Button onClick={this.scrollBack}> Previous</Button>
+                    <Button onClick={this.scrollNext}> Next</Button>
                 </Card>
 
                 <EditDevice ref='edit_device'
