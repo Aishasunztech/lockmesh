@@ -534,7 +534,7 @@ class SideActions extends Component {
             this.setState({
                 policyId: historyId,
                 policyName: name,
-                historyModal: false
+                historyModal: true
             })
         }
     }
