@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styles from './AppList';
 import { Card, Table, Icon } from "antd";
 import IntlMessages from "../../../util/IntlMessages";
-import { getStatus, getColor, checkValue, titleCase } from '../../../routes/utils/commonUtils'
+import { getStatus, getColor, checkValue,  } from '../../../routes/utils/commonUtils'
 import { Redirect } from 'react-router-dom';
 import {
     DEVICE_ID,
@@ -80,136 +80,136 @@ export default class DeviceSidebar extends Component {
         return [
             // {
             //     key: 300,
-            //     name: (<a href="javascript:void(0)" >{titleCase(USER_ID)}:</a>),
+            //     name: (<a href="javascript:void(0)" >{(USER_ID)}:</a>),
             //     value: checkValue(device_details.user_id)
             // },
             {
                 key: 10,
-                name: (<a href="javascript:void(0)" >{titleCase(DEVICE_STATUS)}:</a>),
+                name: (<a href="javascript:void(0)" >{(DEVICE_STATUS)}:</a>),
                 value: <span style={color}>{checkValue(device_details.finalStatus)}</span>,
             },
             {
                 key: 171,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_MODE)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_MODE)}:</a>),
                 value: device_details.online ? (device_details.online == "online") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A"
             },
             {
                 key: 102,
-                name: (<a href="javascript:void(0)" >{titleCase(DEVICE_FLAGGED)}:</a>),
+                name: (<a href="javascript:void(0)" >{(DEVICE_FLAGGED)}:</a>),
                 value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
             },
             {
                 key: 1,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_NAME)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_NAME)}:</a>),
                 value: (<span className="captilize">{checkValue(device_details.name)}</span>)
             },
             {
                 key: 2,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_ACCOUNT_EMAIL)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_ACCOUNT_EMAIL)}:</a>),
                 value: checkValue(device_details.account_email)
             },
 
             {
                 key: 3,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_PGP_EMAIL)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_PGP_EMAIL)}:</a>),
                 value: checkValue(device_details.pgp_email)
             },
             {
                 key: 812,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_ACTIVATION_CODE)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_ACTIVATION_CODE)}:</a>),
                 value: checkValue(device_details.activation_code)
             },
             {
                 key: 4,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_CHAT_ID)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_CHAT_ID)}:</a>),
                 value: checkValue(device_details.chat_id)
             },
             {
                 key: 5,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_CLIENT_ID)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_CLIENT_ID)}:</a>),
                 value: checkValue(device_details.client_id)
             },
             {
                 key: 6,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_DEALER_ID)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_DEALER_ID)}:</a>),
                 value: checkValue(device_details.dealer_id)
             },
             {
                 key: 7,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_DEALER_NAME)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_DEALER_NAME)}:</a>),
                 value: (<span className="captilize"><a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a></span>)
             },
             {
                 key: 8,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_DEALER_PIN)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_DEALER_PIN)}:</a>),
                 value: checkValue(device_details.link_code)
             },
             {
                 key: 9,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_MAC_ADDRESS)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_MAC_ADDRESS)}:</a>),
                 value: checkValue(device_details.mac_address)
             },
             {
                 key: 12,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_SIM_ID)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_SIM_ID)}:</a>),
                 value: checkValue(device_details.sim_id)
             },
 
             {
                 key: 13,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_IMEI_1)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_IMEI_1)}:</a>),
                 value: checkValue(device_details.imei)
             },
             {
                 key: 14,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_SIM_1)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_SIM_1)}:</a>),
                 value: checkValue(device_details.simno)
             },
             {
                 key: 15,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_IMEI_2)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_IMEI_2)}:</a>),
                 value: checkValue(device_details.imei2)
             },
             {
                 key: 16,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_SIM_2)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_SIM_2)}:</a>),
                 value: checkValue(device_details.simno2)
             },
 
             {
                 key: 111,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_SERIAL_NUMBER)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_SERIAL_NUMBER)}:</a>),
                 value: checkValue(device_details.serial_number)
             },
             {
                 key: 11,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_MODEL)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_MODEL)}:</a>),
                 value: checkValue(device_details.model)
             },
             {
                 key: 17,
-                name: (<a href="javascript:void(0)">{titleCase(IP_ADDRESS)}:</a>),
+                name: (<a href="javascript:void(0)">{(IP_ADDRESS)}:</a>),
                 value: checkValue(device_details.ip_address)
             },
 
             {
                 key: 172,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_S_DEALER)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_S_DEALER)}:</a>),
                 value: checkValue(device_details.s_dealer)
             },
             {
                 key: 173,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_S_DEALER_NAME)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_S_DEALER_NAME)}:</a>),
                 value: checkValue(device_details.s_dealer_name)
             },
             {
                 key: 18,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_START_DATE)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_START_DATE)}:</a>),
                 value: checkValue(device_details.start_date)
             },
             {
                 key: 19,
-                name: (<a href="javascript:void(0)">{titleCase(DEVICE_EXPIRY_DATE)}:</a>),
+                name: (<a href="javascript:void(0)">{(DEVICE_EXPIRY_DATE)}:</a>),
                 value: checkValue(device_details.expiry_date)
             }
         ]

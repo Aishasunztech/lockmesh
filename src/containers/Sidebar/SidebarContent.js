@@ -87,7 +87,7 @@ class SidebarContent extends Component {
 
   }
   componentWillReceiveProps(nextProps) {
-    
+
     if (this.props.pathname !== nextProps.pathname) {
       this.props.getNewDevicesList();
       this.props.getNewCashRequests();
@@ -140,17 +140,19 @@ class SidebarContent extends Component {
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
             <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>
-              
+
               {/* Price */}
               <li>
-                <Badge count={this.props.user_credit} overflowCount={999999999}>
-                  <i className="icon icon-dollar" >
-                    <Icon type="dollar" className="mb-10" />
-                  </i>
-                </Badge>
+                <a className="head-example">
+                  <Badge className="cred_badge" count={this.props.user_credit} overflowCount={999}>
+                    <i className="icon icon-dollar notification_icn" >
+                      <Icon type="dollar" className="mb-10" />
+                    </i>
+                  </Badge>
+                </a>
 
               </li>
-              
+
               {/* Chat Icon */}
               <li>
                 <i className="icon icon-chat-new" />

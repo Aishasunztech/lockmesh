@@ -128,29 +128,27 @@ class Apk extends Component {
                             </Col>
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
-                                    <div>
-                                        <Link to="/app-market">
-                                            <Card className="manage_sec" style={{ borderRadius: 12 }}>
-                                                <div className="image_1">
-                                                    <h2 style={{ textAlign: "center" }}>Secure Market</h2>
-                                                    <Divider className="mb-0" />
-                                                    <Row style={{ padding: '12px 0px 0px' }}>
-                                                        <Col span={8} style={{ textAlign: "center" }}>
-                                                            <Icon type="appstore" className="policy_icon" />
-                                                        </Col>
-                                                        <Col span={16} style={{ padding: 0 }}>
-                                                            <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Add/remove apps in </h5>
-                                                            <h5> Secure Market</h5>
-                                                            <h5><span className="diamond_icon">&#9670;</span>Set permissions</h5>
-                                                            <h5 className="more_txt">and more...</h5>
-                                                        </Col>
-                                                    </Row>
+                                    <Link to="/app-market">
+                                        <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                            <div className="image_1">
+                                                <h2 style={{ textAlign: "center" }}>Secure Market</h2>
+                                                <Divider className="mb-0" />
+                                                <Row style={{ padding: '12px 0px 0px' }}>
+                                                    <Col span={8} style={{ textAlign: "center" }}>
+                                                        <Icon type="appstore" className="policy_icon" />
+                                                    </Col>
+                                                    <Col span={16} style={{ padding: 0 }}>
+                                                        <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Add/remove apps in </h5>
+                                                        <h5> Secure Market</h5>
+                                                        <h5><span className="diamond_icon">&#9670;</span>Set permissions</h5>
+                                                        <h5 className="more_txt">and more...</h5>
+                                                    </Col>
+                                                </Row>
 
-                                                </div>
-                                            </Card>
-                                            <Button type="primary" size="small" className="open_btn">Open</Button>
-                                        </Link>
-                                    </div>
+                                            </div>
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn">Open</Button>
+                                    </Link>
                                 </div>
                             </Col>
                             {/* never ever delete this commented code :P */}
@@ -272,7 +270,7 @@ class Apk extends Component {
                         />
 
                     </Modal > */}
-                </div >
+                </div>
             )
         }
     }

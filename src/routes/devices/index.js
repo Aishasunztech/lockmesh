@@ -2176,10 +2176,7 @@ class Devices extends Component {
 
 
     render() {
-
-
-
-        console.log(this.props.locale, 'props are the ')
+        // console.log(this.props.locale, 'props are the ')
         return (
             <Fragment>
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
