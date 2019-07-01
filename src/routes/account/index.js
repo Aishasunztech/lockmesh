@@ -18,7 +18,8 @@ import {
     // saveIDPrices,
     // setPackage,
     getPackages,
-    purchaseCredits
+    purchaseCredits,
+    purchaseCreditsFromCC
 } from "../../appRedux/actions/Account";
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
@@ -1099,6 +1100,8 @@ class Account extends Component {
                                         showPurchaseModal={this.showPurchaseModal}
                                         purchase_modal={this.state.purchase_modal}
                                         purchaseCredits={this.props.purchaseCredits}
+                                        purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
+
                                     />
                                 </div>
                             </div>
@@ -1181,7 +1184,8 @@ function mapDispatchToProps(dispatch) {
         // saveIDPrices: saveIDPrices,
         // setPackage: setPackage,
         getPackages: getPackages,
-        purchaseCredits: purchaseCredits
+        purchaseCredits: purchaseCredits,
+        purchaseCreditsFromCC: purchaseCreditsFromCC
     }, dispatch);
 }
 var mapStateToProps = ({ account, devices, auth }) => {

@@ -600,9 +600,11 @@ const RestService = {
     purchaseCredits: (data) => {
         return axios.post(BASE_URL + 'users/purchase_credits', { data }, RestService.getHeader());
     },
+    purchaseCreditsFromCC: (cardInfo, creditInfo) => {
+        return axios.post(BASE_URL + 'users/purchase_credits_CC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
+    },
 
     invalidPage: () => {
-
     },
     getFile: (filename) => {
         window.location = BASE_URL + 'users/getFile/' + filename;

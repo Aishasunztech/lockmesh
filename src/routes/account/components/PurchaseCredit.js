@@ -20,7 +20,8 @@ class PurchaseCredit extends Component {
             total: '',
             method: "",
             currency_unit_price: 1,
-            creditCard_model: false
+            creditCard_model: false,
+            creditInfo: {}
         }
     }
 
@@ -77,9 +78,11 @@ class PurchaseCredit extends Component {
             currency_price: '',
             total: '',
             method: "",
-            currency_unit_price: 1
+            currency_unit_price: 1,
+            creditInfo: {}
         })
     }
+
     cancelCreditCardModal = () => {
         this.setState({
             creditCard_model: false
@@ -99,7 +102,8 @@ class PurchaseCredit extends Component {
                 } else {
                     // console.log('asjdhask');
                     this.setState({
-                        creditCard_model: true
+                        creditCard_model: true,
+                        creditInfo: values
                     })
                 }
             }
@@ -128,7 +132,8 @@ class PurchaseCredit extends Component {
                     creditCard_model={this.state.creditCard_model}
                     cancelCreditCardModal={this.cancelCreditCardModal}
                     cancelPurchaseModal={this.cancelPurchaseModal}
-                    credits={this.state.credits}
+                    creditInfo={this.state.creditInfo}
+                    purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
                 />
 
                 <Modal
@@ -293,16 +298,7 @@ function showConfirm(_this, msg, values) {
         okText: "Confirm",
         onOk() {
             _this.props.purchaseCredits(values)
-            _this.props.showPurchaseModal(false)
-            _this.props.form.resetFields();
-            _this.setState({
-                credits: '',
-                currency: '',
-                currency_price: '',
-                total: '',
-                method: "",
-                currency_unit_price: 1
-            })
+            _this.cancelPurchaseModal()
         },
         onCancel() { },
     });

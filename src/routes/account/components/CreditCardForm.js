@@ -3,6 +3,7 @@ import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Tabl
 import RestService from '../../../appRedux/services/RestServices';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
+// import axios from 'axios';
 // import 'react-credit-cards/lib/styles.scss';
 
 const confirm = Modal.confirm;
@@ -38,9 +39,9 @@ class CreditCardForm extends Component {
         e.preventDefault();
         // console.log(this.refs.purchaseCredit);
         this.props.form.validateFieldsAndScroll((err, values) => {
-            // console.log('form', values);
+            // console.log('form', values, this.props.creditInfo);
             if (!err) {
-                showConfirm(this, <span>Are you sure you want to purchase <strong> "{this.props.credits} Credits"</strong> from <strong>"CREDIT CARD"</strong> ?'</span>, values)
+                showConfirm(this, <span>Are you sure you want to purchase <strong> "{this.props.credits} Credits"</strong> from <strong>"CREDIT CARD"</strong> ?'</span>, values, this.props.creditInfo)
             }
         });
     }
@@ -102,7 +103,7 @@ class CreditCardForm extends Component {
 
 
     render() {
-        console.log(this.refs.card13);
+        // console.log(this.refs.card13);
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -218,7 +219,7 @@ class CreditCardForm extends Component {
                             }}
                         >
                             <Button key="back" type="button" onClick={(e) => { this.cancelCreditCardModal() }} >Cancel</Button>
-                            <Button type="primary" htmlType="submit">confirm</Button>
+                            <Button type="primary" htmlType="submit">Check Out</Button>
                         </Form.Item>
                     </Form>
                 </Modal >
@@ -232,24 +233,15 @@ CreditCardForm = Form.create()(CreditCardForm);
 export default CreditCardForm;
 
 
-function showConfirm(_this, msg, values) {
+function showConfirm(_this, msg, values, creditInfo) {
     confirm({
         title: 'WARNNING!',
         content: msg,
         okText: "Confirm",
         onOk() {
-            _this.props.purchaseCredits(values)
+            _this.props.purchaseCreditsFromCC(values, creditInfo)
             _this.props.cancelPurchaseModal()
-            _this.props.cancelCreditCardModal()
-            _this.props.form.resetFields();
-            _this.setState({
-                credits: '',
-                currency: '',
-                currency_price: '',
-                total: '',
-                method: "CASH",
-                currency_unit_price: 1
-            })
+            _this.cancelCreditCardModal()
         },
         onCancel() {
 
