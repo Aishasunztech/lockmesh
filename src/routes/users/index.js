@@ -4,15 +4,30 @@ import { bindActionCreators } from "redux";
 import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
-import { getStatus, componentSearch, titleCase } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
 
 
 import {
     ADMIN,
 } from '../../constants/Constants'
 import {
-    USER_ID
+    DEVICE_ID,
 } from '../../constants/DeviceConstants';
+
+
+import {
+    // DEVICE_ID,
+    USER_ID,
+    USER_NAME,
+    USER_EMAIL,
+    USER_DATE_REGISTERED,
+    USER_TOKEN
+} from '../../constants/UserConstants';
+
+import {
+    Appfilter_SearchUser
+} from '../../constants/AppFilterConstants';
+
 
 import {
     addUser,
@@ -31,16 +46,16 @@ import AddUser from './components/AddUser';
 var coppyUsers = [];
 var status = true;
 const question_txt = (
-    <div>
+    <div>Appuyez sur > pour afficher la liste des périphériques de cet utilisateur.
         <p>Press <a style={{ fontSize: 14 }}><Icon type="caret-right" /> </a> to View Devices<br></br> list of this User</p>
     </div>
 );
 class Users extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            users: []
-        }
+        // this.state = {
+        //     users: []
+        // }
         this.columns = [
             {
                 title: '#',
@@ -49,7 +64,9 @@ class Users extends Component {
                 className: 'row',
             },
             {
-                title: 'ACTION',
+                // title: (
+                // // <IntlMessages id="usersColHeading.Action" />
+                // ),
                 align: "center",
                 dataIndex: 'action',
                 key: "action",
@@ -63,14 +80,14 @@ class Users extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(USER_ID)}
+                        placeholder={convertToLang(props.translation[USER_ID], USER_ID)}
                     />
                 ),
                 dataIndex: 'user_id',
                 className: '',
                 children: [
                     {
-                        title: USER_ID,
+                        title: convertToLang(props.translation[USER_ID], USER_ID),
                         align: "center",
                         dataIndex: 'user_id',
                         key: "user_id",
@@ -94,7 +111,7 @@ class Users extends Component {
                             className="search_heading"
                             autoComplete="new-password"
                             onKeyUp={this.handleSearch2}
-                            placeholder={'Search By Device Id'}
+                            placeholder={convertToLang(props.translation[DEVICE_ID], DEVICE_ID)}
                         />
                     </div>
                 ),
@@ -104,7 +121,7 @@ class Users extends Component {
                     {
                         title: (
                             <span>
-                                DEVICES
+                                {convertToLang(props.translation[DEVICE_ID], DEVICE_ID)}
                                 <Popover placement="top" content={question_txt}>
                                     <span className="helping_txt"><Icon type="info-circle" /></span>
                                 </Popover>
@@ -116,7 +133,7 @@ class Users extends Component {
                         className: 'row',
                         onFilter: (value, record) => record.devices.indexOf(value) === 0,
                         sorter: (a, b) => { return a.devices - b.devices },
-                    
+
                         // sortDirections: ['ascend', 'descend'],
                     }
                 ],
@@ -130,13 +147,13 @@ class Users extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Name"
+                        placeholder={convertToLang(props.translation[USER_NAME], USER_NAME)}
                     />
                 ),
                 dataIndex: 'user_name',
                 className: 'row',
                 children: [{
-                    title: 'NAME',
+                    title: convertToLang(props.translation[USER_NAME], USER_NAME),
                     dataIndex: 'user_name',
                     align: "center",
                     key: 'user_name',
@@ -154,13 +171,13 @@ class Users extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Email"
+                        placeholder={convertToLang(props.translation[USER_EMAIL], USER_EMAIL)}
                     />
                 ),
                 dataIndex: 'email',
                 className: 'row',
                 children: [{
-                    title: 'EMAIL',
+                    title: convertToLang(props.translation[USER_EMAIL], USER_EMAIL),
                     dataIndex: 'email',
                     align: "center",
                     key: 'email',
@@ -171,7 +188,7 @@ class Users extends Component {
                 }]
             },
             {
-                title: 'TOKENS',
+                title: convertToLang(props.translation[USER_TOKEN], USER_TOKEN),
                 align: "center",
                 dataIndex: 'tokens',
                 key: "tokens",
@@ -185,13 +202,13 @@ class Users extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder="Date Registered"
+                        placeholder={convertToLang(props.translation[USER_DATE_REGISTERED], USER_DATE_REGISTERED)}
                     />
                 ),
                 dataIndex: 'created_at',
                 className: 'row',
                 children: [{
-                    title: 'DATE REGISTERED',
+                    title: convertToLang(props.translation[USER_DATE_REGISTERED], USER_DATE_REGISTERED),
                     dataIndex: 'created_at',
                     align: "center",
                     key: 'created_at',
@@ -214,7 +231,7 @@ class Users extends Component {
         this.props.getUserList();
         this.props.getPagination('users');
         // console.log(this.props.location.state);
-        this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
+        this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], USER_ID) + ' (' + this.props.users_list.length + ')'
         this.setState({
             users: this.props.users_list,
             originalUsers: this.props.users_list,
@@ -225,7 +242,7 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
-            this.columns[2].children[0].title = USER_ID + ' (' + nextProps.users_list.length + ')'
+            this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], USER_ID) + ' (' + nextProps.users_list.length + ')'
             // console.log('will recice props is called', nextProps.users_list)
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
@@ -240,7 +257,7 @@ class Users extends Component {
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.DisplayPages);
-            this.columns[2].children[0].title = USER_ID + ' (' + this.props.users_list.length + ')'
+            this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], USER_ID) + ' (' + this.props.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
@@ -411,7 +428,7 @@ class Users extends Component {
         return (
             <Fragment>
                 <AppFilter
-                    searchPlaceholder="Search User"
+                    searchPlaceholder= {convertToLang(this.props.translation[Appfilter_SearchUser], Appfilter_SearchUser)}
                     defaultPagingValue={this.state.defaultPagingValue}
                     addButtonText={"Add User"}
                     // selectedOptions={this.props.selectedOptions}
@@ -435,6 +452,7 @@ class Users extends Component {
                     pagination={this.props.DisplayPages}
                     ref="userList"
                     consoled={this.consoled}
+                    translation= {this.props.translation}
                 />
                 {/* <UserList/> */}
             </Fragment>
@@ -453,12 +471,13 @@ function mapDispatchToProps(dispatch) {
         getPagination: getPagination
     }, dispatch);
 }
-var mapStateToProps = ({ auth, users, devices }) => {
-    // console.log(users.users_list);
+var mapStateToProps = ({ auth, users, devices, settings }) => {
+    // console.log("users.users_list::", settings.translation);
     return {
         user: auth.authUser,
         users_list: users.users_list,
         DisplayPages: devices.DisplayPages,
+        translation: settings.translation
     };
 }
 

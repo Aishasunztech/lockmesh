@@ -500,6 +500,7 @@ class EditPolicy extends Component {
                                 rowId={this.state.editAblePolicy.id}
                                 isCheckbox={false}
                                 pageType={'dealerApps'}
+                                translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -522,6 +523,7 @@ class EditPolicy extends Component {
                                 isSwitch={true}
                                 edit={true}
                                 rowId={this.state.editAblePolicy.id}
+                                translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -598,6 +600,7 @@ class EditPolicy extends Component {
                                 isSwitch={true}
                                 edit={true}
                                 rowId={this.state.editAblePolicy.id}
+                                translation={this.props.translation}
                             />
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Menu } from "antd";
 import { Link } from "react-router-dom";
-import IntlMessages from "../../util/IntlMessages";
 import {
   NAV_STYLE_ABOVE_HEADER,
   NAV_STYLE_BELOW_HEADER,
@@ -52,26 +51,38 @@ class HorizontalNav extends Component {
         mode="horizontal">
 
         <Menu.Item key="devices">
-          <Link to="/devices"><i className="icon icon-widgets" /> <IntlMessages id="sidebar.devices" /></Link>
+          <Link to="/devices"><i className="icon icon-widgets" /> 
+          {/* <IntlMessages id="sidebar.devices" /> */}
+          </Link>
         </Menu.Item>
 
         {(this.state.userType === "admin") ? <Menu.Item key="account">
-          <Link to="/account"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.account" /></Link>
+          <Link to="/account"><i className="icon icon-profile2" /> 
+          {/* <IntlMessages id="sidebar.account" /> */}
+          </Link>
         </Menu.Item> : null}
 
         {(this.state.userType === "admin") ? <Menu.Item key="dealer/dealer">
-          <Link to="/dealer/dealer"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.dealers" /></Link>
+          <Link to="/dealer/dealer"><i className="icon icon-profile2" /> 
+          {/* <IntlMessages id="sidebar.dealers" /> */}
+          </Link>
         </Menu.Item> : null}
 
         {(this.state.userType === "admin" || this.state.userType === "dealer") ? <Menu.Item key="dealer/sdealer">
-          <Link to="/dealer/sdealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.sdealers" /></Link>
+          <Link to="/dealer/sdealer"><i className="icon icon-avatar" /> 
+          {/* <IntlMessages id="sidebar.sdealers" / */}
+          ></Link>
         </Menu.Item> : null}
 
         {(this.state.userType === "admin") ? <Menu.Item key="apk-list">
-          <Link to="/apk-list"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
+          <Link to="/apk-list"><i className="icon icon-apps" /> 
+          {/* <IntlMessages id="sidebar.app" /> */}
+          </Link>
         </Menu.Item> : null}
         <Menu.Item key="profile">
-          <Link to="/profile"><i className="icon icon-widgets" /> <IntlMessages id="sidebar.profile" /></Link>
+          <Link to="/profile"><i className="icon icon-widgets" /> 
+          {/* <IntlMessages id="sidebar.profile" /> */}
+          </Link>
         </Menu.Item>
       </Menu >
 

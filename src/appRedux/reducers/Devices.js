@@ -22,6 +22,8 @@ import {
     UNFLAG_DEVICE,
 } from "../../constants/ActionTypes";
 
+import { convertToLang } from '../../routes/utils/commonUtils';
+
 import {
     DEVICE_ID,
     USER_ID,
@@ -54,7 +56,11 @@ import {
 
 } from '../../constants/DeviceConstants';
 
+import SettingStates from './InitialStates';
 import { message, Modal } from 'antd';
+
+const { translation } = SettingStates;
+
 
 const success = Modal.success
 const error = Modal.error
@@ -70,33 +76,33 @@ const initialState = {
     chat_ids: [],
     pgp_emails: [],
     options: [
-        DEVICE_ID,
-        USER_ID,
-        DEVICE_REMAINING_DAYS,
-        DEVICE_STATUS,
-        DEVICE_MODE,
-        DEVICE_FLAGGED,
-        DEVICE_NAME,
-        DEVICE_ACCOUNT_EMAIL,
-        DEVICE_CLIENT_ID,
-        DEVICE_ACTIVATION_CODE,
-        DEVICE_PGP_EMAIL,
-        DEVICE_SIM_ID,
-        DEVICE_CHAT_ID,
-        DEVICE_DEALER_ID,
-        DEVICE_DEALER_NAME,
-        DEVICE_DEALER_PIN,
-        DEVICE_MAC_ADDRESS,
-        DEVICE_IMEI_1,
-        DEVICE_SIM_1,
-        DEVICE_IMEI_2,
-        DEVICE_SIM_2,
-        DEVICE_SERIAL_NUMBER,
-        DEVICE_MODEL,
-        DEVICE_S_DEALER,
-        DEVICE_S_DEALER_NAME,
-        DEVICE_START_DATE,
-        DEVICE_EXPIRY_DATE,
+        {"key": DEVICE_ID, "value": convertToLang(translation[DEVICE_ID], DEVICE_ID)},
+        {"key": USER_ID, "value": convertToLang(translation[USER_ID], USER_ID)},
+        {"key": DEVICE_REMAINING_DAYS, "value": convertToLang(translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS)},
+        {"key": DEVICE_STATUS, "value": convertToLang(translation[DEVICE_STATUS], DEVICE_STATUS)},
+        {"key": DEVICE_MODE, "value": convertToLang(translation[DEVICE_MODE], DEVICE_MODE)},
+        {"key": DEVICE_FLAGGED, "value": convertToLang(translation[DEVICE_FLAGGED], DEVICE_FLAGGED)},
+        {"key": DEVICE_NAME, "value": convertToLang(translation[DEVICE_NAME], DEVICE_NAME)},
+        {"key": DEVICE_ACCOUNT_EMAIL, "value": convertToLang(translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL)},
+        {"key": DEVICE_CLIENT_ID, "value": convertToLang(translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID)},
+        {"key": DEVICE_ACTIVATION_CODE, "value": convertToLang(translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE)},
+        {"key": DEVICE_PGP_EMAIL, "value": convertToLang(translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL)},
+        {"key": DEVICE_SIM_ID, "value": convertToLang(translation[DEVICE_SIM_ID], DEVICE_SIM_ID)},
+        {"key": DEVICE_CHAT_ID, "value": convertToLang(translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID)},
+        {"key": DEVICE_DEALER_ID, "value": convertToLang(translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID)},
+        {"key": DEVICE_DEALER_NAME, "value": convertToLang(translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME)},
+        {"key": DEVICE_DEALER_PIN, "value": convertToLang(translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN)},
+        {"key": DEVICE_MAC_ADDRESS, "value": convertToLang(translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS)},
+        {"key": DEVICE_IMEI_1, "value": convertToLang(translation[DEVICE_IMEI_1], DEVICE_IMEI_1)},
+        {"key": DEVICE_SIM_1, "value": convertToLang(translation[DEVICE_SIM_1], DEVICE_SIM_1)},
+        {"key": DEVICE_IMEI_2, "value": convertToLang(translation[DEVICE_IMEI_2], DEVICE_IMEI_2)},
+        {"key": DEVICE_SIM_2, "value": convertToLang(translation[DEVICE_SIM_2], DEVICE_SIM_2)},
+        {"key": DEVICE_SERIAL_NUMBER, "value": convertToLang(translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER)},
+        {"key": DEVICE_MODEL, "value": convertToLang(translation[DEVICE_MODEL], DEVICE_MODEL)},
+        {"key": DEVICE_S_DEALER, "value": convertToLang(translation[DEVICE_S_DEALER], DEVICE_S_DEALER)},
+        {"key": DEVICE_S_DEALER_NAME, "value": convertToLang(translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME)},
+        {"key": DEVICE_START_DATE, "value": convertToLang(translation[DEVICE_START_DATE], DEVICE_START_DATE)},
+        {"key": DEVICE_EXPIRY_DATE, "value": convertToLang(translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE)},
     ],
     // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],

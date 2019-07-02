@@ -110,11 +110,12 @@ class Apk extends Component {
         )
     }
 }
-var mapStateToProps = ({ auth }) => {
+var mapStateToProps = ({ auth, settings }) => {
     // console.log('devices AUTH', auth.authUser);
     //  console.log('devices is', devices);
     return {
         user: auth.authUser,
+        translation: settings.translation
     };
 }
 

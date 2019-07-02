@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 import { Input, Modal, Select, Button } from "antd";
+import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../utils/commonUtils';
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 // import {getDevicesList} from '../../appRedux/actions/Devices';
@@ -13,7 +14,90 @@ import CircularProgress from "components/CircularProgress/index";
 import DealerList from "./components/dealerList";
 import styles from './dealers.css'
 
-import { componentSearch, getDealerStatus, titleCase } from '../utils/commonUtils';
+
+// import {
+//     DEALER_ID,
+//     DEALER_NAME,
+//     DEALER_EMAIL,
+//     DEALER_PIN,
+//     DEALER_DEVICES,
+//     DEALER_TOKENS,
+//     DEALER_ACTION
+// } from '../../constants/DealerConstants';
+
+import {
+    Appfilter_SearchDealer
+} from '../../constants/AppFilterConstants';
+import {
+    ADMIN,
+    DEALER,
+    SDEALER,
+} from '../../constants/Constants'
+
+import {
+    Button_Modify,
+    Button_Delete,
+    Button_Activate,
+    Button_Connect,
+    Button_Yes,
+    Button_Ok,
+    Button_ok,
+    Button_Cancel,
+    Button_Suspend,
+    Button_Unsuspend,
+    Button_Edit,
+    Button_passwordreset,
+    Button_submit,
+    Button_Flag,
+    Button_UNFLAG,
+    Button_SetPassword,
+    Button_Apply,
+    Button_Undo,
+    Button_Redo,
+    Button_Clear,
+    Button_Refresh,
+    Button_Next,
+    Button_previous,
+    Button_Add_Dealer,
+    Button_Add_S_dealer,
+    Button_Add_Admin,
+    Button_UploadApk,
+    Button_Save,
+    Button_Update,
+    Button_Open,
+    Button_Sample,
+    Button_Import,
+    Button_Export,
+    Button_Release,
+    Button_View,
+    Button_ChangePassword,
+    Button_ChangeEmail,
+    Button_AddPolicy,
+    Button_Add,
+    Button_AddExceptSelected,
+    Button_AddAll,
+    Button_RemoveAll,
+    Button_RemoveExcept,
+    Button_BackupNow,
+    Button_DeleteUser,
+    Button_AddApps,
+    Button_Push,
+    Button_LoadProfile,
+    Button_LoadPolicy,
+    Button_IMEI,
+    Button_Pull,
+    Button_SaveProfile,
+    Button_Activity,
+    Button_SIM,
+    Button_Transfer,
+    Button_WipeDevice,
+    Button_Unlink,
+} from '../../constants/ButtonConstants';
+
+import {
+    DEVICES
+} from '../../constants/UserConstants';
+
 import {
     DEALER_ID,
     DEALER_NAME,
@@ -21,9 +105,12 @@ import {
     DEALER_PIN,
     DEALER_DEVICES,
     DEALER_TOKENS,
-    DEALER_ACTION
+    DEALER_ACTION,
 } from '../../constants/DealerConstants';
+
+
 import { isArray } from "util";
+// import { ADMIN, DEALER } from "../../constants/Constants";
 
 var coppydealers = [];
 var status = true;
@@ -52,8 +139,8 @@ class Dealers extends Component {
                     id="connected_devices"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder="Devices"
                     onKeyUp={this.handleSearch}
+                    placeholder={convertToLang(props.translation[DEVICES], DEVICES)}
 
                 />
             ),
@@ -61,7 +148,7 @@ class Dealers extends Component {
             className: '',
             children: [
                 {
-                    title: 'DEVICES',
+                    title: convertToLang(props.translation[DEVICES], DEVICES),
                     dataIndex: 'connected_devices',
                     key: 'connected_devices',
                     // sorter: (a, b) => {
@@ -85,7 +172,7 @@ class Dealers extends Component {
                     id="dealer_id"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder={titleCase(DEALER_ID)}
+                    placeholder={convertToLang(props.translation[DEALER_ID], DEALER_ID)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -94,7 +181,7 @@ class Dealers extends Component {
             className: '',
             children: [
                 {
-                    title: DEALER_ID,
+                    title: convertToLang(props.translation[DEALER_ID], DEALER_ID),
                     dataIndex: 'dealer_id',
                     key: 'dealer_id',
                     align: 'center',
@@ -111,7 +198,7 @@ class Dealers extends Component {
                     id="link_code"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder={titleCase(DEALER_PIN)}
+                    placeholder={convertToLang(props.translation[DEALER_PIN], DEALER_PIN)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -120,7 +207,7 @@ class Dealers extends Component {
             className: '',
             children: [
                 {
-                    title: DEALER_PIN,
+                    title: convertToLang(props.translation[DEALER_PIN], DEALER_PIN),
                     dataIndex: 'link_code',
                     key: 'link_code',
                     // sorter: (a, b) => {
@@ -144,7 +231,7 @@ class Dealers extends Component {
                     id="dealer_name"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder={titleCase(DEALER_NAME)}
+                    placeholder={convertToLang(props.translation[DEALER_NAME], DEALER_NAME)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -153,7 +240,7 @@ class Dealers extends Component {
             className: '',
             children: [
                 {
-                    title: DEALER_NAME,
+                    title: convertToLang(props.translation[DEALER_NAME], DEALER_NAME),
                     dataIndex: 'dealer_name',
                     key: 'dealer_name',
                     // sorter: (a, b) => {
@@ -177,7 +264,7 @@ class Dealers extends Component {
                     id="dealer_email"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder={titleCase(DEALER_EMAIL)}
+                    placeholder={convertToLang(props.translation[DEALER_EMAIL], DEALER_EMAIL)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -186,7 +273,7 @@ class Dealers extends Component {
             className: '',
             children: [
                 {
-                    title: DEALER_EMAIL,
+                    title: convertToLang(props.translation[DEALER_EMAIL], DEALER_EMAIL),
                     dataIndex: 'dealer_email',
                     key: 'dealer_email',
                     // sorter: (a, b) => {
@@ -212,7 +299,7 @@ class Dealers extends Component {
                     id="dealer_token"
                     className="search_heading"
                     autoComplete="new-password"
-                    placeholder="Tokens"
+                    placeholder={convertToLang(props.translation[DEALER_TOKENS], DEALER_TOKENS)}
                     onKeyUp={this.handleSearch}
 
                 />
@@ -221,7 +308,7 @@ class Dealers extends Component {
             className: '',
             children: [
                 {
-                    title: 'TOKENS',
+                    title: convertToLang(props.translation[DEALER_TOKENS], DEALER_TOKENS),
                     dataIndex: 'dealer_token',
                     key: 'dealer_token',
                     // sorter: (a, b) => {
@@ -392,7 +479,9 @@ class Dealers extends Component {
         return (
             <Select
                 showSearch
-                placeholder="Show Dealer"
+                //     placeholder={
+                //     // <IntlMessages id="appfilter.ShowDealer" />
+                // }
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -652,7 +741,17 @@ class Dealers extends Component {
 
 
     render() {
+        // ADMIN,DEALER,SDEALER
         // console.log(this.props.location, 'location is the ')
+        let dealerType;
+        const type = this.state.dealer_type;
+        if (type == ADMIN) {
+            dealerType = convertToLang(this.props.translation[Button_Add_Admin], Button_Add_Admin)
+        } else if (type == DEALER) {
+            dealerType = convertToLang(this.props.translation[Button_Add_Dealer], Button_Add_Dealer)
+        } else if (type == SDEALER) {
+            dealerType = convertToLang(this.props.translation[Button_Add_S_dealer], Button_Add_S_dealer)
+        }
         return (
 
             <div>
@@ -678,9 +777,9 @@ class Dealers extends Component {
 
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder="Search Dealer"
+                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDealer], Appfilter_SearchDealer)}
                                 defaultPagingValue={this.props.DisplayPages}
-                                addButtonText={"Add " + this.state.dealer_type}
+                                addButtonText={dealerType}
                                 selectedOptions={this.props.selectedOptions}
                                 options={this.state.options}
                                 isAddButton={true}
@@ -696,6 +795,7 @@ class Dealers extends Component {
                                 handleComponentSearch={this.handleComponentSearch}
                                 testfunc={this.testfunc}
                                 addDealer={this.showAddDealer}
+                                translation={this.props.translation}
                             //  toLink={"/create-dealer/" + this.state.dealer_type}
 
                             />
@@ -720,7 +820,7 @@ class Dealers extends Component {
                                 expandedRowsKey={this.state.expandedRowsKeys}
                                 user={this.props.user}
                                 ref='dealerList'
-
+                                translation={this.props.translation}
                             />
                             {/* <Card>
                         <Table size="middle"
@@ -817,7 +917,9 @@ var mapStateToProps = (state) => {
         selectedOptions: state.dealers.selectedOptions,
         DisplayPages: state.dealers.DisplayPages,
         action: state.action,
-        user: state.auth.authUser
+        user: state.auth.authUser,
+        locale: state.settings.locale,
+        translation: state.settings.translation
     };
 }
 

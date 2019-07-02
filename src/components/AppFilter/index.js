@@ -5,8 +5,7 @@ import styles from "./appfilter.css";
 import Picky from 'react-picky';
 import 'react-picky/dist/picky.css';
 import { withRouter, Redirect, Link } from 'react-router-dom';
-
-import IntlMessages from "../../util/IntlMessages";
+import PropTypes from 'prop-types';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -15,7 +14,36 @@ import {
     getUser
 } from "../../appRedux/actions/Auth";
 
+import {
+    Tab_All,
+    Tab_Active,
+    Tab_Expired,
+    Tab_Trial,
+    Tab_Suspended,
+    Tab_PreActivated,
+    Tab_PendingActivation,
+    Tab_Transfer,
+    Tab_Unlinked,
+    Tab_Flagged,
+    Tab_ComingSoon,
+    Tab_Archived,
+} from '../../constants/TabConstants';
 
+import {
+    Devices_Top_Bar,
+    Appfilter_SelectAll,
+    Appfilter_ShowDevices,
+    Appfilter_SearchDevices,
+    Dealer_Top_Bar,
+    Appfilter_ShowDealer,
+    Appfilter_SearchDealer,
+    Appfilter_Display
+} from '../../constants/AppFilterConstants';
+
+import { convertToLang } from '../../routes/utils/commonUtils';
+// Picky.prototype={
+//     value: new PropTypes.object(),
+// }
 class AppFilter extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +83,7 @@ class AppFilter extends Component {
     }
 
     setDropdowns(values) {
-        // console.log('values of undefined', values);
+        console.log('setDropdowns val : ', values)
         this.setState({
             selectedDisplayValues: values,
         });
@@ -83,6 +111,7 @@ class AppFilter extends Component {
     }
 
     render() {
+        const { translation } = this.props;
         // console.log(" Current State", this.props)
         let fullScreenClass1 = "";
         let fullScreenClass2 = "";
@@ -94,19 +123,19 @@ class AppFilter extends Component {
             fullScreenClass1 = "col-md-3";
             fullScreenClass2 = "col-md-2";
         }
-// console.log('-------------------');
-        // console.log(this.props.options);
+        console.log('--------- options are: ----------');
+        console.log(this.props.options);
         const Search = Input.Search;
-        //  console.log('render props ...', this.props.selectedOptions.length);
+         console.log('render props selectedOptions ...', this.props.selectedOptions);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
-        //  console.log('render state ...', this.state.selectedDisplayValues.length);
+         console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
-        if (this.props.options != undefined) {
+        if (this.props.selectedOptions != undefined) {
             if (this.props.options.length == this.state.selectedDisplayValues.length) {
                 allSelectedOpt = true;
             } else { allSelectedOpt = false }
             //  console.log('allSelectedOpt val are: ', allSelectedOpt)
-        }   
+        }
 
         return (
             // className="gutter-example"
@@ -119,12 +148,15 @@ class AppFilter extends Component {
                                     <Icon type="down" className="down_icon" />
                                     <Picky
                                         options={this.props.options}
+                                        valueKey="key"
+                                        labelKey="value"
                                         value={this.state.selectedDisplayValues}
-                                        placeholder="Display"
+                                        placeholder={convertToLang(this.props.translation[Appfilter_Display], Appfilter_Display)}
                                         className="display_"
                                         multiple={true}
                                         includeSelectAll={true}
-                                        onChange={values => this.setDropdowns(values)}
+                                        onChange={values =>  this.setDropdowns(values)}
+                                        // onChange={(values) => console.log(values)}
                                         dropdownHeight={300}
                                         renderSelectAll={({
                                             filtered,
@@ -150,7 +182,8 @@ class AppFilter extends Component {
                                                         <Checkbox
                                                             checked={allSelectedOpt} className="slct_all"
                                                         >
-                                                            <IntlMessages id="appfilter.selectall" />
+                                                            {translation[Appfilter_SelectAll]}
+                                                            {/* <IntlMessages id="appfilter.SelectAll" /> */}
                                                         </Checkbox>
                                                     </li>
                                                 );
@@ -167,16 +200,22 @@ class AppFilter extends Component {
                                             valueKey,
                                             multiple
                                         }) => {
+                                            // console.log("value key:", valueKey)
+                                            // console.log("item:", item)
+                                            // console.log("selectValue", selectValue)
+                                            // console.log("labelKey key:", labelKey)
+                                            // console.log("multiple select", multiple);
+
                                             return (
                                                 <li
                                                     style={style} // required
                                                     className={isSelected ? 'selected' : ''} // required to indicate is selected
-                                                    key={item} // required
+                                                    key={item.key} // required
                                                     onClick={() => selectValue(item)}
                                                 >
                                                     {/* required to select item */}
                                                     {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                    <Checkbox checked={isSelected}>{item}</Checkbox>
+                                                    <Checkbox checked={isSelected}>{item.value}</Checkbox>
 
                                                 </li>
                                             );
@@ -206,24 +245,24 @@ class AppFilter extends Component {
                         </div>
                     </Col>
                     {(!this.props.setPrice) ?
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
-                        <div className="gutter-box">
-                            <Select
-                                value={this.state.DisplayPages}
-                                //  defaultValue={this.state.DisplayPages}
-                                style={{ width: '100%' }}
-                                // onSelect={value => this.setState({DisplayPages:value})}
-                                onChange={value => this.handlePagination(value)}
-                            >
-                                <Select.Option value="10" >10</Select.Option>
-                                <Select.Option value="20">20</Select.Option>
-                                <Select.Option value="30">30</Select.Option>
-                                <Select.Option value="50">50</Select.Option>
-                                <Select.Option value="100">100</Select.Option>
-                            </Select>
-                        </div>
-                    </Col>
-                    :
+                        <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
+                            <div className="gutter-box">
+                                <Select
+                                    value={this.state.DisplayPages}
+                                    //  defaultValue={this.state.DisplayPages}
+                                    style={{ width: '100%' }}
+                                    // onSelect={value => this.setState({DisplayPages:value})}
+                                    onChange={value => this.handlePagination(value)}
+                                >
+                                    <Select.Option value="10" >10</Select.Option>
+                                    <Select.Option value="20">20</Select.Option>
+                                    <Select.Option value="30">30</Select.Option>
+                                    <Select.Option value="50">50</Select.Option>
+                                    <Select.Option value="100">100</Select.Option>
+                                </Select>
+                            </div>
+                        </Col>
+                        :
                         <Col />
                     }
                     <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
@@ -279,23 +318,23 @@ class AppFilter extends Component {
                                                             {this.props.addButtonText}
                                                         </Button>
                                                         : (this.props.setPrice) ?
-                                                        <Button
-                                                            type="primary"
-                                                            disabled={(this.props.disableAddButton === true) ? true : false}
-                                                            style={{ width: '100%' }}
-                                                            onClick={() => this.props.showPricingModal(true)}
-                                                        >
-                                                            {this.props.addButtonText}
-                                                        </Button>
-                                                        :
-                                                        <Button
-                                                            type="primary"
-                                                            disabled={(this.props.disableAddButton === true) ? true : false}
-                                                            style={{ width: '100%' }}
-                                                            onClick={() => this.props.handleUserModal()}
-                                                        >
-                                                            {this.props.addButtonText}
-                                                        </Button>
+                                                            <Button
+                                                                type="primary"
+                                                                disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                style={{ width: '100%' }}
+                                                                onClick={() => this.props.showPricingModal(true)}
+                                                            >
+                                                                {this.props.addButtonText}
+                                                            </Button>
+                                                            :
+                                                            <Button
+                                                                type="primary"
+                                                                disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                style={{ width: '100%' }}
+                                                                onClick={() => this.props.handleUserModal()}
+                                                            >
+                                                                {this.props.addButtonText}
+                                                            </Button>
 
 
                                     : null

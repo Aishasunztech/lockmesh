@@ -8,6 +8,16 @@ import ItemsTab from "../../../components/ItemsTab/index";
 
 import PackagePricingForm from './components/PackagePricingForm';
 import { sim, chat, pgp, vpn, pkg_features } from '../../../constants/Constants';
+import {
+    Tab_SET_ID_PRICES,
+    Tab_SET_PACKAGES_PRICES,
+} from '../../../constants/TabConstants';
+import {
+    Button_SET_PRICE,
+    Button_Save
+} from '../../../constants/ButtonConstants'
+import { convertToLang } from '../../utils/commonUtils';
+
 
 const { TabPane } = Tabs;
 export default class PricingModal extends Component {
@@ -38,7 +48,7 @@ export default class PricingModal extends Component {
 
     handleSubmit = () => {
 
-        if(this.state.outerTab === '1'){
+        if (this.state.outerTab === '1') {
             let data = this.props.prices
             // console.log(this.props.whitelabel_id)
 
@@ -54,27 +64,27 @@ export default class PricingModal extends Component {
         } else if (this.state.outerTab === '2') {
             console.log('ref is hte ', this.form);
             // this.form.props.form.validateFields((err, values) => {
-                // if (!err) {
-                    // console.log('no error found', values);
-                
-                    if (this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName != '' && this.state.pkgTerms != '') {
-                        let data = {
-                            pkgName: this.state.pkgName,
-                            pkgTerm: this.state.pkgTerms,
-                            pkgPrice: this.state.pkgPrice,
-                            pkgFeatures: this.state.pkg_features,
-                            dealer_id: this.props.dealer_id
-                        }
-                        this.props.setPackage(data);
-                        this.props.showPricingModal(false);
-                        this.setState({
-                            pkgPrice: 0,
-                            pkg_features: pkg_features,
-                            pkgTerm: '',
-                            pkgName: '',
-                        })
-                    }
-                // }
+            // if (!err) {
+            // console.log('no error found', values);
+
+            if (this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName != '' && this.state.pkgTerms != '') {
+                let data = {
+                    pkgName: this.state.pkgName,
+                    pkgTerm: this.state.pkgTerms,
+                    pkgPrice: this.state.pkgPrice,
+                    pkgFeatures: this.state.pkg_features,
+                    dealer_id: this.props.dealer_id
+                }
+                this.props.setPackage(data);
+                this.props.showPricingModal(false);
+                this.setState({
+                    pkgPrice: 0,
+                    pkg_features: pkg_features,
+                    pkgTerm: '',
+                    pkgName: '',
+                })
+            }
+            // }
             // })
         }
 
@@ -93,7 +103,7 @@ export default class PricingModal extends Component {
 
     setPrice = (price, field, price_for) => {
 
-        if(price > 0){
+        if (price > 0) {
             this.state[price_for][field] = price
         }
         // console.log('price', price, 'field', field, 'price_for', price_for)
@@ -112,12 +122,12 @@ export default class PricingModal extends Component {
             <Modal
                 maskClosable={false}
                 destroyOnClose={true}
-                title={<div>Set Prices</div>}
+                title={<div>{convertToLang(this.props.translation[Button_SET_PRICE], Button_SET_PRICE)}</div>}
                 visible={this.props.pricing_modal}
                 onOk={this.handleSubmit}
-                okText='Save'
-                okButtonProps={{disabled: this.state.outerTab == '1' ? !this.props.isPriceChanged : false}}
-                onCancel={() => {this.props.showPricingModal(false); this.props.resetPrice()}}
+                okText= {convertToLang(this.props.translation[Button_Save], Button_Save)}
+                okButtonProps={{ disabled: this.state.outerTab == '1' ? !this.props.isPriceChanged : false }}
+                onCancel={() => { this.props.showPricingModal(false); this.props.resetPrice() }}
                 // footer={null}
                 width='650px'
             >
@@ -126,19 +136,20 @@ export default class PricingModal extends Component {
                     type="card"
                     onChange={(e) => this.setState({ outerTab: e })}
                 >
-                    <TabPane tab="Set ID Prices" key="1">
+                    <TabPane tab= {convertToLang(this.props.translation[Tab_SET_ID_PRICES], Tab_SET_ID_PRICES)} key="1">
                         <ItemsTab
                             innerTabChanged={this.innerTabChanged}
                             setPrice={this.props.setPrice}
                             prices={this.props.prices}
-
+                            translation={this.props.translation}
                         />
                     </TabPane>
-                    <TabPane tab="SET Packages Prices" key="2">
+                    <TabPane tab={convertToLang(this.props.translation[Tab_SET_PACKAGES_PRICES], Tab_SET_PACKAGES_PRICES)} key="2">
                         <PackagePricingForm
                             showPricingModal={this.props.showPricingModal}
                             setPkgDetail={this.setPkgDetail}
                             wrappedComponentRef={(form) => this.form = form}
+                            translation={this.props.translation}
                         />
 
                     </TabPane>

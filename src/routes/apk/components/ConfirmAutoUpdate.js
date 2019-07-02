@@ -6,7 +6,6 @@ import {
     PULL_APPS,
     POLICY
 } from "../../../constants/ActionTypes"
-import IntlMessages from "util/IntlMessages";
 const FormItem = Form.Item;
 class PassworForm extends Component {
 

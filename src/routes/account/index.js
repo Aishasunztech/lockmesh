@@ -20,8 +20,22 @@ import {
     getPackages
 } from "../../appRedux/actions/Account";
 
+import { convertToLang } from '../utils/commonUtils';
+
+
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
 import { BASE_URL } from "../../constants/Application";
+import {
+    MANAGE_DATA,
+    BACKUP_DATABASE,
+    PURCHASE_CREDITS,
+    SET_PRICES_PACKAGES,
+} from "../../constants/AccountConstants";
+
+import {
+    Button_Open,
+    Button_BUY,
+} from '../../constants/ButtonConstants'
 import {
     getSimIDs,
     getChatIDs,
@@ -478,7 +492,7 @@ class Account extends Component {
                                     {/* <Link to="#" > */}
                                     <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                         <div>
-                                            <h2 style={{ textAlign: "center" }}>Manage Data</h2>
+                                            <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], MANAGE_DATA)} </h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0 0px' }}>
                                                 <Col span={7} className="" style={{ textAlign: "center" }}>
@@ -493,7 +507,7 @@ class Account extends Component {
                                             </Row>
                                         </div>
                                     </Card>
-                                    <Button type="primary" size="small" className="open_btn">Open</Button>
+                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                 </Link>
                                 <Modal
                                     maskClosable={false}
@@ -1019,7 +1033,7 @@ class Account extends Component {
                                 width="400px"
                                 className="back_db"
                                 maskClosable={false}
-                                title={<div>BACKUP DATABASE</div>}
+                                title={<div> {convertToLang(this.props.translation[BACKUP_DATABASE], BACKUP_DATABASE)} </div>}
                                 visible={this.state.backUpModal}
                                 onOk={this.createBackupDB}
                                 onCancel={this.handleCancel}
@@ -1037,7 +1051,7 @@ class Account extends Component {
                                         <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                             <div>
                                                 <div>
-                                                    <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
+                                                    <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> {convertToLang(this.props.translation[BACKUP_DATABASE], BACKUP_DATABASE)} </h2>
                                                     <Divider className="mb-0" />
                                                     <Row style={{ padding: '12px 0 0px' }}>
                                                         <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1052,7 +1066,7 @@ class Account extends Component {
                                                 </div>
                                             </div>
                                         </Card>
-                                        <Button type="primary" size="small" className="open_btn">Open</Button>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                     </Link>
                                     {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
@@ -1072,7 +1086,7 @@ class Account extends Component {
                                             <div className="profile_table image_1">
                                                 <Fragment>
                                                     <div className="ac_card">
-                                                        <h2 style={{ textAlign: "center" }}>Purchase Credits</h2>
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PURCHASE_CREDITS], PURCHASE_CREDITS)} </h2>
                                                         <Divider className="mb-0" />
                                                         <Row style={{ padding: '12px 0 0px' }}>
                                                             <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1087,7 +1101,7 @@ class Account extends Component {
                                             </div>
                                         </Card>
                                     </a>
-                                    <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
+                                    <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">{convertToLang(this.props.translation[Button_BUY], Button_BUY)}</Button>
                                     <PurchaseCredit
                                         showPurchaseModal={this.showPurchaseModal}
                                         purchase_modal={this.state.purchase_modal}
@@ -1101,13 +1115,13 @@ class Account extends Component {
                                 <div className="contenar">
                                     {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
                                     <Link to={"/set-prices"}>
-                                    {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
+                                        {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="branches" />  Manage Tokens</h2>
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="branches" /> {convertToLang(this.props.translation[SET_PRICES_PACKAGES], SET_PRICES_PACKAGES)} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1128,7 +1142,7 @@ class Account extends Component {
                                                 </Fragment>
                                             </div>
                                         </Card>
-                                        <Button type="primary" size="small" className="open_btn">Open</Button>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                         {/* </a> */}
                                     </Link>
                                     {/* <div className="middle">
@@ -1175,12 +1189,13 @@ function mapDispatchToProps(dispatch) {
         getPackages: getPackages
     }, dispatch);
 }
-var mapStateToProps = ({ account, devices }) => {
+var mapStateToProps = ({ account, devices, settings }) => {
     return {
         msg: account.msg,
         showMsg: account.showMsg,
         newData: account.newData,
-        backUpModal: account.backUpModal
+        backUpModal: account.backUpModal,
+        translation: settings.translation,
     };
 }
 

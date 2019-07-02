@@ -1,4 +1,4 @@
-import { SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH,GET_LANGUAGE } from "constants/ActionTypes";
+import { LANGUAGES, SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH, GET_LANGUAGE } from "../../constants/ActionTypes";
 import {
   LAYOUT_TYPE,
   LAYOUT_TYPE_FULL,
@@ -8,26 +8,36 @@ import {
   THEME_COLOR_SELECTION_PRESET,
   THEME_TYPE,
   THEME_TYPE_SEMI_DARK,
-  
+
 } from "../../constants/ThemeSetting";
 
-const initialSettings = {
-  navCollapsed: true,
-  navStyle: NAV_STYLE_FIXED,
-  layoutType: LAYOUT_TYPE_FULL,
-  themeType: THEME_TYPE_SEMI_DARK,
-  colorSelection: THEME_COLOR_SELECTION_PRESET,
+// import constants from '../constants';
 
-  pathname: '',
-  width: window.innerWidth,
-  isDirectionRTL: false,
-  locale: {
-    languageId: 'english',
-    locale: 'en',
-    name: 'English',
-    icon: 'us'
-  }
-};
+import SettingStates from './InitialStates';
+const { initialSettings } = SettingStates;
+// import enLang from "../../lngProvider/locales/en_US";
+
+
+// const initialSettings = {
+//   navCollapsed: true,
+//   navStyle: NAV_STYLE_FIXED,
+//   layoutType: LAYOUT_TYPE_FULL,
+//   themeType: THEME_TYPE_SEMI_DARK,
+//   colorSelection: THEME_COLOR_SELECTION_PRESET,
+
+//   pathname: '',
+//   width: window.innerWidth,
+//   isDirectionRTL: false,
+//   languages: [],
+//   translation: enLang,
+//   isSwitched: 'abc',
+//   //  locale: {
+//   //   languageId: 'english',
+//   //   locale: 'en',
+//   //   name: 'English',
+//   //   icon: 'us',
+//   // },
+// };
 
 const settings = (state = initialSettings, action) => {
   switch (action.type) {
@@ -62,11 +72,14 @@ const settings = (state = initialSettings, action) => {
       };
 
     case GET_LANGUAGE: {
-      if(action.response.status && action.response.data.length){
-        console.log('response is the', action.response.data)
+      if (action.response.status && action.response.data.length) {
+        console.log('GET_LANGUAGE response is the', action.response.data)
+        console.log(JSON.parse(action.response.data));
+        console.log('GET_LANGUAGE2 response is the', state.translation)
         return {
           ...state,
-          locale: action.response.data[0] ? JSON.parse(action.response.data[0]['dealer_language']) : state.locale
+          // locale: action.response.data[0] ? JSON.parse(action.response.data[0]['dealer_language']) : state.locale
+        translation: action.response.data ? JSON.parse(action.response.data) : state.translation
         }
       }
     }
@@ -93,9 +106,17 @@ const settings = (state = initialSettings, action) => {
       };
 
     case SWITCH_LANGUAGE:
+      // console.log('isSwitched working')
       return {
         ...state,
-        locale: action.payload,
+        isSwitched: new Date()
+        // locale: action.payload,
+      };
+    case LANGUAGES:
+      // console.log('All Languages are: ', action.payload);
+      return {
+        ...state,
+        languages: action.payload,
       };
     default:
       // console.log("default Setting reducer");

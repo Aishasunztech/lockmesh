@@ -9,12 +9,12 @@ import { Button, Tabs, Table, Card, Input } from 'antd';
 import { sim, chat, pgp, vpn } from '../../../../constants/Constants';
 // import AppFilter from '../../../../components/AppFilter/index';
 import PricesList from './components/pricesList';
-// import {
-//     TAB_SIM_ID,
-//     TAB_CHAT_ID,
-//     TAB_PGP_EMAIL,
-//     TAB_VPN
-// } from '../../../../constants/LabelConstants';
+import {
+    TAB_SIM_ID,
+    TAB_CHAT_ID,
+    TAB_PGP_EMAIL,
+    TAB_VPN
+} from '../../../../constants/TabConstants';
 import { isArray } from "util";
 import WhiteLabelPricing from './WhiteLabelPricing';
 let packagesCopy = [];

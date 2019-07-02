@@ -598,6 +598,9 @@ const RestService = {
         // console.log(name, 'data')
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
     },
+    languages: () => {
+        return axios.get(`${BASE_URL}users/languages`, RestService.getHeader());
+    },
 
     switchLanguage: (language) => {
         console.log(language, 'language is')
@@ -605,7 +608,6 @@ const RestService = {
     },
 
     getLanguage: () => {
-
         return axios.get(BASE_URL + 'users/get-language', RestService.getHeader());
     },
     

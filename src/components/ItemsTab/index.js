@@ -9,10 +9,11 @@ import {
     TAB_CHAT_ID,
     TAB_PGP_EMAIL,
     TAB_VPN
-} from '../../constants/LabelConstants';
+} from '../../constants/TabConstants';
 import { sim, chat, pgp, vpn } from '../../constants/Constants';
 import { CLEAR_APPLICATIONS } from '../../constants/ActionTypes';
 import SimTabContent from "../../routes/account/PricesPakages/components/SimTabContent";
+import { convertToLang } from '../../routes/utils/commonUtils';
 const { TabPane } = Tabs;
 
 export default class ItemTabs extends Component {
@@ -40,18 +41,18 @@ export default class ItemTabs extends Component {
                     onChange={(e) => this.tabChaged(e)}
                     style={{ width: '15%', float: 'left' }}
                 >
-                    <TabPane tab={TAB_SIM_ID} key={sim} >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], TAB_SIM_ID)} key={sim} >
 
                     </TabPane>
-                    <TabPane tab={TAB_CHAT_ID} key={chat} >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], TAB_CHAT_ID)} key={chat} >
                         {/* {this.props.simTabContent} */}
 
                     </TabPane>
-                    <TabPane tab={TAB_PGP_EMAIL} key={pgp} >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], TAB_PGP_EMAIL)} key={pgp} >
 
                         {/* {this.props.simTabContent} */}
                     </TabPane>
-                    <TabPane tab={TAB_VPN} key={vpn} >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_VPN], TAB_VPN)} key={vpn} >
 
                         {/* {this.props.simTabContent} */}
                     </TabPane>
@@ -61,6 +62,7 @@ export default class ItemTabs extends Component {
                         setPrice={this.props.setPrice}
                         innerTab={this.state.tabSelected}
                         innerTabData={this.props.prices ? this.props.prices[this.state.tabSelected] : {}}
+                        translation = {this.props.translation}
                     />
                 </div>
 

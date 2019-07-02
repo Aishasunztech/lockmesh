@@ -8,7 +8,6 @@ import {
   showAuthLoader,
   loginUser
 } from "appRedux/actions/Auth";
-import IntlMessages from "util/IntlMessages";
 import CircularProgress from "components/CircularProgress/index";
 import { AUTO_UPDATE_ADMIN } from "../constants/Constants";
 import { APP_TITLE } from "../constants/Application";
@@ -94,7 +93,7 @@ class Login extends React.Component {
 
                 <FormItem>
                   <Button type="primary" className="gx-mb-0" htmlType="submit">
-                    <IntlMessages id="app.userAuth.signIn" />
+                    {/* <IntlMessages id="app.userAuth.signIn" /> */}
                   </Button>
                 </FormItem>
 

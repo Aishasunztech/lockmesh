@@ -5,7 +5,7 @@ import styles from './devices.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
@@ -19,7 +19,38 @@ import {
     DEVICE_TRIAL,
     ADMIN
 } from '../../../constants/Constants'
-import IntlMessages from "../../../util/IntlMessages";
+import {
+    Button_Modify,
+    Button_Delete,
+    Button_Activate,
+    Button_Connect,
+    Button_Yes,
+    Button_Ok,
+    Button_Cancel,
+    Button_Suspend,
+    Button_Unsuspend,
+    Button_Edit,
+    Button_passwordreset,
+    Button_submit,
+    Button_Flag,
+    Button_UNFLAG,
+} from '../../../constants/ButtonConstants';
+
+import {
+    Tab_All,
+    Tab_Active,
+    Tab_Expired,
+    Tab_Trial,
+    Tab_Suspended,
+    Tab_PreActivated,
+    Tab_PendingActivation,
+    Tab_Transfer,
+    Tab_Unlinked,
+    Tab_Flagged,
+    Tab_ComingSoon,
+    Tab_Archived,
+} from '../../../constants/TabConstants';
+
 import { isNull } from 'util';
 import { unlink } from 'fs';
 
@@ -118,7 +149,7 @@ class DevicesList extends Component {
             var order = getSortOrder(status)
             let color = getColor(status);
             var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
-            var text = (<IntlMessages id="button.edit" />);
+            var text = this.props.translation[Button_Edit];
             // var icon = "edit";
 
             // if ((status === 'pending activation') || (device.unlink_status === 1)) {
@@ -129,16 +160,16 @@ class DevicesList extends Component {
                 // icon = 'add'
             }
 
-            let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)} > SUSPEND</Button>;
-            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}  >UNSUSPEND</Button>;
-            let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >DELETE</Button>
-            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`connect-device/${btoa(device.device_id)}`.trim()}>  <IntlMessages id="button.connect" /></Link></Button>
-            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
-            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
-            let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
-            let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>DELETE</Button>
-            let Unflagbtn = <Button type="defualt" size="small" style={{ margin: '0 8px 0 0', color: "#fff", background: "#000" }} onClick={() => { this.props.unflagConfirm(device) }}> UNFLAG </Button>;
+            let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)}> {this.props.translation[Button_Suspend]}</Button>;
+            let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> {this.props.translation[Button_Activate]}</Button>;
+            let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >{this.props.translation[Button_Delete]}</Button>
+            let ConnectBtn = <Button type="default" size="small" style={style}> <Link to={`connect-device/${btoa(device.device_id)}`.trim()}> {this.props.translation[Button_Connect]}</Link></Button>
+            let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
+            let EditBtnPreActive = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.refs.edit_device.showModal(device, this.props.editDevice)} >{text}</Button>
+            let AcceptBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.refs.add_device.showModal(device, this.props.addDevice) }}> ACCEPT </Button>;
+            let DeclineBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.handleRejectDevice(device) }}>DECLINE</Button>
+            let DeleteBtnPreActive = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('pre-active', device)}>{this.props.translation[Button_Delete]} </Button>
+            let Unflagbtn = <Button type="defualt" size="small" style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }} onClick={() => { this.props.unflagConfirm(device) }}>{this.props.translation[Button_UNFLAG]} </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
             // console.log('end', device)
@@ -315,7 +346,7 @@ class DevicesList extends Component {
     // }
 
     scrollBack = () => {
-        let element = document.getElementById('scrolltablelist') ;
+        let element = document.getElementById('scrolltablelist');
         console.log(element.scrollLeft)
         element.scrollLeft += 100;
         console.log(element.scrollLeft)
@@ -408,7 +439,7 @@ class DevicesList extends Component {
             rowSelection = null
         }
 
-        // console.log(rowSelection);
+        // console.log(this.refs.tablelist, 'table rof');
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
@@ -644,14 +675,16 @@ class DevicesList extends Component {
                             }
                         />
                     </div>
-                    <Button onClick={this.scrollBack}> Previous</Button>
-                    <Button onClick={this.scrollNext}> Next</Button>
+                    <Button onClick={this.scrollBack} style={{display: 'none'}} > Previous</Button>
+                    <Button onClick={this.scrollNext} style={{display: 'none'}} > Next</Button>
                 </Card>
 
                 <EditDevice ref='edit_device'
-
+                    translation={this.props.translation}
                 />
                 <AddDevice ref="add_device"
+                    translation={this.props.translation}
+
                 />
             </div>
 
@@ -738,30 +771,31 @@ export default class Tab extends Component {
 
     render() {
         // console.log('columsns', this.state.devices)
+        const { translation } = this.props;
         return (
             <Fragment>
                 <div>
                     <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                        <TabPane tab={<span className="green"><IntlMessages id="tab.All" /> ({this.props.allDevices})</span>} key="1" >
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_All], Tab_All)} ({this.props.allDevices})</span>} key="1" >
                         </TabPane>
-                        <TabPane tab={<span className="green"><IntlMessages id="tab.Active" /> ({this.props.activeDevices})</span>} key="4" forceRender={true}>
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Active], Tab_Active)} ({this.props.activeDevices})</span>} key="4" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="red"><IntlMessages id="tab.Expired" /> ({this.props.expireDevices})</span>} key="6" forceRender={true}>
+                        <TabPane tab={<span className="red">{convertToLang(translation[Tab_Expired], Tab_Expired)} ({this.props.expireDevices})</span>} key="6" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="green"><IntlMessages id="tab.Trial" /> ({this.props.trialDevices})</span>} key="9" forceRender={true}>
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Trial], Tab_Trial)} ({this.props.trialDevices})</span>} key="9" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="yellow"><IntlMessages id="tab.Suspended" /> ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
+                        <TabPane tab={<span className="yellow">{convertToLang(translation[Tab_Suspended], Tab_Suspended)} ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="blue"><IntlMessages id="tab.PreActivated" />  ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
+                        <TabPane tab={<span className="blue">{convertToLang(translation[Tab_PreActivated], Tab_PreActivated)}  ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="gray"><IntlMessages id="tab.PendingActivation" />  ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
+                        <TabPane tab={<span className="gray">{convertToLang(translation[Tab_PendingActivation], Tab_PendingActivation)}  ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="purple"><IntlMessages id="tab.Transfer" /> (0)</span>} key="8" forceRender={true}>
-                            <h2 className="coming_s"><IntlMessages id="tab.ComingSoon" /></h2>
+                        <TabPane tab={<span className="purple">{convertToLang(translation[Tab_Transfer], Tab_Transfer)} (0)</span>} key="8" forceRender={true}>
+                            <h2 className="coming_s">{convertToLang(translation[Tab_ComingSoon], Tab_ComingSoon)}</h2>
                         </TabPane>
-                        <TabPane tab={<span className="orange"><IntlMessages id="tab.Unlinked" /> ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
+                        <TabPane tab={<span className="orange">{convertToLang(translation[Tab_Unlinked], Tab_Unlinked)} ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="black"><IntlMessages id="tab.Flagged" />({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
+                        <TabPane tab={<span className="black">{convertToLang(translation[Tab_Flagged], Tab_Flagged)}({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
                         </TabPane>
 
                     </Tabs>
@@ -782,6 +816,7 @@ export default class Tab extends Component {
                         user={this.props.user}
                         unflagConfirm={this.unflagConfirm}
                         history={this.props.history}
+                        translation={this.props.translation}
                     />
                 </div>
             </Fragment>

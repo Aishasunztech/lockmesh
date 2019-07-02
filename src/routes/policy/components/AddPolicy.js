@@ -391,6 +391,7 @@ class AddPolicy extends Component {
                                 isSwitch={true}
                                 isCheckbox={true}
                                 pageType={'dealerApps'}
+                                translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -409,6 +410,7 @@ class AddPolicy extends Component {
                                 appPermissions='appPermissions'
                                 isSwitch={true}
                             // isCheckbox={true}
+                            translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -427,6 +429,7 @@ class AddPolicy extends Component {
                                 secureSettings='allExtensions'
                                 isSwitch={true}
                                 AddPolicy={true}
+                                translation={this.props.translation}
                             />
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">
