@@ -11,6 +11,11 @@
 
 .manage_sec .ant-card-body {
     padding: 16px;
+    text-align: left;
+}
+
+.manage_sec1 .ant-card-body {
+    padding: 16px;
     text-align: center;
 }
 

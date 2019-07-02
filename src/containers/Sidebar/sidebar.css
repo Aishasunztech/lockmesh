@@ -106,6 +106,10 @@
     padding: 12px 0 12px;
 }
 
+.cred_badge {
+    margin-bottom: 0;
+}
+
 .cred_badge .ant-badge-count {
     min-width: 40px;
     right: -6px;

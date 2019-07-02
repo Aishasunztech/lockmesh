@@ -150,9 +150,7 @@ class SidebarContent extends Component {
                     </i>
                   </Badge>
                 </a>
-
               </li>
-
               {/* Chat Icon */}
               <li>
                 <i className="icon icon-chat-new" />
