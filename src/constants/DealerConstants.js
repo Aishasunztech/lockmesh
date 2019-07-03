@@ -6,5 +6,6 @@ export const DEALER_DEVICES = 'devices'; // DEVICES
 export const DEALER_TOKENS = 'tokens.id'; // TOKENS
 export const DEALER_ACTION = 'action.id'; // ACTION
 
-export const Parent_Dealer = "parent.dealer.id";// Parent Dealer
+export const Parent_Dealer = "parent.dealer.id";// PARENT DEALER
+export const Parent_Dealer_ID = "parent.dealer.id.id";// PARENT DEALER ID
 export const Login_History = "login.histoy.id"; // Login History

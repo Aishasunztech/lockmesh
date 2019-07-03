@@ -45,8 +45,9 @@ import {
 } from "../../../constants/Constants";
 
 
-import { PUSH_APPS, PULL_APPS, POLICY } from "../../../constants/ActionTypes"
-import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG } from '../../../constants/ButtonConstants';
+import { PUSH_APPS, PULL_APPS, POLICY, SAVE_PROFILE } from "../../../constants/ActionTypes"
+import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG, Button_Save, Button_Cancel } from '../../../constants/ButtonConstants';
+import { DEVICE_ID } from '../../../constants/DeviceConstants';
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -813,7 +814,7 @@ class SideActions extends Component {
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
-                    title={<div> Save Profile <br /> Device ID:  {this.props.device.device_id} </div>}
+                    title={<div> {convertToLang(this.props.translation[SAVE_PROFILE], SAVE_PROFILE)} <br /> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}:  {this.props.device.device_id} </div>}
                     closable={false}
                     maskClosable={false}
                     style={{ top: 20 }}
@@ -824,7 +825,8 @@ class SideActions extends Component {
                         this.saveProfile();
                     }}
                     onCancel={() => { this.setState({ profileName: '' }); this.showSaveProfileModal(false) }}
-                    okText='Save'
+                    okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
@@ -841,6 +843,7 @@ class SideActions extends Component {
                     selectedApps={this.state.selectedApps}
                     handleChecked={this.handleChecked}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <PullAppModal
@@ -856,6 +859,7 @@ class SideActions extends Component {
                     handleChecked={this.handleChecked}
                     onCancelModel={this.onCancelModel}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <PasswordModal
@@ -863,6 +867,7 @@ class SideActions extends Component {
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
                     actionType={this.state.actionType}
+                    translation={this.props.translation}
                 />
 
                 <SelectedApps
@@ -877,6 +882,7 @@ class SideActions extends Component {
                     showPushAppsModal={this.props.showPushAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <ActivateDevcie
@@ -893,6 +899,7 @@ class SideActions extends Component {
 
                 <EditDevice
                     ref='edit_device'
+                    translation={this.props.translation}
                 />
                 <WipeDevice
                     ref='wipe_device'
@@ -953,9 +960,10 @@ function mapDispatchToProps(dispatch) {
         getProfiles: getProfiles
     }, dispatch);
 }
-var mapStateToProps = ({ device_details, auth }, otherProps) => {
+var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
 
     return {
+        translation: settings.translation,
         authUser: auth.authUser,
         historyModal: device_details.historyModal,
         applyPolicyConfirm: device_details.applyPolicyConfirm,

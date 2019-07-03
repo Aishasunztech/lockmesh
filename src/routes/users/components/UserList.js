@@ -235,9 +235,10 @@ class UserList extends Component {
                         dataSource={this.renderList(this.state.users)}
                         pagination={{ pageSize: this.state.pagination, size: "midddle" }}
                         ref='user_table'
+                        translation={this.props.translation}
                     />
                 </Card>
-                <AddUser ref='edit_user' />
+                <AddUser ref='edit_user' translation={this.props.translation} />
             </Fragment>
         )
     }

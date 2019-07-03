@@ -26,7 +26,7 @@ import styles from './dealers.css'
 // } from '../../constants/DealerConstants';
 
 import {
-    Appfilter_SearchDealer
+    Appfilter_SearchDealer, Appfilter_ShowDealer
 } from '../../constants/AppFilterConstants';
 import {
     ADMIN,
@@ -106,10 +106,13 @@ import {
     DEALER_DEVICES,
     DEALER_TOKENS,
     DEALER_ACTION,
+    Parent_Dealer,
+    Parent_Dealer_ID,
 } from '../../constants/DealerConstants';
 
 
 import { isArray } from "util";
+import { Tab_All, Tab_Active, Tab_Suspended, Tab_Archived } from "../../constants/TabConstants";
 // import { ADMIN, DEALER } from "../../constants/Constants";
 
 var coppydealers = [];
@@ -447,7 +450,7 @@ class Dealers extends Component {
                     // console.log("valueis", value);
                     // console.log("column", column)
                     if (column.className !== 'row') {
-                        if (column.children[0].title === value) {
+                        if (column.children[0].title === convertToLang(this.props.translation[value.key], value.key)) {
                             dumydata[index].className = '';
                             dumydata[index].children[0].className = '';
                         }
@@ -471,6 +474,7 @@ class Dealers extends Component {
 
             this.setState({ columns: newState });
         }
+        // console.log('this.state.dealer_type is: ', this.state.dealer_type);
 
         this.props.postDropdown(values, this.state.dealer_type);
     }
@@ -479,9 +483,9 @@ class Dealers extends Component {
         return (
             <Select
                 showSearch
-                //     placeholder={
-                //     // <IntlMessages id="appfilter.ShowDealer" />
-                // }
+                    placeholder={ convertToLang(this.props.translation[Appfilter_ShowDealer], Appfilter_ShowDealer)
+                    // <IntlMessages id="appfilter.ShowDealer" />
+                }
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -489,10 +493,10 @@ class Dealers extends Component {
                 }}
                 onChange={this.handleChange}
             >
-                <Select.Option value="all">All</Select.Option>
-                <Select.Option value="active">Active</Select.Option>
-                <Select.Option value="suspended">Suspended</Select.Option>
-                <Select.Option value="unlinked">Archived</Select.Option>
+                <Select.Option value="all">{convertToLang(this.props.translation[Tab_All], Tab_All)}</Select.Option>
+                <Select.Option value="active">{convertToLang(this.props.translation[Tab_Active], Tab_Active)}</Select.Option>
+                <Select.Option value="suspended">{convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)}</Select.Option>
+                <Select.Option value="unlinked">{convertToLang(this.props.translation[Tab_Archived], Tab_Archived)}</Select.Option>
             </Select>
         );
     }
@@ -602,7 +606,7 @@ class Dealers extends Component {
                             id="parent_dealer"
                             className="search_heading"
                             autoComplete="new-password"
-                            placeholder="Parent Dealer"
+                            placeholder={convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer)}
                             onKeyUp={this.handleSearch}
                         />
                     ),
@@ -610,7 +614,7 @@ class Dealers extends Component {
                     className: '',
                     children: [
                         {
-                            title: 'PARENT DEALER',
+                            title: convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer),
                             dataIndex: 'parent_dealer',
                             key: 'parent_dealer',
                             className: '',
@@ -632,7 +636,7 @@ class Dealers extends Component {
                             id="parent_dealer_id"
                             className="search_heading"
                             autoComplete="new-password"
-                            placeholder="Parent Dealer ID"
+                            placeholder={convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID)}
                             onKeyUp={this.handleSearch}
                         />
                     ),
@@ -640,7 +644,7 @@ class Dealers extends Component {
                     className: '',
                     children: [
                         {
-                            title: 'PARENT DEALER ID',
+                            title: convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID),
                             dataIndex: 'parent_dealer_id',
                             key: 'parent_dealer_id',
                             className: '',
@@ -653,12 +657,13 @@ class Dealers extends Component {
             // this.state.columns = this.state.columns
         }
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 6)) {
-            this.state.options.push('PARENT DEALER', 'PARENT DEALER ID');
+            // alert('if sdealer')
+            this.state.options.push(convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer), convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID));
         }
         else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 8) || (this.state.options.length > 6))) {
-
-            this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER ID');
-            this.state.columns = this.state.columns.filter(lst => lst.title !== 'PARENT DEALER');
+            // alert('if dealer')
+            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID));
+            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer));
             this.state.options = this.state.options.slice(0, 6);
         }
 
@@ -735,7 +740,7 @@ class Dealers extends Component {
                 break;
         }
 
-        // this.handleCheckChange(this.props.selectedOptions)
+        this.handleCheckChange(this.props.selectedOptions)
 
     }
 
@@ -762,15 +767,18 @@ class Dealers extends Component {
                             {/* <AddDealer ref='addDealer'  /> */}
                             <Modal
                                 visible={this.state.visible_DealerModal}
-                                title={'Add ' + this.state.dealer_type}
+                                title={dealerType}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
                                 footer={null}
+                                okText= {convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                                cancelText= {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                             >
                                 <AddDealer
                                     handleCancel={this.handleCancel}
                                     dealersList={this.state.dealers}
                                     dealer_type={this.state.dealer_type}
+                                    translation={this.props.translation}
                                 />
 
                             </Modal>
@@ -834,7 +842,7 @@ class Dealers extends Component {
                         />
 
                     </Card> */}
-                            <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
+                            <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
 
 
                         </div>
@@ -908,11 +916,11 @@ var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
     // console.log(state.dealers.isloading);
     // console.log('state.dealer', state.dealers);
-    // console.log("selected options Dealer", state);
+    console.log("selected options Dealer", state.settings.dealerOptions);
     return {
         isloading: state.dealers.isloading,
         dealers: state.dealers.dealers,
-        options: state.dealers.options,
+        options: state.settings.dealerOptions,
         suspended: state.dealers.suspended,
         selectedOptions: state.dealers.selectedOptions,
         DisplayPages: state.dealers.DisplayPages,

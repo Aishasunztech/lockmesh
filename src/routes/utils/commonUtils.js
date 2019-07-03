@@ -355,26 +355,14 @@ export function dealerColsWithSearch(searchBar = false, callBack = null) {
 }
 
 export function convertToLang(lngWord, constant) {
-  // console.log(lngWord, 'data from functions', constant)
-
 
   if (lngWord != undefined && lngWord != '' && lngWord != null) {
+    // console.log('convert To Language Function: ', lngWord);
     return lngWord;
-  } else {
+  } else if (constant != undefined && constant != '' && constant != null) {
     return constant;
+  } else {
+    return "N/A";
   }
 
-  // if (Object.keys(locale).length !== 0 && locale.constructor === Object) {
-  //   // for (var key in appLocale) {
-  //   //   if (key == locale.locale) {
-  //   //     // console.log("Key is ", key, ", value is ", appLocale[key]);
-  //   //     let word = appLocale[key].messages[id];
-  //   //     console.log(locale, word, 'function data is the')
-  //   //     if (word) return word;
-  //   //     else return 'N/A'
-  //   //   }
-  //   // }
-  // } else {
-  //   return 'N/A'
-  // }
 }

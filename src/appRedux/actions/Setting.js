@@ -35,13 +35,16 @@ export function onLayoutTypeChange(layoutType) {
 //   };
 // }
 
-export function languages(){
+export function languages() {
   return (dispatch) => {
-    RestService.languages().then((response)=>{
-      dispatch({
-        type: LANGUAGES,
-        payload: response.data.data
-      })
+    RestService.languages().then((response) => {
+      console.log("Language Resoonse" , response.data)
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: LANGUAGES,
+          payload: response.data.data
+        })
+      }
     })
   }
 }

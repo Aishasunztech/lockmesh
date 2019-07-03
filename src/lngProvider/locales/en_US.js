@@ -211,7 +211,10 @@ let enLang={
   "picker.color.photoshop": "Photoshop Pickers",
   "picker.color.swatches": "Swatches Pickers",
   "picker.color.basicPositioning": "Basic Positioning",
-  "sidebar.social": "Social Apps"
+  "sidebar.social": "Social Apps",
+  "tableHeadings.REMAININGDAYS": "Remaining Days",
+  "parent.dealer.id": "PARENT DEALER",
+  "parent.dealer.id.id": "PARENT DEALER ID",
 }
 
 export default enLang;

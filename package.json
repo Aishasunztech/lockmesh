@@ -10,6 +10,7 @@
     "axios": "^0.18.0",
     "draftjs-to-html": "^0.8.4",
     "instantsearch.css": "^7.1.0",
+    "interweave": "^11.1.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "less-vars-to-js": "^1.2.1",

@@ -3,12 +3,18 @@
 export const MANAGE_DATA = "manage.data.id"; // Manage Data
 export const BACKUP_DATABASE = "backup_database.id"; // Backup Database
 export const PURCHASE_CREDITS = "purchase.credits.id"; // Purchase Credits
-export const SET_PRICES_PACKAGES = "set.prices.packages.id"; // Set Prices Packages
+export const PACKAGES_AND_IDS = "packages.and.ids.id"; // Packages and ID's
 
-// export const MANAGE_DATA_DESCRIPTION = "manage.data.description.id"; // 
-// export const BACKUP_DATABASE_DESCRIPTION = "backup_database.description.id";
-// export const PURCHASE_CREDITS_DESCRIPTION = "purchase.credits.description.id";
-// export const SET_PRICES_PACKAGES_DESCRIPTION = "set.prices.packages.description.id";
+export const ACCOUNT_MANAGE_DATA_01 = "account.manage.data.01.id"; // Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..
+export const ACCOUNT_MANAGE_DATA_02 = "account.manage.data.02.id"; // View/Edit your data
+export const ACCOUNT_MANAGE_DATA_03 = "account.manage.data.03.id"; // Release previously used data back to system
+export const UPLOAD_FILE = "upload.file.id"; // UPLOAD FILE
+export const UPLOAD_FILE_Ext = "upload.file.extension.id"; // .xls, .xlsx, .csv
+export const BACKUP_DATABASE_DESCRIPTION = "backup_database.description.id"; // This feature allows you to keep a backup of the complete system database for offline safekeeping
+export const PURCHASE_CREDITS_DESCRIPTION = "purchase.credits.description.id"; // Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.
+export const PACKAGES_AND_IDS_01 = "packages.and.ids.01.id"; // Distribute tokens
+export const PACKAGES_AND_IDS_02 = "packages.and.ids.02.id"; // Set prices and delay for each token
+export const PACKAGES_AND_IDS_03 = "packages.and.ids.03.id"; // Set permissions for Tokens
 
 
 // ********************** Set prices and Packages

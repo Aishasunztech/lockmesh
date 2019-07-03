@@ -2,14 +2,14 @@ import React from "react";
 import { Button, Form, Icon, Input, message } from "antd";
 import { connect } from "react-redux";
 // import {Link} from "react-router-dom";
-
+import { convertToLang } from '../routes/utils/commonUtils';
 import {
   hideMessage,
   showAuthLoader,
   loginUser
 } from "appRedux/actions/Auth";
 import CircularProgress from "components/CircularProgress/index";
-import { AUTO_UPDATE_ADMIN } from "../constants/Constants";
+import { AUTO_UPDATE_ADMIN, SIGN_IN } from "../constants/Constants";
 import { APP_TITLE } from "../constants/Application";
 
 const FormItem = Form.Item;
@@ -93,6 +93,7 @@ class Login extends React.Component {
 
                 <FormItem>
                   <Button type="primary" className="gx-mb-0" htmlType="submit">
+                  {convertToLang(this.props.translation[SIGN_IN], SIGN_IN)}
                     {/* <IntlMessages id="app.userAuth.signIn" /> */}
                   </Button>
                 </FormItem>
@@ -115,11 +116,13 @@ class Login extends React.Component {
 
 const WrappedNormalLoginForm = Form.create()(Login);
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, settings }) => {
   // console.log(auth);
 
   const { loader, alertMessage, showMessage, authUser } = auth;
-  return { loader, alertMessage, showMessage, authUser, auth }
+  return { loader, alertMessage, showMessage, authUser, auth, 
+    translation: settings.translation 
+  }
 };
 
 export default connect(mapStateToProps, {

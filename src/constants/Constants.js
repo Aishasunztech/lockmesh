@@ -124,3 +124,8 @@ export const Preset_Color_Pallets = "preset.color.pallets.id"; // Preset Color P
 export const Customize = "customize.id"; // Customize
 export const Reset_Theme = "reset.theme.id"; // Reset Theme
 export const Nav_Style = "nav.style.id"; //  Nav Style
+
+
+
+// ==============================
+export const SIGN_IN = "app.userAuth.signIn"; 

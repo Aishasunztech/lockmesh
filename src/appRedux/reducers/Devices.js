@@ -59,7 +59,7 @@ import {
 import SettingStates from './InitialStates';
 import { message, Modal } from 'antd';
 
-const { translation } = SettingStates;
+var { translation } = SettingStates;
 
 
 const success = Modal.success
@@ -75,35 +75,35 @@ const initialState = {
     sim_ids: [],
     chat_ids: [],
     pgp_emails: [],
-    options: [
-        {"key": DEVICE_ID, "value": convertToLang(translation[DEVICE_ID], DEVICE_ID)},
-        {"key": USER_ID, "value": convertToLang(translation[USER_ID], USER_ID)},
-        {"key": DEVICE_REMAINING_DAYS, "value": convertToLang(translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS)},
-        {"key": DEVICE_STATUS, "value": convertToLang(translation[DEVICE_STATUS], DEVICE_STATUS)},
-        {"key": DEVICE_MODE, "value": convertToLang(translation[DEVICE_MODE], DEVICE_MODE)},
-        {"key": DEVICE_FLAGGED, "value": convertToLang(translation[DEVICE_FLAGGED], DEVICE_FLAGGED)},
-        {"key": DEVICE_NAME, "value": convertToLang(translation[DEVICE_NAME], DEVICE_NAME)},
-        {"key": DEVICE_ACCOUNT_EMAIL, "value": convertToLang(translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL)},
-        {"key": DEVICE_CLIENT_ID, "value": convertToLang(translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID)},
-        {"key": DEVICE_ACTIVATION_CODE, "value": convertToLang(translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE)},
-        {"key": DEVICE_PGP_EMAIL, "value": convertToLang(translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL)},
-        {"key": DEVICE_SIM_ID, "value": convertToLang(translation[DEVICE_SIM_ID], DEVICE_SIM_ID)},
-        {"key": DEVICE_CHAT_ID, "value": convertToLang(translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID)},
-        {"key": DEVICE_DEALER_ID, "value": convertToLang(translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID)},
-        {"key": DEVICE_DEALER_NAME, "value": convertToLang(translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME)},
-        {"key": DEVICE_DEALER_PIN, "value": convertToLang(translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN)},
-        {"key": DEVICE_MAC_ADDRESS, "value": convertToLang(translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS)},
-        {"key": DEVICE_IMEI_1, "value": convertToLang(translation[DEVICE_IMEI_1], DEVICE_IMEI_1)},
-        {"key": DEVICE_SIM_1, "value": convertToLang(translation[DEVICE_SIM_1], DEVICE_SIM_1)},
-        {"key": DEVICE_IMEI_2, "value": convertToLang(translation[DEVICE_IMEI_2], DEVICE_IMEI_2)},
-        {"key": DEVICE_SIM_2, "value": convertToLang(translation[DEVICE_SIM_2], DEVICE_SIM_2)},
-        {"key": DEVICE_SERIAL_NUMBER, "value": convertToLang(translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER)},
-        {"key": DEVICE_MODEL, "value": convertToLang(translation[DEVICE_MODEL], DEVICE_MODEL)},
-        {"key": DEVICE_S_DEALER, "value": convertToLang(translation[DEVICE_S_DEALER], DEVICE_S_DEALER)},
-        {"key": DEVICE_S_DEALER_NAME, "value": convertToLang(translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME)},
-        {"key": DEVICE_START_DATE, "value": convertToLang(translation[DEVICE_START_DATE], DEVICE_START_DATE)},
-        {"key": DEVICE_EXPIRY_DATE, "value": convertToLang(translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE)},
-    ],
+    // options: [
+    //     { "key": DEVICE_ID, "value": convertToLang(translation[DEVICE_ID], DEVICE_ID) },
+    //     { "key": USER_ID, "value": convertToLang(translation[USER_ID], USER_ID) },
+    //     { "key": DEVICE_REMAINING_DAYS, "value": convertToLang(translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS) },
+    //     { "key": DEVICE_STATUS, "value": convertToLang(translation[DEVICE_STATUS], DEVICE_STATUS) },
+    //     { "key": DEVICE_MODE, "value": convertToLang(translation[DEVICE_MODE], DEVICE_MODE) },
+    //     { "key": DEVICE_FLAGGED, "value": convertToLang(translation[DEVICE_FLAGGED], DEVICE_FLAGGED) },
+    //     { "key": DEVICE_NAME, "value": convertToLang(translation[DEVICE_NAME], DEVICE_NAME) },
+    //     { "key": DEVICE_ACCOUNT_EMAIL, "value": convertToLang(translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL) },
+    //     { "key": DEVICE_CLIENT_ID, "value": convertToLang(translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID) },
+    //     { "key": DEVICE_ACTIVATION_CODE, "value": convertToLang(translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE) },
+    //     { "key": DEVICE_PGP_EMAIL, "value": convertToLang(translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL) },
+    //     { "key": DEVICE_SIM_ID, "value": convertToLang(translation[DEVICE_SIM_ID], DEVICE_SIM_ID) },
+    //     { "key": DEVICE_CHAT_ID, "value": convertToLang(translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID) },
+    //     { "key": DEVICE_DEALER_ID, "value": convertToLang(translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID) },
+    //     { "key": DEVICE_DEALER_NAME, "value": convertToLang(translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME) },
+    //     { "key": DEVICE_DEALER_PIN, "value": convertToLang(translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN) },
+    //     { "key": DEVICE_MAC_ADDRESS, "value": convertToLang(translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS) },
+    //     { "key": DEVICE_IMEI_1, "value": convertToLang(translation[DEVICE_IMEI_1], DEVICE_IMEI_1) },
+    //     { "key": DEVICE_SIM_1, "value": convertToLang(translation[DEVICE_SIM_1], DEVICE_SIM_1) },
+    //     { "key": DEVICE_IMEI_2, "value": convertToLang(translation[DEVICE_IMEI_2], DEVICE_IMEI_2) },
+    //     { "key": DEVICE_SIM_2, "value": convertToLang(translation[DEVICE_SIM_2], DEVICE_SIM_2) },
+    //     { "key": DEVICE_SERIAL_NUMBER, "value": convertToLang(translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER) },
+    //     { "key": DEVICE_MODEL, "value": convertToLang(translation[DEVICE_MODEL], DEVICE_MODEL) },
+    //     { "key": DEVICE_S_DEALER, "value": convertToLang(translation[DEVICE_S_DEALER], DEVICE_S_DEALER) },
+    //     { "key": DEVICE_S_DEALER_NAME, "value": convertToLang(translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME) },
+    //     { "key": DEVICE_START_DATE, "value": convertToLang(translation[DEVICE_START_DATE], DEVICE_START_DATE) },
+    //     { "key": DEVICE_EXPIRY_DATE, "value": convertToLang(translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE) },
+    // ],
     // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
 };
@@ -118,7 +118,7 @@ export default (state = initialState, action) => {
                 isloading: true,
                 msg: state.msg,
                 showMsg: "hello",
-                options: state.options,
+                // options: state.options,
                 devices: [],
             }
 
@@ -128,23 +128,23 @@ export default (state = initialState, action) => {
                 isloading: false,
                 msg: state.msg,
                 showMsg: "hello",
-                options: state.options,
+                // options: state.options,
                 devices: action.payload,
             }
 
-            case UNFLAG_DEVICE: {
-                if (action.response.status) {
-                    // console.log('unflaged', action.response.device_id)
-                    let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.device_id));
-                    if (objIndex !== -1) {
-                        state.devices[objIndex].flagged = 'Not flagged';
-                    }
-                    return {
-                        ...state,
-                        devices: [...state.devices]
-                    }
+        case UNFLAG_DEVICE: {
+            if (action.response.status) {
+                // console.log('unflaged', action.response.device_id)
+                let objIndex = state.devices.findIndex((obj => obj.device_id === action.response.device_id));
+                if (objIndex !== -1) {
+                    state.devices[objIndex].flagged = 'Not flagged';
+                }
+                return {
+                    ...state,
+                    devices: [...state.devices]
                 }
             }
+        }
 
         case NEW_DEVICES_LIST:
             // console.log('reducer new device', action.payload);
@@ -153,7 +153,7 @@ export default (state = initialState, action) => {
                 isloading: false,
                 msg: state.msg,
                 showMsg: "hello",
-                options: state.options,
+                // options: state.options,
                 newDevices: action.payload,
             }
 
@@ -180,7 +180,7 @@ export default (state = initialState, action) => {
                 devices: [...state.devices],
                 msg: action.payload.msg,
                 showMsg: true,
-                options: state.options,
+                // options: state.options,
             }
 
 
@@ -205,7 +205,7 @@ export default (state = initialState, action) => {
                 devices: [...state.devices],
                 msg: action.payload.msg,
                 showMsg: true,
-                options: state.options,
+                // options: state.options,
             }
 
         case DELETE_UNLINK_DEVICE:
@@ -225,7 +225,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 devices: [...state.devices],
-                options: state.options
+                // options: state.options
             }
 
         case CONNECT_DEVICE:
@@ -254,11 +254,11 @@ export default (state = initialState, action) => {
                 ...state,
                 devices: [...state.devices],
                 //    selectedOptions: [...state.selectedOptions],
-                options: state.options,
+                // options: state.options,
                 isloading: false,
                 msg: state.msg,
                 showMsg: "hello",
-                // options: state.options,
+                options: state.options,
                 // devices: action.payload,
             }
 
@@ -285,7 +285,7 @@ export default (state = initialState, action) => {
                 ...state,
                 devices: devices,
                 //    selectedOptions: [...state.selectedOptions],
-                options: state.options,
+                // options: state.options,
                 isloading: false,
                 msg: state.msg,
                 showMsg: "hello",
@@ -294,6 +294,7 @@ export default (state = initialState, action) => {
             break;
 
         case GET_DROPDOWN: {
+            console.log( "Reducer " ,action.payload)
             // console.log(GET_DROPDOWN);
             // console.log({
             //     ...state,

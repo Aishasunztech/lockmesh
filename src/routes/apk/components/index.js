@@ -6,6 +6,7 @@ import styles from './app.css'
 import { connect } from "react-redux";
 import ConfirmAutoUpdate from './ConfirmAutoUpdate'
 import { authenticateUpdateUser, resetAuthUpdate } from "../../../appRedux/actions/Apk";
+import { Markup } from 'interweave';
 import { Redirect } from 'react-router-dom';
 import { BASE_URL } from '../../../constants/Application.js';
 import {
@@ -230,9 +231,9 @@ class Apk extends Component {
                                                         <Icon type="tool" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16} style={{ padding: 0 }}>
-                                                        <h5><span className="diamond_icon">&#9670;</span>
-                                                            {/* {escape("BYOD Launcher Apk, Tools,<br />etc... can be found here")} */}
-                                                            {convertToLang(this.props.translation[APP_DT_01], APP_DT_01)}
+                                                        <h5 style={{ display: 'inline-flex'}}><span className="diamond_icon">&#9670;</span>
+                                                            <Markup content={convertToLang(this.props.translation[APP_DT_01], APP_DT_01)} />
+                                                            {/* {convertToLang(this.props.translation[APP_DT_01], APP_DT_01)} */}
                                                         </h5>
                                                         <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
                                                     </Col>
@@ -255,7 +256,10 @@ class Apk extends Component {
                                     <Row className="d_t_m">
                                         <h4 style={{ lineHeight: '30px', marginBottom: 0 }}>{convertToLang(this.props.translation[DT_MODAL_BODY], DT_MODAL_BODY)}</h4>
                                         <a href={`${BASE_URL}users/getFile/nlbyod.apk`}>
-                                            <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}> {convertToLang(this.props.translation[Button_DOWNLOAD], Button_DOWNLOAD)}</Button>
+                                            <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}> 
+                                            
+                                            {convertToLang(this.props.translation[Button_DOWNLOAD], Button_DOWNLOAD)}
+                                            </Button>
                                         </a>
                                     </Row>
                                 </Modal>
@@ -272,11 +276,11 @@ class Apk extends Component {
                                                         <Icon type="idcard" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16}>
-                                                        <h5><span className="diamond_icon">&#9670;</span>
-                                                            {convertToLang(this.props.translation[APP_SPA_01], APP_SPA_01)}
+                                                        <h5 style={{ display: 'inline-flex'}}><span className="diamond_icon">&#9670;</span>
+                                                        <Markup content={convertToLang(this.props.translation[APP_SPA_01], APP_SPA_01)} />
                                                         </h5>
-                                                        <h5 style={{ marginBottom: 0 }}><span className="diamond_icon">&#9670;</span>
-                                                            {convertToLang(this.props.translation[APP_SPA_02], APP_SPA_02)}
+                                                        <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                        <Markup content={convertToLang(this.props.translation[APP_SPA_02], APP_SPA_02)} />
                                                         </h5>
                                                         <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
                                                     </Col>

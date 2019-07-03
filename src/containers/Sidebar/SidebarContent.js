@@ -17,6 +17,7 @@ import NewDevice from '../../components/NewDevices';
 
 import { getNewDevicesList } from "../../appRedux/actions/Common";
 
+import { convertToLang } from '../../routes/utils/commonUtils';
 
 import {
   NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
@@ -47,6 +48,7 @@ import { rejectDevice, addDevice } from '../../appRedux/actions/Devices';
 import { switchLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
+import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 
 
 class SidebarContent extends Component {
@@ -62,6 +64,7 @@ class SidebarContent extends Component {
       {this.state.languageData.map(language =>
         <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
           this.props.switchLanguage(language)
+          // this.changeLng(language)
         }>
           <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`} />
           <span className="gx-language-text">{language.name}</span>
@@ -90,6 +93,7 @@ class SidebarContent extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.languageData)
     this.setState({
       languageData: this.props.languageData
     })
@@ -127,11 +131,28 @@ class SidebarContent extends Component {
     let _this = this;
     Modal.confirm({
       title: 'Are you sure you want to logout?',
-      okText: 'Yes',
-      cancelText: 'No',
+      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
 
       onOk() {
         _this.props.logout()
+        // console.log('OK');
+      },
+      onCancel() {
+        // console.log('Cancel');
+      },
+    })
+  }
+
+  changeLng = (language) => {
+    let _this = this;
+    Modal.confirm({
+      title: 'Are you sure to change the language?',
+      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+
+      onOk() {
+        _this.props.switchLanguage(language)
         // console.log('OK');
       },
       onCancel() {
@@ -203,7 +224,7 @@ class SidebarContent extends Component {
               <Menu.Item key="app">
                 <Link to="/apk-list/autoupdate"><i className="icon icon-apps" />
                   {/* <IntlMessages id="sidebar.app" /> */}
-                  {translation[Sidebar_app]}
+                  {convertToLang(translation[Sidebar_app], Sidebar_app)}
                 </Link>
               </Menu.Item>
               <Menu.Item key="logout" onClick={(e) => {
@@ -214,7 +235,7 @@ class SidebarContent extends Component {
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
                 </i>
-                {translation[Sidebar_logout]}
+                {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
                 {/* </Link> */}
               </Menu.Item>
             </Menu>
@@ -229,40 +250,40 @@ class SidebarContent extends Component {
                     <i className="fa fa-mobile" aria-hidden="true"></i>
                   </i>
                   {/* <IntlMessages id="sidebar.devices" /> */}
-                  {translation[Sidebar_devices]}
+                  {convertToLang(translation[Sidebar_devices], Sidebar_devices)}
                 </Link>
               </Menu.Item>
               <Menu.Item key="users">
                 <Link to="/users">
                   <i className="icon icon-user" />
                   {/* <IntlMessages id="sidebar.users" /> */}
-                  {translation[Sidebar_users]}
+                  {convertToLang(translation[Sidebar_users], Sidebar_users)}
                 </Link>
               </Menu.Item>
               {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
                 <Link to="/dealer/dealer"><i className="icon icon-avatar" />
                   {/* <IntlMessages id="sidebar.dealers" /> */}
-                  {translation[Sidebar_dealers]}
+                  {convertToLang(translation[Sidebar_dealers], Sidebar_dealers)}
                 </Link>
               </Menu.Item> : null}
 
               {(authUser.type === ADMIN || authUser.type === DEALER) ? <Menu.Item key="dealer/sdealer">
                 <Link to="/dealer/sdealer"><i className="icon icon-avatar" />
                   {/* <IntlMessages id="sidebar.sdealers" /> */}
-                  {translation[Sidebar_sdealers]}
+                  {convertToLang(translation[Sidebar_sdealers], Sidebar_sdealers)}
                 </Link>
               </Menu.Item> : null}
 
               {(authUser.type === "admin" || authUser.type === "dealer") ? <Menu.Item key="app">
                 <Link to="/app"><i className="icon icon-apps" />
                   {/* <IntlMessages id="sidebar.app" /> */}
-                  {translation[Sidebar_app]}
+                  {convertToLang(translation[Sidebar_app], Sidebar_app)}
                 </Link>
               </Menu.Item> : null}
               {(authUser.type === ADMIN) ? <Menu.Item key="account">
                 <Link to="/account"><i className="icon icon-profile2" />
                   {/* <IntlMessages id="sidebar.account" /> */}
-                  {translation[Sidebar_account]}
+                  {convertToLang(translation[Sidebar_account], Sidebar_account)}
                 </Link>
               </Menu.Item> : null}
 
@@ -270,7 +291,7 @@ class SidebarContent extends Component {
               <Menu.Item key="settings">
                 <Link to="/settings"><i className="icon icon-setting" />
                   {/* <IntlMessages id="sidebar.settings" /> */}
-                  {translation[Sidebar_settings]}
+                  {convertToLang(translation[Sidebar_settings], Sidebar_settings)}
                 </Link>
               </Menu.Item>
               <Menu.Item key="logout" onClick={(e) => {
@@ -281,7 +302,7 @@ class SidebarContent extends Component {
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
                 </i>
-                {translation[Sidebar_logout]}
+                {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
                 {/* </Link> */}
               </Menu.Item>
             </Menu>
@@ -297,7 +318,7 @@ class SidebarContent extends Component {
 
 const mapStateToProps = ({ settings, devices, device3 }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
-  // console.log(locale, 'translation are : ', translation)
+  console.log('translation are : ', languages)
 
   return {
     navStyle,
