@@ -7,7 +7,7 @@ import {
     LOADING,
     PERMSSION_SAVED,
     RESET_UPLOAD_FORM,
-    CHECK_APK_NAME,
+    // CHECK_APK_NAME,
     AUTHENTICATE_UPDATE_USER,
     RESET_AUTH_UPDATE
 } from "../../constants/ActionTypes"

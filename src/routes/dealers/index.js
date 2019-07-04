@@ -536,63 +536,7 @@ class Dealers extends Component {
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 8)) {
             //  alert('if sdealer')
 
-            this.state.columns.push(sDealerColumns(this.props.translation, this.handleSearch)
-                // {
-                //     title: (
-                //         <Input.Search
-                //             name="parent_dealer"
-                //             key="parent_dealer"
-                //             id="parent_dealer"
-                //             className="search_heading"
-                //             autoComplete="new-password"
-                //             placeholder={convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer)}
-                //             onKeyUp={this.handleSearch}
-                //         />
-                //     ),
-                //     dataIndex: 'parent_dealer',
-                //     className: '',
-                //     children: [
-                //         {
-                //             title: convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer),
-                //             dataIndex: 'parent_dealer',
-                //             key: 'parent_dealer',
-                //             className: '',
-                //             // sorter: (a, b) => {
-                //             //     console.log(a);
-                //             //     // console.log(b);
-                //             //     return a.parent_dealer.length;
-                //             // },
-                //             sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
-
-                //         }
-                //     ]
-                // },
-                // {
-                //     title: (
-                //         <Input.Search
-                //             name="parent_dealer_id"
-                //             key="parent_dealer_id"
-                //             id="parent_dealer_id"
-                //             className="search_heading"
-                //             autoComplete="new-password"
-                //             placeholder={convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID)}
-                //             onKeyUp={this.handleSearch}
-                //         />
-                //     ),
-                //     dataIndex: 'parent_dealer_id',
-                //     className: '',
-                //     children: [
-                //         {
-                //             title: convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID),
-                //             dataIndex: 'parent_dealer_id',
-                //             key: 'parent_dealer_id',
-                //             className: '',
-                //             sorter: (a, b) => { return a.parent_dealer_id - b.parent_dealer_id },
-
-                //         }
-                //     ]
-                // }
-            )
+            this.state.columns.push(sDealerColumns(this.props.translation, this.handleSearch));
             // this.state.columns = this.state.columns
         }
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 6)) {
@@ -606,10 +550,7 @@ class Dealers extends Component {
             this.state.options = this.state.options.slice(0, 6);
         }
 
-        if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            this.handleCheckChange(this.props.selectedOptions)
-        }
-
+      
         if (this.props.dealers !== prevProps.dealers) {
             this.setState({
                 dealers: this.props.dealers
@@ -628,6 +569,11 @@ class Dealers extends Component {
                 columns: dealerColumns(this.props.translation, this.handleSearch)
             })
         }
+
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            this.handleCheckChange(this.props.selectedOptions)
+        }
+
 
     }
 
@@ -684,7 +630,7 @@ class Dealers extends Component {
                 break;
         }
 
-        this.handleCheckChange(this.props.selectedOptions)
+        // this.handleCheckChange(this.props.selectedOptions)
 
     }
 
@@ -860,7 +806,7 @@ var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
     // console.log(state.dealers.isloading);
     // console.log('state.dealer', state.dealers);
-    console.log("selected options Dealer", state.settings.dealerOptions);
+    // console.log("selected options Dealer", state.settings.dealerOptions);
     return {
         isloading: state.dealers.isloading,
         dealers: state.dealers.dealers,

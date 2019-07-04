@@ -53,6 +53,13 @@ import {
   Parent_Dealer_ID
 } from '../../../constants/DealerConstants';
 
+import {
+	APK_SHOW_ON_DEVICE,
+	APK,
+	APK_APP_NAME,
+	APK_APP_LOGO,
+	APK_PERMISSION
+} from '../../../constants/ApkConstants';
 
 export var initialSettings = {
   navCollapsed: true,
@@ -105,6 +112,13 @@ export var initialSettings = {
     { "key": DEALER_TOKENS, "value": convertToLang(enLang[DEALER_TOKENS], DEALER_TOKENS) },
     { "key": Parent_Dealer, "value": convertToLang(enLang[Parent_Dealer], Parent_Dealer) },
     { "key": Parent_Dealer_ID, "value": convertToLang(enLang[Parent_Dealer_ID], Parent_Dealer_ID) },
+  ],
+  APKOptions: [
+    { "key": APK_PERMISSION, "value": convertToLang(enLang[APK_PERMISSION], APK_PERMISSION)},
+    { "key": APK_SHOW_ON_DEVICE, "value": convertToLang(enLang[APK_SHOW_ON_DEVICE], APK_SHOW_ON_DEVICE)},
+    { "key": APK, "value": convertToLang(enLang[APK], APK)},
+    { "key": APK_APP_NAME, "value": convertToLang(enLang[APK_APP_NAME], APK_APP_NAME)},
+    { "key": APK_APP_LOGO, "value": convertToLang(enLang[APK_APP_LOGO], APK_APP_LOGO)},
   ],
   //  locale: {
   //   languageId: 'english',

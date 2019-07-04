@@ -50,6 +50,7 @@ import {
     // DEALER_ACTION,
     Parent_Dealer,
     Parent_Dealer_ID,
+    DEALER_ACTION
 } from '../../constants/DealerConstants';
 
 const usersColumns_question_txt = (
@@ -1513,3 +1514,155 @@ export function sDealerColumns(translation, handleSearch) {
     );
 }
 
+
+export function dealerColsWithSearch(translation, searchBar = false, callBack = null) {
+
+    var searchInput = [
+      {
+        title: (
+          <Input.Search
+            name="dealer_id"
+            key="dealer_id"
+            id="dealer_id"
+            className="search_heading"
+            autoComplete="new-password"
+            placeholder={titleCase(convertToLang(translation[DEALER_ID], DEALER_ID))}
+            onKeyUp={
+              (e) => {
+                callBack(e)
+              }
+            }
+  
+          />
+        ),
+        dataIndex: 'dealer_id',
+        className: '',
+        children: []
+      },
+      {
+        title: (
+          <Input.Search
+            name="link_code"
+            key="link_code"
+            id="link_code"
+            className="search_heading"
+            autoComplete="new-password"
+            placeholder={titleCase(convertToLang(translation[DEALER_PIN], DEALER_PIN))}
+            onKeyUp={
+              (e) => {
+                callBack(e)
+              }
+            }
+  
+          />
+        ),
+        dataIndex: 'link_code',
+        className: '',
+        children: []
+      },
+      {
+        title: (
+          <Input.Search
+            name="dealer_name"
+            key="dealer_name"
+            id="dealer_name"
+            className="search_heading"
+            autoComplete="new-password"
+            placeholder={titleCase(convertToLang(translation[DEALER_NAME], DEALER_NAME))}
+            onKeyUp={
+              (e) => {
+                callBack(e)
+              }
+            }
+  
+          />
+        ),
+        dataIndex: 'dealer_name',
+        className: '',
+        children: []
+      },
+      {
+        title: (
+          <Input.Search
+            name="dealer_email"
+            key="dealer_email"
+            id="dealer_email"
+            className="search_heading"
+            autoComplete="new-password"
+            placeholder={titleCase(convertToLang(translation[DEALER_EMAIL], DEALER_EMAIL))}
+            onKeyUp={
+              (e) => {
+                callBack(e)
+              }
+            }
+  
+          />
+        ),
+        dataIndex: 'dealer_email',
+        className: '',
+        children: []
+      },
+    ]
+  
+  
+    var child = [
+      {
+        title: convertToLang(translation[DEALER_ID], DEALER_ID),
+        dataIndex: 'dealer_id',
+        key: 'dealer_id',
+        sorter: (a, b) => a.dealer_id - b.dealer_id,
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      {
+        title: convertToLang(translation[DEALER_PIN], DEALER_PIN),
+        dataIndex: 'link_code',
+        key: 'link_code',
+        sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      {
+        title: convertToLang(translation[DEALER_NAME], DEALER_NAME),
+        dataIndex: 'dealer_name',
+        key: 'dealer_name',
+        sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      {
+        title: convertToLang(translation[DEALER_EMAIL], DEALER_EMAIL),
+        dataIndex: 'dealer_email',
+        key: 'dealer_email',
+        sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+        sortDirections: ['ascend', 'descend'],
+        className: '',
+      },
+      {
+        title: convertToLang(translation[DEALER_ACTION], DEALER_ACTION),
+        dataIndex: 'action',
+        key: 'action',
+        className: '',
+      },
+  
+    ];
+  
+    if (searchBar) {
+      var result = searchInput.map((item, index) => {
+        let flag = true;
+        for (var i in child) {
+          if (child[i].dataIndex == item.dataIndex) {
+            item.children = [child[i]];
+            flag = false;
+            return item;
+          }
+        }
+        if (flag == true) {
+          return item;
+        }
+      })
+      return result;
+    } else {
+      return child;
+    }
+  }

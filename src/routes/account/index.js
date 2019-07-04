@@ -86,7 +86,7 @@ class PasswordModal extends Component {
                 onCancel={() => {
                     this.props.showPwdConfirmModal(false)
                     this.refs.pswdForm.resetFields()
-                    }
+                }
                 }
                 okText="Push Apps"
             >
@@ -513,23 +513,24 @@ class Account extends Component {
                                             {/* <Link to="#" > */}
                                             <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                 <div>
-                                                    <h2 style={{ textAlign: "center" }}>Manage Data</h2>
+                                                    <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], MANAGE_DATA)} </h2>
                                                     <Divider className="mb-0" />
                                                     <Row style={{ padding: '12px 0 0px' }}>
                                                         <Col span={7} className="" style={{ textAlign: "center" }}>
                                                             <Icon type="form" className="and_icon" />
                                                         </Col>
                                                         <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                            <p><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
-                                                            <p><span className="diamond_icon">&#9670;</span>View/Edit your data</p>
-                                                            <p><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
-                                                            <p className="more_txt">and more...</p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], ACCOUNT_MANAGE_DATA_01)} />  </p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], ACCOUNT_MANAGE_DATA_02)} /> </p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], ACCOUNT_MANAGE_DATA_03)} />  </p>
+                                                            <p className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</p>
                                                         </Col>
                                                     </Row>
                                                 </div>
                                             </Card>
-                                            <Button type="primary" size="small" className="open_btn">Open</Button>
+                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                         </Link>
+
                                         <Modal
                                             maskClosable={false}
                                             className="manage_data"
@@ -1072,7 +1073,7 @@ class Account extends Component {
                                                 <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                     <div>
                                                         <div>
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> {convertToLang(this.props.translation[BACKUP_DATABASE], BACKUP_DATABASE)} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1080,14 +1081,14 @@ class Account extends Component {
                                                                 </Col>
                                                                 <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                     <p>
-                                                                        This feature allows you to keep a backup of the complete system database for offline safekeeping
-                                                    </p>
+                                                                        {convertToLang(this.props.translation[BACKUP_DATABASE_DESCRIPTION], BACKUP_DATABASE_DESCRIPTION)}
+                                                                    </p>
                                                                 </Col>
                                                             </Row>
                                                         </div>
                                                     </div>
                                                 </Card>
-                                                <Button type="primary" size="small" className="open_btn">Open</Button>
+                                                <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                             </Link>
                                             {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
@@ -1224,7 +1225,7 @@ var mapStateToProps = ({ account, devices, settings, auth }) => {
         showMsg: account.showMsg,
         newData: account.newData,
         backUpModal: account.backUpModal,
-        translation: settings.translation,        
+        translation: settings.translation,
         user: auth.authUser
     };
 }

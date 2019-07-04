@@ -10,7 +10,7 @@ import { Markup } from 'interweave';
 import { Redirect } from 'react-router-dom';
 import { BASE_URL } from '../../../constants/Application.js';
 import {
-    APP_MANAGE_DATA,
+    APP_MANAGE_APKs,
     APP_MANAGE_POLICY,
     APP_SECURE_MARKET,
     APP_DOWNLOAD_TOOLS,
@@ -109,7 +109,7 @@ class Apk extends Component {
                                     <Link to="/apk-list">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_MANAGE_DATA], APP_MANAGE_DATA)} </h2>
+                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_MANAGE_APKs], APP_MANAGE_APKs)} </h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0 0px' }}>
                                                     <Col span={8} className="" style={{ textAlign: "center" }}>

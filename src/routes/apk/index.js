@@ -176,13 +176,13 @@ class Apk extends React.Component {
 
                 values.map((value) => {
                     // console.log(APK_PERMISSION, value, "columns", column);
-                    if ((value === APK_PERMISSION && column.dataIndex == 'permission') || (value === APK_SHOW_ON_DEVICE && column.dataIndex == 'apk_status')) {
+                    if ((value.key === APK_PERMISSION && column.dataIndex == 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex == 'apk_status')) {
                         // console.log('......... ......', column.title)
-                        if (column.title.props.children[0] === value) {
+                        if (column.title.props.children[0] === convertToLang(this.props.translation[value.key], value.key)) {
                             dumydata[index].className = '';
                         }
                     }
-                    if (column.title === value) {
+                    if (column.title === convertToLang(this.props.translation[value.key], value.key)) {
                         dumydata[index].className = '';
                     }
                     // else if (column.title.props.children !== undefined) {
@@ -296,6 +296,10 @@ class Apk extends React.Component {
             this.setState({
                 apk_list: this.props.apk_list
             })
+        }
+
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            this.handleCheckChange(this.props.selectedOptions)
         }
     }
     componentWillMount() {
@@ -507,7 +511,7 @@ const mapStateToProps = ({ apk_list, auth, settings }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
-        options: apk_list.options,
+        options: settings.APKOptions,
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
         user: auth.authUser,
