@@ -140,7 +140,7 @@ class ApkMarket extends React.Component {
 
     handleSelect = (list, e) => {
         // alert("asdsa")
-        console.log("handle select", e)
+        // console.log("handle select", e)
     }
     render() {
         return (

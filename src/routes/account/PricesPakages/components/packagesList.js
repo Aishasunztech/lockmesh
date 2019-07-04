@@ -74,7 +74,7 @@ export default class Prices extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.id, 'id is')
+        // console.log(this.props.id, 'id is')
         this.props.getPrices(this.props.id);
         this.props.getPackages(this.props.id)
         this.setState({
@@ -86,7 +86,7 @@ export default class Prices extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log('did update', this.props.packages)
+        // console.log('did update', this.props.packages)
         if (this.props !== prevProps) {
             this.setState({
                 prices: this.props.prices,
@@ -98,7 +98,7 @@ export default class Prices extends Component {
     }
 
     renderList = () => {
-        console.log(this.state.packages, 'ddddddddddddddddddddddddddddddddddddd')
+        // console.log(this.state.packages, 'ddddddddddddddddddddddddddddddddddddd')
         if (this.state.packages) {
             return this.state.packages.map((item, index) => {
                 return {
@@ -115,7 +115,7 @@ export default class Prices extends Component {
     }
 
     render() {
-        console.log(this.state.packages, 'prices are')
+        // console.log(this.state.packages, 'prices are')
         return (
 
             <Table

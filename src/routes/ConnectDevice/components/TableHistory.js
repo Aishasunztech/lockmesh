@@ -20,7 +20,7 @@ import {
 
 const renderList = (histories, type, callback) => {
     return histories.map((history) => {
-        console.log("list", history.extenssions);
+        // console.log("list", history.extenssions);
 
         return ({
             key: history.id,
@@ -97,7 +97,7 @@ class TableHistory extends Component {
 
     render() {
         // const TableHistory = (props) => {
-        console.log("props", this.props.histories);
+        // console.log("props", this.props.histories);
 
         return (
             <Table

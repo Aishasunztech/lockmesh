@@ -102,7 +102,7 @@ class SidebarContent extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.languageData)
+    // console.log(this.props.languageData)
     this.setState({
       languageData: this.props.languageData
     })

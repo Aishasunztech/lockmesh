@@ -41,8 +41,9 @@ import {
     DEVICE_TRIAL,
     ADMIN
 } from '../../../constants/Constants'
-import { getStatus, componentSearch, titleCase, checkValue, getColor } from '../../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, checkValue, getColor, convertToLang } from '../../utils/commonUtils';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
+import { Button_Connect } from '../../../constants/ButtonConstants';
 // import styles from './user.css';
 
 var coppyDevices = [];
@@ -478,7 +479,7 @@ class UserDeviceList extends Component {
                 style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
                 text = "Activate";
             }
-            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`/connect-device/${btoa(device.device_id)}`.trim()}> CONNECT</Link></Button>
+            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`/connect-device/${btoa(device.device_id)}`.trim()}> {convertToLang(this.props.translation[Button_Connect], Button_Connect)} </Link></Button>
             // console.log(device.usr_device_id);
             return {
                 rowKey: index,

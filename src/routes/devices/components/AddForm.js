@@ -88,7 +88,7 @@ class AddDevice extends Component {
         this.setState({ visible: false });
     }
     handleChange = (e) => {
-        console.log(e);
+        // console.log(e);
         // this.setState({ pgp_email: e }); 
         this.setState({ type: e.target.value });
     }
@@ -112,7 +112,7 @@ class AddDevice extends Component {
     }
 
     render() {
-        console.log('id is', this.props.policies);
+        // console.log('id is', this.props.policies);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]

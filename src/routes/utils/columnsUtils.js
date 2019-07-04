@@ -33,11 +33,24 @@ import {
 import {
     // DEVICE_ID,
     // USER_ID,
+    DEVICES,
     USER_NAME,
     USER_EMAIL,
     USER_DATE_REGISTERED,
     USER_TOKEN
 } from '../../constants/UserConstants';
+
+import {
+    DEALER_ID,
+    DEALER_NAME,
+    DEALER_EMAIL,
+    DEALER_PIN,
+    // DEALER_DEVICES,
+    DEALER_TOKENS,
+    // DEALER_ACTION,
+    Parent_Dealer,
+    Parent_Dealer_ID,
+} from '../../constants/DealerConstants';
 
 const usersColumns_question_txt = (
     <div>Appuyez sur > pour afficher la liste des périphériques de cet utilisateur.
@@ -45,6 +58,16 @@ const usersColumns_question_txt = (
     </div>
 );
 
+
+/////////////////////////////////////////
+// **************************************
+// ******* devicesColumns
+// ******* usersColumns
+// ******* userDevicesListColumns
+// ******* dealerColumns
+// ******* sDealerColumns
+// **************************************
+/////////////////////////////////////////
 
 export function devicesColumns(translation, handleSearch) {
     return ([
@@ -1224,4 +1247,269 @@ export function userDevicesListColumns(translation, handleSearch) {
 }
 
 
-// import { userDevicesListColumns } from '../../utils/columnsUtils';
+export function dealerColumns(translation, handleSearch) {
+    return ([{
+        title: '#',
+        dataIndex: 'counter',
+        align: 'center',
+        className: 'row',
+    }, {
+        title: '',
+        dataIndex: 'accounts',
+        align: 'center',
+        className: 'row',
+        width: 300,
+    },
+    {
+        title: (
+            <Input.Search
+                name="connected_devices"
+                key="connected_devices"
+                id="connected_devices"
+                className="search_heading"
+                autoComplete="new-password"
+                onKeyUp={handleSearch}
+                placeholder={convertToLang(translation[DEVICES], DEVICES)}
+
+            />
+        ),
+        dataIndex: 'connected_devices',
+        className: '',
+        children: [
+            {
+                title: convertToLang(translation[DEVICES], DEVICES),
+                dataIndex: 'connected_devices',
+                key: 'connected_devices',
+                // sorter: (a, b) => {
+                //     console.log(a);
+                //     // console.log(b);
+                //     return a.connected_devices.length;
+                // },
+                sorter: (a, b) => { return a.connected_devices - b.connected_devices },
+
+                align: 'center',
+                sortDirections: ['ascend', 'descend'],
+                className: '',
+            }
+        ]
+    },
+    {
+        title: (
+            <Input.Search
+                name="dealer_id"
+                key="dealer_id"
+                id="dealer_id"
+                className="search_heading"
+                autoComplete="new-password"
+                placeholder={convertToLang(translation[DEALER_ID], DEALER_ID)}
+                onKeyUp={handleSearch}
+
+            />
+        ),
+        dataIndex: 'dealer_id',
+        className: '',
+        children: [
+            {
+                title: convertToLang(translation[DEALER_ID], DEALER_ID),
+                dataIndex: 'dealer_id',
+                key: 'dealer_id',
+                align: 'center',
+                sorter: (a, b) => a.dealer_id - b.dealer_id,
+                sortDirections: ['ascend', 'descend'],
+                className: '',
+            }
+        ]
+    }, {
+        title: (
+            <Input.Search
+                name="link_code"
+                key="link_code"
+                id="link_code"
+                className="search_heading"
+                autoComplete="new-password"
+                placeholder={convertToLang(translation[DEALER_PIN], DEALER_PIN)}
+                onKeyUp={handleSearch}
+
+            />
+        ),
+        dataIndex: 'link_code',
+        className: '',
+        children: [
+            {
+                title: convertToLang(translation[DEALER_PIN], DEALER_PIN),
+                dataIndex: 'link_code',
+                key: 'link_code',
+                // sorter: (a, b) => {
+                //     console.log(a);
+                //     // console.log(b);
+                //     return a.link_code.length;
+                // },
+                sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+
+                align: 'center',
+                sortDirections: ['ascend', 'descend'],
+                className: '',
+            }
+        ]
+    },
+    {
+        title: (
+            <Input.Search
+                name="dealer_name"
+                key="dealer_name"
+                id="dealer_name"
+                className="search_heading"
+                autoComplete="new-password"
+                placeholder={convertToLang(translation[DEALER_NAME], DEALER_NAME)}
+                onKeyUp={handleSearch}
+
+            />
+        ),
+        dataIndex: 'dealer_name',
+        className: '',
+        children: [
+            {
+                title: convertToLang(translation[DEALER_NAME], DEALER_NAME),
+                dataIndex: 'dealer_name',
+                key: 'dealer_name',
+                // sorter: (a, b) => {
+                //     console.log(a);
+                //     // console.log(b);
+                //     return a.dealer_name.length;
+                // },
+                sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+
+                align: 'center',
+                sortDirections: ['ascend', 'descend'],
+                className: '',
+            }
+        ]
+    },
+    {
+        title: (
+            <Input.Search
+                name="dealer_email"
+                key="dealer_email"
+                id="dealer_email"
+                className="search_heading"
+                autoComplete="new-password"
+                placeholder={convertToLang(translation[DEALER_EMAIL], DEALER_EMAIL)}
+                onKeyUp={handleSearch}
+
+            />
+        ),
+        dataIndex: 'dealer_email',
+        className: '',
+        children: [
+            {
+                title: convertToLang(translation[DEALER_EMAIL], DEALER_EMAIL),
+                dataIndex: 'dealer_email',
+                key: 'dealer_email',
+                // sorter: (a, b) => {
+                //     console.log(a);
+                //     // console.log(b);
+                //     return a.dealer_email.length;
+                // },
+                sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+
+                align: 'center',
+                sortDirections: ['ascend', 'descend'],
+                className: '',
+            }
+        ]
+    },
+
+
+    {
+        title: (
+            <Input.Search
+                name="dealer_token"
+                key="dealer_token"
+                id="dealer_token"
+                className="search_heading"
+                autoComplete="new-password"
+                placeholder={convertToLang(translation[DEALER_TOKENS], DEALER_TOKENS)}
+                onKeyUp={handleSearch}
+
+            />
+        ),
+        dataIndex: 'dealer_token',
+        className: '',
+        children: [
+            {
+                title: convertToLang(translation[DEALER_TOKENS], DEALER_TOKENS),
+                dataIndex: 'dealer_token',
+                key: 'dealer_token',
+                // sorter: (a, b) => {
+                //     console.log(a);
+                //     // console.log(b);
+                //     return a.dealer_token.length;
+                // },
+                sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
+
+            }
+        ]
+    }
+    ]);
+}
+
+export function sDealerColumns(translation, handleSearch) {
+    return (
+        {
+            title: (
+                <Input.Search
+                    name="parent_dealer"
+                    key="parent_dealer"
+                    id="parent_dealer"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[Parent_Dealer], Parent_Dealer)}
+                    onKeyUp={handleSearch}
+                />
+            ),
+            dataIndex: 'parent_dealer',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[Parent_Dealer], Parent_Dealer),
+                    dataIndex: 'parent_dealer',
+                    key: 'parent_dealer',
+                    className: '',
+                    // sorter: (a, b) => {
+                    //     console.log(a);
+                    //     // console.log(b);
+                    //     return a.parent_dealer.length;
+                    // },
+                    sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
+                    
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="parent_dealer_id"
+                    key="parent_dealer_id"
+                    id="parent_dealer_id"
+                    className="search_heading"
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[Parent_Dealer_ID], Parent_Dealer_ID)}
+                    onKeyUp={handleSearch}
+                />
+            ),
+            dataIndex: 'parent_dealer_id',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[Parent_Dealer_ID], Parent_Dealer_ID),
+                    dataIndex: 'parent_dealer_id',
+                    key: 'parent_dealer_id',
+                    className: '',
+                    sorter: (a, b) => { return a.parent_dealer_id - b.parent_dealer_id },
+
+                }
+            ]
+        }
+    );
+}
+

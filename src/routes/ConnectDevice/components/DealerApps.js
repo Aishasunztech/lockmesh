@@ -38,7 +38,7 @@ const DealerApps = (props) => {
     ];
     
     const renderApps = (apk_list, isSwitchable, selectedAppKeys) => {
-        console.log(props.selectedAppKeys);
+        // console.log(props.selectedAppKeys);
         return apk_list.map((app) => {
 
             let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false: false;
@@ -113,7 +113,7 @@ const DealerApps = (props) => {
         ];
     }
 
-    console.log('apk list is updated', props.apk_list)
+    // console.log('apk list is updated', props.apk_list)
     return (
         <Fragment>
             <Table
