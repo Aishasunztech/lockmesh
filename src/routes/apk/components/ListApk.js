@@ -112,7 +112,7 @@ export default class ListApk extends Component {
                     'rowKey': app.apk_id,
                     'apk_id': app.apk_id,
                     'action': (
-                        <custom data-column="ACTION">
+                        <div data-column="ACTION">
                             <Fragment>
                                 <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
                                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
@@ -120,31 +120,31 @@ export default class ListApk extends Component {
                                     this.props.handleConfirmDelete(app.apk_id);
                                 }}>DELETE</Button>
                             </Fragment>
-                        </custom>
+                        </div>
                     ),
                     'permission': (
-                        <custom data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400 }}>
+                        <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400 }}>
                             {app.permission_count}
-                        </custom>
+                        </div>
                     ),
                     "permissions": app.permissions,
                     'apk_status': (
-                        <custom data-column="SHOW ON DEVICE">
+                        <div data-column="SHOW ON DEVICE">
                             <Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                                 this.props.handleStatusChange(e, app.apk_id);
                             }} />
-                        </custom>
+                        </div>
                     ),
                     'apk': (
-                        <custom data-column="SHOW ON DEVICE">
+                        <div data-column="SHOW ON DEVICE">
                             {app.apk ? app.apk : 'N/A'}
-                        </custom>
+                        </div>
                     ),
                     'apk_name': app.apk_name ? app.apk_name : 'N/A',
                     'apk_logo': (
-                        <custom data-column="APK LOGO">
+                        <div data-column="APK LOGO">
                             <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
-                        </custom>),
+                        </div>),
                 }
 
             } else {

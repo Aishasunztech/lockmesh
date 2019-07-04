@@ -169,15 +169,20 @@ class DealerList extends Component {
 
         return (
             <Card className="border_top_0">
-                <Table size="middle"
+                <Table
+                    size="middle"
                     className="gx-table-responsive devices table"
-                    bordered
-                    scroll={{ x: 500 }}
+                    bordered={true}
+                    scroll={
+                        {
+                            x: 500,
+                        }
+                    }
                     columns={this.state.columns}
                     rowKey='row_key'
                     align='center'
                     rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
-                    pagination={{ pageSize: this.state.pagination, size: "midddle" }}
+                    pagination={false}
                     dataSource={this.renderList(this.props.dealersList)}
                     expandIcon={(props) => this.customExpandIcon(props)}
                     expandedRowRender={(record) => {
