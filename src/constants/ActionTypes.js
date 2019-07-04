@@ -51,6 +51,12 @@ export const PRE_ACTIVATE_DEVICE = 'PRE_ACTIVATE_DEVICE';
 export const SPIN_lOADING = 'SPIN_lOADING';
 export const DELETE_UNLINK_DEVICE = 'DELETE_UNLINK_DEVICE';
 
+export const NEW_REQUEST_LIST = 'NEW_REQUEST_LIST';
+export const USER_CREDITS = 'USER_CREDITS';
+export const REJECT_REQUEST = 'REJECT_REQUEST'
+export const ACCEPT_REQUEST = 'ACCEPT_REQUEST'
+
+
 
 //Dealer const
 export const DEALERS_LIST = 'DEALERS_LIST';
@@ -206,7 +212,8 @@ export const SHOW_BACKUP_MODAL = 'SHOW_BACKUP_MODAL';
 
 export const SAVE_ID_PRICES = 'SAVE_ID_PRICES';
 export const SAVE_PACKAGE = 'SAVE_PACKAGE';
-export const GET_PACKAGES ='GET_PACKAGES';
+export const GET_PACKAGES = 'GET_PACKAGES';
+export const PURCHASE_CREDITS = 'PURCHASE_CREDITS';
 export const GET_PRICES = 'GET_PRICES';
 export const SET_PRICE = 'SET_PRICE';
 export const RESET_PRICE = 'RESET_PRICE';

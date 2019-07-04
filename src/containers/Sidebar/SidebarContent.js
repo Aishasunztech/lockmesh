@@ -16,6 +16,12 @@ import UserProfile from "./UserProfile";
 import NewDevice from '../../components/NewDevices';
 
 import { getNewDevicesList } from "../../appRedux/actions/Common";
+import {
+  getNewCashRequests,
+  getUserCredit,
+  rejectRequest,
+  acceptRequest
+} from "../../appRedux/actions/SideBar";
 
 import { convertToLang } from '../../routes/utils/commonUtils';
 
@@ -87,8 +93,11 @@ class SidebarContent extends Component {
   };
 
   showNotification = () => {
+    this.props.getNewCashRequests();
     this.props.getNewDevicesList()
+    this.props.getUserCredit()
     this.refs.new_device.showModal();
+
     // alert('its working');
   }
 
@@ -100,30 +109,20 @@ class SidebarContent extends Component {
 
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
-    // this.setState({
-    //   locale: this.props.locale
-    // })
+    this.props.getNewCashRequests();
+    this.props.getUserCredit()
 
   }
-
-  // componentDidUpdate() {
-  //   this.setState({
-  //     languageData: this.props.languageData
-  //   })
-  // }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       languageData: nextProps.languageData
     })
-    // if(this.props.locale !== nextProps.locale){
-    //   console.log(this.props.locale, '  ' ,nextProps.locale)
-    //   this.setState({
-    //     locale: nextProps.locale
-    //   })
-    // }
+
     if (this.props.pathname !== nextProps.pathname) {
       this.props.getNewDevicesList();
+      this.props.getNewCashRequests();
+      this.props.getUserCredit()
     }
   }
 
@@ -167,6 +166,7 @@ class SidebarContent extends Component {
 
     const selectedKeys = pathname.substr(1);
     const defaultOpenKeys = selectedKeys.split('/')[1];
+    // console.log(this.props.user_credit);
     return (
       <Auxiliary>
         <SidebarLogo />
@@ -178,6 +178,10 @@ class SidebarContent extends Component {
               devices={this.props.devices}
               addDevice={this.props.addDevice}
               rejectDevice={this.props.rejectDevice}
+              authUser={this.props.authUser}
+              requests={this.props.requests}
+              acceptRequest={this.props.acceptRequest}
+              rejectRequest={this.props.rejectRequest}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -187,9 +191,12 @@ class SidebarContent extends Component {
 
               {/* Price */}
               <li>
-                <i className="icon icon-dollar" >
-                  <Icon type="dollar" className="mb-10" />
-                </i>
+                <Badge count={this.props.user_credit} overflowCount={999999999}>
+                  <i className="icon icon-dollar" >
+                    <Icon type="dollar" className="mb-10" />
+                  </i>
+                </Badge>
+
               </li>
 
               {/* Chat Icon */}
@@ -200,7 +207,7 @@ class SidebarContent extends Component {
               {/* Notifications */}
               <li>
                 <a className="head-example">
-                  <Badge count={this.props.devices.length}>
+                  <Badge count={this.props.devices.length + this.props.requests.length}>
                     <i className="icon icon-notification notification_icn" onClick={() => this.showNotification()} />
                   </Badge>
                 </a>
@@ -294,16 +301,14 @@ class SidebarContent extends Component {
                   {convertToLang(translation[Sidebar_settings], Sidebar_settings)}
                 </Link>
               </Menu.Item>
+
               <Menu.Item key="logout" onClick={(e) => {
-                // this.props.logout() 
                 this.logout()
               }}>
-                {/* <Link to="/logout"> */}
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
                 </i>
                 {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
-                {/* </Link> */}
               </Menu.Item>
             </Menu>
           }
@@ -316,19 +321,20 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, device3 }) => {
+const mapStateToProps = ({ settings, devices, sidebar }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
-  console.log('translation are : ', languages)
-
+ 
   return {
     navStyle,
     themeType,
     locale,
     pathname,
     devices: devices.newDevices,
+    requests: sidebar.newRequests,
+    user_credit: sidebar.user_credit,
     languageData: languages,
     translation: translation
   }
 };
-export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage })(SidebarContent);
+export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest })(SidebarContent);
 
