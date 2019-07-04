@@ -384,3 +384,20 @@ export const purchaseCredits = (data) => {
         });
     }
 }
+export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
+    return (dispatch) => {
+        // console.log(data);
+        RestService.purchaseCreditsFromCC(cardInfo, creditInfo).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: PURCHASE_CREDITS,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
