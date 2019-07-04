@@ -13,7 +13,6 @@ import { switchLanguage, toggleCollapsedSideNav } from "../../../appRedux/action
 import { TAB_SIZE } from "../../../constants/ThemeSetting";
 import HorizontalNav from "../HorizontalNav";
 import { Link } from "react-router-dom";
-// import IntlMessages from "../../../util/IntlMessages";
 
 const { Header } = Layout;
 

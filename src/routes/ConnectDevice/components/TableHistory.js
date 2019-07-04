@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Table, Button } from "antd";
 
-import IntlMessages from "../../../util/IntlMessages";
 import AppList from "./AppList";
 import DeviceSettings from './DeviceSettings';
 import styles from './Applist.css';
@@ -38,7 +37,8 @@ const renderList = (histories, type, callback) => {
                         }
                         // this.applyProfile(history.app_list)
                     }}
-                > <IntlMessages id="button.Apply" />
+                > 
+                {/* <IntlMessages id="button.Apply" /> */}
                 </Button>
             ),
             app_list: history.app_list,

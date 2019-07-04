@@ -25,7 +25,6 @@ import React, { Component } from 'react';
 import { Input } from 'antd';
 import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../constants/DeviceConstants';
 
-import appLocale from '../../lngProvider/index';
 import { cloneableGenerator } from 'redux-saga/utils';
 
 
@@ -165,7 +164,7 @@ export function titleCase(str) {
         return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
       })
     } else {
-      if (word == "id" || word == "pgp") {
+      if (word == "id" || word == "pgp" || word == "ip") {
         return word.toUpperCase();
       } else {
         return word.charAt(0).toUpperCase() + word.substr(1);
@@ -355,19 +354,15 @@ export function dealerColsWithSearch(searchBar = false, callBack = null) {
   }
 }
 
-export function convertToLang(locale = {}, id) {
-  // console.log(locale, id, 'data from functions', appLocale)
-  if (Object.keys(locale).length !== 0 && locale.constructor === Object) {
-    for (var key in appLocale) {
-      if (key == locale.locale) {
-        // console.log("Key is ", key, ", value is ", appLocale[key]);
-        let word = appLocale[key].messages[id];
-        // console.log(locale, word, 'function data is the')
-        if (word) return word;
-        else return 'N/A'
-      }
-    }
+export function convertToLang(lngWord, constant) {
+
+  if (lngWord != undefined && lngWord != '' && lngWord != null) {
+    // console.log('convert To Language Function: ', lngWord);
+    return lngWord;
+  } else if (constant != undefined && constant != '' && constant != null) {
+    return constant;
   } else {
-    return 'N/A'
+    return "N/A";
   }
+
 }

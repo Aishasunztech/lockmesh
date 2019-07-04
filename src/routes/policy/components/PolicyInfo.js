@@ -4,36 +4,40 @@ import { BASE_URL } from '../../../constants/Application';
 import Permissions from "./Permissions";
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, Main_SETTINGS, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING } from '../../../constants/Constants';
 import AppList from "./AppList";
+import { convertToLang } from '../../utils/commonUtils';    
+import { Tab_POLICY_SELECTED_APPS, Tab_POLICY_Dealer_PERMISSIONS } from '../../../constants/TabConstants';
+import { POLICY_NAME, NAME, POLICY_ACTION, POLICY_NOTE, POLICY_COMMAND } from '../../../constants/PolicyConstants';
 
 const TabPane = Tabs.TabPane;
-const columnsSystemPermission = [{
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a href="javascript:;">{text}</a>,
-}, {
-    title: 'Action',
-    dataIndex: 'action',
-    key: 'action',
-}];
 
-const columnsPolicyDetail = [{
-    title: 'Policy Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a href="javascript:;">{text}</a>,
-}, {
-    title: 'Policy Note',
-    dataIndex: 'note',
-    key: 'note',
-}, {
-    title: 'Policy Command',
-    dataIndex: 'command',
-    key: 'command',
-}];
 
 
 export default class PolicyInfo extends Component {
+    columnsSystemPermission = [{
+        title: convertToLang(this.props.translation[NAME], NAME),
+        dataIndex: 'name',
+        key: 'name',
+        render: text => <a href="javascript:;">{text}</a>,
+    }, {
+        title: convertToLang(this.props.translation[POLICY_ACTION], POLICY_ACTION),
+        dataIndex: 'action',
+        key: 'action',
+    }];
+    
+     columnsPolicyDetail = [{
+        title: convertToLang(this.props.translation[POLICY_NAME], POLICY_NAME),
+        dataIndex: 'name',
+        key: 'name',
+        render: text => <a href="javascript:;">{text}</a>,
+    }, {
+        title: convertToLang(this.props.translation[POLICY_NOTE], POLICY_NOTE),
+        dataIndex: 'note',
+        key: 'note',
+    }, {
+        title: convertToLang(this.props.translation[POLICY_COMMAND], POLICY_COMMAND),
+        dataIndex: 'command',
+        key: 'command',
+    }];
     constructor(props) {
         super(props);
         this.state = {
@@ -44,6 +48,8 @@ export default class PolicyInfo extends Component {
         }
 
     }
+
+    
 
     // renderSystemPermissions = () => {
     //     if (this.state.policy.controls) {
@@ -218,7 +224,7 @@ export default class PolicyInfo extends Component {
         return (
             <div>
                 <Tabs className="exp_tabs_policy" onChange={this.callback} activeKey={this.state.selected} type="card">
-                    <TabPane tab="Selected Apps " key="1">
+                    <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_SELECTED_APPS], Tab_POLICY_SELECTED_APPS)} key="1">
 
                         <AppList
                             apk_list={this.state.policy.push_apps}
@@ -232,9 +238,10 @@ export default class PolicyInfo extends Component {
                             isSwitch={this.props.isSwitch}
                             edit={this.props.edit}
                             rowId={this.props.rowId}
+                            translation={this.props.translation}
                         />
                     </TabPane>
-                    <TabPane tab={APPLICATION_PERMISION} key="2">
+                    <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)} key="2">
                         <AppList
                             apk_list={this.state.policy.app_list}
                             handleEditPolicy={this.props.handleEditPolicy}
@@ -247,9 +254,10 @@ export default class PolicyInfo extends Component {
                             isSwitch={this.props.isSwitch}
                             edit={this.props.edit}
                             rowId={this.props.rowId}
+                            translation={this.props.translation}
                         />
                     </TabPane>
-                    <TabPane tab={SECURE_SETTING_PERMISSION} key="3">
+                    <TabPane tab={convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)} key="3">
                         <div>
                             <Row>
                                 <Col span={8} className="">
@@ -316,9 +324,10 @@ export default class PolicyInfo extends Component {
                             isSwitch={this.props.isSwitch}
                             edit={this.props.edit}
                             rowId={this.props.rowId}
+                            translation={this.props.translation}
                         />
                     </TabPane>
-                    <TabPane tab={SYSTEM_PERMISSION} key="4">
+                    <TabPane tab={convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)} key="4">
                         <div>
                             <Row>
                                 <Col span={8} className="">
@@ -375,19 +384,20 @@ export default class PolicyInfo extends Component {
                         <Table
                             pagination={false}
                             dataSource={this.renderSystemPermissions(this.state.policy.controls)}
-                            columns={columnsSystemPermission}>
+                            columns={this.columnsSystemPermission}>
                         </Table>
                     </TabPane>
-                    <TabPane tab={POLICY_DETAILS} key="5">
+                    <TabPane tab={convertToLang(this.props.translation[POLICY_DETAILS], POLICY_DETAILS)} key="5">
                         <Table
                             pagination={false}
                             dataSource={PolicyDetail}
-                            columns={columnsPolicyDetail}>
+                            columns={this.columnsPolicyDetail}>
                         </Table>
                     </TabPane>
-                    <TabPane tab="Dealer Permissions" key="6">
+                    <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_Dealer_PERMISSIONS], Tab_POLICY_Dealer_PERMISSIONS)} key="6">
                         <Permissions
                             record={this.props.policy}
+                            translation={this.props.translation}
                         />
                     </TabPane>
                 </Tabs>

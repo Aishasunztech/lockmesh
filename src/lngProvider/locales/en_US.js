@@ -1,4 +1,4 @@
-{
+let enLang={
   "app.announced": "A new version will be released on December 25th. Stay tuned!",
   "SIDEBAR": "----SIDEBAR----",
   "sidebar.main": "Main",
@@ -17,8 +17,8 @@
   "button.Activate": "Activate",
   "button.Connect": "Connect",
   "button.Yes": "Yes",
-  "button.Ok": "No",
-  "button.ok": "Ok",
+  "button.No": "No",
+  "button.Ok": "Ok",
   "button.Cancel": "Cancel",
   "button.Suspend": "Suspend",
   "button.Unsuspend": "Unsuspend",
@@ -213,5 +213,10 @@
   "picker.color.photoshop": "Photoshop Pickers",
   "picker.color.swatches": "Swatches Pickers",
   "picker.color.basicPositioning": "Basic Positioning",
-  "sidebar.social": "Social Apps"
+  "sidebar.social": "Social Apps",
+  "tableHeadings.REMAININGDAYS": "Remaining Days",
+  "parent.dealer.id": "PARENT DEALER",
+  "parent.dealer.id.id": "PARENT DEALER ID",
 }
+
+export default enLang;

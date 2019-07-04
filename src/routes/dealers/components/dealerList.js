@@ -7,7 +7,83 @@ import { Tabs } from 'antd';
 import EditApk from './editDealer';
 import { ADMIN } from '../../../constants/Constants';
 import DealerDevicesList from '../../users/components/UserDeviceList';
+import { convertToLang } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
+import {
+    Tab_All,
+    Tab_Active,
+    Tab_Expired,
+    Tab_Trial,
+    Tab_Suspended,
+    Tab_PreActivated,
+    Tab_PendingActivation,
+    Tab_Transfer,
+    Tab_Unlinked,
+    Tab_Flagged,
+    Tab_ComingSoon,
+    Tab_Archived,
+} from '../../../constants/TabConstants';
+
+import {
+    Button_Modify,
+    Button_Delete,
+    Button_Activate,
+    Button_Connect,
+    Button_Yes,
+    Button_Ok,
+    Button_ok,
+    Button_Cancel,
+    Button_Suspend,
+    Button_Unsuspend,
+    Button_Edit,
+    Button_passwordreset,
+    Button_submit,
+    Button_Flag,
+    Button_UNFLAG,
+    Button_SetPassword,
+    Button_Apply,
+    Button_Undo,
+    Button_Redo,
+    Button_Clear,
+    Button_Refresh,
+    Button_Next,
+    Button_previous,
+    Button_Add_Dealer,
+    Button_Add_S_dealer,
+    Button_Add_Admin,
+    Button_UploadApk,
+    Button_Save,
+    Button_Update,
+    Button_Open,
+    Button_Sample,
+    Button_Import,
+    Button_Export,
+    Button_Release,
+    Button_View,
+    Button_ChangePassword,
+    Button_ChangeEmail,
+    Button_AddPolicy,
+    Button_Add,
+    Button_AddExceptSelected,
+    Button_AddAll,
+    Button_RemoveAll,
+    Button_RemoveExcept,
+    Button_BackupNow,
+    Button_DeleteUser,
+    Button_AddApps,
+    Button_Push,
+    Button_LoadProfile,
+    Button_LoadPolicy,
+    Button_IMEI,
+    Button_Pull,
+    Button_SaveProfile,
+    Button_Activity,
+    Button_SIM,
+    Button_Transfer,
+    Button_WipeDevice,
+    Button_Unlink,
+} from '../../../constants/ButtonConstants';
+
 const TabPane = Tabs.TabPane;
 
 let data = [];
@@ -125,7 +201,7 @@ class DealerList extends Component {
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
-            const dealer_status = (dealer.account_status === "suspended") ? (<IntlMessages id="button.Activate" />) : (<IntlMessages id="button.Suspend" />);
+            const dealer_status = (dealer.account_status === "suspended") ? convertToLang(this.props.translation[Button_Activate], Button_Activate) : convertToLang(this.props.translation[Button_Suspend], Button_Suspend);
             const button_type = (dealer_status === "ACTIVATE") ? "dashed" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
             data.push({
@@ -135,15 +211,15 @@ class DealerList extends Component {
                         onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
                         {(dealer.account_status === '') ? <div>{dealer_status}</div> : <div> {dealer_status}</div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}><IntlMessages id="button.Edit" /></Button>
+                    <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
                     <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
                         onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
-                        {(dealer.unlink_status === 0) ? <div> <IntlMessages id="button.Delete" /></div> : <div>  <IntlMessages id="button.Undo" /></div>}
+                        {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], Button_Delete)} </div> : <div> {convertToLang(this.props.translation[Button_Undo], Button_Undo)} </div>}
 
                     </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} ><IntlMessages id="button.passwordreset" /></Button>
+                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], Button_passwordreset)}</Button>
                     {(this.props.user.type === ADMIN) ?
-                        <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} ><IntlMessages id="button.Connect" /></Button>
+                        <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], Button_Connect)}</Button>
                         :
                         null
                     }
@@ -190,7 +266,9 @@ class DealerList extends Component {
                         return (
                             <DealerDevicesList
                                 ref='dealerDeviceList'
-                                record={record} />
+                                record={record} 
+                                translation={this.props.translation}
+                                />
                             // <span>its working</span>
                         );
                     }}
@@ -265,13 +343,13 @@ export default class Tab extends Component {
         return (
             <Fragment>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab={<span><IntlMessages id="tab.All" /> ({this.props.allDealers})</span>} key="1" >
+                    <TabPane tab={<span> {convertToLang(this.props.translation[Tab_All], Tab_All)} ({this.props.allDealers})</span>} key="1" >
                     </TabPane>
-                    <TabPane tab={<span className="green"><IntlMessages id="tab.Active" /> ({this.props.activeDealers})</span>} key="2" forceRender={true}>
+                    <TabPane tab={<span className="green"> {convertToLang(this.props.translation[Tab_Active], Tab_Active)} ({this.props.activeDealers})</span>} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="yellow"><IntlMessages id="tab.Suspended" /> ({this.props.suspendDealers})</span>} key="4" forceRender={true}>
+                    <TabPane tab={<span className="yellow"> {convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)} ({this.props.suspendDealers})</span>} key="4" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="orange"><IntlMessages id="tab.Archived" /> ({this.props.unlinkedDealers})</span>} key="3" forceRender={true}>
+                    <TabPane tab={<span className="orange"> {convertToLang(this.props.translation[Tab_Archived], Tab_Archived)} ({this.props.unlinkedDealers})</span>} key="3" forceRender={true}>
                     </TabPane>
                 </Tabs>
                 <DealerList
@@ -289,6 +367,7 @@ export default class Tab extends Component {
                     location={this.props.location}
                     expandedRowKeys={this.state.expandedRowKeys}
                     user={this.props.user}
+                    translation={this.props.translation}
                 />
             </Fragment>
 

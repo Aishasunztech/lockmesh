@@ -2,7 +2,19 @@ import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 // import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
+import { convertToLang } from '../../../utils/commonUtils';
+
 import { Tabs } from 'antd';
+import {
+    Tab_All,
+    TAB_CHAT_ID,
+    TAB_SIM_ID,
+    TAB_PGP_EMAIL,
+    TAB_VPN,
+    Tab_USED,
+    Tab_UNUSED,
+} from '../../../../constants/TabConstants';
+
 // import EditApk from './editDealer';
 const TabPane = Tabs.TabPane;
 
@@ -70,13 +82,13 @@ class AccountList extends Component {
         return (
             <Card bordered={false}>
                 <Tabs defaultActiveKey="1" type="card" tabPosition="left" className="manage_data" onChange={this.callback}>
-                    <TabPane tab="CHAT" key="1" >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], TAB_CHAT_ID)} key="1" >
                     </TabPane>
-                    <TabPane tab="PGP" key="2" forceRender={true}>
+                    <TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], TAB_PGP_EMAIL)} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab="SIM" key="3" forceRender={true}>
+                    <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], TAB_SIM_ID)} key="3" forceRender={true}>
                     </TabPane>
-                    <TabPane tab="VPN" key="4" forceRender={true}>
+                    <TabPane tab={convertToLang(this.props.translation[TAB_VPN], TAB_VPN)} key="4" forceRender={true}>
                     </TabPane>
 
                 </Tabs>
@@ -134,10 +146,10 @@ export default class Tab extends Component {
         return (
             <Fragment>
                 <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab="All" key="all" >
+                    <TabPane tab={convertToLang(this.props.translation[Tab_All], Tab_All)} key="all" >
                     </TabPane>
-                    <TabPane tab="Used" key="1" forceRender={true} > </TabPane>
-                    <TabPane tab="Unused" key="0" forceRender={true} > </TabPane>
+                    <TabPane tab={convertToLang(this.props.translation[Tab_USED], Tab_USED)} key="1" forceRender={true} > </TabPane>
+                    <TabPane tab={convertToLang(this.props.translation[Tab_UNUSED], Tab_UNUSED)} key="0" forceRender={true} > </TabPane>
 
                 </Tabs>
                 <AccountList
@@ -155,6 +167,7 @@ export default class Tab extends Component {
                     // editDealer={this.props.editDealer}
                     // updatePassword={this.props.updatePassword}
                     handleChangeInnerTab={this.props.handleChangeInnerTab}
+                    translation= {this.props.translation}
                 />
             </Fragment>
 

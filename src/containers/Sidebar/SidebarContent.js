@@ -23,6 +23,7 @@ import {
   acceptRequest
 } from "../../appRedux/actions/SideBar";
 
+import { convertToLang } from '../../routes/utils/commonUtils';
 
 import {
   NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR,
@@ -30,8 +31,21 @@ import {
   THEME_TYPE_LITE
 } from "../../constants/ThemeSetting";
 
+import {
+  Sidebar_main,
+  Sidebar_devices,
+  Sidebar_users,
+  Sidebar_dealers,
+  Sidebar_policy,
+  Sidebar_sdealers,
+  Sidebar_app,
+  Sidebar_account,
+  Sidebar_settings,
+  Sidebar_logout,
+} from '../../constants/SidebarConstants'
+
 import IntlMessages from "../../util/IntlMessages";
-import languageData from "./languageData";
+// import languageData from "./languageData";
 
 import { logout } from "appRedux/actions/Auth";
 
@@ -40,15 +54,23 @@ import { rejectDevice, addDevice } from '../../appRedux/actions/Devices';
 import { switchLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
+import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 
 
 class SidebarContent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      languageData: []
+    }
+  }
 
   languageMenu = () => (
     <ul className="gx-sub-popover">
-      {languageData.map(language =>
+      {this.state.languageData.map(language =>
         <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
-          this.props.switchLanguage(language)
+          // this.props.switchLanguage(language)
+          this.changeLng(language)
         }>
           <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`} />
           <span className="gx-language-text">{language.name}</span>
@@ -80,13 +102,22 @@ class SidebarContent extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.languageData)
+    this.setState({
+      languageData: this.props.languageData
+    })
+
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
     this.props.getUserCredit()
 
   }
+
   componentWillReceiveProps(nextProps) {
+    this.setState({
+      languageData: nextProps.languageData
+    })
 
     if (this.props.pathname !== nextProps.pathname) {
       this.props.getNewDevicesList();
@@ -99,8 +130,8 @@ class SidebarContent extends Component {
     let _this = this;
     Modal.confirm({
       title: 'Are you sure you want to logout?',
-      okText: 'Yes',
-      cancelText: 'No',
+      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
 
       onOk() {
         _this.props.logout()
@@ -112,9 +143,26 @@ class SidebarContent extends Component {
     })
   }
 
+  changeLng = (language) => {
+    let _this = this;
+    Modal.confirm({
+      title: 'Are you sure to change the language?',
+      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+
+      onOk() {
+        _this.props.switchLanguage(language)
+        // console.log('OK');
+      },
+      onCancel() {
+        // console.log('Cancel');
+      },
+    })
+  }
+
   render() {
     // console.log(addDevice)
-    const { themeType, navStyle, pathname, authUser } = this.props;
+    const { themeType, navStyle, pathname, authUser, translation } = this.props;
 
     const selectedKeys = pathname.substr(1);
     const defaultOpenKeys = selectedKeys.split('/')[1];
@@ -182,7 +230,8 @@ class SidebarContent extends Component {
             <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
               <Menu.Item key="app">
                 <Link to="/apk-list/autoupdate"><i className="icon icon-apps" />
-                  <IntlMessages id="sidebar.app" />
+                  {/* <IntlMessages id="sidebar.app" /> */}
+                  {convertToLang(translation[Sidebar_app], Sidebar_app)}
                 </Link>
               </Menu.Item>
               <Menu.Item key="logout" onClick={(e) => {
@@ -193,7 +242,7 @@ class SidebarContent extends Component {
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
                 </i>
-                <IntlMessages id="sidebar.logout" />
+                {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
                 {/* </Link> */}
               </Menu.Item>
             </Menu>
@@ -207,42 +256,59 @@ class SidebarContent extends Component {
                   <i className="icon icon-mobile" >
                     <i className="fa fa-mobile" aria-hidden="true"></i>
                   </i>
-                  <IntlMessages id="sidebar.devices" /></Link>
+                  {/* <IntlMessages id="sidebar.devices" /> */}
+                  {convertToLang(translation[Sidebar_devices], Sidebar_devices)}
+                </Link>
               </Menu.Item>
               <Menu.Item key="users">
                 <Link to="/users">
                   <i className="icon icon-user" />
-                  <IntlMessages id="sidebar.users" /></Link>
+                  {/* <IntlMessages id="sidebar.users" /> */}
+                  {convertToLang(translation[Sidebar_users], Sidebar_users)}
+                </Link>
               </Menu.Item>
               {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
-                <Link to="/dealer/dealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.dealers" /></Link>
+                <Link to="/dealer/dealer"><i className="icon icon-avatar" />
+                  {/* <IntlMessages id="sidebar.dealers" /> */}
+                  {convertToLang(translation[Sidebar_dealers], Sidebar_dealers)}
+                </Link>
               </Menu.Item> : null}
 
               {(authUser.type === ADMIN || authUser.type === DEALER) ? <Menu.Item key="dealer/sdealer">
-                <Link to="/dealer/sdealer"><i className="icon icon-avatar" /> <IntlMessages id="sidebar.sdealers" /></Link>
+                <Link to="/dealer/sdealer"><i className="icon icon-avatar" />
+                  {/* <IntlMessages id="sidebar.sdealers" /> */}
+                  {convertToLang(translation[Sidebar_sdealers], Sidebar_sdealers)}
+                </Link>
               </Menu.Item> : null}
 
               {(authUser.type === "admin" || authUser.type === "dealer") ? <Menu.Item key="app">
-                <Link to="/app"><i className="icon icon-apps" /> <IntlMessages id="sidebar.app" /></Link>
+                <Link to="/app"><i className="icon icon-apps" />
+                  {/* <IntlMessages id="sidebar.app" /> */}
+                  {convertToLang(translation[Sidebar_app], Sidebar_app)}
+                </Link>
               </Menu.Item> : null}
-              <Menu.Item key="account">
-                <Link to="/account"><i className="icon icon-profile2" /> <IntlMessages id="sidebar.account" /></Link>
-              </Menu.Item>
+              {(authUser.type === ADMIN) ? <Menu.Item key="account">
+                <Link to="/account"><i className="icon icon-profile2" />
+                  {/* <IntlMessages id="sidebar.account" /> */}
+                  {convertToLang(translation[Sidebar_account], Sidebar_account)}
+                </Link>
+              </Menu.Item> : null}
 
 
               <Menu.Item key="settings">
-                <Link to="/settings"><i className="icon icon-setting" /> <IntlMessages id="sidebar.settings" /></Link>
+                <Link to="/settings"><i className="icon icon-setting" />
+                  {/* <IntlMessages id="sidebar.settings" /> */}
+                  {convertToLang(translation[Sidebar_settings], Sidebar_settings)}
+                </Link>
               </Menu.Item>
+
               <Menu.Item key="logout" onClick={(e) => {
-                // this.props.logout() 
                 this.logout()
               }}>
-                {/* <Link to="/logout"> */}
                 <i className="icon">
                   <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
                 </i>
-                Logout
-                {/* </Link> */}
+                {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
               </Menu.Item>
             </Menu>
           }
@@ -255,10 +321,9 @@ class SidebarContent extends Component {
 
 // SidebarContent.propTypes = {};
 
-const mapStateToProps = ({ settings, devices, device3, sidebar }) => {
-  const { navStyle, themeType, locale, pathname } = settings;
-  // console.log(locale, 'locale langueage is')
-
+const mapStateToProps = ({ settings, devices, sidebar }) => {
+  const { navStyle, themeType, locale, pathname, languages, translation } = settings;
+ 
   return {
     navStyle,
     themeType,
@@ -267,6 +332,8 @@ const mapStateToProps = ({ settings, devices, device3, sidebar }) => {
     devices: devices.newDevices,
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
+    languageData: languages,
+    translation: translation
   }
 };
 export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest })(SidebarContent);

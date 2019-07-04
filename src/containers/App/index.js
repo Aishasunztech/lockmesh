@@ -4,9 +4,7 @@ import URLSearchParams from 'url-search-params'
 import { Redirect, Route, Switch } from "react-router-dom";
 import { LocaleProvider } from "antd";
 import { IntlProvider } from "react-intl";
-import IntlMessages from "../../util/IntlMessages";
 
-import AppLocale from "lngProvider";
 import MainApp from "./MainApp";
 
 import Login from "../Login";
@@ -15,7 +13,7 @@ import VerifyAuthCode from "../VerifyAuthCode";
 
 // import SignUp from "../SignUp";
 import { setInitUrl } from "appRedux/actions/Auth";
-import { onLayoutTypeChange, onNavStyleChange, setThemeType, getLanguage } from "appRedux/actions/Setting";
+import { onLayoutTypeChange, onNavStyleChange, setThemeType, getLanguage, languages } from "../../appRedux/actions/Setting";
 
 import { checkComponent } from "../../appRedux/actions/Auth";
 
@@ -34,10 +32,10 @@ import { APP_TITLE } from "../../constants/Application";
 
 class App extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
-    this.state={
-      re_render:true
+    this.state = {
+      re_render: true
     }
   }
 
@@ -92,13 +90,17 @@ class App extends Component {
   componentDidMount() {
     document.title = APP_TITLE + ' - Admin Dashboard';
     this.props.getLanguage();
+    this.props.languages();
   }
 
-  componentWillReceiveProps(nextProps){
-    if(this.props.locale != nextProps.locale){
-      this.setState({
-        re_render: !this.state.re_render
-      })
+
+  componentWillReceiveProps(nextProps) {
+
+    if (this.props.isSwitched != nextProps.isSwitched) {
+      this.props.getLanguage();
+      // this.setState({
+      //   re_render: !this.state.re_render
+      // })
     }
   }
 
@@ -122,21 +124,13 @@ class App extends Component {
 
     this.setNavStyle(navStyle);
 
-  
 
-    const currentAppLocale = AppLocale[locale.locale];
-    // console.log(currentAppLocale ,'sdfdsfdddddddddddddddddddd')
-    console.log(currentAppLocale.messages, 'connect page messages')
     return (
-      <LocaleProvider
-        locale={currentAppLocale.antd}
+
+      < LocaleProvider
       >
         <IntlProvider
-          locale={currentAppLocale.locale}
-          messages={currentAppLocale.messages}
         >
-        
-
           <Switch>
             <Route exact path='/login' component={Login} />
             <Route exact path="/verify-auth" component={VerifyAuthCode} />
@@ -145,13 +139,13 @@ class App extends Component {
               path={`${match.url}`}
               // authUser={authUser}
               re_render={this.state.re_render}
-              component= {MainApp}
+              component={MainApp}
 
             />
 
           </Switch>
         </IntlProvider>
-      </LocaleProvider>
+      </ LocaleProvider>
     )
   }
 
@@ -161,8 +155,9 @@ class App extends Component {
 }
 
 const mapStateToProps = ({ settings, auth }) => {
-  const { locale, navStyle, layoutType } = settings;
+
+  const { locale, navStyle, layoutType, isSwitched } = settings;
   const { authUser, initURL, isAllowed } = auth;
-  return { locale, navStyle, layoutType, authUser, initURL, isAllowed }
+  return { locale, navStyle, layoutType, authUser, initURL, isAllowed, isSwitched }
 };
-export default connect(mapStateToProps, { setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent, getLanguage })(App);
+export default connect(mapStateToProps, { setInitUrl, setThemeType, onNavStyleChange, onLayoutTypeChange, checkComponent, getLanguage, languages })(App);

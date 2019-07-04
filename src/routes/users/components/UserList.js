@@ -1,11 +1,18 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import IntlMessages from "../../../util/IntlMessages";
+
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
 import { getFormattedDate } from '../../utils/commonUtils';
+
+import {
+    Button_Delete,
+    Button_Edit,
+    Button_Undo,
+
+} from '../../../constants/ButtonConstants';
 
 import styles from './user.css';
 
@@ -24,8 +31,6 @@ class UserList extends Component {
         }
     }
     handlePagination = (value) => {
-        // alert('sub child');
-        // console.log(value)
         var x = Number(value)
         this.setState({
             pagination: x,
@@ -58,7 +63,10 @@ class UserList extends Component {
                             size="small"
                             style={{ textTransform: 'uppercase' }}
                             onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
-                        >  <IntlMessages id="button.Edit" /> </Button>
+                        >
+                            {/* <IntlMessages id="button.Edit" />  */}
+                            {this.props.translation[Button_Edit]}
+                        </Button>
                         {(user.devicesList.length === 0) ?
                             (user.del_status == 0) ?
                                 <Button
@@ -66,13 +74,19 @@ class UserList extends Component {
                                     size="small"
                                     style={{ textTransform: 'uppercase' }}
                                     onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
-                                >  <IntlMessages id="button.Delete" /> </Button>
+                                >
+                                    {/* <IntlMessages id="button.Delete" /> */}
+                                    {this.props.translation[Button_Delete]}
+                                </Button>
                                 : <Button
                                     type="dashed"
                                     size="small"
                                     style={{ textTransform: 'uppercase' }}
                                     onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
-                                ><IntlMessages id="button.Undo" /> </Button>
+                                >
+                                    {/* <IntlMessages id="button.Undo" />  */}
+                                    {this.props.translation[Button_Undo]}
+                                </Button>
                             : null
                         }
                     </Fragment>)
@@ -155,7 +169,9 @@ class UserList extends Component {
                             return (
                                 <UserDeviceList
                                     ref='userDeviceList'
-                                    record={record} />
+                                    record={record} 
+                                    translation={this.props.translation}
+                                    />
                             );
                         }}
                         expandIconColumnIndex={3}
@@ -167,9 +183,10 @@ class UserList extends Component {
                         dataSource={this.renderList(this.state.users)}
                         pagination={{ pageSize: this.state.pagination, size: "midddle" }}
                         ref='user_table'
+                        translation={this.props.translation}
                     />
                 </Card>
-                <AddUser ref='edit_user' />
+                <AddUser ref='edit_user' translation={this.props.translation} />
             </Fragment>
         )
     }

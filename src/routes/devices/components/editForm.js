@@ -3,17 +3,29 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import { Button, Form, Input, Select, InputNumber, Spin } from 'antd';
-import { checkValue } from '../../utils/commonUtils'
+import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 import {
-    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN
+    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Modal_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require
 } from '../../../constants/Constants';
 import AddUser from '../../users/components/AddUser';
 import {
     addUser,
     getUserList
 } from "../../../appRedux/actions/Users";
+import { 
+    Required_Fields, 
+    DEVICE_ID, USER_ID, 
+    DEVICE_SIM_ID, 
+    DEVICE_Select_SIM_ID, 
+    DEVICE_CHAT_ID, 
+    Device_Note, 
+    Device_Valid_For, 
+    Device_Valid_days_Required , 
+    DEVICE_Select_CHAT_ID
+} from '../../../constants/DeviceConstants';
+import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
 
 class EditDevice extends Component {
 
@@ -117,9 +129,9 @@ class EditDevice extends Component {
             <div>
 
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                    <p className="mb-4">(*)- Required Fields</p>
+                    <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], Required_Fields)}</p>
                     <Form.Item
-                        label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? "Device ID " : null}
+                        label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID) : null}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
@@ -139,7 +151,7 @@ class EditDevice extends Component {
                         :
                         <Fragment>
                             <Form.Item
-                                label="USER ID"
+                                label={convertToLang(this.props.translation[USER_ID], USER_ID)}
                                 labelCol={{ span: 8, xs: 24, md: 8, sm: 24 }}
                                 wrapperCol={{ span: 10 }}
                             >
@@ -187,8 +199,8 @@ class EditDevice extends Component {
                                         type="primary"
                                         onClick={() => this.handleUserModal()}
                                     >
-                                        Add User
-                                     </Button>
+                                        {convertToLang(this.props.translation[Button_Add_User], Button_Add_User)}
+                                    </Button>
                                 }
 
                             </Form.Item>
@@ -252,7 +264,7 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Sim ID "
+                        label={convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID)}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         showSearch
@@ -262,14 +274,14 @@ class EditDevice extends Component {
                         })(
                             <Select
                                 showSearch
-                                placeholder="Select Sim ID"
+                                placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], DEVICE_Select_SIM_ID)}
                                 optionFilterProp="children"
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value="">Select Sim ID</Select.Option>
+                                <Select.Option value=""> {convertToLang(this.props.translation[DEVICE_Select_SIM_ID], DEVICE_Select_SIM_ID)} </Select.Option>
                                 {this.props.sim_ids.map((sim_id, index) => {
                                     return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
                                 })}
@@ -277,7 +289,7 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Chat ID"
+                        label={convertToLang(this.props.translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID)}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         showSearch
@@ -288,14 +300,14 @@ class EditDevice extends Component {
                             // <Input />
                             <Select
                                 showSearch
-                                placeholder="Select Chat ID"
+                                placeholder={convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], DEVICE_Select_CHAT_ID)}
                                 optionFilterProp="children"
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value="">Select Chat ID</Select.Option>
+                                <Select.Option value=""> {convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], DEVICE_Select_CHAT_ID)} </Select.Option>
                                 {this.props.chat_ids.map((chat_id, index) => {
                                     return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                 })}
@@ -306,7 +318,7 @@ class EditDevice extends Component {
 
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
                         <Form.Item
-                            label="Model"
+                            label={convertToLang(this.props.translation[Modal_text], Modal_text)}
                             labelCol={{ span: 8, xs: 24, sm: 8 }}
                             wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         >
@@ -318,7 +330,7 @@ class EditDevice extends Component {
                         </Form.Item>
                     }
                     <Form.Item
-                        label="Start Date "
+                        label={convertToLang(this.props.translation[Start_Date], Start_Date)}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
@@ -330,24 +342,24 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Expiry Date "
+                        label={convertToLang(this.props.translation[Expire_Date], Expire_Date)}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
                         {this.props.form.getFieldDecorator('expiry_date', {
                             initialValue: this.props.device.expiry_date,
                             rules: [{
-                                required: true, message: 'Expiry Date is Required !',
+                                required: true, message: convertToLang(this.props.translation[Expire_Date_Require], Expire_Date_Require),
                             }],
                         })(
                             <Select
                                 style={{ width: '100%' }}
                             >
-                                {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>Trial (7 days)</Select.Option> : null}
-                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={1}>1 Month</Select.Option> : null}
-                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={3}>3 Months</Select.Option> : null}
-                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={6}>6 Months</Select.Option> : null}
-                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={12}>12 Months</Select.Option> : null}
+                                {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>{convertToLang(this.props.translation[DEVICE_TRIAL], DEVICE_TRIAL)} (7 {convertToLang(this.props.translation[Days], Days)})</Select.Option> : null}
+                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={1}> {convertToLang(this.props.translation[one_month], one_month)} </Select.Option> : null}
+                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={3}>{convertToLang(this.props.translation[three_month], three_month)}</Select.Option> : null}
+                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={6}>{convertToLang(this.props.translation[six_month], six_month)}</Select.Option> : null}
+                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={12}>{convertToLang(this.props.translation[twelve_month], twelve_month)}</Select.Option> : null}
                             </Select>
                         )}
 
@@ -357,7 +369,7 @@ class EditDevice extends Component {
                         <Fragment>
 
                             <Form.Item
-                                label="NOTE"
+                                label={convertToLang(this.props.translation[Device_Note], Device_Note)}
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
@@ -369,14 +381,14 @@ class EditDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label="VALID FOR(DAYS)"
+                                label={convertToLang(this.props.translation[Device_Valid_For], Device_Valid_For)}
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
                                 {this.props.form.getFieldDecorator('validity', {
                                     initialValue: this.props.device.validity,
                                     rules: [{
-                                        required: true, message: 'Valid days required',
+                                        required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], Device_Valid_days_Required),
                                     }],
                                 })(
                                     <InputNumber min={1} />
@@ -440,12 +452,12 @@ class EditDevice extends Component {
                             sm: { span: 24, offset: 0 },
                         }}
                     >
-                        <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} >Cancel</Button>
-                        <Button type="primary" htmlType="submit">Submit</Button>
+                        <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} > {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}</Button>
+                        <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], Button_submit)}</Button>
                     </Form.Item>
 
                 </Form>
-                <AddUser ref="add_user" />
+                <AddUser ref="add_user" translation={this.props.translation} />
             </div >
 
         )
@@ -467,7 +479,7 @@ function mapDispatchToProps(dispatch) {
         addUser: addUser,
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, users, auth }) => {
+var mapStateToProps = ({ routing, devices, users, auth, settings }) => {
     // console.log("sdfsaf", devices);
 
     return {
@@ -477,7 +489,8 @@ var mapStateToProps = ({ routing, devices, users, auth }) => {
         chat_ids: devices.chat_ids,
         pgp_emails: devices.pgp_emails,
         users_list: users.users_list,
-        isloading: users.addUserFlag
+        isloading: users.addUserFlag,
+        translation: settings.translation
     };
 }
 
