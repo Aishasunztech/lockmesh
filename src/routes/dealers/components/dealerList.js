@@ -240,7 +240,7 @@ class DealerList extends Component {
     }
 
     render() {
-        console.log(this.props.dealersList, 'dealers list console');
+        // console.log(this.props.dealersList, 'dealers list console');
 
         return (
             <Card className="border_top_0">
@@ -260,7 +260,9 @@ class DealerList extends Component {
                         return (
                             <DealerDevicesList
                                 ref='dealerDeviceList'
-                                record={record} />
+                                record={record} 
+                                translation={this.props.translation}
+                                />
                             // <span>its working</span>
                         );
                     }}

@@ -271,7 +271,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: false,
                 dealers: [...state.dealers],
-                options: [...state.options],
+                // options: [...state.options],
 
             }
             break;

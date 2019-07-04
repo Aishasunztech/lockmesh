@@ -38,7 +38,7 @@ export function onLayoutTypeChange(layoutType) {
 export function languages() {
   return (dispatch) => {
     RestService.languages().then((response) => {
-      console.log("Language Resoonse" , response.data)
+      // console.log("Language Resoonse" , response.data)
       if (RestService.checkAuth(response.data)) {
         dispatch({
           type: LANGUAGES,
@@ -53,7 +53,7 @@ export function switchLanguage(locale) {
   return (dispatch) => {
     RestService.switchLanguage(locale).then((response) => {
       if (RestService.checkAuth(response.data)) {
-        console.log('response', response.data);
+        // console.log('response', response.data);
         if (response.data) {
           dispatch({
             type: SWITCH_LANGUAGE,
@@ -73,7 +73,7 @@ export function getLanguage() {
   return (dispatch) => {
     RestService.getLanguage().then((response) => {
       if (RestService.checkAuth(response.data)) {
-        console.log('response', response.data);
+        // console.log('response', response.data);
         if (response.data) {
           dispatch({
             type: GET_LANGUAGE,

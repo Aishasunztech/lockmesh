@@ -1,6 +1,6 @@
 
 // *************** App Heading Div
-export const APP_MANAGE_DATA = "app.manage.data.id"; // Manage Data
+export const APP_MANAGE_APKs = "app.manage.apks.id"; // Manage APK's
 export const APP_MANAGE_POLICY = "app.manage.policy.id"; // Manage Policy
 export const APP_SECURE_MARKET = "app.secure.market.id"; // Secure Market
 export const APP_DOWNLOAD_TOOLS = "app.download.tools"; // Download Tools

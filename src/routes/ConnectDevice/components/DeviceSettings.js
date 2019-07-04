@@ -66,7 +66,7 @@ export default class TableHistory extends Component {
     }
 
     cotrolsValues = () => {
-        console.log(this.state.controls, 'controls are');
+        // console.log(this.state.controls, 'controls are');
         if (Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object) {
 
             let data = [];

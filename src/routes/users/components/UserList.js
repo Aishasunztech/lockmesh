@@ -8,62 +8,10 @@ import AddUser from './AddUser';
 import { getFormattedDate } from '../../utils/commonUtils';
 
 import {
-    Button_Modify,
     Button_Delete,
-    Button_Activate,
-    Button_Connect,
-    Button_Yes,
-    Button_Ok,
-    Button_ok,
-    Button_Cancel,
-    Button_Suspend,
-    Button_Unsuspend,
     Button_Edit,
-    Button_passwordreset,
-    Button_submit,
-    Button_Flag,
-    Button_UNFLAG,
-    Button_SetPassword,
-    Button_Apply,
     Button_Undo,
-    Button_Redo,
-    Button_Clear,
-    Button_Refresh,
-    Button_Next,
-    Button_previous,
-    Button_AddDealer,
-    Button_AddS,
-    Button_UploadApk,
-    Button_Save,
-    Button_Update,
-    Button_Open,
-    Button_Sample,
-    Button_Import,
-    Button_Export,
-    Button_Release,
-    Button_View,
-    Button_ChangePassword,
-    Button_ChangeEmail,
-    Button_AddPolicy,
-    Button_Add,
-    Button_AddExceptSelected,
-    Button_AddAll,
-    Button_RemoveAll,
-    Button_RemoveExcept,
-    Button_BackupNow,
-    Button_DeleteUser,
-    Button_AddApps,
-    Button_Push,
-    Button_LoadProfile,
-    Button_LoadPolicy,
-    Button_IMEI,
-    Button_Pull,
-    Button_SaveProfile,
-    Button_Activity,
-    Button_SIM,
-    Button_Transfer,
-    Button_WipeDevice,
-    Button_Unlink,
+
 } from '../../../constants/ButtonConstants';
 
 import styles from './user.css';
@@ -83,8 +31,6 @@ class UserList extends Component {
         }
     }
     handlePagination = (value) => {
-        // alert('sub child');
-        // console.log(value)
         var x = Number(value)
         this.setState({
             pagination: x,
@@ -118,8 +64,8 @@ class UserList extends Component {
                             style={{ textTransform: 'uppercase' }}
                             onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
                         >
-                              {/* <IntlMessages id="button.Edit" />  */}
-                              {this.props.translation[Button_Edit]}
+                            {/* <IntlMessages id="button.Edit" />  */}
+                            {this.props.translation[Button_Edit]}
                         </Button>
                         {(user.devicesList.length === 0) ?
                             (user.del_status === 0) ?
@@ -128,10 +74,10 @@ class UserList extends Component {
                                     size="small"
                                     style={{ textTransform: 'uppercase' }}
                                     onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
-                                >  
-                                {/* <IntlMessages id="button.Delete" /> */}
-                                {this.props.translation[Button_Delete]}
-                                 </Button>
+                                >
+                                    {/* <IntlMessages id="button.Delete" /> */}
+                                    {this.props.translation[Button_Delete]}
+                                </Button>
                                 : <Button
                                     type="dashed"
                                     size="small"
@@ -140,7 +86,7 @@ class UserList extends Component {
                                 >
                                     {/* <IntlMessages id="button.Undo" />  */}
                                     {this.props.translation[Button_Undo]}
-                                    </Button>
+                                </Button>
                             : null
                         }
                     </Fragment>)
@@ -223,7 +169,9 @@ class UserList extends Component {
                             return (
                                 <UserDeviceList
                                     ref='userDeviceList'
-                                    record={record} />
+                                    record={record} 
+                                    translation={this.props.translation}
+                                    />
                             );
                         }}
                         expandIconColumnIndex={3}

@@ -90,7 +90,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PRICES: {
-            console.log(action.response, 'response of get prices')
+            // console.log(action.response, 'response of get prices')
 
             return {
                 ...state,
@@ -101,7 +101,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PACKAGES: {
-            console.log(action.response, 'response of get prices')
+            // console.log(action.response, 'response of get prices')
 
             return {
                 ...state,
@@ -124,11 +124,11 @@ export default (state = initialState, action) => {
             let price_for = action.payload.price_for;
             let field = action.payload.field;
 
-            console.log('price for', price_for, 'field', field, 'value', action.payload.value)
+            // console.log('price for', price_for, 'field', field, 'value', action.payload.value)
             if (price_for && price_for !== '') {
                 copyPrices[price_for][field] = action.payload.value;
             }
-            console.log(copyPrices[price_for], 'prices are', field)
+            // console.log(copyPrices[price_for], 'prices are', field)
             return {
                 ...state,
                 prices: copyPrices,
@@ -261,7 +261,7 @@ export default (state = initialState, action) => {
                 backUpModal: action.payload,
             }
         case PURCHASE_CREDITS:
-            console.log(action.response);
+            // console.log(action.response);
             if (action.response.status) {
 
                 success({

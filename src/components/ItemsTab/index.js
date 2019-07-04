@@ -32,7 +32,7 @@ export default class ItemTabs extends Component {
         })
     }
     render() {
-        console.log(this.props.prices, 'item tab pos', this.state.innerTabData, this.state.tabSelected)
+        // console.log(this.props.prices, 'item tab pos', this.state.innerTabData, this.state.tabSelected)
         return (
             <div>
                 <Tabs

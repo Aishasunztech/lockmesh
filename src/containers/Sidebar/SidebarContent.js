@@ -68,8 +68,8 @@ class SidebarContent extends Component {
     <ul className="gx-sub-popover">
       {this.state.languageData.map(language =>
         <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
-          this.props.switchLanguage(language)
-          // this.changeLng(language)
+          // this.props.switchLanguage(language)
+          this.changeLng(language)
         }>
           <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`} />
           <span className="gx-language-text">{language.name}</span>
@@ -101,7 +101,7 @@ class SidebarContent extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.languageData)
+    // console.log(this.props.languageData)
     this.setState({
       languageData: this.props.languageData
     })

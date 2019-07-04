@@ -609,7 +609,7 @@ const RestService = {
     },
     
     switchLanguage: (language) => {
-        console.log(language, 'language is')
+        // console.log(language, 'language is')
         return axios.patch(BASE_URL + 'users/save-language', { language }, RestService.getHeader());
     },
 
