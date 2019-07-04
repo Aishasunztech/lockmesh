@@ -261,7 +261,9 @@ class DealerList extends Component {
                         return (
                             <DealerDevicesList
                                 ref='dealerDeviceList'
-                                record={record} />
+                                record={record} 
+                                translation={this.props.translation}
+                                />
                             // <span>its working</span>
                         );
                     }}

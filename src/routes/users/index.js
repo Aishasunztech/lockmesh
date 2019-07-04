@@ -42,184 +42,24 @@ import {
     getPagination
 
 } from "../../appRedux/actions/Common";
+import { usersColumns } from '../utils/columnsUtils';
+
 import AddUser from './components/AddUser';
 import { Button_Add_User } from '../../constants/ButtonConstants';
 var coppyUsers = [];
 var status = true;
-const question_txt = (
-    <div>Appuyez sur > pour afficher la liste des périphériques de cet utilisateur.
-        <p>Press <a style={{ fontSize: 14 }}><Icon type="caret-right" /> </a> to View Devices<br></br> list of this User</p>
-    </div>
-);
+// const question_txt = (
+//     <div>Appuyez sur > pour afficher la liste des périphériques de cet utilisateur.
+//         <p>Press <a style={{ fontSize: 14 }}><Icon type="caret-right" /> </a> to View Devices<br></br> list of this User</p>
+//     </div>
+// );
 class Users extends Component {
     constructor(props) {
         super(props);
         // this.state = {
         //     users: []
         // }
-        this.columns = [
-            {
-                title: '#',
-                dataIndex: 'counter',
-                align: 'center',
-                className: 'row',
-            },
-            {
-                // title: (
-                // // <IntlMessages id="usersColHeading.Action" />
-                // ),
-                align: "center",
-                dataIndex: 'action',
-                key: "action",
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="user_id"
-                        key="user_id"
-                        id="user_id"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[USER_ID], USER_ID)}
-                    />
-                ),
-                dataIndex: 'user_id',
-                className: '',
-                children: [
-                    {
-                        title: convertToLang(props.translation[USER_ID], USER_ID),
-                        align: "center",
-                        dataIndex: 'user_id',
-                        key: "user_id",
-                        className: '',
-                        sorter: (a, b) => {
-                            // console.log(a, 'user is is')
-                            return a.user_id.localeCompare(b.user_id)
-                        },
-
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ],
-            },
-            {
-                title: (
-                    <div>
-                        <Input.Search
-                            name="device_id"
-                            key="device_id"
-                            id="device_id"
-                            className="search_heading"
-                            autoComplete="new-password"
-                            onKeyUp={this.handleSearch2}
-                            placeholder={convertToLang(props.translation[DEVICE_ID], DEVICE_ID)}
-                        />
-                    </div>
-                ),
-                dataIndex: 'devices',
-                className: 'row',
-                children: [
-                    {
-                        title: (
-                            <span>
-                                {convertToLang(props.translation[DEVICE_ID], DEVICE_ID)}
-                                <Popover placement="top" content={question_txt}>
-                                    <span className="helping_txt"><Icon type="info-circle" /></span>
-                                </Popover>
-                            </span>
-                        ),
-                        align: "center",
-                        dataIndex: 'devices',
-                        key: "devices",
-                        className: 'row',
-                        onFilter: (value, record) => record.devices.indexOf(value) === 0,
-                        sorter: (a, b) => { return a.devices - b.devices },
-
-                        // sortDirections: ['ascend', 'descend'],
-                    }
-                ],
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="user_name"
-                        key="user_name"
-                        id="user_name"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[USER_NAME], USER_NAME)}
-                    />
-                ),
-                dataIndex: 'user_name',
-                className: 'row',
-                children: [{
-                    title: convertToLang(props.translation[USER_NAME], USER_NAME),
-                    dataIndex: 'user_name',
-                    align: "center",
-                    key: 'user_name',
-                    className: '',
-                    sorter: (a, b) => { return a.user_name.localeCompare(b.user_name) },
-                    sortDirections: ['ascend', 'descend'],
-                }]
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="email"
-                        key="email"
-                        id="email"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[USER_EMAIL], USER_EMAIL)}
-                    />
-                ),
-                dataIndex: 'email',
-                className: 'row',
-                children: [{
-                    title: convertToLang(props.translation[USER_EMAIL], USER_EMAIL),
-                    dataIndex: 'email',
-                    align: "center",
-                    key: 'email',
-                    className: '',
-                    sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
-                    sortDirections: ['ascend', 'descend'],
-
-                }]
-            },
-            {
-                title: convertToLang(props.translation[USER_TOKEN], USER_TOKEN),
-                align: "center",
-                dataIndex: 'tokens',
-                key: "tokens",
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="created_at"
-                        key="created_at"
-                        id="created_at"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[USER_DATE_REGISTERED], USER_DATE_REGISTERED)}
-                    />
-                ),
-                dataIndex: 'created_at',
-                className: 'row',
-                children: [{
-                    title: convertToLang(props.translation[USER_DATE_REGISTERED], USER_DATE_REGISTERED),
-                    dataIndex: 'created_at',
-                    align: "center",
-                    key: 'created_at',
-                    className: '',
-                    sorter: (a, b) => { return a.created_at.localeCompare(b.created_at.toString()) },
-                    sortDirections: ['ascend', 'descend'],
-
-                }]
-            },
-        ];
+        this.columns = usersColumns(props.translation, this.handleSearch);
         this.state = {
             users: [],
             originalUsers: [],
@@ -264,172 +104,8 @@ class Users extends Component {
                 expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
             })
         }
-        if(this.props.translation != prevProps.translation) {
-            // this.setState({
-                this.columns = [
-                    {
-                        title: '#',
-                        dataIndex: 'counter',
-                        align: 'center',
-                        className: 'row',
-                    },
-                    {
-                        // title: (
-                        // // <IntlMessages id="usersColHeading.Action" />
-                        // ),
-                        align: "center",
-                        dataIndex: 'action',
-                        key: "action",
-                    },
-                    {
-                        title: (
-                            <Input.Search
-                                name="user_id"
-                                key="user_id"
-                                id="user_id"
-                                className="search_heading"
-                                onKeyUp={this.handleSearch}
-                                autoComplete="new-password"
-                                placeholder={convertToLang(this.props.translation[USER_ID], USER_ID)}
-                            />
-                        ),
-                        dataIndex: 'user_id',
-                        className: '',
-                        children: [
-                            {
-                                title: convertToLang(this.props.translation[USER_ID], USER_ID),
-                                align: "center",
-                                dataIndex: 'user_id',
-                                key: "user_id",
-                                className: '',
-                                sorter: (a, b) => {
-                                    // console.log(a, 'user is is')
-                                    return a.user_id.localeCompare(b.user_id)
-                                },
-        
-                                sortDirections: ['ascend', 'descend'],
-                            }
-                        ],
-                    },
-                    {
-                        title: (
-                            <div>
-                                <Input.Search
-                                    name="device_id"
-                                    key="device_id"
-                                    id="device_id"
-                                    className="search_heading"
-                                    autoComplete="new-password"
-                                    onKeyUp={this.handleSearch2}
-                                    placeholder={convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}
-                                />
-                            </div>
-                        ),
-                        dataIndex: 'devices',
-                        className: 'row',
-                        children: [
-                            {
-                                title: (
-                                    <span>
-                                        {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}
-                                        <Popover placement="top" content={question_txt}>
-                                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                                        </Popover>
-                                    </span>
-                                ),
-                                align: "center",
-                                dataIndex: 'devices',
-                                key: "devices",
-                                className: 'row',
-                                onFilter: (value, record) => record.devices.indexOf(value) === 0,
-                                sorter: (a, b) => { return a.devices - b.devices },
-        
-                                // sortDirections: ['ascend', 'descend'],
-                            }
-                        ],
-                    },
-                    {
-                        title: (
-                            <Input.Search
-                                name="user_name"
-                                key="user_name"
-                                id="user_name"
-                                className="search_heading"
-                                onKeyUp={this.handleSearch}
-                                autoComplete="new-password"
-                                placeholder={convertToLang(this.props.translation[USER_NAME], USER_NAME)}
-                            />
-                        ),
-                        dataIndex: 'user_name',
-                        className: 'row',
-                        children: [{
-                            title: convertToLang(this.props.translation[USER_NAME], USER_NAME),
-                            dataIndex: 'user_name',
-                            align: "center",
-                            key: 'user_name',
-                            className: '',
-                            sorter: (a, b) => { return a.user_name.localeCompare(b.user_name) },
-                            sortDirections: ['ascend', 'descend'],
-                        }]
-                    },
-                    {
-                        title: (
-                            <Input.Search
-                                name="email"
-                                key="email"
-                                id="email"
-                                className="search_heading"
-                                onKeyUp={this.handleSearch}
-                                autoComplete="new-password"
-                                placeholder={convertToLang(this.props.translation[USER_EMAIL], USER_EMAIL)}
-                            />
-                        ),
-                        dataIndex: 'email',
-                        className: 'row',
-                        children: [{
-                            title: convertToLang(this.props.translation[USER_EMAIL], USER_EMAIL),
-                            dataIndex: 'email',
-                            align: "center",
-                            key: 'email',
-                            className: '',
-                            sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
-                            sortDirections: ['ascend', 'descend'],
-        
-                        }]
-                    },
-                    {
-                        title: convertToLang(this.props.translation[USER_TOKEN], USER_TOKEN),
-                        align: "center",
-                        dataIndex: 'tokens',
-                        key: "tokens",
-                    },
-                    {
-                        title: (
-                            <Input.Search
-                                name="created_at"
-                                key="created_at"
-                                id="created_at"
-                                className="search_heading"
-                                onKeyUp={this.handleSearch}
-                                autoComplete="new-password"
-                                placeholder={convertToLang(this.props.translation[USER_DATE_REGISTERED], USER_DATE_REGISTERED)}
-                            />
-                        ),
-                        dataIndex: 'created_at',
-                        className: 'row',
-                        children: [{
-                            title: convertToLang(this.props.translation[USER_DATE_REGISTERED], USER_DATE_REGISTERED),
-                            dataIndex: 'created_at',
-                            align: "center",
-                            key: 'created_at',
-                            className: '',
-                            sorter: (a, b) => { return a.created_at.localeCompare(b.created_at.toString()) },
-                            sortDirections: ['ascend', 'descend'],
-        
-                        }]
-                    },
-                ]
-            // })
+        if (this.props.translation != prevProps.translation) {
+            this.columns = usersColumns(this.props.translation, this.handleSearch);
         }
     }
 
@@ -596,7 +272,7 @@ class Users extends Component {
         return (
             <Fragment>
                 <AppFilter
-                    searchPlaceholder= {convertToLang(this.props.translation[Appfilter_SearchUser], Appfilter_SearchUser)}
+                    searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchUser], Appfilter_SearchUser)}
                     defaultPagingValue={this.state.defaultPagingValue}
                     addButtonText={convertToLang(this.props.translation[Button_Add_User], Button_Add_User)}
                     // selectedOptions={this.props.selectedOptions}
@@ -621,7 +297,7 @@ class Users extends Component {
                     pagination={this.props.DisplayPages}
                     ref="userList"
                     consoled={this.consoled}
-                    translation= {this.props.translation}
+                    translation={this.props.translation}
                 />
                 {/* <UserList/> */}
             </Fragment>

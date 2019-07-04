@@ -471,7 +471,7 @@ class DevicesList extends Component {
 
                             scroll={{
                                 x: true,
-                                // y: 600 
+                                y: 200
                             }}
                             // useFixedHeader={true}
                             onExpand={this.onExpandRow}
