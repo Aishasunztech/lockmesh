@@ -11,7 +11,6 @@ import UserInfo from "components/UserInfo";
 import HorizontalNav from "../HorizontalNav";
 import { Link } from "react-router-dom";
 import { switchLanguage, toggleCollapsedSideNav } from "../../../appRedux/actions/Setting";
-// import IntlMessages from "../../../util/IntlMessages";
 
 const { Header } = Layout;
 

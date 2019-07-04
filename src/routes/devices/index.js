@@ -30,6 +30,35 @@ import {
 } from '../../constants/Constants'
 
 import {
+    Devices_Top_Bar,
+    Appfilter_SelectAll,
+    Appfilter_ShowDevices,
+    Appfilter_SearchDevices,
+    Dealer_Top_Bar,
+    Appfilter_ShowDealer,
+    Appfilter_SearchDealer,
+} from '../../constants/AppFilterConstants';
+
+import {
+    Button_Add_Device
+} from '../../constants/ButtonConstants'
+
+import {
+    Tab_All,
+    Tab_Active,
+    Tab_Expired,
+    Tab_Trial,
+    Tab_Suspended,
+    Tab_PreActivated,
+    Tab_PendingActivation,
+    Tab_Transfer,
+    Tab_Unlinked,
+    Tab_Flagged,
+    Tab_ComingSoon,
+    Tab_Archived,
+} from '../../constants/TabConstants';
+
+import {
     DEVICE_ID,
     DEVICE_REMAINING_DAYS,
     DEVICE_FLAGGED,
@@ -76,9 +105,11 @@ import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
+import Item from "antd/lib/list/Item";
+import { STATUS_CODES } from "http";
 
 
 var coppyDevices = [];
@@ -87,7 +118,8 @@ var status = true;
 class Devices extends Component {
     constructor(props) {
         super(props);
-        const columns = [
+        // console.log('constructor console is: =>  ', props.translation[DEVICE_ID])
+        var columns = [
             {
                 title: '#',
                 dataIndex: 'counter',
@@ -123,7 +155,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_REMAINING_DAYS)}
+                        placeholder={convertToLang(props.translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS)}
                     // onBlur={(e) => { console.log(e);; e.target.value = ''; }}
                     />
                 ),
@@ -131,7 +163,7 @@ class Devices extends Component {
                 className: 'hide',
                 children: [
                     {
-                        title: DEVICE_REMAINING_DAYS,
+                        title: convertToLang(props.translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS),
                         align: "center",
                         dataIndex: 'validity',
                         key: "validity",
@@ -150,7 +182,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_ID)}
+                        placeholder={convertToLang(props.translation[DEVICE_ID], DEVICE_ID)}
                     // onBlur={(e) => { e.target.value = '' }}
                     />
                 ),
@@ -158,14 +190,13 @@ class Devices extends Component {
                 className: '',
                 children: [
                     {
-                        title: DEVICE_ID,
+                        title: convertToLang(props.translation[DEVICE_ID], DEVICE_ID),
                         align: "center",
                         dataIndex: 'device_id',
                         key: "device_id",
                         className: '',
                         sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
                         sortDirections: ['ascend', 'descend'],
-
                     }
                 ],
             }, {
@@ -177,7 +208,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(USER_ID)}
+                        placeholder={convertToLang(props.translation[USER_ID], USER_ID)}
                     // onBlur={(e) => { e.target.value = '' }}
                     />
                 ),
@@ -185,7 +216,7 @@ class Devices extends Component {
                 className: '',
                 children: [
                     {
-                        title: USER_ID,
+                        title: convertToLang(props.translation[USER_ID], USER_ID),
                         align: "center",
                         dataIndex: 'user_id',
                         key: "user_id",
@@ -207,7 +238,7 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_STATUS)}
+                        placeholder={convertToLang(props.translation[DEVICE_STATUS], DEVICE_STATUS)}
                     // onBlur={(e) => { e.target.value = '' }}
                     />
                 ),
@@ -216,7 +247,7 @@ class Devices extends Component {
 
                 children: [
                     {
-                        title: DEVICE_STATUS,
+                        title: convertToLang(props.translation[DEVICE_STATUS], DEVICE_STATUS),
                         align: "center",
                         className: '',
                         dataIndex: 'status',
@@ -236,14 +267,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_MODE)}
+                        placeholder={convertToLang(props.translation[DEVICE_MODE], DEVICE_MODE)}
                     />
                 ),
                 dataIndex: 'online',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_MODE,
+                        title: convertToLang(props.translation[DEVICE_MODE], DEVICE_MODE),
                         align: "center",
                         className: '',
                         dataIndex: 'online',
@@ -263,14 +294,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_FLAGGED)}
+                        placeholder={convertToLang(props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED)}
                     />
                 ),
                 dataIndex: 'flagged',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_FLAGGED,
+                        title: convertToLang(props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED),
                         align: "center",
                         className: '',
                         dataIndex: 'flagged',
@@ -289,16 +320,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_NAME)}
-
+                        placeholder={convertToLang(props.translation[DEVICE_NAME], DEVICE_NAME)}
                     />
                 ),
                 className: '',
                 dataIndex: 'name',
-                editable: true,
                 children: [
                     {
-                        title: DEVICE_NAME,
+                        title: convertToLang(props.translation[DEVICE_NAME], DEVICE_NAME),
                         align: "center",
                         dataIndex: 'name',
                         key: 'name',
@@ -309,6 +338,8 @@ class Devices extends Component {
 
                     }
                 ]
+
+
             },
             {
                 title: (
@@ -319,14 +350,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_ACCOUNT_EMAIL)}
+                        placeholder={convertToLang(props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL)}
                     />
                 ),
                 dataIndex: 'account_email',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_ACCOUNT_EMAIL,
+                        title: convertToLang(props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL),
                         align: "center",
                         dataIndex: 'account_email',
                         key: 'account_email',
@@ -345,14 +376,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_ACTIVATION_CODE)}
+                        placeholder={convertToLang(props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE)}
                     />
                 ),
                 dataIndex: 'activation_code',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_ACTIVATION_CODE,
+                        title: convertToLang(props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE),
                         align: "center",
                         dataIndex: 'activation_code',
                         className: '',
@@ -371,14 +402,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_CLIENT_ID)}
+                        placeholder={convertToLang(props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID)}
                     />
                 ),
                 dataIndex: 'client_id',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_CLIENT_ID,
+                        title: convertToLang(props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID),
                         align: "center",
                         dataIndex: 'client_id',
                         key: 'client_id',
@@ -397,14 +428,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_PGP_EMAIL)}
+                        placeholder={convertToLang(props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL)}
                     />
                 ),
                 dataIndex: 'pgp_email',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_PGP_EMAIL,
+                        title: convertToLang(props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL),
                         align: "center",
                         dataIndex: 'pgp_email',
                         className: '',
@@ -422,14 +453,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_SIM_ID)}
+                        placeholder={convertToLang(props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID)}
                     />
                 ),
                 dataIndex: 'sim_id',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_SIM_ID,
+                        title: convertToLang(props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID),
                         align: "center",
                         dataIndex: 'sim_id',
                         key: 'sim_id',
@@ -448,14 +479,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_CHAT_ID)}
+                        placeholder={convertToLang(props.translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID)}
                     />
                 ),
                 dataIndex: 'chat_id',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_CHAT_ID,
+                        title: convertToLang(props.translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID),
                         align: "center",
                         dataIndex: 'chat_id',
                         key: 'chat_id',
@@ -476,14 +507,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_DEALER_ID)}
+                        placeholder={convertToLang(props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID)}
                     />
                 ),
                 dataIndex: 'dealer_id',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_DEALER_ID,
+                        title: convertToLang(props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID),
                         align: "center",
                         dataIndex: 'dealer_id',
                         key: 'dealer_id',
@@ -502,14 +533,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_DEALER_NAME)}
+                        placeholder={convertToLang(props.translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME)}
                     />
                 ),
                 dataIndex: 'dealer_name',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_DEALER_NAME,
+                        title: convertToLang(props.translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME),
                         align: "center",
                         className: '',
                         dataIndex: 'dealer_name',
@@ -528,14 +559,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_DEALER_PIN)}
+                        placeholder={convertToLang(props.translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN)}
                     />
                 ),
                 dataIndex: 'dealer_pin',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_DEALER_PIN,
+                        title: convertToLang(props.translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN),
                         align: "center",
                         dataIndex: 'dealer_pin',
                         key: 'dealer_pin',
@@ -554,14 +585,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_MAC_ADDRESS)}
+                        placeholder={convertToLang(props.translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS)}
                     />
                 ),
                 dataIndex: 'mac_address',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_MAC_ADDRESS,
+                        title: convertToLang(props.translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS),
                         align: "center",
                         className: '',
                         dataIndex: 'mac_address',
@@ -580,15 +611,15 @@ class Devices extends Component {
                         id="imei"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_IMEI_1)}
                         onKeyUp={this.handleSearch}
+                        placeholder={convertToLang(props.translation[DEVICE_IMEI_1], DEVICE_IMEI_1)}
                     />
                 ),
                 dataIndex: 'imei_1',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_IMEI_1,
+                        title: convertToLang(props.translation[DEVICE_IMEI_1], DEVICE_IMEI_1),
                         align: "center",
                         className: '',
                         dataIndex: 'imei_1',
@@ -607,14 +638,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_SIM_1)}
+                        placeholder={convertToLang(props.translation[DEVICE_SIM_1], DEVICE_SIM_1)}
                     />
                 ),
                 className: '',
                 dataIndex: 'sim_1',
                 children: [
                     {
-                        title: DEVICE_SIM_1,
+                        title: convertToLang(props.translation[DEVICE_SIM_1], DEVICE_SIM_1),
                         align: "center",
                         className: '',
                         dataIndex: 'sim_1',
@@ -633,15 +664,15 @@ class Devices extends Component {
                         id="imei2"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_IMEI_2)}
                         onKeyUp={this.handleSearch}
+                        placeholder={convertToLang(props.translation[DEVICE_IMEI_2], DEVICE_IMEI_2)}
                     />
                 ),
                 dataIndex: 'imei_2',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_IMEI_2,
+                        title: convertToLang(props.translation[DEVICE_IMEI_2], DEVICE_IMEI_2),
                         align: "center",
                         dataIndex: 'imei_2',
                         key: 'imei_2',
@@ -660,14 +691,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_SIM_2)}
+                        placeholder={convertToLang(props.translation[DEVICE_SIM_2], DEVICE_SIM_2)}
                     />
                 ),
                 dataIndex: 'sim_2',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_SIM_2,
+                        title: convertToLang(props.translation[DEVICE_SIM_2], DEVICE_SIM_2),
                         align: "center",
                         dataIndex: 'sim_2',
                         key: 'sim_2',
@@ -686,14 +717,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_SERIAL_NUMBER)}
+                        placeholder={convertToLang(props.translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER)}
                     />
                 ),
                 dataIndex: 'serial_number',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_SERIAL_NUMBER,
+                        title: convertToLang(props.translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER),
                         align: "center",
                         dataIndex: 'serial_number',
                         key: 'serial_number',
@@ -713,14 +744,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_MODEL)}
+                        placeholder={convertToLang(props.translation[DEVICE_MODEL], DEVICE_MODEL)}
                     />
                 ),
                 dataIndex: 'model',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_MODEL,
+                        title: convertToLang(props.translation[DEVICE_MODEL], DEVICE_MODEL),
                         align: "center",
                         className: '',
                         dataIndex: 'model',
@@ -740,14 +771,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_S_DEALER)}
+                        placeholder={convertToLang(props.translation[DEVICE_S_DEALER], DEVICE_S_DEALER)}
                     />
                 ),
                 dataIndex: 's_dealer',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_S_DEALER,
+                        title: convertToLang(props.translation[DEVICE_S_DEALER], DEVICE_S_DEALER),
                         align: "center",
                         className: '',
                         dataIndex: 's_dealer',
@@ -766,20 +797,21 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_S_DEALER_NAME)}
+                        placeholder={convertToLang(props.translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME)}
                     />
                 ),
                 dataIndex: 's_dealer_name',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_S_DEALER_NAME,
+                        title: convertToLang(props.translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME),
                         align: "center",
                         className: '',
                         dataIndex: 's_dealer_name',
                         key: 's_dealer_name',
-                        sorter: (a, b) => { 
-                            return a.s_dealer_name.localeCompare(b.s_dealer_name) },
+                        sorter: (a, b) => {
+                            return a.s_dealer_name.localeCompare(b.s_dealer_name)
+                        },
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
@@ -792,14 +824,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_START_DATE)}
+                        placeholder={convertToLang(props.translation[DEVICE_START_DATE], DEVICE_START_DATE)}
                     />
                 ),
                 dataIndex: 'start_date',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_START_DATE,
+                        title: convertToLang(props.translation[DEVICE_START_DATE], DEVICE_START_DATE),
                         align: "center",
                         className: '',
                         dataIndex: 'start_date',
@@ -817,14 +849,14 @@ class Devices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={titleCase(DEVICE_EXPIRY_DATE)}
+                        placeholder={convertToLang(props.translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE)}
                     />
                 ),
                 dataIndex: 'expiry_date',
                 className: '',
                 children: [
                     {
-                        title: DEVICE_EXPIRY_DATE,
+                        title: convertToLang(props.translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE),
                         align: "center",
                         className: '',
                         dataIndex: 'expiry_date',
@@ -852,6 +884,7 @@ class Devices extends Component {
             filteredDevices: [],
             flaggedDevices: [],
             copy_status: true,
+            translation: []
         }
         this.copyDevices = [];
 
@@ -1245,7 +1278,7 @@ class Devices extends Component {
 
 
     handleCheckChange(values) {
-
+        console.log('handleCheckChange values are: ', values)
         let dumydata = this.state.columns;
 
         // console.log("dumyData", dumydata);
@@ -1261,19 +1294,19 @@ class Devices extends Component {
                 // console.log(this.state.tabselect)
                 values.map((value) => {
                     if (column.className !== 'row') {
-                        if (column.children[0].title === value) {
-                            if (this.state.tabselect !== '3') {
-                                if (column.children[0].title !== 'REMAINING DAYS') {
-                                    dumydata[index].className = '';
-                                    dumydata[index].children[0].className = '';
-                                }
-                            }
-                            else {
+                    if (column.children[0].title === convertToLang(this.props.translation[value.key], value.key)) {
+                        if (this.state.tabselect !== '3') {
+                            if (column.children[0].title !== convertToLang(this.props.translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS)) {
                                 dumydata[index].className = '';
                                 dumydata[index].children[0].className = '';
                             }
                         }
+                        else {
+                            dumydata[index].className = '';
+                            dumydata[index].children[0].className = '';
+                        }
                     }
+                }
 
                 });
             });
@@ -1297,11 +1330,10 @@ class Devices extends Component {
     }
 
     componentDidUpdate(prevProps) {
-
-        // console.log('updated');
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.DisplayPages);
             this.setState({
+                translation: this.props.translation,
                 devices: this.props.devices,
                 columns: this.state.columns,
                 defaultPagingValue: this.props.DisplayPages,
@@ -1320,7 +1352,782 @@ class Devices extends Component {
 
             })
             // this.copyDevices = this.props.devices;
-            this.handleChangetab(this.state.tabselect)
+            this.handleChangetab(this.state.tabselect);
+            // this.handleCheckChange(this.props.selectedOptions);
+
+        }
+        
+        if(this.props.translation !== prevProps.translation){
+            // console.log(this.columns)
+            this.setState({
+                 columns : [
+                    {
+                        title: '#',
+                        dataIndex: 'counter',
+                        align: 'center',
+                        className: 'row',
+                        width: 800,
+                    },
+                    {
+                        // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
+                        dataIndex: 'action',
+                        // title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
+                        align: 'center',
+                        className: 'row',
+                        width: 800,
+                    },
+                    // {
+                    //     // title: 'ACTIONS',
+                    //     dataIndex: 'sortOrder',
+                    //     align: 'center',
+                    //     className: 'row',
+                    //     id:"order",
+                    //     // hide: true,
+                    //     // sortDirections: ['ascend', 'descend'],
+                    //     defaultSortOrder: 'ascend'
+                    // },
+        
+                    {
+                        title: (
+                            <Input.Search
+                                name="validity"
+                                key="validity"
+                                id="validity"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS)}
+                            // onBlur={(e) => { console.log(e);; e.target.value = ''; }}
+                            />
+                        ),
+                        dataIndex: 'validity',
+                        className: 'hide',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS),
+                                align: "center",
+                                dataIndex: 'validity',
+                                key: "validity",
+                                className: 'hide',
+                                sorter: (a, b) => { return a.validity - b.validity },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ],
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="device_id"
+                                key="device_id"
+                                id="device_id"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}
+                            // onBlur={(e) => { e.target.value = '' }}
+                            />
+                        ),
+                        dataIndex: 'device_id',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID),
+                                align: "center",
+                                dataIndex: 'device_id',
+                                key: "device_id",
+                                className: '',
+                                sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ],
+                    }, {
+                        title: (
+                            <Input.Search
+                                name="user_id"
+                                key="user_id"
+                                id="user_id"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[USER_ID], USER_ID)}
+                            // onBlur={(e) => { e.target.value = '' }}
+                            />
+                        ),
+                        dataIndex: 'user_id',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[USER_ID], USER_ID),
+                                align: "center",
+                                dataIndex: 'user_id',
+                                key: "user_id",
+                                className: '',
+                                sorter: (a, b) => {
+                                    // console.log(a, 'user is is')
+                                    return a.user_id.props.children.localeCompare(b.user_id.props.children)
+                                },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ],
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="finalStatus"
+                                key="status"
+                                id="status"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_STATUS], DEVICE_STATUS)}
+                            // onBlur={(e) => { e.target.value = '' }}
+                            />
+                        ),
+                        dataIndex: 'status',
+                        className: '',
+        
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_STATUS], DEVICE_STATUS),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'status',
+                                key: 'status',
+                                sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+        
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="online"
+                                key="online"
+                                id="online"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_MODE], DEVICE_MODE)}
+                            />
+                        ),
+                        dataIndex: 'online',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_MODE], DEVICE_MODE),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'online',
+                                key: 'online',
+                                sorter: (a, b) => { return a.online.props.children[1].localeCompare(b.online.props.children[1]) },
+        
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="flagged"
+                                key="flagged"
+                                id="flagged"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED)}
+                            />
+                        ),
+                        dataIndex: 'flagged',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'flagged',
+                                key: 'flagged',
+                                sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="name"
+                                key="name"
+                                id="name"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_NAME], DEVICE_NAME)}
+                            />
+                        ),
+                        className: '',
+                        dataIndex: 'name',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_NAME], DEVICE_NAME),
+                                align: "center",
+                                dataIndex: 'name',
+                                key: 'name',
+                                className: '',
+                                sorter: (a, b) => { return a.name.localeCompare(b.name) },
+                                sortDirections: ['ascend', 'descend'],
+                                editable: true,
+        
+                            }
+                        ]
+        
+        
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="account_email"
+                                key="account_email"
+                                id="account_email"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL)}
+                            />
+                        ),
+                        dataIndex: 'account_email',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL),
+                                align: "center",
+                                dataIndex: 'account_email',
+                                key: 'account_email',
+                                className: '',
+                                sorter: (a, b) => { return a.account_email.localeCompare(b.account_email) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="activation_code"
+                                key="activation_code"
+                                id="activation_code"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE)}
+                            />
+                        ),
+                        dataIndex: 'activation_code',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE),
+                                align: "center",
+                                dataIndex: 'activation_code',
+                                className: '',
+                                sorter: (a, b) => { return a.activation_code - b.activation_code },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+        
+                    {
+                        title: (
+                            <Input.Search
+                                name="client_id"
+                                key="client_id"
+                                id="client_id"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID)}
+                            />
+                        ),
+                        dataIndex: 'client_id',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID),
+                                align: "center",
+                                dataIndex: 'client_id',
+                                key: 'client_id',
+                                className: '',
+                                sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="pgp_email"
+                                key="pgp_email"
+                                id="pgp_email"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL)}
+                            />
+                        ),
+                        dataIndex: 'pgp_email',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL),
+                                align: "center",
+                                dataIndex: 'pgp_email',
+                                className: '',
+                                sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="sim_id"
+                                key="sim_id"
+                                id="sim_id"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID)}
+                            />
+                        ),
+                        dataIndex: 'sim_id',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID),
+                                align: "center",
+                                dataIndex: 'sim_id',
+                                key: 'sim_id',
+                                className: '',
+                                sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="chat_id"
+                                key="chat_id"
+                                id="chat_id"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID)}
+                            />
+                        ),
+                        dataIndex: 'chat_id',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID),
+                                align: "center",
+                                dataIndex: 'chat_id',
+                                key: 'chat_id',
+                                className: '',
+                                sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
+        
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+        
+                    {
+                        title: (
+                            <Input.Search
+                                name="dealer_id"
+                                key="dealer_id"
+                                id="dealer_id"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID)}
+                            />
+                        ),
+                        dataIndex: 'dealer_id',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID),
+                                align: "center",
+                                dataIndex: 'dealer_id',
+                                key: 'dealer_id',
+                                className: '',
+                                sorter: (a, b) => { return a.dealer_id - b.dealer_id },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="dealer_name"
+                                key="dealer_name"
+                                id="dealer_name"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME)}
+                            />
+                        ),
+                        dataIndex: 'dealer_name',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'dealer_name',
+                                key: 'dealer_name',
+                                sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="link_code"
+                                key="link_code"
+                                id="link_code"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN)}
+                            />
+                        ),
+                        dataIndex: 'dealer_pin',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN),
+                                align: "center",
+                                dataIndex: 'dealer_pin',
+                                key: 'dealer_pin',
+                                className: '',
+                                sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="mac_address"
+                                key="mac_address"
+                                id="mac_address"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS)}
+                            />
+                        ),
+                        dataIndex: 'mac_address',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'mac_address',
+                                key: 'mac_address',
+                                sorter: (a, b) => { return a.mac_address.localeCompare(b.mac_address) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+        
+                    {
+                        title: (
+                            <Input.Search
+                                name="imei"
+                                key="imei"
+                                id="imei"
+                                className="search_heading"
+                                autoComplete="new-password"
+                                onKeyUp={this.handleSearch}
+                                placeholder={convertToLang(this.props.translation[DEVICE_IMEI_1], DEVICE_IMEI_1)}
+                            />
+                        ),
+                        dataIndex: 'imei_1',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_IMEI_1], DEVICE_IMEI_1),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'imei_1',
+                                key: 'imei_1',
+                                sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="simno"
+                                key="simno"
+                                id="simno"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_SIM_1], DEVICE_SIM_1)}
+                            />
+                        ),
+                        className: '',
+                        dataIndex: 'sim_1',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_SIM_1], DEVICE_SIM_1),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'sim_1',
+                                key: 'sim_1',
+                                sorter: (a, b) => { return a.sim_1.localeCompare(b.sim_1) },
+        
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="imei2"
+                                key="imei2"
+                                id="imei2"
+                                className="search_heading"
+                                autoComplete="new-password"
+                                onKeyUp={this.handleSearch}
+                                placeholder={convertToLang(this.props.translation[DEVICE_IMEI_2], DEVICE_IMEI_2)}
+                            />
+                        ),
+                        dataIndex: 'imei_2',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_IMEI_2], DEVICE_IMEI_2),
+                                align: "center",
+                                dataIndex: 'imei_2',
+                                key: 'imei_2',
+                                className: '',
+                                sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="simno2"
+                                key="simno2"
+                                id="simno2"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_SIM_2], DEVICE_SIM_2)}
+                            />
+                        ),
+                        dataIndex: 'sim_2',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_SIM_2], DEVICE_SIM_2),
+                                align: "center",
+                                dataIndex: 'sim_2',
+                                key: 'sim_2',
+                                className: '',
+                                sorter: (a, b) => { return a.sim_2.localeCompare(b.sim_2) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="serial_number"
+                                key="serial_number"
+                                id="serial_number"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER)}
+                            />
+                        ),
+                        dataIndex: 'serial_number',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER),
+                                align: "center",
+                                dataIndex: 'serial_number',
+                                key: 'serial_number',
+                                className: '',
+                                sorter: (a, b) => { return a.serial_number.localeCompare(b.serial_number) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+        
+                    {
+                        title: (
+                            <Input.Search
+                                name="model"
+                                key="model"
+                                id="model"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_MODEL], DEVICE_MODEL)}
+                            />
+                        ),
+                        dataIndex: 'model',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_MODEL], DEVICE_MODEL),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'model',
+                                key: 'model',
+                                sorter: (a, b) => { return a.model.localeCompare(b.model) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+        
+                    {
+                        title: (
+                            <Input.Search
+                                name="s_dealer"
+                                key="s_dealer"
+                                id="s_dealer"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_S_DEALER], DEVICE_S_DEALER)}
+                            />
+                        ),
+                        dataIndex: 's_dealer',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_S_DEALER], DEVICE_S_DEALER),
+                                align: "center",
+                                className: '',
+                                dataIndex: 's_dealer',
+                                key: 's_dealer',
+                                sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                    {
+                        title: (
+                            <Input.Search
+                                name="s_dealer_name"
+                                key="s_dealer_name"
+                                id="s_dealer_name"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME)}
+                            />
+                        ),
+                        dataIndex: 's_dealer_name',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME),
+                                align: "center",
+                                className: '',
+                                dataIndex: 's_dealer_name',
+                                key: 's_dealer_name',
+                                sorter: (a, b) => {
+                                    return a.s_dealer_name.localeCompare(b.s_dealer_name)
+                                },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    }, {
+                        title: (
+                            <Input.Search
+                                name="start_date"
+                                key="start_date"
+                                id="start_date"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_START_DATE], DEVICE_START_DATE)}
+                            />
+                        ),
+                        dataIndex: 'start_date',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_START_DATE], DEVICE_START_DATE),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'start_date',
+                                key: 'start_date',
+                                sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    }, {
+                        title: (
+                            <Input.Search
+                                name="expiry_date"
+                                key="expiry_date"
+                                id="expiry_date"
+                                className="search_heading"
+                                onKeyUp={this.handleSearch}
+                                autoComplete="new-password"
+                                placeholder={convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE)}
+                            />
+                        ),
+                        dataIndex: 'expiry_date',
+                        className: '',
+                        children: [
+                            {
+                                title: convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE),
+                                align: "center",
+                                className: '',
+                                dataIndex: 'expiry_date',
+                                key: 'expiry_date',
+                                sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+                                sortDirections: ['ascend', 'descend'],
+                            }
+                        ]
+                    },
+                ]
+
+            })
+        }
+
+     
+
+        // console.log('updated');
+        
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            console.log('==================== componentDidUpdate  ======================== ');
+            console.log(this.props.selectedOptions)
+            this.handleCheckChange(this.props.selectedOptions)
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.translation != nextProps.translation) {
+            this.setState({
+                translation: nextProps.translation
+            })
         }
     }
 
@@ -1375,7 +2182,7 @@ class Devices extends Component {
         return (
             <Select
                 showSearch
-                placeholder={<IntlMessages id="appfilter.ShowDevices" />}
+                placeholder={convertToLang(this.props.translation[Appfilter_ShowDevices], Appfilter_ShowDevices)}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -1384,15 +2191,15 @@ class Devices extends Component {
                 onChange={this.handleChange}
             >
 
-                <Select.Option value="all"><IntlMessages id="tab.All" /></Select.Option>
-                <Select.Option value={DEVICE_ACTIVATED}><IntlMessages id="tab.Active" /> </Select.Option>
-                <Select.Option value={DEVICE_EXPIRED}><IntlMessages id="tab.Expired" /></Select.Option>
-                <Select.Option value={DEVICE_TRIAL}><IntlMessages id="tab.Trial" /> </Select.Option>
-                <Select.Option value={DEVICE_SUSPENDED}><IntlMessages id="tab.Suspended" /></Select.Option>
-                <Select.Option value={DEVICE_PRE_ACTIVATION}><IntlMessages id="tab.PreActivated" /> </Select.Option>
-                <Select.Option value={DEVICE_PENDING_ACTIVATION}><IntlMessages id="tab.PendingActivation" /></Select.Option>
-                <Select.Option value={DEVICE_FLAGGED}><IntlMessages id="tab.Flagged" /></Select.Option>
-                <Select.Option value={DEVICE_UNLINKED}><IntlMessages id="tab.Unlinked" /></Select.Option>
+                <Select.Option value="all"> {convertToLang(this.props.translation[Tab_All], Tab_All)} </Select.Option>
+                <Select.Option value={DEVICE_ACTIVATED}> {convertToLang(this.props.translation[Tab_Active], Tab_Active)}  </Select.Option>
+                <Select.Option value={DEVICE_EXPIRED}> {convertToLang(this.props.translation[Tab_Expired], Tab_Expired)} </Select.Option>
+                <Select.Option value={DEVICE_TRIAL}> {convertToLang(this.props.translation[Tab_Trial], Tab_Trial)}  </Select.Option>
+                <Select.Option value={DEVICE_SUSPENDED}> {convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)} </Select.Option>
+                <Select.Option value={DEVICE_PRE_ACTIVATION}> {convertToLang(this.props.translation[Tab_PreActivated], Tab_PreActivated)}  </Select.Option>
+                <Select.Option value={DEVICE_PENDING_ACTIVATION}> {convertToLang(this.props.translation[Tab_PendingActivation], Tab_PendingActivation)} </Select.Option>
+                <Select.Option value={DEVICE_FLAGGED}> {convertToLang(this.props.translation[Tab_Flagged], Tab_Flagged)} </Select.Option>
+                <Select.Option value={DEVICE_UNLINKED}> {convertToLang(this.props.translation[Tab_Unlinked], Tab_Unlinked)} </Select.Option>
 
             </Select>
         );
@@ -1405,13 +2212,27 @@ class Devices extends Component {
         }, true);
     }
 
+
     refreshComponent = () => {
         this.props.history.push('/devices');
     }
+    convertedSelectedOptions = () => {
+        if (this.props.selectedOption) {
+            return this.props.selectedOption.map((item => {
+
+            }))
+
+        } else {
+            return []
+        }
+    }
+
+
     render() {
-        
-        const searchPlaceholder = <IntlMessages id="appfilter.SearchDevices" />;
-        console.log(searchPlaceholder);
+
+
+
+        // console.log(this.props.selectedOptions, 'props are the ')
         return (
             <Fragment>
                 {/* <Button type="danger" size="small" onClick={() => dealerColsWithSearch()}>Testing</Button> */}
@@ -1421,9 +2242,9 @@ class Devices extends Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
-                                searchPlaceholder={"Search Devices"}
+                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], Appfilter_SearchDevices)}
                                 defaultPagingValue={this.state.defaultPagingValue}
-                                addButtonText="Add Device"
+                                addButtonText={convertToLang(this.props.translation[Button_Add_Device], Button_Add_Device)}
                                 options={this.props.options}
                                 isAddButton={this.props.user.type !== ADMIN}
                                 AddDeviceModal={true}
@@ -1434,6 +2255,8 @@ class Devices extends Component {
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
+                                locale={this.props.locale}
+                                translation={this.state.translation}
                             />
 
                             <DevicesList
@@ -1465,7 +2288,7 @@ class Devices extends Component {
                                 refreshComponent={this.refreshComponent}
                                 history={this.props.history}
                                 unflagged={this.props.unflagged}
-
+                                translation={this.state.translation}
                             />
                             <ShowMsg
                                 msg={this.props.msg}
@@ -1553,19 +2376,22 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-var mapStateToProps = ({ devices, auth }) => {
+var mapStateToProps = ({ devices, auth, settings }) => {
+    // console.log('check traslatin log at component:: ', settings.translation)
     // console.log('devices AUTH', auth);
-    //   console.log(devices.options,'devices OPTION', devices.selectedOptions);
+    //   console.log(settings.deviceOptions,' Hamza.. devices OPTION');
     return {
         devices: devices.devices,
         msg: devices.msg,
         showMsg: devices.showMsg,
-        options: devices.options,
+        options: settings.deviceOptions,
         isloading: devices.isloading,
         selectedOptions: devices.selectedOptions,
         DisplayPages: devices.DisplayPages,
         user: auth.authUser,
-        socket: auth.socket
+        socket: auth.socket,
+        locale: settings.locale,
+        translation: settings.translation
     };
 }
 

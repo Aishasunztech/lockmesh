@@ -1,4 +1,4 @@
-import { SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH, INVALID_TOKEN, GET_LANGUAGE } from "constants/ActionTypes";
+import { LANGUAGES, SWITCH_LANGUAGE, TOGGLE_COLLAPSED_NAV, WINDOW_WIDTH, INVALID_TOKEN, GET_LANGUAGE } from "constants/ActionTypes";
 import { LAYOUT_TYPE, NAV_STYLE, THEME_COLOR_SELECTION, THEME_TYPE } from "../../constants/ThemeSetting";
 import RestService from '../services/RestServices';
 
@@ -35,6 +35,19 @@ export function onLayoutTypeChange(layoutType) {
 //   };
 // }
 
+export function languages() {
+  return (dispatch) => {
+    RestService.languages().then((response) => {
+      console.log("Language Resoonse" , response.data)
+      if (RestService.checkAuth(response.data)) {
+        dispatch({
+          type: LANGUAGES,
+          payload: response.data.data
+        })
+      }
+    })
+  }
+}
 
 export function switchLanguage(locale) {
   return (dispatch) => {
@@ -44,7 +57,7 @@ export function switchLanguage(locale) {
         if (response.data) {
           dispatch({
             type: SWITCH_LANGUAGE,
-            payload: locale
+            // payload: locale
           })
         } else {
           dispatch({

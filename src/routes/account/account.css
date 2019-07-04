@@ -98,7 +98,7 @@
 }
 
 .crd_txt p {
-    margin: 6px 0;
+    margin: 4px 0;
     font-size: 15px;
 }
 
@@ -281,4 +281,8 @@
     .text {
         line-height: 260px;
     }
+}
+
+.disp_in_flex {
+    display: inline-flex
 }

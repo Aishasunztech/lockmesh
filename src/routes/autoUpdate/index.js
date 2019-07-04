@@ -305,6 +305,7 @@ class AutoUpdate extends React.Component {
 
                             <div>
                                 <AppFilter
+                                    translation={this.props.translation}                  
                                     handleFilterOptions={this.handleFilterOptions}
                                     searchPlaceholder="Search APK"
                                     addButtonText="Upload APK"
@@ -350,6 +351,7 @@ class AutoUpdate extends React.Component {
                                     user={this.props.user}
                                     ref="listApk"
                                     link='autoUpdate'
+                                    translation={this.props.translation}
                                 />
 
                                 <Modal
@@ -455,14 +457,15 @@ class AutoUpdate extends React.Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list, auth }) => {
+const mapStateToProps = ({ apk_list, auth, settings }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
         options: apk_list.options,
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
-        user: auth.authUser
+        user: auth.authUser,
+        translation: settings.translation
     };
 }
 

@@ -7,7 +7,11 @@ import update from 'react-addons-update';
 import PolicyInfo from './PolicyInfo';
 import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
+import { convertToLang } from '../../utils/commonUtils';
 import styles from './policy.css';
+import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes } from '../../../constants/ButtonConstants';
+import { POLICY } from '../../../constants/ActionTypes';
+import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION } from '../../../constants/PolicyConstants';
 const confirm = Modal.confirm;
 
 class PolicyList extends Component {
@@ -80,12 +84,12 @@ class PolicyList extends Component {
     SavePolicyChanges = (record) => {
 
         Modal.confirm({
-            title: 'Are You Sure, You Want to Save Changes',
+            title: convertToLang(this.props.translation[POLICY_SAVE_CONFIRMATION], POLICY_SAVE_CONFIRMATION),
             onOk: () => {
                 this.props.SavePolicyChanges(record);
             },
             // content: 'Bla bla ...',
-            okText: 'Save',
+            okText: convertToLang(this.props.translation[Button_Save], Button_Save),
         });
     }
 
@@ -93,13 +97,13 @@ class PolicyList extends Component {
     deletePolicy = (id) => {
         let _this = this
         confirm({
-            title: 'Do you want to delete this Policy?',
+            title: convertToLang(this.props.translation[POLICY_DELETE_CONFIRMATION], POLICY_DELETE_CONFIRMATION),
             onOk() {
                 _this.props.handlePolicyStatus(1, 'delete_status', id)
             },
             onCancel() { },
-            okText: 'Yes',
-            cancelText: 'No'
+            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+            cancelText: convertToLang(this.props.translation[Button_No], Button_No)
 
         });
     }
@@ -131,7 +135,7 @@ class PolicyList extends Component {
                                         this.props.editPolicyModal(policy)
                                     }}
                                 >
-                                    EDIT
+                                    {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
                                 </Button>
                                 <Button
                                     style={{ marginRight: 7 }}
@@ -139,7 +143,7 @@ class PolicyList extends Component {
                                     size="small"
                                     onClick={() => { this.deletePolicy(policy.id) }}
                                 >
-                                    DELETE
+                                    {convertToLang(this.props.translation[Button_Delete], Button_Delete)}
                                 </Button>
                             </Fragment>) : null
                 ,
@@ -179,13 +183,13 @@ class PolicyList extends Component {
 
         let _this = this
         confirm({
-            title: 'Do you want to change your default Policy?',
+            title: convertToLang(this.props.translation[POLICY_CHANGE_DEFAULT_CONFIRMATION], POLICY_CHANGE_DEFAULT_CONFIRMATION),
             onOk() {
                 _this.props.defaultPolicyChange(e, policy_id)
             },
             onCancel() { },
-            okText: 'Yes',
-            cancelText: 'No'
+            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+            cancelText: convertToLang(this.props.translation[Button_No], Button_No)
 
         });
     }
@@ -266,7 +270,7 @@ class PolicyList extends Component {
         }
     }
     render() {
-        // console.log(this.state.expandedRowKeys, 'keys are')
+        console.log(this.state.expandedRowKeys, 'keys are')
         return (
             <Fragment>
                 <Card>
@@ -286,7 +290,7 @@ class PolicyList extends Component {
                                 <div>{
                                     this.state.savePolicyButton ?
 
-                                        <Button onClick={() => this.SavePolicyChanges(record)}>Save Changes</Button>
+                                        <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], Button_Save_Changes)} </Button>
                                         : false}
                                     <PolicyInfo
                                         selected={this.state.expandTabSelected[record.rowKey]}
@@ -309,6 +313,7 @@ class PolicyList extends Component {
                                         enableAllallExtensions={this.props.enableAllallExtension}
                                         handleAppGotted={this.props.handleAppGotted}
                                         appsGotted={this.props.appsGotted}
+                                        translation={this.props.translation}
                                     />
                                 </div>
                             )

@@ -604,13 +604,16 @@ const RestService = {
         return axios.post(BASE_URL + 'users/purchase_credits_CC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
     },
 
+    languages: () => {
+        return axios.get(`${BASE_URL}users/languages`, RestService.getHeader());
+    },
+    
     switchLanguage: (language) => {
         console.log(language, 'language is')
         return axios.patch(BASE_URL + 'users/save-language', { language }, RestService.getHeader());
     },
 
     getLanguage: () => {
-
         return axios.get(BASE_URL + 'users/get-language', RestService.getHeader());
     },
     

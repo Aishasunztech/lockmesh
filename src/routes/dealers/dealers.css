@@ -2,6 +2,7 @@
     white-space: nowrap !important;
     font-size: 13px;
     text-align: center;
+    text-transform: uppercase;
 }
 
 .devices table td {

@@ -20,9 +20,12 @@ import {
 
 
 
+
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../constants/DeviceConstants';
+
+import { cloneableGenerator } from 'redux-saga/utils';
 
 
 export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
@@ -113,8 +116,8 @@ export function componentSearch(arr, search) {
     obks.some((obk) => {
       if (obk) {
         let temp = el[obk];
-        if(obk == 'dealer_id')
-        temp = temp.toString()
+        if (obk == 'dealer_id')
+          temp = temp.toString()
         if ((typeof temp) === 'string') {
           if (temp.toLowerCase().includes(search.toLowerCase())) {
             foundDevices.push(el);
@@ -161,7 +164,7 @@ export function titleCase(str) {
         return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
       })
     } else {
-      if (word == "id") {
+      if (word == "id" || word == "pgp" || word == "ip") {
         return word.toUpperCase();
       } else {
         return word.charAt(0).toUpperCase() + word.substr(1);
@@ -349,4 +352,17 @@ export function dealerColsWithSearch(searchBar = false, callBack = null) {
   } else {
     return child;
   }
+}
+
+export function convertToLang(lngWord, constant) {
+
+  if (lngWord != undefined && lngWord != '' && lngWord != null) {
+    // console.log('convert To Language Function: ', lngWord);
+    return lngWord;
+  } else if (constant != undefined && constant != '' && constant != null) {
+    return constant;
+  } else {
+    return "N/A";
+  }
+
 }

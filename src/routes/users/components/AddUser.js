@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, message } from 'antd';
 import AddUserForm from './AdduserForm';
+import { convertToLang } from '../../utils/commonUtils';
+import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 export default class AddUser extends Component {
 
@@ -42,12 +44,15 @@ export default class AddUser extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
+                    okText= {convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    cancelText = {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <AddUserForm
                         AddUserHandler={this.state.handleSubmit}
                         handleCancel={this.handleCancel}
                         user={this.state.user}
                         ref='add_user_form'
+                        translation={this.props.translation}
                     />
                 </Modal>
             </div>

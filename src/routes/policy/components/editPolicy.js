@@ -464,7 +464,8 @@ class EditPolicy extends Component {
 
     render() {
         const { current } = this.state;
-        // console.log(this.state.editAblePolicy.app_list, 'selected row for error')
+        console.log(this.state.editAblePolicy.app_list, 'selected row for error')
+        console.log('main_extension --------- ', this.state.main_extension)
 
         const { selectedRows, selectedRowKeys } = this.state;
         const { getFieldDecorator } = this.props.form;
@@ -499,6 +500,7 @@ class EditPolicy extends Component {
                                 rowId={this.state.editAblePolicy.id}
                                 isCheckbox={false}
                                 pageType={'dealerApps'}
+                                translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -521,6 +523,7 @@ class EditPolicy extends Component {
                                 isSwitch={true}
                                 edit={true}
                                 rowId={this.state.editAblePolicy.id}
+                                translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -597,6 +600,7 @@ class EditPolicy extends Component {
                                 isSwitch={true}
                                 edit={true}
                                 rowId={this.state.editAblePolicy.id}
+                                translation={this.props.translation}
                             />
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">

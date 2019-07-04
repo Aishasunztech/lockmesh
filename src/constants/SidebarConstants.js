@@ -1,0 +1,11 @@
+export const SIDEBAR =  "SIDEBAR";
+export const Sidebar_main =  "sidebar.main";
+export const Sidebar_devices =  "sidebar.devices";
+export const Sidebar_users =  "sidebar.users";
+export const Sidebar_dealers =  "sidebar.dealers";
+export const Sidebar_policy =  "sidebar.policy";
+export const Sidebar_sdealers =  "sidebar.sdealers";
+export const Sidebar_app =  "sidebar.app";
+export const Sidebar_account =  "sidebar.account";
+export const Sidebar_settings =  "sidebar.settings";
+export const Sidebar_logout =  "sidebar.logout";

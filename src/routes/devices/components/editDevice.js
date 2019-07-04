@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Modal, message } from 'antd';
 import EditForm from './editForm';
+import { convertToLang } from '../../utils/commonUtils'
+import { DEVICE_ID, DEVICE_EDIT } from '../../../constants/DeviceConstants';
+import { EDIT_DEVICE } from '../../../constants/ActionTypes';
+import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 let editDevice;
 export default class EditDealer extends Component {
 
@@ -63,12 +67,14 @@ export default class EditDealer extends Component {
                     width="600px"
                     visible={visible}
                     maskClosable={false}
-                    title={<div>Edit Device <br /> <span>Device ID: {this.state.device.device_id} </span></div>}
+                    title={<div> {convertToLang(this.props.translation[DEVICE_EDIT], DEVICE_EDIT)} <br /> <span> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}: {this.state.device.device_id} </span></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
                     maskClosable={false}
+                    okText= {convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    cancelText= {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
 
                     <EditForm
@@ -77,6 +83,7 @@ export default class EditDealer extends Component {
                         hideModal={this.handleCancel}
                         editDeviceFunc={this.state.func}
                         handleCancel={this.handleCancel}
+                        // translation={this.props.translation}
                     />
 
                 </Modal>

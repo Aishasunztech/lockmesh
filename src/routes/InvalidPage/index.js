@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
-import IntlMessages from "util/IntlMessages";
 
 export default class InvalidPage extends Component {
   render() {
@@ -9,7 +8,7 @@ export default class InvalidPage extends Component {
         <div className="gx-page-error-content">
           <div className="gx-error-code gx-mb-4">403</div>
           <h2 className="gx-text-center">
-            <IntlMessages id="extraPages.403Msg" />
+            {/* <IntlMessages id="extraPages.403Msg" /> */}
           </h2>
           {/* <form className="gx-mb-4" role="search">
             <div className="gx-search-bar">
@@ -22,7 +21,9 @@ export default class InvalidPage extends Component {
             </div>
           </form> */}
           <p className="gx-text-center">
-            <Link className="gx-btn gx-btn-primary" to="/"><IntlMessages id="extraPages.goHome" /></Link>
+            <Link className="gx-btn gx-btn-primary" to="/">
+              {/* <IntlMessages id="extraPages.goHome" /> */}
+              </Link>
           </p>
         </div>
       </div>
