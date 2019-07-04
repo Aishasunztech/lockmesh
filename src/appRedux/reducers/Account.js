@@ -171,7 +171,7 @@ export default (state = initialState, action) => {
                 success({
                     title: action.payload.msg,
                 });
-            } else if (action.payload.status == false && action.showMsg) {
+            } else if (action.payload.status === false && action.showMsg) {
                 error({
                     title: action.payload.msg,
                 });

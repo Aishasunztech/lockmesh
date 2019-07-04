@@ -122,7 +122,7 @@ class UserList extends Component {
                               {this.props.translation[Button_Edit]}
                         </Button>
                         {(user.devicesList.length === 0) ?
-                            (user.del_status == 0) ?
+                            (user.del_status === 0) ?
                                 <Button
                                     type="danger"
                                     size="small"

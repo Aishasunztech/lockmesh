@@ -332,20 +332,6 @@ class ConnectDevice extends Component {
   }
 
   applyActionButton = (visible = true) => {
-    // console.log(this.state.changedCtrls, 'controls are');
-    // let changedControls = Object.create(null);
-    // Object.keys(this.state.controls.controls).map(key => {
-    //   if(key == 'bluetooth_status_isChanged'){
-    //     changedControls['bluetooth_status'] = this.state.controls.controls.bluetooth_status;
-    //   }else if(key == 'call_status_isChanged'){
-    //     changedControls['call_status'] = this.state.controls.controls.call_status
-    //   }else if(key == 'hotspot_status_isChanged'){
-    //     changedControls['hotspot_status'] = this.state.controls.controls.hotspot_status
-    //   }else if(key == 'screenshot_status_isChanged'){
-    //     changedControls['screenshot_status'] = this.state.controls.controls.screenshot_status
-    //   }
-    // });
-
     this.setState({
       showChangesModal: visible,
     })
@@ -483,7 +469,6 @@ class ConnectDevice extends Component {
   }
 
   render() {
-    console.log('render connext page ', this.props)
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
     let onlineStatus = this.props.device_details.online
@@ -678,7 +663,6 @@ function mapDispatchToProps(dispatch) {
     editDevice: editDevice,
     getDevicesList: getDevicesList,
     getAccIdFromDvcId: getAccIdFromDvcId,
-    // showMessage: showMessage,
     unlinkDevice: unlinkDevice,
     flagged: flagged,
     unflagged: unflagged,
@@ -705,7 +689,6 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket , settings}) => {
-  // console.log("DEVICE DETAILS",device_details);
   return {
     translation: settings.translation,
     auth: auth,

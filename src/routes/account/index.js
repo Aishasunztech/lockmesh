@@ -378,7 +378,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'sim_id',
                 key: "sim_id",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -387,7 +387,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'start_date',
                 key: "start_date",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -396,7 +396,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'expiry_date',
                 key: "expiry_date",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -404,7 +404,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'chat_id',
                 key: "chat_id",
-                className: this.state.duplicate_data_type == 'chat_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'chat_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -412,7 +412,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'pgp_email',
                 key: "pgp_email",
-                className: this.state.duplicate_data_type == 'pgp_email' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'pgp_email' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             }
         ]
@@ -444,18 +444,18 @@ class Account extends Component {
                                             columns={duplicateModalColumns}
                                             dataSource={
                                                 this.state.duplicate_ids.map(row => {
-                                                    if (this.state.duplicate_data_type == 'chat_id') {
+                                                    if (this.state.duplicate_data_type === 'chat_id') {
                                                         return {
                                                             key: row.chat_id,
                                                             chat_id: row.chat_id
                                                         }
-                                                    } else if (this.state.duplicate_data_type == 'pgp_email') {
+                                                    } else if (this.state.duplicate_data_type === 'pgp_email') {
                                                         return {
                                                             key: row.pgp_email,
                                                             pgp_email: row.pgp_email
                                                         }
                                                     }
-                                                    else if (this.state.duplicate_data_type == 'sim_id') {
+                                                    else if (this.state.duplicate_data_type === 'sim_id') {
                                                         return {
                                                             key: row.id,
                                                             sim_id: row[this.state.duplicate_data_type],
@@ -480,18 +480,18 @@ class Account extends Component {
                                             columns={duplicateModalColumns}
                                             dataSource={
                                                 this.state.newData.map(row => {
-                                                    if (this.state.duplicate_data_type == 'chat_id') {
+                                                    if (this.state.duplicate_data_type === 'chat_id') {
                                                         return {
                                                             key: row.chat_id,
                                                             chat_id: row.chat_id
                                                         }
-                                                    } else if (this.state.duplicate_data_type == 'pgp_email') {
+                                                    } else if (this.state.duplicate_data_type === 'pgp_email') {
                                                         return {
                                                             key: row.pgp_email,
                                                             pgp_email: row.pgp_email
                                                         }
                                                     }
-                                                    else if (this.state.duplicate_data_type == 'sim_id') {
+                                                    else if (this.state.duplicate_data_type === 'sim_id') {
                                                         return {
                                                             key: row.id,
                                                             sim_id: row[this.state.duplicate_data_type],

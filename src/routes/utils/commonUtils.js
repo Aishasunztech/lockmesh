@@ -116,7 +116,7 @@ export function componentSearch(arr, search) {
     obks.some((obk) => {
       if (obk) {
         let temp = el[obk];
-        if (obk == 'dealer_id')
+        if (obk === 'dealer_id')
           temp = temp.toString()
         if ((typeof temp) === 'string') {
           if (temp.toLowerCase().includes(search.toLowerCase())) {
@@ -164,7 +164,7 @@ export function titleCase(str) {
         return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
       })
     } else {
-      if (word == "id" || word == "pgp" || word == "ip") {
+      if (word === "id" || word === "pgp" || word === "ip") {
         return word.toUpperCase();
       } else {
         return word.charAt(0).toUpperCase() + word.substr(1);
@@ -338,13 +338,13 @@ export function dealerColsWithSearch(searchBar = false, callBack = null) {
     var result = searchInput.map((item, index) => {
       let flag = true;
       for (var i in child) {
-        if (child[i].dataIndex == item.dataIndex) {
+        if (child[i].dataIndex === item.dataIndex) {
           item.children = [child[i]];
           flag = false;
           return item;
         }
       }
-      if (flag == true) {
+      if (flag === true) {
         return item;
       }
     })

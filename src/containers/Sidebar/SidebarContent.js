@@ -44,7 +44,6 @@ import {
   Sidebar_logout,
 } from '../../constants/SidebarConstants'
 
-import IntlMessages from "../../util/IntlMessages";
 // import languageData from "./languageData";
 
 import { logout } from "appRedux/actions/Auth";

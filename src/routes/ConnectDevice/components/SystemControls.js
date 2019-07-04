@@ -21,7 +21,6 @@ export default class SystemControls extends Component {
     }
   }
 
-
   componentDidMount() {
     if (this.props.controls) {
       this.setState({
@@ -46,14 +45,10 @@ export default class SystemControls extends Component {
   componentWillReceiveProps(nextprops) {
     // console.log('new props', nextprops)
     if (this.props.controls && (this.props.controls !== nextprops.controls)) {
-      // alert("hello");
-      // console.log(nextprops.secureSettingsMain, 'secureSettingsMain')
       this.setState({
         controls: nextprops.controls.controls,
         settings: nextprops.controls.settings,
-        // secureSettingsMain: nextprops.secureSettingsMain
-        // encryptedAllExt: nextprops.encryptedAllExt,
-        // guestAllExt: nextprops.guestAllExt
+ 
       })
     }
   }
@@ -83,33 +78,30 @@ export default class SystemControls extends Component {
           <Fragment>
             <div>
               <List>
-                {
+                {/* {
                   (this.state.settings !== undefined && this.state.settings && this.state.settings !== [] && objindex>=0) ?
                     <div className="row width_100 m-0 sec_head1">
                       <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                         <span>Guest</span>
                         <Switch onClick={(e) => {
-                          //  console.log("guest", e , this.state.settings[objindex]);
                           this.handleMainSettingCheck(e, "guest");
                         }} checked={this.state.settings[objindex].guest === 1 || this.state.settings[objindex].guest === true ? true : false} size="small" />
                       </div>
                       <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                         <span>Encrypt</span>
                         <Switch onClick={(e) => {
-                          // console.log("guest", e);
                           this.handleMainSettingCheck(e, "encrypted");
                         }} checked={this.state.settings[objindex].encrypted === 1 || this.state.settings[objindex].encrypted === true ? true : false} size="small" />
                       </div>
                       <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                         <span>Enable</span>
                         <Switch onClick={(e) => {
-                          // console.log("guest", e);
                           this.handleMainSettingCheck(e, "enable");
                         }} checked={this.state.settings[objindex].enable === 1 || this.state.settings[objindex].enable === true ? true : false} size="small" />
                       </div>
                     </div>
                     : false
-                }
+                } */}
 
                 <List.Item>
                   <div className="row width_100">
