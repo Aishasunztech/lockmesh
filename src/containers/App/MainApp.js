@@ -47,11 +47,17 @@ export class MainApp extends Component {
     // Inactive
     window.addEventListener('blur', this.startTimer);
   }
-
+  componentWillUnmount(){
+    // this.setState({
+    //   seconds: 0
+    // })
+  }
   timerHandler = () => {
     // 60 * 60 * 3
-    if (this.state.seconds === (60 * 60 * 3)) {
-
+    if (this.state.seconds >= (60 * 60 * 3)) {
+      this.setState({
+        seconds: 0
+      });
       localStorage.removeItem("id");
       localStorage.removeItem("name");
       localStorage.removeItem("lastName");
