@@ -316,7 +316,7 @@ class Apk extends Component {
                         />
 
                     </Modal > */}
-                </div >
+                </div>
             )
         }
     }

@@ -402,24 +402,24 @@ class Permissions extends Component {
         'key': dealer.dealer_id,
         'row_key': dealer.dealer_id,
         'dealer_id': (
-          <custom data-column="DEALER ID">
+          <div data-column="DEALER ID">
             {dealer.dealer_id ? dealer.dealer_id : 'N/A'}
-          </custom>
+          </div>
         ),
         'dealer_name': (
-          // <custom data-column="DEALER NAME">
-          dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
-          // </custom>
+          // <div data-column="DEALER NAME">
+            dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
+          // </div>
         ),
         'dealer_email': (
-          <custom data-column="DEALER EMAIL">
+          <div data-column="DEALER EMAIL">
             {dealer.dealer_email ? dealer.dealer_email : 'N/A'}
-          </custom>
+          </div>
         ),
         'link_code': (
-          <custom data-column="DEALER PIN">
+          <div data-column="DEALER PIN">
             {dealer.link_code ? dealer.link_code : 'N/A'}
-          </custom>
+          </div>
         ),
         'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
         'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
@@ -434,13 +434,13 @@ class Permissions extends Component {
             ...common,
             'action':
               (
-                <custom data-column="ACTION">
+                <div data-column="ACTION">
                   <Button size="small" type="danger" onClick={() => {
                     this.rejectPemission(dealer.dealer_id)
-                  }}>
-                    {convertToLang(this.props.translation[Button_Remove], Button_Remove)}
-                  </Button>
-                </custom>
+                  }}> 
+                  {convertToLang(this.props.translation[Button_Remove], Button_Remove)} 
+                    </Button>
+                </div>
               )
           }
         )

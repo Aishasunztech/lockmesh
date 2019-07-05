@@ -123,8 +123,7 @@ class AppFilter extends Component {
             fullScreenClass1 = "col-md-3";
             fullScreenClass2 = "col-md-2";
         }
-        // console.log('--------- options are: ----------');
-        // console.log(this.props.options);
+
         const Search = Input.Search;
         //  console.log('render props selectedOptions ...', this.props.selectedOptions);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)

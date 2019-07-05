@@ -36,12 +36,12 @@ const DealerApps = (props) => {
             key: 'enable'
         },
     ];
-    
+
     const renderApps = (apk_list, isSwitchable, selectedAppKeys) => {
         // console.log(props.selectedAppKeys);
         return apk_list.map((app) => {
 
-            let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false: false;
+            let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false : false;
             // let isAvailable = false;
             // console.log('isAvailable', isAvailable);
             return {
@@ -64,7 +64,7 @@ const DealerApps = (props) => {
                     /> : (app.guest === true) ? 'On' : 'Off'),
                 encrypted: ((isSwitchable || props.disabledSwitch) ?
                     <Switch
-                    defaultChecked={app.encrypted === true || app.encrypted == 1 ? true : false}
+                        defaultChecked={app.encrypted === true || app.encrypted == 1 ? true : false}
 
                         disabled={!isAvailable}
                         size={"small"}
@@ -74,7 +74,7 @@ const DealerApps = (props) => {
                     /> : (app.encrypted === true) ? 'On' : 'Off'),
                 enable: ((isSwitchable || props.disabledSwitch) ?
                     <Switch
-                    defaultChecked={app.enable === true || app.enable == 1 ? true : false}
+                        defaultChecked={app.enable === true || app.enable == 1 ? true : false}
                         disabled={!isAvailable}
                         size={"small"}
                         onClick={(e) => {

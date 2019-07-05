@@ -718,9 +718,6 @@ class Devices extends Component {
 
 
     render() {
-
-
-
         // console.log(this.props.selectedOptions, 'props are the ')
         return (
             <Fragment>

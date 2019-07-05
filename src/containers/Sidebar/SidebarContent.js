@@ -190,14 +190,14 @@ class SidebarContent extends Component {
 
               {/* Price */}
               <li>
-                <Badge count={this.props.user_credit} overflowCount={999999999}>
-                  <i className="icon icon-dollar" >
-                    <Icon type="dollar" className="mb-10" />
-                  </i>
-                </Badge>
-
+                <a className="head-example">
+                  <Badge className="cred_badge" count={this.props.user_credit} overflowCount={999}>
+                    <i className="icon icon-dollar notification_icn" >
+                      <Icon type="dollar" className="mb-10" />
+                    </i>
+                  </Badge>
+                </a>
               </li>
-
               {/* Chat Icon */}
               <li>
                 <i className="icon icon-chat-new" />
