@@ -94,7 +94,6 @@ var status = true;
 class Devices extends Component {
     constructor(props) {
         super(props);
-        // console.log('constructor console is: =>  ', props.translation[DEVICE_ID])
         var columns = devicesColumns(props.translation, this.handleSearch);
       
 
