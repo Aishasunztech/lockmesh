@@ -20,7 +20,7 @@ import {
 
 const renderList = (histories, type, callback) => {
     return histories.map((history) => {
-        console.log("list", history.extenssions);
+        // console.log("list", history.extenssions);
 
         return ({
             key: history.id,
@@ -37,7 +37,8 @@ const renderList = (histories, type, callback) => {
                         }
                         // this.applyProfile(history.app_list)
                     }}
-                > Apply
+                > 
+                {/* <IntlMessages id="button.Apply" /> */}
                 </Button>
             ),
             app_list: history.app_list,
@@ -96,7 +97,7 @@ class TableHistory extends Component {
 
     render() {
         // const TableHistory = (props) => {
-        console.log("props", this.props.histories);
+        // console.log("props", this.props.histories);
 
         return (
             <Table
@@ -120,9 +121,9 @@ class TableHistory extends Component {
                     let passwords = record.passwords;
                     // console.log("app_list: ", app_list);
                     // console.log("extensions: ", extensions);
-                    if(this.props.type == 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined ){
+                    if (this.props.type == 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined) {
                         let cntrl = {};
-                        cntrl = JSON.parse(record.controls) 
+                        cntrl = JSON.parse(record.controls)
                         controls = cntrl
                     }
                     // console.log("push_apps: ", push_apps);

@@ -8,7 +8,7 @@ import {
     UNDO_DEALER,
     EDIT_DEALER,
     LOADING,ADD_DEALER,
-    INIT_URL,
+    // INIT_URL,
     SPIN_lOADING,
     DEALERS_LIST_IN_SDEALER
 } from "constants/ActionTypes"

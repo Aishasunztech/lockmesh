@@ -4,7 +4,11 @@ import { BASE_URL } from '../../../constants/Application';
 import Permissions from './Permissions';
 import styles from './app.css';
 
+import {
+    convertToLang
+} from '../../utils/commonUtils'
 import EditApk from './EditApk';
+import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
 
 
 export default class ListApk extends Component {
@@ -112,39 +116,39 @@ export default class ListApk extends Component {
                     'rowKey': app.apk_id,
                     'apk_id': app.apk_id,
                     'action': (
-                        <custom data-column="ACTION">
+                        <div data-column="ACTION">
                             <Fragment>
                                 <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
-                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
+                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
                                 <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
                                     this.props.handleConfirmDelete(app.apk_id);
-                                }}>DELETE</Button>
+                                }}>{convertToLang(this.props.translation[Button_Delete], Button_Delete)}</Button>
                             </Fragment>
-                        </custom>
+                        </div>
                     ),
                     'permission': (
-                        <custom data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400 }}>
+                        <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400 }}>
                             {app.permission_count}
-                        </custom>
+                        </div>
                     ),
                     "permissions": app.permissions,
                     'apk_status': (
-                        <custom data-column="SHOW ON DEVICE">
+                        <div data-column="SHOW ON DEVICE">
                             <Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                                 this.props.handleStatusChange(e, app.apk_id);
                             }} />
-                        </custom>
+                        </div>
                     ),
                     'apk': (
-                        <custom data-column="SHOW ON DEVICE">
+                        <div data-column="SHOW ON DEVICE">
                             {app.apk ? app.apk : 'N/A'}
-                        </custom>
+                        </div>
                     ),
                     'apk_name': app.apk_name ? app.apk_name : 'N/A',
                     'apk_logo': (
-                        <custom data-column="APK LOGO">
+                        <div data-column="APK LOGO">
                             <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
-                        </custom>),
+                        </div>),
                 }
 
             } else {
@@ -154,7 +158,7 @@ export default class ListApk extends Component {
                     'action': (
                         <Fragment>
                             <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
-                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
+                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
 
                         </Fragment>
                     ),
@@ -219,7 +223,7 @@ export default class ListApk extends Component {
                     expandedRowRender={(record) => {
                         // console.log("table row", record);
                         return (
-                            <Permissions className="exp_row22" record={record} />
+                            <Permissions className="exp_row22" record={record} translation={this.props.translation} />
                         );
 
                     }}

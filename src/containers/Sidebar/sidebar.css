@@ -4,7 +4,7 @@
 }
 
 .side_bar_main.gx-mb-4 {
-    margin-bottom: 10px !important;
+    margin-bottom: 20px !important;
 }
 
 .notification_icn {
@@ -103,7 +103,19 @@
 }
 
 .lang_icon .gx-sub-popover li {
-    padding: 12px 0 14px;
+    padding: 12px 0 12px;
+}
+
+.cred_badge {
+    margin-bottom: 0;
+}
+
+.cred_badge .ant-badge-count {
+    min-width: 40px;
+    right: -6px;
+    top: -4px;
+    background-color: #52c41a;
+    margin-bottom: 0;
 }
 
 @media screen and (max-width: 768px) {

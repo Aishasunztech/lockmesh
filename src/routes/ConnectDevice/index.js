@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
+import { convertToLang } from '../../routes/utils/commonUtils';
 import BackBtn from './back';
 import {
   getDeviceDetails,
@@ -65,6 +66,7 @@ import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
+import { Button_Apply } from "../../constants/ButtonConstants";
 
 const success = Modal.success
 const error = Modal.error
@@ -330,20 +332,6 @@ class ConnectDevice extends Component {
   }
 
   applyActionButton = (visible = true) => {
-    // console.log(this.state.changedCtrls, 'controls are');
-    // let changedControls = Object.create(null);
-    // Object.keys(this.state.controls.controls).map(key => {
-    //   if(key == 'bluetooth_status_isChanged'){
-    //     changedControls['bluetooth_status'] = this.state.controls.controls.bluetooth_status;
-    //   }else if(key == 'call_status_isChanged'){
-    //     changedControls['call_status'] = this.state.controls.controls.call_status
-    //   }else if(key == 'hotspot_status_isChanged'){
-    //     changedControls['hotspot_status'] = this.state.controls.controls.hotspot_status
-    //   }else if(key == 'screenshot_status_isChanged'){
-    //     changedControls['screenshot_status'] = this.state.controls.controls.screenshot_status
-    //   }
-    // });
-
     this.setState({
       showChangesModal: visible,
     })
@@ -536,6 +524,7 @@ class ConnectDevice extends Component {
                       refreshDevice={this.refreshDevice}
                       startLoading={this.props.startLoading}
                       endLoading={this.props.endLoading}
+                      translation={this.props.translation}
                     />
                   </Col>
                   <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
@@ -559,6 +548,7 @@ class ConnectDevice extends Component {
                           undoBtn={this.props.undoBtn}
                           redoBtn={this.props.redoBtn}
                           clearBtn={this.props.clearBtn}
+                          translation={this.props.translation}
                         />
                         <Button.Group className="nav_btn_grp">
 
@@ -581,6 +571,7 @@ class ConnectDevice extends Component {
                   <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
                     {/*  */}
                     <SideActions
+                    translation={this.props.translation}
                       device={this.props.device_details}
                       profiles={this.props.profiles}
                       policies={this.props.policies}
@@ -609,7 +600,7 @@ class ConnectDevice extends Component {
                   visible={this.state.showChangesModal}
                   onOk={this.applyActions}
                   onCancel={this.onCancel}
-                  okText='Apply'
+                  okText={convertToLang(this.props.translation[Button_Apply], Button_Apply)}
                 >
                   <DeviceSettings
                     app_list={this.props.app_list}
@@ -621,6 +612,7 @@ class ConnectDevice extends Component {
                     isGuestPwd={this.props.isGuestPwd}
                     controls={{ 'controls': this.state.changedCtrls }}
                     showChangedControls={true}
+                    translation={this.props.translation}
                   />
                 </Modal>
               </div>}
@@ -671,7 +663,6 @@ function mapDispatchToProps(dispatch) {
     editDevice: editDevice,
     getDevicesList: getDevicesList,
     getAccIdFromDvcId: getAccIdFromDvcId,
-    // showMessage: showMessage,
     unlinkDevice: unlinkDevice,
     flagged: flagged,
     unflagged: unflagged,
@@ -697,9 +688,9 @@ function mapDispatchToProps(dispatch) {
     clearState: clearState
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth, socket }) => {
-  // console.log("DEVICE DETAILS",device_details);
+var mapStateToProps = ({ routing, device_details, auth, socket , settings}) => {
   return {
+    translation: settings.translation,
     auth: auth,
     socket: auth.socket,
     routing: routing,

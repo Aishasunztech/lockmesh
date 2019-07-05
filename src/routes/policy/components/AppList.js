@@ -6,11 +6,14 @@ import {
     handleCheckAll
 } from "../../../appRedux/actions/ConnectDevice";
 import { SECURE_SETTING } from '../../../constants/Constants';
+import { convertToLang } from '../../utils/commonUtils';
 
 import { BASE_URL } from '../../../constants/Application';
 
 import { Table, Switch, Popover, Checkbox, Icon, Avatar, Button, Row, Col } from "antd";
 import AppDropdown from "./AppDropdown";
+import { POLICY_ACTION, POLICY_APP_NAME } from '../../../constants/PolicyConstants';
+import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 
 
 class AppList extends Component {
@@ -33,25 +36,25 @@ class AppList extends Component {
 
         this.appsColumns2 = [
             {
-                title: 'Action',
+                title: convertToLang(this.props.translation[POLICY_ACTION], POLICY_ACTION),
                 dataIndex: 'action',
                 key: '5',
                 // render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'APP NAME',
+                title: convertToLang(this.props.translation[POLICY_APP_NAME], POLICY_APP_NAME),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], Guest),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: 'ENABLE',
+                title: convertToLang(this.props.translation[ENABLE], ENABLE),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -59,20 +62,20 @@ class AppList extends Component {
 
         this.appsColumns = [
             {
-                title: 'APP NAME',
+                title: convertToLang(this.props.translation[POLICY_APP_NAME], POLICY_APP_NAME),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], Guest),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: 'ENABLE',
+                title: convertToLang(this.props.translation[ENABLE], ENABLE),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -80,16 +83,16 @@ class AppList extends Component {
 
         this.extensionColumns = [
             {
-                title: 'APP NAME',
+                title: convertToLang(this.props.translation[POLICY_APP_NAME], POLICY_APP_NAME),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], Guest),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
                 dataIndex: 'encrypted',
                 key: '3',
             }

@@ -120,7 +120,7 @@ class AppList extends Component {
                             this.handleChecked(e, "guest", app.app_id);
                         }}
                     />,
-                encrypted: app.default_app == 1 ? '' : (this.props.isHistory === true) ?
+                encrypted: app.default_app === 1 ? '' : (this.props.isHistory === true) ?
                     (app.encrypted === 1 || app.encrypted === true) ?
                         (<span style={{ color: "green" }}>On</span>) :
                         (<span style={{ color: "red" }}>Off</span>) :
@@ -136,7 +136,7 @@ class AppList extends Component {
                             this.handleChecked(e, "encrypted", app.app_id);
                         }}
                     />,
-                enable: app.default_app == 1 ? '' : (this.props.isHistory === true) ?
+                enable: app.default_app === 1 ? '' : (this.props.isHistory === true) ?
                     (app.enable === 1 || app.enable === true) ?
                         (<span style={{ color: "green" }}>On</span>) :
                         (<span style={{ color: "red" }}>On</span>) :
@@ -197,7 +197,6 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }, ownProps) => {
-    // console.log(device_details.app_list, "applist ownprops", ownProps);
     if (ownProps.isHistory !== undefined && ownProps.isHistory === true) {
         return {
             app_list: ownProps.app_list,

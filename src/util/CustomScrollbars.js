@@ -7,3 +7,4 @@ const CustomScrollbars = (props) => <Scrollbars  {...props} autoHide
         className="track-horizontal" />} />;
 
 export default CustomScrollbars;
+ 

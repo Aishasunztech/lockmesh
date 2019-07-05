@@ -13,6 +13,7 @@ export default class SimTabContent extends Component {
                     setPrice={this.props.setPrice}
                     price_for={this.props.innerTab}
                     innerTabData={this.props.innerTabData}
+                    translation= {this.props.translation}
                 />
             </div>
         )

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Link } from 'react-router-dom';
 import styles from './account.css'
+import { Markup } from 'interweave';
 import {
     importCSV,
     exportCSV,
@@ -22,8 +23,35 @@ import {
     purchaseCreditsFromCC
 } from "../../appRedux/actions/Account";
 
+import { convertToLang } from '../utils/commonUtils';
+
+
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
 import { BASE_URL } from "../../constants/Application";
+import {
+    MANAGE_DATA,
+    BACKUP_DATABASE,
+    PURCHASE_CREDITS,
+    PACKAGES_AND_IDS,
+    ACCOUNT_MANAGE_DATA_01,
+    ACCOUNT_MANAGE_DATA_02,
+    ACCOUNT_MANAGE_DATA_03,
+    UPLOAD_FILE,
+    UPLOAD_FILE_Ext,
+    BACKUP_DATABASE_DESCRIPTION,
+    PURCHASE_CREDITS_DESCRIPTION,
+    PACKAGES_AND_IDS_01,
+    PACKAGES_AND_IDS_02,
+    PACKAGES_AND_IDS_03,
+} from "../../constants/AccountConstants";
+
+import {
+    Button_Open,
+    Button_BUY,
+    Button_Ok,
+    Button_Cancel,
+    Button_submit,
+} from '../../constants/ButtonConstants'
 import {
     getSimIDs,
     getChatIDs,
@@ -33,6 +61,7 @@ import {
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
 import { ADMIN } from "../../constants/Constants";
+import { APP_ADD_MORE } from "../../constants/AppConstants";
 // import SetPricingModal from './PricesPakages/SetPricingModal';
 
 const confirm = Modal.confirm;
@@ -349,7 +378,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'sim_id',
                 key: "sim_id",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -358,7 +387,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'start_date',
                 key: "start_date",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -367,7 +396,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'expiry_date',
                 key: "expiry_date",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -375,7 +404,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'chat_id',
                 key: "chat_id",
-                className: this.state.duplicate_data_type == 'chat_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'chat_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -383,7 +412,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'pgp_email',
                 key: "pgp_email",
-                className: this.state.duplicate_data_type == 'pgp_email' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'pgp_email' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             }
         ]
@@ -415,18 +444,18 @@ class Account extends Component {
                                             columns={duplicateModalColumns}
                                             dataSource={
                                                 this.state.duplicate_ids.map(row => {
-                                                    if (this.state.duplicate_data_type == 'chat_id') {
+                                                    if (this.state.duplicate_data_type === 'chat_id') {
                                                         return {
                                                             key: row.chat_id,
                                                             chat_id: row.chat_id
                                                         }
-                                                    } else if (this.state.duplicate_data_type == 'pgp_email') {
+                                                    } else if (this.state.duplicate_data_type === 'pgp_email') {
                                                         return {
                                                             key: row.pgp_email,
                                                             pgp_email: row.pgp_email
                                                         }
                                                     }
-                                                    else if (this.state.duplicate_data_type == 'sim_id') {
+                                                    else if (this.state.duplicate_data_type === 'sim_id') {
                                                         return {
                                                             key: row.id,
                                                             sim_id: row[this.state.duplicate_data_type],
@@ -451,18 +480,18 @@ class Account extends Component {
                                             columns={duplicateModalColumns}
                                             dataSource={
                                                 this.state.newData.map(row => {
-                                                    if (this.state.duplicate_data_type == 'chat_id') {
+                                                    if (this.state.duplicate_data_type === 'chat_id') {
                                                         return {
                                                             key: row.chat_id,
                                                             chat_id: row.chat_id
                                                         }
-                                                    } else if (this.state.duplicate_data_type == 'pgp_email') {
+                                                    } else if (this.state.duplicate_data_type === 'pgp_email') {
                                                         return {
                                                             key: row.pgp_email,
                                                             pgp_email: row.pgp_email
                                                         }
                                                     }
-                                                    else if (this.state.duplicate_data_type == 'sim_id') {
+                                                    else if (this.state.duplicate_data_type === 'sim_id') {
                                                         return {
                                                             key: row.id,
                                                             sim_id: row[this.state.duplicate_data_type],
@@ -484,23 +513,24 @@ class Account extends Component {
                                             {/* <Link to="#" > */}
                                             <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                 <div>
-                                                    <h2 style={{ textAlign: "center" }}>Manage Data</h2>
+                                                    <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], MANAGE_DATA)} </h2>
                                                     <Divider className="mb-0" />
                                                     <Row style={{ padding: '12px 0 0px' }}>
                                                         <Col span={7} className="" style={{ textAlign: "center" }}>
                                                             <Icon type="form" className="and_icon" />
                                                         </Col>
                                                         <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                            <p><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
-                                                            <p><span className="diamond_icon">&#9670;</span>View/Edit your data</p>
-                                                            <p><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
-                                                            <p className="more_txt">and more...</p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], ACCOUNT_MANAGE_DATA_01)} />  </p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], ACCOUNT_MANAGE_DATA_02)} /> </p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], ACCOUNT_MANAGE_DATA_03)} />  </p>
+                                                            <p className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</p>
                                                         </Col>
                                                     </Row>
                                                 </div>
                                             </Card>
-                                            <Button type="primary" size="small" className="open_btn">Open</Button>
+                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                         </Link>
+
                                         <Modal
                                             maskClosable={false}
                                             className="manage_data"
@@ -1043,7 +1073,7 @@ class Account extends Component {
                                                 <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                     <div>
                                                         <div>
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> {convertToLang(this.props.translation[BACKUP_DATABASE], BACKUP_DATABASE)} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1051,14 +1081,14 @@ class Account extends Component {
                                                                 </Col>
                                                                 <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                     <p>
-                                                                        This feature allows you to keep a backup of the complete system database for offline safekeeping
-                                                    </p>
+                                                                        {convertToLang(this.props.translation[BACKUP_DATABASE_DESCRIPTION], BACKUP_DATABASE_DESCRIPTION)}
+                                                                    </p>
                                                                 </Col>
                                                             </Row>
                                                         </div>
                                                     </div>
                                                 </Card>
-                                                <Button type="primary" size="small" className="open_btn">Open</Button>
+                                                <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                             </Link>
                                             {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
@@ -1080,14 +1110,14 @@ class Account extends Component {
                                             <div className="profile_table image_1">
                                                 <Fragment>
                                                     <div className="ac_card">
-                                                        <h2 style={{ textAlign: "center" }}>Purchase Credits</h2>
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PURCHASE_CREDITS], PURCHASE_CREDITS)} </h2>
                                                         <Divider className="mb-0" />
                                                         <Row style={{ padding: '12px 0 0px' }}>
                                                             <Col span={8} className="" style={{ textAlign: "center" }}>
                                                                 <Icon type="dollar" className="and_icon" />
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <p>Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.</p>
+                                                                <p>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], PURCHASE_CREDITS_DESCRIPTION)}</p>
                                                             </Col>
                                                         </Row>
                                                     </div>
@@ -1101,7 +1131,7 @@ class Account extends Component {
                                         purchase_modal={this.state.purchase_modal}
                                         purchaseCredits={this.props.purchaseCredits}
                                         purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
-
+                                        translation={this.props.translation}
                                     />
                                 </div>
                             </div>
@@ -1118,7 +1148,7 @@ class Account extends Component {
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="branches" />  Manage Tokens</h2>
+                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PACKAGES_AND_IDS], PACKAGES_AND_IDS)} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1126,10 +1156,10 @@ class Account extends Component {
                                                                 </Col>
                                                                 <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                     <div className="crd_txt">
-                                                                        <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
-                                                                        <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
-                                                                        <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
-                                                                        <p className="more_txt">and more...</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], PACKAGES_AND_IDS_01)}</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], PACKAGES_AND_IDS_02)}</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], PACKAGES_AND_IDS_03)}</p>
+                                                                        <p className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</p>
                                                                     </div>
                                                                 </Col>
                                                             </Row>
@@ -1139,7 +1169,7 @@ class Account extends Component {
                                                 </Fragment>
                                             </div>
                                         </Card>
-                                        <Button type="primary" size="small" className="open_btn">Open</Button>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                         {/* </a> */}
                                     </Link>
                                     {/* <div className="middle">
@@ -1188,14 +1218,15 @@ function mapDispatchToProps(dispatch) {
         purchaseCreditsFromCC: purchaseCreditsFromCC
     }, dispatch);
 }
-var mapStateToProps = ({ account, devices, auth }) => {
+
+var mapStateToProps = ({ account, devices, settings, auth }) => {
     return {
         msg: account.msg,
         showMsg: account.showMsg,
         newData: account.newData,
         backUpModal: account.backUpModal,
+        translation: settings.translation,
         user: auth.authUser
-
     };
 }
 

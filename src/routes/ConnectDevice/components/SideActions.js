@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
 import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
 
-import { componentSearch } from '../../utils/commonUtils';
+import { componentSearch, convertToLang } from '../../utils/commonUtils';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
@@ -17,6 +16,7 @@ import DealerApps from "./DealerApps";
 import PasswordForm from './PasswordForm';
 import DeviceSettings from './DeviceSettings';
 import Activity from './Activity';
+
 
 
 import {
@@ -45,7 +45,9 @@ import {
 } from "../../../constants/Constants";
 
 
-import { PUSH_APPS, PULL_APPS, POLICY } from "../../../constants/ActionTypes"
+import { PUSH_APPS, PULL_APPS, POLICY, SAVE_PROFILE } from "../../../constants/ActionTypes"
+import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG, Button_Save, Button_Cancel } from '../../../constants/ButtonConstants';
+import { DEVICE_ID } from '../../../constants/DeviceConstants';
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -534,7 +536,7 @@ class SideActions extends Component {
             this.setState({
                 policyId: historyId,
                 policyName: name,
-                historyModal: false
+                historyModal: true
             })
         }
     }
@@ -564,9 +566,9 @@ class SideActions extends Component {
 
     render() {
         // console.log(this.state.apk_list, 'list apk')
-        const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
-        const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
-        const flagged = (this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'Flag';
+        const device_status = (this.props.device.account_status === "suspended") ? convertToLang(this.props.translation[Button_Unsuspend], Button_Unsuspend) : convertToLang(this.props.translation[Button_Suspend], Button_Suspend);
+        const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
+        const flagged = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], Button_UNFLAG) : convertToLang(this.props.translation[Button_Flag], Button_Flag);
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
@@ -586,9 +588,10 @@ class SideActions extends Component {
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
-                                    Push
+                                    
+                                    {/* <IntlMessages id="button.Push" /> */}
+                                    {convertToLang(this.props.translation[Button_Push], Button_Push)}
                                 </Button>
-
                                 <Button
                                     // disabled
                                     type="primary"
@@ -596,15 +599,20 @@ class SideActions extends Component {
                                     onClick={() => this.showHistoryModal(true, "profile")}
                                 >
                                     <Icon type="select" />
-                                    Load Profile
+                                    
+                                    {/* <IntlMessages id="button.LoadProfile" /> */}
+                                    {convertToLang(this.props.translation[Button_LoadProfile], Button_LoadProfile)}
                                 </Button>
                                 <Button
                                     type="default"
+                                    className="btn_break_line"
                                     onClick={() => this.showHistoryModal(true, "policy")}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#009700', color: '#fff' }}
                                 >
                                     <Icon type="lock" className="lock_icon" />
-                                    Load Policy
+                                    
+                                    {/* <IntlMessages id="button.LoadPolicy" /> */}
+                                    {convertToLang(this.props.translation[Button_LoadPolicy], Button_LoadPolicy)}
                                 </Button>
                                 <Button
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
@@ -612,7 +620,9 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, background: "#eed9c4", color: "#555", border: "1px solid #eab886" }}
                                 >
                                     {/* <Icon type="number" /> */}
-                                    IMEI
+                                    
+                                    {/* <IntlMessages id="button.IMEI" /> */}
+                                    {convertToLang(this.props.translation[Button_IMEI], Button_IMEI)}
                                 </Button>
                             </Col>
                             <Col
@@ -629,7 +639,9 @@ class SideActions extends Component {
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
-                                    Pull
+                                    
+                                    {/* <IntlMessages id="button.Pull" /> */}
+                                    {convertToLang(this.props.translation[Button_Pull], Button_Pull)}
                                 </Button>
                                 {/* </Tooltip> */}
 
@@ -647,15 +659,20 @@ class SideActions extends Component {
                                             // }
                                             // this.setState({ showChangesModal: true })
                                         }} >
-                                        <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
-                                        </Button>
+                                        <Icon type="save" style={{ fontSize: "14px" }} />
+                                        
+                                        {/* <IntlMessages id="button.SaveProfile" /> */}
+                                        {convertToLang(this.props.translation[Button_SaveProfile], Button_SaveProfile)}
+                                    </Button>
                                     : null}
                                 <Button
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.refs.activity.showModal()}
                                 >
-                                    Activity
+                                    
+                                    {/* <IntlMessages id="button.Activity" /> */}
+                                    {convertToLang(this.props.translation[Button_Activity], Button_Activity)}
                                 </Button>
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button
@@ -663,8 +680,10 @@ class SideActions extends Component {
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                     >
                                         <Icon type="file" />
-                                        SIM
-                                </Button>
+                                        
+                                        {/* <IntlMessages id="button.SIM" /> */}
+                                        {convertToLang(this.props.translation[Button_SIM], Button_SIM)}
+                                    </Button>
                                 </Tooltip>
                             </Col>
                         </Row>
@@ -673,18 +692,24 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
                                 <Tooltip title="Coming Soon">
-                                    <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button>
+                                    <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> 
+                                    {/* <IntlMessages id="button.Transfer" /> */}
+                                    {convertToLang(this.props.translation[Button_Transfer], Button_Transfer)} </Button>
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
                                 </Tooltip>
                                 <Button type={button_type}
-                                    onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
+                                    onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
                                     disabled={(flagged === 'Unflag') ? 'disabled' : ''}
                                 >
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" /> Wipe Device</Button>
+                                <Button type="default" className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" />
+                                    
+                                    {/* <IntlMessages id="button.WipeDevice" /> */}
+                                    {convertToLang(this.props.translation[Button_WipeDevice], Button_WipeDevice)}
+                                </Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button
@@ -696,13 +721,17 @@ class SideActions extends Component {
                                 <Button
                                     onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
-                                    <Icon type='disconnect' />Unlink</Button>
+                                    <Icon type='disconnect' />
+                                    {/* <IntlMessages id="button.Unlink" /> */}
+                                    {convertToLang(this.props.translation[Button_Unlink], Button_Unlink)}</Button>
                                 <Button
                                     onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                 >
                                     <Icon type='edit' />
-                                    Edit
+                                    
+                                    {/* <IntlMessages id="button.Edit" /> */}
+                                    {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
                                 </Button>
                             </Col>
                             <Tooltip title="Coming Soon" placement="bottom" >
@@ -785,7 +814,7 @@ class SideActions extends Component {
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
-                    title={<div> Save Profile <br /> Device ID:  {this.props.device.device_id} </div>}
+                    title={<div> {convertToLang(this.props.translation[SAVE_PROFILE], SAVE_PROFILE)} <br /> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}:  {this.props.device.device_id} </div>}
                     closable={false}
                     maskClosable={false}
                     style={{ top: 20 }}
@@ -796,7 +825,8 @@ class SideActions extends Component {
                         this.saveProfile();
                     }}
                     onCancel={() => { this.setState({ profileName: '' }); this.showSaveProfileModal(false) }}
-                    okText='Save'
+                    okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
@@ -813,6 +843,7 @@ class SideActions extends Component {
                     selectedApps={this.state.selectedApps}
                     handleChecked={this.handleChecked}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <PullAppModal
@@ -828,6 +859,7 @@ class SideActions extends Component {
                     handleChecked={this.handleChecked}
                     onCancelModel={this.onCancelModel}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <PasswordModal
@@ -835,6 +867,7 @@ class SideActions extends Component {
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
                     actionType={this.state.actionType}
+                    translation={this.props.translation}
                 />
 
                 <SelectedApps
@@ -849,6 +882,7 @@ class SideActions extends Component {
                     showPushAppsModal={this.props.showPushAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <ActivateDevcie
@@ -865,6 +899,7 @@ class SideActions extends Component {
 
                 <EditDevice
                     ref='edit_device'
+                    translation={this.props.translation}
                 />
                 <WipeDevice
                     ref='wipe_device'
@@ -925,9 +960,10 @@ function mapDispatchToProps(dispatch) {
         getProfiles: getProfiles
     }, dispatch);
 }
-var mapStateToProps = ({ device_details, auth }, otherProps) => {
+var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
 
     return {
+        translation: settings.translation,
         authUser: auth.authUser,
         historyModal: device_details.historyModal,
         applyPolicyConfirm: device_details.applyPolicyConfirm,

@@ -1,7 +1,15 @@
 import React, { Component, Fragment } from 'react'
 import { Button, Avatar, Input, Modal, Form, Icon, Col, Row, Table, Switch, Tabs } from "antd";
 import AppList from "./AppList";
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS } from '../../../constants/Constants';
+import {
+    SECURE_SETTING_PERMISSION,
+    SYSTEM_PERMISSION,
+    APPLICATION_PERMISION,
+    SYSTEM_CONTROLS_UNIQUE,
+    SECURE_SETTING,
+    Main_SETTINGS
+} from '../../../constants/Constants';
+
 import styles from './policy.css';
 import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
@@ -464,7 +472,6 @@ class EditPolicy extends Component {
 
     render() {
         const { current } = this.state;
-        // console.log(this.state.editAblePolicy.app_list, 'selected row for error')
 
         const { selectedRows, selectedRowKeys } = this.state;
         const { getFieldDecorator } = this.props.form;
@@ -499,6 +506,7 @@ class EditPolicy extends Component {
                                 rowId={this.state.editAblePolicy.id}
                                 isCheckbox={false}
                                 pageType={'dealerApps'}
+                                translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -521,6 +529,7 @@ class EditPolicy extends Component {
                                 isSwitch={true}
                                 edit={true}
                                 rowId={this.state.editAblePolicy.id}
+                                translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -597,13 +606,13 @@ class EditPolicy extends Component {
                                 isSwitch={true}
                                 edit={true}
                                 rowId={this.state.editAblePolicy.id}
+                                translation={this.props.translation}
                             />
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">
                             <div>
-                                {
+                                {/* {
                                     this.state.main_system_control != undefined ?
-
                                         <div>
                                             <Row>
                                                 <Col span={6} className="">
@@ -611,10 +620,9 @@ class EditPolicy extends Component {
                                                 <Col span={3} className="">
                                                     <Avatar src={`${BASE_URL}users/getFile/${this.state.main_system_control.icon}`} style={{ width: "30px", height: "30px" }} />
 
-                                                    {/* <img src={require("assets/images/setting.png")} /> */}
                                                 </Col>
                                                 <Col span={15} className="pl-0">
-                                                    <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
+                                                    <h5 style={{ marginTop: '9px' }}>Android Settings Permission</h5>
                                                 </Col>
                                             </Row>
                                             <Row className="mb-8">
@@ -634,7 +642,6 @@ class EditPolicy extends Component {
                                                         size="small"
                                                         checked={(this.state.main_system_control.encrypted === true || this.state.main_system_control.encrypted === 1) ? true : false}
                                                         onClick={(e) => {
-                                                            // console.log("encrypted", e);
                                                             this.handleChecked(e, "encrypted", '', 'main');
                                                         }}
                                                     />
@@ -645,7 +652,6 @@ class EditPolicy extends Component {
                                                         size="small"
                                                         checked={(this.state.main_system_control.enable === true || this.state.main_system_control.enable === 1) ? true : false}
                                                         onClick={(e) => {
-                                                            // console.log("encrypted", e);
                                                             this.handleChecked(e, "enable", '', 'main');
                                                         }}
                                                     />
@@ -653,7 +659,8 @@ class EditPolicy extends Component {
                                                 </Col>
                                             </Row>
                                         </div>
-                                        : null}
+                                        : null
+                                } */}
                                 <Table
                                     pagination={false}
                                     dataSource={this.renderSystemPermissions()}

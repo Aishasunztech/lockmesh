@@ -15,14 +15,14 @@ import {
     DEALERS_LIST_IN_SDEALER
 } from "constants/ActionTypes";
 
-import {
-    DEALER_ID,
-    DEALER_NAME,
-    DEALER_EMAIL,
-    DEALER_PIN,
-    DEALER_DEVICES,
-    DEALER_TOKENS
-} from '../../constants/DealerConstants';
+// import {
+//     DEALER_ID,
+//     DEALER_NAME,
+//     DEALER_EMAIL,
+//     DEALER_PIN,
+//     DEALER_DEVICES,
+//     DEALER_TOKENS
+// } from '../../constants/DealerConstants';
 import { message, Modal } from 'antd';
 
 const success = Modal.success
@@ -37,14 +37,14 @@ const initialState = {
     action: '',
     msg: 'no message',
     selectedOptions: [],
-    options: [
-        DEALER_ID,
-        DEALER_NAME,
-        DEALER_EMAIL,
-        DEALER_PIN,
-        DEALER_DEVICES,
-        DEALER_TOKENS
-    ],
+    // options: [
+    //     DEALER_ID,
+    //     DEALER_NAME,
+    //     DEALER_EMAIL,
+    //     DEALER_PIN,
+    //     DEALER_DEVICES,
+    //     DEALER_TOKENS
+    // ],
     // options: ["DEALER ID", "DEALER NAME", "DEALER EMAIL", "DEALER PIN", "DEVICES", "TOKENS"],
 
 };
@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: true,
                 dealers: [],
-                options: state.options
+                // options: state.options
             }
 
         case SPIN_lOADING:
@@ -67,7 +67,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 spinloading: true,
-                options: state.options
+                // options: state.options
             }
 
         case DEALERS_LIST:
@@ -78,7 +78,7 @@ export default (state = initialState, action) => {
                 isloading: false,
                 spinloading: false,
                 dealers: action.payload,
-                options: state.options
+                // options: state.options
             }
 
             case DEALERS_LIST_IN_SDEALER: {
@@ -271,7 +271,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: false,
                 dealers: [...state.dealers],
-                options: [...state.options],
+                // options: [...state.options],
 
             }
             break;

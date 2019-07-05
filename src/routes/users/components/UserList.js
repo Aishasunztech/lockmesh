@@ -1,10 +1,18 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
 import { getFormattedDate } from '../../utils/commonUtils';
+
+import {
+    Button_Delete,
+    Button_Edit,
+    Button_Undo,
+
+} from '../../../constants/ButtonConstants';
 
 import styles from './user.css';
 
@@ -23,8 +31,6 @@ class UserList extends Component {
         }
     }
     handlePagination = (value) => {
-        // alert('sub child');
-        // console.log(value)
         var x = Number(value)
         this.setState({
             pagination: x,
@@ -37,7 +43,7 @@ class UserList extends Component {
     }
 
     renderList(list) {
-        console.log(list);
+        // console.log(list);
 
         let user_list = list.filter((data) => {
             // if (data.type === "policy") {
@@ -55,23 +61,35 @@ class UserList extends Component {
                         <Button
                             type="primary"
                             size="small"
+                            style={{ textTransform: 'uppercase' }}
                             onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
-                        > EDIT </Button>
+                        >
+                            {/* <IntlMessages id="button.Edit" />  */}
+                            {this.props.translation[Button_Edit]}
+                        </Button>
                         {(user.devicesList.length === 0) ?
-                            (user.del_status == 0) ?
+                            (user.del_status === 0) ?
                                 <Button
                                     type="danger"
                                     size="small"
+                                    style={{ textTransform: 'uppercase' }}
                                     onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
-                                > DELETE </Button>
+                                >
+                                    {/* <IntlMessages id="button.Delete" /> */}
+                                    {this.props.translation[Button_Delete]}
+                                </Button>
                                 : <Button
                                     type="dashed"
                                     size="small"
+                                    style={{ textTransform: 'uppercase' }}
                                     onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
-                                >UNDO </Button>
+                                >
+                                    {/* <IntlMessages id="button.Undo" />  */}
+                                    {this.props.translation[Button_Undo]}
+                                </Button>
                             : null
                         }
-                    </Fragment >)
+                    </Fragment>)
                 ,
                 user_id: user.user_id,
                 counter: ++index,
@@ -151,7 +169,9 @@ class UserList extends Component {
                             return (
                                 <UserDeviceList
                                     ref='userDeviceList'
-                                    record={record} />
+                                    record={record} 
+                                    translation={this.props.translation}
+                                    />
                             );
                         }}
                         expandIconColumnIndex={3}
@@ -163,9 +183,10 @@ class UserList extends Component {
                         dataSource={this.renderList(this.state.users)}
                         pagination={{ pageSize: this.state.pagination, size: "midddle" }}
                         ref='user_table'
+                        translation={this.props.translation}
                     />
                 </Card>
-                <AddUser ref='edit_user' />
+                <AddUser ref='edit_user' translation={this.props.translation} />
             </Fragment>
         )
     }

@@ -26,8 +26,8 @@ export default class editDealer extends Component {
     handleNameValidation = (event) => {
         var fieldvalue = event.target.value;
 
-        console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
-        console.log('vlaue', fieldvalue)
+        // console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
+        // console.log('vlaue', fieldvalue)
 
 
         if (/[^A-Za-z \d]/.test(fieldvalue)) {

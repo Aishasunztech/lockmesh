@@ -33,9 +33,19 @@ const initialState = {
     duplicate_data_type: '',
     newData: [],
     backUpModal: false,
-    prices: {},
+    prices: {
+        sim_id: {},
+        chat_id: {},
+        pgp_email: {},
+        vpn: {}
+    },
     isPriceChanged: false,
-    pricesCopy: {},
+    pricesCopy: {
+        sim_id: {},
+        chat_id: {},
+        pgp_email: {},
+        vpn: {}
+    },
     packages: [],
     packagesCopy: []
 };
@@ -56,7 +66,8 @@ export default (state = initialState, action) => {
                 })
             }
             return {
-                ...state
+                ...state,
+                isPriceChanged: false
             }
         }
         case SAVE_PACKAGE: {
@@ -65,6 +76,9 @@ export default (state = initialState, action) => {
                 success({
                     title: action.response.msg
                 })
+                if (action.response.data.length) {
+                    state.packages.push(action.response.data[0])
+                }
             } else {
                 error({
                     title: action.response.msg
@@ -76,7 +90,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PRICES: {
-            console.log(action.response, 'response of get prices')
+            // console.log(action.response, 'response of get prices')
 
             return {
                 ...state,
@@ -87,7 +101,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PACKAGES: {
-            console.log(action.response, 'response of get prices')
+            // console.log(action.response, 'response of get prices')
 
             return {
                 ...state,
@@ -106,12 +120,15 @@ export default (state = initialState, action) => {
         }
 
         case SET_PRICE: {
-            let copyPrices = state.prices;
+            let copyPrices = JSON.parse(JSON.stringify(state.prices));
             let price_for = action.payload.price_for;
             let field = action.payload.field;
+
+            // console.log('price for', price_for, 'field', field, 'value', action.payload.value)
             if (price_for && price_for !== '') {
                 copyPrices[price_for][field] = action.payload.value;
             }
+            // console.log(copyPrices[price_for], 'prices are', field)
             return {
                 ...state,
                 prices: copyPrices,
@@ -154,7 +171,7 @@ export default (state = initialState, action) => {
                 success({
                     title: action.payload.msg,
                 });
-            } else if (action.payload.status == false && action.showMsg) {
+            } else if (action.payload.status === false && action.showMsg) {
                 error({
                     title: action.payload.msg,
                 });
@@ -244,7 +261,7 @@ export default (state = initialState, action) => {
                 backUpModal: action.payload,
             }
         case PURCHASE_CREDITS:
-            console.log(action.response);
+            // console.log(action.response);
             if (action.response.status) {
 
                 success({

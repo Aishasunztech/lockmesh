@@ -594,7 +594,7 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get-packages/' + dealer_id, RestService.getHeader());
     },
     checkPackageName: (name) => {
-        console.log(name, 'data')
+
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
     },
     purchaseCredits: (data) => {
@@ -604,6 +604,19 @@ const RestService = {
         return axios.post(BASE_URL + 'users/purchase_credits_CC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
     },
 
+    languages: () => {
+        return axios.get(`${BASE_URL}users/languages`, RestService.getHeader());
+    },
+    
+    switchLanguage: (language) => {
+        // console.log(language, 'language is')
+        return axios.patch(BASE_URL + 'users/save-language', { language }, RestService.getHeader());
+    },
+
+    getLanguage: () => {
+        return axios.get(BASE_URL + 'users/get-language', RestService.getHeader());
+    },
+    
     invalidPage: () => {
     },
     getFile: (filename) => {
