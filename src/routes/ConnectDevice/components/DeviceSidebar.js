@@ -215,7 +215,7 @@ export default class DeviceSidebar extends Component {
         ]
     }
     handleUserId = (user_id) => {
-        if (user_id != 'null' && user_id != null) {
+        if (user_id !== 'null' && user_id !== null) {
             this.setState({
                 redirect: true,
                 user_id: user_id
@@ -224,7 +224,7 @@ export default class DeviceSidebar extends Component {
     }
 
     goToDealer = (dealer) => {
-        if (dealer.dealer_id != 'null' && dealer.dealer_id != null) {
+        if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
             if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
                 this.setState({
                     redirect: true,

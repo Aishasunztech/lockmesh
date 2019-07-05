@@ -54,7 +54,7 @@ class Permissions extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.translation != nextProps.translation) {
+    if (this.props.translation !== nextProps.translation) {
       this.addDealerCols = dealerColsWithSearch(nextProps.translation, true, this.handleSearch);
       this.addDealerColsInModal = dealerColsWithSearch(nextProps.translation, true, this.handleSearchInModal);
       this.listDealerCols = dealerColsWithSearch(nextProps.translation);
@@ -185,7 +185,7 @@ class Permissions extends Component {
             if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
               demoData.push(data);
             }
-          } else if (data[fieldName] != null) {
+          } else if (data[fieldName] !== null) {
             if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
               demoData.push(data);
             }

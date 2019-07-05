@@ -129,8 +129,8 @@ class AppFilter extends Component {
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
         //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
-        if (this.props.selectedOptions != undefined) {
-            if (this.props.options.length == this.state.selectedDisplayValues.length) {
+        if (this.props.selectedOptions !== undefined) {
+            if (this.props.options.length === this.state.selectedDisplayValues.length) {
                 allSelectedOpt = true;
             } else { allSelectedOpt = false }
             //  console.log('allSelectedOpt val are: ', allSelectedOpt)

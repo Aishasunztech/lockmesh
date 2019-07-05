@@ -132,7 +132,7 @@ class UserList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }

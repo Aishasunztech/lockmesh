@@ -222,7 +222,7 @@ class Account extends Component {
                         if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }
-                    } else if (data[fieldName] != null) {
+                    } else if (data[fieldName] !== null) {
                         if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }

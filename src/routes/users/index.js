@@ -104,7 +104,7 @@ class Users extends Component {
                 expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
             })
         }
-        if (this.props.translation != prevProps.translation) {
+        if (this.props.translation !== prevProps.translation) {
             this.columns = usersColumns(this.props.translation, this.handleSearch);
         }
     }
@@ -183,7 +183,7 @@ class Users extends Component {
                                     demoDeviceList.push(device);
                                 }
                             }
-                            else if (device[e.target.name] != null) {
+                            else if (device[e.target.name] !== null) {
                                 // console.log("else null check", user[e.target.name])
                                 // if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                                 //     demoDeviceList.push(device);
@@ -244,7 +244,7 @@ class Users extends Component {
                         if (user[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoUsers.push(user);
                         }
-                    } else if (user[e.target.name] != null) {
+                    } else if (user[e.target.name] !== null) {
                         // console.log("else null check", user[e.target.name])
                         if (user[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoUsers.push(user);

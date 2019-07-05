@@ -648,7 +648,7 @@ class ManageData extends Component {
                         if (item[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoItems.push(item);
                         }
-                    } else if (item[e.target.name] != null) {
+                    } else if (item[e.target.name] !== null) {
                         if (item[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoItems.push(item);
                         }

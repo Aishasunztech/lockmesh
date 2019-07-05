@@ -157,7 +157,7 @@ class PolicyList extends Component {
                     </Fragment>
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
-                permissions: (policy.dealer_permission !== undefined || policy.dealer_permission != null) ? policy.dealer_permission : [],
+                permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
                 policy_status: (<Switch size='small' checked={policy.status === 1 || policy.status === true ? true : false}
                     onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
                     } disabled={(policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ? false : true

@@ -175,7 +175,7 @@ export function titleCase(str) {
 }
 export function checkRemainDays(createDate, validity) {
   var validDays = 0, createdDateTime, today, days;
-  if (validity != null) validDays = validity;
+  if (validity !== null) validDays = validity;
   createdDateTime = new Date(createDate);
   createdDateTime.setDate(createdDateTime.getDate() + validDays);
   today = new Date();
@@ -205,10 +205,10 @@ export function isBase64(str) {
 
 export function convertToLang(lngWord, constant) {
 
-  if (lngWord != undefined && lngWord != '' && lngWord != null) {
+  if (lngWord !== undefined && lngWord !== '' && lngWord !== null) {
     // console.log('convert To Language Function: ', lngWord);
     return lngWord;
-  } else if (constant != undefined && constant != '' && constant != null) {
+  } else if (constant !== undefined && constant !== '' && constant !== null) {
     return constant;
   } else {
     return "N/A";

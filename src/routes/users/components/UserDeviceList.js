@@ -346,7 +346,7 @@ class UserDeviceList extends Component {
             })
         }
 
-        if (this.props.translation != nextProps.translation) {
+        if (this.props.translation !== nextProps.translation) {
             this.listdeviceCols = userDevicesListColumns(this.props.translation, this.handleSearch);
         }
     }
@@ -361,7 +361,7 @@ class UserDeviceList extends Component {
                         if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }
-                    } else if (data[fieldName] != null) {
+                    } else if (data[fieldName] !== null) {
                         if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }
@@ -445,7 +445,7 @@ class UserDeviceList extends Component {
                         if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
-                    } else if (device[e.target.name] != null) {
+                    } else if (device[e.target.name] !== null) {
                         // console.log("else lsdjfls", device[e.target.name])
                         if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
@@ -493,7 +493,7 @@ class UserDeviceList extends Component {
                 activation_code: checkValue(device.activation_code),
                 dealer_pin: checkValue(device.link_code),
                 status: (<span style={color} > {status}</span >),
-                device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 pgp_email: checkValue(device.pgp_email),
                 chat_id: checkValue(device.chat_id),
                 sim_id: checkValue(device.sim_id),

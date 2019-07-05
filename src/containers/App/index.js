@@ -95,7 +95,7 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    if (this.props.isSwitched != nextProps.isSwitched) {
+    if (this.props.isSwitched !== nextProps.isSwitched) {
       this.props.getLanguage();
       // this.setState({
       //   re_render: !this.state.re_render

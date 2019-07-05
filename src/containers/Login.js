@@ -43,11 +43,11 @@ class Login extends React.Component {
       this.props.history.push('/verify-auth');
     }
 
-    if (authUser.id != null && authUser.email != null && authUser.token != null && authUser.type === AUTO_UPDATE_ADMIN) {
+    if (authUser.id !== null && authUser.email !== null && authUser.token !== null && authUser.type === AUTO_UPDATE_ADMIN) {
       // console.log("Updater");
       this.props.history.push('/apk-list/autoupdate');
     }
-    else if (authUser.id != null && authUser.email != null && authUser.token != null && authUser.type != null) {
+    else if (authUser.id !== null && authUser.email !== null && authUser.token !== null && authUser.type !== null) {
       this.props.history.push('/');
     }
   }

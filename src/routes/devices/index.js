@@ -181,7 +181,7 @@ class Devices extends Component {
         }
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
         let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
-        if (value == DEVICE_UNLINKED && (this.props.user.type != ADMIN)) {
+        if (value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
@@ -350,7 +350,7 @@ class Devices extends Component {
         }
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
 
-        if (value == '5' && (this.props.user.type != ADMIN)) {
+        if (value == '5' && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
@@ -613,7 +613,7 @@ class Devices extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.translation != nextProps.translation) {
+        if (this.props.translation !== nextProps.translation) {
             this.setState({
                 translation: nextProps.translation
             })
@@ -813,7 +813,7 @@ class Devices extends Component {
                         if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
-                    } else if (device[e.target.name] != null) {
+                    } else if (device[e.target.name] !== null) {
                         // console.log("else null check", device[e.target.name])
                         if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);

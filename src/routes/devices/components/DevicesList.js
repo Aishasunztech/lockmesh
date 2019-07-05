@@ -102,7 +102,7 @@ class DevicesList extends Component {
         this.confirmDelete(action, arr, title);
     }
     handleUserId = (user_id) => {
-        if (user_id != 'null' && user_id != null) {
+        if (user_id !== 'null' && user_id !== null) {
             this.setState({
                 redirect: true,
                 user_id: user_id
@@ -110,7 +110,7 @@ class DevicesList extends Component {
         }
     }
     goToDealer = (dealer) => {
-        if (dealer.dealer_id != 'null' && dealer.dealer_id != null) {
+        if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
             if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
                 this.setState({
                     redirect: true,
@@ -206,8 +206,8 @@ class DevicesList extends Component {
                 ),
                 status: (<span style={color} > {status}</span>),
                 flagged: device.flagged,
-                device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
-                // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+                device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 validity: checkValue(device.validity),
                 name: checkValue(device.name),
@@ -263,7 +263,7 @@ class DevicesList extends Component {
             // console.log('delete the device', this.state.selectedRowKeys);
             for (let id of this.state.selectedRowKeys) {
                 for (let device of this.props.devices) {
-                    if (type != 'unlink') {
+                    if (type !== 'unlink') {
                         if (id == device.id) {
                             arr.push(device)
                         }
@@ -331,7 +331,7 @@ class DevicesList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }
