@@ -240,7 +240,7 @@ class SidebarContent extends Component {
               }}>
                 {/* <Link to="/logout"> */}
                 <i className="icon">
-                  <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
+                  <i className="fa fa-sign-out ml-2" aria-hidden="true"></i>
                 </i>
                 {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
                 {/* </Link> */}
@@ -306,7 +306,7 @@ class SidebarContent extends Component {
                 this.logout()
               }}>
                 <i className="icon">
-                  <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
+                  <i className="fa fa-sign-out ml-2" aria-hidden="true"></i>
                 </i>
                 {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
               </Menu.Item>

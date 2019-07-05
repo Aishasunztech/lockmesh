@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Button, Card, Tag, Form, Input, Popconfirm, Empty, Icon } from "antd";
 import { Redirect } from 'react-router-dom';
 import styles from './devices.css'
+import styles1 from './devices_fixheader.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
@@ -181,8 +182,8 @@ class DevicesList extends Component {
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 key: status == DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
-                counter: ++index,
-                action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
+                counter: (<div className="counter_w">{++index}</div>),
+                action: (<div className="device_action_w">{((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
@@ -203,39 +204,40 @@ class DevicesList extends Component {
                                                     : false
 
 
-                ),
-                status: (<span style={color} > {status}</span>),
-                flagged: device.flagged,
-                device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                )}</div>),
                 // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
-                validity: checkValue(device.validity),
-                name: checkValue(device.name),
-                activation_code: checkValue(device.activation_code),
-                account_email: checkValue(device.account_email),
-                pgp_email: checkValue(device.pgp_email),
-                chat_id: checkValue(device.chat_id),
-                client_id: checkValue(device.client_id),
-                dealer_id: checkValue(device.dealer_id),
-                dealer_pin: checkValue(device.link_code),
-                mac_address: checkValue(device.mac_address),
-                sim_id: checkValue(device.sim_id),
-                imei_1: checkValue(device.imei),
-                sim_1: checkValue(device.simno),
-                imei_2: checkValue(device.imei2),
-                sim_2: checkValue(device.simno2),
-                serial_number: checkValue(device.serial_number),
-
-                model: checkValue(device.model),
-
+                device_id: (<div className="device_id_w">{(status != DEVICE_PRE_ACTIVATION) ? checkValue(device.device_id) : "N/A"}</div>),
+                user_id: (<div className="user_id_w"><a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a></div>),
+                status: (<div className="status_w"><span style={color} > {status}</span></div>),
+                online: (<div className="online_w">{device.online === 'online' ? (<span style={{ color: "green" }}>
+                    {device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) :
+                    (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>)}
+                </div>),
+                flagged: (<div className="flagged_w">{device.flagged}</div>),
+                validity: (<div className="validity_w">{checkValue(device.validity)}</div>),
+                name: (<div className="name_w">{checkValue(device.name)}</div>),
+                activation_code: (<div className="activation_code_w">{checkValue(device.activation_code)}</div>),
+                account_email: (<div className="account_email_w">{checkValue(device.account_email)}</div>),
+                pgp_email: (<div className="pgp_email_w">{checkValue(device.pgp_email)}</div>),
+                chat_id: (<div className="chat_id_w">{checkValue(device.chat_id)}</div>),
+                client_id: (<div className="client_id_w">{checkValue(device.client_id)}</div>),
+                dealer_id: (<div className="dealer_id_w">{checkValue(device.dealer_id)}</div>),
+                dealer_pin: (<div className="dealer_pin_w">{checkValue(device.link_code)}</div>),
+                mac_address: (<div className="mac_address_w">{checkValue(device.mac_address)}</div>),
+                sim_id: (<div className="sim_id_w">{checkValue(device.sim_id)}</div>),
+                imei_1: (<div className="imei_1_w">{checkValue(device.imei)}</div>),
+                sim_1: (<div className="sim_1_w">{checkValue(device.simno)}</div>),
+                imei_2: (<div className="imei_2_w">{checkValue(device.imei2)}</div>),
+                sim_2: (<div className="sim_2_w">{checkValue(device.simno2)}</div>),
+                serial_number: (<div className="serial_number_w">{checkValue(device.serial_number)}</div>),
+                model: (<div className="model_w">{checkValue(device.model)}</div>),
+                dealer_name: (<div className="dealer_name_w" > <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a></div>),
+                s_dealer: (<div className="s_dealer_w">{checkValue(device.s_dealer)}</div>),
+                s_dealer_name: (<div className="s_dealer_name_w">{checkValue(device.s_dealer_name)}</div>),
+                start_date: (<div className="start_date_w">{checkValue(device.start_date)}</div>),
+                expiry_date: (<div className="expiry_date_w">{checkValue(device.expiry_date)}</div>),
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
-                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
-                s_dealer: checkValue(device.s_dealer),
-                s_dealer_name: checkValue(device.s_dealer_name),
-                start_date: checkValue(device.start_date),
-                expiry_date: checkValue(device.expiry_date),
                 // batchData: device.batchData == undefined ? [] : device.batchData
             }
         });
@@ -387,6 +389,7 @@ class DevicesList extends Component {
 
     render() {
 
+        var lng_name = 'eng'
         // console.log(this.state, 'selected keys', )
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state
@@ -447,7 +450,7 @@ class DevicesList extends Component {
                 <SuspendDevice ref="suspend"
                     suspendDevice={suspendDevice} />
                 <Card>
-                    <div >
+                    <div>
                         <Table
                             // id="test"
                             style={{
@@ -457,7 +460,7 @@ class DevicesList extends Component {
                             }}
                             id='scrolltablelist'
                             ref='tablelist'
-                            className="devices"
+                            className={"devices lng_" + lng_name}
                             rowSelection={rowSelection}
                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
                             size="middle"
@@ -673,8 +676,8 @@ class DevicesList extends Component {
                             }
                         />
                     </div>
-                    <Button onClick={this.scrollBack} style={{ display: 'none' }} > Previous</Button>
-                    <Button onClick={this.scrollNext} style={{ display: 'none' }} > Next</Button>
+                    {/* <Button onClick={this.scrollBack} style={{ display: 'none' }} > Previous</Button>
+                    <Button onClick={this.scrollNext} style={{ display: 'none' }} > Next</Button> */}
                 </Card>
 
                 <EditDevice ref='edit_device'

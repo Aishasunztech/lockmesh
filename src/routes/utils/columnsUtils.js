@@ -45,22 +45,21 @@ const usersColumns_question_txt = (
     </div>
 );
 
-
 export function devicesColumns(translation, handleSearch) {
     return ([
         {
-            title: '#',
+            title: (<div className="counter_w">#</div>),
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
         },
         {
-            title: 'ACTION',
-            // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
+            title: "action",
             dataIndex: 'action',
-            // title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
             align: 'center',
             className: 'row',
+            // title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
+            // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
         },
         {
             title: (
@@ -91,17 +90,20 @@ export function devicesColumns(translation, handleSearch) {
         },
         {
             title: (
-                <Input.Search
-                    name="device_id"
-                    key="device_id"
-                    id="device_id"
-                    className="search_heading"
-                    onKeyUp={handleSearch}
-                    autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_ID], DEVICE_ID)}
-                // onBlur={(e) => { e.target.value = '' }}
-                />
+                <div className="">
+                    <Input.Search
+                        name="device_id"
+                        key="device_id"
+                        id="device_id"
+                        className="search_heading device_id_w"
+                        onKeyUp={handleSearch}
+                        autoComplete="new-password"
+                        placeholder={convertToLang(translation[DEVICE_ID], DEVICE_ID)}
+                    // onBlur={(e) => { e.target.value = '' }}
+                    />
+                </div>
             ),
+
             dataIndex: 'device_id',
             children: [
                 {
@@ -119,7 +121,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="user_id"
                     key="user_id"
                     id="user_id"
-                    className="search_heading"
+                    className="search_heading user_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_ID], USER_ID)}
@@ -146,7 +148,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="finalStatus"
                     key="status"
                     id="status"
-                    className="search_heading"
+                    className="search_heading status_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_STATUS], DEVICE_STATUS)}
@@ -154,7 +156,6 @@ export function devicesColumns(translation, handleSearch) {
                 />
             ),
             dataIndex: 'status',
-
             children: [
                 {
                     title: convertToLang(translation[DEVICE_STATUS], DEVICE_STATUS),
@@ -162,7 +163,6 @@ export function devicesColumns(translation, handleSearch) {
                     dataIndex: 'status',
                     key: 'status',
                     sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
-
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -173,7 +173,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="online"
                     key="online"
                     id="online"
-                    className="search_heading"
+                    className="search_heading online_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MODE], DEVICE_MODE)}
@@ -197,7 +197,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="flagged"
                     key="flagged"
                     id="flagged"
-                    className="search_heading"
+                    className="search_heading flagged_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_FLAGGED], DEVICE_FLAGGED)}
@@ -221,7 +221,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="name"
                     key="name"
                     id="name"
-                    className="search_heading"
+                    className="search_heading name_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_NAME], DEVICE_NAME)}
@@ -249,7 +249,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="account_email"
                     key="account_email"
                     id="account_email"
-                    className="search_heading"
+                    className="search_heading account_email_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL)}
@@ -273,7 +273,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="activation_code"
                     key="activation_code"
                     id="activation_code"
-                    className="search_heading"
+                    className="search_heading activation_code_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE)}
@@ -297,7 +297,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="client_id"
                     key="client_id"
                     id="client_id"
-                    className="search_heading"
+                    className="search_heading client_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID)}
@@ -321,7 +321,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="pgp_email"
                     key="pgp_email"
                     id="pgp_email"
-                    className="search_heading"
+                    className="search_heading pgp_email_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL)}
@@ -344,7 +344,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="sim_id"
                     key="sim_id"
                     id="sim_id"
-                    className="search_heading"
+                    className="search_heading sim_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_ID], DEVICE_SIM_ID)}
@@ -368,7 +368,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="chat_id"
                     key="chat_id"
                     id="chat_id"
-                    className="search_heading"
+                    className="search_heading chat_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID)}
@@ -394,7 +394,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="dealer_id"
                     key="dealer_id"
                     id="dealer_id"
-                    className="search_heading"
+                    className="search_heading dealer_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID)}
@@ -418,7 +418,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="dealer_name"
                     key="dealer_name"
                     id="dealer_name"
-                    className="search_heading"
+                    className="search_heading dealer_name_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME)}
@@ -442,7 +442,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="link_code"
                     key="link_code"
                     id="link_code"
-                    className="search_heading"
+                    className="search_heading dealer_pin_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN)}
@@ -466,7 +466,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="mac_address"
                     key="mac_address"
                     id="mac_address"
-                    className="search_heading"
+                    className="search_heading mac_address_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS)}
@@ -491,7 +491,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="imei"
                     key="imei"
                     id="imei"
-                    className="search_heading"
+                    className="search_heading imei_1_w"
                     autoComplete="new-password"
                     onKeyUp={handleSearch}
                     placeholder={convertToLang(translation[DEVICE_IMEI_1], DEVICE_IMEI_1)}
@@ -515,7 +515,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="simno"
                     key="simno"
                     id="simno"
-                    className="search_heading"
+                    className="search_heading sim_1_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_1], DEVICE_SIM_1)}
@@ -529,7 +529,6 @@ export function devicesColumns(translation, handleSearch) {
                     dataIndex: 'sim_1',
                     key: 'sim_1',
                     sorter: (a, b) => { return a.sim_1.localeCompare(b.sim_1) },
-
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -540,7 +539,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="imei2"
                     key="imei2"
                     id="imei2"
-                    className="search_heading"
+                    className="search_heading imei_2_w"
                     autoComplete="new-password"
                     onKeyUp={handleSearch}
                     placeholder={convertToLang(translation[DEVICE_IMEI_2], DEVICE_IMEI_2)}
@@ -564,7 +563,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="simno2"
                     key="simno2"
                     id="simno2"
-                    className="search_heading"
+                    className="search_heading sim_2_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_2], DEVICE_SIM_2)}
@@ -588,7 +587,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="serial_number"
                     key="serial_number"
                     id="serial_number"
-                    className="search_heading"
+                    className="search_heading serial_number_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER)}
@@ -613,7 +612,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="model"
                     key="model"
                     id="model"
-                    className="search_heading"
+                    className="search_heading model_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MODEL], DEVICE_MODEL)}
@@ -638,7 +637,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="s_dealer"
                     key="s_dealer"
                     id="s_dealer"
-                    className="search_heading"
+                    className="search_heading s_dealer_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_S_DEALER], DEVICE_S_DEALER)}
@@ -662,7 +661,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="s_dealer_name"
                     key="s_dealer_name"
                     id="s_dealer_name"
-                    className="search_heading"
+                    className="search_heading s_dealer_name_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME)}
@@ -687,7 +686,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="start_date"
                     key="start_date"
                     id="start_date"
-                    className="search_heading"
+                    className="search_heading start_date_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_START_DATE], DEVICE_START_DATE)}
@@ -710,7 +709,7 @@ export function devicesColumns(translation, handleSearch) {
                     name="expiry_date"
                     key="expiry_date"
                     id="expiry_date"
-                    className="search_heading"
+                    className="search_heading expiry_date_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE)}
@@ -741,9 +740,7 @@ export function usersColumns(translation, handleSearch) {
             className: 'row',
         },
         {
-            // title: (
-            // // <IntlMessages id="usersColHeading.Action" />
-            // ),
+            title: "ACTION",
             align: "center",
             dataIndex: 'action',
             key: "action",
@@ -754,7 +751,7 @@ export function usersColumns(translation, handleSearch) {
                     name="user_id"
                     key="user_id"
                     id="user_id"
-                    className="search_heading"
+                    className="search_heading user_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_ID], USER_ID)}
@@ -783,7 +780,7 @@ export function usersColumns(translation, handleSearch) {
                         name="device_id"
                         key="device_id"
                         id="device_id"
-                        className="search_heading"
+                        className="search_heading device_id_w"
                         autoComplete="new-password"
                         onKeyUp={handleSearch}
                         placeholder={convertToLang(translation[DEVICE_ID], DEVICE_ID)}
@@ -819,7 +816,7 @@ export function usersColumns(translation, handleSearch) {
                     name="user_name"
                     key="user_name"
                     id="user_name"
-                    className="search_heading"
+                    className="search_heading user_name_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_NAME], USER_NAME)}
@@ -842,7 +839,7 @@ export function usersColumns(translation, handleSearch) {
                     name="email"
                     key="email"
                     id="email"
-                    className="search_heading"
+                    className="search_heading email_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_EMAIL], USER_EMAIL)}
@@ -872,7 +869,7 @@ export function usersColumns(translation, handleSearch) {
                     name="created_at"
                     key="created_at"
                     id="created_at"
-                    className="search_heading"
+                    className="search_heading created_at_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_DATE_REGISTERED], USER_DATE_REGISTERED)}
@@ -898,6 +895,7 @@ export function userDevicesListColumns(translation, handleSearch) {
     return ([
         {
             // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
+            title: "action",
             dataIndex: 'action',
             align: 'center',
             className: 'row',
@@ -910,7 +908,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="activation_code"
                     key="activation_code"
                     id="activation_code"
-                    className="search_heading"
+                    className="search_heading activation_code_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE))}
@@ -933,7 +931,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="link_code"
                     key="link_code"
                     id="link_code"
-                    className="search_heading"
+                    className="search_heading link_code_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN))}
@@ -957,7 +955,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="device_id"
                     key="device_id"
                     id="device_id"
-                    className="search_heading"
+                    className="search_heading device_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_ID], DEVICE_ID))}
@@ -981,7 +979,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="finalStatus"
                     key="status"
                     id="status"
-                    className="search_heading"
+                    className="search_heading status_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_STATUS], DEVICE_STATUS))}
@@ -1006,7 +1004,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="expiry_date"
                     key="expiry_date"
                     id="expiry_date"
-                    className="search_heading"
+                    className="search_heading expiry_date_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE))}
@@ -1030,7 +1028,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="pgp_email"
                     key="pgp_email"
                     id="pgp_email"
-                    className="search_heading"
+                    className="search_heading pgp_email_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL))}
@@ -1052,7 +1050,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="chat_id"
                     key="chat_id"
                     id="chat_id"
-                    className="search_heading"
+                    className="search_heading chat_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID))}
@@ -1076,7 +1074,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="sim_id"
                     key="sim_id"
                     id="sim_id"
-                    className="search_heading"
+                    className="search_heading sim_id_w"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_SIM_ID], DEVICE_SIM_ID))}
@@ -1099,7 +1097,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="imei"
                     key="imei"
                     id="imei"
-                    className="search_heading"
+                    className="search_heading imei_w"
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_IMEI_1], DEVICE_IMEI_1))}
                     onKeyUp={handleSearch}
@@ -1122,7 +1120,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     name="imei2"
                     key="imei2"
                     id="imei2"
-                    className="search_heading"
+                    className="search_heading imei2_w"
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_IMEI_2], DEVICE_IMEI_2))}
                     onKeyUp={handleSearch}
@@ -1144,4 +1142,4 @@ export function userDevicesListColumns(translation, handleSearch) {
 }
 
 
-// import { userDevicesListColumns } from '../../utils/columnsUtils';
+// import {userDevicesListColumns} from '../../utils/columnsUtils';
