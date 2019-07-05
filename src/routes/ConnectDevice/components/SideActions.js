@@ -766,6 +766,7 @@ class SideActions extends Component {
                             histories={this.props.histories}
                             type={this.state.historyType}
                             applyHistory={this.applyHistory}
+                            translation = {this.props.translation}
                         />
                         :
                         (this.state.historyType === "profile") ?
@@ -774,6 +775,7 @@ class SideActions extends Component {
                                 histories={this.props.profiles}
                                 type={this.state.historyType}
                                 applyHistory={this.applyHistory}
+                                translation = {this.props.translation}
                             />
                             :
                             (this.state.historyType === "policy") ?
@@ -781,6 +783,7 @@ class SideActions extends Component {
                                     histories={this.props.policies}
                                     type={this.state.historyType}
                                     applyHistory={this.applyHistory}
+                                    translation = {this.props.translation}
                                 />
                                 :
                                 (this.state.historyType === undefined) ?

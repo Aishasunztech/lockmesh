@@ -145,7 +145,7 @@ class SidebarContent extends Component {
   changeLng = (language) => {
     let _this = this;
     Modal.confirm({
-      title: 'Are you sure to change the language?',
+      title: 'Are you sure you want to change the language?',
       okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
       cancelText: convertToLang(this.props.translation[Button_No], Button_No),
 
@@ -241,7 +241,7 @@ class SidebarContent extends Component {
               }}>
                 {/* <Link to="/logout"> */}
                 <i className="icon">
-                  <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
+                  <i className="fa fa-sign-out ml-2" aria-hidden="true"></i>
                 </i>
                 {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
                 {/* </Link> */}
@@ -307,7 +307,7 @@ class SidebarContent extends Component {
                 this.logout()
               }}>
                 <i className="icon">
-                  <i className="fa fa-sign-out ml-6" aria-hidden="true"></i>
+                  <i className="fa fa-sign-out ml-2" aria-hidden="true"></i>
                 </i>
                 {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
               </Menu.Item>
