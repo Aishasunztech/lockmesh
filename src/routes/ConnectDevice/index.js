@@ -90,20 +90,20 @@ class ConnectDevice extends Component {
     this.mainMenu = [
       {
         pageName: APPS,
-        value: APPLICATION_PERMISION
+        value: convertToLang(props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)
       },
       {
         pageName: SECURE_SETTING,
-        value: SECURE_SETTING_PERMISSION
+        value: convertToLang(props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)
       },
       {
         pageName: SYSTEM_CONTROLS,
-        value: SYSTEM_PERMISSION
+        value: convertToLang(props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)
       },
 
       {
         pageName: MANAGE_PASSWORD,
-        value: MANAGE_PASSWORDS
+        value: convertToLang(props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)
       },
 
     ]
@@ -571,7 +571,7 @@ class ConnectDevice extends Component {
                   <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
                     {/*  */}
                     <SideActions
-                    translation={this.props.translation}
+                      translation={this.props.translation}
                       device={this.props.device_details}
                       profiles={this.props.profiles}
                       policies={this.props.policies}
@@ -688,7 +688,7 @@ function mapDispatchToProps(dispatch) {
     clearState: clearState
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth, socket , settings}) => {
+var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
   return {
     translation: settings.translation,
     auth: auth,

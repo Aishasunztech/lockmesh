@@ -145,7 +145,7 @@ class SidebarContent extends Component {
   changeLng = (language) => {
     let _this = this;
     Modal.confirm({
-      title: 'Are you sure to change the language?',
+      title: 'Are you sure you want to change the language?',
       okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
       cancelText: convertToLang(this.props.translation[Button_No], Button_No),
 

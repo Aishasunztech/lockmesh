@@ -1,6 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Divider, Badge, Switch } from "antd";
-import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS } from '../../../constants/Constants';
+import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME } from '../../../constants/Constants';
+import { convertToLang } from '../../utils/commonUtils';
+import { PUSH_APPS } from '../../../constants/ActionTypes';
+import { APK_APP_NAME } from '../../../constants/ApkConstants';
+import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
+import { DEVICE_STATUS } from '../../../constants/DeviceConstants';
 
 // import AppList from "./AppList";
 
@@ -17,20 +22,20 @@ export default class TableHistory extends Component {
 
         this.appsColumns = [
             {
-                title: 'APP NAME',
+                title: convertToLang(this.props.translation[APK_APP_NAME], APK_APP_NAME),
                 dataIndex: 'label',
                 key: '1',
                 render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], Guest),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: 'ENABLE',
+                title: convertToLang(this.props.translation[ENABLE], ENABLE),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -42,23 +47,23 @@ export default class TableHistory extends Component {
                 key: '1',
                 render: text => <a href="javascript:;" style={{ fontSize: 12 }}> {text}</ a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], Guest),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
                 dataIndex: 'encrypted',
                 key: '3',
             }
         ];
         this.controlColumns = [
             {
-                title: 'PERMISSION NAME',
+                title: convertToLang(this.props.translation[PERMISSION_NAME], PERMISSION_NAME),
                 dataIndex: 'label',
                 key: '1',
                 render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
             }, {
-                title: 'STATUS',
+                title: convertToLang(this.props.translation[DEVICE_STATUS], DEVICE_STATUS),
                 dataIndex: 'status',
                 key: '2',
             }
@@ -231,7 +236,7 @@ export default class TableHistory extends Component {
         // console.log(this.props.type, 'datalist is type of');
         let data = JSON.parse(JSON.stringify(datalist));
         if (this.props.type == 'profile') {
-             data = JSON.parse(datalist) 
+            data = JSON.parse(datalist)
         }
 
         if (datalist.length > 0) {
@@ -277,7 +282,7 @@ export default class TableHistory extends Component {
                 {
                     this.props.isPushApps == true && this.props.type !== 'profile' ?
                         <div>
-                            <Divider > PUSH APPS </Divider>
+                            <Divider > {convertToLang(this.props.translation[PUSH_APPS], PUSH_APPS)} </Divider>
                             <Table
                                 style={{ margin: 0, padding: 0 }}
                                 size='default'
@@ -292,7 +297,7 @@ export default class TableHistory extends Component {
                 }
                 {this.state.applist.length > 0 ?
                     <div>
-                        <Divider >{APPLICATION_PERMISION} </Divider>
+                        <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)} </Divider>
                         <Table
                             style={{ margin: 0, padding: 0 }}
                             size='default'
@@ -308,7 +313,7 @@ export default class TableHistory extends Component {
                 {
                     this.state.extensions.length ?
                         <div>
-                            <Divider> {SECURE_SETTING_PERMISSION}</Divider>
+                            <Divider> {convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)}</Divider>
 
                             <Table
                                 style={{ margin: 0, padding: 0 }}
@@ -328,7 +333,7 @@ export default class TableHistory extends Component {
 
                                 <div>
                                     {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
-                                    <Divider> {SYSTEM_PERMISSION}</Divider>
+                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)}</Divider>
 
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -346,7 +351,7 @@ export default class TableHistory extends Component {
                             Object.entries(this.state.controls).length > 0 ?
                                 Object.entries(this.state.controls.controls).length > 0 ?
                                     <div>
-                                        <Divider> {SYSTEM_PERMISSION}</Divider>
+                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)}</Divider>
                                         <Table
                                             style={{ margin: 0, padding: 0 }}
                                             size='default'
@@ -365,7 +370,7 @@ export default class TableHistory extends Component {
                     <div>
                         {
                             this.props.passwords.admin_password || this.props.passwords.guest_password || this.props.passwords.encrypted_password || this.props.passwords.duress_password ?
-                                <Divider> {MANAGE_PASSWORDS} </Divider> : false
+                                <Divider>{convertToLang(this.props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)} </Divider> : false
                         }
                         {
                             this.props.passwords.admin_password ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
@@ -381,7 +386,7 @@ export default class TableHistory extends Component {
                     <div>
                         {
                             this.props.isAdminPwd || this.props.isEncryptedPwd || this.props.isGuestPwd || this.props.isDuressPwd ?
-                                <Divider> {MANAGE_PASSWORDS} </Divider> : false
+                                <Divider> {convertToLang(this.props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)} </Divider> : false
                         }
                         {
                             this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false

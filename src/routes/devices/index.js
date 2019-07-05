@@ -328,7 +328,7 @@ class Devices extends Component {
     }
 
     handleChangetab = (value) => {
-
+console.log('============= value index is: ', value)
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
         if (value == '5' && this.props.user.type == ADMIN) {
@@ -353,6 +353,8 @@ class Devices extends Component {
         if (value == '5' && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
+        } else if (value == '2' && (this.props.user.type == ADMIN)) {
+            this.state.columns.splice(indxAction, 1)
         }
         else if (value == '3') {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
@@ -524,15 +526,17 @@ class Devices extends Component {
 
                 if (dumydata[index].className !== 'row') {
                     dumydata[index].className = 'hide';
-                    dumydata[index].children[0].className = 'hide';
+                    // if(dumydata[index].children) {
+                        dumydata[index].children[0].className = 'hide';
+                    // }
                     // dumydata[]
                 }
                 // console.log(this.state.tabselect)
                 values.map((value) => {
                     if (column.className !== 'row') {
-                    if (column.children[0].title === convertToLang(this.props.translation[value.key], value.key)) {
+                    if (column.dataIndex === value.key) {
                         if (this.state.tabselect !== '3') {
-                            if (column.children[0].title !== convertToLang(this.props.translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS)) {
+                            if (column.dataIndex !== 'validity') {
                                 dumydata[index].className = '';
                                 dumydata[index].children[0].className = '';
                             }
