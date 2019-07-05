@@ -969,7 +969,7 @@ export default (state = initialState, action) => {
             let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
                 // console.log(app[action.payload.key], 'kkkkkk', 'guest')
-                if (app.default_app != 1) {
+                if (app.default_app !== 1) {
                     app[action.payload.key] = action.payload.value;
                     app.isChanged = true;
                 } else if (app.default_app === 1 && action.payload.key === 'guest') {

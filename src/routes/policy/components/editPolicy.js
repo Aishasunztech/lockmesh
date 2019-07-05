@@ -537,7 +537,7 @@ class EditPolicy extends Component {
 
 
                             {
-                                this.state.main_extension != undefined ?
+                                this.state.main_extension !== undefined ?
 
                                     <div>
                                         <Row>

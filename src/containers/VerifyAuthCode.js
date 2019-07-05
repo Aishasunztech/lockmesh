@@ -21,7 +21,7 @@ class VerifyAuthCode extends Component {
         const { authUser } = this.props;
 
 
-        if (authUser.id != null && authUser.email != null && authUser.token != null && authUser.type != null) {
+        if (authUser.id !== null && authUser.email !== null && authUser.token !== null && authUser.type !== null) {
             this.props.history.push('/devices');
         }
     }

@@ -54,7 +54,7 @@ class AccountList extends Component {
 
     renderList(list) {
         data = [];
-        if (this.props.tabselect != 'all') {
+        if (this.props.tabselect !== 'all') {
             list = list.filter(e => e.used == this.props.tabselect);
         }
         list.map((item, index) => {

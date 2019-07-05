@@ -564,7 +564,7 @@ class Dealers extends Component {
                 unlinkedDealers: this.filterList('unlinked', this.props.dealers),
             })
         }
-        if (this.props.translation != prevProps.translation) {
+        if (this.props.translation !== prevProps.translation) {
             this.setState({
                 columns: dealerColumns(this.props.translation, this.handleSearch)
             })
@@ -763,7 +763,7 @@ class Dealers extends Component {
                         if (dealer[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDealers.push(dealer);
                         }
-                    } else if (dealer[e.target.name] != null) {
+                    } else if (dealer[e.target.name] !== null) {
                         if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDealers.push(dealer);
                         }

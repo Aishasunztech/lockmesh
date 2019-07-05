@@ -89,7 +89,7 @@ class TableHistory extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -114,7 +114,7 @@ class TableHistory extends Component {
                     // console.log("record", record);
 
                     let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
-                    let extensions = (record.secure_apps !== undefined && record.secure_apps != null && record.secure_apps != '') ? record.secure_apps : [];
+                    let extensions = (record.secure_apps !== undefined && record.secure_apps !== null && record.secure_apps !== '') ? record.secure_apps : [];
 
                     let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
                     let push_apps = record.push_apps == null || record.push_apps == 'null' ? [] : record.push_apps;

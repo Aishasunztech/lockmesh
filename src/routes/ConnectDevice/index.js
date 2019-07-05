@@ -460,7 +460,7 @@ class ConnectDevice extends Component {
 
 
   capitalizeFirstLetter = (string) => {
-    if (string && string !== '' && string !== null && string != 'N/A') {
+    if (string && string !== '' && string !== null && string !== 'N/A') {
       return string.charAt(0).toUpperCase() + string.slice(1);
     } else {
       return string

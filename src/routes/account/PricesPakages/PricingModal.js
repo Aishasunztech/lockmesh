@@ -67,7 +67,7 @@ export default class PricingModal extends Component {
             // if (!err) {
             // console.log('no error found', values);
 
-            if (this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName != '' && this.state.pkgTerms != '') {
+            if (this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
                 let data = {
                     pkgName: this.state.pkgName,
                     pkgTerm: this.state.pkgTerms,

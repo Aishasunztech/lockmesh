@@ -179,7 +179,7 @@ export default class Activity extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -373,10 +373,10 @@ export default class Activity extends Component {
                                         app_list={JSON.parse(record.data.app_list)}
                                         extensions={JSON.parse(record.data.permissions)}
                                         extensionUniqueName={SECURE_SETTING}
-                                        isAdminPwd={passwords.admin_password != null && passwords.admin_password != 'null' ? true : false}
-                                        isDuressPwd={passwords.duress_password != null && passwords.duress_password != 'null' ? true : false}
-                                        isEncryptedPwd={passwords.encrypted_password != null && passwords.encrypted_password != 'null' ? true : false}
-                                        isGuestPwd={passwords.guest_password != null && passwords.guest_password != 'null' ? true : false}
+                                        isAdminPwd={passwords.admin_password !== null && passwords.admin_password !== 'null' ? true : false}
+                                        isDuressPwd={passwords.duress_password !== null && passwords.duress_password !== 'null' ? true : false}
+                                        isEncryptedPwd={passwords.encrypted_password !== null && passwords.encrypted_password !== 'null' ? true : false}
+                                        isGuestPwd={passwords.guest_password !== null && passwords.guest_password !== 'null' ? true : false}
                                         controls={controls}
                                         show_all_apps={true}
                                         show_unchanged={true}

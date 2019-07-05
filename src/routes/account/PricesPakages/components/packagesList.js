@@ -45,7 +45,7 @@ export default class Prices extends Component {
                         if (dealer[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             dumyPackages.push(dealer);
                         }
-                    } else if (dealer[e.target.name] != null) {
+                    } else if (dealer[e.target.name] !== null) {
                         if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             dumyPackages.push(dealer);
                         }

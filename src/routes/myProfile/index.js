@@ -139,7 +139,7 @@ class Profile extends Component {
             }
         }
         let dataSource = [];
-        if (columnData != null) {
+        if (columnData !== null) {
 
             dataSource = commonColumns;
             dataSource.push(columnData);
