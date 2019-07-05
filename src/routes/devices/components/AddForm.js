@@ -44,7 +44,7 @@ class AddDevice extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('form', values);
             if (!err) {
-                if (this.state.type == 1) {
+                if (this.state.type === 1) {
                     showConfirm(this, values);
                 } else {
                     this.props.AddDeviceHandler(values);
@@ -201,7 +201,7 @@ class AddDevice extends Component {
 
                         </Fragment>
                     )}
-                    {(this.state.type == 0 && lastObject) ?
+                    {(this.state.type === 0 && lastObject) ?
                         <Fragment>
                             <Form.Item style={{ marginBottom: 0 }}
                             >
@@ -448,7 +448,7 @@ class AddDevice extends Component {
                             </Form.Item>
 
                         </Fragment> : null}
-                    {(this.state.type == 1) ?
+                    {(this.state.type === 1) ?
                         <Form.Item
                             label="DUPLICATE"
                             labelCol={{ span: 8 }}

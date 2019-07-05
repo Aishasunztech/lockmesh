@@ -123,8 +123,8 @@ export class MainApp extends Component {
           onActive={this.onActive}
           onIdle={this.onIdle}
           onAction={this.onAction}
-          debounce={250}
-          timeout={60}
+          debounce={1}
+          timeout={1}
         />
         {this.getSidebar(navStyle, width)}
         <Layout>
