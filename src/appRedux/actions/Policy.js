@@ -121,6 +121,7 @@ export function savePolicy(data) {
 }
 
 export function handleCheckAppPolicy(e, key, app_id, stateToUpdate, uniqueName = '', main='') {
+    
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_APP_POLICY,

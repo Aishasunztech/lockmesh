@@ -105,7 +105,6 @@ class AddPolicy extends Component {
 
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log(err, 'Received values of form: ', values);
 
                 if (this.state.pushAppsIds.length) {
                     for (let id of this.state.pushAppsIds) {
@@ -117,6 +116,7 @@ class AddPolicy extends Component {
                 }
 
                 let appPermissions = JSON.parse(JSON.stringify(this.state.appPermissions))
+                
                 let secure_apps = [];
 
                 let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName == SECURE_SETTING)));
@@ -128,7 +128,6 @@ class AddPolicy extends Component {
                 if (Object.keys(this.state.main_system_control).length !== 0 && this.state.main_system_control.constructor === Object) {
                      appPermissions.push(JSON.parse(JSON.stringify(this.state.main_system_control)))
                 }
-                console.log(appPermissions, 'length at system control', this.state.main_system_control)
 
                 delete main_extension.subExtension;
                 // console.log(this.state.main_system_control, 'main setting controls is')
