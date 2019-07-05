@@ -464,15 +464,13 @@ class DevicesList extends Component {
                             bordered
                             columns={this.state.columns}
                             dataSource={this.renderList(this.props.devices)}
-                            pagination={{
-                                pageSize: Number(this.state.pagination),
-                                size: "midddle",
-                            }}
+                            pagination={
+                                false
+                                // pageSize: Number(this.state.pagination),
+                                //size: "midddle",
+                            }
 
-                            scroll={{
-                                x: true,
-                                y: 200
-                            }}
+                            scroll={{ x: true, y: 470 }}
                             // useFixedHeader={true}
                             onExpand={this.onExpandRow}
                             expandIcon={(props) => this.customExpandIcon(props)}
@@ -675,8 +673,8 @@ class DevicesList extends Component {
                             }
                         />
                     </div>
-                    <Button onClick={this.scrollBack} style={{display: 'none'}} > Previous</Button>
-                    <Button onClick={this.scrollNext} style={{display: 'none'}} > Next</Button>
+                    <Button onClick={this.scrollBack} style={{ display: 'none' }} > Previous</Button>
+                    <Button onClick={this.scrollNext} style={{ display: 'none' }} > Next</Button>
                 </Card>
 
                 <EditDevice ref='edit_device'
