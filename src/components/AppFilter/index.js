@@ -108,7 +108,7 @@ class AppFilter extends Component {
 
     handleComponentSearch = (value) => {
         this.props.handleComponentSearch(value);
-    }
+    } 
 
     render() {
         const { translation } = this.props;
