@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { Layout } from "antd";
 import { connect } from "react-redux";
 
-import IdleTimer from 'react-idle-timer'
-
 import Sidebar from "../Sidebar/index";
 import HorizontalDefault from "../Topbar/HorizontalDefault/index";
 import HorizontalDark from "../Topbar/HorizontalDark/index";
@@ -34,6 +32,66 @@ import NoHeaderNotification from "../Topbar/NoHeaderNotification/index";
 const { Content, Footer } = Layout;
 
 export class MainApp extends Component {
+  constructor(props) {
+    super(props)
+    this.state= {
+      seconds: 0,
+      interval: null
+    };
+  }
+
+  componentDidMount() {
+    // Active
+    window.addEventListener('focus', this.stopTimer);
+
+    // Inactive
+    window.addEventListener('blur', this.startTimer);
+  }
+  componentWillUnmount(){
+    // this.setState({
+    //   seconds: 0
+    // })
+  }
+  timerHandler = () => {
+    // 60 * 60 * 3
+    if (this.state.seconds >= (60 * 60 * 3)) {
+      this.setState({
+        seconds: 0
+      });
+      localStorage.removeItem("id");
+      localStorage.removeItem("name");
+      localStorage.removeItem("lastName");
+      localStorage.removeItem("firstName");
+      localStorage.removeItem("email");
+      localStorage.removeItem("type");
+      localStorage.removeItem("token");
+
+      this.props.history.push('/login')
+
+    }else{
+      let seconds = this.state.seconds;
+      seconds++;
+      this.setState({
+        seconds: seconds
+      })
+    }
+  }
+
+  // Start timer
+  startTimer = () => {
+    let interval = window.setInterval(this.timerHandler, 1000);
+    this.setState({
+      interval: interval
+    })
+  }
+
+  // Stop timer
+  stopTimer = () => {
+    this.setState({
+      seconds: 0
+    })
+    window.clearInterval(this.state.interval);
+  }
 
   getContainerClass = (navStyle) => {
     switch (navStyle) {
@@ -98,34 +156,12 @@ export class MainApp extends Component {
     }
   };
 
-  _onAction(e) {
-    console.log('user did something', e)
-  }
- 
-  _onActive(e) {
-    console.log('user is active', e)
-    console.log('time remaining', this.idleTimer.getRemainingTime())
-  }
- 
-  _onIdle(e) {
-    console.log('user is idle', e)
-    console.log('last active', this.idleTimer.getLastActiveTime())
-  }
 
   render() {
     const { match, width, navStyle } = this.props;
 
     return (
       <Layout className="gx-app-layout">
-        <IdleTimer
-          ref={ref => { console.log("checking idle time", ref) }}
-          // element={document}
-          onActive={this.onActive}
-          onIdle={this.onIdle}
-          onAction={this.onAction}
-          debounce={250}
-          timeout={60}
-        />
         {this.getSidebar(navStyle, width)}
         <Layout>
           {this.getNavStyles(navStyle)}

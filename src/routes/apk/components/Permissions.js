@@ -393,7 +393,7 @@ class Permissions extends Component {
     // console.log(list);
     let is_included
     list.map((dealer) => {
-      console.log('object recrd', dealer);
+      // console.log('object recrd', dealer);
       if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);
 

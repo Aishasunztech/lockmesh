@@ -83,7 +83,7 @@ class AppFilter extends Component {
     }
 
     setDropdowns(values) {
-        console.log('setDropdowns val : ', values)
+        // console.log('setDropdowns val : ', values)
         this.setState({
             selectedDisplayValues: values,
         });
@@ -146,6 +146,7 @@ class AppFilter extends Component {
                                 <Fragment>
                                     <Icon type="down" className="down_icon" />
                                     <Picky
+                                    // disabled
                                         options={this.props.options}
                                         valueKey="key"
                                         labelKey="value"
@@ -168,7 +169,7 @@ class AppFilter extends Component {
                                             if (multiple && !filtered) {
                                                 return (
 
-                                                    <li
+                                                    <li 
                                                         tabIndex={tabIndex}
                                                         role="option"
                                                         className={allSelected ? 'option selected' : 'option'}
@@ -178,7 +179,7 @@ class AppFilter extends Component {
                                                     >
                                                         {/* required to select item */}
                                                         {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                        <Checkbox
+                                                        <Checkbox 
                                                             checked={allSelectedOpt} className="slct_all"
                                                         >
                                                             {translation[Appfilter_SelectAll]}
@@ -214,7 +215,7 @@ class AppFilter extends Component {
                                                 >
                                                     {/* required to select item */}
                                                     {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                    <Checkbox checked={isSelected}>{item.value}</Checkbox>
+                                                    <Checkbox checked={isSelected}>{convertToLang(this.props.translation[item.value], item.value)}</Checkbox>
 
                                                 </li>
                                             );

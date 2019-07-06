@@ -34,7 +34,8 @@ export const DT_MODAL_HEADING = "download.tools.modal.heading.id"; // Download T
 export const DT_MODAL_BODY = "download.tools.modal.body.id"; // Neutral Launcher (BYOD) v1.2 <b>(Android v8+)</b>
 
 // Secure Panel Apk inside
-export const SPA_APPS = "span.app.id"; // App
+export const SPA_APP = "spa.app.id"; // App
+export const SPA_APPS = "spa.apps.id"; // Apps
 export const SPA_SEARCH = "spa.search.id"; // Search here
 export const SPA_NOTIFICATION_BAR = "spa.notification.bar.id"; // Move <b>(Available Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices
 export const SPA_TITEL_AVAILABLE_APPS = "spa.title.available.apps.id"; // Available Apps

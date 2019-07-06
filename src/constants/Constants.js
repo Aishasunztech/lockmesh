@@ -37,6 +37,7 @@ export const SECURE_SETTING_PERMISSION = 'secure.settings.permission.id'; // Sec
 export const SYSTEM_PERMISSION = 'system.permission.id';// System Permission
 export const MANAGE_PASSWORDS = 'manage.passwords.id'; //MANAGE PASSWORDS
 export const POLICY_DETAILS = 'policy.details.id'; // Policy Details
+export const PUSH_APPS = "push.apps.id"; // PUSH APPS
 
 export const POLICY = 'policy';
 
@@ -129,3 +130,5 @@ export const Nav_Style = "nav.style.id"; //  Nav Style
 
 // ==============================
 export const SIGN_IN = "app.userAuth.signIn"; 
+
+export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME

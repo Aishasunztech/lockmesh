@@ -389,7 +389,7 @@ class Dealers extends Component {
                     // console.log("valueis", value);
                     // console.log("column", column)
                     if (column.className !== 'row') {
-                        if (column.children[0].title === convertToLang(this.props.translation[value.key], value.key)) {
+                        if (column.dataIndex === value.key) {
                             dumydata[index].className = '';
                             dumydata[index].children[0].className = '';
                         }

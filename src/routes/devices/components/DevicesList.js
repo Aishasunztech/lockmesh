@@ -195,7 +195,9 @@ class DevicesList extends Component {
                                     : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
                                         (<Fragment>{DeleteBtn}</Fragment>)
                                         : (status === DEVICE_PENDING_ACTIVATION) ?
-                                            (<Fragment><Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment></Fragment>)
+                                            (<Fragment>
+                                                {/* <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment> */}
+                                                </Fragment>)
                                             : (device.status === DEVICE_PRE_ACTIVATION) ?
                                                 false
                                                 : (status === DEVICE_EXPIRED) ?

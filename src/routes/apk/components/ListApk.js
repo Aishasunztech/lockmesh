@@ -231,7 +231,7 @@ export default class ListApk extends Component {
                     expandIconColumnIndex={1}
                     expandIconAsCell={false}
                     className="gx-table-responsive apklist_table"
-                    size="midddle"
+                    size="small"
                     bordered
                     columns={this.state.columns}
                     dataSource={this.renderList(this.props.apk_list)}

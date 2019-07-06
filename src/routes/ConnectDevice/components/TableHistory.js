@@ -11,6 +11,8 @@ import {
     // , 
     // SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
 } from '../../../constants/Constants';
+import { convertToLang } from '../../utils/commonUtils';
+import { Button_Apply } from '../../../constants/ButtonConstants';
 
 
 // applyProfile = (app_list) => {
@@ -38,6 +40,8 @@ const renderList = (histories, type, callback) => {
                         // this.applyProfile(history.app_list)
                     }}
                 > 
+                Apply
+                {/* {convertToLang(this.props.translation[Button_Apply], Button_Apply)} */}
                 {/* <IntlMessages id="button.Apply" /> */}
                 </Button>
             ),
@@ -143,7 +147,7 @@ class TableHistory extends Component {
                             isPushApps={true}
                             push_apps={push_apps}
                             type={this.props.type}
-
+                            translation = {this.props.translation}
                         />
                     );
                 }}

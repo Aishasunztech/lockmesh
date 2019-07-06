@@ -182,7 +182,7 @@ class Apk extends React.Component {
                             dumydata[index].className = '';
                         }
                     }
-                    if (column.title === convertToLang(this.props.translation[value.key], value.key)) {
+                    if (column.dataIndex === value.key) {
                         dumydata[index].className = '';
                     }
                     // else if (column.title.props.children !== undefined) {

@@ -13,8 +13,7 @@ const AppNotification = () => {
       </div>
       <CustomScrollbars className="gx-popover-scroll">
         <ul className="gx-sub-popover">
-          {notifications.map((notification, index) => <NotificationItem key={index}
-                                                                        notification={notification}/>)
+          {notifications.map((notification, index) => <NotificationItem key={index} notification={notification}/>)
           }
         </ul>
       </CustomScrollbars>
