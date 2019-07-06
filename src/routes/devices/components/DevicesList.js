@@ -675,8 +675,8 @@ class DevicesList extends Component {
                             }
                         />
                     </div>
-                    <Button onClick={this.scrollBack} style={{display: 'none'}} > Previous</Button>
-                    <Button onClick={this.scrollNext} style={{display: 'none'}} > Next</Button>
+                    <Button onClick={this.scrollBack} style={{ display: 'none' }} > Previous</Button>
+                    <Button onClick={this.scrollNext} style={{ display: 'none' }} > Next</Button>
                 </Card>
 
                 <EditDevice ref='edit_device'

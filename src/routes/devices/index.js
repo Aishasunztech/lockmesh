@@ -344,7 +344,7 @@ class Devices extends Component {
                     align: 'center',
                     className: 'row',
                     width: 800,
-
+                    
                 })
             }
         }
