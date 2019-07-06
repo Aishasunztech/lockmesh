@@ -60,7 +60,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import { ADMIN } from "../../constants/Constants";
+import { ADMIN, PUSH_APPS } from "../../constants/Constants";
 import { APP_ADD_MORE } from "../../constants/AppConstants";
 // import SetPricingModal from './PricesPakages/SetPricingModal';
 
@@ -88,7 +88,9 @@ class PasswordModal extends Component {
                     this.refs.pswdForm.resetFields()
                 }
                 }
-                okText="Push Apps"
+                // okText="Push Apps"
+                okText={convertToLang(this.props.translation[PUSH_APPS], PUSH_APPS)}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
             >
                 <PasswordForm
                     checkPass={this.props.checkPass}
@@ -433,7 +435,9 @@ class Account extends Component {
                                         visible={this.state.duplicate_modal_show}
                                         onOk={this.InsertNewData}
                                         onCancel={this.handleCancelDuplicate}
-                                        okText='Submit'
+                                        // okText='Submit'
+                                        okText={convertToLang(this.props.translation[Button_submit], Button_submit)}
+                                        cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                                         okButtonProps={{
                                             disabled: this.state.newData.length ? false : true
                                         }}
@@ -1102,9 +1106,9 @@ class Account extends Component {
                             <div>
                                 <div>
                                     <a href="javascript:void(0)"
-                                        // onClick={(e) => {
-                                        //     this.showPurchaseModal(e, true);
-                                        // }}
+                                    // onClick={(e) => {
+                                    //     this.showPurchaseModal(e, true);
+                                    // }}
                                     >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">

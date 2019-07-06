@@ -4,6 +4,9 @@ import RestService from '../../../appRedux/services/RestServices';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import CreditCardForm from './CreditCardForm'
+import { PUSH_APPS } from '../../../constants/ActionTypes';
+import { convertToLang } from '../../utils/commonUtils';
+import { Button_Cancel } from '../../../constants/ButtonConstants';
 // import 'react-credit-cards/lib/styles.scss';
 
 const confirm = Modal.confirm;
@@ -151,7 +154,9 @@ class PurchaseCredit extends Component {
                     onCancel={(e) => {
                         this.cancelPurchaseModal()
                     }}
-                    okText="Push Apps"
+                    // okText="Push Apps"
+                    okText={convertToLang(this.props.translation[PUSH_APPS], PUSH_APPS)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <div>
                         <Form onSubmit={this.handleSubmit} autoComplete="new-password">

@@ -6,6 +6,7 @@ import { Input, Modal, Select, Button } from "antd";
 import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../utils/commonUtils';
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
+import { resetUploadForm } from "../../appRedux/actions/Apk";
 // import {getDevicesList} from '../../appRedux/actions/Devices';
 import AppFilter from '../../components/AppFilter';
 import AddDealer from '../addDealer/index';
@@ -300,8 +301,10 @@ class Dealers extends Component {
         }, 3000);
     };
 
-    handleCancel = () => {
+    handleCancel = (e) => {
         this.setState({ visible_DealerModal: false });
+
+        // this.props.resetUploadForm(true)
     };
 
     showModal = () => {
@@ -536,7 +539,8 @@ class Dealers extends Component {
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 8)) {
             //  alert('if sdealer')
 
-            this.state.columns.push(sDealerColumns(this.props.translation, this.handleSearch));
+            let sDealerCols = sDealerColumns(this.props.translation, this.handleSearch);
+            this.state.columns.push(...sDealerCols);
             // this.state.columns = this.state.columns
         }
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 6)) {
@@ -550,7 +554,7 @@ class Dealers extends Component {
             this.state.options = this.state.options.slice(0, 6);
         }
 
-      
+
         if (this.props.dealers !== prevProps.dealers) {
             this.setState({
                 dealers: this.props.dealers
@@ -661,6 +665,8 @@ class Dealers extends Component {
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
                                 footer={null}
+                                maskClosable={false}
+                                destroyOnClose={true}
                                 okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
                                 cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                             >
@@ -668,6 +674,7 @@ class Dealers extends Component {
                                     handleCancel={this.handleCancel}
                                     dealersList={this.state.dealers}
                                     dealer_type={this.state.dealer_type}
+                                    dealerTypeText={dealerType}
                                     translation={this.props.translation}
                                 />
 
@@ -842,4 +849,4 @@ var mapStateToProps = (state) => {
 // }
 
 
-export default connect(mapStateToProps, { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer, getDropdown, postDropdown, postPagination, getPagination })(Dealers)
+export default connect(mapStateToProps, { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer, getDropdown, postDropdown, postPagination, getPagination, resetUploadForm })(Dealers)
