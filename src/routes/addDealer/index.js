@@ -4,7 +4,9 @@ import { Row, Card, Button, Divider, Form, Input, Select, Modal } from 'antd';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 import { getDealerList, addDealer } from "../../appRedux/actions/Dealers";
-import { ADMIN, DEALER, SDEALER } from "../../constants/Constants";
+import { ADMIN, DEALER, SDEALER, Name, Email, User_Name_require, Only_alpha_numeric, SELECT, Not_valid_Email, PLZ_INPUT_Email } from "../../constants/Constants";
+import { convertToLang } from '../utils/commonUtils';
+import { SELECT_Dealer } from '../../constants/DealerConstants';
 
 // const FormItem = Form.Item;
 const { Option } = Select;
@@ -28,7 +30,7 @@ class AddDealer extends Component {
         if (/[^A-Za-z \d]/.test(fieldvalue)) {
             this.setState({
                 validateStatus: 'error',
-                help: 'Please insert only alphabets and numbers'
+                help: convertToLang(this.props.translation[Only_alpha_numeric], Only_alpha_numeric)
             })
         }
         else {
@@ -45,7 +47,7 @@ class AddDealer extends Component {
             if(values.name === ''){
                 this.setState({
                     validateStatus: 'error',
-                    help: 'Name is Required'
+                    help: convertToLang(this.props.translation[User_Name_require], User_Name_require)
                 })
             }
             if (!err) {
@@ -53,7 +55,7 @@ class AddDealer extends Component {
                 if (/[^A-Za-z \d]/.test(values.name)) {
                     this.setState({
                         validateStatus: 'error',
-                        help: 'Please insert only alphabets and numbers'
+                        help: convertToLang(this.props.translation[Only_alpha_numeric], Only_alpha_numeric)
                     })
                 }else{
                     values.pageType = window.location.pathname.split("/").pop();
@@ -129,7 +131,7 @@ class AddDealer extends Component {
 
                             <Form.Item
                                 {...formItemLayout}
-                                label="Select"
+                                label={convertToLang(this.props.translation[SELECT], SELECT)}
                                 hasFeedback
 
 
@@ -137,7 +139,7 @@ class AddDealer extends Component {
                                 {getFieldDecorator('dealerId', {
 
                                 })(
-                                    <Select placeholder="Select Dealer Name">
+                                    <Select placeholder={convertToLang(this.props.translation[SELECT_Dealer], SELECT_Dealer)}>
                                         {this.props.dealersList.map((dealer, index) => {
                                             return (<Option key={index} value={dealer.dealer_id} ><strong>{dealer.dealer_name}</strong> ({dealer.dealer_email})</Option>)
                                         })
@@ -149,13 +151,13 @@ class AddDealer extends Component {
 
                     <Form.Item
                         {...formItemLayout}
-                        label="Name"
+                        label={convertToLang(this.props.translation[Name], Name)}
                         validateStatus={this.state.validateStatus}
                         help={this.state.help}
                     >
                         {getFieldDecorator('name', {
                             rules: [{
-                                required: true, message: 'Please input your Name!',
+                                required: true, message: convertToLang(this.props.translation[User_Name_require], User_Name_require),
                             }, {
                                 validator: this.validateToNextPassword,
                             }],
@@ -166,13 +168,13 @@ class AddDealer extends Component {
 
                     <Form.Item
                         {...formItemLayout}
-                        label="E-mail"
+                        label={convertToLang(this.props.translation[Email], Email)}
                     >
                         {getFieldDecorator('email', {
                             rules: [{
-                                type: 'email', message: 'The input is not valid E-mail!',
+                                type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], Not_valid_Email),
                             }, {
-                                required: true, message: 'Please input your E-mail!',
+                                required: true, message: convertToLang(this.props.translation[PLZ_INPUT_Email], PLZ_INPUT_Email),
                             }],
                         })(
                             <Input />
@@ -180,7 +182,7 @@ class AddDealer extends Component {
                     </Form.Item>
 
                     <div className='submitButton' style={{ justifycontent: 'right', alignItems: 'right' }} >
-                        <Button className='submitButton' onClick={this.handleSubmit}  >{'Add '+ this.props.dealer_type}</Button>
+                        <Button className='submitButton' onClick={this.handleSubmit}  >{this.props.dealerTypeText}</Button>
                         {/* <Button className='submitButton' onClick={this.showModal}  >Add Dealer </Button> */}
                     </div>
 

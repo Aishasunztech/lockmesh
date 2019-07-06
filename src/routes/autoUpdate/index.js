@@ -161,13 +161,13 @@ class AutoUpdate extends React.Component {
 
                 values.map((value) => {
                     // console.log(APK_PERMISSION, value, "columns", column);
-                    if (value === APK_PERMISSION && column.dataIndex == 'permission') {
+                    if (value.key === APK_PERMISSION) {
                         // console.log('......... ......', column.title)
-                        if (column.title.props.children[0] === value) {
+                        if (column.title.props.children[0] === value.key) {
                             dumydata[index].className = '';
                         }
                     }
-                    if (column.title === value) {
+                    if (column.dataIndex === value.key) {
                         dumydata[index].className = '';
                     }
                     // else if (column.title.props.children !== undefined) {
@@ -461,7 +461,7 @@ const mapStateToProps = ({ apk_list, auth, settings }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
-        options: apk_list.options,
+        options: settings.APKOptions,
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
         user: auth.authUser,

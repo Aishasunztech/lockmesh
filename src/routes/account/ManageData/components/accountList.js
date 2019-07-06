@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 // import { BASE_URL } from '../../../constants/Application';
-import EditDealer from './editDealer';
+// import EditDealer from './editDealer';
 import { convertToLang } from '../../../utils/commonUtils';
 
 import { Tabs } from 'antd';

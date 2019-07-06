@@ -112,7 +112,7 @@ class AppFilter extends Component {
 
     render() {
         const { translation } = this.props;
-        // console.log(" Current State", this.props)
+        // console.log(" Current State options are ", this.props.options)
         let fullScreenClass1 = "";
         let fullScreenClass2 = "";
 
@@ -129,7 +129,7 @@ class AppFilter extends Component {
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
         //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
-        if (this.props.selectedOptions !== undefined) {
+        if (this.props.options !== undefined) {
             if (this.props.options.length === this.state.selectedDisplayValues.length) {
                 allSelectedOpt = true;
             } else { allSelectedOpt = false }

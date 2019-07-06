@@ -17,8 +17,9 @@ import DealerList from "../../apk/components/DealerList";
 import CircularProgress from "components/CircularProgress/index";
 import { titleCase, convertToLang } from '../../utils/commonUtils';
 import { dealerColsWithSearch } from '../../utils/columnsUtils';
-import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected } from '../../../constants/ButtonConstants';
+import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { Permission_List, PERMISSION_Add_Modal_Title, PERMISSION_Remove_Modal_Title, PERMISSION_Add_Except_Selected_Modal_Title } from '../../../constants/ApkConstants';
+import { Alert_Allow_Permission_Delaer, Alert_Remove_Permission_Delaer } from '../../../constants/Constants';
 
 const confirm = Modal.confirm;
 // export default 
@@ -125,9 +126,9 @@ class Permissions extends Component {
   saveAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: 'Do you realy Want to allow Permission for all Dealers?',
-      okText: 'Yes',
-      cancelText: 'No',
+      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], Alert_Allow_Permission_Delaer),
+      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
       onOk() {
         _this.saveAllDealers()
       },
@@ -319,9 +320,9 @@ class Permissions extends Component {
   removeAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: 'Do you realy Want to Remove Permission for all Dealers?',
-      okText: 'Yes',
-      cancelText: 'No',
+      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], Alert_Remove_Permission_Delaer),
+      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
       onOk() {
         _this.removeAllDealers();
       },

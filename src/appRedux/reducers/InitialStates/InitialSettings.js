@@ -114,8 +114,8 @@ export var initialSettings = {
     { "key": "parent_dealer_id", "value": Parent_Dealer_ID },
   ],
   APKOptions: [
-    { "key": "permission", "value": APK_PERMISSION},
-    { "key": "apk_status", "value": APK_SHOW_ON_DEVICE},
+    // { "key": "permission", "value": APK_PERMISSION},
+    // { "key": "apk_status", "value": APK_SHOW_ON_DEVICE},
     { "key": "apk", "value": APK},
     { "key": "apk_name", "value": APK_APP_NAME},
     { "key": "apk_logo", "value": APK_APP_LOGO},

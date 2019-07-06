@@ -36,8 +36,8 @@ import {
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
-import { ACTION } from "../../constants/Constants";
-import { Button_Save } from "../../constants/ButtonConstants";
+import { ACTION, Alert_Delete_APK } from "../../constants/Constants";
+import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
 
 const question_txt = (
     <div>
@@ -135,8 +135,10 @@ class Apk extends React.Component {
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
-            title: 'Are you sure, you want to delete the Apk ?',
+            title: convertToLang(this.props.translation[Alert_Delete_APK], Alert_Delete_APK),
             content: '',
+            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+            cancelText: convertToLang(this.props.translation[Button_No], Button_No),
             onOk: () => {
                 this.props.deleteApk(appId);
                 return new Promise((resolve, reject) => {
@@ -364,8 +366,8 @@ class Apk extends React.Component {
                             <AppFilter
                                 translation={this.props.translation}
                                 handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder= {convertToLang(this.props.translation[APK_SEARCH], APK_SEARCH)}
-                                addButtonText= {convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
+                                searchPlaceholder={convertToLang(this.props.translation[APK_SEARCH], APK_SEARCH)}
+                                addButtonText={convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
                                 isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
@@ -415,12 +417,12 @@ class Apk extends React.Component {
                                 width="620px"
                                 className="upload_apk_popup"
                                 visible={this.state.uploadApkModal}
-                                title= {convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
+                                title={convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
                                 onOk={() => { }}
                                 onCancel={() => {
                                     this.hideUploadApkModal()
                                 }}
-                                okText= {convertToLang(this.props.translation[Button_Save], Button_Save)}
+                                okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
                                 footer={null}
                             >
                                 <AddApk

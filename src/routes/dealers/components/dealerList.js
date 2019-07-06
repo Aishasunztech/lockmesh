@@ -3,7 +3,7 @@ import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
 import { Tabs } from 'antd';
-import EditApk from './editDealer';
+// import EditApk from './editDealer';
 import { ADMIN } from '../../../constants/Constants';
 import DealerDevicesList from '../../users/components/UserDeviceList';
 import { convertToLang } from '../../utils/commonUtils'
@@ -277,7 +277,7 @@ class DealerList extends Component {
                     expandIconAsCell={false}
                     defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                 />
-                <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
+                <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
 
             </Card>
         )

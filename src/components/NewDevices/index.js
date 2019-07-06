@@ -3,6 +3,8 @@ import { Modal, Table, Button, } from 'antd';
 import { Link } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
 import { ADMIN } from '../../constants/Constants';
+import { convertToLang } from '../../routes/utils/commonUtils';
+import { Button_Ok, Button_Cancel } from '../../constants/ButtonConstants';
 const confirm = Modal.confirm;
 
 export default class NewDevices extends Component {
@@ -139,6 +141,8 @@ export default class NewDevices extends Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
+                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     {(this.props.authUser.type === ADMIN) ? null :
                         <Fragment>

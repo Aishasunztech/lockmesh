@@ -50,7 +50,8 @@ import {
     // DEALER_ACTION,
     Parent_Dealer,
     Parent_Dealer_ID,
-    DEALER_ACTION
+    DEALER_ACTION,
+    DEALER_DEVICES
 } from '../../constants/DealerConstants';
 
 const usersColumns_question_txt = (
@@ -1197,7 +1198,7 @@ export function dealerColumns(translation, handleSearch) {
         className: '',
         children: [
             {
-                title: convertToLang(translation[DEVICES], DEVICES),
+                title: convertToLang(translation[DEALER_DEVICES], DEALER_DEVICES),
                 dataIndex: 'connected_devices',
                 key: 'connected_devices',
                 // sorter: (a, b) => {
@@ -1374,7 +1375,7 @@ export function dealerColumns(translation, handleSearch) {
 }
 
 export function sDealerColumns(translation, handleSearch) {
-    return (
+    return ([
         {
             title: (
                 <Input.Search
@@ -1391,7 +1392,7 @@ export function sDealerColumns(translation, handleSearch) {
             className: '',
             children: [
                 {
-                    title: convertToLang(translation[Parent_Dealer], Parent_Dealer),
+                    title:  convertToLang(translation[Parent_Dealer], Parent_Dealer),
                     dataIndex: 'parent_dealer',
                     key: 'parent_dealer',
                     className: '',
@@ -1430,7 +1431,7 @@ export function sDealerColumns(translation, handleSearch) {
                 }
             ]
         }
-    );
+    ]);
 }
 
 
