@@ -44,7 +44,7 @@ class AddDevice extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('form', values);
             if (!err) {
-                if (this.state.type === 1) {
+                if (this.state.type == 1) {
                     showConfirm(this, values);
                 } else {
                     this.props.AddDeviceHandler(values);
@@ -112,10 +112,11 @@ class AddDevice extends Component {
     }
 
     render() {
-        // console.log('id is', this.props.policies);
+        // console.log('id is', this.state.type);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
+        // console.log(users_list[0]);
         return (
             <div>
                 {(this.props.preActive) ?
@@ -201,7 +202,7 @@ class AddDevice extends Component {
 
                         </Fragment>
                     )}
-                    {(this.state.type === 0 && lastObject) ?
+                    {(this.state.type == 0 && lastObject) ?
                         <Fragment>
                             <Form.Item style={{ marginBottom: 0 }}
                             >
@@ -304,7 +305,10 @@ class AddDevice extends Component {
                                     initialValue: this.state.client_id,
 
                                 })(
-                                    <Input value={this.state.client_id} onChange={e => this.setState({ client_id: e.target.value })} />
+                                    <Input
+                                        onChange={e => {
+                                            this.setState({ client_id: e.target.value });
+                                        }} />
                                 )}
                             </Form.Item>
 
@@ -448,7 +452,7 @@ class AddDevice extends Component {
                             </Form.Item>
 
                         </Fragment> : null}
-                    {(this.state.type === 1) ?
+                    {(this.state.type == 1) ?
                         <Form.Item
                             label="DUPLICATE"
                             labelCol={{ span: 8 }}
