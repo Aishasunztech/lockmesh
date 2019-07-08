@@ -544,7 +544,6 @@ class ManageData extends Component {
                                 </Select>
                             </div>
                         </Col> */}
-
                                     <Col className="col-md-2 col-sm-6 col-xs-12">
                                         <div className="gutter-box">
                                             <Select
@@ -577,14 +576,8 @@ class ManageData extends Component {
                                             </Select>
                                         </div>
                                     </Col>
-
-
                                 </Row>
                             </Card>
-
-
-
-
                             {/* <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 searchPlaceholder="Search Dealer"
@@ -621,7 +614,7 @@ class ManageData extends Component {
                                 handleChangeInnerTab={this.handleChangeInnerTab}
                                 // updatePassword={this.props.updatePassword}
                                 ref='dealerList'
-                                translation= {this.props.translation}
+                                translation={this.props.translation}
                             />
                         </div>
                 }

@@ -400,7 +400,7 @@ class Prices extends Component {
                                         tabPosition={'left'}
                                         type="card"
                                         onChange={(e) => this.tabChaged(e)}
-                                        style={{ width: '10%', float: 'left' }}
+                                        className="price_table_tabs"
                                     >
                                         <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], TAB_SIM_ID)} key={sim} >
 
@@ -415,11 +415,11 @@ class Prices extends Component {
 
                                         </Tabs.TabPane>
                                     </Tabs>
-                                    <div style={{ width: '90%', float: 'right' }}>
+                                    <div className="price_table">
                                         <PricesList
                                             data={this.state.prices ? this.state.prices[this.state.tabSelected] : {}}
                                             tabSelected={this.state.tabSelected}
-                                            translation= {this.props.translation}
+                                            translation={this.props.translation}
                                         />
                                     </div>
                                 </div>

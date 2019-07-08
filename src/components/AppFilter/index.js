@@ -117,20 +117,20 @@ class AppFilter extends Component {
         let fullScreenClass2 = "";
 
         if (this.props.isAddButton === false) {
-            fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-3";
+            fullScreenClass1 = "col-md-4";
+            fullScreenClass2 = "col-md-4";
         } else {
             fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-2";
+            fullScreenClass2 = "col-md-3";
         }
         // console.log('-------------------');
         // console.log(this.props.options);
         const Search = Input.Search;
-         console.log('render props selectedOptions ...', this.props.selectedOptions);
+        console.log('render props selectedOptions ...', this.props.selectedOptions);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
-         console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
+        console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
-        if (this.props.selectedOptions != undefined) {
+        if (this.props.options != undefined && this.props.selectedDisplayValues != undefined) {
             if (this.props.options.length == this.state.selectedDisplayValues.length) {
                 allSelectedOpt = true;
             } else { allSelectedOpt = false }
@@ -155,7 +155,7 @@ class AppFilter extends Component {
                                         className="display_"
                                         multiple={true}
                                         includeSelectAll={true}
-                                        onChange={values =>  this.setDropdowns(values)}
+                                        onChange={values => this.setDropdowns(values)}
                                         // onChange={(values) => console.log(values)}
                                         dropdownHeight={300}
                                         renderSelectAll={({
@@ -244,7 +244,7 @@ class AppFilter extends Component {
                             />
                         </div>
                     </Col>
-                    {(!this.props.setPrice) ?
+                    {/* {(false) ?//!this.props.setPrice
                         <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                             <div className="gutter-box">
                                 <Select
@@ -264,7 +264,7 @@ class AppFilter extends Component {
                         </Col>
                         :
                         <Col />
-                    }
+                    } */}
                     <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
                         <div className="gutter-box">
                             {
