@@ -57,12 +57,12 @@
     margin-right: 40px;
 }
 
-
+.login_history .ant-table-body {
+    padding: 0 19px 0 16px;
+}
 
 .login_history ::-webkit-scrollbar {
-    width: 10px;
-    background-color: #e0e0e0;
-    -webkit-border-radius: 100px;
+    display: none;
 }
 
 .login_history ::-webkit-scrollbar-thumb {

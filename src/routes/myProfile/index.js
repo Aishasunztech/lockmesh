@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import CustomScrollbars from "../../util/CustomScrollbars";
 
 import { updatePassword } from "../../appRedux/actions/Dealers";
 import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
@@ -289,8 +290,9 @@ class Profile extends Component {
                     onOk={this.handleOk1}
                     onCancel={this.handleCancelHistory}
                     className="login_history"
+                    centered
                     footer={false}
-                    bodyStyle={{ height: 500, overflow: "overlay" }}
+                    //bodyStyle={{ height: 500, overflow: "overlay" }}
                     okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
@@ -312,43 +314,45 @@ class Profile extends Component {
                                 />
                             </div>
                         </div> */}
-                        <Table
-                            columns={[
-                                {
-                                    title: '#',
-                                    align: "center",
-                                    dataIndex: 'tableIndex',
-                                    key: "tableIndex",
-                                    className: '',
-                                    sorter: (a, b) => { return a.tableIndex - b.tableIndex },
-                                    sortDirections: ['ascend', 'descend'],
+                        <CustomScrollbars className="gx-popover-scroll overflow_tables">
+                            <Table
+                                columns={[
+                                    {
+                                        title: '#',
+                                        align: "center",
+                                        dataIndex: 'tableIndex',
+                                        key: "tableIndex",
+                                        className: '',
+                                        sorter: (a, b) => { return a.tableIndex - b.tableIndex },
+                                        sortDirections: ['ascend', 'descend'],
 
-                                },
-                                {
-                                    title: convertToLang(this.props.translation[IP_ADDRESS], IP_ADDRESS),
-                                    align: "center",
-                                    dataIndex: 'imei',
-                                    key: "imei",
-                                    className: '',
-                                    sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
-                                    sortDirections: ['ascend', 'descend'],
+                                    },
+                                    {
+                                        title: convertToLang(this.props.translation[IP_ADDRESS], IP_ADDRESS),
+                                        align: "center",
+                                        dataIndex: 'imei',
+                                        key: "imei",
+                                        className: '',
+                                        sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
+                                        sortDirections: ['ascend', 'descend'],
 
-                                },
-                                {
-                                    title: convertToLang(this.props.translation[Date_Text], Date_Text),
-                                    align: "center",
-                                    dataIndex: 'changed_time',
-                                    key: "changed_time",
-                                    className: '',
-                                    sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
-                                    sortDirections: ['ascend', 'descend'],
+                                    },
+                                    {
+                                        title: convertToLang(this.props.translation[Date_Text], Date_Text),
+                                        align: "center",
+                                        dataIndex: 'changed_time',
+                                        key: "changed_time",
+                                        className: '',
+                                        sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
+                                        sortDirections: ['ascend', 'descend'],
 
-                                },
-                            ]}
-                            bordered
-                            dataSource={this.renderList(this.props.loginHistory)}
-                            pagination={false}
-                        />
+                                    },
+                                ]}
+                                bordered
+                                dataSource={this.renderList(this.props.loginHistory)}
+                                pagination={false}
+                            />
+                        </CustomScrollbars>
                     </Fragment>
 
                 </Modal>

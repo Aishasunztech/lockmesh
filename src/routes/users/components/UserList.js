@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+// import styles1 from './users_fixheader.css';
+import CustomScrollbars from "../../../util/CustomScrollbars";
 
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
 import { getFormattedDate } from '../../utils/commonUtils';
-
 import {
     Button_Delete,
     Button_Edit,
@@ -56,43 +57,47 @@ class UserList extends Component {
             return {
                 key: `${user.user_id}`,
                 rowKey: `${user.user_id}`,
-                action:
-                    (<Fragment>
-                        <Button
-                            type="primary"
-                            size="small"
-                            style={{ textTransform: 'uppercase' }}
-                            onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
-                        >
-                            {/* <IntlMessages id="button.Edit" />  */}
-                            {this.props.translation[Button_Edit]}
-                        </Button>
-                        {(user.devicesList.length === 0) ?
-                            (user.del_status === 0) ?
-                                <Button
-                                    type="danger"
-                                    size="small"
-                                    style={{ textTransform: 'uppercase' }}
-                                    onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
-                                >
-                                    {/* <IntlMessages id="button.Delete" /> */}
-                                    {this.props.translation[Button_Delete]}
-                                </Button>
-                                : <Button
-                                    type="dashed"
-                                    size="small"
-                                    style={{ textTransform: 'uppercase' }}
-                                    onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
-                                >
-                                    {/* <IntlMessages id="button.Undo" />  */}
-                                    {this.props.translation[Button_Undo]}
-                                </Button>
-                            : null
-                        }
-                    </Fragment>)
+                counter: <div className="counter_w_td">{++index}</div>,
+                action: (
+                    <Fragment>
+                        <div className="users_action_w">
+                            <Button
+                                type="primary"
+                                size="small"
+                                style={{ textTransform: 'uppercase' }}
+                                onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
+                            >
+                                {/* <IntlMessages id="button.Edit" />  */}
+                                {this.props.translation[Button_Edit]}
+                            </Button>
+                            {(user.devicesList.length === 0) ?
+                                (user.del_status == 0) ?
+                                    <Button
+                                        type="danger"
+                                        size="small"
+                                        style={{ textTransform: 'uppercase' }}
+                                        onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
+                                    >
+                                        {/* <IntlMessages id="button.Delete" /> */}
+                                        {this.props.translation[Button_Delete]}
+                                    </Button>
+                                    : <Button
+                                        type="dashed"
+                                        size="small"
+                                        style={{ textTransform: 'uppercase' }}
+                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
+                                    >
+                                        {/* <IntlMessages id="button.Undo" />  */}
+                                        {this.props.translation[Button_Undo]}
+                                    </Button>
+                                : null
+                            }
+                        </div>
+                    </Fragment>
+                )
                 ,
+
                 user_id: user.user_id,
-                counter: ++index,
                 devices: (user.devicesList) ? user.devicesList.length : 0,
                 devicesList: user.devicesList,
                 user_name: user.user_name,
@@ -155,36 +160,35 @@ class UserList extends Component {
         return (
             <Fragment>
                 <Card>
-                    <Table
-                        className="devices"
-                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
-                        size="middle"
-                        bordered
-                        scroll={{
-                            x: 500,
-                        }}
-                        expandIcon={(props) => this.customExpandIcon(props)}
-                        expandedRowRender={(record) => {
-                            // console.log("table row", record);
-                            return (
-                                <UserDeviceList
-                                    ref='userDeviceList'
-                                    record={record} 
-                                    translation={this.props.translation}
+                    <CustomScrollbars className="gx-popover-scroll overflow_tables">
+                        <Table
+                            className="users_list lng_eng"
+                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
+                            size="middle"
+                            bordered
+                            expandIcon={(props) => this.customExpandIcon(props)}
+                            expandedRowRender={(record) => {
+                                // console.log("table row", record);
+                                return (
+                                    <UserDeviceList
+                                        ref='userDeviceList'
+                                        record={record}
+                                        translation={this.props.translation}
                                     />
-                            );
-                        }}
-                        expandIconColumnIndex={3}
-                        expandedRowKeys={this.state.expandedRowKeys}
-                        onExpand={this.onExpandRow}
-                        expandIconAsCell={false}
-                        defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
-                        columns={this.state.columns}
-                        dataSource={this.renderList(this.state.users)}
-                        pagination={{ pageSize: this.state.pagination, size: "midddle" }}
-                        ref='user_table'
-                        translation={this.props.translation}
-                    />
+                                );
+                            }}
+                            expandIconColumnIndex={3}
+                            expandedRowKeys={this.state.expandedRowKeys}
+                            onExpand={this.onExpandRow}
+                            expandIconAsCell={false}
+                            defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
+                            columns={this.state.columns}
+                            dataSource={this.renderList(this.state.users)}
+                            pagination={false}
+                            ref='user_table'
+                            translation={this.props.translation}
+                        />
+                    </CustomScrollbars>
                 </Card>
                 <AddUser ref='edit_user' translation={this.props.translation} />
             </Fragment>

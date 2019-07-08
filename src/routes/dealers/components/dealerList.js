@@ -8,6 +8,7 @@ import { ADMIN } from '../../../constants/Constants';
 import DealerDevicesList from '../../users/components/UserDeviceList';
 import { convertToLang } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import {
     Tab_All,
     Tab_Active,
@@ -243,42 +244,39 @@ class DealerList extends Component {
         // console.log(this.props.dealersList, 'dealers list console');
 
         return (
-            <Card className="border_top_0">
-                <Table
-                    size="middle"
-                    className="gx-table-responsive devices table"
-                    bordered={true}
-                    scroll={
-                        {
-                            x: 500,
-                        }
-                    }
-                    columns={this.state.columns}
-                    rowKey='row_key'
-                    align='center'
-                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
-                    pagination={false}
-                    dataSource={this.renderList(this.props.dealersList)}
-                    expandIcon={(props) => this.customExpandIcon(props)}
-                    expandedRowRender={(record) => {
-                        // console.log("table row", record);
-                        return (
-                            <DealerDevicesList
-                                ref='dealerDeviceList'
-                                record={record} 
-                                translation={this.props.translation}
-                                />
-                            // <span>its working</span>
-                        );
-                    }}
-                    expandIconColumnIndex={2}
-                    expandedRowKeys={this.state.expandedRowKeys}
-                    onExpand={this.onExpandRow}
-                    expandIconAsCell={false}
-                    defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
-                />
-                <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
 
+            <Card className="border_top_0">
+                <CustomScrollbars className="gx-popover-scroll overflow_tables">
+                    <Table
+                        size="middle"
+                        className="gx-table-responsive devices table"
+                        bordered={true}
+                        columns={this.state.columns}
+                        rowKey='row_key'
+                        align='center'
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
+                        pagination={false}
+                        dataSource={this.renderList(this.props.dealersList)}
+                        expandIcon={(props) => this.customExpandIcon(props)}
+                        expandedRowRender={(record) => {
+                            // console.log("table row", record);
+                            return (
+                                <DealerDevicesList
+                                    ref='dealerDeviceList'
+                                    record={record}
+                                    translation={this.props.translation}
+                                />
+                                // <span>its working</span>
+                            );
+                        }}
+                        expandIconColumnIndex={2}
+                        expandedRowKeys={this.state.expandedRowKeys}
+                        onExpand={this.onExpandRow}
+                        expandIconAsCell={false}
+                        defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
+                    />
+                    <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
+                </CustomScrollbars>
             </Card>
         )
     }

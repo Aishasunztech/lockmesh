@@ -39,7 +39,7 @@ export default class ItemTabs extends Component {
                     tabPosition={'left'}
                     type="card"
                     onChange={(e) => this.tabChaged(e)}
-                    style={{ width: '15%', float: 'left' }}
+                    className="price_table_tabs"
                 >
                     <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], TAB_SIM_ID)} key={sim} >
 
@@ -57,12 +57,12 @@ export default class ItemTabs extends Component {
                         {/* {this.props.simTabContent} */}
                     </TabPane>
                 </Tabs>
-                <div style={{ width: '83%', float: 'right' }}>
+                <div className="price_table1">
                     <SimTabContent
                         setPrice={this.props.setPrice}
                         innerTab={this.state.tabSelected}
                         innerTabData={this.props.prices ? this.props.prices[this.state.tabSelected] : {}}
-                        translation = {this.props.translation}
+                        translation={this.props.translation}
                     />
                 </div>
 

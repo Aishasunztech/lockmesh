@@ -69,3 +69,31 @@
     height: 200px;
     overflow: overlay;
 }
+
+.price_table_tabs {
+    position: relative;
+}
+
+.set_price .price_table_tabs .ant-tabs-tab {
+    width: auto;
+}
+
+.set_price .price_table_tabs .ant-tabs-tab:first-child {
+    margin-top: 8px;
+}
+
+.price_table {
+    position: absolute;
+    left: 66px;
+    top: 56px;
+    width: auto;
+    right: 0;
+}
+
+.price_table1 {
+    position: absolute;
+    left: 100px;
+    top: 56px;
+    width: auto;
+    right: 0;
+}
