@@ -126,8 +126,8 @@ class CreditCardForm extends Component {
                     title="CREDIT CARD DETAILS"
                     visible={this.props.creditCard_model}
                     footer={false}
-                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    // okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    // cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                     onOk={() => {
                     }}
                     onCancel={(e) => {

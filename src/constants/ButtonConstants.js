@@ -65,6 +65,7 @@ export const Button_SET_PRICE = "button.set.prices.id"; // Set Price
 export const Button_SET = "button.set.id"; // SET
 export const Button_UNSET = "button.unset.id"; // UNSET
 export const Button_DOWNLOAD = "button.download.id"; // Download
+export const Button_Back = "button.back.id"; // Back
 
 export const Switch_Button_Uninstall = "switch.button.uninstall.id"; // Uninstall
 export const  Button_Save_Changes = "button.save.changes"; // Save Changes

@@ -13,7 +13,7 @@ import { AUTO_UPDATE_ADMIN, SIGN_IN } from "../constants/Constants";
 import { APP_TITLE } from "../constants/Application";
 
 const FormItem = Form.Item;
-
+var LoginExp = true;
 class Login extends React.Component {
 
   handleSubmit = (e) => {
@@ -36,7 +36,7 @@ class Login extends React.Component {
         this.props.hideMessage();
       }, 100);
     }
-    const { authUser } = this.props;
+    const { authUser, alertMessage } = this.props;
     // console.log(this.props.auth);
     if (this.props.auth.two_factor_auth === true || this.props.auth.two_factor_auth === 1 || this.props.auth.two_factor_auth === 'true') {
       // console.log("asdaddsa");
@@ -49,6 +49,17 @@ class Login extends React.Component {
     }
     else if (authUser.id !== null && authUser.email !== null && authUser.token !== null && authUser.type !== null) {
       this.props.history.push('/');
+    }
+
+    if (this.props.showMessage) {
+      if (alertMessage == 'Login expired' && LoginExp) {
+        message.error(alertMessage.toString())
+        LoginExp = false;
+      } else if(this.props.loginFailedStatus != prevProps.loginFailedStatus) {
+        message.error(alertMessage.toString())
+        // LoginExp = false;
+      }
+
     }
   }
 
@@ -93,7 +104,7 @@ class Login extends React.Component {
 
                 <FormItem>
                   <Button type="primary" className="gx-mb-0" htmlType="submit">
-                  {convertToLang(this.props.translation[SIGN_IN], SIGN_IN)}
+                    {convertToLang(this.props.translation[SIGN_IN], SIGN_IN)}
                     {/* <IntlMessages id="app.userAuth.signIn" /> */}
                   </Button>
                 </FormItem>
@@ -105,8 +116,8 @@ class Login extends React.Component {
               <div className="gx-loader-view">
                 <CircularProgress />
               </div> : null}
-            {showMessage ?
-              message.error(alertMessage.toString()) : null}
+            {/* {showMessage ?
+              message.error(alertMessage.toString()) : null} */}
           </div>
         </div>
       </div>
@@ -119,9 +130,10 @@ const WrappedNormalLoginForm = Form.create()(Login);
 const mapStateToProps = ({ auth, settings }) => {
   // console.log(auth);
 
-  const { loader, alertMessage, showMessage, authUser } = auth;
-  return { loader, alertMessage, showMessage, authUser, auth, 
-    translation: settings.translation 
+  const { loader, alertMessage, showMessage, authUser, loginFailedStatus } = auth;
+  return {
+    loader, alertMessage, showMessage, authUser, auth, loginFailedStatus, 
+    translation: settings.translation
   }
 };
 
