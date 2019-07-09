@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
-import { getFormattedDate } from '../../utils/commonUtils';
+import { getFormattedDate, convertToLang } from '../../utils/commonUtils';
 
 import {
     Button_Delete,
@@ -15,6 +15,7 @@ import {
 } from '../../../constants/ButtonConstants';
 
 import styles from './user.css';
+import { EDIT_USER, DELETE_USER, DO_YOU_WANT_TO_DELETE_USER, UNDO, DO_YOU_WANT_TO_UNDO_USER } from '../../../constants/UserConstants';
 
 const confirm = Modal.confirm
 
@@ -62,10 +63,10 @@ class UserList extends Component {
                             type="primary"
                             size="small"
                             style={{ textTransform: 'uppercase' }}
-                            onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
+                            onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, convertToLang(this.props.translation[EDIT_USER], EDIT_USER))}
                         >
                             {/* <IntlMessages id="button.Edit" />  */}
-                            {this.props.translation[Button_Edit]}
+                            {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
                         </Button>
                         {(user.devicesList.length === 0) ?
                             (user.del_status === 0) ?
@@ -73,19 +74,19 @@ class UserList extends Component {
                                     type="danger"
                                     size="small"
                                     style={{ textTransform: 'uppercase' }}
-                                    onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
+                                    onClick={() => showConfirm(this.props.deleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_DELETE_USER], DO_YOU_WANT_TO_DELETE_USER) , convertToLang(this.props.translation[DELETE_USER], DELETE_USER))}
                                 >
                                     {/* <IntlMessages id="button.Delete" /> */}
-                                    {this.props.translation[Button_Delete]}
+                                    {convertToLang(this.props.translation[Button_Delete], Button_Delete)}
                                 </Button>
                                 : <Button
                                     type="dashed"
                                     size="small"
                                     style={{ textTransform: 'uppercase' }}
-                                    onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
+                                    onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_UNDO_USER], DO_YOU_WANT_TO_UNDO_USER) , convertToLang(this.props.translation[UNDO], UNDO))}
                                 >
                                     {/* <IntlMessages id="button.Undo" />  */}
-                                    {this.props.translation[Button_Undo]}
+                                    {convertToLang(this.props.translation[Button_Undo], Button_Undo)}
                                 </Button>
                             : null
                         }
@@ -213,6 +214,7 @@ function showConfirm(action, user_id, msg, buttonText) {
     confirm({
         title: msg + user_id,
         okText: buttonText,
+        // cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
         onOk() {
             action(user_id)
         },

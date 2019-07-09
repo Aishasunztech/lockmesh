@@ -327,7 +327,7 @@ class Devices extends Component {
     }
 
     handleChangetab = (value) => {
-console.log('============= value index is: ', value)
+// console.log('============= value index is: ', value)
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
         if (value == '5' && this.props.user.type == ADMIN) {
@@ -591,7 +591,7 @@ console.log('============= value index is: ', value)
 
             })
             // this.copyDevices = this.props.devices;
-            this.handleChangetab(this.state.tabselect);
+            // this.handleChangetab(this.state.tabselect);
             // this.handleCheckChange(this.props.selectedOptions);
 
         }

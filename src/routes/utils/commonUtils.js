@@ -210,7 +210,7 @@ export function convertToLang(lngWord, constant) {
     return lngWord;
   } else if (constant !== undefined && constant !== '' && constant !== null) {
     return constant;
-http://www.firefall.cc/windows-10/  } else {
+ } else {
     return "N/A";
   }
 
