@@ -116,7 +116,7 @@ export function componentSearch(arr, search) {
     obks.some((obk) => {
       if (obk) {
         let temp = el[obk];
-        if (obk == 'dealer_id')
+        if (obk === 'dealer_id')
           temp = temp.toString()
         if ((typeof temp) === 'string') {
           if (temp.toLowerCase().includes(search.toLowerCase())) {
@@ -204,14 +204,9 @@ export function isBase64(str) {
 
 
 export function convertToLang(lngWord, constant) {
-
   if (lngWord !== undefined && lngWord !== '' && lngWord !== null) {
-    // console.log('convert To Language Function: ', lngWord);
     return lngWord;
   } else if (constant !== undefined && constant !== '' && constant !== null) {
     return constant;
-http://www.firefall.cc/windows-10/  } else {
-    return "N/A";
-  }
-
+  } else { return "N/A"; }
 }

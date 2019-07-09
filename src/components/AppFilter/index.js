@@ -108,7 +108,7 @@ class AppFilter extends Component {
 
     handleComponentSearch = (value) => {
         this.props.handleComponentSearch(value);
-    } 
+    }
 
     render() {
         const { translation } = this.props;
@@ -117,11 +117,11 @@ class AppFilter extends Component {
         let fullScreenClass2 = "";
 
         if (this.props.isAddButton === false) {
-            fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-3";
+            fullScreenClass1 = "col-md-4";
+            fullScreenClass2 = "col-md-4";
         } else {
             fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-2";
+            fullScreenClass2 = "col-md-3";
         }
 
         const Search = Input.Search;
@@ -146,17 +146,16 @@ class AppFilter extends Component {
                                 <Fragment>
                                     <Icon type="down" className="down_icon" />
                                     <Picky
-                                    // disabled
                                         options={this.props.options}
                                         valueKey="key"
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
-                                        placeholder={convertToLang(this.props.translation[Appfilter_Display], Appfilter_Display)}
+                                        placeholder={convertToLang(translation[Appfilter_Display], Appfilter_Display)}
                                         className="display_"
                                         multiple={true}
+                                        numberDisplayed={true}
                                         includeSelectAll={true}
-                                        onChange={values =>  this.setDropdowns(values)}
-                                        // onChange={(values) => console.log(values)}
+                                        onChange={values => this.setDropdowns(values)}
                                         dropdownHeight={300}
                                         renderSelectAll={({
                                             filtered,
@@ -169,7 +168,7 @@ class AppFilter extends Component {
                                             if (multiple && !filtered) {
                                                 return (
 
-                                                    <li 
+                                                    <li
                                                         tabIndex={tabIndex}
                                                         role="option"
                                                         className={allSelected ? 'option selected' : 'option'}
@@ -177,13 +176,10 @@ class AppFilter extends Component {
                                                         onKeyPress={toggleSelectAll}
                                                         key={tabIndex}
                                                     >
-                                                        {/* required to select item */}
-                                                        {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                        <Checkbox 
+                                                        <Checkbox
                                                             checked={allSelectedOpt} className="slct_all"
                                                         >
-                                                            {translation[Appfilter_SelectAll]}
-                                                            {/* <IntlMessages id="appfilter.SelectAll" /> */}
+                                                            {convertToLang(translation[Appfilter_SelectAll], Appfilter_SelectAll)}
                                                         </Checkbox>
                                                     </li>
                                                 );
@@ -200,21 +196,14 @@ class AppFilter extends Component {
                                             valueKey,
                                             multiple
                                         }) => {
-                                            // console.log("value key:", valueKey)
-                                            // console.log("item:", item)
-                                            // console.log("selectValue", selectValue)
-                                            // console.log("labelKey key:", labelKey)
-                                            // console.log("multiple select", multiple);
 
                                             return (
                                                 <li
                                                     style={style} // required
                                                     className={isSelected ? 'selected' : ''} // required to indicate is selected
                                                     key={item.key} // required
-                                                    onClick={() => selectValue(item)}
+                                                    onClick={() => selectValue({ "key": item.key, "value": convertToLang(this.props.translation[item.value], item.value) })}
                                                 >
-                                                    {/* required to select item */}
-                                                    {/* <input type="checkbox" checked={isSelected} readOnly /> */}
                                                     <Checkbox checked={isSelected}>{convertToLang(this.props.translation[item.value], item.value)}</Checkbox>
 
                                                 </li>
@@ -244,7 +233,7 @@ class AppFilter extends Component {
                             />
                         </div>
                     </Col>
-                    {(!this.props.setPrice) ?
+                    {/* {(false) ?//!this.props.setPrice
                         <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                             <div className="gutter-box">
                                 <Select
@@ -264,7 +253,7 @@ class AppFilter extends Component {
                         </Col>
                         :
                         <Col />
-                    }
+                    } */}
                     <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
                         <div className="gutter-box">
                             {

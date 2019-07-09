@@ -82,7 +82,7 @@ export default class editDealer extends Component {
         let error = false;
 
         let chcek = /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/;
-        if (chcek.test(this.state.dealer_email) == false) {
+        if (chcek.test(this.state.dealer_email) === false) {
             // message.error('Invalid data');
             this.setState({
             status: 'error',

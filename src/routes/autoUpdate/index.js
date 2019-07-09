@@ -332,7 +332,7 @@ class AutoUpdate extends React.Component {
                                         <div style={{ textAlign: "center" }}>
                                             {/* <Button
                                                 type="primary"
-                                                // disabled={(this.props.disableAddButton == true) ? true : false}
+                                                // disabled={(this.props.disableAddButton === true) ? true : false}
                                                 style={{ width: '12%', marginBottom:16 }}
                                             >
                                                 <Link to='/upload-apk'>Upload apk</Link>

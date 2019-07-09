@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import CustomScrollbars from "../../util/CustomScrollbars";
 
 import { updatePassword } from "../../appRedux/actions/Dealers";
 import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
@@ -70,17 +71,17 @@ class Profile extends Component {
     }
     renderList = (history) => {
         let data = history.map((data, index) => {
-            if (data.ip_address.substr(0, 7) == "::ffff:") {
+            if (data.ip_address.substr(0, 7) === "::ffff:") {
                 data.ip_address = data.ip_address.substr(7)
             }
-            if (index == 0) {
+            if (index === 0) {
                 return {
                     key: index,
                     tableIndex: index + 1,
                     imei: data.ip_address + ' (CURRENT)',
                     changed_time: getFormattedDate(data.created_at)
                 }
-            } else if (index == 1) {
+            } else if (index === 1) {
                 return {
                     key: index,
                     tableIndex: index + 1,
@@ -127,7 +128,7 @@ class Profile extends Component {
             {
                 key: 5,
                 name: <a>{convertToLang(this.props.translation[DEVICES], DEVICES)}</a>,
-                value: this.props.profile.type == 'admin' ? 'All' : this.props.profile.connected_devices,
+                value: this.props.profile.type === 'admin' ? 'All' : this.props.profile.connected_devices,
             },
         ]
 
@@ -135,7 +136,7 @@ class Profile extends Component {
             columnData = {
                 key: 6,
                 name: <a>{convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer)}</a>,
-                value: (this.props.profile.connected_dealer == 0) ? "N/A" : this.props.profile.connected_dealer,
+                value: (this.props.profile.connected_dealer === 0) ? "N/A" : this.props.profile.connected_dealer,
             }
         }
         let dataSource = [];
@@ -289,8 +290,9 @@ class Profile extends Component {
                     onOk={this.handleOk1}
                     onCancel={this.handleCancelHistory}
                     className="login_history"
+                    centered
                     footer={false}
-                    bodyStyle={{ height: 500, overflow: "overlay" }}
+                    //bodyStyle={{ height: 500, overflow: "overlay" }}
                     okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
@@ -312,43 +314,45 @@ class Profile extends Component {
                                 />
                             </div>
                         </div> */}
-                        <Table
-                            columns={[
-                                {
-                                    title: '#',
-                                    align: "center",
-                                    dataIndex: 'tableIndex',
-                                    key: "tableIndex",
-                                    className: '',
-                                    sorter: (a, b) => { return a.tableIndex - b.tableIndex },
-                                    sortDirections: ['ascend', 'descend'],
+                        <div className="overflow_table">
+                            <Table
+                                columns={[
+                                    {
+                                        title: '#',
+                                        align: "center",
+                                        dataIndex: 'tableIndex',
+                                        key: "tableIndex",
+                                        className: '',
+                                        sorter: (a, b) => { return a.tableIndex - b.tableIndex },
+                                        sortDirections: ['ascend', 'descend'],
 
-                                },
-                                {
-                                    title: convertToLang(this.props.translation[IP_ADDRESS], IP_ADDRESS),
-                                    align: "center",
-                                    dataIndex: 'imei',
-                                    key: "imei",
-                                    className: '',
-                                    sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
-                                    sortDirections: ['ascend', 'descend'],
+                                    },
+                                    {
+                                        title: convertToLang(this.props.translation[IP_ADDRESS], IP_ADDRESS),
+                                        align: "center",
+                                        dataIndex: 'imei',
+                                        key: "imei",
+                                        className: '',
+                                        sorter: (a, b) => { return a.imei.localeCompare(b.imei) },
+                                        sortDirections: ['ascend', 'descend'],
 
-                                },
-                                {
-                                    title: convertToLang(this.props.translation[Date_Text], Date_Text),
-                                    align: "center",
-                                    dataIndex: 'changed_time',
-                                    key: "changed_time",
-                                    className: '',
-                                    sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
-                                    sortDirections: ['ascend', 'descend'],
+                                    },
+                                    {
+                                        title: convertToLang(this.props.translation[Date_Text], Date_Text),
+                                        align: "center",
+                                        dataIndex: 'changed_time',
+                                        key: "changed_time",
+                                        className: '',
+                                        sorter: (a, b) => { return a.changed_time.localeCompare(b.changed_time) },
+                                        sortDirections: ['ascend', 'descend'],
 
-                                },
-                            ]}
-                            bordered
-                            dataSource={this.renderList(this.props.loginHistory)}
-                            pagination={false}
-                        />
+                                    },
+                                ]}
+                                bordered
+                                dataSource={this.renderList(this.props.loginHistory)}
+                                pagination={false}
+                            />
+                        </div>
                     </Fragment>
 
                 </Modal>

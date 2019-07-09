@@ -112,10 +112,11 @@ class AddDevice extends Component {
     }
 
     render() {
-        // console.log('id is', this.props.policies);
+        // console.log('id is', this.state.type);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
+        // console.log(users_list[0]);
         return (
             <div>
                 {(this.props.preActive) ?
@@ -304,7 +305,10 @@ class AddDevice extends Component {
                                     initialValue: this.state.client_id,
 
                                 })(
-                                    <Input value={this.state.client_id} onChange={e => this.setState({ client_id: e.target.value })} />
+                                    <Input
+                                        onChange={e => {
+                                            this.setState({ client_id: e.target.value });
+                                        }} />
                                 )}
                             </Form.Item>
 

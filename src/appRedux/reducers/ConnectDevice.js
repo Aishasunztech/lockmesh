@@ -690,7 +690,7 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_CONTROL: {
             let changedControls = JSON.parse(JSON.stringify(state.controls));
-            // if (action.payload.key == 'wifi_status') {
+            // if (action.payload.key === 'wifi_status') {
             //     changedControls[action.payload.key] = true;
             // } else {
             changedControls.controls[action.payload.key] = action.payload.value;
@@ -848,7 +848,7 @@ export default (state = initialState, action) => {
             changedExtensions.forEach(extension => {
                 if (extension.uniqueName === action.payload.uniqueName) {
                     for (let subExt of extension.subExtension) {
-                        subExt[action.payload.key] = action.payload.value == true ? 1 : 0;
+                        subExt[action.payload.key] = action.payload.value === true ? 1 : 0;
                         subExt.isChanged = true;
                     }
                 }

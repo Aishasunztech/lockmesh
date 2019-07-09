@@ -254,7 +254,7 @@ class Apk extends Component {
                                     width="42%"
                                 >
                                     <Row className="d_t_m">
-                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}>{convertToLang(this.props.translation[DT_MODAL_BODY], DT_MODAL_BODY)}</h4>
+                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY], DT_MODAL_BODY)} ></Markup></h4>
                                         <a href={`${BASE_URL}users/getFile/nlbyod.apk`}>
                                             <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}> 
                                             

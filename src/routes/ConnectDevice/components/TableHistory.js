@@ -7,12 +7,15 @@ import styles from './Applist.css';
 
 import {
     SECURE_SETTING,
-    POLICY
+    POLICY,
+    Name,
+    ACTION
     // , 
     // SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
 } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Apply } from '../../../constants/ButtonConstants';
+import { HISTORY_DATE } from '../../../constants/DeviceConstants';
 
 
 // applyProfile = (app_list) => {
@@ -20,61 +23,7 @@ import { Button_Apply } from '../../../constants/ButtonConstants';
 //     this.props.showHistoryModal(false, '');
 // }
 
-const renderList = (histories, type, callback) => {
-    return histories.map((history) => {
-        // console.log("list", history.extenssions);
 
-        return ({
-            key: history.id,
-            history_date: (type === "history") ? history.created_at : (type === POLICY) ? history.policy_name : (type === "profile") ? history.profile_name : null,
-            action: (
-                <Button
-                    size="small"
-                    className="mb-0"
-                    onClick={() => {
-                        if (type === POLICY) {
-                            callback(history.id, history.policy_name, history);
-                        } else {
-                            callback(history.id, history.profile_name, history);
-                        }
-                        // this.applyProfile(history.app_list)
-                    }}
-                > 
-                Apply
-                {/* {convertToLang(this.props.translation[Button_Apply], Button_Apply)} */}
-                {/* <IntlMessages id="button.Apply" /> */}
-                </Button>
-            ),
-            app_list: history.app_list,
-            controls: history.controls,
-            secure_apps: (type === "profile") ? history.permissions : history.secure_apps,
-            push_apps: history.push_apps,
-            passwords: history.passwords
-        })
-    })
-}
-
-const renderColumn = (type) => {
-    // if(type === "history"){
-
-    // } else {
-
-    // }
-    return [
-        {
-            title: (type === "history") ? 'History Date' : `${type} Name`,
-            dataIndex: 'history_date',
-            key: '1',
-            align: "center"
-        },
-        {
-            title: "Action",
-            dataIndex: 'action',
-            key: '2',
-            align: "center"
-        }
-    ]
-}
 
 class TableHistory extends Component {
     constructor(props) {
@@ -99,6 +48,62 @@ class TableHistory extends Component {
         }
     }
 
+    renderList = (histories, type, callback) => {
+        return histories.map((history) => {
+            // console.log("list", history.extenssions);
+    
+            return ({
+                key: history.id,
+                history_date: (type === "history") ? history.created_at : (type === POLICY) ? history.policy_name : (type === "profile") ? history.profile_name : null,
+                action: (
+                    <Button
+                        size="small"
+                        className="mb-0"
+                        onClick={() => {
+                            if (type === POLICY) {
+                                callback(history.id, history.policy_name, history);
+                            } else {
+                                callback(history.id, history.profile_name, history);
+                            }
+                            // this.applyProfile(history.app_list)
+                        }}
+                    > 
+                    {/* Apply */}
+                    {convertToLang(this.props.translation[Button_Apply], Button_Apply)}
+                    {/* <IntlMessages id="button.Apply" /> */}
+                    </Button>
+                ),
+                app_list: history.app_list,
+                controls: history.controls,
+                secure_apps: (type === "profile") ? history.permissions : history.secure_apps,
+                push_apps: history.push_apps,
+                passwords: history.passwords
+            })
+        })
+    }
+    
+    renderColumn = (type) => {
+        // if(type === "history"){
+    
+        // } else {
+    
+        // }
+        return [
+            {
+                title: (type === "history") ?  convertToLang(this.props.translation[HISTORY_DATE], HISTORY_DATE) :  `${type} ${convertToLang(this.props.translation[Name], Name)}`,
+                dataIndex: 'history_date',
+                key: '1',
+                align: "center"
+            },
+            {
+                title:  convertToLang(this.props.translation[ACTION], ACTION),
+                dataIndex: 'action',
+                key: '2',
+                align: "center"
+            }
+        ]
+    }
+
     render() {
         // const TableHistory = (props) => {
         // console.log("props", this.props.histories);
@@ -109,9 +114,9 @@ class TableHistory extends Component {
                 rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
                 size='default'
                 bordered
-                columns={renderColumn(this.props.type)}
+                columns={this.renderColumn(this.props.type)}
                 align='center'
-                dataSource={renderList(this.props.histories, this.props.type, this.props.applyHistory)}
+                dataSource={this.renderList(this.props.histories, this.props.type, this.props.applyHistory)}
                 pagination={false}
                 onExpand={this.onExpandRow}
                 expandedRowRender={record => {
@@ -121,11 +126,11 @@ class TableHistory extends Component {
                     let extensions = (record.secure_apps !== undefined && record.secure_apps !== null && record.secure_apps !== '') ? record.secure_apps : [];
 
                     let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
-                    let push_apps = record.push_apps == null || record.push_apps == 'null' ? [] : record.push_apps;
+                    let push_apps = record.push_apps === null || record.push_apps === 'null' ? [] : record.push_apps;
                     let passwords = record.passwords;
                     // console.log("app_list: ", app_list);
                     // console.log("extensions: ", extensions);
-                    if (this.props.type == 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined) {
+                    if (this.props.type === 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined) {
                         let cntrl = {};
                         cntrl = JSON.parse(record.controls)
                         controls = cntrl

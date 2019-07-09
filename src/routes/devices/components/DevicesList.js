@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { Table, Button, Card, Tag, Form, Input, Popconfirm, Empty, Icon } from "antd";
 import { Redirect } from 'react-router-dom';
 import styles from './devices.css'
+import CustomScrollbars from "../../../util/CustomScrollbars";
+// import styles1 from './devices_fixheader.css'
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
@@ -111,7 +113,7 @@ class DevicesList extends Component {
     }
     goToDealer = (dealer) => {
         if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
-            if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+            if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
                 this.setState({
                     redirect: true,
                     dealer_id: dealer.dealer_id,
@@ -180,9 +182,9 @@ class DevicesList extends Component {
                 // sortOrder: {order},
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-                key: status == DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
-                counter: ++index,
-                action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
+                key: status === DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
+                counter: <div className="counter_w_td">{++index}</div>,
+                action: (<div className="device_action_w">{(status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
@@ -194,7 +196,7 @@ class DevicesList extends Component {
                                     (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                     : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
                                         (<Fragment>{DeleteBtn}</Fragment>)
-                                        : (status === DEVICE_PENDING_ACTIVATION) ?
+                                        : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type === ADMIN) ?
                                             (<Fragment>
                                                 {/* <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment> */}
                                                 </Fragment>)
@@ -203,14 +205,15 @@ class DevicesList extends Component {
                                                 : (status === DEVICE_EXPIRED) ?
                                                     (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
                                                     : false
-
-
-                ),
-                status: (<span style={color} > {status}</span>),
-                flagged: device.flagged,
-                device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
-                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+                }</div>),
+                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect === '3') ? `${device.validity}` : "N/A" : "N/A",
+                device_id: status !== DEVICE_PRE_ACTIVATION ? checkValue(device.device_id) : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
+                status: <span style={color} > {status}</span>,
+                online: device.online === 'online' ? (<span style={{ color: "gr" }}>
+                    {device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) :
+                    (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
+                flagged: device.flagged,
                 validity: checkValue(device.validity),
                 name: checkValue(device.name),
                 activation_code: checkValue(device.activation_code),
@@ -227,18 +230,12 @@ class DevicesList extends Component {
                 imei_2: checkValue(device.imei2),
                 sim_2: checkValue(device.simno2),
                 serial_number: checkValue(device.serial_number),
-
                 model: checkValue(device.model),
-
-                // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
-                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 start_date: checkValue(device.start_date),
                 expiry_date: checkValue(device.expiry_date),
-                // batchData: device.batchData == undefined ? [] : device.batchData
             }
         });
     }
@@ -266,12 +263,12 @@ class DevicesList extends Component {
             for (let id of this.state.selectedRowKeys) {
                 for (let device of this.props.devices) {
                     if (type !== 'unlink') {
-                        if (id == device.id) {
+                        if (id === device.id) {
                             arr.push(device)
                         }
                     }
                     else {
-                        if (id == device.user_acc_id) {
+                        if (id === device.user_acc_id) {
                             arr.push(device)
                         }
                     }
@@ -375,7 +372,7 @@ class DevicesList extends Component {
 
         var scrollAmount = 0;
         // var slideTimer = setInterval(function () {
-        //     if (direction == 'left') {
+        //     if (direction === 'left') {
         //         element.scrollLeft -= step;
         //     } else {
         //         element.scrollLeft += step;
@@ -407,7 +404,7 @@ class DevicesList extends Component {
         }
 
         let rowSelection;
-        if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {
+        if (this.props.tabselect === '5' && this.props.user.type !== ADMIN) {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
@@ -420,7 +417,7 @@ class DevicesList extends Component {
                 //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
         }
-        else if (this.props.tabselect == '3') {
+        else if (this.props.tabselect === '3') {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
@@ -448,8 +445,8 @@ class DevicesList extends Component {
                     activateDevice={activateDevice} />
                 <SuspendDevice ref="suspend"
                     suspendDevice={suspendDevice} />
-                <Card>
-                    <div >
+                <Card className="fix_card devices_fix_card">
+                    <CustomScrollbars className="gx-popover-scroll ">
                         <Table
                             // id="test"
                             style={{
@@ -459,22 +456,18 @@ class DevicesList extends Component {
                             }}
                             id='scrolltablelist'
                             ref='tablelist'
-                            className="devices"
+                            className={"devices "}
                             rowSelection={rowSelection}
                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
                             size="middle"
                             bordered
                             columns={this.state.columns}
                             dataSource={this.renderList(this.props.devices)}
-                            pagination={{
-                                pageSize: Number(this.state.pagination),
-                                size: "midddle",
-                            }}
-
-                            scroll={{
-                                x: true,
-                                y: 200
-                            }}
+                            pagination={
+                                false
+                                // pageSize: Number(this.state.pagination),
+                                //size: "midddle",
+                            }
                             // useFixedHeader={true}
                             onExpand={this.onExpandRow}
                             expandIcon={(props) => this.customExpandIcon(props)}
@@ -676,9 +669,9 @@ class DevicesList extends Component {
                             }
                             }
                         />
-                    </div>
-                    <Button onClick={this.scrollBack} style={{ display: 'none' }} > Previous</Button>
-                    <Button onClick={this.scrollNext} style={{ display: 'none' }} > Next</Button>
+                        {/* <Button onClick={this.scrollBack} style={{ display: 'none' }} > Previous</Button>
+                    <Button onClick={this.scrollNext} style={{ display: 'none' }} > Next</Button> */}
+                    </CustomScrollbars>
                 </Card>
 
                 <EditDevice ref='edit_device'
@@ -688,7 +681,7 @@ class DevicesList extends Component {
                     translation={this.props.translation}
 
                 />
-            </div>
+            </div >
 
         )
     }
