@@ -57,10 +57,10 @@ class UserList extends Component {
             return {
                 key: `${user.user_id}`,
                 rowKey: `${user.user_id}`,
-                counter: <div className="counter_w_td">{++index}</div>,
+                counter: ++index,
                 action: (
                     <Fragment>
-                        <div className="users_action_w">
+                        <div>
                             <Button
                                 type="primary"
                                 size="small"
@@ -159,10 +159,10 @@ class UserList extends Component {
         // console.log(this.state.expandedRowKeys)
         return (
             <Fragment>
-                <Card>
-                    <CustomScrollbars className="gx-popover-scroll overflow_tables">
+                <Card className="fix_card users_fix_card">
+                    <CustomScrollbars className="gx-popover-scroll">
                         <Table
-                            className="users_list lng_eng"
+                            className="users_list"
                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                             size="middle"
                             bordered

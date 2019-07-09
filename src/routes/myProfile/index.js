@@ -314,7 +314,7 @@ class Profile extends Component {
                                 />
                             </div>
                         </div> */}
-                        <CustomScrollbars className="gx-popover-scroll overflow_tables">
+                        <div className="overflow_table">
                             <Table
                                 columns={[
                                     {
@@ -352,7 +352,7 @@ class Profile extends Component {
                                 dataSource={this.renderList(this.props.loginHistory)}
                                 pagination={false}
                             />
-                        </CustomScrollbars>
+                        </div>
                     </Fragment>
 
                 </Modal>

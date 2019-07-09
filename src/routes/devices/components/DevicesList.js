@@ -447,8 +447,8 @@ class DevicesList extends Component {
                     activateDevice={activateDevice} />
                 <SuspendDevice ref="suspend"
                     suspendDevice={suspendDevice} />
-                <Card>
-                    <CustomScrollbars className="gx-popover-scroll overflow_tables">
+                <Card className="fix_card devices_fix_card">
+                    <CustomScrollbars className="gx-popover-scroll ">
                         <Table
                             // id="test"
                             style={{
@@ -458,7 +458,7 @@ class DevicesList extends Component {
                             }}
                             id='scrolltablelist'
                             ref='tablelist'
-                            className={"devices lng_" + lng_name}
+                            className={"devices "}
                             rowSelection={rowSelection}
                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
                             size="middle"

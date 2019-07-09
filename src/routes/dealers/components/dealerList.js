@@ -216,7 +216,6 @@ class DealerList extends Component {
                     <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
                         onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
                         {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], Button_Delete)} </div> : <div> {convertToLang(this.props.translation[Button_Undo], Button_Undo)} </div>}
-
                     </Button>
                     <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], Button_passwordreset)}</Button>
                     {(this.props.user.type === ADMIN) ?
@@ -246,8 +245,8 @@ class DealerList extends Component {
 
         return (
 
-            <Card className="border_top_0">
-                <CustomScrollbars className="gx-popover-scroll overflow_tables">
+            <Card className="fix_card dealer_fix_card">
+                <CustomScrollbars className="gx-popover-scroll">
                     <Table
                         size="middle"
                         className="gx-table-responsive devices table"
