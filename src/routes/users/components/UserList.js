@@ -59,40 +59,44 @@ class UserList extends Component {
             return {
                 key: `${user.user_id}`,
                 rowKey: `${user.user_id}`,
-                action:
-                    (<Fragment>
-                        <Button
-                            type="primary"
-                            size="small"
-                            style={{ textTransform: 'uppercase' }}
-                            onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, convertToLang(this.props.translation[EDIT_USER], EDIT_USER))}
-                        >
-                            {/* <IntlMessages id="button.Edit" />  */}
-                            {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
-                        </Button>
-                        {(user.devicesList.length === 0) ?
-                            (user.del_status === 0) ?
-                                <Button
-                                    type="danger"
-                                    size="small"
-                                    style={{ textTransform: 'uppercase' }}
-                                    onClick={() => showConfirm(this.props.deleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_DELETE_USER], DO_YOU_WANT_TO_DELETE_USER) , convertToLang(this.props.translation[DELETE_USER], DELETE_USER))}
-                                >
-                                    {/* <IntlMessages id="button.Delete" /> */}
-                                    {convertToLang(this.props.translation[Button_Delete], Button_Delete)}
-                                </Button>
-                                : <Button
-                                    type="dashed"
-                                    size="small"
-                                    style={{ textTransform: 'uppercase' }}
-                                    onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_UNDO_USER], DO_YOU_WANT_TO_UNDO_USER) , convertToLang(this.props.translation[UNDO], UNDO))}
-                                >
-                                    {/* <IntlMessages id="button.Undo" />  */}
-                                    {convertToLang(this.props.translation[Button_Undo], Button_Undo)}
-                                </Button>
-                            : null
-                        }
-                    </Fragment>)
+                counter: ++index,
+                action: (
+                    <Fragment>
+                        <div>
+                            <Button
+                                type="primary"
+                                size="small"
+                                style={{ textTransform: 'uppercase' }}
+                                onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
+                            >
+                                {/* <IntlMessages id="button.Edit" />  */}
+                                {this.props.translation[Button_Edit]}
+                            </Button>
+                            {(user.devicesList.length === 0) ?
+                                (user.del_status == 0) ?
+                                    <Button
+                                        type="danger"
+                                        size="small"
+                                        style={{ textTransform: 'uppercase' }}
+                                        onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
+                                    >
+                                        {/* <IntlMessages id="button.Delete" /> */}
+                                        {this.props.translation[Button_Delete]}
+                                    </Button>
+                                    : <Button
+                                        type="dashed"
+                                        size="small"
+                                        style={{ textTransform: 'uppercase' }}
+                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
+                                    >
+                                        {/* <IntlMessages id="button.Undo" />  */}
+                                        {this.props.translation[Button_Undo]}
+                                    </Button>
+                                : null
+                            }
+                        </div>
+                    </Fragment>
+                )
                 ,
 
                 user_id: user.user_id,
@@ -157,10 +161,10 @@ class UserList extends Component {
         // console.log(this.state.expandedRowKeys)
         return (
             <Fragment>
-                <Card>
-                    <CustomScrollbars className="gx-popover-scroll overflow_tables">
+                <Card className="fix_card users_fix_card">
+                    <CustomScrollbars className="gx-popover-scroll">
                         <Table
-                            className="users_list lng_eng"
+                            className="users_list"
                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                             size="middle"
                             bordered

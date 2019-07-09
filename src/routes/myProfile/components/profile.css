@@ -57,14 +57,6 @@
     margin-right: 40px;
 }
 
-.login_history .ant-table-body {
-    padding: 0 19px 0 16px;
-}
-
-.login_history ::-webkit-scrollbar {
-    display: none;
-}
-
 .login_history ::-webkit-scrollbar-thumb {
     background: #efefef;
     border-radius: 10px;
@@ -82,4 +74,8 @@
     .open_btn1 {
         bottom: 33px;
     }
+}
+
+.login_history .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+    top: 0;
 }
