@@ -108,7 +108,7 @@ class AddPolicy extends Component {
 
                 if (this.state.pushAppsIds.length) {
                     for (let id of this.state.pushAppsIds) {
-                        let index = this.state.dealerApps.findIndex(item => item.apk_id == id);
+                        let index = this.state.dealerApps.findIndex(item => item.apk_id === id);
                         if (index > -1) {
                             this.state.pushApps.push(this.state.dealerApps[index])
                         }
@@ -119,7 +119,7 @@ class AddPolicy extends Component {
                 
                 let secure_apps = [];
 
-                let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName == SECURE_SETTING)));
+                let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName === SECURE_SETTING)));
                 // console.log(main_extension)
                 if (main_extension) {
                     secure_apps = main_extension.subExtension
@@ -175,7 +175,7 @@ class AddPolicy extends Component {
 
         let main_system_control = {};
         if (this.props.appPermissions.length) {
-            let main_system_control_index = this.props.appPermissions.findIndex(item => item.uniqueName == Main_SETTINGS)
+            let main_system_control_index = this.props.appPermissions.findIndex(item => item.uniqueName === Main_SETTINGS)
             
             if (main_system_control_index > -1) {
                 main_system_control = this.props.appPermissions[main_system_control_index];
@@ -211,12 +211,12 @@ class AddPolicy extends Component {
     componentDidUpdate(prevProps) {
         //   console.log(this.props.allExtensions, 'add policy page data is ', prevProps.allExtensions);
         if (this.props !== prevProps) {
-            if (this.props.goToLastTab !== prevProps.goToLastTab && this.props.goToLastTab == true) {
+            if (this.props.goToLastTab !== prevProps.goToLastTab && this.props.goToLastTab === true) {
                 this.setState({ tabSelected: '5' })
             }
 
             if (this.props.appPermissions.length) {
-                let main_system_control_index = this.props.appPermissions.findIndex(item => item.uniqueName == Main_SETTINGS)
+                let main_system_control_index = this.props.appPermissions.findIndex(item => item.uniqueName === Main_SETTINGS)
                 // console.log(main_system_control_index, 'dsfksd');
                 if (main_system_control_index > -1) {
                     this.props.appPermissions.splice(main_system_control_index, 1);
@@ -249,8 +249,8 @@ class AddPolicy extends Component {
 
 
     onSelectChange = (selected, pageType) => {
-        if (pageType == 'dealerApps') this.state.pushAppsIds = selected;
-        else if (pageType == 'appPermissions') this.state.appPermissionsIds = selected
+        if (pageType === 'dealerApps') this.state.pushAppsIds = selected;
+        else if (pageType === 'appPermissions') this.state.appPermissionsIds = selected
 
     }
 

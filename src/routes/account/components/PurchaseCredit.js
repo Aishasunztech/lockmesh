@@ -45,7 +45,7 @@ class PurchaseCredit extends Component {
             }
         }
         else {
-            if (e == 'usd') {
+            if (e === 'usd') {
                 this.setState({
                     currency: 'usd',
                     currency_price: this.state.credits,
@@ -100,7 +100,7 @@ class PurchaseCredit extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('form', values);
             if (!err) {
-                if (values.method == 'CASH') {
+                if (values.method === 'CASH') {
                     showConfirm(this, <span>Are you sure you want to request for <strong> "{values.credits} Credits"</strong> on <strong>"CASH"</strong> ?'</span>, values)
                 } else {
                     // console.log('asjdhask');

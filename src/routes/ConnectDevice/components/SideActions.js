@@ -190,7 +190,7 @@ class PullAppModal extends Component {
                     selectedApps={this.props.selectedApps}
                     selectedAppKeys={this.props.selectedAppKeys}
                     handleChecked={this.props.handleChecked}
-                    type={this.props.actionType == PUSH_APPS ? "push" : 'pull'}
+                    type={this.props.actionType === PUSH_APPS ? "push" : 'pull'}
                 />
             </Modal>
         )
@@ -209,7 +209,7 @@ const SelectedApps = (props) => {
             title={<div>Selected Apps <br /> Device ID: {props.device.device_id} </div>}
             visible={props.selectedAppsModal}
             onOk={() => {
-                props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
+                props.actionType === PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
                 props.showSelectedAppsModal(false);
                 props.showPushAppsModal(false)
                 props.showPullAppsModal(false)
@@ -217,18 +217,18 @@ const SelectedApps = (props) => {
             }}
             // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
             onCancel={() => {
-                props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
+                props.actionType === PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
                 props.showSelectedAppsModal(false);
             }}
             cancelText='Back'
-            okText={props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps'}
+            okText={props.actionType === PUSH_APPS ? "Push Apps" : 'Pull Apps'}
             destroyOnClose={true}
         >
             <DealerApps
                 apk_list={props.apk_list}
                 isSwitchable={false}
                 selectedApps={props.selectedApps}
-                type={props.actionType == PUSH_APPS ? "push" : 'pull'}
+                type={props.actionType === PUSH_APPS ? "push" : 'pull'}
                 disabledSwitch={true}
             />
         </Modal>
@@ -363,7 +363,7 @@ class SideActions extends Component {
             if (this.props.extensions.length) {
                 // console.log('saved profile will be', this.props.extensions);
                 for (let extension of this.props.extensions) {
-                    if (extension.uniqueName == SECURE_SETTING) {
+                    if (extension.uniqueName === SECURE_SETTING) {
                         exts = extension.subExtension
                         //   console.log(exts, 'sddsdsdsdsdsdsdsd')
                     }
@@ -516,7 +516,7 @@ class SideActions extends Component {
     }
 
     handleFlag(flagged) {
-        if (flagged == 'Unflag') {
+        if (flagged === 'Unflag') {
             showConfirm(this.props.device, this.props.unflagged, this, "Do you really want to unflag the device ", 'flagged')
         } else {
             this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
@@ -584,7 +584,7 @@ class SideActions extends Component {
                                     placement="bottom"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
-                                    disabled={(this.props.authUser.type == ADMIN || this.props.authUser.type == DEALER) ? false : true}
+                                    disabled={(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
@@ -635,7 +635,7 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
-                                    disabled={this.props.authUser.type == ADMIN ? false : true}
+                                    disabled={this.props.authUser.type === ADMIN ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
@@ -753,7 +753,7 @@ class SideActions extends Component {
                     </Card>
                 </div>
                 <Modal
-                    title={<div>{(this.state.historyType == 'profile') ? "Load Profile" : this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
+                    title={<div>{(this.state.historyType === 'profile') ? "Load Profile" : this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}

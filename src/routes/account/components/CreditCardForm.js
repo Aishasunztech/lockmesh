@@ -48,7 +48,7 @@ class CreditCardForm extends Component {
         });
     }
     handleCardInputs = (e, field) => {
-        if (field == 'cvc') {
+        if (field === 'cvc') {
             if (e.target.value.length <= 4) {
                 this.setState({
                     [field]: e.target.value,
@@ -56,7 +56,7 @@ class CreditCardForm extends Component {
                 })
             }
         }
-        else if (field == 'expiry') {
+        else if (field === 'expiry') {
             if (e.target.value.length <= 7) {
                 if (e.target.value.length > 1) {
                     if (e.target.value.length > 2) {
@@ -68,7 +68,7 @@ class CreditCardForm extends Component {
                             expiry: e.target.value,
                         })
                     }
-                    if (e.target.value.length == 2) {
+                    if (e.target.value.length === 2) {
                         document.getElementById('expiry').value = e.target.value + ' / '
                     } else {
                         document.getElementById('expiry').value = e.target.value
@@ -96,7 +96,7 @@ class CreditCardForm extends Component {
 
     checkNumberLength = (rule, value, callback) => {
         // console.log("Check length");
-        if (value.length == 16 || value.length == 19) {
+        if (value.length === 16 || value.length === 19) {
             callback();
         } else {
             callback(' ');

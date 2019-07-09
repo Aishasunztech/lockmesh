@@ -121,11 +121,11 @@ class TableHistory extends Component {
                     let extensions = (record.secure_apps !== undefined && record.secure_apps !== null && record.secure_apps !== '') ? record.secure_apps : [];
 
                     let controls = (record.controls !== undefined && record.controls !== null && record.controls !== '') ? (Object.entries(record.controls).length > 0 && record.controls.constructor === Object) ? record.controls : [] : [];
-                    let push_apps = record.push_apps == null || record.push_apps == 'null' ? [] : record.push_apps;
+                    let push_apps = record.push_apps === null || record.push_apps === 'null' ? [] : record.push_apps;
                     let passwords = record.passwords;
                     // console.log("app_list: ", app_list);
                     // console.log("extensions: ", extensions);
-                    if (this.props.type == 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined) {
+                    if (this.props.type === 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined) {
                         let cntrl = {};
                         cntrl = JSON.parse(record.controls)
                         controls = cntrl

@@ -342,7 +342,7 @@ export default (state = initialState, action) => {
                 } else if (stateToUpdate === 'secure_apps') {
                     // console.log('object', changedState)
 
-                    // let permissionIndex = changedState[rowId][stateToUpdate].findIndex(item => item.uniqueName == action.payload.uniqueName);
+                    // let permissionIndex = changedState[rowId][stateToUpdate].findIndex(item => item.uniqueName === action.payload.uniqueName);
                     // if (permissionIndex >= 0) {
                     index = changedState[rowId][stateToUpdate].findIndex(item => item.id === id);
                     if (index >= 0) {

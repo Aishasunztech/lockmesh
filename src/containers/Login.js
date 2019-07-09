@@ -25,10 +25,11 @@ class Login extends React.Component {
       }
     });
   };
+  
   componentDidMount() {
-    // console.log("componentDidMount Login");
-
+   
   }
+
   componentDidUpdate(prevProps) {
 
     if (this.props.showMessage) {

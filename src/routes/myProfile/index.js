@@ -71,17 +71,17 @@ class Profile extends Component {
     }
     renderList = (history) => {
         let data = history.map((data, index) => {
-            if (data.ip_address.substr(0, 7) == "::ffff:") {
+            if (data.ip_address.substr(0, 7) === "::ffff:") {
                 data.ip_address = data.ip_address.substr(7)
             }
-            if (index == 0) {
+            if (index === 0) {
                 return {
                     key: index,
                     tableIndex: index + 1,
                     imei: data.ip_address + ' (CURRENT)',
                     changed_time: getFormattedDate(data.created_at)
                 }
-            } else if (index == 1) {
+            } else if (index === 1) {
                 return {
                     key: index,
                     tableIndex: index + 1,
@@ -128,7 +128,7 @@ class Profile extends Component {
             {
                 key: 5,
                 name: <a>{convertToLang(this.props.translation[DEVICES], DEVICES)}</a>,
-                value: this.props.profile.type == 'admin' ? 'All' : this.props.profile.connected_devices,
+                value: this.props.profile.type === 'admin' ? 'All' : this.props.profile.connected_devices,
             },
         ]
 
@@ -136,7 +136,7 @@ class Profile extends Component {
             columnData = {
                 key: 6,
                 name: <a>{convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer)}</a>,
-                value: (this.props.profile.connected_dealer == 0) ? "N/A" : this.props.profile.connected_dealer,
+                value: (this.props.profile.connected_dealer === 0) ? "N/A" : this.props.profile.connected_dealer,
             }
         }
         let dataSource = [];

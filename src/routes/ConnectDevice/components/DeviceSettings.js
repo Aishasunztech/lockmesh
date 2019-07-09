@@ -196,7 +196,7 @@ export default class TableHistory extends Component {
         } else {
             if (data.length) {
                 for (let obj of data) {
-                    if (obj.uniqueName == this.props.extensionUniqueName) {
+                    if (obj.uniqueName === this.props.extensionUniqueName) {
                         for (let item of obj.subExtension) {
                             if (item.isChanged !== undefined && item.isChanged === true) {
                                 extensions.push(item);
@@ -235,7 +235,7 @@ export default class TableHistory extends Component {
         // console.log(JSON.parse(datalist));
         // console.log(this.props.type, 'datalist is type of');
         let data = JSON.parse(JSON.stringify(datalist));
-        if (this.props.type == 'profile') {
+        if (this.props.type === 'profile') {
             data = JSON.parse(datalist)
         }
 
@@ -246,8 +246,8 @@ export default class TableHistory extends Component {
                     // console.log(item);
                     return {
                         key: item.app_id,
-                        label: item.label == undefined || item.label == 'undefined' ? item.apk_name : item.label,
-                        // guest: (item.guest == 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
+                        label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                        // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
                         guest: <Switch
                             size="small"
                             value={item.guest}
@@ -280,7 +280,7 @@ export default class TableHistory extends Component {
                 {/* {
                     this.state.applist.length ? */}
                 {
-                    this.props.isPushApps == true && this.props.type !== 'profile' ?
+                    this.props.isPushApps === true && this.props.type !== 'profile' ?
                         <div>
                             <Divider > {convertToLang(this.props.translation[PUSH_APPS], PUSH_APPS)} </Divider>
                             <Table
@@ -347,7 +347,7 @@ export default class TableHistory extends Component {
                                     />
 
                                 </div> : false : false
-                        : this.props.showChangedControls == undefined ?
+                        : this.props.showChangedControls === undefined ?
                             Object.entries(this.state.controls).length > 0 ?
                                 Object.entries(this.state.controls.controls).length > 0 ?
                                     <div>

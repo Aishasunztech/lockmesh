@@ -1812,13 +1812,13 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
       var result = searchInput.map((item, index) => {
         let flag = true;
         for (var i in child) {
-          if (child[i].dataIndex == item.dataIndex) {
+          if (child[i].dataIndex === item.dataIndex) {
             item.children = [child[i]];
             flag = false;
             return item;
           }
         }
-        if (flag == true) {
+        if (flag === true) {
           return item;
         }
       })

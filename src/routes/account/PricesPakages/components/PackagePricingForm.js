@@ -47,7 +47,7 @@ class PackagePricingForm extends Component {
         // let value = e.target.value;
         let value = ''
         if (fieldName) {
-            if (fieldName == 'pkgPrice' && value < 0) {
+            if (fieldName === 'pkgPrice' && value < 0) {
             } else {
                 if (is_pkg_feature) {
                     if (pkg_feature_value !== '' && fieldName) {

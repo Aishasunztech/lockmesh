@@ -113,7 +113,7 @@ class DevicesList extends Component {
     }
     goToDealer = (dealer) => {
         if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
-            if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+            if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
                 this.setState({
                     redirect: true,
                     dealer_id: dealer.dealer_id,
@@ -182,7 +182,7 @@ class DevicesList extends Component {
                 // sortOrder: {order},
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-                key: status == DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
+                key: status === DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
                 counter: <div className="counter_w_td">{++index}</div>,
                 action: (<div className="device_action_w">{(status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
@@ -206,8 +206,8 @@ class DevicesList extends Component {
                                                     (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
                                                     : false
                 }</div>),
-                // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-                device_id: status != DEVICE_PRE_ACTIVATION ? checkValue(device.device_id) : "N/A",
+                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect === '3') ? `${device.validity}` : "N/A" : "N/A",
+                device_id: status !== DEVICE_PRE_ACTIVATION ? checkValue(device.device_id) : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 status: <span style={color} > {status}</span>,
                 online: device.online === 'online' ? (<span style={{ color: "gr" }}>
@@ -263,12 +263,12 @@ class DevicesList extends Component {
             for (let id of this.state.selectedRowKeys) {
                 for (let device of this.props.devices) {
                     if (type !== 'unlink') {
-                        if (id == device.id) {
+                        if (id === device.id) {
                             arr.push(device)
                         }
                     }
                     else {
-                        if (id == device.user_acc_id) {
+                        if (id === device.user_acc_id) {
                             arr.push(device)
                         }
                     }
@@ -372,7 +372,7 @@ class DevicesList extends Component {
 
         var scrollAmount = 0;
         // var slideTimer = setInterval(function () {
-        //     if (direction == 'left') {
+        //     if (direction === 'left') {
         //         element.scrollLeft -= step;
         //     } else {
         //         element.scrollLeft += step;
@@ -404,7 +404,7 @@ class DevicesList extends Component {
         }
 
         let rowSelection;
-        if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {
+        if (this.props.tabselect === '5' && this.props.user.type !== ADMIN) {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
@@ -417,7 +417,7 @@ class DevicesList extends Component {
                 //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
         }
-        else if (this.props.tabselect == '3') {
+        else if (this.props.tabselect === '3') {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })

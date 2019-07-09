@@ -130,7 +130,7 @@ class Devices extends Component {
     filterList = (type, devices) => {
         let dumyDevices = [];
 
-        if (type == DEVICE_FLAGGED) {
+        if (type === DEVICE_FLAGGED) {
             // console.log('11111 flagged', type)
             devices.filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {
@@ -159,9 +159,9 @@ class Devices extends Component {
     handleChange(value) {
         // console.log('filtede dis0')
 
-        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
-        let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
-        if (value == DEVICE_UNLINKED && this.props.user.type == ADMIN) {
+        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
+        let indxAction = this.state.columns.findIndex(k => k.dataIndex === 'action');
+        if (value === DEVICE_UNLINKED && this.props.user.type === ADMIN) {
             //  indx = this.state.columns.findIndex(k => k.dataIndex =='action');
             if (indxAction >= 0) { this.state.columns.splice(indxAction, 1) }
             //    console.log('CLGGGG', this.state.columns)
@@ -178,14 +178,14 @@ class Devices extends Component {
                 })
             }
         }
-        let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
-        let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
-        if (value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
+        let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
+        let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
+        if (value === DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
-        else if (value == DEVICE_PRE_ACTIVATION) {
-            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+        else if (value === DEVICE_PRE_ACTIVATION) {
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
                 // this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
@@ -194,28 +194,28 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = '';
                 this.state.columns[indxRemainingDays].children[0].className = '';
             }
-            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
+            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
-            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
             if (indexFlagged >= 0) {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
         }
-        else if (value == DEVICE_FLAGGED) {
-            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+        else if (value === DEVICE_FLAGGED) {
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
 
             if (indexFlagged > -1) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
-            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
+            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
         }
         else {
-            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             this.state.columns[1]['title'] = '';
 
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
@@ -226,12 +226,12 @@ class Devices extends Component {
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
-            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
             if (indexFlagged >= 0) {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
-            // if (value == DEVICE_PRE_ACTIVATION && this.props.user.type == ADMIN) {
-            //     let actionIndex = this.state.columns.findIndex(i => i.dataIndex == 'action');
+            // if (value === DEVICE_PRE_ACTIVATION && this.props.user.type === ADMIN) {
+            //     let actionIndex = this.state.columns.findIndex(i => i.dataIndex === 'action');
             //     if (actionIndex >= 0) {
             //         this.state.columns[actionIndex].className = 'hide';
             //     }
@@ -329,9 +329,9 @@ class Devices extends Component {
     handleChangetab = (value) => {
         // console.log('val is: ', value)
 
-        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
-        let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
-        if (value == '5' && this.props.user.type == ADMIN) {
+        let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
+        let indxAction = this.state.columns.findIndex(k => k.dataIndex === 'action');
+        if (value === '5' && this.props.user.type === ADMIN) {
             //  indx = this.state.columns.findIndex(k => k.dataIndex =='action');
             if (indxAction >= 0) { this.state.columns.splice(indxAction, 1) }
             //    console.log('CLGGGG', this.state.columns)
@@ -348,16 +348,16 @@ class Devices extends Component {
                 })
             }
         }
-        let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
+        let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
 
-        if (value == '5' && (this.props.user.type !== ADMIN)) {
+        if (value === '5' && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
-        } else if (value == '2' && (this.props.user.type == ADMIN)) {
+        } else if (value === '2' && (this.props.user.type === ADMIN)) {
             this.state.columns.splice(indxAction, 1)
         }
-        else if (value == '3') {
-            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+        else if (value === '3') {
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
                 this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
@@ -366,28 +366,28 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = '';
                 this.state.columns[indxRemainingDays].children[0].className = '';
             }
-            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
+            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
-            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
             if (indexFlagged >= 0) {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
         }
-        else if (value == '10') {
-            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+        else if (value === '10') {
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
 
             if (indexFlagged > -1) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
-            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
+            let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex === 'activation_code');
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
         }
         else {
-            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
+            let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             this.state.columns[1]['title'] = '';
 
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
@@ -398,7 +398,7 @@ class Devices extends Component {
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
-            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
+            let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
             if (indexFlagged >= 0) {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
