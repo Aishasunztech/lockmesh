@@ -1196,6 +1196,7 @@ class Account extends Component {
                     </Row>
                 </div>
                 <PasswordModal
+                    translation={this.props.translation}
                     pwdConfirmModal={this.state.pwdConfirmModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}

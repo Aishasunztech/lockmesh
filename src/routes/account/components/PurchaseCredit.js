@@ -3,7 +3,10 @@ import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Tabl
 import RestService from '../../../appRedux/services/RestServices';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
+
 import CreditCardForm from './CreditCardForm'
+import BitCoinForm from './BitCoinForm';
+
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Cancel } from '../../../constants/ButtonConstants';
@@ -24,7 +27,8 @@ class PurchaseCredit extends Component {
             method: "",
             currency_unit_price: 1,
             creditCard_model: false,
-            creditInfo: {}
+            creditInfo: {},
+            bitCoinModal: false
         }
     }
 
@@ -36,15 +40,13 @@ class PurchaseCredit extends Component {
                     credits: e,
                     currency_price: e
                 })
-            }
-            else {
+            } else {
                 this.setState({
                     credits: e,
                     currency_price: e * this.state.currency_unit_price
                 })
             }
-        }
-        else {
+        } else {
             if (e === 'usd') {
                 this.setState({
                     currency: 'usd',
@@ -70,7 +72,6 @@ class PurchaseCredit extends Component {
                 })
             }
         }
-
     }
     cancelPurchaseModal = () => {
         this.props.showPurchaseModal(false)
@@ -92,7 +93,11 @@ class PurchaseCredit extends Component {
         })
     }
 
-
+    showBitCoinModal = (visible) => {
+        this.setState({
+            bitCoinModal: visible
+        })
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -102,7 +107,12 @@ class PurchaseCredit extends Component {
             if (!err) {
                 if (values.method === 'CASH') {
                     showConfirm(this, <span>Are you sure you want to request for <strong> "{values.credits} Credits"</strong> on <strong>"CASH"</strong> ?'</span>, values)
-                } else {
+                } else if (values.method === 'BTC') {
+                    this.setState({
+                        bitCoinModal: true,
+                        creditInfo: values
+                    })
+                } else if (values.method === 'CREDIT') {
                     // console.log('asjdhask');
                     this.setState({
                         creditCard_model: true,
@@ -132,13 +142,19 @@ class PurchaseCredit extends Component {
         return (
             <Fragment>
                 <CreditCardForm
+                    translation={this.props.translation}
                     creditCard_model={this.state.creditCard_model}
                     cancelCreditCardModal={this.cancelCreditCardModal}
                     cancelPurchaseModal={this.cancelPurchaseModal}
                     creditInfo={this.state.creditInfo}
                     purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
                 />
-
+                <BitCoinForm 
+                    translation = {this.props.translation}
+                    bitCoinModal = {this.state.bitCoinModal}
+                    showBitCoinModal = {this.showBitCoinModal}
+                    creditInfo={this.state.creditInfo}
+                />
                 <Modal
                     // closable={false}
                     ref="purchaseCredit"
@@ -161,7 +177,7 @@ class PurchaseCredit extends Component {
                     <div>
                         <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                             <p className="mb-4">(*)- Required Fields</p>
-                            < Form.Item
+                            <Form.Item
                                 style={{ marginBottom: 0 }}
                                 label="Credits"
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
@@ -258,7 +274,7 @@ class PurchaseCredit extends Component {
                                     >
                                         <Select.Option value="">Select Payment Method</Select.Option>
                                         <Select.Option value="CASH">CASH</Select.Option>
-                                        {/* <Select.Option value="BTC">BITCOIN</Select.Option> */}
+                                        <Select.Option value="BTC">BITCOIN</Select.Option>
                                         <Select.Option value="CREDIT">CREDIT CARD</Select.Option>
                                     </Select>,
                                 )}

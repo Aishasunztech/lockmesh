@@ -105,17 +105,7 @@ class CreditCardForm extends Component {
 
 
     render() {
-        // console.log(this.refs.card13);
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
+        
         return (
             <Fragment>
                 <Modal
