@@ -10,6 +10,8 @@ import BitCoinForm from './BitCoinForm';
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Cancel } from '../../../constants/ButtonConstants';
+import { PUSH_APPS_TEXT } from '../../../constants/Constants';
+import { Required_Fields } from '../../../constants/DeviceConstants';
 // import 'react-credit-cards/lib/styles.scss';
 
 const confirm = Modal.confirm;
@@ -171,13 +173,13 @@ class PurchaseCredit extends Component {
                         this.cancelPurchaseModal()
                     }}
                     // okText="Push Apps"
-                    okText={convertToLang(this.props.translation[PUSH_APPS], PUSH_APPS)}
+                    okText={convertToLang(this.props.translation[PUSH_APPS_TEXT], PUSH_APPS_TEXT)}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <div>
                         <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                            <p className="mb-4">(*)- Required Fields</p>
-                            <Form.Item
+                            <p className="mb-4">(*)- {convertToLang(this.props.translation[Required_Fields], Required_Fields)}</p>
+                            < Form.Item
                                 style={{ marginBottom: 0 }}
                                 label="Credits"
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}

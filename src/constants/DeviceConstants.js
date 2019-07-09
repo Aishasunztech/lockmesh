@@ -34,3 +34,8 @@ export const DEVICE_Select_CHAT_ID = "tableHeadings.Select.CHATID"; // Select Ch
 export const Device_Note = "device.note.id"; //Note
 export const Device_Valid_For = "device.valid.for.id"; // VALID FOR(DAYS)
 export const Device_Valid_days_Required = "device.valid.days.required.id";  // Valid days required
+
+// CONNECT DEVICE
+export const DEVICE_NOT_FOUND = "Device.Not.Found.id"; // Device Not Found
+export const SETTINGS_TO_BE_SENT_TO_DEVICE = "Settings.to.be.sent.to.Device.id"; // Confirm new Settings to be sent to Device 
+export const HISTORY_DATE = "History.Date.id"; // History Date

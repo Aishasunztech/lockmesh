@@ -66,7 +66,8 @@ import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
-import { Button_Apply } from "../../constants/ButtonConstants";
+import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
+import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE } from "../../constants/DeviceConstants";
 
 const success = Modal.success
 const error = Modal.error
@@ -596,10 +597,11 @@ class ConnectDevice extends Component {
                 </Row>
                 <Modal
                   maskClosable={false}
-                  title="Confirm new Settings to be sent to Device"
+                  title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], SETTINGS_TO_BE_SENT_TO_DEVICE)}
                   visible={this.state.showChangesModal}
                   onOk={this.applyActions}
                   onCancel={this.onCancel}
+                  cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                   okText={convertToLang(this.props.translation[Button_Apply], Button_Apply)}
                 >
                   <DeviceSettings
@@ -634,7 +636,7 @@ class ConnectDevice extends Component {
                 : null : null}
 
 
-        </div> : <h1>Device Not Found</h1>
+        </div> : <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], DEVICE_NOT_FOUND)} </h1>
     )
   }
 }
