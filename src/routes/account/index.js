@@ -524,10 +524,10 @@ class Account extends Component {
                                                             <Icon type="form" className="and_icon" />
                                                         </Col>
                                                         <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], ACCOUNT_MANAGE_DATA_01)} />  </p>
-                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], ACCOUNT_MANAGE_DATA_02)} /> </p>
-                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], ACCOUNT_MANAGE_DATA_03)} />  </p>
-                                                            <p className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</p>
+                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], ACCOUNT_MANAGE_DATA_01)} />  </h5>
+                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], ACCOUNT_MANAGE_DATA_02)} /> </h5>
+                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], ACCOUNT_MANAGE_DATA_03)} />  </h5>
+                                                            <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</h5>
                                                         </Col>
                                                     </Row>
                                                 </div>
@@ -1039,17 +1039,14 @@ class Account extends Component {
                                                                             <a href={`${BASE_URL}users/getFile/import_sim_ids.xlsx`}>
                                                                                 <Button size='small' className="pull-right imp_btn mb-0" type="dashed">Sample</Button>
                                                                             </a>
-
                                                                         </div>
                                                                     </Row>
                                                                 </div>
                                                             </Card>
                                                         </div>
                                                     </Row>
-
                                                 </Fragment>
                                             </div>
-
                                         </Modal>
                                     </div>
                                 </Col>
@@ -1084,9 +1081,9 @@ class Account extends Component {
                                                                     <Icon type="database" className="and_icon" />
                                                                 </Col>
                                                                 <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                    <p>
+                                                                    <h5>
                                                                         {convertToLang(this.props.translation[BACKUP_DATABASE_DESCRIPTION], BACKUP_DATABASE_DESCRIPTION)}
-                                                                    </p>
+                                                                    </h5>
                                                                 </Col>
                                                             </Row>
                                                         </div>
@@ -1121,7 +1118,7 @@ class Account extends Component {
                                                                 <Icon type="dollar" className="and_icon" />
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <p>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], PURCHASE_CREDITS_DESCRIPTION)}</p>
+                                                                <h5>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], PURCHASE_CREDITS_DESCRIPTION)}</h5>
                                                             </Col>
                                                         </Row>
                                                     </div>
@@ -1143,40 +1140,38 @@ class Account extends Component {
 
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div className="contenar">
-                                    {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
-                                    <Link to={"/set-prices"}>
-                                        {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
-                                        <Card style={{ borderRadius: 12 }} className="manage_ac">
-                                            <div className="profile_table image_1">
-                                                <Fragment>
-                                                    <Row>
-                                                        <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PACKAGES_AND_IDS], PACKAGES_AND_IDS)} </h2>
-                                                            <Divider className="mb-0" />
-                                                            <Row style={{ padding: '12px 0 0px' }}>
-                                                                <Col span={8} className="" style={{ textAlign: "center" }}>
-                                                                    <Icon type="dollar" className="and_icon" />
-                                                                </Col>
-                                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                    <div className="crd_txt">
-                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], PACKAGES_AND_IDS_01)}</p>
-                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], PACKAGES_AND_IDS_02)}</p>
-                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], PACKAGES_AND_IDS_03)}</p>
-                                                                        <p className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</p>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-
-                                                        </div>
-                                                    </Row>
-                                                </Fragment>
-                                            </div>
-                                        </Card>
-                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
-                                        {/* </a> */}
-                                    </Link>
-                                    {/* <div className="middle">
+                                {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
+                                <Link to={"/set-prices"}>
+                                    {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
+                                    <Card style={{ borderRadius: 12 }} className="manage_ac">
+                                        <div className="profile_table image_1">
+                                            <Fragment>
+                                                <Row>
+                                                    <div className="col-md-12 ac_card">
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PACKAGES_AND_IDS], PACKAGES_AND_IDS)} </h2>
+                                                        <Divider className="mb-0" />
+                                                        <Row style={{ padding: '12px 0 0px' }}>
+                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                <Icon type="dollar" className="and_icon" />
+                                                            </Col>
+                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                <div className="crd_txt">
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], PACKAGES_AND_IDS_01)}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], PACKAGES_AND_IDS_02)}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], PACKAGES_AND_IDS_03)}</h5>
+                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</h5>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                </Row>
+                                            </Fragment>
+                                        </div>
+                                    </Card>
+                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                    {/* </a> */}
+                                </Link>
+                                {/* <div className="middle">
                                         <SetPricingModal
                                             showPricingModal={this.showPricingModal}
                                             pricing_modal={this.state.pricing_modal}
@@ -1187,10 +1182,9 @@ class Account extends Component {
 
                                         />
                                     </div> */}
-                                    {/* <div className="middle">
+                                {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
                                     </div> */}
-                                </div>
                             </div>
                         </Col>
                     </Row>
@@ -1199,7 +1193,7 @@ class Account extends Component {
                     pwdConfirmModal={this.state.pwdConfirmModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
-                    translation= {this.props.translation}
+                    translation={this.props.translation}
                 />
             </div>
         );
