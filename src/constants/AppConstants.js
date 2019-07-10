@@ -32,6 +32,7 @@ export const APP_SPA_02 = "app.spa.02.id"; // Very useful tool for your  <br />C
 // Download Tools Modal
 export const DT_MODAL_HEADING = "download.tools.modal.heading.id"; // Download Tools
 export const DT_MODAL_BODY = "download.tools.modal.body.id"; // Neutral Launcher (BYOD) v1.2 <b>(Android v8+)</b>
+export const DT_MODAL_BODY_7 = "download.tools.modal.body.7.id"; // Neutral Launcher (BYOD7) v1.21 <b>(Android v7)</b>
 
 // Secure Panel Apk inside
 export const SPA_APP = "spa.app.id"; // App

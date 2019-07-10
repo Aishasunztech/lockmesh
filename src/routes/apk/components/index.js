@@ -33,6 +33,7 @@ import {
 
     DT_MODAL_HEADING,
     DT_MODAL_BODY,
+    DT_MODAL_BODY_7
 } from '../../../constants/AppConstants';
 import {
     Button_Open,
@@ -231,7 +232,7 @@ class Apk extends Component {
                                                         <Icon type="tool" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16} style={{ padding: 0 }}>
-                                                        <h5 style={{ display: 'inline-flex'}}><span className="diamond_icon">&#9670;</span>
+                                                        <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
                                                             <Markup content={convertToLang(this.props.translation[APP_DT_01], APP_DT_01)} />
                                                             {/* {convertToLang(this.props.translation[APP_DT_01], APP_DT_01)} */}
                                                         </h5>
@@ -244,7 +245,7 @@ class Apk extends Component {
                                     </Link>
                                 </div>
                                 <Modal
-                                    title= {convertToLang(this.props.translation[DT_MODAL_HEADING], DT_MODAL_HEADING)} //"Download Tools"
+                                    title={convertToLang(this.props.translation[DT_MODAL_HEADING], DT_MODAL_HEADING)} //"Download Tools"
                                     visible={this.state.tools_modal}
                                     onOk={this.handleOk}
                                     okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
@@ -252,13 +253,21 @@ class Apk extends Component {
                                     onCancel={this.handleCancel}
                                     className="d_tool_pup"
                                     width="42%"
+                                    centered
                                 >
                                     <Row className="d_t_m">
                                         <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY], DT_MODAL_BODY)} ></Markup></h4>
                                         <a href={`${BASE_URL}users/getFile/nlbyod.apk`}>
-                                            <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}> 
-                                            
-                                            {convertToLang(this.props.translation[Button_DOWNLOAD], Button_DOWNLOAD)}
+                                            <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}>
+                                                {convertToLang(this.props.translation[Button_DOWNLOAD], Button_DOWNLOAD)}
+                                            </Button>
+                                        </a>
+                                    </Row>
+                                    <Row className="d_t_m">
+                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY_7], DT_MODAL_BODY_7)} ></Markup></h4>
+                                        <a href={`${BASE_URL}users/getFile/nlbyod7.apk`}>
+                                            <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}>
+                                                {convertToLang(this.props.translation[Button_DOWNLOAD], Button_DOWNLOAD)}
                                             </Button>
                                         </a>
                                     </Row>
@@ -276,11 +285,11 @@ class Apk extends Component {
                                                         <Icon type="idcard" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16}>
-                                                        <h5 style={{ display: 'inline-flex'}}><span className="diamond_icon">&#9670;</span>
-                                                        <Markup content={convertToLang(this.props.translation[APP_SPA_01], APP_SPA_01)} />
+                                                        <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                            <Markup content={convertToLang(this.props.translation[APP_SPA_01], APP_SPA_01)} />
                                                         </h5>
                                                         <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                        <Markup content={convertToLang(this.props.translation[APP_SPA_02], APP_SPA_02)} />
+                                                            <Markup content={convertToLang(this.props.translation[APP_SPA_02], APP_SPA_02)} />
                                                         </h5>
                                                         <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
                                                     </Col>
