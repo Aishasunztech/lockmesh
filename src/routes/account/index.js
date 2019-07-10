@@ -60,7 +60,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import { ADMIN, PUSH_APPS } from "../../constants/Constants";
+import { ADMIN, PUSH_APPS_TEXT } from "../../constants/Constants";
 import { APP_ADD_MORE } from "../../constants/AppConstants";
 // import SetPricingModal from './PricesPakages/SetPricingModal';
 
@@ -89,7 +89,7 @@ class PasswordModal extends Component {
                 }
                 }
                 // okText="Push Apps"
-                okText={convertToLang(this.props.translation[PUSH_APPS], PUSH_APPS)}
+                okText={convertToLang(this.props.translation[PUSH_APPS_TEXT], PUSH_APPS_TEXT)}
                 cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
             >
                 <PasswordForm
@@ -1196,9 +1196,11 @@ class Account extends Component {
                     </Row>
                 </div>
                 <PasswordModal
+                    translation={this.props.translation}
                     pwdConfirmModal={this.state.pwdConfirmModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
+                    translation= {this.props.translation}
                 />
             </div>
         );

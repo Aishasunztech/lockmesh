@@ -1,18 +1,14 @@
 import React, { Component, Fragment } from 'react'
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider, InputNumber } from "antd";
-import RestService from '../../../appRedux/services/RestServices';
-import Cards from 'react-credit-cards';
-import 'react-credit-cards/es/styles-compiled.css';
+
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
-// import axios from 'axios';
-// import 'react-credit-cards/lib/styles.scss';
+import CoinbaseCommerceButton from 'react-coinbase-commerce';
+import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 
 const confirm = Modal.confirm;
 
-let expiryInput = ''
-
-class CreditCardForm extends Component {
+class BitCoinForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,9 +20,10 @@ class CreditCardForm extends Component {
             expiryInput: '',
         }
     }
-    cancelCreditCardModal = () => {
-        this.props.cancelCreditCardModal()
+    cancelBitCoinModal = () => {
+        this.props.showBitCoinModal(false)
         this.props.form.resetFields();
+        
         this.setState({
             number: '',
             name: '',
@@ -43,49 +40,13 @@ class CreditCardForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('form', values, this.props.creditInfo);
             if (!err) {
-                showConfirm(this, <span>Are you sure you want to purchase <strong> "{this.props.credits} Credits"</strong> from <strong>"CREDIT CARD"</strong> ?'</span>, values, this.props.creditInfo)
+                // showConfirm(this, <span>Are you sure you want to purchase <strong> "{this.props.credits} Credits"</strong> from <strong>"CREDIT CARD"</strong> ?'</span>, values, this.props.creditInfo)
             }
         });
     }
-    handleCardInputs = (e, field) => {
-        if (field === 'cvc') {
-            if (e.target.value.length <= 4) {
-                this.setState({
-                    [field]: e.target.value,
 
-                })
-            }
-        }
-        else if (field === 'expiry') {
-            if (e.target.value.length <= 7) {
-                if (e.target.value.length > 1) {
-                    if (e.target.value.length > 2) {
-                        this.setState({
-                            expiry: e.target.value.replace(' / ', ''),
-                        })
-                    } else {
-                        this.setState({
-                            expiry: e.target.value,
-                        })
-                    }
-                    if (e.target.value.length === 2) {
-                        document.getElementById('expiry').value = e.target.value + ' / '
-                    } else {
-                        document.getElementById('expiry').value = e.target.value
-                    }
-                }
-                else {
-                    this.setState({
-                        [field]: e.target.value,
-                    })
-                }
-            }
-        }
-        else {
-            this.setState({
-                [field]: e.target.value
-            })
-        }
+    handleCardInputs = (e, field) => {
+
     }
 
     handleCardFocus = (field) => {
@@ -103,39 +64,29 @@ class CreditCardForm extends Component {
         }
     }
 
-
     render() {
-        
         return (
-            <Fragment>
                 <Modal
                     // closable={false}
                     maskClosable={false}
                     style={{ top: 50 }}
                     width="600px"
-                    title="CREDIT CARD DETAILS"
-                    visible={this.props.creditCard_model}
+                    title="BitCoin Information"
+                    visible={this.props.bitCoinModal}
                     footer={false}
-                    // okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    // cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                     onOk={() => {
                     }}
                     onCancel={(e) => {
-                        this.cancelCreditCardModal()
-
-                    }}
-                    ref='card13'
+                            this.cancelBitCoinModal()
+                        }
+                    }
                 >
-                    <Cards
+                    {/* <CoinbaseCommerceButton checkoutId={'be05fae1-b47e-46b0-9632-891411337942'}/> */}
 
-                        number={this.state.number}
-                        name={this.state.name}
-                        expiry={this.state.expiry}
-                        cvc={this.state.cvc}
-                        focused={this.state.focused}
-                    />
-                    <Form style={{ marginTop: 20 }} onSubmit={this.handleSubmit} autoComplete="new-password">
-                        < Form.Item
+                    {/* <Form style={{ marginTop: 20 }} onSubmit={this.handleSubmit} autoComplete="new-password">
+                        <Form.Item
                             style={{ marginBottom: 0 }}
                             label="CREDIT CARD NUMBER"
                             labelCol={{ span: 8, xs: 24, sm: 8 }}
@@ -216,15 +167,16 @@ class CreditCardForm extends Component {
                             <Button type="primary" htmlType="submit">Check Out</Button>
                         </Form.Item>
                     </Form>
+                 */}
                 </Modal >
-            </Fragment>
         )
-
     }
 }
 
-CreditCardForm = Form.create()(CreditCardForm);
-export default CreditCardForm;
+
+
+BitCoinForm = Form.create()(BitCoinForm);
+export default BitCoinForm;
 
 
 function showConfirm(_this, msg, values, creditInfo) {
@@ -233,9 +185,9 @@ function showConfirm(_this, msg, values, creditInfo) {
         content: msg,
         okText: "Confirm",
         onOk() {
-            _this.props.purchaseCreditsFromCC(values, creditInfo)
-            _this.props.cancelPurchaseModal()
-            _this.cancelCreditCardModal()
+            // _this.props.purchaseCreditsFromCC(values, creditInfo)
+            // _this.props.cancelPurchaseModal()
+            // _this.cancelCreditCardModal()
         },
         onCancel() {
 

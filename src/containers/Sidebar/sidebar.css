@@ -12,10 +12,10 @@
 }
 
 .ant-badge .ant-badge-count {
-    height     : 16px;
-    min-width  : 16px;
-    line-height: 16px;
-    padding    : 0 0px;
+    height: 13px;
+    min-width: 13px;
+    line-height: 13px;
+    padding: 0 0px;
 
 }
 
@@ -111,11 +111,12 @@
 }
 
 .cred_badge .ant-badge-count {
-    min-width       : 45px;
-    right           : -4px;
-    top             : -5px;
+    min-width: 35px;
+    right: 0px;
+    top: -3px;
     background-color: #52c41a;
-    margin-bottom   : 0;
+    margin-bottom: 0;
+    font-size: 11px;
 }
 
 @media screen and (max-width: 768px) {

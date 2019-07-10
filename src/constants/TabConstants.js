@@ -41,7 +41,7 @@ export const Tab_POLICY_SELECTED_APPS = "tab.policy.selected.apps.id"; // Select
 // export const Tab_POLICY_APPLICATION_PERMISSION = "tab.policy.application.permission.id";
 // export const Tab_POLICY_SECURE_SYSTEM_PERMISSIONS = "tab.policy.secure.system.permission.id";
 // export const Tab_POLICY_SYSTEM_PERMISSION = "tab.policy.system.permission.id";
-export const Tab_POLICY_Detail = "tab.policy.detail.id"; // Policy Detai
+export const Tab_POLICY_Detail = "tab.policy.detail.id"; // Policy Detail
 export const Tab_POLICY_Dealer_PERMISSIONS = "tab.policy.dealer.permissions.id"; // Dealer PERMISSIONS
 
 // inner colums
@@ -49,3 +49,8 @@ export const App_Name = "app.name.id"; // APP NAME
 export const Guest = "guest.id"; // GUEST
 export const ENCRYPTED = "encrypted.id" // ENCRYPTED
 export const ENABLE = "enable.id"; // ENABLE
+export const EXTENSION_NAME = "Extension.NAME.id"; // Extension NAME
+export const ADMIN_PASSWORD_IS_CHANGED = "Admin.Password.is.changed.id"; // Admin Password is changed
+export const ENCRYPTED_PASSWORD_IS_CHANGED = "Encrypted.Password.is.changed.id"; // Encrypted Password is changed
+export const GUEST_PASSWORD_IS_CHANGED = "Guest.Password.is.changed.id"; // Guest Password is changed
+export const DURESS_PASSWORD_IS_CHANGED = "Duress.Password.is.changed.id"; // Duress Password is changed

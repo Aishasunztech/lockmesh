@@ -264,7 +264,7 @@ export default class Activity extends Component {
                         dataSource={this.renderList()}
                         expandedRowRender={record => {
                             // console.log('recored', record)
-                            if (record.action_name == 'APPS PUSHED') {
+                            if (record.action_name === 'APPS PUSHED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -280,7 +280,7 @@ export default class Activity extends Component {
                                 )
                             }
 
-                            else if (record.action_name == 'APPS PULLED') {
+                            else if (record.action_name === 'APPS PULLED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -295,7 +295,7 @@ export default class Activity extends Component {
                                     />
                                 )
                             }
-                            else if (record.action_name == 'IMEI CHANGED') {
+                            else if (record.action_name === 'IMEI CHANGED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -317,7 +317,7 @@ export default class Activity extends Component {
                                     />
                                 )
                             }
-                            else if (record.action_name == 'POLICY APPLIED') {
+                            else if (record.action_name === 'POLICY APPLIED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -336,7 +336,7 @@ export default class Activity extends Component {
                                     />
                                 )
                             }
-                            else if (record.action_name == 'PROFILE APPLIED') {
+                            else if (record.action_name === 'PROFILE APPLIED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -363,7 +363,7 @@ export default class Activity extends Component {
 
 
 
-                            else if (record.action_name == 'SETTING CHANGED') {
+                            else if (record.action_name === 'SETTING CHANGED') {
                                 let controls = {
                                     'controls': JSON.parse(record.data.controls)
                                 }

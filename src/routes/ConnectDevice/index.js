@@ -66,7 +66,8 @@ import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
-import { Button_Apply } from "../../constants/ButtonConstants";
+import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
+import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE } from "../../constants/DeviceConstants";
 
 const success = Modal.success
 const error = Modal.error
@@ -236,7 +237,7 @@ class ConnectDevice extends Component {
   //     //     device_id: nextProps.match.params.device_id
   //     // });
   //     // const device_id = nextProps.match.params.device_id;
-  //     // if (device_id != '') {
+  //     // if (device_id !== '') {
 
   //     //     nextProps.getDeviceDetails(device_id);
   //     //     nextProps.getDeviceApps(device_id);
@@ -473,10 +474,10 @@ class ConnectDevice extends Component {
     let color = getColor(finalStatus)
     let onlineStatus = this.props.device_details.online
     let onlineColor = (onlineStatus === 'offline') ? { color: 'red' } : { color: 'green' }
-    let totalApps = (this.props.noOfApp_push_pull == undefined || this.props.noOfApp_push_pull == 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
-    let completeApps = (this.props.noOfApp_pushed_pulled == undefined) ? 0 : this.props.noOfApp_pushed_pulled
+    let totalApps = (this.props.noOfApp_push_pull === undefined || this.props.noOfApp_push_pull === 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
+    let completeApps = (this.props.noOfApp_pushed_pulled === undefined) ? 0 : this.props.noOfApp_pushed_pulled
     let completeStep = this.props.complete_policy_step;
-    let policy_loading = (this.props.is_policy_applying == 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
+    let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -485,23 +486,23 @@ class ConnectDevice extends Component {
             <div className="gx-loader-view">
               <CircularProgress />
             </div> :
-            (this.props.is_in_process || this.props.is_push_apps == 1 || policy_loading == 1) ?
+            (this.props.is_in_process || this.props.is_push_apps === 1 || policy_loading === 1) ?
               <div>
 
                 <CircularProgress />
 
-                {/* {(this.props.device_details.online == 'online') ?
+                {/* {(this.props.device_details.online === 'online') ?
                   null : <CircularProgress />
                 } */}
                 {/* <Modal
                   width='auto'
                   centered
                   maskClosable={false}
-                  visible={(this.props.device_details.online == 'online') ? true : false}
+                  visible={(this.props.device_details.online === 'online') ? true : false}
                   footer={null}
                   closable={false}
                 > */}
-                {/* {(policy_loading == 1) ?
+                {/* {(policy_loading === 1) ?
 
                     <Progress className='prog' type="circle" percent={(completeStep / 4) * 100} format={percent => `Step ${completeStep} of ${4}`} />
                     :
@@ -596,10 +597,11 @@ class ConnectDevice extends Component {
                 </Row>
                 <Modal
                   maskClosable={false}
-                  title="Confirm new Settings to be sent to Device"
+                  title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], SETTINGS_TO_BE_SENT_TO_DEVICE)}
                   visible={this.state.showChangesModal}
                   onOk={this.applyActions}
                   onCancel={this.onCancel}
+                  cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                   okText={convertToLang(this.props.translation[Button_Apply], Button_Apply)}
                 >
                   <DeviceSettings
@@ -634,7 +636,7 @@ class ConnectDevice extends Component {
                 : null : null}
 
 
-        </div> : <h1>Device Not Found</h1>
+        </div> : <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], DEVICE_NOT_FOUND)} </h1>
     )
   }
 }

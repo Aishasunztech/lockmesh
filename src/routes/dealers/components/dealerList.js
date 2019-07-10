@@ -8,6 +8,7 @@ import { ADMIN } from '../../../constants/Constants';
 import DealerDevicesList from '../../users/components/UserDeviceList';
 import { convertToLang } from '../../utils/commonUtils'
 import { Redirect } from 'react-router-dom';
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import {
     Tab_All,
     Tab_Active,
@@ -214,7 +215,6 @@ class DealerList extends Component {
                     <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
                         onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
                         {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], Button_Delete)} </div> : <div> {convertToLang(this.props.translation[Button_Undo], Button_Undo)} </div>}
-
                     </Button>
                     <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], Button_passwordreset)}</Button>
                     {(this.props.user.type === ADMIN) ?
@@ -243,42 +243,39 @@ class DealerList extends Component {
         // console.log(this.props.dealersList, 'dealers list console');
 
         return (
-            <Card className="border_top_0">
-                <Table
-                    size="middle"
-                    className="gx-table-responsive devices table"
-                    bordered={true}
-                    scroll={
-                        {
-                            x: 500,
-                        }
-                    }
-                    columns={this.state.columns}
-                    rowKey='row_key'
-                    align='center'
-                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
-                    pagination={false}
-                    dataSource={this.renderList(this.props.dealersList)}
-                    expandIcon={(props) => this.customExpandIcon(props)}
-                    expandedRowRender={(record) => {
-                        // console.log("table row", record);
-                        return (
-                            <DealerDevicesList
-                                ref='dealerDeviceList'
-                                record={record} 
-                                translation={this.props.translation}
-                                />
-                            // <span>its working</span>
-                        );
-                    }}
-                    expandIconColumnIndex={2}
-                    expandedRowKeys={this.state.expandedRowKeys}
-                    onExpand={this.onExpandRow}
-                    expandIconAsCell={false}
-                    defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
-                />
-                <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
 
+            <Card className="fix_card dealer_fix_card">
+                <CustomScrollbars className="gx-popover-scroll">
+                    <Table
+                        size="middle"
+                        className="gx-table-responsive devices table"
+                        bordered={true}
+                        columns={this.state.columns}
+                        rowKey='row_key'
+                        align='center'
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
+                        pagination={false}
+                        dataSource={this.renderList(this.props.dealersList)}
+                        expandIcon={(props) => this.customExpandIcon(props)}
+                        expandedRowRender={(record) => {
+                            // console.log("table row", record);
+                            return (
+                                <DealerDevicesList
+                                    ref='dealerDeviceList'
+                                    record={record}
+                                    translation={this.props.translation}
+                                />
+                                // <span>its working</span>
+                            );
+                        }}
+                        expandIconColumnIndex={2}
+                        expandedRowKeys={this.state.expandedRowKeys}
+                        onExpand={this.onExpandRow}
+                        expandIconAsCell={false}
+                        defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
+                    />
+                    <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
+                </CustomScrollbars>
             </Card>
         )
     }

@@ -222,7 +222,6 @@ class SidebarContent extends Component {
                   content={this.languageMenu()} trigger="click">
                   <i className="icon icon-global" >
                     <Icon type="global" className="mb-10" />
-
                   </i>
                 </Popover>
               </li>

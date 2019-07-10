@@ -34,7 +34,7 @@ export default (state = initialState, action) => {
         }
         case GET_APP_JOBS: {
             if (action.payload.id) {
-                if (action.data_type == 'policy') {
+                if (action.data_type === 'policy') {
                     return {
                         ...state,
                         is_policy_process: action.payload.is_in_process,

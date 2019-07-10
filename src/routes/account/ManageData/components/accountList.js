@@ -55,11 +55,11 @@ class AccountList extends Component {
     renderList(list) {
         data = [];
         if (this.props.tabselect !== 'all') {
-            list = list.filter(e => e.used == this.props.tabselect);
+            list = list.filter(e => e.used === this.props.tabselect);
         }
         list.map((item, index) => {
             // let label;
-            // if (item.whitelabel_id == 1) { label = "Lockmesh" } else if (item.whitelabel_id == 2) { label = "Titan Locker" } else { label = "N/A" }
+            // if (item.whitelabel_id === 1) { label = "Lockmesh" } else if (item.whitelabel_id === 2) { label = "Titan Locker" } else { label = "N/A" }
             data.push({
                 'row_key': `${index}Key`,
                 'count': ++index,
