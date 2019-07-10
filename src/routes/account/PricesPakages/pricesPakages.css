@@ -60,6 +60,10 @@
     text-align: center;
 }
 
+.set_price_modal .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-ink-bar {
+    visibility: hidden;
+}
+
 .child_tabs .ant-tabs-tab {
     width: 100%;
     text-align: center;

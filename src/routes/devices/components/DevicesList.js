@@ -448,7 +448,7 @@ class DevicesList extends Component {
                 <SuspendDevice ref="suspend"
                     suspendDevice={suspendDevice} />
                 <Card className="fix_card devices_fix_card">
-                    <CustomScrollbars className="gx-popover-scroll ">
+                    <CustomScrollbars className="gx-popover-scroll">
                         <Table
                             // id="test"
                             style={{

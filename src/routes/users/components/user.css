@@ -24,3 +24,11 @@
 .users_list table th {
     white-space: nowrap !important;
 }
+
+.expand_row_card .ant-card-body {
+    padding: 16px 0 0 !important;
+}
+
+.expand_row_card .ant-table-body {
+    border-top: 1px solid #e8e8e8;
+}

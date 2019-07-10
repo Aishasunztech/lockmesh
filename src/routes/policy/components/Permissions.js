@@ -469,8 +469,7 @@ class Permissions extends Component {
           </Col>
 
         </Row>
-        <Row gutter={16}>
-
+        <Row gutter={16} gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={20}>
@@ -508,7 +507,6 @@ class Permissions extends Component {
           // selectedDealers={[]}
           />
         </Modal>
-
         {/*  remove except selected */}
         <Modal
           width='665px'

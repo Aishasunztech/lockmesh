@@ -192,7 +192,7 @@ class SidebarContent extends Component {
               {/* Price */}
               <li>
                 <a className="head-example">
-                  <Badge className="cred_badge" count={this.props.user_credit} overflowCount={999}>
+                  <Badge dot className="cred_badge" count={this.props.user_credit} overflowCount={999}>
                     <i className="icon icon-dollar notification_icn" >
                       <Icon type="dollar" className="mb-10" />
                     </i>
@@ -322,7 +322,7 @@ class SidebarContent extends Component {
 
 const mapStateToProps = ({ settings, devices, sidebar }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
- 
+
   return {
     navStyle,
     themeType,

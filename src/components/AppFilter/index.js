@@ -141,7 +141,7 @@ class AppFilter extends Component {
             // className="gutter-example"
             <Card className="sticky_top_bar">
                 <Row gutter={16} className="filter_top">
-                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             {(this.props.options !== undefined && this.props.options !== null) ?
                                 <Fragment>
@@ -229,12 +229,12 @@ class AppFilter extends Component {
 
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             {(this.props.handleFilterOptions !== undefined && this.props.handleFilterOptions !== null) ? this.props.handleFilterOptions() : null}
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             <Search
 
@@ -265,7 +265,7 @@ class AppFilter extends Component {
                         :
                         <Col />
                     } */}
-                    <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             {
                                 (this.props.isAddButton === true) ?
@@ -341,7 +341,6 @@ class AppFilter extends Component {
                             }
                         </div>
                     </Col>
-
                 </Row>
             </Card>
         )

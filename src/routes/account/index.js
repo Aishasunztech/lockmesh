@@ -86,7 +86,7 @@ class PasswordModal extends Component {
                 onCancel={() => {
                     this.props.showPwdConfirmModal(false)
                     this.refs.pswdForm.resetFields()
-                    }
+                }
                 }
                 okText="Push Apps"
             >
@@ -709,7 +709,7 @@ class Account extends Component {
                                                                             }
                                                                         })
                                                                     }
-                                                                    scroll={{ y: 250 }}
+                                                                    // scroll={{ y: 250 }}
                                                                     pagination={false}
 
                                                                 />
@@ -755,7 +755,7 @@ class Account extends Component {
                                                                                 }
                                                                             })
                                                                         }
-                                                                        scroll={{ y: 250 }}
+                                                                        // scroll={{ y: 250 }}
                                                                         pagination={false}
 
 
@@ -806,7 +806,7 @@ class Account extends Component {
                                                                                 })
                                                                             }
 
-                                                                            scroll={{ y: 250 }}
+                                                                            // scroll={{ y: 250 }}
                                                                             pagination={false}
                                                                         />
                                                                     </Fragment>
@@ -864,7 +864,7 @@ class Account extends Component {
                                                                                         }
                                                                                     })
                                                                                 }
-                                                                                scroll={{ y: 250 }}
+                                                                                //scroll={{ y: 250 }}
                                                                                 pagination={false}
                                                                             />
                                                                         </Fragment> : (this.state.dataFieldName === "used_sim_ids") ?
@@ -921,7 +921,7 @@ class Account extends Component {
                                                                                             }
                                                                                         })
                                                                                     }
-                                                                                    scroll={{ y: 250 }}
+                                                                                    //scroll={{ y: 250 }}
                                                                                     pagination={false}
                                                                                 />
                                                                             </Fragment> : (this.state.dataFieldName === "used_chat_ids") ?
@@ -977,7 +977,7 @@ class Account extends Component {
                                                                                                 }
                                                                                             })
                                                                                         }
-                                                                                        scroll={{ y: 250 }}
+                                                                                        //scroll={{ y: 250 }}
                                                                                         pagination={false}
                                                                                     />
                                                                                 </Fragment> : null
@@ -1224,7 +1224,7 @@ var mapStateToProps = ({ account, devices, settings, auth }) => {
         showMsg: account.showMsg,
         newData: account.newData,
         backUpModal: account.backUpModal,
-        translation: settings.translation,        
+        translation: settings.translation,
         user: auth.authUser
     };
 }

@@ -44,6 +44,11 @@
     background: #fff;
 }
 
+.apk_fix_card .expand_rows {
+    border-left: 1px solid #e8e8e8;
+    border-top: 1px solid #e8e8e8;
+}
+
 .more_txt1 {
     margin-top: 4px !important;
 }

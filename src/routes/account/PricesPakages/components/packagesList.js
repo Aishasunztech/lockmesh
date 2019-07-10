@@ -98,7 +98,7 @@ export default class Prices extends Component {
     }
 
     renderList = () => {
-        console.log(this.state.packages, 'ddddddddddddddddddddddddddddddddddddd')
+        // console.log(this.state.packages, 'ddddddddddddddddddddddddddddddddddddd')
         if (this.state.packages) {
             return this.state.packages.map((item, index) => {
                 return {

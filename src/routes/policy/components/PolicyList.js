@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, Modal, Button, message, Table, Icon, Switch } from "antd";
 import update from 'react-addons-update';
-
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import PolicyInfo from './PolicyInfo';
 import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
@@ -273,61 +273,61 @@ class PolicyList extends Component {
         console.log(this.state.expandedRowKeys, 'keys are')
         return (
             <Fragment>
-                <Card>
-                    <Table
-                        scroll={{ x: 600 }}
-                        className="devices policy_expand"
-                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
-                        size="default"
-                        bordered
-                        expandIcon={(props) => this.customExpandIcon(props)}
-                        // onExpand={this.onExpandRow}
+                <Card className="fix_card policy_fix_card">
+                    <CustomScrollbars className="gx-popover-scroll">
+                        <Table
+                            className="devices policy_expand"
+                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
+                            size="default"
+                            bordered
+                            expandIcon={(props) => this.customExpandIcon(props)}
+                            // onExpand={this.onExpandRow}
+                            expandedRowRender={(record) => {
+                                // console.log("expandTabSelected", record);
+                                // console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                                return (
+                                    <div>{
+                                        this.state.savePolicyButton ?
 
-                        expandedRowRender={(record) => {
-                            // console.log("expandTabSelected", record);
-                            // console.log("table row", this.state.expandTabSelected[record.rowKey]);
-                            return (
-                                <div>{
-                                    this.state.savePolicyButton ?
-
-                                        <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], Button_Save_Changes)} </Button>
-                                        : false}
-                                    <PolicyInfo
-                                        selected={this.state.expandTabSelected[record.rowKey]}
-                                        policy={record}
-                                        isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
-                                        rowId={record.policy_id}
-                                        handleEditPolicy={this.props.handleEditPolicy}
-                                        handleCheckAll={this.props.handleCheckAll}
-                                        // edit={true}
-                                        guestAlldealerApps={this.props.guestAlldealerApps}
-                                        encryptedAlldealerApps={this.props.encryptedAlldealerApps}
-                                        enableAlldealerApps={this.props.enableAlldealerApps}
-
-                                        guestAllappPermissions={this.props.guestAllappPermissions}
-                                        encryptedAllappPermissions={this.props.encryptedAllappPermissions}
-                                        enableAllappPermissions={this.props.enableAllappPermissions}
-
-                                        guestAllallExtensions={this.props.guestAllallExtensions}
-                                        encryptedAllallExtensions={this.props.encryptedAllallExtensions}
-                                        enableAllallExtensions={this.props.enableAllallExtension}
-                                        handleAppGotted={this.props.handleAppGotted}
-                                        appsGotted={this.props.appsGotted}
-                                        translation={this.props.translation}
-                                    />
-                                </div>
-                            )
-                        }}
-                        // expandIconColumnIndex={1}         
-                        expandIconColumnIndex={2}
-                        expandedRowKeys={this.state.expandedRowKeys}
-                        expandIconAsCell={false}
-                        columns={this.props.columns}
-                        dataSource={this.renderList(this.props.policies)}
-                        pagination={{ pageSize: this.state.pagination, size: "midddle" }}
-                        rowKey="policy_list"
-                        ref='policy_table'
-                    />
+                                            <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], Button_Save_Changes)} </Button>
+                                            : false}
+                                        <PolicyInfo
+                                            selected={this.state.expandTabSelected[record.rowKey]}
+                                            policy={record}
+                                            isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
+                                            rowId={record.policy_id}
+                                            handleEditPolicy={this.props.handleEditPolicy}
+                                            handleCheckAll={this.props.handleCheckAll}
+                                            // edit={true}
+                                            guestAlldealerApps={this.props.guestAlldealerApps}
+                                            encryptedAlldealerApps={this.props.encryptedAlldealerApps}
+                                            enableAlldealerApps={this.props.enableAlldealerApps}
+                                            guestAllappPermissions={this.props.guestAllappPermissions}
+                                            encryptedAllappPermissions={this.props.encryptedAllappPermissions}
+                                            enableAllappPermissions={this.props.enableAllappPermissions}
+                                            guestAllallExtensions={this.props.guestAllallExtensions}
+                                            encryptedAllallExtensions={this.props.encryptedAllallExtensions}
+                                            enableAllallExtensions={this.props.enableAllallExtension}
+                                            handleAppGotted={this.props.handleAppGotted}
+                                            appsGotted={this.props.appsGotted}
+                                            translation={this.props.translation}
+                                        />
+                                    </div>
+                                )
+                            }}
+                            // expandIconColumnIndex={1}         
+                            expandIconColumnIndex={2}
+                            expandedRowKeys={this.state.expandedRowKeys}
+                            expandIconAsCell={false}
+                            columns={this.props.columns}
+                            dataSource={this.renderList(this.props.policies)}
+                            pagination={false
+                                // { pageSize: this.state.pagination, size: "midddle" }
+                            }
+                            rowKey="policy_list"
+                            ref='policy_table'
+                        />
+                    </CustomScrollbars>
                 </Card>
 
             </Fragment>

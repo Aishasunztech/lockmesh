@@ -18,7 +18,6 @@ class PriceList extends Component {
         super(props)
         this.columns = [
             {
-
                 dataIndex: 'price_term',
                 className: '',
                 title: convertToLang(this.props.translation[PRICE_TERM], PRICE_TERM),
