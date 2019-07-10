@@ -38,7 +38,7 @@ export const SYSTEM_PERMISSION = 'system.permission.id';// System Permission
 export const MANAGE_PASSWORDS = 'manage.passwords.id'; //MANAGE PASSWORDS
 export const POLICY_DETAILS = 'policy.details.id'; // Policy Details
 export const PUSH_APP_TEXT = "push.app.id"; // PUSH APP
-export const PUSH_APPS_TEXT = "push.apps.id"; // PUSH APPS
+export const PULL_APPS_TEXT = "pull.apps.id"; // PULL APPS
 export const PUSH = "push.id"; // PUSH
 export const PULL = "pull.id"; // PULL
 export const Alert_Allow_Permission_Delaer = "alert.allow.permission.dealer.id"; // Do you realy Want to allow Permission for all Dealers?
@@ -96,13 +96,13 @@ export const Name = "name.id"; // Name
 export const Value = "value.id"; // Value
 
 export const Login_Email = "login.email.id"; // Login Email
-export const DEVICES ="devices.id"; // DEVICES
+export const DEVICES = "devices.id"; // DEVICES
 
 
 export const Profile_Info = "profile.info.id"; // Profile Info
 export const Change_Profile = "change.profile.id"; // Change Profile
 export const SAVE_PROFILE_TEXT = "save.profile.text.id"; // Save Profile
- 
+
 export const Edit_Profile = "edit.profile.id"; // Edit Profile
 export const Edit_Profile_01 = "edit.profile.01.id"; // Change password
 export const Edit_Profile_02 = "edit.profile.02.id"; // Change Email
@@ -137,7 +137,7 @@ export const Nav_Style = "nav.style.id"; //  Nav Style
 
 
 // ==============================
-export const SIGN_IN = "app.userAuth.signIn"; 
+export const SIGN_IN = "app.userAuth.signIn";
 
 export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME
 export const SELECT = "select.id"; // Select

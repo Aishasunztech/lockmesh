@@ -41,7 +41,7 @@ import {
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
-    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APPS_TEXT, PUSH_APP_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT
+    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT
 } from "../../../constants/Constants";
 
 
@@ -127,8 +127,8 @@ class DealerAppModal extends Component {
                     }
                 }}
                 onCancel={() => { this.props.showPushAppsModal(false); this.props.resetSeletedRows() }}
-                okText= {convertToLang(this.props.translation[PUSH_APPS_TEXT], PUSH_APPS_TEXT)}
-                cancelText= {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
             >
                 <DealerApps
                     apk_list={this.props.apk_list}
@@ -177,7 +177,7 @@ class PullAppModal extends Component {
                 visible={this.props.pullAppsModal}
                 onOk={() => {
                     if (this.props.selectedAppKeys.length) {
-                        // this.props.showPullAppsModal(false);
+                        this.props.showPullAppsModal(false);
                         this.props.showSelectedAppsModal(true);
                     }
                 }}
@@ -200,7 +200,7 @@ class PullAppModal extends Component {
 
 
 const SelectedApps = (props) => {
-    // console.log('selected app are', props.selectedApps)
+    // console.log('selected app are', props.selectedApps, props.actionType)
     return (
         <Modal
             // closable={false}
@@ -210,7 +210,7 @@ const SelectedApps = (props) => {
             title={<div>Selected Apps <br /> Device ID: {props.device.device_id} </div>}
             visible={props.selectedAppsModal}
             onOk={() => {
-                props.actionType === PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
+                props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
                 props.showSelectedAppsModal(false);
                 props.showPushAppsModal(false)
                 props.showPullAppsModal(false)
@@ -218,19 +218,20 @@ const SelectedApps = (props) => {
             }}
             // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
             onCancel={() => {
-                props.actionType === PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
+                props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
                 props.showSelectedAppsModal(false);
             }}
             // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], Button_Back)}
-            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APPS_TEXT], PUSH_APPS_TEXT) : convertToLang(props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
+            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT) : convertToLang(props.translation[PULL_APPS_TEXT], PULL_APPS_TEXT)}
             destroyOnClose={true}
         >
             <DealerApps
                 apk_list={props.apk_list}
                 isSwitchable={false}
                 selectedApps={props.selectedApps}
-                type={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
+                type={props.actionType == PUSH_APPS ? 'push' : 'pull'}
+                // buttonText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
                 disabledSwitch={true}
                 translation={props.translation}
             />
@@ -571,7 +572,8 @@ class SideActions extends Component {
         // console.log(this.state.apk_list, 'list apk')
         const device_status = (this.props.device.account_status === "suspended") ? convertToLang(this.props.translation[Button_Unsuspend], Button_Unsuspend) : convertToLang(this.props.translation[Button_Suspend], Button_Suspend);
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
-        const flagged = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], Button_UNFLAG) : convertToLang(this.props.translation[Button_Flag], Button_Flag);
+        const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], Button_UNFLAG) : convertToLang(this.props.translation[Button_Flag], Button_Flag);
+        const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
@@ -703,7 +705,7 @@ class SideActions extends Component {
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
-                                    disabled={(flagged === 'Unflag') ? 'disabled' : ''}
+                                    disabled={(this.props.device.flagged !== 'Not flagged') ? 'disabled' : ''}
                                 >
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
@@ -719,7 +721,7 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#1b1b1b', color: '#fff' }}
                                     onClick={() => this.handleFlag(flagged)}
                                 >
-                                    <Icon type="flag" />{flagged}
+                                    <Icon type="flag" />{flaggedButtonText}
                                 </Button>
                                 <Button
                                     onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')}
@@ -840,6 +842,8 @@ class SideActions extends Component {
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
+
+
 
                 <DealerAppModal
                     pushAppsModal={this.props.pushAppsModal}
