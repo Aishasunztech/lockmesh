@@ -347,7 +347,7 @@ class UserDeviceList extends Component {
         }
 
         if (this.props.translation !== nextProps.translation) {
-            this.listdeviceCols = userDevicesListColumns(this.props.translation, this.handleSearch);
+            this.listdeviceCols = userDevicesListColumns(nextProps.translation, this.handleSearch);
         }
     }
     searchField = (originalData, fieldName, value) => {
