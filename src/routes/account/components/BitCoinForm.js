@@ -3,8 +3,7 @@ import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Tabl
 
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
-import CoinbaseCommerceButton from 'react-coinbase-commerce';
-import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
+
 
 const confirm = Modal.confirm;
 
