@@ -37,7 +37,13 @@ export const SECURE_SETTING_PERMISSION = 'secure.settings.permission.id'; // Sec
 export const SYSTEM_PERMISSION = 'system.permission.id';// System Permission
 export const MANAGE_PASSWORDS = 'manage.passwords.id'; //MANAGE PASSWORDS
 export const POLICY_DETAILS = 'policy.details.id'; // Policy Details
-
+export const PUSH_APP_TEXT = "push.app.id"; // PUSH APP
+export const PUSH_APPS_TEXT = "push.apps.id"; // PUSH APPS
+export const PUSH = "push.id"; // PUSH
+export const PULL = "pull.id"; // PULL
+export const Alert_Allow_Permission_Delaer = "alert.allow.permission.dealer.id"; // Do you realy Want to allow Permission for all Dealers?
+export const Alert_Remove_Permission_Delaer = "alert.remove.permission.dealer.id"; // Do you realy Want to Remove Permission for all Dealers?
+export const Alert_Delete_APK = "alert.delete.apk.id"; // Are you sure, you want to delete the Apk ?
 export const POLICY = 'policy';
 
 // Constant Package Names
@@ -82,7 +88,9 @@ export const Days = "days.id";
 export const User_Name_require = "user.name.require"; // Name is Required
 export const Only_alpha_numeric = "only.alpha.numeric.id"; // Please insert only alphabets and numbers
 export const Not_valid_Email = "not.valid.email.id"; // The input is not valid E-mail!
+export const PLZ_INPUT_Email = "not.valid.email.id"; // Please input your E-mail!
 export const Required_Email = "require.email.id"; // Email is Required !
+export const Insert_Valid_Dealer_Name = "insert.valid.dealer.name.id"; // Please Insert dealer Name
 export const Email = "email.id"; // Email
 export const Name = "name.id"; // Name
 export const Value = "value.id"; // Value
@@ -93,6 +101,7 @@ export const DEVICES ="devices.id"; // DEVICES
 
 export const Profile_Info = "profile.info.id"; // Profile Info
 export const Change_Profile = "change.profile.id"; // Change Profile
+export const SAVE_PROFILE_TEXT = "save.profile.text.id"; // Save Profile
  
 export const Edit_Profile = "edit.profile.id"; // Edit Profile
 export const Edit_Profile_01 = "edit.profile.01.id"; // Change password
@@ -129,3 +138,6 @@ export const Nav_Style = "nav.style.id"; //  Nav Style
 
 // ==============================
 export const SIGN_IN = "app.userAuth.signIn"; 
+
+export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME
+export const SELECT = "select.id"; // Select

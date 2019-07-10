@@ -1,14 +1,16 @@
 import React, { Component, Fragment } from 'react'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import { Tabs, Button, Row, Col, Avatar, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
-import { connect } from "react-redux";
 import { BASE_URL } from '../../../constants/Application';
 import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS } from '../../../constants/Constants';
 import styles from './policy.css';
-import { bindActionCreators } from "redux";
 import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
 import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy, handleCheckAllAppPolicy } from '../../../appRedux/actions/Policy';
 import RestService from '../../../appRedux/services/RestServices'
+
 const TextArea = Input;
 const TabPane = Tabs.TabPane;
 const columns = [{
@@ -103,7 +105,6 @@ class AddPolicy extends Component {
 
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log(err, 'Received values of form: ', values);
 
                 if (this.state.pushAppsIds.length) {
                     for (let id of this.state.pushAppsIds) {
@@ -115,6 +116,7 @@ class AddPolicy extends Component {
                 }
 
                 let appPermissions = JSON.parse(JSON.stringify(this.state.appPermissions))
+                
                 let secure_apps = [];
 
                 let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName == SECURE_SETTING)));
@@ -126,17 +128,12 @@ class AddPolicy extends Component {
                 if (Object.keys(this.state.main_system_control).length !== 0 && this.state.main_system_control.constructor === Object) {
                      appPermissions.push(JSON.parse(JSON.stringify(this.state.main_system_control)))
                 }
-                console.log(appPermissions, 'length at system control', this.state.main_system_control)
 
                 delete main_extension.subExtension;
                 // console.log(this.state.main_system_control, 'main setting controls is')
                 if (main_extension) {
-
-                    console.log(main_extension, 'main extension is')
-
                     appPermissions.push(JSON.parse(JSON.stringify(main_extension)));
                 }
-                console.log(appPermissions, 'length at extenison', main_extension)
 
                 let data = {
                     policy_name: values.policy_name,
@@ -146,7 +143,6 @@ class AddPolicy extends Component {
                     secure_apps: secure_apps,
                     system_permissions: this.state.systemPermissions
                 }
-                console.log('polcy is', data);
 
                 this.props.savePolicy(data);
                 this.props.handlePolicyModal(false);
@@ -180,7 +176,7 @@ class AddPolicy extends Component {
         let main_system_control = {};
         if (this.props.appPermissions.length) {
             let main_system_control_index = this.props.appPermissions.findIndex(item => item.uniqueName == Main_SETTINGS)
-            console.log(main_system_control_index, 'component did mount');
+            
             if (main_system_control_index > -1) {
                 main_system_control = this.props.appPermissions[main_system_control_index];
                 this.props.appPermissions.splice(main_system_control_index, 1);
@@ -256,7 +252,6 @@ class AddPolicy extends Component {
         if (pageType == 'dealerApps') this.state.pushAppsIds = selected;
         else if (pageType == 'appPermissions') this.state.appPermissionsIds = selected
 
-        console.log(this.state.appPermissionsIds, 'guested apps', this.state.pushAppsIds)
     }
 
     renderSystemPermissions = () => {
@@ -369,9 +364,8 @@ class AddPolicy extends Component {
     }
 
     render() {
-        // console.log(this.state.main_system_control,'console the applist', this.state.appPermissions);
         const { getFieldDecorator } = this.props.form;
-        // console.log(this.state.main_system_control, 'render time')
+        
         return (
             <Fragment>
                 <div className="policy_steps card-container">
@@ -434,58 +428,6 @@ class AddPolicy extends Component {
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">
                             <div>
-                                <div>
-                                    <Row>
-                                        <Col span={6} className="">
-                                        </Col>
-                                        <Col span={3} className="">
-                                        <Avatar src={`${BASE_URL}users/getFile/${this.state.main_system_control.icon}`} style={{ width: "30px", height: "30px" }} />
-                                            {/* <img src={require("assets/images/setting.png")} /> */}
-                                        </Col>
-                                        <Col span={15} className="pl-0">
-                                            <h5 style={{ marginTop: '9px' }}>Android Settings Permission</h5>
-                                        </Col>
-                                    </Row>
-
-                                    <Row className="mb-8">
-                                        <Col span={8} className="text-center">
-                                            <span>Guest: </span>
-                                            <Switch
-                                                size="small"
-                                                checked={(this.state.main_system_control.guest === true || this.state.main_system_control.guest === 1) ? true : false}
-                                                onClick={(e) => {
-                                                    this.handleChecked(e, "guest", '', 'main');
-                                                }}
-                                            />
-                                        </Col>
-                                        <Col span={8} className="text-center">
-                                            <span>Encrypted: </span>
-                                            <Switch
-                                                size="small"
-                                                checked={(this.state.main_system_control.encrypted === true || this.state.main_system_control.encrypted === 1) ? true : false}
-                                                onClick={(e) => {
-                                                    // console.log("encrypted", e);
-                                                    this.handleChecked(e, "encrypted", '', 'main');
-                                                }}
-                                            />
-                                        </Col>
-                                        <Col span={8} className="text-center">
-                                            <span>Enable: </span>
-                                            <Switch
-                                                size="small"
-                                                checked={(this.state.main_system_control.enable === true || this.state.main_system_control.enable === 1) ? true : false}
-                                                onClick={(e) => {
-                                                    // console.log("encrypted", e);
-                                                    this.handleChecked(e, "enable", '', 'main');
-                                                }}
-                                            />
-                                        </Col>
-                                    </Row>
-
-
-
-
-                                </div>
                                 <Table
                                     className="add-policy-modal-content"
                                     pagination={false}

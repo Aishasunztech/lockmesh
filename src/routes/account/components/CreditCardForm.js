@@ -3,6 +3,8 @@ import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Tabl
 import RestService from '../../../appRedux/services/RestServices';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
+import { convertToLang } from '../../utils/commonUtils';
+import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 // import axios from 'axios';
 // import 'react-credit-cards/lib/styles.scss';
 
@@ -124,6 +126,8 @@ class CreditCardForm extends Component {
                     title="CREDIT CARD DETAILS"
                     visible={this.props.creditCard_model}
                     footer={false}
+                    // okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    // cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                     onOk={() => {
                     }}
                     onCancel={(e) => {

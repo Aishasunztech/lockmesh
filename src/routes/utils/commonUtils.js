@@ -164,7 +164,7 @@ export function titleCase(str) {
         return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
       })
     } else {
-      if (word == "id" || word == "pgp" || word == "ip") {
+      if (word === "id" || word === "pgp" || word === "ip") {
         return word.toUpperCase();
       } else {
         return word.charAt(0).toUpperCase() + word.substr(1);
@@ -175,7 +175,7 @@ export function titleCase(str) {
 }
 export function checkRemainDays(createDate, validity) {
   var validDays = 0, createdDateTime, today, days;
-  if (validity != null) validDays = validity;
+  if (validity !== null) validDays = validity;
   createdDateTime = new Date(createDate);
   createdDateTime.setDate(createdDateTime.getDate() + validDays);
   today = new Date();
@@ -202,167 +202,11 @@ export function isBase64(str) {
   }
 }
 
-export function dealerColsWithSearch(searchBar = false, callBack = null) {
-
-  var searchInput = [
-    {
-      title: (
-        <Input.Search
-          name="dealer_id"
-          key="dealer_id"
-          id="dealer_id"
-          className="search_heading"
-          autoComplete="new-password"
-          placeholder={titleCase(DEALER_ID)}
-          onKeyUp={
-            (e) => {
-              callBack(e)
-            }
-          }
-
-        />
-      ),
-      dataIndex: 'dealer_id',
-      className: '',
-      children: []
-    },
-    {
-      title: (
-        <Input.Search
-          name="link_code"
-          key="link_code"
-          id="link_code"
-          className="search_heading"
-          autoComplete="new-password"
-          placeholder={titleCase(DEALER_PIN)}
-          onKeyUp={
-            (e) => {
-              callBack(e)
-            }
-          }
-
-        />
-      ),
-      dataIndex: 'link_code',
-      className: '',
-      children: []
-    },
-    {
-      title: (
-        <Input.Search
-          name="dealer_name"
-          key="dealer_name"
-          id="dealer_name"
-          className="search_heading"
-          autoComplete="new-password"
-          placeholder={titleCase(DEALER_NAME)}
-          onKeyUp={
-            (e) => {
-              callBack(e)
-            }
-          }
-
-        />
-      ),
-      dataIndex: 'dealer_name',
-      className: '',
-      children: []
-    },
-    {
-      title: (
-        <Input.Search
-          name="dealer_email"
-          key="dealer_email"
-          id="dealer_email"
-          className="search_heading"
-          autoComplete="new-password"
-          placeholder={titleCase(DEALER_EMAIL)}
-          onKeyUp={
-            (e) => {
-              callBack(e)
-            }
-          }
-
-        />
-      ),
-      dataIndex: 'dealer_email',
-      className: '',
-      children: []
-    },
-  ]
-
-
-  var child = [
-    {
-      title: DEALER_ID,
-      dataIndex: 'dealer_id',
-      key: 'dealer_id',
-      sorter: (a, b) => a.dealer_id - b.dealer_id,
-      sortDirections: ['ascend', 'descend'],
-      className: '',
-    },
-    {
-      title: DEALER_PIN,
-      dataIndex: 'link_code',
-      key: 'link_code',
-      sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-      sortDirections: ['ascend', 'descend'],
-      className: '',
-    },
-    {
-      title: DEALER_NAME,
-      dataIndex: 'dealer_name',
-      key: 'dealer_name',
-      sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
-      sortDirections: ['ascend', 'descend'],
-      className: '',
-    },
-    {
-      title: DEALER_EMAIL,
-      dataIndex: 'dealer_email',
-      key: 'dealer_email',
-      sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-      sortDirections: ['ascend', 'descend'],
-      className: '',
-    },
-    {
-      title: DEALER_ACTION,
-      dataIndex: 'action',
-      key: 'action',
-      className: '',
-    },
-
-  ];
-
-  if (searchBar) {
-    var result = searchInput.map((item, index) => {
-      let flag = true;
-      for (var i in child) {
-        if (child[i].dataIndex == item.dataIndex) {
-          item.children = [child[i]];
-          flag = false;
-          return item;
-        }
-      }
-      if (flag == true) {
-        return item;
-      }
-    })
-    return result;
-  } else {
-    return child;
-  }
-}
 
 export function convertToLang(lngWord, constant) {
-
-  if (lngWord != undefined && lngWord != '' && lngWord != null) {
-    // console.log('convert To Language Function: ', lngWord);
+  if (lngWord !== undefined && lngWord !== '' && lngWord !== null) {
     return lngWord;
-  } else if (constant != undefined && constant != '' && constant != null) {
+  } else if (constant !== undefined && constant !== '' && constant !== null) {
     return constant;
-    http://www.firefall.cc/windows-10/  } else {
-    return "N/A";
-  }
-
+  } else { return "N/A"; }
 }

@@ -159,7 +159,7 @@ export default class ListApk extends Component {
                     'action': (
                         <Fragment>
                             <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
-                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
+                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
                         </Fragment>
                     ),
                     'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
@@ -201,7 +201,7 @@ export default class ListApk extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }

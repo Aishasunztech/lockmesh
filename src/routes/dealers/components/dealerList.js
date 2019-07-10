@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 import { BASE_URL } from '../../../constants/Application';
-import IntlMessages from "../../../util/IntlMessages";
 import EditDealer from './editDealer';
 import { Tabs } from 'antd';
-import EditApk from './editDealer';
+// import EditApk from './editDealer';
 import { ADMIN } from '../../../constants/Constants';
 import DealerDevicesList from '../../users/components/UserDeviceList';
 import { convertToLang } from '../../utils/commonUtils'
@@ -145,7 +144,7 @@ class DealerList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.row_key)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.row_key)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.row_key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -241,10 +240,9 @@ class DealerList extends Component {
     }
 
     render() {
-        console.log(this.props.dealersList, 'dealers list console');
+        // console.log(this.props.dealersList, 'dealers list console');
 
         return (
-
             <Card className="fix_card dealer_fix_card">
                 <CustomScrollbars className="gx-popover-scroll">
                     <Table

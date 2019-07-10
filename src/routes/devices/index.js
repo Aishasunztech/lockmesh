@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import Highlighter from 'react-highlight-words';
 import { Input, Button, Icon, Select } from "antd";
 
-import IntlMessages from "../../util/IntlMessages";
 
 import { bindActionCreators } from "redux";
 
@@ -59,33 +58,9 @@ import {
 } from '../../constants/TabConstants';
 
 import {
-    DEVICE_ID,
     DEVICE_REMAINING_DAYS,
     DEVICE_FLAGGED,
-    DEVICE_STATUS,
-    DEVICE_MODE,
-    DEVICE_NAME,
-    DEVICE_ACTIVATION_CODE,
-    DEVICE_ACCOUNT_EMAIL,
-    DEVICE_PGP_EMAIL,
-    DEVICE_CHAT_ID,
-    DEVICE_CLIENT_ID,
-    DEVICE_DEALER_ID,
-    DEVICE_DEALER_PIN,
-    DEVICE_MAC_ADDRESS,
-    DEVICE_SIM_ID,
-    DEVICE_IMEI_1,
-    DEVICE_SIM_1,
-    DEVICE_IMEI_2,
-    DEVICE_SIM_2,
-    DEVICE_SERIAL_NUMBER,
-    DEVICE_MODEL,
-    DEVICE_START_DATE,
-    DEVICE_EXPIRY_DATE,
-    DEVICE_DEALER_NAME,
-    DEVICE_S_DEALER,
-    DEVICE_S_DEALER_NAME,
-    USER_ID
+
 } from '../../constants/DeviceConstants';
 
 import {
@@ -120,6 +95,8 @@ class Devices extends Component {
     constructor(props) {
         super(props);
         var columns = devicesColumns(props.translation, this.handleSearch);
+
+
         this.state = {
             columns: columns,
             searchText: '',
@@ -203,7 +180,7 @@ class Devices extends Component {
         }
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
         let indexFlagged = this.state.columns.findIndex(k => k.dataIndex == 'flagged');
-        if (value == DEVICE_UNLINKED && (this.props.user.type != ADMIN)) {
+        if (value == DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
         }
@@ -211,7 +188,7 @@ class Devices extends Component {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
-                this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+                // this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
             }
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
                 this.state.columns[indxRemainingDays].className = '';
@@ -253,6 +230,12 @@ class Devices extends Component {
             if (indexFlagged >= 0) {
                 this.state.columns.splice(7, 0, this.state.columns.splice(indexFlagged, 1)[0]);
             }
+            // if (value == DEVICE_PRE_ACTIVATION && this.props.user.type == ADMIN) {
+            //     let actionIndex = this.state.columns.findIndex(i => i.dataIndex == 'action');
+            //     if (actionIndex >= 0) {
+            //         this.state.columns[actionIndex].className = 'hide';
+            //     }
+            // }
         }
 
         switch (value) {
@@ -344,8 +327,7 @@ class Devices extends Component {
     }
 
     handleChangetab = (value) => {
-        // console.log('val is: ', value)
-
+        // console.log('============= value index is: ', value)
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
         if (value == '5' && this.props.user.type == ADMIN) {
@@ -367,9 +349,11 @@ class Devices extends Component {
         }
         let activationCodeIndex = this.state.columns.findIndex(i => i.dataIndex == 'activation_code');
 
-        if (value == '5' && (this.props.user.type != ADMIN)) {
+        if (value == '5' && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
             this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
+        } else if (value == '2' && (this.props.user.type == ADMIN)) {
+            this.state.columns.splice(indxAction, 1)
         }
         else if (value == '3') {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
@@ -531,7 +515,7 @@ class Devices extends Component {
 
 
     handleCheckChange(values) {
-        console.log('handleCheckChange values are: ', values)
+        // console.log('handleCheckChange values are: ', values)
         let dumydata = this.state.columns;
 
         // console.log("dumyData", dumydata);
@@ -541,25 +525,27 @@ class Devices extends Component {
 
                 if (dumydata[index].className !== 'row') {
                     dumydata[index].className = 'hide';
+                    // if(dumydata[index].children) {
                     dumydata[index].children[0].className = 'hide';
+                    // }
                     // dumydata[]
                 }
                 // console.log(this.state.tabselect)
                 values.map((value) => {
                     if (column.className !== 'row') {
-                    if (column.children[0].title === convertToLang(this.props.translation[value.key], value.key)) {
-                        if (this.state.tabselect !== '3') {
-                            if (column.children[0].title !== convertToLang(this.props.translation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS)) {
+                        if (column.dataIndex === value.key) {
+                            if (this.state.tabselect !== '3') {
+                                if (column.dataIndex !== 'validity') {
+                                    dumydata[index].className = '';
+                                    dumydata[index].children[0].className = '';
+                                }
+                            }
+                            else {
                                 dumydata[index].className = '';
                                 dumydata[index].children[0].className = '';
                             }
                         }
-                        else {
-                            dumydata[index].className = '';
-                            dumydata[index].children[0].className = '';
-                        }
                     }
-                }
 
                 });
             });
@@ -605,33 +591,32 @@ class Devices extends Component {
 
             })
             // this.copyDevices = this.props.devices;
-            this.handleChangetab(this.state.tabselect);
+            // this.handleChangetab(this.state.tabselect);
             // this.handleCheckChange(this.props.selectedOptions);
 
         }
-        
-        if(this.props.translation !== prevProps.translation){
+
+        if (this.props.translation !== prevProps.translation) {
             // console.log(this.columns)
             this.setState({
-                columns : devicesColumns(this.props.translation, this.handleSearch)
-                
+                columns: devicesColumns(this.props.translation, this.handleSearch)
 
             })
         }
 
-     
+
 
         // console.log('updated');
-        
+
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            console.log('==================== componentDidUpdate  ======================== ');
-            console.log(this.props.selectedOptions)
+            // console.log('==================== componentDidUpdate  ======================== ');
+            // console.log(this.props.selectedOptions)
             this.handleCheckChange(this.props.selectedOptions)
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.translation != nextProps.translation) {
+        if (this.props.translation !== nextProps.translation) {
             this.setState({
                 translation: nextProps.translation
             })
@@ -692,9 +677,9 @@ class Devices extends Component {
                 placeholder={convertToLang(this.props.translation[Appfilter_ShowDevices], Appfilter_ShowDevices)}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
-                filterOption={(input, option) => {
-                    return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-                }}
+                // filterOption={(input, option) => {
+                //     return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+                // }}
                 onChange={this.handleChange}
             >
 
@@ -831,7 +816,7 @@ class Devices extends Component {
                         if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);
                         }
-                    } else if (device[e.target.name] != null) {
+                    } else if (device[e.target.name] !== null) {
                         // console.log("else null check", device[e.target.name])
                         if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDevices.push(device);

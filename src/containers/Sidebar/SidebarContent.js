@@ -42,9 +42,9 @@ import {
   Sidebar_account,
   Sidebar_settings,
   Sidebar_logout,
+  Alert_Change_Language,
 } from '../../constants/SidebarConstants'
 
-import IntlMessages from "../../util/IntlMessages";
 // import languageData from "./languageData";
 
 import { logout } from "appRedux/actions/Auth";
@@ -102,7 +102,7 @@ class SidebarContent extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.languageData)
+    // console.log(this.props.languageData)
     this.setState({
       languageData: this.props.languageData
     })
@@ -146,7 +146,7 @@ class SidebarContent extends Component {
   changeLng = (language) => {
     let _this = this;
     Modal.confirm({
-      title: 'Are you sure to change the language?',
+      title: convertToLang(this.props.translation[Alert_Change_Language], Alert_Change_Language),
       okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
       cancelText: convertToLang(this.props.translation[Button_No], Button_No),
 
@@ -182,6 +182,7 @@ class SidebarContent extends Component {
               requests={this.props.requests}
               acceptRequest={this.props.acceptRequest}
               rejectRequest={this.props.rejectRequest}
+              translation={this.props.translation}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}

@@ -969,10 +969,10 @@ export default (state = initialState, action) => {
             let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
                 // console.log(app[action.payload.key], 'kkkkkk', 'guest')
-                if (app.default_app != 1) {
+                if (app.default_app !== 1) {
                     app[action.payload.key] = action.payload.value;
                     app.isChanged = true;
-                } else if (app.default_app == 1 && action.payload.key == 'guest') {
+                } else if (app.default_app === 1 && action.payload.key === 'guest') {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
                 }
@@ -1059,7 +1059,6 @@ export default (state = initialState, action) => {
         }
 
         case CLEAR_APPLICATIONS: {
-            console.log(state.undoApps.length, state.undoControls.length, state.undoExtensions.length)
             let extensions = state.undoExtensions.length ? state.undoExtensions[0] : [];
             let controls = state.undoControls.length ? state.undoControls[0] : [];
             let apps = state.undoApps.length ? state.undoApps[0] : [];

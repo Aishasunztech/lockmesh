@@ -324,7 +324,7 @@ export default (state = initialState, action) => {
             let stateToUpdate = action.payload.stateToUpdate;
             let checkButtons;
             // console.log(stateToUpdate, 'state to update')
-            let rowId = changedState.findIndex(item => item.id == policyId);
+            let rowId = changedState.findIndex(item => item.id === policyId);
             //  console.log(policyId, 'row id', rowId)
 
             if (rowId >= 0) {
@@ -394,8 +394,11 @@ export default (state = initialState, action) => {
                     ...state,
                     policies: [...state.policies],
                 }
+            } else {
+                return {
+                    ...state
+                }
             }
-
         }
 
 
@@ -689,34 +692,34 @@ function check_all_apps_buttons(apps, type) {
     let enableCount = 0;
 
     for (let app of apps) {
-        if (app.guest == true || app.guest == 1) {
+        if (app.guest === true || app.guest === 1) {
             guestCount += 1;
         }
-        if (app.encrypted == true || app.encrypted == 1) {
+        if (app.encrypted === true || app.encrypted === 1) {
             encryptedCount += 1;
         }
-        if (app.enable == true || app.enable == 1) {
+        if (app.enable === true || app.enable === 1) {
             enableCount += 1;
         }
     }
 
-    let guestAll = guestCount == apps.length ? true : false;
-    let encryptedAll = encryptedCount == apps.length ? true : false;
-    let enableAll = enableCount == apps.length ? true : false;
+    let guestAll = guestCount === apps.length ? true : false;
+    let encryptedAll = encryptedCount === apps.length ? true : false;
+    let enableAll = enableCount === apps.length ? true : false;
 
-    if (type == 'push_apps') {
+    if (type === 'push_apps') {
         return {
             guestAlldealerApps: guestAll,
             encryptedAlldealerApps: encryptedAll,
             enableAlldealerApps: enableAll,
         }
-    } else if (type == 'appPermissions') {
+    } else if (type === 'appPermissions') {
         return {
             guestAllappPermissions: guestAll,
             encryptedAllappPermissions: encryptedAll,
             enableAllappPermissions: enableAll,
         }
-    }else if (type == 'extenssions') {
+    }else if (type === 'extenssions') {
         return {
             guestAllallExtensions: guestAll,
             encryptedAllallExtensions: encryptedAll,
@@ -741,59 +744,59 @@ function checkToggleButtons(policy) {
     let extension_enableCount = 0;
 
     for (let app of policy.push_apps) {
-        if (app.guest == true || app.guest == 1) {
+        if (app.guest === true || app.guest === 1) {
             push_apps_guestCount += 1;
         }
-        if (app.encrypted == true || app.encrypted == 1) {
+        if (app.encrypted === true || app.encrypted === 1) {
             push_apps_encryptedCount += 1;
         }
-        if (app.enable == true || app.enable == 1) {
+        if (app.enable === true || app.enable === 1) {
             push_apps_enableCount += 1;
         }
     }
 
     for (let app of policy.app_list) {
-        if (app.guest == true || app.guest == 1) {
+        if (app.guest === true || app.guest === 1) {
             appPermissions_guestCount += 1;
         }
-        if (app.encrypted == true || app.encrypted == 1) {
+        if (app.encrypted === true || app.encrypted === 1) {
             appPermissions_encryptedCount += 1;
         }
-        if (app.enable == true || app.enable == 1) {
+        if (app.enable === true || app.enable === 1) {
             appPermissions_enableCount += 1;
         }
     }
 
     for (let app of policy.secure_apps) {
-        if (app.guest == true || app.guest == 1) {
+        if (app.guest === true || app.guest === 1) {
             extension_guestCount += 1;
         }
-        if (app.encrypted == true || app.encrypted == 1) {
+        if (app.encrypted === true || app.encrypted === 1) {
             extension_encryptedCount += 1;
         }
-        if (app.enable == true || app.enable == 1) {
+        if (app.enable === true || app.enable === 1) {
             extension_enableCount += 1;
         }
     }
 
 
-    let guestAll2dealerApps = push_apps_guestCount == policy.push_apps.length ? true : false;
+    let guestAll2dealerApps = push_apps_guestCount === policy.push_apps.length ? true : false;
 
-    let encryptedAll2dealerApps = push_apps_encryptedCount == policy.push_apps.length ? true : false;
+    let encryptedAll2dealerApps = push_apps_encryptedCount === policy.push_apps.length ? true : false;
 
-    let enableAll2dealerApps = push_apps_enableCount == policy.push_apps.length ? true : false;
+    let enableAll2dealerApps = push_apps_enableCount === policy.push_apps.length ? true : false;
 
-    let guestAll2appPermissions = appPermissions_guestCount == policy.app_list.length ? true : false;
+    let guestAll2appPermissions = appPermissions_guestCount === policy.app_list.length ? true : false;
 
-    let encryptedAll2appPermissions = appPermissions_encryptedCount == policy.app_list.length ? true : false;
+    let encryptedAll2appPermissions = appPermissions_encryptedCount === policy.app_list.length ? true : false;
 
-    let enableAll2appPermissions = appPermissions_enableCount == policy.app_list.length ? true : false;
+    let enableAll2appPermissions = appPermissions_enableCount === policy.app_list.length ? true : false;
 
-    let guestAll2allExtensions = extension_guestCount == policy.secure_apps.length ? true : false;
+    let guestAll2allExtensions = extension_guestCount === policy.secure_apps.length ? true : false;
 
-    let encryptedAll2allExtensions = extension_encryptedCount == policy.secure_apps.length ? true : false;
+    let encryptedAll2allExtensions = extension_encryptedCount === policy.secure_apps.length ? true : false;
 
-    let enableAll2allExtensions = extension_enableCount == policy.secure_apps.length ? true : false
+    let enableAll2allExtensions = extension_enableCount === policy.secure_apps.length ? true : false
     // console.log('reducer',  guestAll2appPermissions,encryptedAll2appPermissions, enableAll2appPermissions)
     return {
         guestAll2dealerApps: guestAll2dealerApps,

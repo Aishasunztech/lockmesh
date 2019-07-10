@@ -338,7 +338,7 @@ class Policy extends Component {
                         if (policy[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoPolicy.push(policy);
                         }
-                    } else if (policy[e.target.name] != null) {
+                    } else if (policy[e.target.name] !== null) {
                         // console.log("else null check", policy[e.target.name])
                         if (policy[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoPolicy.push(policy);

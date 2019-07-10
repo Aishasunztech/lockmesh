@@ -10,7 +10,7 @@ import { Markup } from 'interweave';
 import { Redirect } from 'react-router-dom';
 import { BASE_URL } from '../../../constants/Application.js';
 import {
-    APP_MANAGE_DATA,
+    APP_MANAGE_APKs,
     APP_MANAGE_POLICY,
     APP_SECURE_MARKET,
     APP_DOWNLOAD_TOOLS,
@@ -109,7 +109,7 @@ class Apk extends Component {
                                     <Link to="/apk-list">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_MANAGE_DATA], APP_MANAGE_DATA)} </h2>
+                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_MANAGE_APKs], APP_MANAGE_APKs)} </h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0 0px' }}>
                                                     <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -254,7 +254,7 @@ class Apk extends Component {
                                     width="42%"
                                 >
                                     <Row className="d_t_m">
-                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}>{convertToLang(this.props.translation[DT_MODAL_BODY], DT_MODAL_BODY)}</h4>
+                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY], DT_MODAL_BODY)} ></Markup></h4>
                                         <a href={`${BASE_URL}users/getFile/nlbyod.apk`}>
                                             <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}> 
                                             

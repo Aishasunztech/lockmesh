@@ -66,7 +66,8 @@ import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
-import { Button_Apply } from "../../constants/ButtonConstants";
+import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
+import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE } from "../../constants/DeviceConstants";
 
 const success = Modal.success
 const error = Modal.error
@@ -90,20 +91,20 @@ class ConnectDevice extends Component {
     this.mainMenu = [
       {
         pageName: APPS,
-        value: APPLICATION_PERMISION
+        value: convertToLang(props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)
       },
       {
         pageName: SECURE_SETTING,
-        value: SECURE_SETTING_PERMISSION
+        value: convertToLang(props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)
       },
       {
         pageName: SYSTEM_CONTROLS,
-        value: SYSTEM_PERMISSION
+        value: convertToLang(props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)
       },
 
       {
         pageName: MANAGE_PASSWORD,
-        value: MANAGE_PASSWORDS
+        value: convertToLang(props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)
       },
 
     ]
@@ -332,20 +333,6 @@ class ConnectDevice extends Component {
   }
 
   applyActionButton = (visible = true) => {
-    // console.log(this.state.changedCtrls, 'controls are');
-    // let changedControls = Object.create(null);
-    // Object.keys(this.state.controls.controls).map(key => {
-    //   if(key == 'bluetooth_status_isChanged'){
-    //     changedControls['bluetooth_status'] = this.state.controls.controls.bluetooth_status;
-    //   }else if(key == 'call_status_isChanged'){
-    //     changedControls['call_status'] = this.state.controls.controls.call_status
-    //   }else if(key == 'hotspot_status_isChanged'){
-    //     changedControls['hotspot_status'] = this.state.controls.controls.hotspot_status
-    //   }else if(key == 'screenshot_status_isChanged'){
-    //     changedControls['screenshot_status'] = this.state.controls.controls.screenshot_status
-    //   }
-    // });
-
     this.setState({
       showChangesModal: visible,
     })
@@ -474,7 +461,7 @@ class ConnectDevice extends Component {
 
 
   capitalizeFirstLetter = (string) => {
-    if (string && string !== '' && string !== null && string != 'N/A') {
+    if (string && string !== '' && string !== null && string !== 'N/A') {
       return string.charAt(0).toUpperCase() + string.slice(1);
     } else {
       return string
@@ -483,7 +470,6 @@ class ConnectDevice extends Component {
   }
 
   render() {
-    console.log('render connext page ', this.props)
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
     let onlineStatus = this.props.device_details.online
@@ -586,7 +572,7 @@ class ConnectDevice extends Component {
                   <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
                     {/*  */}
                     <SideActions
-                    translation={this.props.translation}
+                      translation={this.props.translation}
                       device={this.props.device_details}
                       profiles={this.props.profiles}
                       policies={this.props.policies}
@@ -611,10 +597,11 @@ class ConnectDevice extends Component {
                 </Row>
                 <Modal
                   maskClosable={false}
-                  title="Confirm new Settings to be sent to Device"
+                  title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], SETTINGS_TO_BE_SENT_TO_DEVICE)}
                   visible={this.state.showChangesModal}
                   onOk={this.applyActions}
                   onCancel={this.onCancel}
+                  cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                   okText={convertToLang(this.props.translation[Button_Apply], Button_Apply)}
                 >
                   <DeviceSettings
@@ -649,7 +636,7 @@ class ConnectDevice extends Component {
                 : null : null}
 
 
-        </div> : <h1>Device Not Found</h1>
+        </div> : <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], DEVICE_NOT_FOUND)} </h1>
     )
   }
 }
@@ -678,7 +665,6 @@ function mapDispatchToProps(dispatch) {
     editDevice: editDevice,
     getDevicesList: getDevicesList,
     getAccIdFromDvcId: getAccIdFromDvcId,
-    // showMessage: showMessage,
     unlinkDevice: unlinkDevice,
     flagged: flagged,
     unflagged: unflagged,
@@ -704,8 +690,7 @@ function mapDispatchToProps(dispatch) {
     clearState: clearState
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth, socket , settings}) => {
-  // console.log("DEVICE DETAILS",device_details);
+var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
   return {
     translation: settings.translation,
     auth: auth,

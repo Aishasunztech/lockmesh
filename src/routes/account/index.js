@@ -60,7 +60,7 @@ import {
 
 import PasswordForm from '../ConnectDevice/components/PasswordForm';
 import PurchaseCredit from "./components/PurchaseCredit";
-import { ADMIN } from "../../constants/Constants";
+import { ADMIN, PUSH_APPS_TEXT } from "../../constants/Constants";
 import { APP_ADD_MORE } from "../../constants/AppConstants";
 // import SetPricingModal from './PricesPakages/SetPricingModal';
 
@@ -88,7 +88,9 @@ class PasswordModal extends Component {
                     this.refs.pswdForm.resetFields()
                 }
                 }
-                okText="Push Apps"
+                // okText="Push Apps"
+                okText={convertToLang(this.props.translation[PUSH_APPS_TEXT], PUSH_APPS_TEXT)}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
             >
                 <PasswordForm
                     checkPass={this.props.checkPass}
@@ -222,7 +224,7 @@ class Account extends Component {
                         if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }
-                    } else if (data[fieldName] != null) {
+                    } else if (data[fieldName] !== null) {
                         if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }
@@ -378,7 +380,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'sim_id',
                 key: "sim_id",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -387,7 +389,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'start_date',
                 key: "start_date",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -396,7 +398,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'expiry_date',
                 key: "expiry_date",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -404,7 +406,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'chat_id',
                 key: "chat_id",
-                className: this.state.duplicate_data_type == 'chat_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'chat_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -412,7 +414,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'pgp_email',
                 key: "pgp_email",
-                className: this.state.duplicate_data_type == 'pgp_email' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'pgp_email' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             }
         ]
@@ -433,7 +435,9 @@ class Account extends Component {
                                         visible={this.state.duplicate_modal_show}
                                         onOk={this.InsertNewData}
                                         onCancel={this.handleCancelDuplicate}
-                                        okText='Submit'
+                                        // okText='Submit'
+                                        okText={convertToLang(this.props.translation[Button_submit], Button_submit)}
+                                        cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                                         okButtonProps={{
                                             disabled: this.state.newData.length ? false : true
                                         }}
@@ -444,18 +448,18 @@ class Account extends Component {
                                             columns={duplicateModalColumns}
                                             dataSource={
                                                 this.state.duplicate_ids.map(row => {
-                                                    if (this.state.duplicate_data_type == 'chat_id') {
+                                                    if (this.state.duplicate_data_type === 'chat_id') {
                                                         return {
                                                             key: row.chat_id,
                                                             chat_id: row.chat_id
                                                         }
-                                                    } else if (this.state.duplicate_data_type == 'pgp_email') {
+                                                    } else if (this.state.duplicate_data_type === 'pgp_email') {
                                                         return {
                                                             key: row.pgp_email,
                                                             pgp_email: row.pgp_email
                                                         }
                                                     }
-                                                    else if (this.state.duplicate_data_type == 'sim_id') {
+                                                    else if (this.state.duplicate_data_type === 'sim_id') {
                                                         return {
                                                             key: row.id,
                                                             sim_id: row[this.state.duplicate_data_type],
@@ -480,18 +484,18 @@ class Account extends Component {
                                             columns={duplicateModalColumns}
                                             dataSource={
                                                 this.state.newData.map(row => {
-                                                    if (this.state.duplicate_data_type == 'chat_id') {
+                                                    if (this.state.duplicate_data_type === 'chat_id') {
                                                         return {
                                                             key: row.chat_id,
                                                             chat_id: row.chat_id
                                                         }
-                                                    } else if (this.state.duplicate_data_type == 'pgp_email') {
+                                                    } else if (this.state.duplicate_data_type === 'pgp_email') {
                                                         return {
                                                             key: row.pgp_email,
                                                             pgp_email: row.pgp_email
                                                         }
                                                     }
-                                                    else if (this.state.duplicate_data_type == 'sim_id') {
+                                                    else if (this.state.duplicate_data_type === 'sim_id') {
                                                         return {
                                                             key: row.id,
                                                             sim_id: row[this.state.duplicate_data_type],
@@ -513,23 +517,24 @@ class Account extends Component {
                                             {/* <Link to="#" > */}
                                             <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                 <div>
-                                                    <h2 style={{ textAlign: "center" }}>Manage Data</h2>
+                                                    <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], MANAGE_DATA)} </h2>
                                                     <Divider className="mb-0" />
                                                     <Row style={{ padding: '12px 0 0px' }}>
                                                         <Col span={7} className="" style={{ textAlign: "center" }}>
                                                             <Icon type="form" className="and_icon" />
                                                         </Col>
                                                         <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                            <p><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
-                                                            <p><span className="diamond_icon">&#9670;</span>View/Edit your data</p>
-                                                            <p><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
-                                                            <p className="more_txt">and more...</p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], ACCOUNT_MANAGE_DATA_01)} />  </p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], ACCOUNT_MANAGE_DATA_02)} /> </p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], ACCOUNT_MANAGE_DATA_03)} />  </p>
+                                                            <p className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</p>
                                                         </Col>
                                                     </Row>
                                                 </div>
                                             </Card>
-                                            <Button type="primary" size="small" className="open_btn">Open</Button>
+                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                         </Link>
+
                                         <Modal
                                             maskClosable={false}
                                             className="manage_data"
@@ -1072,7 +1077,7 @@ class Account extends Component {
                                                 <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                     <div>
                                                         <div>
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> Backup Database</h2>
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> {convertToLang(this.props.translation[BACKUP_DATABASE], BACKUP_DATABASE)} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1080,14 +1085,14 @@ class Account extends Component {
                                                                 </Col>
                                                                 <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                     <p>
-                                                                        This feature allows you to keep a backup of the complete system database for offline safekeeping
-                                                    </p>
+                                                                        {convertToLang(this.props.translation[BACKUP_DATABASE_DESCRIPTION], BACKUP_DATABASE_DESCRIPTION)}
+                                                                    </p>
                                                                 </Col>
                                                             </Row>
                                                         </div>
                                                     </div>
                                                 </Card>
-                                                <Button type="primary" size="small" className="open_btn">Open</Button>
+                                                <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
                                             </Link>
                                             {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
@@ -1101,9 +1106,9 @@ class Account extends Component {
                             <div>
                                 <div>
                                     <a href="javascript:void(0)"
-                                        onClick={(e) => {
-                                            this.showPurchaseModal(e, true);
-                                        }}
+                                    // onClick={(e) => {
+                                    //     this.showPurchaseModal(e, true);
+                                    // }}
                                     >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
@@ -1194,6 +1199,7 @@ class Account extends Component {
                     pwdConfirmModal={this.state.pwdConfirmModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
+                    translation= {this.props.translation}
                 />
             </div>
         );

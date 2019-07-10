@@ -10,6 +10,7 @@ import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/
 import { transferApps, getMarketApps, handleUninstall } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { ADMIN, DEALER } from "../../constants/Constants";
+import Markup from 'interweave';
 import styles from './appmarket.css'
 
 import {
@@ -18,7 +19,8 @@ import {
     SPA_NOTIFICATION_BAR,
     SPA_TITEL_AVAILABLE_APPS,
     SPA_TITLE_SECURE_MARKET,
-    SPA_UNINSTALL_HELPING_TEXT_FUN
+    SPA_UNINSTALL_HELPING_TEXT_FUN,
+    SPA_APP
 } from '../../constants/AppConstants';
 
 import {
@@ -140,7 +142,7 @@ class ApkMarket extends React.Component {
 
     handleSelect = (list, e) => {
         // alert("asdsa")
-        console.log("handle select", e)
+        // console.log("handle select", e)
     }
     render() {
         return (
@@ -149,7 +151,7 @@ class ApkMarket extends React.Component {
                     this.props.isloading ? <CircularProgress /> :
                         <Card >
                             <Row>
-                                <h4 className="sm_top_heading">{convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], SPA_NOTIFICATION_BAR)}</h4>
+                                <h4 className="sm_top_heading"> <Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], SPA_NOTIFICATION_BAR)} /> </h4>
                                 <Col md={12} sm={24} xs={24} className="text-center">
                                     <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], SPA_TITEL_AVAILABLE_APPS)}</b></h4>
                                 </Col>
@@ -192,7 +194,7 @@ class ApkMarket extends React.Component {
                                 onSearch={this.handleSearch}
                                 onSelectChange={this.handleSelect}
                                 render={item => item.title}
-                                locale={{ itemUnit: convertToLang(this.props.translation[SPA_APPS], SPA_APPS), itemsUnit: convertToLang(this.props.translation[SPA_APPS], SPA_APPS) }}
+                                locale={{ itemUnit: convertToLang(this.props.translation[SPA_APP], SPA_APP), itemsUnit: convertToLang(this.props.translation[SPA_APPS], SPA_APPS) }}
                                 onItemSelect={this.handleSelect}
 
                             />

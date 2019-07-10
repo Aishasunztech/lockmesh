@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import URLSearchParams from 'url-search-params'
 import { Redirect, Route, Switch } from "react-router-dom";
 import { LocaleProvider } from "antd";
-import { IntlProvider } from "react-intl";
 
 import MainApp from "./MainApp";
 
@@ -96,7 +95,7 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    if (this.props.isSwitched != nextProps.isSwitched) {
+    if (this.props.isSwitched !== nextProps.isSwitched) {
       this.props.getLanguage();
       // this.setState({
       //   re_render: !this.state.re_render
@@ -126,26 +125,18 @@ class App extends Component {
 
 
     return (
-
-      < LocaleProvider
-      >
-        <IntlProvider
-        >
           <Switch>
             <Route exact path='/login' component={Login} />
             <Route exact path="/verify-auth" component={VerifyAuthCode} />
             <RestrictedRoute
               authUser={authUser}
               path={`${match.url}`}
-              // authUser={authUser}
               re_render={this.state.re_render}
               component={MainApp}
 
             />
 
           </Switch>
-        </IntlProvider>
-      </ LocaleProvider>
     )
   }
 

@@ -104,7 +104,7 @@ class DevicesList extends Component {
         this.confirmDelete(action, arr, title);
     }
     handleUserId = (user_id) => {
-        if (user_id != 'null' && user_id != null) {
+        if (user_id !== 'null' && user_id !== null) {
             this.setState({
                 redirect: true,
                 user_id: user_id
@@ -112,7 +112,7 @@ class DevicesList extends Component {
         }
     }
     goToDealer = (dealer) => {
-        if (dealer.dealer_id != 'null' && dealer.dealer_id != null) {
+        if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
             if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
                 this.setState({
                     redirect: true,
@@ -183,8 +183,8 @@ class DevicesList extends Component {
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
                 key: status == DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
-                counter: <div className="counter_w_td">{++index}</div>,
-                action: (<div className="device_action_w">{(status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
+                counter: ++index,
+                action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
@@ -196,22 +196,23 @@ class DevicesList extends Component {
                                     (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                     : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
                                         (<Fragment>{DeleteBtn}</Fragment>)
-                                        : (status === DEVICE_PENDING_ACTIVATION) ?
-                                            (<Fragment><Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment></Fragment>)
+                                        : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type === ADMIN) ?
+                                            (<Fragment>
+                                                {/* <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment> */}
+                                            </Fragment>)
                                             : (device.status === DEVICE_PRE_ACTIVATION) ?
                                                 false
                                                 : (status === DEVICE_EXPIRED) ?
                                                     (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
                                                     : false
-                }</div>),
-                // device_id: ((status != DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
-                device_id: status != DEVICE_PRE_ACTIVATION ? checkValue(device.device_id) : "N/A",
-                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
-                status: <span style={color} > {status}</span>,
-                online: device.online === 'online' ? (<span style={{ color: "gr" }}>
-                    {device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) :
-                    (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
+
+
+                ),
+                status: (<span style={color} > {status}</span>),
                 flagged: device.flagged,
+                device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 validity: checkValue(device.validity),
                 name: checkValue(device.name),
                 activation_code: checkValue(device.activation_code),
@@ -229,13 +230,14 @@ class DevicesList extends Component {
                 sim_2: checkValue(device.simno2),
                 serial_number: checkValue(device.serial_number),
                 model: checkValue(device.model),
+                // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+                // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 start_date: checkValue(device.start_date),
                 expiry_date: checkValue(device.expiry_date),
-                // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // batchData: device.batchData == undefined ? [] : device.batchData
             }
         });
@@ -263,7 +265,7 @@ class DevicesList extends Component {
             // console.log('delete the device', this.state.selectedRowKeys);
             for (let id of this.state.selectedRowKeys) {
                 for (let device of this.props.devices) {
-                    if (type != 'unlink') {
+                    if (type !== 'unlink') {
                         if (id == device.id) {
                             arr.push(device)
                         }
@@ -331,7 +333,7 @@ class DevicesList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.key)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.key)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.key)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -387,7 +389,6 @@ class DevicesList extends Component {
 
     render() {
 
-        var lng_name = 'eng'
         // console.log(this.state, 'selected keys', )
         const { activateDevice, suspendDevice } = this.props;
         const { redirect } = this.state

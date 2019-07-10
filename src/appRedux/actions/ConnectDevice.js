@@ -672,7 +672,7 @@ export function saveProfile(app_list, passwords = null, profileName, usr_acc_id,
     return (dispatch) => {
         let pwd = {};
         // console.log(passwords);
-        if (passwords != null) {
+        if (passwords !== null) {
             pwd = {
                 admin_password: (passwords.adminPwd === '') ? null : passwords.adminPwd,
                 guest_password: (passwords.guestPwd === '') ? null : passwords.guestPwd,
@@ -733,7 +733,7 @@ export function saveProfile(app_list, passwords = null, profileName, usr_acc_id,
 export function savePolicy(app_list, passwords = null, profileType, profileName, usr_acc_id) {
     return (dispatch) => {
         let pwd = {};
-        if (passwords != null) {
+        if (passwords !== null) {
             pwd = {
                 admin_password: (passwords.adminPwd === '') ? null : passwords.adminPwd,
                 guest_password: (passwords.guestPwd === '') ? null : passwords.guestPwd,

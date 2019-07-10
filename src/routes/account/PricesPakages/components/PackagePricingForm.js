@@ -72,7 +72,7 @@ class PackagePricingForm extends Component {
 
     PackageNameChange = async (rule, value, callback) => {
         let response = true
-        console.log('value', value)
+        // console.log('value', value)
         response = await RestService.checkPackageName(value).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -83,7 +83,7 @@ class PackagePricingForm extends Component {
                 }
             }
         });
-        console.log(response, 'respoinse ise  d')
+        // console.log(response, 'respoinse ise  d')
         if (response) {
             callback()
         } else {

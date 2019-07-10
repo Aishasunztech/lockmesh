@@ -240,7 +240,22 @@ const RestService = {
     },
 
     SavePolicyChanges: (record) => {
-        // console.log('api called ', record);
+        record.push_apps.forEach((app) => {
+            app.guest = (app.guest !== undefined) ? app.guest : false;
+            app.enable = (app.enable !== undefined) ? app.enable : false;
+            app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
+        });
+
+        record.app_list.forEach((app) => {
+            app.guest = (app.guest !== undefined) ? app.guest : false;
+            app.enable = (app.enable !== undefined) ? app.enable : false;
+            app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
+        });
+        record.permissions.forEach((app) => {
+            app.guest = (app.guest !== undefined) ? app.guest : false;
+            app.enable = (app.enable !== undefined) ? app.enable : false;
+        })
+        
         let data = {
             id: record.id,
             push_apps: JSON.stringify(record.push_apps),
@@ -607,16 +622,16 @@ const RestService = {
     languages: () => {
         return axios.get(`${BASE_URL}users/languages`, RestService.getHeader());
     },
-    
+
     switchLanguage: (language) => {
-        console.log(language, 'language is')
+        // console.log(language, 'language is')
         return axios.patch(BASE_URL + 'users/save-language', { language }, RestService.getHeader());
     },
 
     getLanguage: () => {
         return axios.get(BASE_URL + 'users/get-language', RestService.getHeader());
     },
-    
+
     invalidPage: () => {
     },
     getFile: (filename) => {

@@ -50,11 +50,17 @@ import {
   Parent_Dealer,
   Parent_Dealer_ID
 } from '../../constants/DealerConstants';
+import {
+	APK_SHOW_ON_DEVICE,
+	APK,
+	APK_APP_NAME,
+	APK_APP_LOGO,
+	APK_PERMISSION
+} from '../../constants/ApkConstants';
 // import constants from '../constants';
 
 import SettingStates from './InitialStates';
 
-import { convertToLang } from '../../routes/utils/commonUtils';
 
 var { initialSettings } = SettingStates;
 
@@ -127,45 +133,52 @@ const settings = (state = initialSettings, action) => {
           ...state,
           // locale: action.response.data[0] ? JSON.parse(action.response.data[0]['dealer_language']) : state.locale
           translation: passedTranslation,
-          deviceOptions: [
-            { "key": DEVICE_ID, "value": convertToLang(passedTranslation[DEVICE_ID], DEVICE_ID) },
-            { "key": USER_ID, "value": convertToLang(passedTranslation[USER_ID], USER_ID) },
-            { "key": DEVICE_REMAINING_DAYS, "value": convertToLang(passedTranslation[DEVICE_REMAINING_DAYS], DEVICE_REMAINING_DAYS) },
-            { "key": DEVICE_STATUS, "value": convertToLang(passedTranslation[DEVICE_STATUS], DEVICE_STATUS) },
-            { "key": DEVICE_MODE, "value": convertToLang(passedTranslation[DEVICE_MODE], DEVICE_MODE) },
-            { "key": DEVICE_FLAGGED, "value": convertToLang(passedTranslation[DEVICE_FLAGGED], DEVICE_FLAGGED) },
-            { "key": DEVICE_NAME, "value": convertToLang(passedTranslation[DEVICE_NAME], DEVICE_NAME) },
-            { "key": DEVICE_ACCOUNT_EMAIL, "value": convertToLang(passedTranslation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL) },
-            { "key": DEVICE_CLIENT_ID, "value": convertToLang(passedTranslation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID) },
-            { "key": DEVICE_ACTIVATION_CODE, "value": convertToLang(passedTranslation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE) },
-            { "key": DEVICE_PGP_EMAIL, "value": convertToLang(passedTranslation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL) },
-            { "key": DEVICE_SIM_ID, "value": convertToLang(passedTranslation[DEVICE_SIM_ID], DEVICE_SIM_ID) },
-            { "key": DEVICE_CHAT_ID, "value": convertToLang(passedTranslation[DEVICE_CHAT_ID], DEVICE_CHAT_ID) },
-            { "key": DEVICE_DEALER_ID, "value": convertToLang(passedTranslation[DEVICE_DEALER_ID], DEVICE_DEALER_ID) },
-            { "key": DEVICE_DEALER_NAME, "value": convertToLang(passedTranslation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME) },
-            { "key": DEVICE_DEALER_PIN, "value": convertToLang(passedTranslation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN) },
-            { "key": DEVICE_MAC_ADDRESS, "value": convertToLang(passedTranslation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS) },
-            { "key": DEVICE_IMEI_1, "value": convertToLang(passedTranslation[DEVICE_IMEI_1], DEVICE_IMEI_1) },
-            { "key": DEVICE_SIM_1, "value": convertToLang(passedTranslation[DEVICE_SIM_1], DEVICE_SIM_1) },
-            { "key": DEVICE_IMEI_2, "value": convertToLang(passedTranslation[DEVICE_IMEI_2], DEVICE_IMEI_2) },
-            { "key": DEVICE_SIM_2, "value": convertToLang(passedTranslation[DEVICE_SIM_2], DEVICE_SIM_2) },
-            { "key": DEVICE_SERIAL_NUMBER, "value": convertToLang(passedTranslation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER) },
-            { "key": DEVICE_MODEL, "value": convertToLang(passedTranslation[DEVICE_MODEL], DEVICE_MODEL) },
-            { "key": DEVICE_S_DEALER, "value": convertToLang(passedTranslation[DEVICE_S_DEALER], DEVICE_S_DEALER) },
-            { "key": DEVICE_S_DEALER_NAME, "value": convertToLang(passedTranslation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME) },
-            { "key": DEVICE_START_DATE, "value": convertToLang(passedTranslation[DEVICE_START_DATE], DEVICE_START_DATE) },
-            { "key": DEVICE_EXPIRY_DATE, "value": convertToLang(passedTranslation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE) },
-          ],
-          dealerOptions: [
-            { "key": DEALER_ID, "value": convertToLang(passedTranslation[DEALER_ID], DEALER_ID) },
-            { "key": DEALER_NAME, "value": convertToLang(passedTranslation[DEALER_NAME], DEALER_NAME) },
-            { "key": DEALER_EMAIL, "value": convertToLang(passedTranslation[DEALER_EMAIL], DEALER_EMAIL) },
-            { "key": DEALER_PIN, "value": convertToLang(passedTranslation[DEALER_PIN], DEALER_PIN) },
-            { "key": DEALER_DEVICES, "value": convertToLang(passedTranslation[DEALER_DEVICES], DEALER_DEVICES) },
-            { "key": DEALER_TOKENS, "value": convertToLang(passedTranslation[DEALER_TOKENS], DEALER_TOKENS) },
-            { "key": Parent_Dealer, "value": convertToLang(passedTranslation[Parent_Dealer], Parent_Dealer) },
-            { "key": Parent_Dealer_ID, "value": convertToLang(passedTranslation[Parent_Dealer_ID], Parent_Dealer_ID) },
-          ],
+          // deviceOptions: [
+          //   { "key": "device_id", "value": DEVICE_ID },
+          //   { "key": "user_id", "value": USER_ID },
+          //   { "key": "validity", "value": DEVICE_REMAINING_DAYS },
+          //   { "key": "status", "value": DEVICE_STATUS },
+          //   { "key": "online", "value": DEVICE_MODE },
+          //   { "key": "flagged", "value": DEVICE_FLAGGED },
+          //   { "key": "name", "value": DEVICE_NAME },
+          //   { "key": "account_email", "value": DEVICE_ACCOUNT_EMAIL },
+          //   { "key": "client_id", "value": DEVICE_CLIENT_ID },
+          //   { "key": "activation_code", "value": DEVICE_ACTIVATION_CODE },
+          //   { "key": "pgp_email", "value": DEVICE_PGP_EMAIL },
+          //   { "key": "sim_id", "value": DEVICE_SIM_ID },
+          //   { "key": "chat_id", "value": DEVICE_CHAT_ID },
+          //   { "key": "dealer_id", "value": DEVICE_DEALER_ID },
+          //   { "key": "dealer_name", "value": DEVICE_DEALER_NAME },
+          //   { "key": "dealer_pin", "value": DEVICE_DEALER_PIN },
+          //   { "key": "mac_address", "value": DEVICE_MAC_ADDRESS },
+          //   { "key": "imei_1", "value": DEVICE_IMEI_1 },
+          //   { "key": "sim_1", "value": DEVICE_SIM_1 },
+          //   { "key": "imei_2", "value": DEVICE_IMEI_2 },
+          //   { "key": "sim_2", "value": DEVICE_SIM_2 },
+          //   { "key": "serial_number", "value": DEVICE_SERIAL_NUMBER },
+          //   { "key": "model", "value": DEVICE_MODEL },
+          //   { "key": "s_dealer", "value": DEVICE_S_DEALER },
+          //   { "key": "s_dealer_name", "value": DEVICE_S_DEALER_NAME },
+          //   { "key": "start_date", "value": DEVICE_START_DATE },
+          //   { "key": "expiry_date", "value": DEVICE_EXPIRY_DATE },
+          // ],
+          // dealerOptions: [
+          //   { "key": "dealer_id", "value": DEALER_ID },
+          //   { "key": "dealer_name", "value": DEALER_NAME },
+          //   { "key": "dealer_email", "value": DEALER_EMAIL },
+          //   { "key": "link_code", "value": DEALER_PIN },
+          //   { "key": "connected_devices", "value": DEALER_DEVICES },
+          //   { "key": "dealer_token", "value": DEALER_TOKENS },
+          //   { "key": "parent_dealer", "value": Parent_Dealer },
+          //   { "key": "parent_dealer_id", "value": Parent_Dealer_ID },
+          // ],
+          // APKOptions: [
+          //   { "key": "permission", "value": APK_PERMISSION},
+          //   { "key": "apk_status", "value": APK_SHOW_ON_DEVICE},
+          //   { "key": "apk", "value": APK},
+          //   { "key": "apk_name", "value": APK_APP_NAME},
+          //   { "key": "apk_logo", "value": APK_APP_LOGO},
+          // ],
         }
       }
     }

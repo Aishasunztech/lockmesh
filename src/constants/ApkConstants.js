@@ -7,6 +7,8 @@ export const APK_ACTION = 'action.id'; // ACTION
 
 export const APK_SEARCH = "apk.search.id"; // Search APK
 export const APK_UPLOAD = "apk.upload.id"; // Upload APK
+export const APK_UPLOAD_FILE = "apk.upload.file.id"; // Upload APK FILE
+export const APK_UPLOAD_ICON = "apk.upload.icon.id"; // Upload ICON
 export const Permission_List = "permission.list.id"; // Permission List
 
 export const PERMISSION_Add_Modal_Title = "permission.add.modal.title.id"; // Add Dealer to permissions list for this App

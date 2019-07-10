@@ -83,7 +83,7 @@ class AppFilter extends Component {
     }
 
     setDropdowns(values) {
-        console.log('setDropdowns val : ', values)
+        // console.log('setDropdowns val : ', values)
         this.setState({
             selectedDisplayValues: values,
         });
@@ -112,7 +112,7 @@ class AppFilter extends Component {
 
     render() {
         const { translation } = this.props;
-        // console.log(" Current State", this.props)
+        // console.log(" Current State options are ", this.props.options)
         let fullScreenClass1 = "";
         let fullScreenClass2 = "";
 
@@ -123,15 +123,14 @@ class AppFilter extends Component {
             fullScreenClass1 = "col-md-3";
             fullScreenClass2 = "col-md-3";
         }
-        // console.log('-------------------');
-        // console.log(this.props.options);
+
         const Search = Input.Search;
-        console.log('render props selectedOptions ...', this.props.selectedOptions);
+        //  console.log('render props selectedOptions ...', this.props.selectedOptions);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
-        console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
+        //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
-        if (this.props.options != undefined && this.props.selectedDisplayValues != undefined) {
-            if (this.props.options.length == this.state.selectedDisplayValues.length) {
+        if (this.props.selectedDisplayValues !== undefined) {
+            if (this.props.options.length === this.state.selectedDisplayValues.length) {
                 allSelectedOpt = true;
             } else { allSelectedOpt = false }
             //  console.log('allSelectedOpt val are: ', allSelectedOpt)
@@ -151,12 +150,12 @@ class AppFilter extends Component {
                                         valueKey="key"
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
-                                        placeholder={convertToLang(this.props.translation[Appfilter_Display], Appfilter_Display)}
+                                        placeholder={convertToLang(translation[Appfilter_Display], Appfilter_Display)}
                                         className="display_"
                                         multiple={true}
+                                        numberDisplayed={true}
                                         includeSelectAll={true}
                                         onChange={values => this.setDropdowns(values)}
-                                        // onChange={(values) => console.log(values)}
                                         dropdownHeight={300}
                                         renderSelectAll={({
                                             filtered,
@@ -177,13 +176,10 @@ class AppFilter extends Component {
                                                         onKeyPress={toggleSelectAll}
                                                         key={tabIndex}
                                                     >
-                                                        {/* required to select item */}
-                                                        {/* <input type="checkbox" checked={isSelected} readOnly /> */}
                                                         <Checkbox
                                                             checked={allSelectedOpt} className="slct_all"
                                                         >
-                                                            {translation[Appfilter_SelectAll]}
-                                                            {/* <IntlMessages id="appfilter.SelectAll" /> */}
+                                                            {convertToLang(translation[Appfilter_SelectAll], Appfilter_SelectAll)}
                                                         </Checkbox>
                                                     </li>
                                                 );
@@ -200,22 +196,15 @@ class AppFilter extends Component {
                                             valueKey,
                                             multiple
                                         }) => {
-                                            // console.log("value key:", valueKey)
-                                            // console.log("item:", item)
-                                            // console.log("selectValue", selectValue)
-                                            // console.log("labelKey key:", labelKey)
-                                            // console.log("multiple select", multiple);
 
                                             return (
                                                 <li
                                                     style={style} // required
                                                     className={isSelected ? 'selected' : ''} // required to indicate is selected
                                                     key={item.key} // required
-                                                    onClick={() => selectValue(item)}
+                                                    onClick={() => selectValue({ "key": item.key, "value": convertToLang(this.props.translation[item.value], item.value) })}
                                                 >
-                                                    {/* required to select item */}
-                                                    {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                    <Checkbox checked={isSelected}>{item.value}</Checkbox>
+                                                    <Checkbox checked={isSelected}>{convertToLang(this.props.translation[item.value], item.value)}</Checkbox>
 
                                                 </li>
                                             );
@@ -270,7 +259,6 @@ class AppFilter extends Component {
                             {
                                 (this.props.isAddButton === true) ?
                                     (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
-
                                         <Button
                                             type="primary"
                                             disabled={(this.props.disableAddButton === true) ? true : false}
@@ -278,7 +266,6 @@ class AppFilter extends Component {
                                         >
                                             <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
                                         </Button>
-
                                         : (this.props.addDealer) ?
                                             <Button
                                                 type="primary"

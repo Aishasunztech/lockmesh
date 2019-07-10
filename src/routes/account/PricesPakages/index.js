@@ -202,7 +202,7 @@ class Prices extends Component {
                         if (dealer[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             dumyPackages.push(dealer);
                         }
-                    } else if (dealer[e.target.name] != null) {
+                    } else if (dealer[e.target.name] !== null) {
                         if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             dumyPackages.push(dealer);
                         }
@@ -274,7 +274,7 @@ class Prices extends Component {
 
     renderList = () => {
         if (this.state.packages) {
-            console.log(this.state.packages)
+            // console.log(this.state.packages)
             return this.state.packages.map((item, index) => {
                 return {
                     key: item.id,
@@ -322,7 +322,7 @@ class Prices extends Component {
                 }
             }
         }
-        console.log(features, 'featues arte')
+        // console.log(features, 'featues arte')
         return features
     }
 
@@ -364,7 +364,7 @@ class Prices extends Component {
         })
     }
     render() {
-        console.log(this.state.prices, 'prices are coming')
+        // console.log(this.state.prices, 'prices are coming')
         return (
             <div>
                 <div>

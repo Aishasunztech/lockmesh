@@ -6,6 +6,7 @@ import { Input, Modal, Select, Button } from "antd";
 import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../utils/commonUtils';
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
+import { resetUploadForm } from "../../appRedux/actions/Apk";
 // import {getDevicesList} from '../../appRedux/actions/Devices';
 import AppFilter from '../../components/AppFilter';
 import AddDealer from '../addDealer/index';
@@ -14,16 +15,6 @@ import CircularProgress from "components/CircularProgress/index";
 import DealerList from "./components/dealerList";
 import styles from './dealers.css'
 
-
-// import {
-//     DEALER_ID,
-//     DEALER_NAME,
-//     DEALER_EMAIL,
-//     DEALER_PIN,
-//     DEALER_DEVICES,
-//     DEALER_TOKENS,
-//     DEALER_ACTION
-// } from '../../constants/DealerConstants';
 
 import {
     Appfilter_SearchDealer, Appfilter_ShowDealer
@@ -35,63 +26,11 @@ import {
 } from '../../constants/Constants'
 
 import {
-    Button_Modify,
-    Button_Delete,
-    Button_Activate,
-    Button_Connect,
-    Button_Yes,
     Button_Ok,
-    Button_ok,
     Button_Cancel,
-    Button_Suspend,
-    Button_Unsuspend,
-    Button_Edit,
-    Button_passwordreset,
-    Button_submit,
-    Button_Flag,
-    Button_UNFLAG,
-    Button_SetPassword,
-    Button_Apply,
-    Button_Undo,
-    Button_Redo,
-    Button_Clear,
-    Button_Refresh,
-    Button_Next,
-    Button_previous,
     Button_Add_Dealer,
     Button_Add_S_dealer,
     Button_Add_Admin,
-    Button_UploadApk,
-    Button_Save,
-    Button_Update,
-    Button_Open,
-    Button_Sample,
-    Button_Import,
-    Button_Export,
-    Button_Release,
-    Button_View,
-    Button_ChangePassword,
-    Button_ChangeEmail,
-    Button_AddPolicy,
-    Button_Add,
-    Button_AddExceptSelected,
-    Button_AddAll,
-    Button_RemoveAll,
-    Button_RemoveExcept,
-    Button_BackupNow,
-    Button_DeleteUser,
-    Button_AddApps,
-    Button_Push,
-    Button_LoadProfile,
-    Button_LoadPolicy,
-    Button_IMEI,
-    Button_Pull,
-    Button_SaveProfile,
-    Button_Activity,
-    Button_SIM,
-    Button_Transfer,
-    Button_WipeDevice,
-    Button_Unlink,
 } from '../../constants/ButtonConstants';
 
 import {
@@ -114,6 +53,7 @@ import {
 import { isArray } from "util";
 import { Tab_All, Tab_Active, Tab_Suspended, Tab_Archived } from "../../constants/TabConstants";
 // import { ADMIN, DEALER } from "../../constants/Constants";
+import { dealerColumns, sDealerColumns } from '../utils/columnsUtils';
 
 var coppydealers = [];
 var status = true;
@@ -121,210 +61,210 @@ class Dealers extends Component {
 
     constructor(props) {
         super(props);
+        const columns = dealerColumns(props.translation, this.handleSearch);
+        // const columns = [{
+        //     title: '#',
+        //     dataIndex: 'counter',
+        //     align: 'center',
+        //     className: 'row',
+        // }, {
+        //     title: '',
+        //     dataIndex: 'accounts',
+        //     align: 'center',
+        //     className: 'row',
+        //     width: 300,
+        // },
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="connected_devices"
+        //             key="connected_devices"
+        //             id="connected_devices"
+        //             className="search_heading"
+        //             autoComplete="new-password"
+        //             onKeyUp={this.handleSearch}
+        //             placeholder={convertToLang(props.translation[DEVICES], DEVICES)}
 
-        const columns = [{
-            title: '#',
-            dataIndex: 'counter',
-            align: 'center',
-            className: 'row',
-        }, {
-            title: '',
-            dataIndex: 'accounts',
-            align: 'center',
-            className: 'row',
-            width: 300,
-        },
-        {
-            title: (
-                <Input.Search
-                    name="connected_devices"
-                    key="connected_devices"
-                    id="connected_devices"
-                    className="search_heading"
-                    autoComplete="new-password"
-                    onKeyUp={this.handleSearch}
-                    placeholder={convertToLang(props.translation[DEVICES], DEVICES)}
+        //         />
+        //     ),
+        //     dataIndex: 'connected_devices',
+        //     className: '',
+        //     children: [
+        //         {
+        //             title: convertToLang(props.translation[DEVICES], DEVICES),
+        //             dataIndex: 'connected_devices',
+        //             key: 'connected_devices',
+        //             // sorter: (a, b) => {
+        //             //     console.log(a);
+        //             //     // console.log(b);
+        //             //     return a.connected_devices.length;
+        //             // },
+        //             sorter: (a, b) => { return a.connected_devices - b.connected_devices },
 
-                />
-            ),
-            dataIndex: 'connected_devices',
-            className: '',
-            children: [
-                {
-                    title: convertToLang(props.translation[DEVICES], DEVICES),
-                    dataIndex: 'connected_devices',
-                    key: 'connected_devices',
-                    // sorter: (a, b) => {
-                    //     console.log(a);
-                    //     // console.log(b);
-                    //     return a.connected_devices.length;
-                    // },
-                    sorter: (a, b) => { return a.connected_devices - b.connected_devices },
+        //             align: 'center',
+        //             sortDirections: ['ascend', 'descend'],
+        //             className: '',
+        //         }
+        //     ]
+        // },
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="dealer_id"
+        //             key="dealer_id"
+        //             id="dealer_id"
+        //             className="search_heading"
+        //             autoComplete="new-password"
+        //             placeholder={convertToLang(props.translation[DEALER_ID], DEALER_ID)}
+        //             onKeyUp={this.handleSearch}
 
-                    align: 'center',
-                    sortDirections: ['ascend', 'descend'],
-                    className: '',
-                }
-            ]
-        },
-        {
-            title: (
-                <Input.Search
-                    name="dealer_id"
-                    key="dealer_id"
-                    id="dealer_id"
-                    className="search_heading"
-                    autoComplete="new-password"
-                    placeholder={convertToLang(props.translation[DEALER_ID], DEALER_ID)}
-                    onKeyUp={this.handleSearch}
+        //         />
+        //     ),
+        //     dataIndex: 'dealer_id',
+        //     className: '',
+        //     children: [
+        //         {
+        //             title: convertToLang(props.translation[DEALER_ID], DEALER_ID),
+        //             dataIndex: 'dealer_id',
+        //             key: 'dealer_id',
+        //             align: 'center',
+        //             sorter: (a, b) => a.dealer_id - b.dealer_id,
+        //             sortDirections: ['ascend', 'descend'],
+        //             className: '',
+        //         }
+        //     ]
+        // }, {
+        //     title: (
+        //         <Input.Search
+        //             name="link_code"
+        //             key="link_code"
+        //             id="link_code"
+        //             className="search_heading"
+        //             autoComplete="new-password"
+        //             placeholder={convertToLang(props.translation[DEALER_PIN], DEALER_PIN)}
+        //             onKeyUp={this.handleSearch}
 
-                />
-            ),
-            dataIndex: 'dealer_id',
-            className: '',
-            children: [
-                {
-                    title: convertToLang(props.translation[DEALER_ID], DEALER_ID),
-                    dataIndex: 'dealer_id',
-                    key: 'dealer_id',
-                    align: 'center',
-                    sorter: (a, b) => a.dealer_id - b.dealer_id,
-                    sortDirections: ['ascend', 'descend'],
-                    className: '',
-                }
-            ]
-        }, {
-            title: (
-                <Input.Search
-                    name="link_code"
-                    key="link_code"
-                    id="link_code"
-                    className="search_heading"
-                    autoComplete="new-password"
-                    placeholder={convertToLang(props.translation[DEALER_PIN], DEALER_PIN)}
-                    onKeyUp={this.handleSearch}
+        //         />
+        //     ),
+        //     dataIndex: 'link_code',
+        //     className: '',
+        //     children: [
+        //         {
+        //             title: convertToLang(props.translation[DEALER_PIN], DEALER_PIN),
+        //             dataIndex: 'link_code',
+        //             key: 'link_code',
+        //             // sorter: (a, b) => {
+        //             //     console.log(a);
+        //             //     // console.log(b);
+        //             //     return a.link_code.length;
+        //             // },
+        //             sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
 
-                />
-            ),
-            dataIndex: 'link_code',
-            className: '',
-            children: [
-                {
-                    title: convertToLang(props.translation[DEALER_PIN], DEALER_PIN),
-                    dataIndex: 'link_code',
-                    key: 'link_code',
-                    // sorter: (a, b) => {
-                    //     console.log(a);
-                    //     // console.log(b);
-                    //     return a.link_code.length;
-                    // },
-                    sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+        //             align: 'center',
+        //             sortDirections: ['ascend', 'descend'],
+        //             className: '',
+        //         }
+        //     ]
+        // },
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="dealer_name"
+        //             key="dealer_name"
+        //             id="dealer_name"
+        //             className="search_heading"
+        //             autoComplete="new-password"
+        //             placeholder={convertToLang(props.translation[DEALER_NAME], DEALER_NAME)}
+        //             onKeyUp={this.handleSearch}
 
-                    align: 'center',
-                    sortDirections: ['ascend', 'descend'],
-                    className: '',
-                }
-            ]
-        },
-        {
-            title: (
-                <Input.Search
-                    name="dealer_name"
-                    key="dealer_name"
-                    id="dealer_name"
-                    className="search_heading"
-                    autoComplete="new-password"
-                    placeholder={convertToLang(props.translation[DEALER_NAME], DEALER_NAME)}
-                    onKeyUp={this.handleSearch}
+        //         />
+        //     ),
+        //     dataIndex: 'dealer_name',
+        //     className: '',
+        //     children: [
+        //         {
+        //             title: convertToLang(props.translation[DEALER_NAME], DEALER_NAME),
+        //             dataIndex: 'dealer_name',
+        //             key: 'dealer_name',
+        //             // sorter: (a, b) => {
+        //             //     console.log(a);
+        //             //     // console.log(b);
+        //             //     return a.dealer_name.length;
+        //             // },
+        //             sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
 
-                />
-            ),
-            dataIndex: 'dealer_name',
-            className: '',
-            children: [
-                {
-                    title: convertToLang(props.translation[DEALER_NAME], DEALER_NAME),
-                    dataIndex: 'dealer_name',
-                    key: 'dealer_name',
-                    // sorter: (a, b) => {
-                    //     console.log(a);
-                    //     // console.log(b);
-                    //     return a.dealer_name.length;
-                    // },
-                    sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
+        //             align: 'center',
+        //             sortDirections: ['ascend', 'descend'],
+        //             className: '',
+        //         }
+        //     ]
+        // },
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="dealer_email"
+        //             key="dealer_email"
+        //             id="dealer_email"
+        //             className="search_heading"
+        //             autoComplete="new-password"
+        //             placeholder={convertToLang(props.translation[DEALER_EMAIL], DEALER_EMAIL)}
+        //             onKeyUp={this.handleSearch}
 
-                    align: 'center',
-                    sortDirections: ['ascend', 'descend'],
-                    className: '',
-                }
-            ]
-        },
-        {
-            title: (
-                <Input.Search
-                    name="dealer_email"
-                    key="dealer_email"
-                    id="dealer_email"
-                    className="search_heading"
-                    autoComplete="new-password"
-                    placeholder={convertToLang(props.translation[DEALER_EMAIL], DEALER_EMAIL)}
-                    onKeyUp={this.handleSearch}
+        //         />
+        //     ),
+        //     dataIndex: 'dealer_email',
+        //     className: '',
+        //     children: [
+        //         {
+        //             title: convertToLang(props.translation[DEALER_EMAIL], DEALER_EMAIL),
+        //             dataIndex: 'dealer_email',
+        //             key: 'dealer_email',
+        //             // sorter: (a, b) => {
+        //             //     console.log(a);
+        //             //     // console.log(b);
+        //             //     return a.dealer_email.length;
+        //             // },
+        //             sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
 
-                />
-            ),
-            dataIndex: 'dealer_email',
-            className: '',
-            children: [
-                {
-                    title: convertToLang(props.translation[DEALER_EMAIL], DEALER_EMAIL),
-                    dataIndex: 'dealer_email',
-                    key: 'dealer_email',
-                    // sorter: (a, b) => {
-                    //     console.log(a);
-                    //     // console.log(b);
-                    //     return a.dealer_email.length;
-                    // },
-                    sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-
-                    align: 'center',
-                    sortDirections: ['ascend', 'descend'],
-                    className: '',
-                }
-            ]
-        },
+        //             align: 'center',
+        //             sortDirections: ['ascend', 'descend'],
+        //             className: '',
+        //         }
+        //     ]
+        // },
 
 
-        {
-            title: (
-                <Input.Search
-                    name="dealer_token"
-                    key="dealer_token"
-                    id="dealer_token"
-                    className="search_heading"
-                    autoComplete="new-password"
-                    placeholder={convertToLang(props.translation[DEALER_TOKENS], DEALER_TOKENS)}
-                    onKeyUp={this.handleSearch}
+        // {
+        //     title: (
+        //         <Input.Search
+        //             name="dealer_token"
+        //             key="dealer_token"
+        //             id="dealer_token"
+        //             className="search_heading"
+        //             autoComplete="new-password"
+        //             placeholder={convertToLang(props.translation[DEALER_TOKENS], DEALER_TOKENS)}
+        //             onKeyUp={this.handleSearch}
 
-                />
-            ),
-            dataIndex: 'dealer_token',
-            className: '',
-            children: [
-                {
-                    title: convertToLang(props.translation[DEALER_TOKENS], DEALER_TOKENS),
-                    dataIndex: 'dealer_token',
-                    key: 'dealer_token',
-                    // sorter: (a, b) => {
-                    //     console.log(a);
-                    //     // console.log(b);
-                    //     return a.dealer_token.length;
-                    // },
-                    sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
+        //         />
+        //     ),
+        //     dataIndex: 'dealer_token',
+        //     className: '',
+        //     children: [
+        //         {
+        //             title: convertToLang(props.translation[DEALER_TOKENS], DEALER_TOKENS),
+        //             dataIndex: 'dealer_token',
+        //             key: 'dealer_token',
+        //             // sorter: (a, b) => {
+        //             //     console.log(a);
+        //             //     // console.log(b);
+        //             //     return a.dealer_token.length;
+        //             // },
+        //             sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
 
-                }
-            ]
-        }
-        ];
+        //         }
+        //     ]
+        // }
+        // ];
         // console.log('c_length', columns.length);
 
         this.state = {
@@ -361,8 +301,10 @@ class Dealers extends Component {
         }, 3000);
     };
 
-    handleCancel = () => {
+    handleCancel = (e) => {
         this.setState({ visible_DealerModal: false });
+
+        // this.props.resetUploadForm(true)
     };
 
     showModal = () => {
@@ -391,7 +333,7 @@ class Dealers extends Component {
             case 'active':
                 this.setState({
                     dealers: this.filterList('active', this.props.dealers),
-                    column: this.columns,
+                    column: this.state.columns,
                     tabselect: '2'
                 })
 
@@ -399,7 +341,7 @@ class Dealers extends Component {
             case 'suspended':
                 this.setState({
                     dealers: this.filterList('suspended', this.props.dealers),
-                    column: this.columns,
+                    column: this.state.columns,
                     tabselect: '4'
                 })
                 break;
@@ -407,14 +349,14 @@ class Dealers extends Component {
             case 'all':
                 this.setState({
                     dealers: this.props.dealers,
-                    column: this.columns,
+                    column: this.state.columns,
                     tabselect: '1'
                 })
                 break;
             case "unlinked":
                 this.setState({
                     dealers: this.filterList('unlinked', this.props.dealers),
-                    column: this.columns,
+                    column: this.state.columns,
                     tabselect: '3'
                 })
                 break;
@@ -422,7 +364,7 @@ class Dealers extends Component {
             default:
                 this.setState({
                     dealers: this.props.dealers,
-                    column: this.columns,
+                    column: this.state.columns,
                     tabselect: '1'
                 })
                 break;
@@ -450,7 +392,7 @@ class Dealers extends Component {
                     // console.log("valueis", value);
                     // console.log("column", column)
                     if (column.className !== 'row') {
-                        if (column.children[0].title === convertToLang(this.props.translation[value.key], value.key)) {
+                        if (column.dataIndex === value.key) {
                             dumydata[index].className = '';
                             dumydata[index].children[0].className = '';
                         }
@@ -483,7 +425,7 @@ class Dealers extends Component {
         return (
             <Select
                 showSearch
-                    placeholder={ convertToLang(this.props.translation[Appfilter_ShowDealer], Appfilter_ShowDealer)
+                placeholder={convertToLang(this.props.translation[Appfilter_ShowDealer], Appfilter_ShowDealer)
                     // <IntlMessages id="appfilter.ShowDealer" />
                 }
                 optionFilterProp="children"
@@ -597,63 +539,8 @@ class Dealers extends Component {
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.columns !== undefined) && (this.state.options !== undefined) && (this.state.columns !== null) && (this.state.columns.length <= 8)) {
             //  alert('if sdealer')
 
-            this.state.columns.push(
-                {
-                    title: (
-                        <Input.Search
-                            name="parent_dealer"
-                            key="parent_dealer"
-                            id="parent_dealer"
-                            className="search_heading"
-                            autoComplete="new-password"
-                            placeholder={convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer)}
-                            onKeyUp={this.handleSearch}
-                        />
-                    ),
-                    dataIndex: 'parent_dealer',
-                    className: '',
-                    children: [
-                        {
-                            title: convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer),
-                            dataIndex: 'parent_dealer',
-                            key: 'parent_dealer',
-                            className: '',
-                            // sorter: (a, b) => {
-                            //     console.log(a);
-                            //     // console.log(b);
-                            //     return a.parent_dealer.length;
-                            // },
-                            sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
-
-                        }
-                    ]
-                },
-                {
-                    title: (
-                        <Input.Search
-                            name="parent_dealer_id"
-                            key="parent_dealer_id"
-                            id="parent_dealer_id"
-                            className="search_heading"
-                            autoComplete="new-password"
-                            placeholder={convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID)}
-                            onKeyUp={this.handleSearch}
-                        />
-                    ),
-                    dataIndex: 'parent_dealer_id',
-                    className: '',
-                    children: [
-                        {
-                            title: convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID),
-                            dataIndex: 'parent_dealer_id',
-                            key: 'parent_dealer_id',
-                            className: '',
-                            sorter: (a, b) => { return a.parent_dealer_id - b.parent_dealer_id },
-
-                        }
-                    ]
-                }
-            )
+            let sDealerCols = sDealerColumns(this.props.translation, this.handleSearch);
+            this.state.columns.push(...sDealerCols);
             // this.state.columns = this.state.columns
         }
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 6)) {
@@ -667,9 +554,6 @@ class Dealers extends Component {
             this.state.options = this.state.options.slice(0, 6);
         }
 
-        if (this.props.selectedOptions !== prevProps.selectedOptions) {
-            this.handleCheckChange(this.props.selectedOptions)
-        }
 
         if (this.props.dealers !== prevProps.dealers) {
             this.setState({
@@ -684,6 +568,16 @@ class Dealers extends Component {
                 unlinkedDealers: this.filterList('unlinked', this.props.dealers),
             })
         }
+        if (this.props.translation !== prevProps.translation) {
+            this.setState({
+                columns: dealerColumns(this.props.translation, this.handleSearch)
+            })
+        }
+
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            this.handleCheckChange(this.props.selectedOptions)
+        }
+
 
     }
 
@@ -740,7 +634,7 @@ class Dealers extends Component {
                 break;
         }
 
-        this.handleCheckChange(this.props.selectedOptions)
+        // this.handleCheckChange(this.props.selectedOptions)
 
     }
 
@@ -771,13 +665,16 @@ class Dealers extends Component {
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
                                 footer={null}
-                                okText= {convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                                cancelText= {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                                maskClosable={false}
+                                destroyOnClose={true}
+                                okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                             >
                                 <AddDealer
                                     handleCancel={this.handleCancel}
                                     dealersList={this.state.dealers}
                                     dealer_type={this.state.dealer_type}
+                                    dealerTypeText={dealerType}
                                     translation={this.props.translation}
                                 />
 
@@ -871,7 +768,7 @@ class Dealers extends Component {
                         if (dealer[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDealers.push(dealer);
                         }
-                    } else if (dealer[e.target.name] != null) {
+                    } else if (dealer[e.target.name] !== null) {
                         if (dealer[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDealers.push(dealer);
                         }
@@ -914,7 +811,7 @@ var mapStateToProps = (state) => {
     // console.log("mapStateToProps");
     // console.log(state.dealers.isloading);
     // console.log('state.dealer', state.dealers);
-    console.log("selected options Dealer", state.settings.dealerOptions);
+    // console.log("selected options Dealer", state.settings.dealerOptions);
     return {
         isloading: state.dealers.isloading,
         dealers: state.dealers.dealers,
@@ -950,4 +847,4 @@ var mapStateToProps = (state) => {
 // }
 
 
-export default connect(mapStateToProps, { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer, getDropdown, postDropdown, postPagination, getPagination })(Dealers)
+export default connect(mapStateToProps, { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer, getDropdown, postDropdown, postPagination, getPagination, resetUploadForm })(Dealers)

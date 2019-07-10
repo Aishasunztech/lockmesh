@@ -7,7 +7,7 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
-import { getFormattedDate } from '../../utils/commonUtils';
+import { getFormattedDate, convertToLang } from '../../utils/commonUtils';
 import {
     Button_Delete,
     Button_Edit,
@@ -16,6 +16,7 @@ import {
 } from '../../../constants/ButtonConstants';
 
 import styles from './user.css';
+import { EDIT_USER, DELETE_USER, DO_YOU_WANT_TO_DELETE_USER, UNDO, DO_YOU_WANT_TO_UNDO_USER } from '../../../constants/UserConstants';
 
 const confirm = Modal.confirm
 
@@ -57,46 +58,41 @@ class UserList extends Component {
             return {
                 key: `${user.user_id}`,
                 rowKey: `${user.user_id}`,
-                counter: ++index,
-                action: (
-                    <Fragment>
-                        <div>
-                            <Button
-                                type="primary"
-                                size="small"
-                                style={{ textTransform: 'uppercase' }}
-                                onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
-                            >
-                                {/* <IntlMessages id="button.Edit" />  */}
-                                {this.props.translation[Button_Edit]}
-                            </Button>
-                            {(user.devicesList.length === 0) ?
-                                (user.del_status == 0) ?
-                                    <Button
-                                        type="danger"
-                                        size="small"
-                                        style={{ textTransform: 'uppercase' }}
-                                        onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
-                                    >
-                                        {/* <IntlMessages id="button.Delete" /> */}
-                                        {this.props.translation[Button_Delete]}
-                                    </Button>
-                                    : <Button
-                                        type="dashed"
-                                        size="small"
-                                        style={{ textTransform: 'uppercase' }}
-                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
-                                    >
-                                        {/* <IntlMessages id="button.Undo" />  */}
-                                        {this.props.translation[Button_Undo]}
-                                    </Button>
-                                : null
-                            }
-                        </div>
-                    </Fragment>
-                )
+                action:
+                    (<Fragment>
+                        <Button
+                            type="primary"
+                            size="small"
+                            style={{ textTransform: 'uppercase' }}
+                            onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, convertToLang(this.props.translation[EDIT_USER], EDIT_USER))}
+                        >
+                            {/* <IntlMessages id="button.Edit" />  */}
+                            {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
+                        </Button>
+                        {(user.devicesList.length === 0) ?
+                            (user.del_status === 0) ?
+                                <Button
+                                    type="danger"
+                                    size="small"
+                                    style={{ textTransform: 'uppercase' }}
+                                    onClick={() => showConfirm(this.props.deleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_DELETE_USER], DO_YOU_WANT_TO_DELETE_USER), convertToLang(this.props.translation[DELETE_USER], DELETE_USER))}
+                                >
+                                    {/* <IntlMessages id="button.Delete" /> */}
+                                    {convertToLang(this.props.translation[Button_Delete], Button_Delete)}
+                                </Button>
+                                : <Button
+                                    type="dashed"
+                                    size="small"
+                                    style={{ textTransform: 'uppercase' }}
+                                    onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_UNDO_USER], DO_YOU_WANT_TO_UNDO_USER), convertToLang(this.props.translation[UNDO], UNDO))}
+                                >
+                                    {/* <IntlMessages id="button.Undo" />  */}
+                                    {convertToLang(this.props.translation[Button_Undo], Button_Undo)}
+                                </Button>
+                            : null
+                        }
+                    </Fragment>)
                 ,
-
                 user_id: user.user_id,
                 devices: (user.devicesList) ? user.devicesList.length : 0,
                 devicesList: user.devicesList,
@@ -137,7 +133,7 @@ class UserList extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -217,6 +213,7 @@ function showConfirm(action, user_id, msg, buttonText) {
     confirm({
         title: msg + user_id,
         okText: buttonText,
+        // cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
         onOk() {
             action(user_id)
         },

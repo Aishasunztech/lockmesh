@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Tabs, Table, Switch, Row, Col, Avatar } from 'antd';
 import { BASE_URL } from '../../../constants/Application';
 import Permissions from "./Permissions";
@@ -9,8 +9,6 @@ import { Tab_POLICY_SELECTED_APPS, Tab_POLICY_Dealer_PERMISSIONS } from '../../.
 import { POLICY_NAME, NAME, POLICY_ACTION, POLICY_NOTE, POLICY_COMMAND } from '../../../constants/PolicyConstants';
 
 const TabPane = Tabs.TabPane;
-
-
 
 export default class PolicyInfo extends Component {
     columnsSystemPermission = [{
@@ -49,24 +47,6 @@ export default class PolicyInfo extends Component {
 
     }
 
-    
-
-    // renderSystemPermissions = () => {
-    //     if (this.state.policy.controls) {
-    //         if (this.state.policy.controls.length) {
-    //             return this.state.policy.controls.map((item, index) => {
-    //                 // console.log('object, ', item)
-    //                 return {
-    //                     rowKey: index,
-    //                     name: item.name,
-    //                     action: <span style={{ color: (item.value === true || item.value === 1) ? 'green' : 'red' }} >{(item.value === true || item.value === 1) ? 'On' : 'Off'}</span>
-    //                 }
-
-    //             })
-    //         }
-    //     }
-
-    // }
 
     renderSystemPermissions = (controls) => {
         if (controls) {
@@ -111,18 +91,6 @@ export default class PolicyInfo extends Component {
 
             }]
         }
-        // console.log(this.state.systemPermissions, 'permissions')
-        // if (this.state.systemPermissions.length) {
-        //     return this.state.systemPermissions.map((item, index) => {
-        //         // console.log('object, ', item)
-        //         return {
-        //             rowKey: index,
-        //             name: item.name,
-        //             action: <Switch disabled={item.name == 'Wifi' ? true : false} checked={item.value} onClick={(e) => this.props.handleChekSystemPermission(e, item.name)} size="small" />
-        //         }
-
-        //     })
-        // }
     }
 
 
@@ -157,31 +125,6 @@ export default class PolicyInfo extends Component {
                 selected: nextProps.selected,
             })
         }
-
-        // if (this.props.appsGotted == false) {
-        //     let system_setting_app = '';
-        //     let secure_setting_app = '';
-        //     console.log(' 11111111')
-        //     if (nextProps.policy.app_list.length) {
-        //     console.log(' 2222222222')
-
-        //         let system_control_index = nextProps.policy.app_list.findIndex(app => app.uniqueName == Main_SETTINGS)
-        //         if (system_control_index > -1) {
-        //             system_setting_app = nextProps.policy.app_list[system_control_index]
-        //         }
-
-        //         let secure_setting_index = nextProps.policy.app_list.findIndex(app => app.uniqueName == SECURE_SETTING)
-        //         if (secure_setting_index > -1) {
-        //             secure_setting_app = nextProps.policy.app_list[secure_setting_index]
-        //         }
-        //     }
-
-        //     this.setState({
-        //         policy: nextProps.policy,
-        //         system_setting_app: system_setting_app,
-        //         secure_setting_app: secure_setting_app,
-        //     })
-        // }
 
         if (this.props.policy !== nextProps.policy) {
             // console.log(nextProps.policy, 'next policy is');
@@ -222,7 +165,7 @@ export default class PolicyInfo extends Component {
         }]
         // console.log(this.state.policy);
         return (
-            <div>
+            <Fragment>
                 <Tabs className="exp_tabs_policy" onChange={this.callback} activeKey={this.state.selected} type="card">
                     <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_SELECTED_APPS], Tab_POLICY_SELECTED_APPS)} key="1">
 
@@ -258,13 +201,12 @@ export default class PolicyInfo extends Component {
                         />
                     </TabPane>
                     <TabPane tab={convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)} key="3">
-                        <div>
+                        <Fragment>
                             <Row>
                                 <Col span={8} className="">
                                 </Col>
                                 <Col span={2} className="">
-                                <Avatar src={`${BASE_URL}users/getFile/${this.state.secure_setting_app.icon}`} style={{ width: "30px", height: "30px" }} />
-                                    {/* <img src={require("assets/images/setting.png")} className='image_icon' /> */}
+                                    <Avatar src={`${BASE_URL}users/getFile/${this.state.secure_setting_app.icon}`} style={{ width: "30px", height: "30px" }} />
                                 </Col>
                                 <Col span={6} className="pl-0">
                                     <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
@@ -278,9 +220,6 @@ export default class PolicyInfo extends Component {
                                         disabled
                                         size="small"
                                         checked={this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.guest === true || this.state.secure_setting_app.guest === 1) ? true : false : false}
-                                        onClick={(e) => {
-                                            this.handleChecked(e, "guest", '', 'main');
-                                        }}
                                     />
                                 </Col>
                                 <Col span={4} className="text-center">
@@ -289,10 +228,6 @@ export default class PolicyInfo extends Component {
                                         disabled
                                         size="small"
                                         checked={this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.encrypted === true || this.state.secure_setting_app.encrypted === 1) ? true : false : false}
-                                        onClick={(e) => {
-                                            // console.log("encrypted", e);
-                                            this.handleChecked(e, "encrypted", '', 'main');
-                                        }}
                                     />
                                 </Col>
                                 <Col span={4} className="text-center">
@@ -301,16 +236,12 @@ export default class PolicyInfo extends Component {
                                         disabled
                                         size="small"
                                         checked={this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.enable === true || this.state.secure_setting_app.enable === 1) ? true : false : false}
-                                        onClick={(e) => {
-                                            // console.log("encrypted", e);
-                                            this.handleChecked(e, "enable", '', 'main');
-                                        }}
                                     />
 
                                 </Col>
                                 <Col span={6}></Col>
                             </Row>
-                        </div>
+                        </Fragment>
                         <AppList
                             allExtensions={this.state.policy.secure_apps}
                             handleEditPolicy={this.props.handleEditPolicy}
@@ -328,13 +259,12 @@ export default class PolicyInfo extends Component {
                         />
                     </TabPane>
                     <TabPane tab={convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)} key="4">
-                        <div>
+                        {/* <Fragment>
                             <Row>
                                 <Col span={8} className="">
                                 </Col>
                                 <Col span={2} className="">
-                                <Avatar src={`${BASE_URL}users/getFile/${this.state.system_setting_app.icon}`} style={{ width: "30px", height: "30px" }} />
-                                    {/* <img src={require("assets/images/setting.png")} className='image_icon' /> */}
+                                    <Avatar src={`${BASE_URL}users/getFile/${this.state.system_setting_app.icon}`} style={{ width: "30px", height: "30px" }} />
                                 </Col>
                                 <Col span={6} className="pl-0">
                                     <h5 style={{ marginTop: '9px' }}>Android Settings Permission</h5>
@@ -359,10 +289,6 @@ export default class PolicyInfo extends Component {
                                         disabled
                                         size="small"
                                         checked={this.state.system_setting_app !== '' ? (this.state.system_setting_app.encrypted === true || this.state.system_setting_app.encrypted === 1) ? true : false : false}
-                                        onClick={(e) => {
-                                            // console.log("encrypted", e);
-                                            this.handleChecked(e, "encrypted", '', 'main');
-                                        }}
                                     />
                                 </Col>
                                 <Col span={4} className="text-center">
@@ -371,16 +297,13 @@ export default class PolicyInfo extends Component {
                                         disabled
                                         size="small"
                                         checked={this.state.system_setting_app !== '' ? (this.state.system_setting_app.enable === true || this.state.system_setting_app.enable === 1) ? true : false : false}
-                                        onClick={(e) => {
-                                            // console.log("encrypted", e);
-                                            this.handleChecked(e, "enable", '', 'main');
-                                        }}
                                     />
 
                                 </Col>
                                 <Col span={6}></Col>
                             </Row>
-                        </div>
+                        </Fragment> */}
+
                         <Table
                             pagination={false}
                             dataSource={this.renderSystemPermissions(this.state.policy.controls)}
@@ -401,7 +324,7 @@ export default class PolicyInfo extends Component {
                         />
                     </TabPane>
                 </Tabs>
-            </div>
+            </Fragment>
         )
     }
 }

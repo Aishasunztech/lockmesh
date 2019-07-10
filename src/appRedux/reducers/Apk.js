@@ -32,13 +32,13 @@ const initialState = {
 	apk_list: [],
 	selectedOptions: [],
 	DisplayPages: '10',
-	options: [
-		APK_PERMISSION,
-		APK_SHOW_ON_DEVICE,
-		APK,
-		APK_APP_NAME,
-		APK_APP_LOGO,
-	],
+	// options: [
+	// 	APK_PERMISSION,
+	// 	APK_SHOW_ON_DEVICE,
+	// 	APK,
+	// 	APK_APP_NAME,
+	// 	APK_APP_LOGO,
+	// ],
 	resetUploadForm: false,
 	authenticateUpdateUser: false
 };
