@@ -61,10 +61,8 @@ export default class User extends Component {
                                             <a onClick={() => this.props.ChangeProfile()} >Edit</a>
                                         </Col>
                                     </Row>
-
                                     <Divider />
-                                    <Table columns={columns} dataSource={dataSource} bordered={true} pagination={false} showHeader={false}   >
-
+                                    <Table columns={columns} dataSource={dataSource} bordered={true} pagination={false} showHeader={false}>
                                     </Table>
                                 </div>
                             </Card>
