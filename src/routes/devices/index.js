@@ -60,7 +60,7 @@ import {
 import {
     DEVICE_REMAINING_DAYS,
     DEVICE_FLAGGED,
-   
+
 } from '../../constants/DeviceConstants';
 
 import {
@@ -95,7 +95,7 @@ class Devices extends Component {
     constructor(props) {
         super(props);
         var columns = devicesColumns(props.translation, this.handleSearch);
-      
+
 
         this.state = {
             columns: columns,
@@ -327,7 +327,7 @@ class Devices extends Component {
     }
 
     handleChangetab = (value) => {
-// console.log('============= value index is: ', value)
+        // console.log('============= value index is: ', value)
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
         if (value == '5' && this.props.user.type == ADMIN) {
@@ -343,7 +343,7 @@ class Devices extends Component {
                     align: 'center',
                     className: 'row',
                     width: 800,
-                    
+
                 })
             }
         }
@@ -406,7 +406,7 @@ class Devices extends Component {
         var devices = [];
         switch (value) {
             case '4':
-                devices = this.filterList(DEVICE_ACTIVATED, this.props.devices)
+                devices = this.state.activeDevices
                 this.setState({
                     devices: devices,
                     column: this.state.columns,
@@ -526,26 +526,26 @@ class Devices extends Component {
                 if (dumydata[index].className !== 'row') {
                     dumydata[index].className = 'hide';
                     // if(dumydata[index].children) {
-                        dumydata[index].children[0].className = 'hide';
+                    dumydata[index].children[0].className = 'hide';
                     // }
                     // dumydata[]
                 }
                 // console.log(this.state.tabselect)
                 values.map((value) => {
                     if (column.className !== 'row') {
-                    if (column.dataIndex === value.key) {
-                        if (this.state.tabselect !== '3') {
-                            if (column.dataIndex !== 'validity') {
+                        if (column.dataIndex === value.key) {
+                            if (this.state.tabselect !== '3') {
+                                if (column.dataIndex !== 'validity') {
+                                    dumydata[index].className = '';
+                                    dumydata[index].children[0].className = '';
+                                }
+                            }
+                            else {
                                 dumydata[index].className = '';
                                 dumydata[index].children[0].className = '';
                             }
                         }
-                        else {
-                            dumydata[index].className = '';
-                            dumydata[index].children[0].className = '';
-                        }
                     }
-                }
 
                 });
             });
@@ -573,7 +573,7 @@ class Devices extends Component {
             // console.log('this.props ', this.props.DisplayPages);
             this.setState({
                 translation: this.props.translation,
-                devices: this.props.devices,
+                devices: this.filterList(DEVICE_ACTIVATED, this.props.devices),
                 columns: this.state.columns,
                 defaultPagingValue: this.props.DisplayPages,
                 selectedOptions: this.props.selectedOptions,
@@ -595,19 +595,19 @@ class Devices extends Component {
             // this.handleCheckChange(this.props.selectedOptions);
 
         }
-        
-        if(this.props.translation !== prevProps.translation){
+
+        if (this.props.translation !== prevProps.translation) {
             // console.log(this.columns)
             this.setState({
-                columns : devicesColumns(this.props.translation, this.handleSearch)
-            
+                columns: devicesColumns(this.props.translation, this.handleSearch)
+
             })
         }
 
-     
+
 
         // console.log('updated');
-        
+
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
             // console.log('==================== componentDidUpdate  ======================== ');
             // console.log(this.props.selectedOptions)
