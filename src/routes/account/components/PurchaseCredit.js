@@ -10,7 +10,7 @@ import BitCoinForm from './BitCoinForm';
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Cancel } from '../../../constants/ButtonConstants';
-import { PUSH_APPS_TEXT } from '../../../constants/Constants';
+import { PUSH_APP_TEXT } from '../../../constants/Constants';
 import { Required_Fields } from '../../../constants/DeviceConstants';
 // import 'react-credit-cards/lib/styles.scss';
 
@@ -151,10 +151,10 @@ class PurchaseCredit extends Component {
                     creditInfo={this.state.creditInfo}
                     purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
                 />
-                <BitCoinForm 
-                    translation = {this.props.translation}
-                    bitCoinModal = {this.state.bitCoinModal}
-                    showBitCoinModal = {this.showBitCoinModal}
+                <BitCoinForm
+                    translation={this.props.translation}
+                    bitCoinModal={this.state.bitCoinModal}
+                    showBitCoinModal={this.showBitCoinModal}
                     creditInfo={this.state.creditInfo}
                 />
                 <Modal
@@ -173,7 +173,7 @@ class PurchaseCredit extends Component {
                         this.cancelPurchaseModal()
                     }}
                     // okText="Push Apps"
-                    okText={convertToLang(this.props.translation[PUSH_APPS_TEXT], PUSH_APPS_TEXT)}
+                    okText={convertToLang(this.props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <div>

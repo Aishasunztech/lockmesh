@@ -4,7 +4,6 @@ import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Tabl
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
-
 const confirm = Modal.confirm;
 
 class BitCoinForm extends Component {
