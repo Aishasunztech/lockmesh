@@ -235,7 +235,7 @@ const RestService = {
             app.enable = (app.enable !== undefined) ? app.enable : false;
             app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
         });
-        record.permissions.forEach((app) => {
+        record.secure_apps.forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
         })

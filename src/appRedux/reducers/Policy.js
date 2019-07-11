@@ -247,19 +247,22 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_POLICY: {
-            // console.log(action.response, 'resp')
+            console.log(action.response, 'resp')
+            let policies = state.policies
             if (action.response.status) {
                 success({
                     title: action.response.msg,
                 });
+                policies.push(action.response.data)
             } else {
                 error({
                     title: action.response.msg,
                 });
             }
-
+            console.log(policies);
             return {
                 ...state,
+                policies: policies,
                 guestAlldealerApps: false,
                 encryptedAlldealerApps: false,
                 enableAlldealerApps: false,
@@ -302,7 +305,7 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
-                copyPolicies: JSON.parse(JSON.stringify(state.policies))
+                policies: JSON.parse(JSON.stringify(state.copyPolicies))
             }
         }
 
@@ -645,7 +648,7 @@ export default (state = initialState, action) => {
             });
             // let dealers = JSON.parse(action.dealers)
             // console.log(dealers.length ,'itrititt',action.apk_id);
-            
+
             let objIndex = state.policies.findIndex((obj => obj.id === action.policy_id));
             state.policies[objIndex].permission_count = action.permission_count;
 

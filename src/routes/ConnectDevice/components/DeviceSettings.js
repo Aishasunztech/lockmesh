@@ -28,7 +28,7 @@ export default class TableHistory extends Component {
                 render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
             }, {
                 title: convertToLang(this.props.translation[Guest], Guest),
-                dataIndex: convertToLang(this.props.translation[Guest], Guest),
+                dataIndex: 'guest',
                 key: '2',
             }, {
                 title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
@@ -48,7 +48,7 @@ export default class TableHistory extends Component {
                 render: text => <a href="javascript:;" style={{ fontSize: 12 }}> {text}</ a>,
             }, {
                 title: convertToLang(this.props.translation[Guest], Guest),
-                dataIndex: convertToLang(this.props.translation[Guest], Guest),
+                dataIndex: 'guest',
                 key: '2',
             }, {
                 title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
@@ -236,7 +236,7 @@ export default class TableHistory extends Component {
         // console.log(this.props.type, 'datalist is type of');
         let data = JSON.parse(JSON.stringify(datalist));
         if (this.props.type === 'profile') {
-            data = JSON.parse(datalist)
+            data = JSON.parse(JSON.stringify(datalist))
         }
 
         if (datalist.length > 0) {

@@ -51,7 +51,7 @@ class TableHistory extends Component {
     renderList = (histories, type, callback) => {
         return histories.map((history) => {
             // console.log("list", history.extenssions);
-    
+
             return ({
                 key: history.id,
                 history_date: (type === "history") ? history.created_at : (type === POLICY) ? history.policy_name : (type === "profile") ? history.profile_name : null,
@@ -67,10 +67,10 @@ class TableHistory extends Component {
                             }
                             // this.applyProfile(history.app_list)
                         }}
-                    > 
-                    {/* Apply */}
-                    {convertToLang(this.props.translation[Button_Apply], Button_Apply)}
-                    {/* <IntlMessages id="button.Apply" /> */}
+                    >
+                        {/* Apply */}
+                        {convertToLang(this.props.translation[Button_Apply], Button_Apply)}
+                        {/* <IntlMessages id="button.Apply" /> */}
                     </Button>
                 ),
                 app_list: history.app_list,
@@ -81,22 +81,22 @@ class TableHistory extends Component {
             })
         })
     }
-    
+
     renderColumn = (type) => {
         // if(type === "history"){
-    
+
         // } else {
-    
+
         // }
         return [
             {
-                title: (type === "history") ?  convertToLang(this.props.translation[HISTORY_DATE], HISTORY_DATE) :  `${type} ${convertToLang(this.props.translation[Name], Name)}`,
+                title: (type === "history") ? convertToLang(this.props.translation[HISTORY_DATE], HISTORY_DATE) : `${type} ${convertToLang(this.props.translation[Name], Name)}`,
                 dataIndex: 'history_date',
                 key: '1',
                 align: "center"
             },
             {
-                title:  convertToLang(this.props.translation[ACTION], ACTION),
+                title: convertToLang(this.props.translation[ACTION], ACTION),
                 dataIndex: 'action',
                 key: '2',
                 align: "center"
@@ -132,7 +132,7 @@ class TableHistory extends Component {
                     // console.log("extensions: ", extensions);
                     if (this.props.type === 'profile' && record.controls !== null && record.controls !== '' && record.controls !== undefined) {
                         let cntrl = {};
-                        cntrl = JSON.parse(record.controls)
+                        cntrl = JSON.parse(JSON.stringify(record.controls))
                         controls = cntrl
                     }
                     // console.log("push_apps: ", push_apps);
@@ -152,7 +152,7 @@ class TableHistory extends Component {
                             isPushApps={true}
                             push_apps={push_apps}
                             type={this.props.type}
-                            translation = {this.props.translation}
+                            translation={this.props.translation}
                         />
                     );
                 }}
