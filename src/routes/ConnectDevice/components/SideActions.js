@@ -573,7 +573,7 @@ class SideActions extends Component {
 
     render() {
         // console.log(this.state.apk_list, 'list apk')
-        const device_status = (this.props.device.account_status === "suspended") ? convertToLang(this.props.translation[Button_Unsuspend], Button_Unsuspend) : convertToLang(this.props.translation[Button_Suspend], Button_Suspend);
+        const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], Button_UNFLAG) : convertToLang(this.props.translation[Button_Flag], Button_Flag);
         const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
@@ -710,7 +710,7 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
                                     disabled={(this.props.device.flagged !== 'Not flagged') ? 'disabled' : ''}
                                 >
-                                    {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
+                                    {((this.props.device.account_status === '')) ? <div><Icon type="user-delete" /> {convertToLang(this.props.translation[Button_Suspend], Button_Suspend)} </div> : <div><Icon type="user-add" /> {convertToLang(this.props.translation[Button_Unsuspend], Button_Unsuspend)} </div>}
                                 </Button>
 
                                 <Button type="default" className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" />
