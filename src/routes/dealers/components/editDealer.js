@@ -9,7 +9,7 @@ import { convertToLang } from '../../utils/commonUtils';
 import { EDIT_DEALER } from '../../../constants/ActionTypes';
 
 let func;
-export default class editDealer extends Component {
+export default class EditDealer extends Component {
 
     constructor(props) {
         super(props);

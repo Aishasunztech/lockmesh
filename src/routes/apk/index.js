@@ -426,13 +426,11 @@ class Apk extends React.Component {
                                 footer={null}
                             >
                                 <AddApk
-
+                                    translation={this.props.translation}
                                     hideUploadApkModal={this.hideUploadApkModal}
                                     ref='uploadApk'
                                 />
                             </Modal>
-
-
                         </div>}
             </div>
         )

@@ -305,7 +305,7 @@ class AutoUpdate extends React.Component {
 
                             <div>
                                 <AppFilter
-                                    translation={this.props.translation}                  
+                                    translation={this.props.translation}
                                     handleFilterOptions={this.handleFilterOptions}
                                     searchPlaceholder="Search APK"
                                     addButtonText="Upload APK"
@@ -368,6 +368,7 @@ class AutoUpdate extends React.Component {
                                     footer={null}
                                 >
                                     <AddApk
+                                        translation={this.props.translation}
                                         autoUpdate={true}
                                         hideUploadApkModal={this.hideUploadApkModal}
                                         ref='uploadApk'

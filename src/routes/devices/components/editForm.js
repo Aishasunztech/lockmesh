@@ -7,7 +7,7 @@ import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 import {
-    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Modal_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require
+    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Model_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require
 } from '../../../constants/Constants';
 import AddUser from '../../users/components/AddUser';
 import {
@@ -318,7 +318,7 @@ class EditDevice extends Component {
 
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
                         <Form.Item
-                            label={convertToLang(this.props.translation[Modal_text], Modal_text)}
+                            label={convertToLang(this.props.translation[Model_text], Model_text)}
                             labelCol={{ span: 8, xs: 24, sm: 8 }}
                             wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         >
