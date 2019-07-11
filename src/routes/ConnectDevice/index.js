@@ -69,6 +69,8 @@ import ProgressBar from "../../components/ProgressBar";
 import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
 import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE } from "../../constants/DeviceConstants";
 
+import { mobileMainMenu, mobileSubMenu } from '../utils/columnsUtils';
+
 const success = Modal.success
 const error = Modal.error
 
@@ -88,47 +90,8 @@ class ConnectDevice extends Component {
       messageType: ''
     }
     // console.log("hello every body", this.props);
-    this.mainMenu = [
-      {
-        pageName: APPS,
-        value: convertToLang(props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)
-      },
-      {
-        pageName: SECURE_SETTING,
-        value: convertToLang(props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)
-      },
-      {
-        pageName: SYSTEM_CONTROLS,
-        value: convertToLang(props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)
-      },
-
-      {
-        pageName: MANAGE_PASSWORD,
-        value: convertToLang(props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)
-      },
-
-    ]
-
-    this.subMenu = [
-
-      {
-        pageName: GUEST_PASSWORD,
-        value: 'Set Guest Password'
-      },
-      {
-        pageName: ENCRYPTED_PASSWORD,
-        value: 'Set Encrypted Password'
-      },
-      {
-        pageName: DURESS_PASSWORD,
-        value: 'Set Duress Password'
-      },
-
-      {
-        pageName: ADMIN_PASSWORD,
-        value: 'Change Admin Panel Code'
-      },
-    ]
+    this.mainMenu = mobileMainMenu(props.translation);
+    this.subMenu = mobileSubMenu(props.translation);
   }
 
   changePage = (pageName) => {
@@ -213,6 +176,10 @@ class ConnectDevice extends Component {
         messageText: this.props.messageText,
         messageType: this.props.messageType
       })
+    }
+    if (this.props.translation != prevProps.translation) {
+      this.mainMenu = mobileMainMenu(this.props.translation);
+      this.subMenu = mobileSubMenu(this.props.translation);
     }
   }
 

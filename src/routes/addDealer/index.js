@@ -202,6 +202,7 @@ class AddDealer extends Component {
 const AddDealerForm = Form.create()(AddDealer);
 
 var mapStateToProps = (dealers) => {
+    // console.log('s dealer list is: ', dealers.dealers.dealers2);
     // console.log("mapStateToProps");
     // console.log(dealers);
     // console.log('dealer', dealers);

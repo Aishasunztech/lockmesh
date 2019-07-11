@@ -402,11 +402,12 @@ class AddApk extends Component {
 const WrappedNormalApkForm = Form.create('name', 'add_apk')(AddApk);
 
 
-const mapStateToProps = ({ apk_list }) => {
+const mapStateToProps = ({ apk_list, settings }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
-        resetUploadForm: apk_list.resetUploadForm
+        resetUploadForm: apk_list.resetUploadForm,
+        translation: settings.translation
     };
 }
 
