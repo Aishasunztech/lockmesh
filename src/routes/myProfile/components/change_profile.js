@@ -80,6 +80,7 @@ class EditForm extends Component {
             if(!err)
             {
                 // console.log('done', values);
+                // console.log(values);
                 this.props.updateUserProfile(values);
                 this.props.handleCancel();
                
