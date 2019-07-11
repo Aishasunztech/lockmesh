@@ -43,6 +43,7 @@ import {
   Sidebar_settings,
   Sidebar_logout,
   Alert_Change_Language,
+  ARE_YOU_SURE_YOU_WANT_TO_LOGOUT,
 } from '../../constants/SidebarConstants'
 
 // import languageData from "./languageData";
@@ -129,7 +130,7 @@ class SidebarContent extends Component {
   logout = () => {
     let _this = this;
     Modal.confirm({
-      title: 'Are you sure you want to logout?',
+      title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_LOGOUT], ARE_YOU_SURE_YOU_WANT_TO_LOGOUT),
       okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
       cancelText: convertToLang(this.props.translation[Button_No], Button_No),
 
