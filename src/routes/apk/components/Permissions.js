@@ -401,11 +401,7 @@ class Permissions extends Component {
       let common = {
         'key': dealer.dealer_id,
         'row_key': dealer.dealer_id,
-        'dealer_id': (
-          <div data-column="DEALER ID">
-            {dealer.dealer_id ? dealer.dealer_id : 'N/A'}
-          </div>
-        ),
+        'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
         'dealer_name': (
           // <div data-column="DEALER NAME">
             dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
