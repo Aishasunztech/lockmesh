@@ -16,11 +16,21 @@ switch (hostName) {
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "LockMesh"
         break;
+    case "www.lockmesh.com":
+        URL = "https://api.lockmesh.com/"
+        SUPERADMIN = 'https://api.meshguard.co/'
+        TITLE = "LockMesh"
+        break;
     case "titansecureserver.com":
         URL = "https://api.titansecureserver.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "TitanLocker"
         break;
+    case "www.titansecureserver.com":
+            URL = "https://api.titansecureserver.com/"
+            SUPERADMIN = 'https://api.meshguard.co/'
+            TITLE = "TitanLocker"
+            break;
     case "dev.lockmesh.com":
         URL = "https://devapi.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
