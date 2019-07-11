@@ -156,10 +156,10 @@ class PackagePricingForm extends Component {
                                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                <Option value={one_month}>{convertToLang(this.props.translation[one_month], one_month)}</Option>
-                                <Option value={three_month}>{convertToLang(this.props.translation[three_month], three_month)}</Option>
-                                <Option value={six_month}>{convertToLang(this.props.translation[six_month], six_month)}</Option>
-                                <Option value={twelve_month}>{convertToLang(this.props.translation[twelve_month], twelve_month)}</Option>
+                                <Option value={'1 month'}>{convertToLang(this.props.translation[one_month], one_month)}</Option>
+                                <Option value={'3 month'}>{convertToLang(this.props.translation[three_month], three_month)}</Option>
+                                <Option value={'6 month'}>{convertToLang(this.props.translation[six_month], six_month)}</Option>
+                                <Option value={'12 month'}>{convertToLang(this.props.translation[twelve_month], twelve_month)}</Option>
                             </Select>)}
 
                         </Form.Item>

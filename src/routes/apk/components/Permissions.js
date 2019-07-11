@@ -397,7 +397,6 @@ class Permissions extends Component {
       // console.log('object recrd', dealer);
       if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);
-
       }
       let common = {
         'key': dealer.dealer_id,
@@ -452,7 +451,6 @@ class Permissions extends Component {
     return (data);
   }
   render() {
-
     const { redirect } = this.state;
     if (redirect && this.state.dealer_id !== '') {
       return <Redirect to={{
