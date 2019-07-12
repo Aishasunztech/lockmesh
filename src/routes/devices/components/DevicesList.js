@@ -326,7 +326,7 @@ class DevicesList extends Component {
         })
     }
 
-    onExpandRow = (expanded, record) => {
+    onExpandRow = (expanded, record) => { 
         // console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.key)) {
