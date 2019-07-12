@@ -109,26 +109,26 @@ class Apk extends Component {
                                     <Link to="/apk-list">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_MANAGE_APKs], APP_MANAGE_APKs)} </h2>
+                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_MANAGE_APKs], "Manage APK's")} </h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0 0px' }}>
                                                     <Col span={8} className="" style={{ textAlign: "center" }}>
                                                         <Icon type="android" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16} style={{ padding: 0 }}>
-                                                        <h5><span className="diamond_icon">&#9670;</span> {convertToLang(this.props.translation[APP_MD_01], APP_MD_01)} </h5>
-                                                        <h5><span className="diamond_icon">&#9670;</span> {convertToLang(this.props.translation[APP_MD_02], APP_MD_02)} </h5>
+                                                        <h5><span className="diamond_icon">&#9670;</span> {convertToLang(this.props.translation[APP_MD_01], "Manage apk's")} </h5>
+                                                        <h5><span className="diamond_icon">&#9670;</span> {convertToLang(this.props.translation[APP_MD_02], "Add permssion")} </h5>
                                                         {(this.props.user.type === 'admin') ?
                                                             (<Fragment>
-                                                                <h5><span className="diamond_icon">&#9670;</span> {convertToLang(this.props.translation[APP_MD_03], APP_MD_03)} </h5>
-                                                                <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span> {convertToLang(this.props.translation[APP_MD_04], APP_MD_04)} </h5>
-                                                                <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
+                                                                <h5><span className="diamond_icon">&#9670;</span> {convertToLang(this.props.translation[APP_MD_03], "Activate apk push")} </h5>
+                                                                <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span> {convertToLang(this.props.translation[APP_MD_04], "Set apk Dealer permissions")} </h5>
+                                                                <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                             </Fragment>
                                                             )
                                                             :
                                                             (
                                                                 <Fragment>
-                                                                    <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
+                                                                    <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                                 </Fragment>
                                                             )
                                                         }
@@ -136,7 +136,7 @@ class Apk extends Component {
                                                 </Row>
                                             </div>
                                         </Card>
-                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     </Link>
                                 </div>
                             </Col>
@@ -145,21 +145,21 @@ class Apk extends Component {
                                     <Link to="/policy">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_MANAGE_POLICY], APP_MANAGE_POLICY)} </h2>
+                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_MANAGE_POLICY], "Manage Policy")} </h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0px 0px' }}>
                                                     <Col span={8} style={{ textAlign: "center" }}>
                                                         <Icon type="file-text" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16} style={{ padding: 0 }}>
-                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_MP_01], APP_MP_01)}</h5>
-                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_MP_02], APP_MP_02)}</h5>
-                                                        <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
+                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_MP_01], "Create/Edit Policies")}</h5>
+                                                        <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_MP_02], "Set Policy  Permission")}</h5>
+                                                        <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                     </Col>
                                                 </Row>
                                             </div>
                                         </Card>
-                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     </Link>
                                 </div>
                             </Col>
@@ -169,23 +169,23 @@ class Apk extends Component {
                                         <Link to="/app-market">
                                             <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                                 <div className="image_1">
-                                                    <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_SECURE_MARKET], APP_SECURE_MARKET)} </h2>
+                                                    <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_SECURE_MARKET], "Secure Market")} </h2>
                                                     <Divider className="mb-0" />
                                                     <Row style={{ padding: '12px 0px 0px' }}>
                                                         <Col span={8} style={{ textAlign: "center" }}>
                                                             <Icon type="appstore" className="policy_icon" />
                                                         </Col>
                                                         <Col span={16} style={{ padding: 0 }}>
-                                                            <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_SM_01], APP_SM_01)}</h5>
-                                                            <h5> {convertToLang(this.props.translation[APP_SM_02], APP_SM_02)}</h5>
-                                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_SM_03], APP_SM_03)}</h5>
-                                                            <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
+                                                            <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_SM_01], "Add/remove apps in")}</h5>
+                                                            <h5> {convertToLang(this.props.translation[APP_SM_02], "Secure Market")}</h5>
+                                                            <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_SM_03], "Set permissions")}</h5>
+                                                            <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                         </Col>
                                                     </Row>
 
                                                 </div>
                                             </Card>
-                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                         </Link>
                                     </div>
                                 </div>
@@ -208,13 +208,13 @@ class Apk extends Component {
                                                         <Col span={16} style={{ padding: 0 }}>
                                                             <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>Add/remove apps </h5>
                                                             <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span> Edit Apps </h5>
-                                                            <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
+                                                            <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                         </Col>
                                                     </Row>
 
                                                 </div>
                                             </Card>
-                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                         </Link>
                                     </div>
                                 </div>
@@ -224,41 +224,40 @@ class Apk extends Component {
                                     <Link to="#" onClick={() => this.showToolsModal()}>
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_DOWNLOAD_TOOLS], APP_DOWNLOAD_TOOLS)} </h2>
+                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_DOWNLOAD_TOOLS], "Download Tools")} </h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0 0px' }}>
                                                     <Col span={8} className="" style={{ textAlign: "center" }}>
                                                         <Icon type="tool" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16} style={{ padding: 0 }}>
-                                                        <h5 style={{ display: 'inline-flex'}}><span className="diamond_icon">&#9670;</span>
-                                                            <Markup content={convertToLang(this.props.translation[APP_DT_01], APP_DT_01)} />
-                                                            {/* {convertToLang(this.props.translation[APP_DT_01], APP_DT_01)} */}
+                                                        <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                            <Markup content={convertToLang(this.props.translation[APP_DT_01], "BYOD Launcher Apk, Tools, <br />etc... can be found here")} />
                                                         </h5>
-                                                        <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
+                                                        <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                     </Col>
                                                 </Row>
                                             </div>
                                         </Card>
-                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     </Link>
                                 </div>
                                 <Modal
-                                    title= {convertToLang(this.props.translation[DT_MODAL_HEADING], DT_MODAL_HEADING)} //"Download Tools"
+                                    title={convertToLang(this.props.translation[DT_MODAL_HEADING], "Download Tools")} //"Download Tools"
                                     visible={this.state.tools_modal}
                                     onOk={this.handleOk}
-                                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                     onCancel={this.handleCancel}
                                     className="d_tool_pup"
                                     width="42%"
                                 >
                                     <Row className="d_t_m">
-                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY], DT_MODAL_BODY)} ></Markup></h4>
+                                        <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY], "Neutral Launcher (BYOD) v1.2 <b>(Android v8+)</b>")} ></Markup></h4>
                                         <a href={`${BASE_URL}users/getFile/nlbyod.apk`}>
-                                            <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}> 
-                                            
-                                            {convertToLang(this.props.translation[Button_DOWNLOAD], Button_DOWNLOAD)}
+                                            <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}>
+
+                                                {convertToLang(this.props.translation[Button_DOWNLOAD], "Download")}
                                             </Button>
                                         </a>
                                     </Row>
@@ -269,25 +268,25 @@ class Apk extends Component {
                                     <Link to="#">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_SECURE_PANEL_APK], APP_SECURE_PANEL_APK)} </h2>
+                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_SECURE_PANEL_APK], "Secure Panel APK")} </h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0 0px' }}>
                                                     <Col span={8} className="" style={{ textAlign: "center" }}>
                                                         <Icon type="idcard" className="policy_icon" />
                                                     </Col>
                                                     <Col span={16}>
-                                                        <h5 style={{ display: 'inline-flex'}}><span className="diamond_icon">&#9670;</span>
-                                                        <Markup content={convertToLang(this.props.translation[APP_SPA_01], APP_SPA_01)} />
+                                                        <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                            <Markup content={convertToLang(this.props.translation[APP_SPA_01], "Edit/Create Users and add <br />permissions for the Secure Panel Apk")} />
                                                         </h5>
                                                         <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                        <Markup content={convertToLang(this.props.translation[APP_SPA_02], APP_SPA_02)} />
+                                                            <Markup content={convertToLang(this.props.translation[APP_SPA_02], APP_SPA_02)} />
                                                         </h5>
-                                                        <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)} </h5>
+                                                        <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                     </Col>
                                                 </Row>
                                             </div>
                                         </Card>
-                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     </Link>
                                 </div>
                             </Col>

@@ -119,10 +119,10 @@ export default class ListApk extends Component {
                         <div data-column="ACTION">
                             <Fragment>
                                 <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
-                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
+                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
                                 <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
                                     this.props.handleConfirmDelete(app.apk_id);
-                                }}>{convertToLang(this.props.translation[Button_Delete], Button_Delete)}</Button>
+                                }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                             </Fragment>
                         </div>
                     ),
@@ -158,7 +158,7 @@ export default class ListApk extends Component {
                     'action': (
                         <Fragment>
                             <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
-                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
+                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
 
                         </Fragment>
                     ),
