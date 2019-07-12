@@ -160,6 +160,7 @@ class UserList extends Component {
         return (
             <Fragment>
                 <Card className="fix_card users_fix_card">
+                    <hr className="fix_header_border" style={{top:"59px"}} />
                     <CustomScrollbars className="gx-popover-scroll">
                         <Table
                             className="users_list"

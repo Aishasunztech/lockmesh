@@ -202,7 +202,7 @@ class DealerList extends Component {
         data = [];
         list.map((dealer, index) => {
             const dealer_status = (dealer.account_status === "suspended") ? convertToLang(this.props.translation[Button_Activate], Button_Activate) : convertToLang(this.props.translation[Button_Suspend], Button_Suspend);
-            const button_type = (dealer_status === "ACTIVATE") ? "dashed" : "danger";
+            const button_type = (dealer_status === "ACTIVATE") ? "default" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
             data.push({
                 'row_key': dealer.dealer_id,
@@ -243,6 +243,7 @@ class DealerList extends Component {
         // console.log(this.props.dealersList, 'dealers list console');
         return (
             <Card className="fix_card dealer_fix_card">
+                <hr className="fix_header_border" style={{ top: "57px" }} />
                 <CustomScrollbars className="gx-popover-scroll">
                     <Table
                         size="middle"

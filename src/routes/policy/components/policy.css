@@ -212,17 +212,6 @@
     height: 310px;
 }
 
-.fix_header_border {
-    border-bottom: 1px solid #e8e8e8;
-    position: absolute;
-    z-index: 0;
-    top: 73px;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    right: 0;
-}
-
 @media only screen and (max-width: 768px) {
 
     /* tr.ant-table-expanded-row td,

@@ -214,6 +214,7 @@ export default class ListApk extends Component {
 
         return (
             <Card className="fix_card apk_fix_card">
+                <hr className="fix_header_border" style={{ top: "15px"}} />
                 <CustomScrollbars className="gx-popover-scroll">
                     <Table
                         className="gx-table-responsive apklist_table"

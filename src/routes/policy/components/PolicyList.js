@@ -243,7 +243,7 @@ class PolicyList extends Component {
         return (
             <Fragment>
                 <Card className="fix_card policy_fix_card">
-                    <hr className="fix_header_border" />
+                    <hr className="fix_header_border" style={{ top: "57px" }} />
                     <CustomScrollbars className="gx-popover-scroll">
                         <Table
                             className="devices policy_expand"

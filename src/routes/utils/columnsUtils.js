@@ -1421,7 +1421,7 @@ export function sDealerColumns(translation, handleSearch) {
                     //     // console.log(b);
                     //     return a.parent_dealer.length;
                     // },
-                    // sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
+                    sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
 
                 }
             ]
@@ -1446,7 +1446,7 @@ export function sDealerColumns(translation, handleSearch) {
                     dataIndex: 'parent_dealer_id',
                     key: 'parent_dealer_id',
                     className: '',
-                    // sorter: (a, b) => { return a.parent_dealer_id - b.parent_dealer_id },
+                    sorter: (a, b) => { return a.parent_dealer_id - b.parent_dealer_id },
 
                 }
             ]

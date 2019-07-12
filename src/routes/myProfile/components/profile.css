@@ -83,3 +83,7 @@
 .login_history .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
     top: -1;
 }
+
+.profile_table .ant-table-tbody>tr>td.dealer_info {
+    text-transform: uppercase;
+}

@@ -1,5 +1,5 @@
 let hostName = window.location.hostname
-console.log(hostName);
+// console.log(hostName);
 
 let URL = "http://localhost:3000/";
 let SUPERADMIN = "http://localhost:8042/";
