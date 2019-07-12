@@ -8,7 +8,6 @@ import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } fro
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
 import { getFormattedDate, convertToLang } from '../../utils/commonUtils';
-
 import {
     Button_Delete,
     Button_Edit,
@@ -98,7 +97,6 @@ class UserList extends Component {
                     </Fragment>
                 )
                 ,
-
                 user_id: user.user_id,
                 devices: (user.devicesList) ? user.devicesList.length : 0,
                 devicesList: user.devicesList,
@@ -162,6 +160,7 @@ class UserList extends Component {
         return (
             <Fragment>
                 <Card className="fix_card users_fix_card">
+                    <hr className="fix_header_border" style={{top:"59px"}} />
                     <CustomScrollbars className="gx-popover-scroll">
                         <Table
                             className="users_list"

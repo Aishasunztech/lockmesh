@@ -57,6 +57,10 @@
     margin-right: 40px;
 }
 
+.login_history ::-webkit-scrollbar {
+    width: 10px;
+}
+
 .login_history ::-webkit-scrollbar-thumb {
     background: #efefef;
     border-radius: 10px;
@@ -77,5 +81,9 @@
 }
 
 .login_history .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
-    top: 0;
+    top: -1;
+}
+
+.profile_table .ant-table-tbody>tr>td.dealer_info {
+    text-transform: uppercase;
 }

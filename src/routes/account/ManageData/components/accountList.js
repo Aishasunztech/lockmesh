@@ -80,8 +80,8 @@ class AccountList extends Component {
     render() {
         // console.log('data list at::', this.props.dataList)
         return (
-            <Card bordered={false}>
-                <Tabs defaultActiveKey="1" type="card" tabPosition="left" className="manage_data" onChange={this.callback}>
+            <Card bordered={false} className="fix_card m_d_fix_table">
+                <Tabs defaultActiveKey="1" type="card" tabPosition="left" className="m_d_table_tabs" onChange={this.callback}>
                     <TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], TAB_CHAT_ID)} key="1" >
                     </TabPane>
                     <TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], TAB_PGP_EMAIL)} key="2" forceRender={true}>
@@ -96,7 +96,7 @@ class AccountList extends Component {
                     size="middle"
                     className="gx-table-responsive devices table m_d_table"
                     bordered
-                    scroll={{ x: 500 }}
+                    //scroll={{ x: 500 }}
                     columns={this.state.columns}
                     rowKey='row_key'
                     align='center'
@@ -167,7 +167,7 @@ export default class Tab extends Component {
                     // editDealer={this.props.editDealer}
                     // updatePassword={this.props.updatePassword}
                     handleChangeInnerTab={this.props.handleChangeInnerTab}
-                    translation= {this.props.translation}
+                    translation={this.props.translation}
                 />
             </Fragment>
 

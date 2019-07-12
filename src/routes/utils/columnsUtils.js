@@ -101,13 +101,13 @@ const usersColumns_question_txt = (
 export function devicesColumns(translation, handleSearch) {
     return ([
         {
-            title: <div className="counter_w">#</div>,
+            title: "#",
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
         },
         {
-            title: <div className="device_action_w">ACTION</div>,
+            title: "ACTION",
             dataIndex: 'action',
             align: 'center',
             className: 'row',
@@ -165,14 +165,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: "device_id",
                     sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) }, //
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "device_id_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ],
         }, {
@@ -199,14 +191,6 @@ export function devicesColumns(translation, handleSearch) {
                         console.log(a); return a.user_id.props.children.localeCompare(b.user_id.props.children)
                     },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "user_id_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ],
         },
@@ -232,14 +216,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'status',
                     sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "status_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -264,14 +240,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'online',
                     sorter: (a, b) => { return a.online.props.children[1].localeCompare(b.online.props.children[1]) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "online_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -296,14 +264,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'flagged',
                     sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "flagged_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -329,14 +289,6 @@ export function devicesColumns(translation, handleSearch) {
                     sorter: (a, b) => { return a.name.localeCompare(b.name) },
                     sortDirections: ['ascend', 'descend'],
                     editable: true,
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "name_w_td",
-                            },
-                            children: text,
-                        };
-                    },
 
                 }
             ]
@@ -364,14 +316,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'account_email',
                     sorter: (a, b) => { return a.account_email.localeCompare(b.account_email) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "account_email_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -395,14 +339,6 @@ export function devicesColumns(translation, handleSearch) {
                     dataIndex: 'activation_code',
                     sorter: (a, b) => { return a.activation_code - b.activation_code },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "activation_code_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -428,14 +364,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'client_id',
                     sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "client_id_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -459,14 +387,6 @@ export function devicesColumns(translation, handleSearch) {
                     dataIndex: 'pgp_email',
                     sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "pgp_email_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -491,14 +411,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'sim_id',
                     sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "sim_id_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -523,14 +435,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'chat_id',
                     sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "chat_id_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -556,14 +460,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'dealer_id',
                     sorter: (a, b) => { return a.dealer_id - b.dealer_id },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "dealer_id_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -588,14 +484,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'dealer_name',
                     sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "dealer_name_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -620,14 +508,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'dealer_pin',
                     sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "dealer_pin_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -652,14 +532,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'mac_address',
                     sorter: (a, b) => { return a.mac_address.localeCompare(b.mac_address) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "mac_address_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -685,14 +557,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'imei_1',
                     sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "imei_1_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -717,14 +581,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'sim_1',
                     sorter: (a, b) => { return a.sim_1.localeCompare(b.sim_1) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "sim_1_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -749,14 +605,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'imei_2',
                     sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "imei_2_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -781,14 +629,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'sim_2',
                     sorter: (a, b) => { return a.sim_2.localeCompare(b.sim_2) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "sim_2_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -813,14 +653,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'serial_number',
                     sorter: (a, b) => { return a.serial_number.localeCompare(b.serial_number) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "serial_number_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -846,14 +678,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'model',
                     sorter: (a, b) => { return a.model.localeCompare(b.model) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "model_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -879,14 +703,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 's_dealer',
                     sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "s_dealer_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -911,14 +727,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 's_dealer_name',
                     sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "s_dealer_name_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         }, {
@@ -942,14 +750,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'start_date',
                     sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "start_date_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         }, {
@@ -973,14 +773,6 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'expiry_date',
                     sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "expiry_date_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ]
         },
@@ -1026,14 +818,6 @@ export function usersColumns(translation, handleSearch) {
                         return a.user_id.localeCompare(b.user_id)
                     },
                     sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "user_id_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ],
         },
@@ -1070,14 +854,6 @@ export function usersColumns(translation, handleSearch) {
                     onFilter: (value, record) => record.devices.indexOf(value) === 0,
                     sorter: (a, b) => { return a.devices - b.devices },
                     // sortDirections: ['ascend', 'descend'],
-                    render: (text, record) => {
-                        return {
-                            props: {
-                                className: "device_id_w_td",
-                            },
-                            children: text,
-                        };
-                    },
                 }
             ],
         },
@@ -1102,14 +878,6 @@ export function usersColumns(translation, handleSearch) {
                 key: 'user_name',
                 sorter: (a, b) => { return a.user_name.localeCompare(b.user_name) },
                 sortDirections: ['ascend', 'descend'],
-                render: (text, record) => {
-                    return {
-                        props: {
-                            className: "user_name_w_td",
-                        },
-                        children: text,
-                    };
-                },
             }]
         },
         {
@@ -1133,14 +901,6 @@ export function usersColumns(translation, handleSearch) {
                 key: 'email',
                 sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
                 sortDirections: ['ascend', 'descend'],
-                render: (text, record) => {
-                    return {
-                        props: {
-                            className: "email_w_td",
-                        },
-                        children: text,
-                    };
-                },
             }]
         },
         {
@@ -1171,14 +931,6 @@ export function usersColumns(translation, handleSearch) {
                 key: 'created_at',
                 sorter: (a, b) => { return a.created_at.localeCompare(b.created_at.toString()) },
                 sortDirections: ['ascend', 'descend'],
-                render: (text, record) => {
-                    return {
-                        props: {
-                            className: "created_at_w_td",
-                        },
-                        children: text,
-                    };
-                },
             }]
         },
     ]);
@@ -1669,7 +1421,7 @@ export function sDealerColumns(translation, handleSearch) {
                     //     // console.log(b);
                     //     return a.parent_dealer.length;
                     // },
-                    // sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
+                    sorter: (a, b) => { return a.parent_dealer.localeCompare(b.parent_dealer) },
 
                 }
             ]
@@ -1694,7 +1446,7 @@ export function sDealerColumns(translation, handleSearch) {
                     dataIndex: 'parent_dealer_id',
                     key: 'parent_dealer_id',
                     className: '',
-                    // sorter: (a, b) => { return a.parent_dealer_id - b.parent_dealer_id },
+                    sorter: (a, b) => { return a.parent_dealer_id - b.parent_dealer_id },
 
                 }
             ]

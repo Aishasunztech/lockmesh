@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Row, Col } from 'react'
 
 import {
     Button, Modal, Tabs
@@ -130,13 +130,14 @@ export default class PricingModal extends Component {
                 onCancel={() => { this.props.showPricingModal(false); this.props.resetPrice() }}
                 // footer={null}
                 width='650px'
+                className="set_price_modal"
             >
                 <Tabs
                     className="set_price"
                     type="card"
                     onChange={(e) => this.setState({ outerTab: e })}
                 >
-                    <TabPane tab= {convertToLang(this.props.translation[Tab_SET_ID_PRICES], Tab_SET_ID_PRICES)} key="1">
+                    <TabPane tab={convertToLang(this.props.translation[Tab_SET_ID_PRICES], Tab_SET_ID_PRICES)} key="1">
                         <ItemsTab
                             innerTabChanged={this.innerTabChanged}
                             setPrice={this.props.setPrice}
@@ -151,7 +152,6 @@ export default class PricingModal extends Component {
                             wrappedComponentRef={(form) => this.form = form}
                             translation={this.props.translation}
                         />
-
                     </TabPane>
                 </Tabs>
             </Modal>

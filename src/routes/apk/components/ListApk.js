@@ -3,6 +3,7 @@ import { Table, Avatar, Switch, Button, Icon, Card, Modal, Row, Col, Input } fro
 import { BASE_URL } from '../../../constants/Application';
 import Permissions from './Permissions';
 import styles from './app.css';
+import CustomScrollbars from "../../../util/CustomScrollbars";
 
 import {
     convertToLang
@@ -116,18 +117,18 @@ export default class ListApk extends Component {
                     'rowKey': app.apk_id,
                     'apk_id': app.apk_id,
                     'action': (
-                        <div data-column="ACTION">
+                        <div data-column="ACTION" style={{ display: "inline-flex" }}>
                             <Fragment>
-                                <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
+                                <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
                                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
-                                <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
+                                <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px', textTransform: "uppercase" }} onClick={(e) => {
                                     this.props.handleConfirmDelete(app.apk_id);
                                 }}>{convertToLang(this.props.translation[Button_Delete], Button_Delete)}</Button>
                             </Fragment>
                         </div>
                     ),
                     'permission': (
-                        <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400 }}>
+                        <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
                             {app.permission_count}
                         </div>
                     ),
@@ -157,12 +158,11 @@ export default class ListApk extends Component {
                     'apk_id': app.apk_id,
                     'action': (
                         <Fragment>
-                            <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
+                            <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
                                 onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
-
                         </Fragment>
                     ),
-                    'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
+                    'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
                     "permissions": app.permissions,
                     'apk_status': (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                         this.props.handleStatusChange(e, app.apk_id);
@@ -213,34 +213,37 @@ export default class ListApk extends Component {
         // };
 
         return (
-            <Card>
-                <Table
-                    // rowSelection={rowSelection}
-                    // expandableRowIcon={<Icon type="right" />}
-                    // collapsedRowIcon={<Icon type="down" />}
-                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
-                    expandIcon={(props) => this.customExpandIcon(props)}
-                    expandedRowRender={(record) => {
-                        // console.log("table row", record);
-                        return (
-                            <Permissions className="exp_row22" record={record} translation={this.props.translation} />
-                        );
-
-                    }}
-                    onExpand={this.onExpandRow}
-                    expandIconColumnIndex={1}
-                    expandIconAsCell={false}
-                    className="gx-table-responsive apklist_table"
-                    size="small"
-                    bordered
-                    columns={this.state.columns}
-                    dataSource={this.renderList(this.props.apk_list)}
-                    pagination={{ pageSize: Number(this.state.pagination) }}
-                    className="devices"
-                    scroll={{ x: 10 }}
-                    rowKey="apk_id"
-                />
-                <EditApk ref='editApk' getApkList={this.props.getApkList} />
+            <Card className="fix_card apk_fix_card">
+                <hr className="fix_header_border" style={{ top: "15px"}} />
+                <CustomScrollbars className="gx-popover-scroll">
+                    <Table
+                        className="gx-table-responsive apklist_table"
+                        // rowSelection={rowSelection}
+                        // expandableRowIcon={<Icon type="right" />}
+                        // collapsedRowIcon={<Icon type="down" />}
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
+                        expandIcon={(props) => this.customExpandIcon(props)}
+                        expandedRowRender={(record) => {
+                            // console.log("table row", record);
+                            return (
+                                <Permissions className="exp_row22" record={record} translation={this.props.translation} />
+                            );
+                        }}
+                        onExpand={this.onExpandRow}
+                        expandIconColumnIndex={1}
+                        expandIconAsCell={false}
+                        size="midddle"
+                        bordered
+                        columns={this.state.columns}
+                        dataSource={this.renderList(this.props.apk_list)}
+                        pagination={false
+                            //{ pageSize: Number(this.state.pagination) }
+                        }
+                        // scroll={{ x: 10 }}
+                        rowKey="apk_id"
+                    />
+                    <EditApk ref='editApk' getApkList={this.props.getApkList} />
+                </CustomScrollbars>
             </Card>
         )
     }

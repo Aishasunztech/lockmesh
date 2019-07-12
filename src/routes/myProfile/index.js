@@ -161,7 +161,7 @@ class Profile extends Component {
                 {
                     key: 6,
                     name: <a>{convertToLang(this.props.translation[Login_History], Login_History)}</a>,
-                    value: <Button size="small" type='primary' onClick={() => { this.showLoginHistory() }} > {convertToLang(this.props.translation[Button_Open], Button_Open)}  </Button>,
+                    value: <Button size="small" type='primary' style={{ textTransform: "uppercase" }} onClick={() => { this.showLoginHistory() }} > {convertToLang(this.props.translation[Button_Open], Button_Open)}  </Button>,
                 }
 
             ];

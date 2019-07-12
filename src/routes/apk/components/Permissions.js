@@ -404,7 +404,7 @@ class Permissions extends Component {
         'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
         'dealer_name': (
           // <div data-column="DEALER NAME">
-            dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
+          dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
           // </div>
         ),
         'dealer_email': (
@@ -433,9 +433,9 @@ class Permissions extends Component {
                 <div data-column="ACTION">
                   <Button size="small" type="danger" onClick={() => {
                     this.rejectPemission(dealer.dealer_id)
-                  }}> 
-                  {convertToLang(this.props.translation[Button_Remove], Button_Remove)} 
-                    </Button>
+                  }}>
+                    {convertToLang(this.props.translation[Button_Remove], Button_Remove)}
+                  </Button>
                 </div>
               )
           }
@@ -508,8 +508,7 @@ class Permissions extends Component {
           </Col>
 
         </Row>
-        <Row gutter={24}>
-
+        <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>

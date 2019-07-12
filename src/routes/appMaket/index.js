@@ -149,7 +149,7 @@ class ApkMarket extends React.Component {
             <div>
                 {
                     this.props.isloading ? <CircularProgress /> :
-                        <Card>
+                        <Card >
                             <Row>
                                 <h4 className="sm_top_heading"> <Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], SPA_NOTIFICATION_BAR)} /> </h4>
                                 <Col md={12} sm={24} xs={24} className="text-center">

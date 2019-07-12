@@ -740,8 +740,6 @@ class Dealers extends Component {
 
                     </Card> */}
                             <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
-
-
                         </div>
                 }
             </div>
