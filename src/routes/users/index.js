@@ -72,7 +72,7 @@ class Users extends Component {
         this.props.getUserList();
         this.props.getPagination('users');
         // console.log(this.props.location.state);
-        this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], USER_ID) + ' (' + this.props.users_list.length + ')'
+        this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
         this.setState({
             users: this.props.users_list,
             originalUsers: this.props.users_list,
@@ -83,7 +83,7 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
-            this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], USER_ID) + ' (' + nextProps.users_list.length + ')'
+            this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + nextProps.users_list.length + ')'
             // console.log('will recice props is called', nextProps.users_list)
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
@@ -98,7 +98,7 @@ class Users extends Component {
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.DisplayPages);
-            this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], USER_ID) + ' (' + this.props.users_list.length + ')'
+            this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
@@ -272,9 +272,9 @@ class Users extends Component {
         return (
             <Fragment>
                 <AppFilter
-                    searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchUser], Appfilter_SearchUser)}
+                    searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchUser], "Search")}
                     defaultPagingValue={this.state.defaultPagingValue}
-                    addButtonText={convertToLang(this.props.translation[Button_Add_User], Button_Add_User)}
+                    addButtonText={convertToLang(this.props.translation[Button_Add_User], "Add User")}
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
                     isAddButton={this.props.user.type !== ADMIN}

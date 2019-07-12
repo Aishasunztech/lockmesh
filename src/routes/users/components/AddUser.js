@@ -44,8 +44,8 @@ export default class AddUser extends Component {
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
-                    okText= {convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText = {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText= {convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText = {convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <AddUserForm
                         AddUserHandler={this.state.handleSubmit}
