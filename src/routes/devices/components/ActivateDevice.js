@@ -1,6 +1,9 @@
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 
 import React, { Component } from 'react'
+import { convertToLang } from '../../utils/commonUtils';
+import { ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE } from '../../../constants/DeviceConstants';
+import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 export default class ActivateDevice extends Component {
 
@@ -12,8 +15,10 @@ export default class ActivateDevice extends Component {
     handleActivateDevice = (device, refresh) => {
 
         this.confirm({
-            title: 'Are you sure, you want to activate the device?',
+            title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE], "Are you sure, you want to activate the device "),
             content: '',
+            okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
+            cancelText:  convertToLang(this.props.translation[Button_Cancel], "Cancel"),
             onOk: () => {
 
                 this.props.activateDevice(device);

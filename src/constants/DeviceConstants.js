@@ -39,3 +39,8 @@ export const Device_Valid_days_Required = "device.valid.days.required.id";  // V
 export const DEVICE_NOT_FOUND = "Device.Not.Found.id"; // Device Not Found
 export const SETTINGS_TO_BE_SENT_TO_DEVICE = "Settings.to.be.sent.to.Device.id"; // Confirm new Settings to be sent to Device 
 export const HISTORY_DATE = "History.Date.id"; // History Date
+
+
+//new 12/7/19
+export const ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE = "Are.you.sure.you.want.activate.the.device.id"; // Are you sure, you want to activate the device
+export const ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE = "Are.you.sure.you.want.suspend.the.device.id"; // Are you sure, you want to suspend the device 
