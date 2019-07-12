@@ -123,7 +123,7 @@ class PolicyList extends Component {
                         (
                             <Fragment>
                                 <Button
-                                    style={{ marginRight: 7, marginLeft: 7 }}
+                                    style={{ marginRight: 7, marginLeft: 7, textTransform: "uppercase" }}
                                     type="primary"
                                     size="small"
                                     onClick={() => {
@@ -135,7 +135,7 @@ class PolicyList extends Component {
                                     {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
                                 </Button>
                                 <Button
-                                    style={{ marginRight: 7 }}
+                                    style={{ marginRight: 7, textTransform: "uppercase" }}
                                     type="danger"
                                     size="small"
                                     onClick={() => { this.deletePolicy(policy.id) }}
@@ -239,10 +239,11 @@ class PolicyList extends Component {
         }
     }
     render() {
-        console.log(this.state.expandedRowKeys, 'keys are')
+        // console.log(this.state.expandedRowKeys, 'keys are')
         return (
             <Fragment>
                 <Card className="fix_card policy_fix_card">
+                    <hr className="fix_header_border" />
                     <CustomScrollbars className="gx-popover-scroll">
                         <Table
                             className="devices policy_expand"
