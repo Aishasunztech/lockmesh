@@ -224,12 +224,17 @@ const RestService = {
     },
 
     SavePolicyChanges: (record) => {
-        record.push_apps.forEach((app) => {
-            app.guest = (app.guest !== undefined) ? app.guest : false;
-            app.enable = (app.enable !== undefined) ? app.enable : false;
-            app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
-        });
-
+        // console.log('check perm:: ', record);
+        // return;
+        if(record.push_apps.length) {
+            record.push_apps.forEach((app) => {
+                app.guest = (app.guest !== undefined) ? app.guest : false;
+                app.enable = (app.enable !== undefined) ? app.enable : false;
+                app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
+            });
+        }
+        
+// if(record)
         record.app_list.forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;

@@ -11,3 +11,6 @@ export const Sidebar_settings =  "sidebar.settings";
 export const Sidebar_logout =  "sidebar.logout";
 
 export const Alert_Change_Language = "alert.change.language.id"; // Are you sure you want to change the language?
+export const ARE_YOU_SURE_YOU_WANT_TO_LOGOUT = "Are.you.sure.you.want.to.logout.id"; // Are you sure you want to logout?
+
+

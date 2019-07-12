@@ -59,22 +59,22 @@ class PriceList extends Component {
             {
                 key: '1',
                 price_term: convertToLang(this.props.translation[one_month], one_month),
-                unit_price: this.props.data ? this.props.data[one_month] ? this.props.data[one_month] : 0 : 0
+                unit_price: this.props.data ? this.props.data['1 month'] ? this.props.data['1 month'] : 0 : 0
             },
             {
                 key: '2',
                 price_term: convertToLang(this.props.translation[three_month], three_month),
-                unit_price: this.props.data ? this.props.data[three_month] ? this.props.data[three_month] : 0 : 0
+                unit_price: this.props.data ? this.props.data['3 month'] ? this.props.data['3 month'] : 0 : 0
             },
             {
                 key: '3',
                 price_term: convertToLang(this.props.translation[six_month], six_month),
-                unit_price: this.props.data ? this.props.data[six_month] ? this.props.data[six_month] : 0 : 0
+                unit_price: this.props.data ? this.props.data['6 month'] ? this.props.data['6 month'] : 0 : 0
             },
             {
                 key: '4',
                 price_term: convertToLang(this.props.translation[twelve_month], twelve_month),
-                unit_price: this.props.data ? this.props.data[twelve_month] ? this.props.data[twelve_month] : 0 : 0
+                unit_price: this.props.data ? this.props.data['12 month'] ? this.props.data['12 month'] : 0 : 0
             },
         ];
 

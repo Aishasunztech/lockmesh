@@ -56,10 +56,13 @@ class Login extends React.Component {
       if (alertMessage == 'Login expired' && LoginExp) {
         message.error(alertMessage.toString())
         LoginExp = false;
-      } else if(this.props.loginFailedStatus != prevProps.loginFailedStatus) {
+      } else if (this.props.loginFailedStatus != prevProps.loginFailedStatus) {
         message.error(alertMessage.toString())
-        // LoginExp = false;
+
       }
+      // else if (alertMessage == 'Invalid verification code') {
+      //   message.error(alertMessage.toString())
+      // }
 
     }
   }
@@ -133,7 +136,7 @@ const mapStateToProps = ({ auth, settings }) => {
 
   const { loader, alertMessage, showMessage, authUser, loginFailedStatus } = auth;
   return {
-    loader, alertMessage, showMessage, authUser, auth, loginFailedStatus, 
+    loader, alertMessage, showMessage, authUser, auth, loginFailedStatus,
     translation: settings.translation
   }
 };
