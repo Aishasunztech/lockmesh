@@ -14,15 +14,15 @@ import {
     addUser,
     getUserList
 } from "../../../appRedux/actions/Users";
-import { 
-    Required_Fields, 
-    DEVICE_ID, USER_ID, 
-    DEVICE_SIM_ID, 
-    DEVICE_Select_SIM_ID, 
-    DEVICE_CHAT_ID, 
-    Device_Note, 
-    Device_Valid_For, 
-    Device_Valid_days_Required , 
+import {
+    Required_Fields,
+    DEVICE_ID, USER_ID,
+    DEVICE_SIM_ID,
+    DEVICE_Select_SIM_ID,
+    DEVICE_CHAT_ID,
+    Device_Note,
+    Device_Valid_For,
+    Device_Valid_days_Required,
     DEVICE_Select_CHAT_ID
 } from '../../../constants/DeviceConstants';
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
@@ -127,7 +127,6 @@ class EditDevice extends Component {
 
         return (
             <div>
-
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], Required_Fields)}</p>
                     <Form.Item
@@ -255,7 +254,7 @@ class EditDevice extends Component {
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value="">Select PGP Email</Select.Option>
+                                <Select.Option value="">SELECT PGP EMAIL</Select.Option>
                                 {this.props.pgp_emails.map((pgp_email) => {
                                     return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                                 })}
@@ -281,7 +280,7 @@ class EditDevice extends Component {
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value=""> {convertToLang(this.props.translation[DEVICE_Select_SIM_ID], DEVICE_Select_SIM_ID)} </Select.Option>
+                                <Select.Option value=""> SELECT SIM ID </Select.Option>
                                 {this.props.sim_ids.map((sim_id, index) => {
                                     return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
                                 })}
@@ -305,9 +304,11 @@ class EditDevice extends Component {
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                filterOption={(input, option) =>
+                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
                             >
-                                <Select.Option value=""> {convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], DEVICE_Select_CHAT_ID)} </Select.Option>
+                                <Select.Option value="" >SELECT CHAT ID</Select.Option>
                                 {this.props.chat_ids.map((chat_id, index) => {
                                     return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                 })}
