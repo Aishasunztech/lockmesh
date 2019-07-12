@@ -68,7 +68,7 @@ export default class SystemControls extends Component {
     // console.log('object settings', this.state.settings)
     // if(this.state.settings !== undefined && this.state.settings && this.state.controls.length){
     if (this.state.settings !== undefined && this.state.settings && this.state.settings !== []) {
-      objindex = this.state.settings.findIndex(item => item.uniqueName == Main_SETTINGS)
+      objindex = this.state.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
     }
     // console.log('object settings', objindex)
     if (this.state.controls) {
@@ -109,7 +109,7 @@ export default class SystemControls extends Component {
                       <span>Wifi</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
-                      <Switch checked={this.state.controls.wifi_status == 1 || this.state.controls.wifi_status == true ? true : false} size="small"
+                      <Switch checked={this.state.controls.wifi_status === 1 || this.state.controls.wifi_status === true ? true : false} size="small"
                         onClick={(e) => {
                           // console.log("guest", e);
                           this.handleChecked(e, "wifi_status");
@@ -124,7 +124,7 @@ export default class SystemControls extends Component {
                       <span>Bluetooth</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
-                      <Switch checked={this.state.controls.bluetooth_status == 1 || this.state.controls.bluetooth_status == true ? true : false} size="small"
+                      <Switch checked={this.state.controls.bluetooth_status === 1 || this.state.controls.bluetooth_status === true ? true : false} size="small"
                         onClick={(e) => {
                           // console.log("guest", e);
                           this.handleChecked(e, "bluetooth_status");
@@ -139,7 +139,7 @@ export default class SystemControls extends Component {
                       <span>Hotspot</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
-                      <Switch checked={this.state.controls.hotspot_status == 1 || this.state.controls.hotspot_status == true ? true : false} size="small"
+                      <Switch checked={this.state.controls.hotspot_status === 1 || this.state.controls.hotspot_status === true ? true : false} size="small"
                         onClick={(e) => {
                           // console.log("guest", e);
                           this.handleChecked(e, "hotspot_status");
@@ -154,7 +154,7 @@ export default class SystemControls extends Component {
                       <span>Screenshots</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
-                      <Switch checked={this.state.controls.screenshot_status == 1 || this.state.controls.screenshot_status == true ? true : false} size="small"
+                      <Switch checked={this.state.controls.screenshot_status === 1 || this.state.controls.screenshot_status === true ? true : false} size="small"
                         onClick={(e) => {
                           // console.log("guest", e);
                           this.handleChecked(e, "screenshot_status");
@@ -169,7 +169,7 @@ export default class SystemControls extends Component {
                       <span>Block Calls</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
-                      <Switch checked={this.state.controls.call_status == 1 || this.state.controls.call_status == true ? true : false} size="small"
+                      <Switch checked={this.state.controls.call_status === 1 || this.state.controls.call_status === true ? true : false} size="small"
                         onClick={(e) => {
                           // console.log("guest", e);
                           this.handleChecked(e, "call_status");

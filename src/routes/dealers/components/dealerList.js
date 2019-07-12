@@ -241,7 +241,6 @@ class DealerList extends Component {
 
     render() {
         // console.log(this.props.dealersList, 'dealers list console');
-
         return (
             <Card className="fix_card dealer_fix_card">
                 <CustomScrollbars className="gx-popover-scroll">

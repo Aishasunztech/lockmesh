@@ -204,7 +204,7 @@ class ConnectDevice extends Component {
   //     //     device_id: nextProps.match.params.device_id
   //     // });
   //     // const device_id = nextProps.match.params.device_id;
-  //     // if (device_id != '') {
+  //     // if (device_id !== '') {
 
   //     //     nextProps.getDeviceDetails(device_id);
   //     //     nextProps.getDeviceApps(device_id);
@@ -441,10 +441,10 @@ class ConnectDevice extends Component {
     let color = getColor(finalStatus)
     let onlineStatus = this.props.device_details.online
     let onlineColor = (onlineStatus === 'offline') ? { color: 'red' } : { color: 'green' }
-    let totalApps = (this.props.noOfApp_push_pull == undefined || this.props.noOfApp_push_pull == 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
-    let completeApps = (this.props.noOfApp_pushed_pulled == undefined) ? 0 : this.props.noOfApp_pushed_pulled
+    let totalApps = (this.props.noOfApp_push_pull === undefined || this.props.noOfApp_push_pull === 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
+    let completeApps = (this.props.noOfApp_pushed_pulled === undefined) ? 0 : this.props.noOfApp_pushed_pulled
     let completeStep = this.props.complete_policy_step;
-    let policy_loading = (this.props.is_policy_applying == 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
+    let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -453,23 +453,23 @@ class ConnectDevice extends Component {
             <div className="gx-loader-view">
               <CircularProgress />
             </div> :
-            (this.props.is_in_process || this.props.is_push_apps == 1 || policy_loading == 1) ?
+            (this.props.is_in_process || this.props.is_push_apps === 1 || policy_loading === 1) ?
               <div>
 
                 <CircularProgress />
 
-                {/* {(this.props.device_details.online == 'online') ?
+                {/* {(this.props.device_details.online === 'online') ?
                   null : <CircularProgress />
                 } */}
                 {/* <Modal
                   width='auto'
                   centered
                   maskClosable={false}
-                  visible={(this.props.device_details.online == 'online') ? true : false}
+                  visible={(this.props.device_details.online === 'online') ? true : false}
                   footer={null}
                   closable={false}
                 > */}
-                {/* {(policy_loading == 1) ?
+                {/* {(policy_loading === 1) ?
 
                     <Progress className='prog' type="circle" percent={(completeStep / 4) * 100} format={percent => `Step ${completeStep} of ${4}`} />
                     :

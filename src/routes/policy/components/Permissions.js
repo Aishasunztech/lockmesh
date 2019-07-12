@@ -383,7 +383,7 @@ class Permissions extends Component {
 
   goToDealer = (dealer) => {
     if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
-      if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+      if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
         this.setState({
           redirect: true,
           dealer_id: dealer.dealer_id,
@@ -436,6 +436,9 @@ class Permissions extends Component {
     return (data);
   }
   render() {
+
+
+    console.log(this.state.dealerList)
     const { redirect } = this.state;
     if (redirect && this.state.dealer_id !== '') {
       return <Redirect to={{

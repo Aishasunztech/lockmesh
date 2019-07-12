@@ -113,7 +113,7 @@ class DevicesList extends Component {
     }
     goToDealer = (dealer) => {
         if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
-            if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+            if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
                 this.setState({
                     redirect: true,
                     dealer_id: dealer.dealer_id,
@@ -238,7 +238,6 @@ class DevicesList extends Component {
                 s_dealer_name: checkValue(device.s_dealer_name),
                 start_date: checkValue(device.start_date),
                 expiry_date: checkValue(device.expiry_date),
-                // batchData: device.batchData == undefined ? [] : device.batchData
             }
         });
     }
@@ -266,12 +265,12 @@ class DevicesList extends Component {
             for (let id of this.state.selectedRowKeys) {
                 for (let device of this.props.devices) {
                     if (type !== 'unlink') {
-                        if (id == device.id) {
+                        if (id === device.id) {
                             arr.push(device)
                         }
                     }
                     else {
-                        if (id == device.user_acc_id) {
+                        if (id === device.user_acc_id) {
                             arr.push(device)
                         }
                     }
@@ -375,7 +374,7 @@ class DevicesList extends Component {
 
         var scrollAmount = 0;
         // var slideTimer = setInterval(function () {
-        //     if (direction == 'left') {
+        //     if (direction === 'left') {
         //         element.scrollLeft -= step;
         //     } else {
         //         element.scrollLeft += step;
@@ -407,7 +406,7 @@ class DevicesList extends Component {
         }
 
         let rowSelection;
-        if (this.props.tabselect == '5' && this.props.user.type !== ADMIN) {
+        if (this.props.tabselect === '5' && this.props.user.type !== ADMIN) {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
@@ -420,7 +419,7 @@ class DevicesList extends Component {
                 //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
             };
         }
-        else if (this.props.tabselect == '3') {
+        else if (this.props.tabselect === '3') {
             rowSelection = {
                 onChange: (selectedRowKeys, selectedRows) => {
                     this.setState({ selectedRows: selectedRows, selectedRowKeys: selectedRowKeys })
@@ -449,7 +448,7 @@ class DevicesList extends Component {
                 <SuspendDevice ref="suspend"
                     suspendDevice={suspendDevice} />
                 <Card className="fix_card devices_fix_card">
-                    <CustomScrollbars className="gx-popover-scroll">
+                    <CustomScrollbars className="gx-popover-scroll ">
                         <Table
                             // id="test"
                             style={{

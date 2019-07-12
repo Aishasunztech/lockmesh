@@ -99,12 +99,12 @@ export default class PolicyInfo extends Component {
         let secure_setting_app = '';
 
         if (this.props.policy.app_list.length) {
-            let system_control_index = this.props.policy.app_list.findIndex(app => app.uniqueName == Main_SETTINGS)
+            let system_control_index = this.props.policy.app_list.findIndex(app => app.uniqueName === Main_SETTINGS)
             if (system_control_index > -1) {
                 system_setting_app = this.props.policy.app_list[system_control_index]
             }
 
-            let secure_setting_index = this.props.policy.app_list.findIndex(app => app.uniqueName == SECURE_SETTING)
+            let secure_setting_index = this.props.policy.app_list.findIndex(app => app.uniqueName === SECURE_SETTING)
             if (secure_setting_index > -1) {
                 secure_setting_app = this.props.policy.app_list[secure_setting_index]
             }
@@ -131,12 +131,12 @@ export default class PolicyInfo extends Component {
             let system_setting_app = '';
             let secure_setting_app = '';
             if (nextProps.policy.app_list.length) {
-                let system_control_index = nextProps.policy.app_list.findIndex(app => app.uniqueName == Main_SETTINGS)
+                let system_control_index = nextProps.policy.app_list.findIndex(app => app.uniqueName === Main_SETTINGS)
                 if (system_control_index > -1) {
                     system_setting_app = nextProps.policy.app_list[system_control_index]
                 }
 
-                let secure_setting_index = nextProps.policy.app_list.findIndex(app => app.uniqueName == SECURE_SETTING)
+                let secure_setting_index = nextProps.policy.app_list.findIndex(app => app.uniqueName === SECURE_SETTING)
                 if (secure_setting_index > -1) {
                     secure_setting_app = nextProps.policy.app_list[secure_setting_index]
                 }

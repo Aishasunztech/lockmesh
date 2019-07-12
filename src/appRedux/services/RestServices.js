@@ -169,26 +169,10 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get_used_chat_ids', RestService.getHeader());
     },
     DealerList: (dealer) => {
-        return axios.get(BASE_URL + 'users/dealers/' + dealer,
-            {
-                headers: {
-                    authorization: localStorage.getItem('token') //the token is a variable which holds the token
-                }
-            }
-        ).catch((error) => {
-            // console.log(error);
-        });
+        return axios.get(BASE_URL + 'users/dealers/' + dealer, RestService.getHeader());
     },
     getAllDealers: () => {
-        return axios.get(BASE_URL + 'users/dealers',
-            {
-                headers: {
-                    authorization: localStorage.getItem('token') //the token is a variable which holds the token
-                }
-            }
-        ).catch((error) => {
-            // console.log(error);
-        });
+        return axios.get(BASE_URL + 'users/dealers', RestService.getHeader());
     },
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());

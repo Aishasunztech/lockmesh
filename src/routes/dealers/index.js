@@ -644,11 +644,11 @@ class Dealers extends Component {
         // console.log(this.props.location, 'location is the ')
         let dealerType;
         const type = this.state.dealer_type;
-        if (type == ADMIN) {
+        if (type === ADMIN) {
             dealerType = convertToLang(this.props.translation[Button_Add_Admin], Button_Add_Admin)
-        } else if (type == DEALER) {
+        } else if (type === DEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_Dealer], Button_Add_Dealer)
-        } else if (type == SDEALER) {
+        } else if (type === SDEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_S_dealer], Button_Add_S_dealer)
         }
         return (

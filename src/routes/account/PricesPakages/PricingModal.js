@@ -125,8 +125,8 @@ export default class PricingModal extends Component {
                 title={<div>{convertToLang(this.props.translation[Button_SET_PRICE], Button_SET_PRICE)}</div>}
                 visible={this.props.pricing_modal}
                 onOk={this.handleSubmit}
-                okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
-                okButtonProps={{ disabled: this.state.outerTab == '1' ? !this.props.isPriceChanged : false }}
+                okText= {convertToLang(this.props.translation[Button_Save], Button_Save)}
+                okButtonProps={{ disabled: this.state.outerTab === '1' ? !this.props.isPriceChanged : false }}
                 onCancel={() => { this.props.showPricingModal(false); this.props.resetPrice() }}
                 // footer={null}
                 width='650px'

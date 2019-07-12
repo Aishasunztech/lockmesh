@@ -117,7 +117,7 @@ class EditPolicy extends Component {
     handleCheckApp = (value, key, id, arrayOf, main = '') => {
         // console.log('iiiiiiiiiiiiiiiiiiiiiiiiiii');
 
-        if (main == 'main') {
+        if (main === 'main') {
             if (this.state.main_extension) {
                 this.state.main_extension[key] = value
             }
@@ -137,24 +137,24 @@ class EditPolicy extends Component {
 
     componentDidMount() {
         if (this.props.editAblePolicy.length) {
-            let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
+            let editAblePolicy = this.props.editAblePolicy.find(item => item.id === this.props.editAblePolicyId)
             // console.log(this.props.editAblePolicyId, 'id')
             // console.log(editAblePolicy, 'policys')
             let main_system_control = {};
             let main_extension = {};
             if (editAblePolicy.app_list) {
                 if (editAblePolicy.app_list.length) {
-                    main_system_control = editAblePolicy.app_list.find(item => item.uniqueName == Main_SETTINGS);
-                    main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
+                    main_system_control = editAblePolicy.app_list.find(item => item.uniqueName === Main_SETTINGS);
+                    main_extension = editAblePolicy.app_list.find(item => item.uniqueName === SECURE_SETTING);
 
                     // console.log('1223', editAblePolicy.app_list)
 
-                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName === SECURE_SETTING);
                     // console.log(seccure_index, 'sdfdsfa')
                     if (seccure_index > -1) {
                         editAblePolicy.app_list.splice(seccure_index, 1)
                     }
-                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
+                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName === Main_SETTINGS);
                     // console.log('system_index', systemcontrols_index)
                     if (systemcontrols_index > -1) {
                         editAblePolicy.app_list.splice(systemcontrols_index, 1)
@@ -185,38 +185,38 @@ class EditPolicy extends Component {
         if (this.props !== prevProps) {
 
             if (this.props.editAblePolicy.length) {
-                let editAblePolicy = this.props.editAblePolicy.find(item => item.id == this.props.editAblePolicyId)
+                let editAblePolicy = this.props.editAblePolicy.find(item => item.id === this.props.editAblePolicyId)
                 // console.log('eidted dsddffffffff', editAblePolicy);
 
-                // let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                // let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName === SECURE_SETTING);
                 // // console.log(seccure_index, 'sdfdsfa')
                 // if (seccure_index > -1) {
                 //     editAblePolicy.app_list.splice(seccure_index, 1)
                 // }
-                // let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
+                // let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName === Main_SETTINGS);
                 // if (systemcontrols_index > -1) {
                 //     editAblePolicy.app_list.splice(systemcontrols_index, 1)
                 // }
 
                 // console.log(editAblePolicy, 'chceck', systemcontrols_index);
 
-                // let editAblePolicyPrev = prevProps.editAblePolicy.find(item => item.id == prevProps.editAblePolicyId)
+                // let editAblePolicyPrev = prevProps.editAblePolicy.find(item => item.id === prevProps.editAblePolicyId)
 
 
-                if (this.state.main_extension == undefined && this.state.main_extension == {}) {
+                if (this.state.main_extension === undefined && this.state.main_extension === {}) {
                     let main_extension = {};
                     let main_system_control = {};
                     if (editAblePolicy.app_list.length) {
 
-                        main_system_control = editAblePolicy.app_list.find(item => item.uniqueName == Main_SETTINGS);
-                        main_extension = editAblePolicy.app_list.find(item => item.uniqueName == SECURE_SETTING);
+                        main_system_control = editAblePolicy.app_list.find(item => item.uniqueName === Main_SETTINGS);
+                        main_extension = editAblePolicy.app_list.find(item => item.uniqueName === SECURE_SETTING);
 
-                        let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                        let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName === SECURE_SETTING);
                         // console.log(seccure_index, 'sdfdsfa')
                         if (seccure_index > -1) {
                             editAblePolicy.app_list.splice(seccure_index, 1)
                         }
-                        let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
+                        let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName === Main_SETTINGS);
                         if (systemcontrols_index > -1) {
                             editAblePolicy.app_list.splice(systemcontrols_index, 1)
                         }
@@ -234,12 +234,12 @@ class EditPolicy extends Component {
                     });
                 } else {
 
-                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == SECURE_SETTING);
+                    let seccure_index = editAblePolicy.app_list.findIndex(item => item.uniqueName === SECURE_SETTING);
                     // console.log(seccure_index, 'sdfdsfa')
                     if (seccure_index > -1) {
                         editAblePolicy.app_list.splice(seccure_index, 1)
                     }
-                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName == Main_SETTINGS);
+                    let systemcontrols_index = editAblePolicy.app_list.findIndex(item => item.uniqueName === Main_SETTINGS);
                     if (systemcontrols_index > -1) {
                         editAblePolicy.app_list.splice(systemcontrols_index, 1)
                     }
@@ -372,7 +372,7 @@ class EditPolicy extends Component {
                 }
 
                 if (dupmVar.app_list.length) {
-                    let indexforDel = dupmVar.app_list.findIndex(item => item == undefined || item == "undefined" || item == '' || item == null || item == {})
+                    let indexforDel = dupmVar.app_list.findIndex(item => item === undefined || item === "undefined" || item === '' || item === null || item === {})
                     if (indexforDel > -1) {
                         dupmVar.app_list.splice(indexforDel, 1)
                     }
@@ -612,7 +612,7 @@ class EditPolicy extends Component {
                         <TabPane tab="SYSTEM PERMISSION" key="4">
                             <div>
                                 {/* {
-                                    this.state.main_system_control != undefined ?
+                                    this.state.main_system_control !== undefined ?
                                         <div>
                                             <Row>
                                                 <Col span={6} className="">
@@ -742,7 +742,7 @@ class EditPolicy extends Component {
                             columns={this.appsColumns}
                             align='center'
                             dataSource={
-                                this.renderApp(this.state.addDataOf == 'push_apps' ? this.props.push_apps : this.props.appPermissions)
+                                this.renderApp(this.state.addDataOf === 'push_apps' ? this.props.push_apps : this.props.appPermissions)
                             }
                             pagination={false}
                             bordered

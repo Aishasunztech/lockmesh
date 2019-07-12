@@ -41,7 +41,7 @@ import {
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
-    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APPS_TEXT, PUSH_APP_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT
+    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT
 } from "../../../constants/Constants";
 
 
@@ -80,6 +80,7 @@ class PasswordModal extends Component {
                     checkPass={this.props.checkPass}
                     actionType={this.props.actionType}
                     handleCancel={this.props.showPwdConfirmModal}
+                    translation={this.props.translation}
                     ref='pswdForm'
                 />
             </Modal >
@@ -127,8 +128,8 @@ class DealerAppModal extends Component {
                     }
                 }}
                 onCancel={() => { this.props.showPushAppsModal(false); this.props.resetSeletedRows() }}
-                okText= {convertToLang(this.props.translation[PUSH_APPS_TEXT], PUSH_APPS_TEXT)}
-                cancelText= {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
             >
                 <DealerApps
                     apk_list={this.props.apk_list}
@@ -137,6 +138,7 @@ class DealerAppModal extends Component {
                     selectedApps={this.props.selectedApps}
                     selectedAppKeys={this.props.selectedAppKeys}
                     handleChecked={this.props.handleChecked}
+                    translation={this.props.translation}
                 />
             </Modal>
         )
@@ -177,7 +179,7 @@ class PullAppModal extends Component {
                 visible={this.props.pullAppsModal}
                 onOk={() => {
                     if (this.props.selectedAppKeys.length) {
-                        // this.props.showPullAppsModal(false);
+                        this.props.showPullAppsModal(false);
                         this.props.showSelectedAppsModal(true);
                     }
                 }}
@@ -191,7 +193,8 @@ class PullAppModal extends Component {
                     selectedApps={this.props.selectedApps}
                     selectedAppKeys={this.props.selectedAppKeys}
                     handleChecked={this.props.handleChecked}
-                    type={this.props.actionType == PUSH_APPS ? "push" : 'pull'}
+                    type={this.props.actionType === PUSH_APPS ? "push" : 'pull'}
+                    translation={this.props.translation}
                 />
             </Modal>
         )
@@ -200,7 +203,7 @@ class PullAppModal extends Component {
 
 
 const SelectedApps = (props) => {
-    // console.log('selected app are', props.selectedApps)
+    // console.log('selected app are', props.selectedApps, props.actionType)
     return (
         <Modal
             // closable={false}
@@ -223,14 +226,15 @@ const SelectedApps = (props) => {
             }}
             // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], Button_Back)}
-            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APPS_TEXT], PUSH_APPS_TEXT) : convertToLang(props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
+            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT) : convertToLang(props.translation[PULL_APPS_TEXT], PULL_APPS_TEXT)}
             destroyOnClose={true}
         >
             <DealerApps
                 apk_list={props.apk_list}
                 isSwitchable={false}
                 selectedApps={props.selectedApps}
-                type={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
+                type={props.actionType == PUSH_APPS ? 'push' : 'pull'}
+                // buttonText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
                 disabledSwitch={true}
                 translation={props.translation}
             />
@@ -366,7 +370,7 @@ class SideActions extends Component {
             if (this.props.extensions.length) {
                 // console.log('saved profile will be', this.props.extensions);
                 for (let extension of this.props.extensions) {
-                    if (extension.uniqueName == SECURE_SETTING) {
+                    if (extension.uniqueName === SECURE_SETTING) {
                         exts = extension.subExtension
                         //   console.log(exts, 'sddsdsdsdsdsdsdsd')
                     }
@@ -519,7 +523,7 @@ class SideActions extends Component {
     }
 
     handleFlag(flagged) {
-        if (flagged == 'Unflag') {
+        if (flagged === 'Unflag') {
             showConfirm(this.props.device, this.props.unflagged, this, "Do you really want to unflag the device ", 'flagged')
         } else {
             this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
@@ -571,7 +575,8 @@ class SideActions extends Component {
         // console.log(this.state.apk_list, 'list apk')
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
-        const flagged = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], Button_UNFLAG) : convertToLang(this.props.translation[Button_Flag], Button_Flag);
+        const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], Button_UNFLAG) : convertToLang(this.props.translation[Button_Flag], Button_Flag);
+        const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
@@ -587,7 +592,7 @@ class SideActions extends Component {
                                     placement="bottom"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
-                                    disabled={(this.props.authUser.type == ADMIN || this.props.authUser.type == DEALER) ? false : true}
+                                    disabled={(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
@@ -638,7 +643,7 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
-                                    disabled={this.props.authUser.type == ADMIN ? false : true}
+                                    disabled={this.props.authUser.type === ADMIN ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
@@ -703,7 +708,7 @@ class SideActions extends Component {
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
-                                    disabled={(flagged === 'Unflag') ? 'disabled' : ''}
+                                    disabled={(this.props.device.flagged !== 'Not flagged') ? 'disabled' : ''}
                                 >
                                     {((this.props.device.account_status === '')) ? <div><Icon type="user-delete" /> {convertToLang(this.props.translation[Button_Suspend], Button_Suspend)} </div> : <div><Icon type="user-add" /> {convertToLang(this.props.translation[Button_Unsuspend], Button_Unsuspend)} </div>}
                                 </Button>
@@ -719,7 +724,7 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#1b1b1b', color: '#fff' }}
                                     onClick={() => this.handleFlag(flagged)}
                                 >
-                                    <Icon type="flag" />{flagged}
+                                    <Icon type="flag" />{flaggedButtonText}
                                 </Button>
                                 <Button
                                     onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')}
@@ -775,7 +780,7 @@ class SideActions extends Component {
                         />
                         :
                         (this.state.historyType === "profile") ?
-
+                                    
                             <TableHistory
                                 histories={this.props.profiles}
                                 type={this.state.historyType}
@@ -820,6 +825,7 @@ class SideActions extends Component {
                         isGuestPwd={this.props.isGuestPwd}
                         controls={{ 'controls': this.state.changedCtrls }}
                         showChangedControls={true}
+                        translation={this.props.translation}
                     />
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
@@ -840,6 +846,8 @@ class SideActions extends Component {
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
+
+
 
                 <DealerAppModal
                     pushAppsModal={this.props.pushAppsModal}

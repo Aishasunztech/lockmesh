@@ -362,15 +362,15 @@ class ManageData extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-        if (this.state.innerTabSelect == '1') {
+        if (this.state.innerTabSelect === '1') {
             this.setState({
                 innerContent: nextProps.chat_ids
             })
-        } else if (this.state.innerTabSelect == '2') {
+        } else if (this.state.innerTabSelect === '2') {
             this.setState({
                 innerContent: nextProps.pgp_emails
             })
-        } else if (this.state.innerTabSelect == '3') {
+        } else if (this.state.innerTabSelect === '3') {
             this.setState({
                 innerContent: nextProps.sim_ids
             })

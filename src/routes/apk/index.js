@@ -178,7 +178,7 @@ class Apk extends React.Component {
 
                 values.map((value) => {
                     // console.log(APK_PERMISSION, value, "columns", column);
-                    if ((value.key === APK_PERMISSION && column.dataIndex == 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex == 'apk_status')) {
+                    if ((value.key === APK_PERMISSION && column.dataIndex === 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex === 'apk_status')) {
                         // console.log('......... ......', column.title)
                         if (column.title.props.children[0] === convertToLang(this.props.translation[value.key], value.key)) {
                             dumydata[index].className = '';
@@ -391,7 +391,7 @@ class Apk extends React.Component {
                                     <div style={{ textAlign: "center" }}>
                                         {/* <Button
                                             type="primary"
-                                            // disabled={(this.props.disableAddButton == true) ? true : false}
+                                            // disabled={(this.props.disableAddButton === true) ? true : false}
                                             style={{ width: '12%', marginBottom:16 }}
                                         >
                                             <Link to='/upload-apk'>Upload apk</Link>

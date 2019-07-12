@@ -69,7 +69,7 @@ export default class DeviceSidebar extends Component {
         // } else if (device_details.account_status === 'suspended') {
         //     device_status = 'Suspended';
         //     make_red = 'make_red captilize'
-        // } else if (device_details.unlink_status == 1) {
+        // } else if (device_details.unlink_status === 1) {
         //     device_status = 'Unlinked';
         //     make_red = 'make_red captilize'
         // } else {
@@ -91,7 +91,7 @@ export default class DeviceSidebar extends Component {
             {
                 key: 171,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODE], DEVICE_MODE))}:</a>),
-                value: device_details.online ? (device_details.online == "online") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A"
+                value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A"
             },
             {
                 key: 102,
@@ -225,7 +225,7 @@ export default class DeviceSidebar extends Component {
 
     goToDealer = (dealer) => {
         if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
-            if (dealer.connected_dealer == 0 || dealer.connected_dealer == '' || dealer.connected_dealer == null) {
+            if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
                 this.setState({
                     redirect: true,
                     dealer_id: dealer.dealer_id,

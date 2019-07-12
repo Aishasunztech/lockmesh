@@ -1665,7 +1665,7 @@ export function appsColumns(translation) {
             render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
         }, {
             title: convertToLang(translation[Guest], Guest),
-            dataIndex: 'Guest',
+            dataIndex: 'guest',
             key: '2',
         }, {
             title: convertToLang(translation[ENCRYPTED], ENCRYPTED),
@@ -1688,7 +1688,7 @@ export function extensionColumns(translation) {
             render: text => <a href="javascript:;" style={{ fontSize: 12 }}> {text}</ a>,
         }, {
             title: convertToLang(translation[Guest], Guest),
-            dataIndex: 'Guest',
+            dataIndex: 'guest',
             key: '2',
         }, {
             title: convertToLang(translation[ENCRYPTED], ENCRYPTED),
