@@ -19,7 +19,10 @@ import {
     DEVICE_SUSPENDED,
     DEVICE_UNLINKED,
     DEVICE_TRIAL,
-    ADMIN
+    ADMIN,
+    Name,
+    Value,
+    ALERT_TO_SURE_DELETE_ALL_DEVICES
 } from '../../../constants/Constants'
 import {
     Button_Modify,
@@ -259,7 +262,7 @@ class DevicesList extends Component {
         // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
         // console.log(type);
         if (this.state.selectedRowKeys.length) {
-            let title = ' Are you sure, you want to delete All these devices';
+            let title = convertToLang(this.props.translation[ALERT_TO_SURE_DELETE_ALL_DEVICES], " Are you sure, you want to delete All these devices");
             let arr = [];
             // console.log('delete the device', this.state.selectedRowKeys);
             for (let id of this.state.selectedRowKeys) {
@@ -323,8 +326,8 @@ class DevicesList extends Component {
         })
     }
 
-    onExpandRow = (expanded, record) => {
-        console.log(expanded, 'data is expanded', record);
+    onExpandRow = (expanded, record) => { 
+        // console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.key)) {
                 this.state.expandedRowKeys.push(record.key);
@@ -444,9 +447,13 @@ class DevicesList extends Component {
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
-                    activateDevice={activateDevice} />
+                    activateDevice={activateDevice} 
+                    translation={this.props.translation}
+                    />
                 <SuspendDevice ref="suspend"
-                    suspendDevice={suspendDevice} />
+                    suspendDevice={suspendDevice} 
+                    translation={this.props.translation}
+                    />
                 <Card className="fix_card devices_fix_card">
                     <hr className="fix_header_border" style={{ top: "56px" }} />
                     <CustomScrollbars className="gx-popover-scroll ">
@@ -480,17 +487,19 @@ class DevicesList extends Component {
                                 let showRecord2 = [];
 
                                 this.props.columns.map((column, index) => {
+                                    // console.log(column.dataIndex, ' test column: ', column);
                                     if (column.className === "row") {
                                     } else if (column.className === "hide") {
                                         let title = column.children[0].title;
-                                        if (title === "SIM ID" || title === "IMEI 1" || title === "SIM 1" || title === "IMEI 2" || title === "SIM 2") {
+                                        let dataIndex = column.dataIndex;
+                                        if (dataIndex === "sim_id" || dataIndex === "imei_1" || dataIndex === "sim_1" || dataIndex === "imei_2" || dataIndex === "sim_2") {
                                             showRecord2.push({
                                                 name: title,
                                                 values: record[column.dataIndex],
                                                 rowKey: title
                                             });
                                         } else {
-                                            if (title === "STATUS" || title === "DEALER NAME" || title === "S-DEALER Name") {
+                                            if (dataIndex === "status" || dataIndex === "dealer_name" || dataIndex === "s_dealer_name") {
                                                 if (record[column.dataIndex][0]) {
                                                     showRecord.push({
                                                         name: title,
@@ -579,13 +588,13 @@ class DevicesList extends Component {
                                 //                             columns={
                                 //                                 [
                                 //                                     {
-                                //                                         title: "Name",
+                                //                                         title: convertToLang(this.props.translation[Name],"Name"),
                                 //                                         dataIndex: 'name',
                                 //                                         key: "name",
                                 //                                         align: "center",
                                 //                                         className: "bold"
                                 //                                     }, {
-                                //                                         title: "Value",
+                                //                                         title: convertToLang(this.props.translation[Value],"Value"),
                                 //                                         dataIndex: "values",
                                 //                                         key: "value",
                                 //                                         align: "center"
@@ -601,13 +610,13 @@ class DevicesList extends Component {
                                 //                             columns={
                                 //                                 [
                                 //                                     {
-                                //                                         title: "Name",
+                                //                                         title: convertToLang(this.props.translation[Name],"Name"),
                                 //                                         dataIndex: 'name',
                                 //                                         key: "name",
                                 //                                         align: "center",
                                 //                                         className: "bold"
                                 //                                     }, {
-                                //                                         title: "Value",
+                                //                                         title: convertToLang(this.props.translation[Value],"Value"),
                                 //                                         dataIndex: "values",
                                 //                                         key: "value",
                                 //                                         align: "center"
@@ -628,13 +637,13 @@ class DevicesList extends Component {
                                                 columns={
                                                     [
                                                         {
-                                                            title: "Name",
+                                                            title: convertToLang(this.props.translation[Name],"Name"),
                                                             dataIndex: 'name',
                                                             key: "name",
                                                             align: "center",
                                                             className: "bold"
                                                         }, {
-                                                            title: "Value",
+                                                            title: convertToLang(this.props.translation[Value],"Value"),
                                                             dataIndex: "values",
                                                             key: "value",
                                                             align: "center"
@@ -650,13 +659,13 @@ class DevicesList extends Component {
                                                 columns={
                                                     [
                                                         {
-                                                            title: "Name",
+                                                            title: convertToLang(this.props.translation[Name],"Name"),
                                                             dataIndex: 'name',
                                                             key: "name",
                                                             align: "center",
                                                             className: "bold"
                                                         }, {
-                                                            title: "Value",
+                                                            title: convertToLang(this.props.translation[Value],"Value"),
                                                             dataIndex: "values",
                                                             key: "value",
                                                             align: "center"
@@ -682,7 +691,6 @@ class DevicesList extends Component {
                 />
                 <AddDevice ref="add_device"
                     translation={this.props.translation}
-
                 />
             </div >
 

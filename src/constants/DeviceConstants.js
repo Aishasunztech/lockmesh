@@ -1,5 +1,6 @@
 export const DEVICE_ID = "tableHeadings.DEVICEID";
 export const DEVICE_EDIT = "tableHeadings.DEVICEedit";
+export const ADD_DEVICE = "tableHeadings.ADDDEVICE";
 export const USER_ID = "tableHeadings.USERID";
 export const DEVICE_REMAINING_DAYS =  "tableHeadings.REMAININGDAYS";
 export const DEVICE_FLAGGED =  "tableHeadings.FLAGGED";
@@ -44,3 +45,13 @@ export const HISTORY_DATE = "History.Date.id"; // History Date
 //new 12/7/19
 export const ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE = "Are.you.sure.you.want.activate.the.device.id"; // Are you sure, you want to activate the device
 export const ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE = "Are.you.sure.you.want.suspend.the.device.id"; // Are you sure, you want to suspend the device 
+
+
+
+export const SINGLE_DEVICE = "Single.Device.id"; // Single Device
+export const DUPLICATE_DEVICES = "Duplicate Devices.id"; // Duplicate Devices
+export const SELECT_USER_ID = "Select.User.ID.id"; // Select User ID
+export const USER_ID_IS_REQUIRED = "User.ID.is.Required.id"; // User ID is Required
+export const SELECT_PGP_EMAILS = "Select.PGP.Emails.id"; // Select PGP Emails
+
+export const DUPLICATE_DEVICES_REQUIRED = "Duplicate.devices.required.id" // Number of Duplicate devices required

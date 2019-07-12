@@ -51,6 +51,7 @@ export const Alert_Allow_Permission_Delaer = "alert.allow.permission.dealer.id";
 export const Alert_Remove_Permission_Delaer = "alert.remove.permission.dealer.id"; // Do you realy Want to Remove Permission for all Dealers?
 export const Alert_Delete_APK = "alert.delete.apk.id"; // Are you sure, you want to delete the Apk ?
 export const POLICY = 'policy';
+export const SELECT_POLICY = "Select.Policy.id"; // Select Policy
 
 // Constant Package Names
 export const Main_SETTINGS = 'com.android.settingsSettings';
@@ -118,6 +119,12 @@ export const Edit_Profile_03 = "edit.profile.03.id"; // Enable Dual Authenticati
 export const Change_Password = "change.password.id"; // Change Password
 export const Change_Email = "change.email.id"; // Change Email
 export const Login_Email_Authentication = "login.email.authentication"; // Login Email Authentication
+export const ENTER_NEW_PASSWORD = "Enter.New.Password.id"; // Enter New Password
+export const NEW_PASSWORD = "New.Password.id"; // New Password
+export const ENTER_CURRENT_PASSWORD = "Enter.Current.Password.id"; // Enter Current Password
+export const CURRENT_PASSWORD = "Current.Password.id"; // Current Password
+export const CONFIRM_NEW_PASSWORD  = "Confirm.New.Password.id"; // Confirm New Password
+export const CONFIRM_PASSWORD  = "Confirm.Password.id"; // Confirm Password
 
 
 export const Date_Text = "date.text.id"; // Date
@@ -147,3 +154,4 @@ export const SIGN_IN = "app.userAuth.signIn";
 
 export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME
 export const SELECT = "select.id"; // Select
+export const ALERT_TO_SURE_DELETE_ALL_DEVICES = "ALERT_TO_SURE_DELETE_ALL_DEVICES.id"; // Are you sure, you want to delete All these devices

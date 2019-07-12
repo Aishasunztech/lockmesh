@@ -274,7 +274,7 @@ class Profile extends Component {
                         <Customizer1 ref="Customize33" />
                     </Row>
                 </div>
-                <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} />
+                <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} translation={this.props.translation} />
                 <ChangeProfile
                     ref="change_profile"
                     profile={this.props.profile}
