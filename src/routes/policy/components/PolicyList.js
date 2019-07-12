@@ -81,12 +81,12 @@ class PolicyList extends Component {
     SavePolicyChanges = (record) => {
 
         Modal.confirm({
-            title: convertToLang(this.props.translation[POLICY_SAVE_CONFIRMATION], POLICY_SAVE_CONFIRMATION),
+            title: convertToLang(this.props.translation[POLICY_SAVE_CONFIRMATION], "Are You Sure, You Want to Save Changes"),
             onOk: () => {
                 this.props.SavePolicyChanges(record);
             },
             // content: 'Bla bla ...',
-            okText: convertToLang(this.props.translation[Button_Save], Button_Save),
+            okText: convertToLang(this.props.translation[Button_Save], "Save"),
         });
     }
 
@@ -94,13 +94,13 @@ class PolicyList extends Component {
     deletePolicy = (id) => {
         let _this = this
         confirm({
-            title: convertToLang(this.props.translation[POLICY_DELETE_CONFIRMATION], POLICY_DELETE_CONFIRMATION),
+            title: convertToLang(this.props.translation[POLICY_DELETE_CONFIRMATION], "Do you want to delete this Policy?"),
             onOk() {
                 _this.props.handlePolicyStatus(1, 'delete_status', id)
             },
             onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-            cancelText: convertToLang(this.props.translation[Button_No], Button_No)
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No")
 
         });
     }
@@ -132,7 +132,7 @@ class PolicyList extends Component {
                                         this.props.editPolicyModal(policy)
                                     }}
                                 >
-                                    {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
+                                    {convertToLang(this.props.translation[Button_Edit], "EDIT")}
                                 </Button>
                                 <Button
                                     style={{ marginRight: 7, textTransform: "uppercase" }}
@@ -140,7 +140,7 @@ class PolicyList extends Component {
                                     size="small"
                                     onClick={() => { this.deletePolicy(policy.id) }}
                                 >
-                                    {convertToLang(this.props.translation[Button_Delete], Button_Delete)}
+                                    {convertToLang(this.props.translation[Button_Delete], "DELETE")}
                                 </Button>
                             </Fragment>) : null
                 ,
@@ -180,13 +180,13 @@ class PolicyList extends Component {
 
         let _this = this
         confirm({
-            title: convertToLang(this.props.translation[POLICY_CHANGE_DEFAULT_CONFIRMATION], POLICY_CHANGE_DEFAULT_CONFIRMATION),
+            title: convertToLang(this.props.translation[POLICY_CHANGE_DEFAULT_CONFIRMATION], "Do you want to change your default Policy?"),
             onOk() {
                 _this.props.defaultPolicyChange(e, policy_id)
             },
             onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-            cancelText: convertToLang(this.props.translation[Button_No], Button_No)
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No")
 
         });
     }
@@ -258,7 +258,7 @@ class PolicyList extends Component {
                                 return (
                                     <div>{
                                         this.state.savePolicyButton ?
-                                            <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], Button_Save_Changes)} </Button>
+                                            <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], "Save Changes")} </Button>
                                             : false}
                                         <PolicyInfo
                                             selected={this.state.expandTabSelected[record.rowKey]}
