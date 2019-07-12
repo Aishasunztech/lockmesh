@@ -167,7 +167,7 @@ export default class NewDevices extends Component {
 
                     />
                 </Modal>
-                <AddDeviceModal ref='add_device_modal' />
+                <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
             </div>
         )
     }
