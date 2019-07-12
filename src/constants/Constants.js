@@ -86,7 +86,7 @@ export const twelve_month = '12.month.id'; // 12 month
 
 export const ACTION = "action.id"; // ACTION
 export const SEARCH = "search.id"; // Search
-export const Model_text = "model.text" // Model
+export const Model_text = "modal.text" // Model
 export const Start_Date = "start.date"; // Start Date
 export const Expire_Date = "expire.date"; // Expire Date
 export const Expire_Date_Require = "expire.date.require" // Expiry Date is Required !
@@ -97,7 +97,7 @@ export const Only_alpha_numeric = "only.alpha.numeric.id"; // Please insert only
 export const Not_valid_Email = "not.valid.email.id"; // The input is not valid E-mail!
 export const PLZ_INPUT_Email = "not.valid.email.id"; // Please input your E-mail!
 export const Required_Email = "require.email.id"; // Email is Required !
-export const Insert_Valid_Dealer_Name = "insert.valid.dealer.name.id"; // Please Insert dealer Name
+export const Insert_Valid_Dealer_Name = "insert.valid.dealer.name.id"; // Please Insert Dealer Name
 export const Email = "email.id"; // Email
 export const Name = "name.id"; // Name
 export const Value = "value.id"; // Value

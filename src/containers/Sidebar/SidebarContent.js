@@ -130,9 +130,9 @@ class SidebarContent extends Component {
   logout = () => {
     let _this = this;
     Modal.confirm({
-      title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_LOGOUT], ARE_YOU_SURE_YOU_WANT_TO_LOGOUT),
-      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+      title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_LOGOUT], "Are you sure you want to logout?"),
+      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(this.props.translation[Button_No], "No"),
 
       onOk() {
         _this.props.logout()
@@ -147,9 +147,9 @@ class SidebarContent extends Component {
   changeLng = (language) => {
     let _this = this;
     Modal.confirm({
-      title: convertToLang(this.props.translation[Alert_Change_Language], Alert_Change_Language),
-      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+      title: convertToLang(this.props.translation[Alert_Change_Language], "Are you sure you want to change the language?"),
+      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(this.props.translation[Button_No], "No"),
 
       onOk() {
         _this.props.switchLanguage(language)
@@ -233,7 +233,7 @@ class SidebarContent extends Component {
               <Menu.Item key="app">
                 <Link to="/apk-list/autoupdate"><i className="icon icon-apps" />
                   {/* <IntlMessages id="sidebar.app" /> */}
-                  {convertToLang(translation[Sidebar_app], Sidebar_app)}
+                  {convertToLang(translation[Sidebar_app], "App")}
                 </Link>
               </Menu.Item>
               <Menu.Item key="logout" onClick={(e) => {
@@ -244,7 +244,7 @@ class SidebarContent extends Component {
                 <i className="icon">
                   <i className="fa fa-sign-out ml-2" aria-hidden="true"></i>
                 </i>
-                {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
+                {convertToLang(translation[Sidebar_logout], "Logout")}
                 {/* </Link> */}
               </Menu.Item>
             </Menu>
@@ -259,40 +259,40 @@ class SidebarContent extends Component {
                     <i className="fa fa-mobile" aria-hidden="true"></i>
                   </i>
                   {/* <IntlMessages id="sidebar.devices" /> */}
-                  {convertToLang(translation[Sidebar_devices], Sidebar_devices)}
+                  {convertToLang(translation[Sidebar_devices], "Devices")}
                 </Link>
               </Menu.Item>
               <Menu.Item key="users">
                 <Link to="/users">
                   <i className="icon icon-user" />
                   {/* <IntlMessages id="sidebar.users" /> */}
-                  {convertToLang(translation[Sidebar_users], Sidebar_users)}
+                  {convertToLang(translation[Sidebar_users], "Users)}
                 </Link>
               </Menu.Item>
               {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
                 <Link to="/dealer/dealer"><i className="icon icon-avatar" />
                   {/* <IntlMessages id="sidebar.dealers" /> */}
-                  {convertToLang(translation[Sidebar_dealers], Sidebar_dealers)}
+                  {convertToLang(translation[Sidebar_dealers], "Dealers")}
                 </Link>
               </Menu.Item> : null}
 
               {(authUser.type === ADMIN || authUser.type === DEALER) ? <Menu.Item key="dealer/sdealer">
                 <Link to="/dealer/sdealer"><i className="icon icon-avatar" />
                   {/* <IntlMessages id="sidebar.sdealers" /> */}
-                  {convertToLang(translation[Sidebar_sdealers], Sidebar_sdealers)}
+                  {convertToLang(translation[Sidebar_sdealers], "S-dealers")}
                 </Link>
               </Menu.Item> : null}
 
               {(authUser.type === "admin" || authUser.type === "dealer") ? <Menu.Item key="app">
                 <Link to="/app"><i className="icon icon-apps" />
                   {/* <IntlMessages id="sidebar.app" /> */}
-                  {convertToLang(translation[Sidebar_app], Sidebar_app)}
+                  {convertToLang(translation[Sidebar_app], "App")}
                 </Link>
               </Menu.Item> : null}
               {(authUser.type === ADMIN) ? <Menu.Item key="account">
                 <Link to="/account"><i className="icon icon-profile2" />
                   {/* <IntlMessages id="sidebar.account" /> */}
-                  {convertToLang(translation[Sidebar_account], Sidebar_account)}
+                  {convertToLang(translation[Sidebar_account], "Account")}
                 </Link>
               </Menu.Item> : null}
 
@@ -300,7 +300,7 @@ class SidebarContent extends Component {
               <Menu.Item key="settings">
                 <Link to="/settings"><i className="icon icon-setting" />
                   {/* <IntlMessages id="sidebar.settings" /> */}
-                  {convertToLang(translation[Sidebar_settings], Sidebar_settings)}
+                  {convertToLang(translation[Sidebar_settings], "Settings")}
                 </Link>
               </Menu.Item>
 
@@ -310,7 +310,7 @@ class SidebarContent extends Component {
                 <i className="icon">
                   <i className="fa fa-sign-out ml-2" aria-hidden="true"></i>
                 </i>
-                {convertToLang(translation[Sidebar_logout], Sidebar_logout)}
+                {convertToLang(translation[Sidebar_logout], "Logout")}
               </Menu.Item>
             </Menu>
           }

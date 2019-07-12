@@ -25,7 +25,7 @@ class AddUserForm extends Component {
             if(values.name === ''){
                 this.setState({
                     validateStatus: 'error',
-                    help: convertToLang(this.props.translation[User_Name_require], User_Name_require)
+                    help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
                 })
             }
             if (!err) {
@@ -34,7 +34,7 @@ class AddUserForm extends Component {
             if (/[^A-Za-z \d]/.test( values.name)) {
                 this.setState({
                     validateStatus: 'error',
-                    help: convertToLang(this.props.translation[User_Name_require], User_Name_require)
+                    help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
                 })
             } else {
                 this.props.AddUserHandler(values);
@@ -55,13 +55,13 @@ class AddUserForm extends Component {
         if(fieldvalue === ''){
             this.setState({
                 validateStatus: 'error',
-                help: convertToLang(this.props.translation[User_Name_require], User_Name_require)
+                help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
             })
         }
         if (/[^A-Za-z \d]/.test(fieldvalue)) {
             this.setState({
                 validateStatus: 'error',
-                help: convertToLang(this.props.translation[Only_alpha_numeric], Only_alpha_numeric)
+                help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
             })
         }
         else {
@@ -95,7 +95,7 @@ class AddUserForm extends Component {
         // console.log(this.state.type);
         return (
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                <p>(*)-  {convertToLang(this.props.translation[Required_Fields], Required_Fields)} </p>
+                <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
                 {(this.props.user) ? <Form.Item>
                     {this.props.form.getFieldDecorator('user_id', {
                         initialValue: this.props.user.user_id,
@@ -105,7 +105,7 @@ class AddUserForm extends Component {
                 </Form.Item> : null}
                 <Form.Item
 
-                    label= {convertToLang(this.props.translation[Name], Name)}
+                    label= {convertToLang(this.props.translation[Name], "Name")}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                     validateStatus={this.state.validateStatus}
@@ -115,7 +115,7 @@ class AddUserForm extends Component {
                         initialValue: this.props.user ? this.props.user.user_name : '',
                         rules: [
                             {
-                                required: true, message: convertToLang(this.props.translation[User_Name_require], User_Name_require),
+                                required: true, message: convertToLang(this.props.translation[User_Name_require], "Name is Required"),
                             }
                         ],
                     })(
@@ -124,17 +124,17 @@ class AddUserForm extends Component {
                 </Form.Item>
                 <Form.Item
 
-                    label= {convertToLang(this.props.translation[Email], Email)}
+                    label= {convertToLang(this.props.translation[Email], "Email")}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('email', {
                         initialValue: this.props.user ? this.props.user.email : '',
                         rules: [{
-                            type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], Not_valid_Email),
+                            type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], "The input is not valid E-mail!"),
                         },
                         {
-                            required: true, message: convertToLang(this.props.translation[Required_Email], Required_Email),
+                            required: true, message: convertToLang(this.props.translation[Required_Email], "Email is Required!"),
                         }],
                     })(
                         <Input onChange={(e) => this.check} />
@@ -146,8 +146,8 @@ class AddUserForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <Button key="back" type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)} </Button>
-                    <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_submit], Button_submit)} </Button>
+                    <Button key="back" type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
+                    <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_submit], "Submit")} </Button>
                 </Form.Item>
 
             </Form>

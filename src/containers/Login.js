@@ -108,7 +108,7 @@ class Login extends React.Component {
 
                 <FormItem>
                   <Button type="primary" className="gx-mb-0" htmlType="submit">
-                    {convertToLang(this.props.translation[SIGN_IN], SIGN_IN)}
+                    {convertToLang(this.props.translation[SIGN_IN], "SIGN IN")}
                     {/* <IntlMessages id="app.userAuth.signIn" /> */}
                   </Button>
                 </FormItem>
