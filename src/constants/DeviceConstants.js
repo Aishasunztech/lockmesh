@@ -45,6 +45,8 @@ export const HISTORY_DATE = "History.Date.id"; // History Date
 //new 12/7/19
 export const ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE = "Are.you.sure.you.want.activate.the.device.id"; // Are you sure, you want to activate the device
 export const ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE = "Are.you.sure.you.want.suspend.the.device.id"; // Are you sure, you want to suspend the device 
+export const ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE = "Are.you.sure.you.want.transfer.the.device.id"; // Are you sure, you want to transfer the device 
+export const ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE = "Are.you.sure.you.want.delete.the.device.id"; // Are you sure, you want to delete the device 
 
 
 
@@ -55,3 +57,4 @@ export const USER_ID_IS_REQUIRED = "User.ID.is.Required.id"; // User ID is Requi
 export const SELECT_PGP_EMAILS = "Select.PGP.Emails.id"; // Select PGP Emails
 
 export const DUPLICATE_DEVICES_REQUIRED = "Duplicate.devices.required.id" // Number of Duplicate devices required
+export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id";

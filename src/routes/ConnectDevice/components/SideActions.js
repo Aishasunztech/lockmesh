@@ -46,8 +46,8 @@ import {
 
 
 import { PUSH_APPS, PULL_APPS, POLICY } from "../../../constants/ActionTypes"
-import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG, Button_Save, Button_Cancel, Button_Ok, Button_Apply, Button_Back } from '../../../constants/ButtonConstants';
-import { DEVICE_ID, SETTINGS_TO_BE_SENT_TO_DEVICE } from '../../../constants/DeviceConstants';
+import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG, Button_Save, Button_Cancel, Button_Ok, Button_Apply, Button_Back, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
+import { DEVICE_ID, SETTINGS_TO_BE_SENT_TO_DEVICE, ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE } from '../../../constants/DeviceConstants';
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -400,7 +400,7 @@ class SideActions extends Component {
         confirm({
             content: (
                 <h2>
-                    Are You Sure, You want to Transfer this Device
+                   {convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device")}
             </h2>
             ),
             onOk() {
@@ -410,6 +410,8 @@ class SideActions extends Component {
             onCancel() {
                 // console.log('Cancel');
             },
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
         });
     }
 

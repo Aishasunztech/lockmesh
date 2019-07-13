@@ -9,7 +9,7 @@ import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 import styles from './policy.css';
-import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes } from '../../../constants/ButtonConstants';
+import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';
 import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION } from '../../../constants/PolicyConstants';
 const confirm = Modal.confirm;
@@ -87,6 +87,7 @@ class PolicyList extends Component {
             },
             // content: 'Bla bla ...',
             okText: convertToLang(this.props.translation[Button_Save], "Save"),
+            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         });
     }
 

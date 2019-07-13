@@ -58,10 +58,12 @@ import {
 } from "../../constants/ActionTypes";
 
 import {
-    NOT_AVAILABLE, MAIN_MENU,
+    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE,
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
+import { Button_Cancel } from '../../constants/ButtonConstants';
+import { convertToLang } from '../../routes/utils/commonUtils';
 
 const warning = Modal.warning;
 const confirm = Modal.confirm;
@@ -1237,9 +1239,10 @@ function handleCheckedAllExts(extensions) {
 
 function showConfirm1(device, msg, buttonText) {
     confirm({
-        title: 'WARNNING!',
+        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
         content: msg,
         okText: buttonText,
+        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             showConfirm(device, "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.")
         },
@@ -1248,9 +1251,11 @@ function showConfirm1(device, msg, buttonText) {
 }
 function showConfirm(device, msg) {
     confirm({
-        title: 'WARNNING!',
+        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
         content: msg,
-        okText: "PROCEED WITH WIPING THE DEVICE",
+        // okText: "PROCEED WITH WIPING THE DEVICE",
+        okText: convertToLang(this.props.translation[PROCEED_WITH_WIPING_THE_DEVICE], "PROCEED WITH WIPING THE DEVICE"),
+        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             actions.wipe(device)
         },

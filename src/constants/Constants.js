@@ -155,3 +155,11 @@ export const SIGN_IN = "app.userAuth.signIn";
 export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME
 export const SELECT = "select.id"; // Select
 export const ALERT_TO_SURE_DELETE_ALL_DEVICES = "ALERT_TO_SURE_DELETE_ALL_DEVICES.id"; // Are you sure, you want to delete All these devices
+export const WARNNING = "WARNNING.id"; 
+export const PROCEED_WITH_WIPING_THE_DEVICE = "PROCEED.WITH.WIPING.THE.DEVICE.id";
+
+export const CREDITS = "CREDITS.id";
+export const CREDITS_CASH_REQUESTS = "CREDITS.CASH.REQUESTS.id";
+export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id";
+export const ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST= "Are.you.sure.you.want.to.decline.this.request.id"; // Are you sure you want to decline this request ?
+export const ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST= "Are.you.sure.you.want.to.accept.this.request.id"; // Are you sure you want to accept this request ?

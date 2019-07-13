@@ -39,6 +39,7 @@ import {
     Button_submit,
     Button_Flag,
     Button_UNFLAG,
+    Button_No,
 } from '../../../constants/ButtonConstants';
 
 import {
@@ -58,6 +59,7 @@ import {
 
 import { isNull } from 'util';
 import { unlink } from 'fs';
+import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE } from '../../../constants/DeviceConstants';
 
 const TabPane = Tabs.TabPane;
 class DevicesList extends Component {
@@ -103,7 +105,7 @@ class DevicesList extends Component {
     deleteUnlinkedDevice = (action, device) => {
         let arr = [];
         arr.push(device);
-        let title = ' Are you sure, you want to delete the device';
+        let title = convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE], "Are you sure, you want to delete the device");
         this.confirmDelete(action, arr, title);
     }
     handleUserId = (user_id) => {
@@ -293,6 +295,8 @@ class DevicesList extends Component {
         this.confirm({
             title: title,
             content: '',
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk: (() => {
 
                 this.props.deleteUnlinkDevice(action, devices);

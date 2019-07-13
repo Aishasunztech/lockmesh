@@ -74,3 +74,6 @@ export const  Button_Save_Changes = "button.save.changes"; // Save Changes
 export const  Button_Remove = "button.Remove"; // Remove
 export const  Button_DeleteExceptSelected = "button.DeleteExceptSelected"; // Delete Except Selected
 export const  Button_Add_User = "button.add.user" // Add User
+export const Button_Confirm = "button.Confirm.id";
+export const Button_Decline = "button.decline.id";
+export const Button_ACCEPT = "Button_ACCEPT.id";

@@ -2,21 +2,41 @@ import React, { Component, Fragment } from 'react';
 import { Modal, Table, Button, } from 'antd';
 import { Link } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
-import { ADMIN } from '../../constants/Constants';
+import { ADMIN, WARNNING, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST } from '../../constants/Constants';
 import { convertToLang } from '../../routes/utils/commonUtils';
-import { Button_Ok, Button_Cancel } from '../../constants/ButtonConstants';
+import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT } from '../../constants/ButtonConstants';
+import { DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2, DEVICE_REQUESTS, DEVICE_SIM_1 } from '../../constants/DeviceConstants';
+import { DEALER_NAME } from '../../constants/DealerConstants';
 const confirm = Modal.confirm;
 
 export default class NewDevices extends Component {
     constructor(props) {
         super(props);
+        const columns = [
+            { title: convertToLang(props.translation[ACTION], "Action"), dataIndex: 'action', key: 'action', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_ID], "DEVICE ID"), dataIndex: 'device_id', key: 'device_id', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_SERIAL_NUMBER], "SERIAL NUMBER"), dataIndex: 'serial_number', key: 'serial_number', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_SIM_1], "SIM 1"), dataIndex: 'sim_1', key: 'sim_1', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_IMEI_1], "IMEI 1"), dataIndex: 'imei_1', key: 'imei_1', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_SIM_2], "SIM 2"), dataIndex: 'sim_2', key: 'sim_2', align: "center" },
+            { title: convertToLang(props.translation[DEVICE_IMEI_2], "IMEI 2"), dataIndex: 'imei_2', key: 'imei_2', align: "center" },
+        ];
+        const columns1 = [
+            { title: convertToLang(props.translation[ACTION], "Action"), dataIndex: 'action', key: 'action', align: "center" },
+            { title: convertToLang(props.translation[DEALER_NAME], "DEALER NAME"), dataIndex: 'dealer_name', key: 'dealer_name', align: "center" },
+            { title: convertToLang(props.translation[CREDITS], "CREDITS"), dataIndex: 'credits', key: 'credits', align: "center" },
+        ];
+        
         this.state = {
+            columns: columns,
+            columns1: columns1,
             visible: false,
             NewDevices: [],
             NewRequests: []
         }
     }
 
+    
 
     showModal = () => {
         this.setState({
@@ -57,12 +77,12 @@ export default class NewDevices extends Component {
         this.props.rejectDevice(device);
     }
     rejectRequest(request) {
-        showConfirm(this, "Are you sure you want to decline this request ?", this.props.rejectRequest, request)
+        showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST], "Are you sure you want to decline this request ?"), this.props.rejectRequest, request)
 
         // this.setState({ visible: false })
     }
     acceptRequest(request) {
-        showConfirm(this, "Are you sure you want to accept this request ?", this.props.acceptRequest, request)
+        showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST], "Are you sure you want to accept this request ?"), this.props.acceptRequest, request)
         // this.props.rejectRequest(request);
         // this.setState({ visible: false })
     }
@@ -79,7 +99,7 @@ export default class NewDevices extends Component {
                         size="small"
                         style={{ margin: '0 8px 0 8px' }}
                         onClick={() => { this.acceptRequest(request) }}>
-                        ACCEPT
+                        {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}
                     </Button>
                 </div>,
                 dealer_name: request.dealer_name ? `${request.dealer_name}` : "N/A",
@@ -111,13 +131,13 @@ export default class NewDevices extends Component {
 
             return {
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>DECLINE</Button>
+                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
                     <Button
                         type="primary"
                         size="small"
                         style={{ margin: '0 8px 0 8px' }}
                         onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}>
-                        ACCEPT
+                        {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}
                     </Button></div>,
                 device_id: device.device_id ? `${device.device_id}` : "N/A",
                 imei_1: device.imei ? `${device.imei}` : "N/A",
@@ -146,10 +166,10 @@ export default class NewDevices extends Component {
                 >
                     {(this.props.authUser.type === ADMIN) ? null :
                         <Fragment>
-                            <h1>DEVICE REQUESTS</h1>
+                            <h1>{convertToLang(this.props.translation[DEVICE_REQUESTS], "DEVICE REQUESTS")}</h1>
                             <Table
                                 bordered
-                                columns={columns}
+                                columns={this.state.columns}
                                 style={{ marginTop: 20 }}
                                 dataSource={this.renderList(this.state.NewDevices)}
                                 pagination={false}
@@ -157,10 +177,10 @@ export default class NewDevices extends Component {
                             />
                         </Fragment>
                     }
-                    <h1>CREDITS CASH REQUESTS</h1>
+                    <h1>{convertToLang(this.props.translation[CREDITS_CASH_REQUESTS], "CREDITS CASH REQUESTS")}</h1>
                     <Table
                         bordered
-                        columns={columns1}
+                        columns={this.state.columns1}
                         style={{ marginTop: 20 }}
                         dataSource={this.renderList1(this.state.NewRequests)}
                         pagination={false}
@@ -173,25 +193,13 @@ export default class NewDevices extends Component {
     }
 }
 
-const columns = [
-    { title: 'Action', dataIndex: 'action', key: 'action', align: "center" },
-    { title: 'DEVICE ID', dataIndex: 'device_id', key: 'device_id', align: "center" },
-    { title: 'SERIAL NUMBER', dataIndex: 'serial_number', key: 'serial_number', align: "center" },
-    { title: 'SIM 1 ', dataIndex: 'sim_1', key: 'sim_1', align: "center" },
-    { title: 'IMEI 1', dataIndex: 'imei_1', key: 'imei_1', align: "center" },
-    { title: 'SIM 2', dataIndex: 'sim_2', key: 'sim_2', align: "center" },
-    { title: 'IMEI 2 ', dataIndex: 'imei_2', key: 'imei_2', align: "center" },
-];
-const columns1 = [
-    { title: 'Action', dataIndex: 'action', key: 'action', align: "center" },
-    { title: 'DEALER NAME', dataIndex: 'dealer_name', key: 'dealer_name', align: "center" },
-    { title: 'CREDITS', dataIndex: 'credits', key: 'credits', align: "center" },
-];
+
 function showConfirm(_this, msg, action, request) {
     confirm({
-        title: 'WARNNING!',
+        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
         content: msg,
-        okText: "Confirm",
+        okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             action(request);
         },
