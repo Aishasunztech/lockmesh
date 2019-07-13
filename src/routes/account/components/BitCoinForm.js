@@ -73,8 +73,8 @@ class BitCoinForm extends Component {
                     title="BitCoin Information"
                     visible={this.props.bitCoinModal}
                     footer={false}
-                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                     onOk={() => {
                     }}
                     onCancel={(e) => {

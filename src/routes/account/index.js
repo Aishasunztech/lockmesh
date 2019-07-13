@@ -43,6 +43,8 @@ import {
     PACKAGES_AND_IDS_01,
     PACKAGES_AND_IDS_02,
     PACKAGES_AND_IDS_03,
+    BACKUP_NOW,
+    BACKUP_DATABASE_DESCRIPTION_OF_MODAL_BODY,
 } from "../../constants/AccountConstants";
 
 import {
@@ -89,8 +91,8 @@ class PasswordModal extends Component {
                 }
                 }
                 // okText="Push Apps"
-                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
-                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
             >
                 <PasswordForm
                     checkPass={this.props.checkPass}
@@ -436,8 +438,8 @@ class Account extends Component {
                                         onOk={this.InsertNewData}
                                         onCancel={this.handleCancelDuplicate}
                                         // okText='Submit'
-                                        okText={convertToLang(this.props.translation[Button_submit], Button_submit)}
-                                        cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                                        okText={convertToLang(this.props.translation[Button_submit], "Submit")}
+                                        cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                         okButtonProps={{
                                             disabled: this.state.newData.length ? false : true
                                         }}
@@ -543,6 +545,8 @@ class Account extends Component {
                                             visible={this.state.visible1}
                                             onOk={this.handleOk}
                                             onCancel={this.handleCancel}
+                                            okText= {convertToLang(this.props.translation[Button_Ok], "Ok")}
+                                            cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                             centered
                                         >
                                             <div className="profile_table">
@@ -561,10 +565,10 @@ class Account extends Component {
                                                         footer={[
                                                             <Button key="back" onClick={() => {
                                                                 this.showImportModal(false);
-                                                            }}>Cancel</Button>,
+                                                            }}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>,
 
                                                             <Button key="submit" ref="formSubmission" type="primary" onClick={(e) => this.handleSubmit()} >
-                                                                Submit
+                                                                {convertToLang(this.props.translation[Button_submit], "Submit")}
                                                         </Button>
                                                         ]}>
                                                         <Form onSubmit={(e) => { this.handleSubmit(e) }}>
@@ -582,8 +586,8 @@ class Account extends Component {
                                                                                 <p className="ant-upload-drag-icon">
                                                                                     <Icon type="file-excel" />
                                                                                 </p>
-                                                                                <h2 className="ant-upload-hint">UPLOAD FILE </h2>
-                                                                                <p className="ant-upload-text">Upload file (.xls, .xlsx, .csv)</p>
+                                                                                <h2 className="ant-upload-hint">{convertToLang(this.props.translation[UPLOAD_FILE], "UPLOAD FILE")} </h2>
+                                                                                <p className="ant-upload-text">{convertToLang(this.props.translation[UPLOAD_FILE], "Upload file")} {convertToLang(this.props.translation[UPLOAD_FILE_Ext], "(.xls, .xlsx, .csv)")} </p>
                                                                             </Upload.Dragger>
                                                                         </div>
                                                                     </Form.Item>
@@ -598,6 +602,8 @@ class Account extends Component {
                                                         visible={this.state.dataVisible}
                                                         title={`${this.state.dataFieldTitle}`}
                                                         // onOk={this.handleOk}
+                                                        okText = {convertToLang(this.props.translation[Button_Ok], "Ok")}
+                                                        cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                                         onCancel={
                                                             () => {
                                                                 this.showViewmodal(false);
@@ -1056,16 +1062,17 @@ class Account extends Component {
                                         width="400px"
                                         className="back_db"
                                         maskClosable={false}
-                                        title={<div>BACKUP DATABASE</div>}
+                                        title={<div>{convertToLang(this.props.translation[BACKUP_DATABASE], "BACKUP DATABASE")}</div>}
                                         visible={this.state.backUpModal}
                                         onOk={this.createBackupDB}
                                         onCancel={this.handleCancel}
-                                        okText='BACKUP NOW'
+                                        okText={convertToLang(this.props.translation[BACKUP_NOW], "BACKUP NOW")}
+                                        cancelText= {convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                         okButtonDisabled={true}
                                         centered
                                     >
                                         <div>
-                                            <p style={{ margin: 13 }}>Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated Files first and open in Excel. </p>
+                                            <p style={{ margin: 13 }}>{convertToLang(this.props.translation[BACKUP_DATABASE_DESCRIPTION_OF_MODAL_BODY], "Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated Files first and open in Excel.")} </p>
                                         </div>
                                     </Modal>
                                     <div>

@@ -173,8 +173,8 @@ class PurchaseCredit extends Component {
                         this.cancelPurchaseModal()
                     }}
                     // okText="Push Apps"
-                    okText={convertToLang(this.props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <div>
                         <Form onSubmit={this.handleSubmit} autoComplete="new-password">
