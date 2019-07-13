@@ -58,7 +58,8 @@ import {
 	APK,
 	APK_APP_NAME,
 	APK_APP_LOGO,
-	APK_PERMISSION
+  APK_PERMISSION,
+  APK_SIZE
 } from '../../../constants/ApkConstants';
 
 export var initialSettings = {
@@ -119,6 +120,7 @@ export var initialSettings = {
     { "key": "apk", "value": APK},
     { "key": "apk_name", "value": APK_APP_NAME},
     { "key": "apk_logo", "value": APK_APP_LOGO},
+    { "key": "apk_size", "value": APK_SIZE},
   ],
   //  locale: {
   //   languageId: 'english',

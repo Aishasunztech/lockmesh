@@ -9,12 +9,12 @@ import { convertToLang } from '../../utils/commonUtils';
 const DealerApps = (props) => {
     let columns = [
         {
-            title: convertToLang(this.props.translation[APK], "APK"),
+            title: convertToLang(props.translation[APK], "APK"),
             dataIndex: 'apk',
             key: 'apk',
         },
         {
-            title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+            title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
             dataIndex: 'apk_name',
             width: "100",
             key: 'apk_name',
@@ -25,17 +25,17 @@ const DealerApps = (props) => {
             defaultSortOrder: "ascend"
         },
         {
-            title: convertToLang(this.props.translation[Guest], "GUEST"),
+            title: convertToLang(props.translation[Guest], "GUEST"),
             dataIndex: 'guest',
             key: 'guest'
         },
         {
-            title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+            title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
             dataIndex: 'encrypted',
             key: 'encrypted'
         },
         {
-            title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
+            title: convertToLang(props.translation[ENABLE], "ENABLE"),
             dataIndex: 'enable',
             key: 'enable'
         },
@@ -99,12 +99,12 @@ const DealerApps = (props) => {
         columns = [
 
             {
-                title: convertToLang(this.props.translation[APK], "APK"),
+                title: convertToLang(props.translation[APK], "APK"),
                 dataIndex: 'apk',
                 key: 'apk',
             },
             {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'apk_name',
                 width: "100",
                 key: 'apk_name',

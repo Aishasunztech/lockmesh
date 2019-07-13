@@ -67,7 +67,7 @@ import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
 import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
-import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE } from "../../constants/DeviceConstants";
+import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE, DEVICE_NOT_SYNCED, DEVICE_IS } from "../../constants/DeviceConstants";
 
 import { mobileMainMenu, mobileManagePasswords } from '../utils/columnsUtils';
 
@@ -298,9 +298,9 @@ class ConnectDevice extends Component {
       )
 
     } else if (this.props.pageName === NOT_AVAILABLE) {
-      return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
+      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS],"Device is ")} {this.props.status}</a></h1></div>);
     } else {
-      return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
+      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
     }
   }
 

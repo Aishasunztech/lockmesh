@@ -59,7 +59,7 @@ import {
 
 import { isNull } from 'util';
 import { unlink } from 'fs';
-import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE } from '../../../constants/DeviceConstants';
+import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE } from '../../../constants/DeviceConstants';
 
 const TabPane = Tabs.TabPane;
 class DevicesList extends Component {
@@ -751,9 +751,9 @@ export default class Tab extends Component {
     unflagConfirm = (device) => {
         let _this = this;
         confirm({
-            title: 'Do you really want to unflag the device ' + device.device_id,
-            okText: 'Yes',
-            cancelText: 'No',
+            title: convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device ') + device.device_id,
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk() {
                 _this.props.unflagged(device.device_id)
                 _this.props.activateDevice(device)

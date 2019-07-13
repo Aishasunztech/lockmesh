@@ -37,17 +37,18 @@ import {
     hidePolicyConfirm,
     applyPolicy,
     applySetting,
-    getProfiles
+    getProfiles,
+    wipe,
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
-    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT, PUSH_APPS_TEXT, SELECTED_APPS, SELECT_APPS
+    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT, PUSH_APPS_TEXT, SELECTED_APPS, SELECT_APPS, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE
 } from "../../../constants/Constants";
 
 
 import { PUSH_APPS, PULL_APPS, POLICY } from "../../../constants/ActionTypes"
 import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG, Button_Save, Button_Cancel, Button_Ok, Button_Apply, Button_Back, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
-import { DEVICE_ID, SETTINGS_TO_BE_SENT_TO_DEVICE, ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE } from '../../../constants/DeviceConstants';
+import { DEVICE_ID, SETTINGS_TO_BE_SENT_TO_DEVICE, ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE, WIPE_DEVICE_DESCRIPTION, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE } from '../../../constants/DeviceConstants';
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -106,7 +107,7 @@ class DealerAppModal extends Component {
                 width="780px"
                 title={
                     <div className="pp_popup">{convertToLang(this.props.translation[SELECT_APPS], "Select Apps ")}
-                <Input.Search
+                        <Input.Search
                             name="push_apps"
                             key="push_apps"
                             id="push_apps"
@@ -163,7 +164,7 @@ class PullAppModal extends Component {
                 width="650px"
                 title={
                     <div className="pp_popup">{convertToLang(this.props.translation[SELECT_APPS], "Select Apps ")}
-                    <Input.Search
+                        <Input.Search
                             name="pull_apps"
                             key="pull_apps"
                             id="pull_apps"
@@ -179,9 +180,11 @@ class PullAppModal extends Component {
                         <br /> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID: ")} {this.props.device.device_id} </div>}
                 visible={this.props.pullAppsModal}
                 onOk={() => {
-                    if (this.props.selectedAppKeys.length) {
-                        this.props.showPullAppsModal(false);
-                        this.props.showSelectedAppsModal(true);
+                    if (this.props.selectedAppKeys) {
+                        if (this.props.selectedAppKeys.length) {
+                            this.props.showPullAppsModal(false);
+                            this.props.showSelectedAppsModal(true);
+                        }
                     }
                 }}
                 onCancel={() => { this.props.showPullAppsModal(false); this.props.resetSeletedRows(); }}
@@ -227,7 +230,7 @@ const SelectedApps = (props) => {
             }}
             // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], "Back")}
-            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP") : convertToLang(props.translation[PULL_APPS_TEXT], PULL_APPS_TEXT)}
+            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP") : convertToLang(props.translation[PULL_APPS_TEXT], "PULL APPS")}
             destroyOnClose={true}
         >
             <DealerApps
@@ -313,6 +316,10 @@ class SideActions extends Component {
         }
         if (nextProps.applyPolicyConfirm) {
             showConfirmPolcy(this)
+        }
+
+        if(this.props.wipeDevieStatus != nextProps.wipeDevieStatus) {
+            showConfirm1(nextProps, this.props.device, "Do you really want to Wipe the device " + this.props.device.device_id + "?")
         }
     }
 
@@ -401,8 +408,8 @@ class SideActions extends Component {
         confirm({
             content: (
                 <h2>
-                   {convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device")}
-            </h2>
+                    {convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device")}
+                </h2>
             ),
             onOk() {
                 // console.log('OK');
@@ -527,7 +534,7 @@ class SideActions extends Component {
 
     handleFlag(flagged) {
         if (flagged === 'Unflag') {
-            showConfirm(this.props.device, this.props.unflagged, this, "Do you really want to unflag the device ", 'flagged')
+            showConfirm(this.props.device, this.props.unflagged, this, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device '), 'flagged')
         } else {
             this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
         }
@@ -612,7 +619,7 @@ class SideActions extends Component {
                                     <Icon type="select" />
 
                                     {/* <IntlMessages id="button.LoadProfile" /> */}
-                                    {convertToLang(this.props.translation[Button_LoadProfile], "LoadProfile")}
+                                    {convertToLang(this.props.translation[Button_LoadProfile], "Load Profile")}
                                 </Button>
                                 <Button
                                     type="default"
@@ -622,8 +629,8 @@ class SideActions extends Component {
                                 >
                                     <Icon type="lock" className="lock_icon" />
 
-                                    {/* <IntlMessages id="button.LoadPolicy" /> */}
-                                    {convertToLang(this.props.translation[Button_LoadPolicy], "LoadPolicy")}
+                                    {/* <IntlMessages id="button.  /> */}
+                                    {convertToLang(this.props.translation[Button_LoadPolicy], "Load Policy")}
                                 </Button>
                                 <Button
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
@@ -783,7 +790,7 @@ class SideActions extends Component {
                         />
                         :
                         (this.state.historyType === "profile") ?
-                                    
+
                             <TableHistory
                                 histories={this.props.profiles}
                                 type={this.state.historyType}
@@ -987,7 +994,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
-
+    // console.log('test: ' , device_details.wipeDeviceID)
     return {
         translation: settings.translation,
         authUser: auth.authUser,
@@ -1016,7 +1023,10 @@ var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
         changedCtrls: device_details.changedCtrls,
         extensions: device_details.extensions,
         activities: device_details.activities,
-        isSaveProfileBtn: device_details.isSaveProfileBtn
+        isSaveProfileBtn: device_details.isSaveProfileBtn,
+        // wipeDeviceID: device_details.wipeDeviceID,
+        // wipeDevice: device_details.wipeDevice,
+        wipeDevieStatus: device_details.wipeDevieStatus
     };
 }
 
@@ -1072,6 +1082,35 @@ function showConfirmProfile(_this, name, profile) {
             _this.props.showHistoryModal(false);
         },
         onCancel() {
+        },
+    });
+}
+
+function showConfirm1(props, device, msg, buttonText = "") {
+    confirm({
+        title: convertToLang(props.translation[WARNNING], "WARNNING!"),
+        content: msg,
+        okText: buttonText,
+        cancelText: convertToLang(props.translation[Button_Cancel], "Cancel"),
+        onOk() {
+            showConfirmWipe(props, device, convertToLang(props.translation[WIPE_DEVICE_DESCRIPTION], "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action."))
+        },
+        onCancel() { },
+    });
+}
+function showConfirmWipe(props, device, msg) {
+    confirm({
+        title: convertToLang(props.translation[WARNNING], "WARNNING!"),
+        content: msg,
+        // okText: "PROCEED WITH WIPING THE DEVICE",
+        okText: convertToLang(props.translation[PROCEED_WITH_WIPING_THE_DEVICE], "PROCEED WITH WIPING THE DEVICE"),
+        cancelText: convertToLang(props.translation[Button_Cancel], "Cancel"),
+        onOk() {
+            // console.log(props.wipe)
+            props.wipe(device)
+        },
+        onCancel() {
+
         },
     });
 }

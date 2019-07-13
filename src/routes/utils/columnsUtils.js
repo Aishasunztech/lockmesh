@@ -106,6 +106,7 @@ export function devicesColumns(translation, handleSearch) {
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
+            render : (text, record, index) => ++index,
         },
         {
             title: convertToLang(translation[ACTION], "ACTION"),
@@ -164,7 +165,11 @@ export function devicesColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'device_id',
                     key: "device_id",
-                    sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) }, //
+                    sorter: (a, b) => {
+                        let list = a.device_id.localeCompare(b.device_id);
+                        
+                        return list
+                    }, //
                     sortDirections: ['ascend', 'descend'],
                 }
             ],

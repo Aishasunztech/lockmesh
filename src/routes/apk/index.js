@@ -32,7 +32,8 @@ import {
     APK_PERMISSION,
     APK_ACTION,
     APK_SEARCH,
-    APK_UPLOAD
+    APK_UPLOAD,
+    APK_SIZE
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
@@ -119,6 +120,11 @@ class Apk extends React.Component {
                     title: convertToLang(props.translation[APK_APP_LOGO], "APP LOGO"),
                     dataIndex: 'apk_logo',
                     key: 'apk_logo',
+                },
+                {
+                    title: convertToLang(props.translation[APK_SIZE], "APP SIZE"),
+                    dataIndex: 'apk_size',
+                    key: 'apk_size',
                 },
             ],
         }

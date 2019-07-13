@@ -48,7 +48,7 @@ import {
     HIDE_POLICY_CONFIRM,
     APPLY_POLICY,
     CLEAR_APPLICATIONS,
-    CLEAR_STATE 
+    CLEAR_STATE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -259,30 +259,32 @@ export function suspendDevice2(device) {
 
 }
 export function wipe(device) {
-    RestService.wipe(device.usr_device_id).then((response) => {
+    return (dispatch) => {
+        RestService.wipe(device.usr_device_id).then((response) => {
 
-        if (RestService.checkAuth(response.data)) {
-            // console.log('reslut', response);
-            // console.log('conect device', device);
-            // console.log('done status');
-            // dispatch({
-            //     type: WIPE_DEVICE,
-            //     response: response.data,
-            //     payload: {
-            //         device: device,
-            //         msg: response.data.msg,
-            //     }
-            // });
-            success({
-                title: response.data.msg,
-            });
-        }
-        else {
-            error({
-                title: "Device Not Wiped.Please Try again.",
-            });
-        }
-    });
+            if (RestService.checkAuth(response.data)) {
+                // console.log('reslut', response);
+                // console.log('conect device', device);
+                // console.log('done status');
+                dispatch({
+                    type: WIPE_DEVICE,
+                    response: response.data,
+                    payload: {
+                        device: device,
+                        msg: response.data.msg,
+                    }
+                });
+                success({
+                    title: response.data.msg,
+                });
+            }
+            else {
+                error({
+                    title: "Device Not Wiped.Please Try again.",
+                });
+            }
+        });
+    }
 }
 
 export function unlinkDevice(device) {

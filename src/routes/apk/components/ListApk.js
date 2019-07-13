@@ -112,6 +112,7 @@ export default class ListApk extends Component {
     renderList(list) {
 
         return list.map((app) => {
+            // console.log('app is: ', app)
             if (app.deleteable) {
                 return {
                     'rowKey': app.apk_id,
@@ -150,6 +151,11 @@ export default class ListApk extends Component {
                         <div data-column="APK LOGO">
                             <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
                         </div>),
+                    'apk_size': (
+                        <div data-column="APP SIZE">
+                            {app.size ? app.size : 'N/A'}
+                        </div>
+                    ),
                 }
 
             } else {
@@ -171,6 +177,7 @@ export default class ListApk extends Component {
                     'apk': app.apk ? app.apk : 'N/A',
                     'apk_name': app.apk_name ? app.apk_name : 'N/A',
                     'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                    'apk_size': app.size ? app.size : "N/A",
                 }
             }
         });

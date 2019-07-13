@@ -79,3 +79,15 @@ export const SCREENSHOTS = "Screenshots.id";
 export const BLOCK_CALLS = "BLOCK.CALLS.id"; 
 export const NOT_AVAILABLE ="Not Available.id"
 export const WIPE_DEVICE_DESCRIPTION = "WIPE_DEVICE_DESCRIPTION.id"; // This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.
+export const DEVICE_NOT_SYNCED = "Device_not_Synced.id"; // Device is not Synced
+export const DEVICE_IS = "Device.is.id"; // Device is
+
+
+export const MANAGE_IMEI = "MANAGE.IMEI.id"; // MANAGE IMEI
+export const GENERATE_IMEI_NUMBER = "Generate.IMEI.number.id"; // Generate IMEI number
+export const IMEI_1_NUMBER = "IMEI.1.NUMBER.id"; // IMEI 1 NUMBER
+export const SR_NO = "SR.NO.ID"; 
+export const CHANGED_DATE ="Changed.Date.id"; // Changed Date
+export const WRITE_IMEI_2_TEXT = "WRITE IMEI 2.id"; // WRITE IMEI 2
+export const IMEI_2_NUMBER = "IMEI.2.NUMBER.id"; // IMEI 2 NUMBER
+export const DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE = "Do.you.really.want.to.unflag.the.device.id"; // Do you really want to unflag the device
