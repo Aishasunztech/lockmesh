@@ -1633,7 +1633,7 @@ export function mobileMainMenu(translation) {
     );
 }
 
-export function mobileSubMenu(translation) {
+export function mobileManagePasswords(translation) {
     return ([
 
         {

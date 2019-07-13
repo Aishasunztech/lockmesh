@@ -10,26 +10,32 @@ import {
 import { BASE_URL } from '../../../constants/Application';
 
 import ExtensionDropdown from './ExtensionDropdown';
+import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../constants/TabConstants';
+import { convertToLang } from '../../utils/commonUtils';
+import { SECURE_SETTING_PERMISSION, NOT_AVAILABLE, SECURE_SETTINGS } from '../../../constants/Constants';
 
-const columns = [{
-  title: 'In-App Menu Display',
-  dataIndex: 'name',
-  key: 'name',
-}, {
-  title: 'Guest',
-  dataIndex: 'guest',
-  key: 'guest',
-}, {
-  title: 'Encrypted',
-  dataIndex: 'encrypted',
-  key: 'encrypted',
-}];
+
 
 class SettingAppPermissions extends Component {
 
   constructor(props) {
     super(props)
+    const columns = [{
+      title: convertToLang(props.translation[IN_APP_MENU_DISPLAY], "In-App Menu Display"),
+      dataIndex: 'name',
+      key: 'name',
+    }, {
+      title: convertToLang(props.translation[Guest], "Guest"),
+      dataIndex: 'guest',
+      key: 'guest',
+    }, {
+      title: convertToLang(props.translation[ENCRYPTED], "Encrypted"),
+      dataIndex: 'encrypted',
+      key: 'encrypted',
+    }];
+
     this.state = {
+      columns: columns,
       extension: {},
       uniqueName: '',
       guestAllExt: false,
@@ -128,31 +134,31 @@ class SettingAppPermissions extends Component {
               <img src={require("assets/images/setting.png")} />
             </Col>
             <Col span={17} className="pl-4 pr-0">
-              <h5>Secure Settings Permission</h5>
+              <h5>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>
             </Col>
           </Row>
           <Row className="sec_head">
             <Col span={8}>
-              <span>Guest </span> <Switch onClick={(e) => {
+              <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                 // console.log("guest", e);
                 this.handleChecked(e, "guest");
               }} checked={extension.guest === 1 ? true : false} size="small" />
             </Col>
             <Col span={8}>
-              <span>Encrypt </span> <Switch onClick={(e) => {
+              <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
                 // console.log("guest", e);
                 this.handleChecked(e, "encrypted");
               }} checked={extension.encrypted === 1 ? true : false} size="small" />
             </Col>
             <Col span={8}>
-              <span>Enable </span> <Switch onClick={(e) => {
+              <span>{convertToLang(this.props.translation[ENABLE], "Enable")} </span> <Switch onClick={(e) => {
                 // console.log("guest", e);
                 this.handleChecked(e, "enable");
               }} checked={extension.enable === 1 ? true : false} size="small" />
             </Col>
           </Row>
           <div className="sec_set_table">
-            <Table dataSource={this.renderApps()} columns={columns} pagination={false} scroll={{ y: 276 }} />
+            <Table dataSource={this.renderApps()} columns={this.state.columns} pagination={false} scroll={{ y: 276 }} />
           </div>
 
         </Fragment>
@@ -160,7 +166,7 @@ class SettingAppPermissions extends Component {
     } else {
       return (
         <Fragment>
-          <h1 class="not_syn_txt"><a>Secure Settings <br></br> Not Available</a></h1>
+          <h1 class="not_syn_txt"><a>{convertToLang(this.props.translation[SECURE_SETTINGS], "Secure Settings")} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
         </Fragment>
       )
     }

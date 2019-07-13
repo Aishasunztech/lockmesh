@@ -5,15 +5,16 @@ import {
     handleCheckApp,
     handleCheckAll
 } from "../../../appRedux/actions/ConnectDevice";
-import { SECURE_SETTING } from '../../../constants/Constants';
+import { SECURE_SETTING, Enable_ALL, Encrypted_ALL, GUEST_ALL, SECURE_SETTING_PERMISSION } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 
 import { BASE_URL } from '../../../constants/Application';
 
 import { Table, Switch, Popover, Checkbox, Icon, Avatar, Button, Row, Col } from "antd";
 import AppDropdown from "./AppDropdown";
-import { POLICY_ACTION, POLICY_APP_NAME } from '../../../constants/PolicyConstants';
+import { POLICY_ACTION, POLICY_APP_NAME, ADD_PERMISSIONS, ADD_APPS } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
+import { Button_Remove } from '../../../constants/ButtonConstants';
 
 
 class AppList extends Component {
@@ -214,7 +215,7 @@ class AppList extends Component {
 
         return ({
             key: app_id,
-            action: <Button size='small' onClick={() => this.removeItem(app)}  >Remove</Button>,
+            action: <Button size='small' onClick={() => this.removeItem(app)}  >{convertToLang(this.props.translation[Button_Remove], "Remove")}</Button>,
             app_name:
                 <Fragment>
                     <Avatar src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
@@ -413,12 +414,12 @@ class AppList extends Component {
                                     {/* <img src={require("assets/images/setting.png")} /> */}
                                 </Col>
                                 <Col span={15} className="pl-0">
-                                    <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
+                                    <h5 style={{ marginTop: '9px' }}>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col span={8} className="text-center">
-                                    <span>Guest: </span>
+                                    <span>{convertToLang(this.props.translation[Guest], "Guest:")} </span>
                                     <Switch
                                         size="small"
                                         checked={(this.state.mainExtension.guest === true || this.state.mainExtension.guest === 1) ? true : false}
@@ -429,7 +430,7 @@ class AppList extends Component {
                                     />
                                 </Col>
                                 <Col span={8} className="text-center">
-                                    <span>Encrypted: </span>
+                                    <span>{convertToLang(this.props.translation[ENCRYPTED], "Encrypted:")} </span>
                                     <Switch
                                         size="small"
                                         disabled={this.props.isSwitch ? false : true}
@@ -441,7 +442,7 @@ class AppList extends Component {
                                     />
                                 </Col>
                                 <Col span={8} className="text-center">
-                                    <span>Enable: </span>
+                                    <span>{convertToLang(this.props.translation[ENABLE], "Enable:")} </span>
                                     <Switch
                                         size="small"
                                         disabled={this.props.isSwitch ? false : true}
@@ -465,16 +466,16 @@ class AppList extends Component {
                                     {
                                         this.props.addAppsButton ?
                                             this.props.apps ?
-                                                <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('push_apps')} >Add Apps</Button>
+                                                <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('push_apps')} >{convertToLang(this.props.translation[ADD_APPS], "Add Apps")}</Button>
                                                 : this.props.appPermissions ?
-                                                    <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('app_list')} >Add Permissions</Button>
+                                                    <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('app_list')} >{convertToLang(this.props.translation[ADD_PERMISSIONS], "Add Permissions")}</Button>
                                                     : false
                                             : false
 
                                     }</Col>
                                 <Col className="text-center pr-2 pl-2" span={4}></Col>
                                 <Col className="text-center pr-2 pl-2" span={4}>
-                                    <span className="policy_s_txt">Guest All</span>
+                                    <span className="policy_s_txt">{convertToLang(this.props.translation[GUEST_ALL], "Guest All")}</span>
 
                                     <Switch checked={this.state.guestAll ? true : false}
                                         size='small'
@@ -485,7 +486,7 @@ class AppList extends Component {
                                         }} />
                                 </Col>
                                 <Col className="text-center pr-2 pl-2" span={5}>
-                                    <span className="policy_s_txt">Encrypted All</span>
+                                    <span className="policy_s_txt">{convertToLang(this.props.translation[Encrypted_ALL], "Encrypted All")}</span>
                                     <Switch checked={this.state.encryptedAll ? true : false}
                                         size='small'
                                         className="ml-4"
@@ -500,7 +501,7 @@ class AppList extends Component {
 
                                         this.props.apps || this.props.appPermissions ?
                                             <div>
-                                                <span className="policy_s_txt">Enable All</span>
+                                                <span className="policy_s_txt">{convertToLang(this.props.translation[Enable_ALL], "Enable All")}</span>
                                                 <Switch checked={this.state.enableAll ? true : false}
                                                     disabled={this.props.dataLength <= 0 ? true : false}
                                                     size='small'

@@ -64,6 +64,7 @@ import {
 import { message, Modal, Alert, Icon } from 'antd';
 import { Button_Cancel } from '../../constants/ButtonConstants';
 import { convertToLang } from '../../routes/utils/commonUtils';
+import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
 
 const warning = Modal.warning;
 const confirm = Modal.confirm;
@@ -1244,7 +1245,7 @@ function showConfirm1(device, msg, buttonText) {
         okText: buttonText,
         cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
-            showConfirm(device, "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.")
+            showConfirm(device, convertToLang(this.props.translation[WIPE_DEVICE_DESCRIPTION], "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action."))
         },
         onCancel() { },
     });

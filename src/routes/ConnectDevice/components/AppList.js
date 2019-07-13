@@ -10,6 +10,10 @@ import { BASE_URL } from '../../../constants/Application';
 
 import { Table, Switch, Avatar } from "antd";
 import AppDropdown from "./AppDropdown";
+import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
+import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
+import { convertToLang } from '../../utils/commonUtils';
+import { Button_LoadProfile, Button_On, Button_Off } from '../../../constants/ButtonConstants';
 
 
 class AppList extends Component {
@@ -27,20 +31,20 @@ class AppList extends Component {
 
         this.appsColumns = [
             {
-                title: 'APP NAME',
+                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], "GUEST"),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: 'ENABLE',
+                title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -107,8 +111,8 @@ class AppList extends Component {
                     </Fragment>,
                 guest: (this.props.isHistory === true) ?
                     (app.guest === 1 || app.guest === true) ?
-                        (<span style={{ color: "green" }}>On</span>) :
-                        (<span style={{ color: "red" }}>Off</span>) :
+                        (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
+                        (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
                     <Switch
                         size="small"
                         ref={`guest_${app.app_id}`}
@@ -122,8 +126,8 @@ class AppList extends Component {
                     />,
                 encrypted: app.default_app === 1 ? '' : (this.props.isHistory === true) ?
                     (app.encrypted === 1 || app.encrypted === true) ?
-                        (<span style={{ color: "green" }}>On</span>) :
-                        (<span style={{ color: "red" }}>Off</span>) :
+                        (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
+                        (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
                     <Switch
                         size="small"
                         ref={`encrypted_${app.app_id}`}
@@ -138,8 +142,8 @@ class AppList extends Component {
                     />,
                 enable: app.default_app === 1 ? '' : (this.props.isHistory === true) ?
                     (app.enable === 1 || app.enable === true) ?
-                        (<span style={{ color: "green" }}>On</span>) :
-                        (<span style={{ color: "red" }}>On</span>) :
+                        (<span style={{ color: "green" }}>{convertToLang(this.props.translation[Button_On], "On")}</span>) :
+                        (<span style={{ color: "red" }}>{convertToLang(this.props.translation[Button_Off], "Off")}</span>) :
                     <Switch
                         size="small"
                         ref={`enable_${app.app_id}`}
@@ -196,7 +200,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-var mapStateToProps = ({ device_details }, ownProps) => {
+var mapStateToProps = ({ device_details, settings }, ownProps) => {
     if (ownProps.isHistory !== undefined && ownProps.isHistory === true) {
         return {
             app_list: ownProps.app_list,
@@ -204,6 +208,7 @@ var mapStateToProps = ({ device_details }, ownProps) => {
         }
     } else {
         return {
+            translation: settings.translation,
             app_list: device_details.app_list,
             undoApps: device_details.undoApps,
             redoApps: device_details.redoApps,

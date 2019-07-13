@@ -58,3 +58,24 @@ export const SELECT_PGP_EMAILS = "Select.PGP.Emails.id"; // Select PGP Emails
 
 export const DUPLICATE_DEVICES_REQUIRED = "Duplicate.devices.required.id" // Number of Duplicate devices required
 export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id";
+
+
+
+
+// device  connect
+export const SET_PASSWORD = "Set.Password.id"; // Set Password
+export const ONLY_NUMBER_ARE_ALLOWED = "Only.Number.are.allowed.id";
+export const PASSWORDS_ARE_INCONSISTENT ="passwords.are.inconsistent!.id"; // passwords are inconsistent!
+export const PLEASE_INPUT_YOUR_PASSWORD ="Please.input.your.password.id"; // Please input your password!
+export const Password_TEXT = "Password.id";
+export const PLEASE_CONFIRM_YOUR_PASSWORD = "Please.confirm.your.password.id";
+export const PASSWORD_AGAIN = "Password.Again.id";
+
+// 
+export const WIFI = "Wifi.id";
+export const BLUETOOTH ="Bluetooth.id";
+export const HOTSPOT ="Hotspot.id";
+export const SCREENSHOTS = "Screenshots.id";
+export const BLOCK_CALLS = "BLOCK.CALLS.id"; 
+export const NOT_AVAILABLE ="Not Available.id"
+export const WIPE_DEVICE_DESCRIPTION = "WIPE_DEVICE_DESCRIPTION.id"; // This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.

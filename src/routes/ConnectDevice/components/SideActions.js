@@ -41,7 +41,7 @@ import {
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
-    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT
+    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT, PUSH_APPS_TEXT, SELECTED_APPS, SELECT_APPS
 } from "../../../constants/Constants";
 
 
@@ -74,7 +74,8 @@ class PasswordModal extends Component {
                     this.refs.pswdForm.resetFields()
                 }
                 }
-                okText="Push Apps"
+                okText={convertToLang(this.props.translation[PUSH_APPS_TEXT], "Push Apps")}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
             >
                 <PasswordForm
                     checkPass={this.props.checkPass}
@@ -104,7 +105,7 @@ class DealerAppModal extends Component {
                 style={{ top: 20 }}
                 width="780px"
                 title={
-                    <div className="pp_popup">Select Apps
+                    <div className="pp_popup">{convertToLang(this.props.translation[SELECT_APPS], "Select Apps ")}
                 <Input.Search
                             name="push_apps"
                             key="push_apps"
@@ -118,7 +119,7 @@ class DealerAppModal extends Component {
                             autoComplete="new-password"
                             placeholder="Search Apps"
                         />
-                        <br /> Device ID: {this.props.device.device_id}
+                        <br />{convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID: ")}  {this.props.device.device_id}
                     </div>}
                 visible={this.props.pushAppsModal}
                 onOk={() => {
@@ -128,8 +129,8 @@ class DealerAppModal extends Component {
                     }
                 }}
                 onCancel={() => { this.props.showPushAppsModal(false); this.props.resetSeletedRows() }}
-                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
-                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
             >
                 <DealerApps
                     apk_list={this.props.apk_list}
@@ -161,7 +162,7 @@ class PullAppModal extends Component {
                 style={{ top: 20 }}
                 width="650px"
                 title={
-                    <div className="pp_popup">Select Apps
+                    <div className="pp_popup">{convertToLang(this.props.translation[SELECT_APPS], "Select Apps ")}
                     <Input.Search
                             name="pull_apps"
                             key="pull_apps"
@@ -175,7 +176,7 @@ class PullAppModal extends Component {
                             autoComplete="new-password"
                             placeholder="Search Apps"
                         />
-                        <br /> Device ID: {this.props.device.device_id} </div>}
+                        <br /> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID: ")} {this.props.device.device_id} </div>}
                 visible={this.props.pullAppsModal}
                 onOk={() => {
                     if (this.props.selectedAppKeys.length) {
@@ -210,7 +211,7 @@ const SelectedApps = (props) => {
             maskClosable={false}
             style={{ top: 20 }}
             width="650px"
-            title={<div>Selected Apps <br /> Device ID: {props.device.device_id} </div>}
+            title={<div>{convertToLang(props.translation[SELECTED_APPS], "Selected Apps ")} <br /> {convertToLang(props.translation[DEVICE_ID], "DEVICE ID: ")} {props.device.device_id} </div>}
             visible={props.selectedAppsModal}
             onOk={() => {
                 props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
@@ -225,8 +226,8 @@ const SelectedApps = (props) => {
                 props.showSelectedAppsModal(false);
             }}
             // cancelText='Back'
-            cancelText={convertToLang(props.translation[Button_Back], Button_Back)}
-            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT) : convertToLang(props.translation[PULL_APPS_TEXT], PULL_APPS_TEXT)}
+            cancelText={convertToLang(props.translation[Button_Back], "Back")}
+            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP") : convertToLang(props.translation[PULL_APPS_TEXT], PULL_APPS_TEXT)}
             destroyOnClose={true}
         >
             <DealerApps
@@ -577,7 +578,7 @@ class SideActions extends Component {
         // console.log(this.state.apk_list, 'list apk')
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
-        const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], Button_UNFLAG) : convertToLang(this.props.translation[Button_Flag], Button_Flag);
+        const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG") : convertToLang(this.props.translation[Button_Flag], "Flag");
         const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
         return (
             <div className="gutter-box bordered">
@@ -600,7 +601,7 @@ class SideActions extends Component {
                                     <Icon type='upload' />
 
                                     {/* <IntlMessages id="button.Push" /> */}
-                                    {convertToLang(this.props.translation[Button_Push], Button_Push)}
+                                    {convertToLang(this.props.translation[Button_Push], "Push")}
                                 </Button>
                                 <Button
                                     // disabled
@@ -611,7 +612,7 @@ class SideActions extends Component {
                                     <Icon type="select" />
 
                                     {/* <IntlMessages id="button.LoadProfile" /> */}
-                                    {convertToLang(this.props.translation[Button_LoadProfile], Button_LoadProfile)}
+                                    {convertToLang(this.props.translation[Button_LoadProfile], "LoadProfile")}
                                 </Button>
                                 <Button
                                     type="default"
@@ -622,7 +623,7 @@ class SideActions extends Component {
                                     <Icon type="lock" className="lock_icon" />
 
                                     {/* <IntlMessages id="button.LoadPolicy" /> */}
-                                    {convertToLang(this.props.translation[Button_LoadPolicy], Button_LoadPolicy)}
+                                    {convertToLang(this.props.translation[Button_LoadPolicy], "LoadPolicy")}
                                 </Button>
                                 <Button
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
@@ -632,7 +633,7 @@ class SideActions extends Component {
                                     {/* <Icon type="number" /> */}
 
                                     {/* <IntlMessages id="button.IMEI" /> */}
-                                    {convertToLang(this.props.translation[Button_IMEI], Button_IMEI)}
+                                    {convertToLang(this.props.translation[Button_IMEI], "IMEI")}
                                 </Button>
                             </Col>
                             <Col
@@ -651,7 +652,7 @@ class SideActions extends Component {
                                     <Icon type='download' />
 
                                     {/* <IntlMessages id="button.Pull" /> */}
-                                    {convertToLang(this.props.translation[Button_Pull], Button_Pull)}
+                                    {convertToLang(this.props.translation[Button_Pull], "Pull")}
                                 </Button>
                                 {/* </Tooltip> */}
 
@@ -672,7 +673,7 @@ class SideActions extends Component {
                                         <Icon type="save" style={{ fontSize: "14px" }} />
 
                                         {/* <IntlMessages id="button.SaveProfile" /> */}
-                                        {convertToLang(this.props.translation[Button_SaveProfile], Button_SaveProfile)}
+                                        {convertToLang(this.props.translation[Button_SaveProfile], "Save Profile")}
                                     </Button>
                                     : null}
                                 <Button
@@ -682,7 +683,7 @@ class SideActions extends Component {
                                 >
 
                                     {/* <IntlMessages id="button.Activity" /> */}
-                                    {convertToLang(this.props.translation[Button_Activity], Button_Activity)}
+                                    {convertToLang(this.props.translation[Button_Activity], "Activity")}
                                 </Button>
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button
@@ -692,7 +693,7 @@ class SideActions extends Component {
                                         <Icon type="file" />
 
                                         {/* <IntlMessages id="button.SIM" /> */}
-                                        {convertToLang(this.props.translation[Button_SIM], Button_SIM)}
+                                        {convertToLang(this.props.translation[Button_SIM], "SIM")}
                                     </Button>
                                 </Tooltip>
                             </Col>
@@ -704,7 +705,7 @@ class SideActions extends Component {
                                 <Tooltip title="Coming Soon">
                                     <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />
                                         {/* <IntlMessages id="button.Transfer" /> */}
-                                        {convertToLang(this.props.translation[Button_Transfer], Button_Transfer)} </Button>
+                                        {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button>
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
                                 </Tooltip>
                                 <Button type={button_type}
@@ -712,13 +713,13 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
                                     disabled={(this.props.device.flagged !== 'Not flagged') ? 'disabled' : ''}
                                 >
-                                    {((this.props.device.account_status === '')) ? <div><Icon type="user-delete" /> {convertToLang(this.props.translation[Button_Suspend], Button_Suspend)} </div> : <div><Icon type="user-add" /> {convertToLang(this.props.translation[Button_Unsuspend], Button_Unsuspend)} </div>}
+                                    {((this.props.device.account_status === '')) ? <div><Icon type="user-delete" /> {convertToLang(this.props.translation[Button_Suspend], "Suspend")} </div> : <div><Icon type="user-add" /> {convertToLang(this.props.translation[Button_Unsuspend], "Unsuspend")} </div>}
                                 </Button>
 
                                 <Button type="default" className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" />
 
                                     {/* <IntlMessages id="button.WipeDevice" /> */}
-                                    {convertToLang(this.props.translation[Button_WipeDevice], Button_WipeDevice)}
+                                    {convertToLang(this.props.translation[Button_WipeDevice], "WipeDevice")}
                                 </Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
@@ -733,7 +734,7 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
                                     <Icon type='disconnect' />
                                     {/* <IntlMessages id="button.Unlink" /> */}
-                                    {convertToLang(this.props.translation[Button_Unlink], Button_Unlink)}</Button>
+                                    {convertToLang(this.props.translation[Button_Unlink], "Unlink")}</Button>
                                 <Button
                                     onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
@@ -741,7 +742,7 @@ class SideActions extends Component {
                                     <Icon type='edit' />
 
                                     {/* <IntlMessages id="button.Edit" /> */}
-                                    {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
+                                    {convertToLang(this.props.translation[Button_Edit], "Edit")}
                                 </Button>
                             </Col>
                             <Tooltip title="Coming Soon" placement="bottom" >
@@ -763,15 +764,15 @@ class SideActions extends Component {
                     </Card>
                 </div>
                 <Modal
-                    title={<div>{(this.state.historyType == 'profile') ? convertToLang(this.props.translation[Button_LoadProfile], Button_LoadProfile) : this.state.historyType}  <br /> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}:  {this.props.device.device_id} </div>}
+                    title={<div>{(this.state.historyType == 'profile') ? convertToLang(this.props.translation[Button_LoadProfile], "Load Profile") : this.state.historyType}  <br /> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}:  {this.props.device.device_id} </div>}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}
                     onOk={() => this.showHistoryModal(false, '')}
                     onCancel={() => this.showHistoryModal(false, '')}
                     className="load_policy_popup"
-                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     {(this.state.historyType === "history") ?
                         <TableHistory
@@ -806,7 +807,7 @@ class SideActions extends Component {
 
                 <Modal
                     maskClosable={false}
-                    title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], SETTINGS_TO_BE_SENT_TO_DEVICE)}
+                    title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
                     visible={this.state.showChangesModal}
                     onOk={() => {
                         this.showSaveProfileModal(true, 'profile')
@@ -814,8 +815,8 @@ class SideActions extends Component {
                     }}
                     onCancel={() => this.setState({ showChangesModal: false })}
                     // okText='Apply'
-                    okText={convertToLang(this.props.translation[Button_Apply], Button_Apply)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Apply], "Apply")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <DeviceSettings
                         app_list={this.props.app_list}
@@ -832,7 +833,7 @@ class SideActions extends Component {
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
-                    title={<div> {convertToLang(this.props.translation[SAVE_PROFILE_TEXT], SAVE_PROFILE_TEXT)} <br /> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}:  {this.props.device.device_id} </div>}
+                    title={<div> {convertToLang(this.props.translation[SAVE_PROFILE_TEXT], "SAVE PROFILE")} <br /> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}:  {this.props.device.device_id} </div>}
                     closable={false}
                     maskClosable={false}
                     style={{ top: 20 }}
@@ -843,8 +844,8 @@ class SideActions extends Component {
                         this.saveProfile();
                     }}
                     onCancel={() => { this.setState({ profileName: '' }); this.showSaveProfileModal(false) }}
-                    okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Save], "Save")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
