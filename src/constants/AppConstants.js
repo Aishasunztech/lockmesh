@@ -10,7 +10,7 @@ export const APP_SECURE_PANEL_APK = "ap.secure.panel.apk.id"; // Secure Panel AP
 export const APP_MD_01 = "app.md.01.id"; // Manage apk's
 export const APP_MD_02 = "app.md.02.id"; //Add permssion
 export const APP_MD_03 = "app.md.03.id"; //Activate apk push
-export const APP_MD_04 = "app.md.04.id"; // et apk Dealer permissions
+export const APP_MD_04 = "app.md.04.id"; // Set apk Dealer permissions
 
 // Manage POLICY Description list
 export const APP_MP_01 = "app.mp.01.id"; // Create/Edit Policies

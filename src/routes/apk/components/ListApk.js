@@ -119,11 +119,11 @@ export default class ListApk extends Component {
                     'action': (
                         <div data-column="ACTION" style={{ display: "inline-flex" }}>
                             <Fragment>
-                                <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
-                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
-                                <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px', textTransform: "uppercase" }} onClick={(e) => {
+                                <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
+                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
+                                <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
                                     this.props.handleConfirmDelete(app.apk_id);
-                                }}>{convertToLang(this.props.translation[Button_Delete], Button_Delete)}</Button>
+                                }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                             </Fragment>
                         </div>
                     ),
@@ -158,8 +158,9 @@ export default class ListApk extends Component {
                     'apk_id': app.apk_id,
                     'action': (
                         <Fragment>
-                            <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
-                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
+                            <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
+                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
+
                         </Fragment>
                     ),
                     'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
