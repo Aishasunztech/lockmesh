@@ -266,7 +266,7 @@ class SidebarContent extends Component {
                 <Link to="/users">
                   <i className="icon icon-user" />
                   {/* <IntlMessages id="sidebar.users" /> */}
-                  {convertToLang(translation[Sidebar_users], "Users)}
+                  {convertToLang(translation[Sidebar_users], "Users")}
                 </Link>
               </Menu.Item>
               {(authUser.type === ADMIN) ? <Menu.Item key="dealer/dealer">
