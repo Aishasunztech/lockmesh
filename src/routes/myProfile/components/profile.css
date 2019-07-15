@@ -57,8 +57,25 @@
     margin-right: 40px;
 }
 
+.login_history ::-webkit-scrollbar-thumb {
+    background: #efefef;
+    border-radius: 10px;
+}
+
+.login_history ::-webkit-scrollbar-thumb:hover {
+    background: #efefef;
+}
+
+.dealer_value {
+    word-break: break-all !important;
+}
+
 @media (max-width: 768px) {
     .open_btn1 {
         bottom: 33px;
     }
+}
+
+.login_history .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+    top: 0;
 }

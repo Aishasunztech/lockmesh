@@ -4,7 +4,11 @@ import { BASE_URL } from '../../../constants/Application';
 import Permissions from './Permissions';
 import styles from './app.css';
 
+import {
+    convertToLang
+} from '../../utils/commonUtils'
 import EditApk from './EditApk';
+import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
 
 
 export default class ListApk extends Component {
@@ -112,23 +116,39 @@ export default class ListApk extends Component {
                     'rowKey': app.apk_id,
                     'apk_id': app.apk_id,
                     'action': (
-                        <Fragment>
-                            <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
-                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
-                            <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
-                                this.props.handleConfirmDelete(app.apk_id);
-                            }}>DELETE</Button>
-
-                        </Fragment>
+                        <div data-column="ACTION">
+                            <Fragment>
+                                <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', }}
+                                    onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
+                                <Button type="danger" className="mob_m_t" size="small" style={{ width: '60px' }} onClick={(e) => {
+                                    this.props.handleConfirmDelete(app.apk_id);
+                                }}>{convertToLang(this.props.translation[Button_Delete], Button_Delete)}</Button>
+                            </Fragment>
+                        </div>
                     ),
-                    'permission': <span style={{ fontSize: 15, fontWeight: 400 }}>{app.permission_count}</span>,
+                    'permission': (
+                        <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400 }}>
+                            {app.permission_count}
+                        </div>
+                    ),
                     "permissions": app.permissions,
-                    'apk_status': (<Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
-                        this.props.handleStatusChange(e, app.apk_id);
-                    }} />),
-                    'apk': app.apk ? app.apk : 'N/A',
+                    'apk_status': (
+                        <div data-column="SHOW ON DEVICE">
+                            <Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                                this.props.handleStatusChange(e, app.apk_id);
+                            }} />
+                        </div>
+                    ),
+                    'apk': (
+                        <div data-column="SHOW ON DEVICE">
+                            {app.apk ? app.apk : 'N/A'}
+                        </div>
+                    ),
                     'apk_name': app.apk_name ? app.apk_name : 'N/A',
-                    'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                    'apk_logo': (
+                        <div data-column="APK LOGO">
+                            <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
+                        </div>),
                 }
 
             } else {
@@ -138,7 +158,7 @@ export default class ListApk extends Component {
                     'action': (
                         <Fragment>
                             <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px" }}
-                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > EDIT</Button>
+                                onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
 
                         </Fragment>
                     ),
@@ -181,7 +201,7 @@ export default class ListApk extends Component {
             }
         } else if (!expanded) {
             if (this.state.expandedRowKeys.includes(record.rowKey)) {
-                let list = this.state.expandedRowKeys.filter(item => item != record.rowKey)
+                let list = this.state.expandedRowKeys.filter(item => item !== record.rowKey)
                 this.setState({ expandedRowKeys: list })
             }
         }
@@ -203,7 +223,7 @@ export default class ListApk extends Component {
                     expandedRowRender={(record) => {
                         // console.log("table row", record);
                         return (
-                            <Permissions record={record} />
+                            <Permissions className="exp_row22" record={record} translation={this.props.translation} />
                         );
 
                     }}
@@ -211,13 +231,13 @@ export default class ListApk extends Component {
                     expandIconColumnIndex={1}
                     expandIconAsCell={false}
                     className="gx-table-responsive apklist_table"
-                    size="midddle"
+                    size="small"
                     bordered
                     columns={this.state.columns}
                     dataSource={this.renderList(this.props.apk_list)}
                     pagination={{ pageSize: Number(this.state.pagination) }}
                     className="devices"
-                    scroll={{ x: 500 }}
+                    scroll={{ x: 10 }}
                     rowKey="apk_id"
                 />
                 <EditApk ref='editApk' getApkList={this.props.getApkList} />

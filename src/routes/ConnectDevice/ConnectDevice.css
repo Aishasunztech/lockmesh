@@ -1,7 +1,7 @@
 .deviceImg {
     width: 311px;
     margin: 0 auto;
-    height: 579px;
+    height: 587px;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;
@@ -89,8 +89,9 @@
 
 .deviceImg .ant-table-scroll {
     width: 298px;
-    margin: 23px auto 0;
+    margin: 0;
     border-radius: 0px;
+    padding-top: 23px;
 }
 
 .ant-table-small {
@@ -119,7 +120,7 @@
 }
 
 .act_b_grp.ant-btn-group .ant-btn {
-    padding: 0 4px;
+    padding: 0;
 }
 
 .act_b_grp .action_btn {
@@ -128,7 +129,7 @@
 
 .act_b_grp .ant-btn>.anticon+span {
     margin-left: 4px;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .act_b_grp {

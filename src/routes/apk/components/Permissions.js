@@ -5,10 +5,11 @@ import { bindActionCreators } from "redux";
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
 import { savePermission } from "../../../appRedux/actions/Apk";
 import DealerList from "./DealerList";
+import { Redirect } from 'react-router-dom';
 import CircularProgress from "components/CircularProgress/index";
 
-import { titleCase, dealerColsWithSearch } from '../../utils/commonUtils';
-
+import { titleCase, convertToLang } from '../../utils/commonUtils';
+import { dealerColsWithSearch } from '../../utils/columnsUtils';
 import {
   DEALER_ID,
   DEALER_NAME,
@@ -18,6 +19,9 @@ import {
   DEALER_TOKENS,
   DEALER_ACTION
 } from '../../../constants/DealerConstants';
+import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
+import { Permission_List, PERMISSION_Add_Modal_Title, PERMISSION_Remove_Modal_Title, PERMISSION_Add_Except_Selected_Modal_Title } from '../../../constants/ApkConstants';
+import { Alert_Allow_Permission_Delaer, Alert_Remove_Permission_Delaer } from '../../../constants/Constants';
 
 const confirm = Modal.confirm;
 // export default 
@@ -32,12 +36,14 @@ class Permissions extends Component {
       permissions: [],
       hideDefaultSelections: false,
       removeSelectedDealersModal: false,
-      addSelectedDealersModal: false
+      addSelectedDealersModal: false,
+      redirect: false,
+      dealer_id: '',
+      goToPage: '/dealer/dealer'
     }
-
-    this.addDealerCols = dealerColsWithSearch(true, this.handleSearch)
-    this.addDealerColsInModal = dealerColsWithSearch(true, this.handleSearchInModal)
-    this.listDealerCols = dealerColsWithSearch();
+    this.addDealerCols = dealerColsWithSearch(props.translation, true, this.handleSearch);
+    this.addDealerColsInModal = dealerColsWithSearch(props.translation, true, this.handleSearchInModal);
+    this.listDealerCols = dealerColsWithSearch(props.translation);
 
   }
 
@@ -50,7 +56,15 @@ class Permissions extends Component {
     })
   }
 
+
   componentWillReceiveProps(nextProps) {
+
+    if (this.props.translation !== nextProps.translation) {
+      this.addDealerCols = dealerColsWithSearch(nextProps.translation, true, this.handleSearch);
+      this.addDealerColsInModal = dealerColsWithSearch(nextProps.translation, true, this.handleSearchInModal);
+      this.listDealerCols = dealerColsWithSearch(nextProps.translation);
+    }
+
     if (this.props.record.apk_id !== nextProps.record.apk_id) {
       this.props.getAllDealers();
       this.setState({
@@ -65,6 +79,9 @@ class Permissions extends Component {
         permissions: this.props.record.permissions
       })
     }
+
+  
+
   }
 
   showPermissionedDealersModal = (visible) => {
@@ -111,9 +128,9 @@ class Permissions extends Component {
   saveAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: 'Do you realy Want to allow Permission for all Dealers?',
-      okText: 'Yes',
-      cancelText: 'No',
+      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], Alert_Allow_Permission_Delaer),
+      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
       onOk() {
         _this.saveAllDealers()
       },
@@ -191,7 +208,7 @@ class Permissions extends Component {
             if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
               demoData.push(data);
             }
-          } else if (data[fieldName] != null) {
+          } else if (data[fieldName] !== null) {
             if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
               demoData.push(data);
             }
@@ -308,9 +325,9 @@ class Permissions extends Component {
   removeAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: 'Do you realy Want to Remove Permission for all Dealers?',
-      okText: 'Yes',
-      cancelText: 'No',
+      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], Alert_Remove_Permission_Delaer),
+      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
       onOk() {
         _this.removeAllDealers();
       },
@@ -353,12 +370,31 @@ class Permissions extends Component {
     this.props.savePermission(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
   }
 
+  goToDealer = (dealer) => {
+    if (dealer.dealer_id !== 'null' && dealer.dealer_id !== null) {
+      if (dealer.connected_dealer === 0 || dealer.connected_dealer === '' || dealer.connected_dealer === null) {
+        this.setState({
+          redirect: true,
+          dealer_id: dealer.dealer_id,
+          goToPage: '/dealer/dealer'
+        })
+      } else {
+        this.setState({
+          redirect: true,
+          dealer_id: dealer.dealer_id,
+          goToPage: '/dealer/sdealer'
+        })
+      }
+
+    }
+  }
+
   renderDealer(list, permitted = false) {
     let data = [];
     // console.log(list);
     let is_included
     list.map((dealer) => {
-      // console.log('object recrd', this.props.record.permissions);
+      // console.log('object recrd', dealer);
       if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);
 
@@ -366,10 +402,26 @@ class Permissions extends Component {
       let common = {
         'key': dealer.dealer_id,
         'row_key': dealer.dealer_id,
-        'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
-        'dealer_name': dealer.dealer_name ? dealer.dealer_name : 'N/A',
-        'dealer_email': dealer.dealer_email ? dealer.dealer_email : 'N/A',
-        'link_code': dealer.link_code ? dealer.link_code : 'N/A',
+        'dealer_id': (
+          <div data-column="DEALER ID">
+            {dealer.dealer_id ? dealer.dealer_id : 'N/A'}
+          </div>
+        ),
+        'dealer_name': (
+          // <div data-column="DEALER NAME">
+            dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
+          // </div>
+        ),
+        'dealer_email': (
+          <div data-column="DEALER EMAIL">
+            {dealer.dealer_email ? dealer.dealer_email : 'N/A'}
+          </div>
+        ),
+        'link_code': (
+          <div data-column="DEALER PIN">
+            {dealer.link_code ? dealer.link_code : 'N/A'}
+          </div>
+        ),
         'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
         'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
         'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
@@ -378,12 +430,21 @@ class Permissions extends Component {
 
       if (permitted && is_included) {
 
-        data.push({
-          ...common,
-          'action': (<Button size="small" type="danger" onClick={() => {
-            this.rejectPemission(dealer.dealer_id)
-          }}>Remove</Button>)
-        })
+        data.push(
+          {
+            ...common,
+            'action':
+              (
+                <div data-column="ACTION">
+                  <Button size="small" type="danger" onClick={() => {
+                    this.rejectPemission(dealer.dealer_id)
+                  }}> 
+                  {convertToLang(this.props.translation[Button_Remove], Button_Remove)} 
+                    </Button>
+                </div>
+              )
+          }
+        )
       } else if (permitted === false && is_included === false) {
         data.push({ ...common })
       }
@@ -391,29 +452,54 @@ class Permissions extends Component {
     return (data);
   }
   render() {
+
+    const { redirect } = this.state;
+    if (redirect && this.state.dealer_id !== '') {
+      return <Redirect to={{
+        pathname: this.state.goToPage,
+        state: { id: this.state.dealer_id }
+      }} />
+    }
     // console.log('dealer state', this.state.dealerList);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" span={4} sm={5} xs={5} md={5}>
-            <div className="gutter-box"><h2>Permission List</h2> </div>
+          <Col className="gutter-row" sm={10} xs={15} md={5}>
+            <div className="gutter-box text-left">
+              <h2>{convertToLang(this.props.translation[Permission_List], Permission_List)}</h2>
+            </div>
           </Col>
-          <Col className="gutter-row" span={2} sm={2} xs={2} md={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.showDealersModal(true) }}>Add</Button></div>
+          <Col className="gutter-row" sm={4} xs={9} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], Button_Add)}</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={4} sm={4} xs={5} md={4}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.addSelectedDealersModal(true) }}>Add Except Selected</Button></div>
+          <Col className="gutter-row" sm={6} xs={12} md={5}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], Button_AddExceptSelected)}</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={2} sm={2} xs={2} md={2}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="primary" onClick={() => { this.saveAllDealersConfirm() }}>Add All</Button></div>
+          <Col className="gutter-row" sm={4} xs={12} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
+                onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], Button_AddAll)}</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={3} sm={3} xs={3} md={3}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.removeAllDealersConfirm() }}>Remove All</Button></div>
+          <Col className="gutter-row" sm={5} xs={12} md={3}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+                onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], Button_RemoveAll)}</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={3} sm={4} xs={5} md={3}>
-            <div className="gutter-box"><Button size="small" style={{ width: '100%' }} type="danger" onClick={() => { this.showPermissionedDealersModal(true) }}>Remove Except</Button></div>
+          <Col className="gutter-row" sm={7} xs={12} md={4}>
+            <div className="gutter-box">
+              <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
+                onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], Button_RemoveExcept)}</Button>
+            </div>
           </Col>
-          <Col className="gutter-row" span={4} sm={4} xs={5} md={4}>
+          <Col className="gutter-row" sm={12} xs={24} md={8}>
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
@@ -428,15 +514,17 @@ class Permissions extends Component {
           </Col>
 
         </Row>
-        <Row gutter={20}>
+        <Row gutter={24}>
 
           {
             this.props.spinloading ? <CircularProgress /> :
-              <Col className="gutter-row" span={20}>
+              <Col className="gutter-row" span={24}>
                 <Table
+                  className="mb-24 expand_rows"
                   columns={this.listDealerCols}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
                   pagination={false}
+                  translation={this.props.translation}
                 />
               </Col>
           }
@@ -445,12 +533,13 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title="Add Dealer to permissions list for this App"
+          title={convertToLang(this.props.translation[PERMISSION_Add_Modal_Title], PERMISSION_Add_Modal_Title)}
           visible={this.state.showDealersModal}
           onOk={() => {
             this.savePermission()
           }}
-          okText="Save"
+          okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
           onCancel={() => {
             this.showDealersModal(false)
           }}
@@ -472,12 +561,13 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title="Remove Dealers from permissions list for this App"
+          title={convertToLang(this.props.translation[PERMISSION_Remove_Modal_Title], PERMISSION_Remove_Modal_Title)}
           visible={this.state.removeSelectedDealersModal}
+          okText={convertToLang(this.props.translation[Button_DeleteExceptSelected], Button_DeleteExceptSelected)}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
           onOk={() => {
             this.removeSelectedDealers()
           }}
-          okText="Delete Except Selected"
           onCancel={() => {
             this.removeSelectedDealersModal(false)
           }}
@@ -498,12 +588,14 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title="Add Dealers to permissions list for this App"
+          title={convertToLang(this.props.translation[PERMISSION_Add_Except_Selected_Modal_Title], PERMISSION_Add_Except_Selected_Modal_Title)}
           visible={this.state.addSelectedDealersModal}
+          okText={convertToLang(this.props.translation[Button_AddExceptSelected], Button_AddExceptSelected)}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
           onOk={() => {
             this.addSelectedDealers()
           }}
-          okText="Add Except Selected"
+          // okText="Add Except Selected"
           onCancel={() => {
             this.addSelectedDealersModal(false)
           }}
@@ -525,13 +617,14 @@ class Permissions extends Component {
 }
 
 // export default Apk;
-const mapStateToProps = ({ dealers }, props) => {
+const mapStateToProps = ({ dealers, settings }, props) => {
   // console.log("dealer", dealers);
   // console.log("permission", props.record);
   return {
     dealerList: dealers.dealers,
     record: props.record,
-    spinloading: dealers.spinloading
+    spinloading: dealers.spinloading,
+    translation: settings.translation
   };
 }
 

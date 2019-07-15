@@ -2,6 +2,7 @@
     white-space: nowrap !important;
     font-size: 13px;
     text-align: center;
+    text-transform: uppercase;
 }
 
 .devices table td {
@@ -12,6 +13,10 @@
     text-align: left;
     padding-left: 48px !important;
     width: 130px;
+}
+
+.exp_row {
+    background: #e6faff !important;
 }
 
 @media screen and (max-width: 768px) {

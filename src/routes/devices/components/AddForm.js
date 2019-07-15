@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import AddUser from '../../users/components/AddUser';
-
+import { convertToLang } from '../../utils/commonUtils';
 import AddSimPermission from './AddSimPermission'
 
 import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin } from 'antd';
@@ -14,6 +14,7 @@ import {
     addUser,
     getUserList
 } from "../../../appRedux/actions/Users";
+import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants';
 const confirm = Modal.confirm;
 
 const duplicate_txt = (
@@ -43,7 +44,7 @@ class AddDevice extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('form', values);
             if (!err) {
-                if (this.state.type == 1) {
+                if (this.state.type === 1) {
                     showConfirm(this, values);
                 } else {
                     this.props.AddDeviceHandler(values);
@@ -87,7 +88,7 @@ class AddDevice extends Component {
         this.setState({ visible: false });
     }
     handleChange = (e) => {
-        console.log(e);
+        // console.log(e);
         // this.setState({ pgp_email: e }); 
         this.setState({ type: e.target.value });
     }
@@ -111,10 +112,11 @@ class AddDevice extends Component {
     }
 
     render() {
-        console.log('id is', this.props.policies);
+        // console.log('id is', this.state.type);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
+        // console.log(users_list[0]);
         return (
             <div>
                 {(this.props.preActive) ?
@@ -200,7 +202,7 @@ class AddDevice extends Component {
 
                         </Fragment>
                     )}
-                    {(this.state.type == 0 && lastObject) ?
+                    {(this.state.type === 0 && lastObject) ?
                         <Fragment>
                             <Form.Item style={{ marginBottom: 0 }}
                             >
@@ -303,7 +305,10 @@ class AddDevice extends Component {
                                     initialValue: this.state.client_id,
 
                                 })(
-                                    <Input value={this.state.client_id} onChange={e => this.setState({ client_id: e.target.value })} />
+                                    <Input
+                                        onChange={e => {
+                                            this.setState({ client_id: e.target.value });
+                                        }} />
                                 )}
                             </Form.Item>
 
@@ -447,7 +452,7 @@ class AddDevice extends Component {
                             </Form.Item>
 
                         </Fragment> : null}
-                    {(this.state.type == 1) ?
+                    {(this.state.type === 1) ?
                         <Form.Item
                             label="DUPLICATE"
                             labelCol={{ span: 8 }}
@@ -521,11 +526,11 @@ class AddDevice extends Component {
                             sm: { span: 24, offset: 0 },
                         }}
                     >
-                        <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button>
-                        <Button type="primary" htmlType="submit">Submit</Button>
+                        <Button key="back" type="button" onClick={this.props.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}</Button>
+                        <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], Button_submit)}</Button>
                     </Form.Item>
                 </Form>
-                <AddUser ref="add_user" />
+                <AddUser ref="add_user" translation={this.props.translation} />
                 <AddSimPermission ref="add_sim_permission" />
             </div>
         )
@@ -550,7 +555,7 @@ function mapDispatchToProps(dispatch) {
         addSimPermission: null
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, device_details, users }) => {
+var mapStateToProps = ({ routing, devices, device_details, users, settings }) => {
     // console.log("sdfsaf", users.users_list);
     return {
         routing: routing,
@@ -559,7 +564,8 @@ var mapStateToProps = ({ routing, devices, device_details, users }) => {
         pgp_emails: devices.pgp_emails,
         policies: device_details.policies,
         users_list: users.users_list,
-        isloading: users.addUserFlag
+        isloading: users.addUserFlag,
+        translation: settings.translation
     };
 }
 

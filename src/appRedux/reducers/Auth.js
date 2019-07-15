@@ -28,6 +28,7 @@ const error = Modal.error
 const INIT_STATE = {
   loader: false,
   alertMessage: '',
+  loginFailedStatus: false,
   showMessage: false,
   initURL: '',
   socket: io,
@@ -117,7 +118,8 @@ export default (state = INIT_STATE, action) => {
         ...state,
         alertMessage: action.payload.msg,
         showMessage: true,
-        loader: false
+        loader: false,
+        loginFailedStatus: new Date()
       }
     }
 

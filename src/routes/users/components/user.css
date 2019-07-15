@@ -14,5 +14,13 @@
     width: 1000px;
     overflow-x: auto;
     padding-bottom: 12px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
+}
+
+.users_action_w {
+    min-width: 100px;
+}
+
+.users_list table th {
+    white-space: nowrap !important;
 }

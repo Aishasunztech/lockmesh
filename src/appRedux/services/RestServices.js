@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from '../../constants/Application';
+import { BASE_URL, SUPERADMIN_URL } from '../../constants/Application';
 import io from "socket.io-client";
 
 const RestService = {
@@ -138,7 +138,6 @@ const RestService = {
         return axios.get(BASE_URL + 'users/new/devices',
             RestService.getHeader()
         )
-
     },
     getSimIDs: () => {
         return axios.get(BASE_URL + 'users/get_sim_ids', RestService.getHeader());
@@ -149,6 +148,17 @@ const RestService = {
     getPGPEmails: () => {
         return axios.get(BASE_URL + 'users/get_pgp_emails', RestService.getHeader());
     },
+    // get All ids
+    getAllSimIDs: () => {
+        return axios.get(BASE_URL + 'users/get_all_sim_ids', RestService.getHeader());
+    },
+    getAllChatIDs: () => {
+        return axios.get(BASE_URL + 'users/get_all_chat_ids', RestService.getHeader());
+    },
+    getAllPGPEmails: () => {
+        return axios.get(BASE_URL + 'users/get_all_pgp_emails', RestService.getHeader());
+    },
+    // get used ids
     getUsedPGPEmails: () => {
         return axios.get(BASE_URL + 'users/get_used_pgp_emails', RestService.getHeader());
     },
@@ -159,26 +169,10 @@ const RestService = {
         return axios.get(BASE_URL + 'users/get_used_chat_ids', RestService.getHeader());
     },
     DealerList: (dealer) => {
-        return axios.get(BASE_URL + 'users/dealers/' + dealer,
-            {
-                headers: {
-                    authorization: localStorage.getItem('token') //the token is a variable which holds the token
-                }
-            }
-        ).catch((error) => {
-            // console.log(error);
-        });
+        return axios.get(BASE_URL + 'users/dealers/' + dealer, RestService.getHeader());
     },
     getAllDealers: () => {
-        return axios.get(BASE_URL + 'users/dealers',
-            {
-                headers: {
-                    authorization: localStorage.getItem('token') //the token is a variable which holds the token
-                }
-            }
-        ).catch((error) => {
-            // console.log(error);
-        });
+        return axios.get(BASE_URL + 'users/dealers', RestService.getHeader());
     },
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
@@ -222,18 +216,38 @@ const RestService = {
 
     deleteORStatusPolicy: (data) => {
         //   console.log('api called ')
-        return axios.post(BASE_URL + "users/change_policy_status ", data, RestService.getHeader());
+        return axios.post(BASE_URL + "users/change_policy_status", data, RestService.getHeader());
+    },
+    createBackupDB: () => {
+        //   console.log('api called ')
+        return axios.post(BASE_URL + "users/create_backup_DB", {}, RestService.getHeader());
     },
 
     SavePolicyChanges: (record) => {
-        console.log('api called ', record);
+        record.push_apps.forEach((app) => {
+            app.guest = (app.guest !== undefined) ? app.guest : false;
+            app.enable = (app.enable !== undefined) ? app.enable : false;
+            app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
+        });
+
+        record.app_list.forEach((app) => {
+            app.guest = (app.guest !== undefined) ? app.guest : false;
+            app.enable = (app.enable !== undefined) ? app.enable : false;
+            app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
+        });
+        record.secure_apps.forEach((app) => {
+            app.guest = (app.guest !== undefined) ? app.guest : false;
+            app.enable = (app.enable !== undefined) ? app.enable : false;
+        })
+        
         let data = {
             id: record.id,
             push_apps: JSON.stringify(record.push_apps),
             controls: JSON.stringify(record.controls),
             permissions: JSON.stringify(record.secure_apps),
             app_list: JSON.stringify(record.app_list),
-            policy_note: record.policy_note
+            policy_note: record.policy_note,
+            policy_name: record.policy_name
         }
         return axios.post(BASE_URL + "users/save_policy_changes ", data, RestService.getHeader());
     },
@@ -321,6 +335,10 @@ const RestService = {
     // For check apk name 
     checkApkName: (name, apk_id = '') => {
         return axios.post(BASE_URL + 'users/checkApkName', { name, apk_id }, RestService.getHeader());
+    },
+    // For check apk name 
+    checkPolicyName: (name, policy_id = '') => {
+        return axios.post(BASE_URL + 'users/check_policy_name', { name, policy_id }, RestService.getHeader());
     },
 
     updateUserProfile: (formData) => {
@@ -557,12 +575,54 @@ const RestService = {
     checkPass: (user) => {
         return axios.post(BASE_URL + 'users/check_pass', { user }, RestService.getHeader());
     },
+    saveIDPrices: (data) => {
+        console.log(data, 'save-prices data')
+        return axios.patch(BASE_URL + 'users/save-prices', data, RestService.getHeader());
+    },
+    setPackage: (data) => {
+        // console.log(data, 'data')
+        return axios.post(BASE_URL + 'users/save-package', { data }, RestService.getHeader());
+    },
+    getPrices: (dealer_id) => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-prices/' + dealer_id, RestService.getHeader());
+    },
+
+    getPackages: (dealer_id) => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-packages/' + dealer_id, RestService.getHeader());
+    },
+    checkPackageName: (name) => {
+
+        return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
+    },
+    purchaseCredits: (data) => {
+        return axios.post(BASE_URL + 'users/purchase_credits', { data }, RestService.getHeader());
+    },
+    purchaseCreditsFromCC: (cardInfo, creditInfo) => {
+        return axios.post(BASE_URL + 'users/purchase_credits_CC', { cardInfo: cardInfo, creditInfo: creditInfo }, RestService.getHeader());
+    },
+
+    languages: () => {
+        return axios.get(`${BASE_URL}users/languages`, RestService.getHeader());
+    },
+
+    switchLanguage: (language) => {
+        // console.log(language, 'language is')
+        return axios.patch(BASE_URL + 'users/save-language', { language }, RestService.getHeader());
+    },
+
+    getLanguage: () => {
+        return axios.get(BASE_URL + 'users/get-language', RestService.getHeader());
+    },
 
     invalidPage: () => {
-
     },
     getFile: (filename) => {
         window.location = BASE_URL + 'users/getFile/' + filename;
+    },
+    getBackupFile: (filename) => {
+        window.location = BASE_URL + 'users/getBackupFile/' + filename;
     },
     postPagenation: (selectedValue, pageName) => {
         return axios.post(BASE_URL + 'users/dealer/postPagination', { selectedValue: selectedValue, pageName: pageName }, RestService.getHeader())
@@ -635,6 +695,29 @@ const RestService = {
 
     defaultPolicyChange: (enable, policy_id) => {
         return axios.post(BASE_URL + 'users/set_default_policy', { enable, policy_id }, RestService.getHeader())
+    },
+    getNewCashRequests: () => {
+        return axios.get(BASE_URL + 'users/newRequests',
+            RestService.getHeader()
+        )
+    },
+    getUserCredit: () => {
+        return axios.get(BASE_URL + 'users/get_user_credits',
+            RestService.getHeader()
+        )
+    },
+    exchangeCurrency: (e) => {
+        return axios.get(SUPERADMIN_URL + 'pub/exchange-currency/' + e,
+            RestService.getHeader()
+        )
+    },
+    rejectRequest: (request) => {
+        // console.log(device);
+        return axios.put(BASE_URL + 'users/delete_request/' + request.id, request, RestService.getHeader());
+    },
+    acceptRequest: (request) => {
+        // console.log(device);
+        return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
     },
 
 

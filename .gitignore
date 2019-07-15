@@ -6,7 +6,8 @@ node_modules/
 /nbproject/private/
 npm-debug.log
 build/
-src/constants/Application.js
+#src/constants/Application.js
+
 .editoryconfig
 .vscode
 build/static/js/runtime~main.fdfcfda2.js

@@ -5,9 +5,9 @@ import NextApp from './NextApp';
 // import {registerServiceWorker, unregister} from './registerServiceWorker';
 import registerServiceWorker from './registerServiceWorker';
 // Add this import:
-import {AppContainer} from 'react-hot-loader';
+import { AppContainer } from 'react-hot-loader';
 
-function noop() {}
+function noop() { }
 
 if (process.env.NODE_ENV !== 'development') {
   console.log = noop;
@@ -20,7 +20,7 @@ const render = Component => {
   ReactDOM.render(
     // Wrap App inside AppContainer
     <AppContainer>
-      <NextApp/>
+      <NextApp />
     </AppContainer>,
     document.getElementById('root')
   );

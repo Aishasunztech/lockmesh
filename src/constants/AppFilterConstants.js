@@ -1,0 +1,11 @@
+export const Devices_Top_Bar = "Devices Top Bar";
+export const Appfilter_SelectAll = "appfilter.SelectAll"; // Select All
+export const Appfilter_ShowDevices = "appfilter.ShowDevices"; // Show Devices
+export const Appfilter_SearchDevices = "appfilter.SearchDevices"; // Search Devices
+export const Dealer_Top_Bar = "Dealer Top Bar"; 
+export const Appfilter_ShowDealer = "appfilter.ShowDealer"; // Show Dealer
+export const Appfilter_SearchDealer = "appfilter.SearchDealer"; // Search Dealer
+export const Appfilter_Display = "appfilter.Display"; // Display
+export const Appfilter_SearchUser = "appfilter.SearchUser"; // Search
+export const Appfilter_SearchManageData = "appfilter.SearchManageData"; // Search
+export const Appfilter_Export = "appfilter.export"; // Export

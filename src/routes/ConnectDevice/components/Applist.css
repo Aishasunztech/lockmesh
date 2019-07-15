@@ -26,7 +26,7 @@
 
 .side_action .ant-btn>span {
     margin-left: 8px;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .applist_menu .ant-checkbox-wrapper:first-child {
@@ -209,6 +209,13 @@
     width: 30%;
     float: right;
     margin-right: 40px;
+}
+
+.btn_break_line span {
+    width: 66px;
+    line-height: 15px;
+    white-space: normal;
+    vertical-align: middle;
 }
 
 @media (max-width:1330px) and (min-width:1200px) {

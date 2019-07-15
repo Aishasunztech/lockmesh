@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { Card, Row, Col, List, Button, message, Modal, Progress, Icon } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
+import { convertToLang } from '../../routes/utils/commonUtils';
 import BackBtn from './back';
 import {
   getDeviceDetails,
@@ -39,7 +40,8 @@ import {
   reSyncDevice,
   getDealerApps,
   getActivities,
-  clearApplications
+  clearApplications,
+  clearState
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
@@ -64,6 +66,8 @@ import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
+import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
+import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE } from "../../constants/DeviceConstants";
 
 const success = Modal.success
 const error = Modal.error
@@ -87,20 +91,20 @@ class ConnectDevice extends Component {
     this.mainMenu = [
       {
         pageName: APPS,
-        value: APPLICATION_PERMISION
+        value: convertToLang(props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)
       },
       {
         pageName: SECURE_SETTING,
-        value: SECURE_SETTING_PERMISSION
+        value: convertToLang(props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)
       },
       {
         pageName: SYSTEM_CONTROLS,
-        value: SYSTEM_PERMISSION
+        value: convertToLang(props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)
       },
 
       {
         pageName: MANAGE_PASSWORD,
-        value: MANAGE_PASSWORDS
+        value: convertToLang(props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)
       },
 
     ]
@@ -185,7 +189,18 @@ class ConnectDevice extends Component {
     setTimeout(() => {
       this.props.endLoading();
     }, 2000);
+    // window.addEventListener('hashchange', this.componentGracefulUnmount);
   }
+
+  // componentGracefulUnmount = () => {
+  //   console.log("COMPONENT UNMOUNT");
+  //   window.removeEventListener('hashchange', this.componentGracefulUnmount);
+
+  // }
+  // componentWillUnmount() {
+  //   this.componentGracefulUnmount()
+  //   // this.props.clearState()
+  // }
 
   componentDidUpdate(prevProps) {
     if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
@@ -222,7 +237,7 @@ class ConnectDevice extends Component {
   //     //     device_id: nextProps.match.params.device_id
   //     // });
   //     // const device_id = nextProps.match.params.device_id;
-  //     // if (device_id != '') {
+  //     // if (device_id !== '') {
 
   //     //     nextProps.getDeviceDetails(device_id);
   //     //     nextProps.getDeviceApps(device_id);
@@ -318,20 +333,6 @@ class ConnectDevice extends Component {
   }
 
   applyActionButton = (visible = true) => {
-    console.log(this.state.changedCtrls, 'controls are');
-    // let changedControls = Object.create(null);
-    // Object.keys(this.state.controls.controls).map(key => {
-    //   if(key == 'bluetooth_status_isChanged'){
-    //     changedControls['bluetooth_status'] = this.state.controls.controls.bluetooth_status;
-    //   }else if(key == 'call_status_isChanged'){
-    //     changedControls['call_status'] = this.state.controls.controls.call_status
-    //   }else if(key == 'hotspot_status_isChanged'){
-    //     changedControls['hotspot_status'] = this.state.controls.controls.hotspot_status
-    //   }else if(key == 'screenshot_status_isChanged'){
-    //     changedControls['screenshot_status'] = this.state.controls.controls.screenshot_status
-    //   }
-    // });
-
     this.setState({
       showChangesModal: visible,
     })
@@ -373,7 +374,8 @@ class ConnectDevice extends Component {
         duressPwd: this.props.duressPwd,
       },
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      this.state.controls.controls,
+      // this.state.controls.controls,
+      this.state.changedCtrls,
       this.state.device_id,
       this.props.user_acc_id,
       null, null,
@@ -381,14 +383,15 @@ class ConnectDevice extends Component {
 
     this.onCancel();
     let deviceId = atob(this.props.match.params.device_id);
-    this.props.getDeviceApps(deviceId)
+    this.props.getDeviceApps(deviceId);
+    this.props.getActivities(deviceId);
 
     // console.log('app after push ', app_list)
   }
   componentWillUnmount() {
     this.onBackHandler();
   }
-  refreshDevice = (deviceId, type = false) => {
+  refreshDevice = (deviceId, resync = false) => {
 
     this.props.startLoading();
 
@@ -396,7 +399,7 @@ class ConnectDevice extends Component {
       deviceId = isBase64(this.props.match.params.device_id);
     }
     // console.log('ref', deviceId)
-    if (type) {
+    if (resync) {
       this.props.reSyncDevice(deviceId);
       setTimeout(() => {
         this.props.getDeviceDetails(deviceId);
@@ -455,15 +458,26 @@ class ConnectDevice extends Component {
   onCancel = () => {
     this.setState({ showChangesModal: false });
   }
+
+
+  capitalizeFirstLetter = (string) => {
+    if (string && string !== '' && string !== null && string !== 'N/A') {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    } else {
+      return string
+    }
+
+  }
+
   render() {
     let finalStatus = (this.props.device_details.finalStatus === 'Activated' || this.props.device_details.finalStatus === '' || this.props.device_details.finalStatus === null || this.props.device_details.finalStatus === undefined) ? 'Active' : this.props.device_details.finalStatus;
     let color = getColor(finalStatus)
     let onlineStatus = this.props.device_details.online
     let onlineColor = (onlineStatus === 'offline') ? { color: 'red' } : { color: 'green' }
-    let totalApps = (this.props.noOfApp_push_pull == undefined || this.props.noOfApp_push_pull == 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
-    let completeApps = (this.props.noOfApp_pushed_pulled == undefined) ? 0 : this.props.noOfApp_pushed_pulled
+    let totalApps = (this.props.noOfApp_push_pull === undefined || this.props.noOfApp_push_pull === 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
+    let completeApps = (this.props.noOfApp_pushed_pulled === undefined) ? 0 : this.props.noOfApp_pushed_pulled
     let completeStep = this.props.complete_policy_step;
-    let policy_loading = (this.props.is_policy_applying == 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
+    let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -472,23 +486,23 @@ class ConnectDevice extends Component {
             <div className="gx-loader-view">
               <CircularProgress />
             </div> :
-            (this.props.is_in_process || this.props.is_push_apps == 1 || policy_loading == 1) ?
+            (this.props.is_in_process || this.props.is_push_apps === 1 || policy_loading === 1) ?
               <div>
 
                 <CircularProgress />
 
-                {/* {(this.props.device_details.online == 'online') ?
+                {/* {(this.props.device_details.online === 'online') ?
                   null : <CircularProgress />
                 } */}
                 {/* <Modal
                   width='auto'
                   centered
                   maskClosable={false}
-                  visible={(this.props.device_details.online == 'online') ? true : false}
+                  visible={(this.props.device_details.online === 'online') ? true : false}
                   footer={null}
                   closable={false}
                 > */}
-                {/* {(policy_loading == 1) ?
+                {/* {(policy_loading === 1) ?
 
                     <Progress className='prog' type="circle" percent={(completeStep / 4) * 100} format={percent => `Step ${completeStep} of ${4}`} />
                     :
@@ -511,6 +525,7 @@ class ConnectDevice extends Component {
                       refreshDevice={this.refreshDevice}
                       startLoading={this.props.startLoading}
                       endLoading={this.props.endLoading}
+                      translation={this.props.translation}
                     />
                   </Col>
                   <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
@@ -518,10 +533,10 @@ class ConnectDevice extends Component {
                       <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
                         <div className="status_bar">
                           <div className="col-md-6 col-xs-6 col-sm-6 active_st">
-                            <h5><span style={color}>{finalStatus}</span></h5>
+                            <h5><span style={color}>{this.capitalizeFirstLetter(finalStatus)}</span></h5>
                           </div>
                           <div className="col-md-6 col-xs-6 col-sm-6 offline_st">
-                            <h5><span style={onlineColor}>{onlineStatus}</span></h5>
+                            <h5><span style={onlineColor}>{this.capitalizeFirstLetter(onlineStatus)}</span></h5>
                           </div>
                         </div>
                         {this.renderScreen()}
@@ -534,6 +549,7 @@ class ConnectDevice extends Component {
                           undoBtn={this.props.undoBtn}
                           redoBtn={this.props.redoBtn}
                           clearBtn={this.props.clearBtn}
+                          translation={this.props.translation}
                         />
                         <Button.Group className="nav_btn_grp">
 
@@ -556,6 +572,7 @@ class ConnectDevice extends Component {
                   <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
                     {/*  */}
                     <SideActions
+                      translation={this.props.translation}
                       device={this.props.device_details}
                       profiles={this.props.profiles}
                       policies={this.props.policies}
@@ -580,11 +597,12 @@ class ConnectDevice extends Component {
                 </Row>
                 <Modal
                   maskClosable={false}
-                  title="Confirm new Settings to be sent to Device"
+                  title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], SETTINGS_TO_BE_SENT_TO_DEVICE)}
                   visible={this.state.showChangesModal}
                   onOk={this.applyActions}
                   onCancel={this.onCancel}
-                  okText='Apply'
+                  cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                  okText={convertToLang(this.props.translation[Button_Apply], Button_Apply)}
                 >
                   <DeviceSettings
                     app_list={this.props.app_list}
@@ -596,6 +614,7 @@ class ConnectDevice extends Component {
                     isGuestPwd={this.props.isGuestPwd}
                     controls={{ 'controls': this.state.changedCtrls }}
                     showChangedControls={true}
+                    translation={this.props.translation}
                   />
                 </Modal>
               </div>}
@@ -617,7 +636,7 @@ class ConnectDevice extends Component {
                 : null : null}
 
 
-        </div> : <h1>Device Not Found</h1>
+        </div> : <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], DEVICE_NOT_FOUND)} </h1>
     )
   }
 }
@@ -646,7 +665,6 @@ function mapDispatchToProps(dispatch) {
     editDevice: editDevice,
     getDevicesList: getDevicesList,
     getAccIdFromDvcId: getAccIdFromDvcId,
-    // showMessage: showMessage,
     unlinkDevice: unlinkDevice,
     flagged: flagged,
     unflagged: unflagged,
@@ -668,12 +686,13 @@ function mapDispatchToProps(dispatch) {
     getAppJobQueue: getAppJobQueue,
     ackSinglePushApp: ackSinglePushApp,
     ackSinglePullApp: ackSinglePullApp,
-    ackFinishedPolicyStep: ackFinishedPolicyStep
+    ackFinishedPolicyStep: ackFinishedPolicyStep,
+    clearState: clearState
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth, socket }) => {
-  // console.log("DEVICE DETAILS",device_details);
+var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
   return {
+    translation: settings.translation,
     auth: auth,
     socket: auth.socket,
     routing: routing,

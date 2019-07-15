@@ -27,13 +27,13 @@ export default class ImeiView extends Component {
         let dumyImei1List = []
         let dumyImei2List = []
         let imei1List = this.props.imei_list.filter(item => {
-            if (dumyImei1List.includes(item.imei1) == false) {
+            if (dumyImei1List.includes(item.imei1) === false) {
                 dumyImei1List.push(item.imei1)
                 return item
             }
         })
         let imei2List = this.props.imei_list.filter(item => {
-            if (dumyImei2List.includes(item.imei2) == false) {
+            if (dumyImei2List.includes(item.imei2) === false) {
                 dumyImei2List.push(item.imei2)
                 return item
             }
@@ -98,7 +98,7 @@ export default class ImeiView extends Component {
                 // console.log(status,'searched value', value)
                 if (status) {
                     // console.log('status')
-                    if (type == "imei1") {
+                    if (type === "imei1") {
                         coppyImeis = this.state.imei1List;
                     } else {
                         coppyImeis = this.state.imei2List;
@@ -110,7 +110,7 @@ export default class ImeiView extends Component {
                 let foundImeis = componentSearch(coppyImeis, value);
                 //  console.log('found devics', foundImeis)
                 if (foundImeis.length) {
-                    if (type == "imei1") {
+                    if (type === "imei1") {
                         this.setState({
                             imei1List: foundImeis,
                         })
@@ -120,7 +120,7 @@ export default class ImeiView extends Component {
                         })
                     }
                 } else {
-                    if (type == "imei1") {
+                    if (type === "imei1") {
                         this.setState({
                             imei1List: [],
                         })
@@ -133,7 +133,7 @@ export default class ImeiView extends Component {
             } else {
                 status = true;
 
-                if (type == "imei1") {
+                if (type === "imei1") {
                     this.setState({
                         imei1List: coppyImeis,
                     })
@@ -153,12 +153,13 @@ export default class ImeiView extends Component {
         var i = 0;
         let imeiLength = imei_list.length
         let data = (type === 'IMEI 1') ? imei_list.map((device, index) => {
+            let imei = (device.imei1 !== 'null') ? device.imei1 : 'N/A'
             if (device.orignal_imei1 === device.imei1) {
                 i++
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: device.imei1 + ' (ORIGNAL)',
+                    imei: imei + ' (ORIGNAL)',
                     changed_time: getFormattedDate(device.created_at)
                 }
             } else {
@@ -166,19 +167,19 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: (imeiLength === i) ? device.imei1 + ' (CURRENT)' : device.imei1,
+                    imei: (imeiLength === i) ? imei + ' (CURRENT)' : imei,
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
         }) : imei_list.map((device, index) => {
-
+            let imei = (device.imei2 !== 'null') ? device.imei2 : 'N/A'
             // console.log("original", device, "imei2", device.imei2);
             if (device.orignal_imei2 === device.imei2) {
                 i++
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: device.imei2 + ' (ORIGNAL)',
+                    imei: imei + ' (ORIGNAL)',
                     changed_time: getFormattedDate(device.created_at)
                 }
             } else {
@@ -186,7 +187,7 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: (imeiLength === i) ? device.imei2 + ' (CURRENT)' : device.imei2,
+                    imei: (imeiLength === i) ? imei + ' (CURRENT)' : imei,
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
@@ -216,6 +217,8 @@ export default class ImeiView extends Component {
                                 type='IMEI1'
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
+                                getActivities={this.props.getActivities}
+
                             />
                             <Fragment>
                                 <div className="row">
@@ -287,6 +290,7 @@ export default class ImeiView extends Component {
                                 type='IMEI2'
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
+                                getActivities={this.props.getActivities}
                             />
                             <Fragment>
 

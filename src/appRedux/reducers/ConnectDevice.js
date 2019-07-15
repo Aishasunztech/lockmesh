@@ -53,6 +53,8 @@ import {
     APPLY_POLICY,
     CLEAR_APPLICATIONS,
     SAVE_PROFILE,
+    EDIT_DEVICE,
+    CLEAR_STATE
 } from "../../constants/ActionTypes";
 
 import {
@@ -167,6 +169,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pageName: action.payload
+            }
+        }
+        case CLEAR_STATE: {
+            // console.log("CLEAR STATE FUNCTION");
+            return {
+                ...state,
+                is_push_apps: 0,
+                is_policy_process: 0,
+                noOfApp_push_pull: 0,
+                noOfApp_pushed_pulled: 0,
             }
         }
         case GET_DEVICE_DETAILS: {
@@ -309,6 +321,23 @@ export default (state = initialState, action) => {
                 ...check
             }
         }
+
+        case EDIT_DEVICE: {
+            if (action.response.status) {
+                if (action.response.data.length) {
+                    state.device = action.response.data[0];
+                }
+
+                return {
+                    ...state,
+                    //   device: state.device
+                }
+
+
+            }
+        }
+
+
         case GET_PROFILES: {
             return {
                 ...state,
@@ -460,14 +489,14 @@ export default (state = initialState, action) => {
 
         case SHOW_MESSAGE: {
 
-            if(action.payload.showMessage){
+            if (action.payload.showMessage) {
                 if (action.payload.messageType === 'success') {
                     success({
                         title: action.payload.messageText,
                     })
                 } else {
                     error({
-                        title: this.props.messageText,
+                        title: action.payload.messageText,
                     })
                 }
             }
@@ -661,11 +690,11 @@ export default (state = initialState, action) => {
 
         case HANDLE_CHECK_CONTROL: {
             let changedControls = JSON.parse(JSON.stringify(state.controls));
-            // if (action.payload.key == 'wifi_status') {
+            // if (action.payload.key === 'wifi_status') {
             //     changedControls[action.payload.key] = true;
             // } else {
-                changedControls.controls[action.payload.key] = action.payload.value;
-               state.changedCtrls[action.payload.key] = action.payload.value;
+            changedControls.controls[action.payload.key] = action.payload.value;
+            state.changedCtrls[action.payload.key] = action.payload.value;
             // }
 
             state.controls = JSON.parse(JSON.stringify(changedControls));
@@ -819,7 +848,7 @@ export default (state = initialState, action) => {
             changedExtensions.forEach(extension => {
                 if (extension.uniqueName === action.payload.uniqueName) {
                     for (let subExt of extension.subExtension) {
-                        subExt[action.payload.key] = action.payload.value == true ? 1 : 0;
+                        subExt[action.payload.key] = action.payload.value === true ? 1 : 0;
                         subExt.isChanged = true;
                     }
                 }
@@ -940,10 +969,10 @@ export default (state = initialState, action) => {
             let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
                 // console.log(app[action.payload.key], 'kkkkkk', 'guest')
-                if (app.default_app != 1) {
+                if (app.default_app !== 1) {
                     app[action.payload.key] = action.payload.value;
                     app.isChanged = true;
-                } else if (app.default_app == 1 && action.payload.key == 'guest') {
+                } else if (app.default_app === 1 && action.payload.key === 'guest') {
                     app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
                 }
@@ -1030,7 +1059,6 @@ export default (state = initialState, action) => {
         }
 
         case CLEAR_APPLICATIONS: {
-            console.log(state.undoApps.length, state.undoControls.length, state.undoExtensions.length)
             let extensions = state.undoExtensions.length ? state.undoExtensions[0] : [];
             let controls = state.undoControls.length ? state.undoControls[0] : [];
             let apps = state.undoApps.length ? state.undoApps[0] : [];

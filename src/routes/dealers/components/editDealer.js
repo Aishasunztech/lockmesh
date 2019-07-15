@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form, Input, message } from 'antd';
+import { Only_alpha_numeric, Not_valid_Email, Insert_Valid_Dealer_Name, Name } from '../../../constants/Constants';
+// import { convertToLang } from '../../utils/commonUtils';
+import { Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
+import { Required_Fields } from '../../../constants/DeviceConstants';
+import { DEALER_PIN, EDIT_DEALER_Text, Account_Email } from '../../../constants/DealerConstants';
+import { convertToLang } from '../../utils/commonUtils';
+import { EDIT_DEALER } from '../../../constants/ActionTypes';
+
 let func;
 export default class editDealer extends Component {
 
@@ -26,14 +34,14 @@ export default class editDealer extends Component {
     handleNameValidation = (event) => {
         var fieldvalue = event.target.value;
 
-        console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
-        console.log('vlaue', fieldvalue)
+        // console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
+        // console.log('vlaue', fieldvalue)
 
 
         if (/[^A-Za-z \d]/.test(fieldvalue)) {
             this.setState({
                 validateStatus: 'error',
-                help2: 'Please insert only alphabets and numbers',
+                help2: convertToLang(this.props.translation[Only_alpha_numeric], Only_alpha_numeric),
                 dealer_name: fieldvalue,
             })
         }
@@ -60,7 +68,7 @@ export default class editDealer extends Component {
         else {
             this.setState({
                 status: 'error',
-                help: 'Please insert Valid Email',
+                help: convertToLang(this.props.translation[Not_valid_Email], Not_valid_Email),
                 dealer_email: fieldvalue,
             })
             
@@ -74,18 +82,18 @@ export default class editDealer extends Component {
         let error = false;
 
         let chcek = /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/;
-        if (chcek.test(this.state.dealer_email) == false) {
+        if (chcek.test(this.state.dealer_email) === false) {
             // message.error('Invalid data');
             this.setState({
             status: 'error',
-            help: 'Please insert Valid Email'
+            help: convertToLang(this.props.translation[Not_valid_Email], Not_valid_Email)
             })
             error= true;
         }
         if (/[^A-Za-z \d]/.test(this.state.dealer_name) ) {
             this.setState({
                 validateStatus: 'error',
-                help2: 'Please insert only alphabets and numbers'
+                help2: convertToLang(this.props.translation[Only_alpha_numeric], Only_alpha_numeric)
             })
 
             error= true;
@@ -94,7 +102,7 @@ export default class editDealer extends Component {
         if (this.state.dealer_name === '') {
             this.setState({
                 validateStatus: 'error',
-                help2: 'Please Insert dealer Name'
+                help2: convertToLang(this.props.translation[Insert_Valid_Dealer_Name], Insert_Valid_Dealer_Name)
             })
 
             error= true;
@@ -124,22 +132,22 @@ export default class editDealer extends Component {
             <div>
                 <Modal
                     visible={visible}
-                    title="Edit Dealer"
+                    title={convertToLang(this.props.translation[EDIT_DEALER_Text], EDIT_DEALER_Text)}
                     maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={[
-                        <Button key="back" onClick={this.handleCancel}>Cancel</Button>,
+                        <Button key="back" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], Button_Cancel)} </Button>,
                         <Button key="submit" type="primary" loading={loading} onClick={this.handleSubmit}>
-                            Submit
+                            {convertToLang(this.props.translation[Button_submit], Button_submit)}
                         </Button>,
                     ]}
                 >
 
                     <Form >
-                        <p>(*)- Required Fields</p>
+                        <p>(*)- {convertToLang(this.props.translation[Required_Fields], Required_Fields)} </p>
                         <Form.Item
-                            label="Name* "
+                            label={`${convertToLang(this.props.translation[Name], Name)} * `}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                             validateStatus={this.state.validateStatus}
@@ -149,7 +157,7 @@ export default class editDealer extends Component {
 
                         </Form.Item>
                         <Form.Item
-                            label="Account Email* "
+                            label={`${convertToLang(this.props.translation[Account_Email], Account_Email)}* `}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                             validateStatus={this.state.status}
@@ -159,7 +167,7 @@ export default class editDealer extends Component {
 
                         </Form.Item>
                         <Form.Item
-                            label="Dealer Pin "
+                            label={convertToLang(this.props.translation[DEALER_PIN], DEALER_PIN)}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                         >

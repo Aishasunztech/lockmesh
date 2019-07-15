@@ -4,28 +4,36 @@
 }
 
 .side_bar_main.gx-mb-4 {
-    margin-bottom: 0px !important;
+    margin-bottom: 20px !important;
 }
 
-.side_bar_main .notification_icn {
-    font-size: 26px;
+.notification_icn {
+    font-size: 20px;
+}
+
+.ant-badge .ant-badge-count {
+    height: 13px;
+    min-width: 13px;
+    line-height: 13px;
+    padding: 0 0px;
+
 }
 
 .side_bar_main .ant-badge-count {
     position: absolute;
-    left: 10px;
-    top: 0px;
+    left    : 10px;
+    top     : 0px;
 }
 
 .side_bar_main .ant-badge-count {
-    height: 15px;
-    border-radius: 50%;
-    min-width: 15px;
-    line-height: 15px;
-    padding: 0;
-    font-size: 10px;
+    height           : 15px;
+    border-radius    : 50%;
+    min-width        : 15px;
+    line-height      : 15px;
+    padding          : 0;
+    font-size        : 10px;
     -webkit-transform: translate(30%, -30%);
-    transform: translate(30%, -30%);
+    transform        : translate(30%, -30%);
 }
 
 .side_bar_main .ant-badge-count {
@@ -37,9 +45,9 @@
 }
 
 .bell_icon li {
-    padding: 0;
+    padding : 0;
     position: absolute;
-    right: 25px;
+    right   : 25px;
 }
 
 .bell_icon .ant-badge {
@@ -51,22 +59,22 @@
 }
 
 .edit_ftr_1 .ant-radio-group {
-    width: 100%;
+    width : 100%;
     margin: 7px 0px 0;
 }
 
 .border_btm {
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom : 1px solid #e8e8e8;
     padding-bottom: 12px;
-    margin-bottom: 10px !important;
+    margin-bottom : 10px !important;
 }
 
 .edit_ftr_1 .ant-radio-button-wrapper {
-    width: 25%;
-    text-align: center;
-    font-size: 15px;
+    width      : 25%;
+    text-align : center;
+    font-size  : 15px;
     font-weight: 400;
-    color: #000;
+    color      : #000;
 }
 
 .flag_device .edit_ftr_btn {
@@ -82,8 +90,33 @@
 }
 
 .gx-app-nav li {
-    padding: 0 10px 0 25px;
-    font-size: 26px;
+    padding  : 0px 16px 0px 16px;
+    font-size: 20px;
+}
+
+.lang_icon .ant-popover-inner-content {
+    padding: 0;
+}
+
+.lang_icon .gx-language-text {
+    margin: 4px 0 0 4px;
+}
+
+.lang_icon .gx-sub-popover li {
+    padding: 12px 0 12px;
+}
+
+.cred_badge {
+    margin-bottom: 0;
+}
+
+.cred_badge .ant-badge-count {
+    min-width: 35px;
+    right: 0px;
+    top: -3px;
+    background-color: #52c41a;
+    margin-bottom: 0;
+    font-size: 11px;
 }
 
 @media screen and (max-width: 768px) {

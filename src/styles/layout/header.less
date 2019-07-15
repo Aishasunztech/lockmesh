@@ -8,13 +8,14 @@
     padding: @layout-header-padding;
     height: @layout-header-height;
     position: relative;
-    z-index: 10;
+    z-index: 200;
     color: @header-text-color;
     display: none;
 
     @media screen and (max-width: @screen-md-max) {
         padding: @layout-header-padding-res;
         display: flex;
+        z-index: 200;
     }
 
     @media screen and (max-width: @screen-xs-max) {
@@ -168,13 +169,13 @@
 }
 
 .@{class-prefix}-popover-scroll {
-    height: 280px !important;
-    width: 300px !important;
+    height: auto !important;
+    width: auto !important;
     margin: 0 -16px;
 
     @media screen and (max-width: @screen-xs-max) {
-        height: 280px !important;
-        width: 200px !important;
+        height: auto !important;
+        width: auto !important;
     }
 }
 

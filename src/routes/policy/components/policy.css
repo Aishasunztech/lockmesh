@@ -11,6 +11,14 @@
     overflow: overlay;
 }
 
+.policy_steps .ant-tabs .ant-tabs-left-bar {
+    padding-top: 20px;
+}
+
+.policy_steps .ant-tabs .ant-tabs-left-content {
+    padding-left: 16px;
+}
+
 .add-policy-modal-content {
     height: 309px;
     overflow: overlay
@@ -58,7 +66,7 @@
 } */
 
 .line_break2 {
-    width: 50px;
+    width: 63px;
     margin: 0 0 0 12px;
     display: inline-block;
     text-align: left;
@@ -102,6 +110,11 @@
     font-weight: 300;
     vertical-align: top;
     margin-left: 2px;
+}
+
+.image_icon {
+    height: 40px;
+    width: 40px
 }
 
 .ant-steps-item-content {
@@ -181,6 +194,8 @@
     font-weight: 400;
 }
 
+
+
 .policy_expand .ant-tabs-bar {
     margin: 0 0 8px 0;
 }
@@ -195,4 +210,14 @@
 
 .policy_steps .ant-tabs .ant-tabs-left-content {
     height: 310px;
+}
+
+@media only screen and (max-width: 768px) {
+
+    /* tr.ant-table-expanded-row td,
+    .expand_rows .ant-table-tbody>tr>td,
+    .policy_expand .ant-table-tbody>tr>td {
+        padding-left: 50% !important;
+        text-align: left !important;
+    } */
 }

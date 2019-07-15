@@ -6,11 +6,14 @@ import {
     handleCheckAll
 } from "../../../appRedux/actions/ConnectDevice";
 import { SECURE_SETTING } from '../../../constants/Constants';
+import { convertToLang } from '../../utils/commonUtils';
 
 import { BASE_URL } from '../../../constants/Application';
 
 import { Table, Switch, Popover, Checkbox, Icon, Avatar, Button, Row, Col } from "antd";
 import AppDropdown from "./AppDropdown";
+import { POLICY_ACTION, POLICY_APP_NAME } from '../../../constants/PolicyConstants';
+import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 
 
 class AppList extends Component {
@@ -33,25 +36,25 @@ class AppList extends Component {
 
         this.appsColumns2 = [
             {
-                title: 'Action',
+                title: convertToLang(this.props.translation[POLICY_ACTION], POLICY_ACTION),
                 dataIndex: 'action',
                 key: '5',
                 // render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'APP NAME',
+                title: convertToLang(this.props.translation[POLICY_APP_NAME], POLICY_APP_NAME),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], Guest),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: 'ENABLE',
+                title: convertToLang(this.props.translation[ENABLE], ENABLE),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -59,20 +62,20 @@ class AppList extends Component {
 
         this.appsColumns = [
             {
-                title: 'APP NAME',
+                title: convertToLang(this.props.translation[POLICY_APP_NAME], POLICY_APP_NAME),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], Guest),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: 'ENABLE',
+                title: convertToLang(this.props.translation[ENABLE], ENABLE),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -80,16 +83,16 @@ class AppList extends Component {
 
         this.extensionColumns = [
             {
-                title: 'APP NAME',
+                title: convertToLang(this.props.translation[POLICY_APP_NAME], POLICY_APP_NAME),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: 'GUEST',
+                title: convertToLang(this.props.translation[Guest], Guest),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: 'ENCRYPTED',
+                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
                 dataIndex: 'encrypted',
                 key: '3',
             }
@@ -113,7 +116,7 @@ class AppList extends Component {
         if (this.props !== nextProps) {
 
             if (nextProps.allExtensions) {
-                let index = nextProps.allExtensions.findIndex(item => item.uniqueName == SECURE_SETTING);
+                let index = nextProps.allExtensions.findIndex(item => item.uniqueName === SECURE_SETTING);
                 if (index > -1) {
                     this.setState({
                         apk_list: nextProps.apk_list,
@@ -186,7 +189,7 @@ class AppList extends Component {
     }
 
     removeItem = (app) => {
-        let dataType = this.props.pageType == 'dealerApps' ? 'push_apps' : 'appPermissions';
+        let dataType = this.props.pageType === 'dealerApps' ? 'push_apps' : 'appPermissions';
         this.props.removeAppsFromPolicies(app.apk_id, this.props.rowId, dataType)
     }
 
@@ -240,8 +243,8 @@ class AppList extends Component {
                     ref={`encrypted_${app_id}`}
                     name={`encrypted_${app_id}`}
                     // value={encrypted}
-                    disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false : true}
-                    checked={app.default_app == 1 ? true : this.props.edit ? ((encrypted === true || encrypted === 1) ? true : false) : (isAvailable ? ((encrypted === true || encrypted === 1) ? true : false) : false)}
+                    disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app === 1 ? true : !isAvailable : false : true}
+                    checked={app.default_app === 1 ? true : this.props.edit ? ((encrypted === true || encrypted === 1) ? true : false) : (isAvailable ? ((encrypted === true || encrypted === 1) ? true : false) : false)}
                     onClick={(e) => {
                         // console.log("encrypted", e);
                         this.handleChecked(e, "encrypted", app_id);
@@ -255,8 +258,8 @@ class AppList extends Component {
                     ref={`enable_${app_id}`}
                     name={`enable_${app_id}`}
                     // value={enable}
-                    checked={app.default_app == 1 ? true : this.props.edit ? ((enable === true || enable === 1) ? true : false) : (isAvailable ? ((enable === true || enable === 1) ? true : false) : false)}
-                    disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app == 1 ? true : !isAvailable : false : true}
+                    checked={app.default_app === 1 ? true : this.props.edit ? ((enable === true || enable === 1) ? true : false) : (isAvailable ? ((enable === true || enable === 1) ? true : false) : false)}
+                    disabled={this.props.isSwitch ? this.props.isCheckbox ? app.default_app === 1 ? true : !isAvailable : false : true}
                     onClick={(e) => {
                         this.handleChecked(e, "enable", app_id);
                     }}
@@ -330,7 +333,7 @@ class AppList extends Component {
             // console.log('a;; extension', this.props.allExtensions)
             if (this.props.allExtensions.length) {
                 if (this.props.AddPolicy) {
-                    let index = this.props.allExtensions.findIndex(item => item.uniqueName == SECURE_SETTING);
+                    let index = this.props.allExtensions.findIndex(item => item.uniqueName === SECURE_SETTING);
                     if (index > -1) {
                         return this.props.allExtensions[index]['subExtension'].map(app => {
                             return this.renderExtensionsApp(app)
@@ -349,7 +352,7 @@ class AppList extends Component {
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        if (this.props.pageType == 'dealerApps') {
+        if (this.props.pageType === 'dealerApps') {
             this.setState({
                 selectedRowKeysApps: selectedRowKeys,
                 selectedRows: selectedRows
@@ -377,7 +380,7 @@ class AppList extends Component {
 
         const { loading, selectedRowKeys, selectedRows, selectedRowKeysApps, selectedRowKeysPermissios } = this.state;
         let rowSelection = {
-            selectedRowKeys: this.props.pageType == 'dealerApps' ? selectedRowKeysApps : selectedRowKeysPermissios,
+            selectedRowKeys: this.props.pageType === 'dealerApps' ? selectedRowKeysApps : selectedRowKeysPermissios,
             selectedRows,
             onChange: this.onSelectChange,
         };
@@ -398,14 +401,16 @@ class AppList extends Component {
                     </Popover> : false} */}
 
                 {
-                    (this.props.pageType == 'allExtensions' && !this.props.edit) ?
+                    (this.props.pageType === 'allExtensions' && !this.props.edit) ?
                         <div>
                             <Row>
                                 <Col span={6} className="">
 
                                 </Col>
                                 <Col span={3} className="">
-                                    <img src={require("assets/images/setting.png")} />
+                                <Avatar src={`${BASE_URL}users/getFile/${this.state.mainExtension.icon}`} style={{ width: "30px", height: "30px" }} />
+                          
+                                    {/* <img src={require("assets/images/setting.png")} /> */}
                                 </Col>
                                 <Col span={15} className="pl-0">
                                     <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
@@ -460,7 +465,7 @@ class AppList extends Component {
                                     {
                                         this.props.addAppsButton ?
                                             this.props.apps ?
-                                                <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('push_apps')} >Add Push Apps</Button>
+                                                <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('push_apps')} >Add Apps</Button>
                                                 : this.props.appPermissions ?
                                                     <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('app_list')} >Add Permissions</Button>
                                                     : false
@@ -515,7 +520,7 @@ class AppList extends Component {
                     className="exp_policy"
                     style={{ margin: 0, padding: 0 }}
                     rowSelection={rowSelection}
-                    selectedRowKeys={this.props.pageType == 'dealerApps' ? this.state.selectedRowKeysApps : this.state.selectedRowKeysPermissios}
+                    selectedRowKeys={this.props.pageType === 'dealerApps' ? this.state.selectedRowKeysApps : this.state.selectedRowKeysPermissios}
                     scroll={this.props.isHistory ? {} : {}}
                     columns={this.props.allExtensions ? this.extensionColumns : this.props.addAppsButton ? this.appsColumns2 : this.appsColumns}
                     align='center'
