@@ -793,6 +793,7 @@ export function usersColumns(translation, handleSearch) {
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
+            render : (text, record, index) => ++index,
         },
         {
             title: convertToLang(translation[ACTION], "ACTION"),
@@ -1200,6 +1201,7 @@ export function dealerColumns(translation, handleSearch) {
         dataIndex: 'counter',
         align: 'center',
         className: 'row',
+        render : (text, record, index) => ++index,
     }, {
         title: '',
         dataIndex: 'accounts',
