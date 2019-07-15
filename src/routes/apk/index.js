@@ -32,7 +32,8 @@ import {
     APK_PERMISSION,
     APK_ACTION,
     APK_SEARCH,
-    APK_UPLOAD
+    APK_UPLOAD,
+    APK_SIZE
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
@@ -80,7 +81,7 @@ class Apk extends React.Component {
                 {
                     title: (
                         <span>
-                            {convertToLang(props.translation[APK_PERMISSION], APK_PERMISSION)}
+                            {convertToLang(props.translation[APK_PERMISSION], "PERMISSION")}
                             <Popover placement="top" content={question_txt}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
@@ -92,7 +93,7 @@ class Apk extends React.Component {
                 {
                     title:
                         <span>
-                            {convertToLang(props.translation[APK_SHOW_ON_DEVICE], APK_SHOW_ON_DEVICE)}
+                            {convertToLang(props.translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE")}
                             <Popover placement="top" content={SHOW_DEVICE_TEXT}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
@@ -102,12 +103,12 @@ class Apk extends React.Component {
                     key: 'apk_status',
                 },
                 {
-                    title: convertToLang(props.translation[APK], APK),
+                    title: convertToLang(props.translation[APK], "APK"),
                     dataIndex: 'apk',
                     key: 'apk',
                 },
                 {
-                    title: convertToLang(props.translation[APK_APP_NAME], APK_APP_NAME),
+                    title: convertToLang(props.translation[APK_APP_NAME], "APP NAME"),
                     dataIndex: 'apk_name',
                     width: "100",
                     key: 'apk_name',
@@ -116,9 +117,14 @@ class Apk extends React.Component {
                     defaultSortOrder: "ascend"
                 },
                 {
-                    title: convertToLang(props.translation[APK_APP_LOGO], APK_APP_LOGO),
+                    title: convertToLang(props.translation[APK_APP_LOGO], "APP LOGO"),
                     dataIndex: 'apk_logo',
                     key: 'apk_logo',
+                },
+                {
+                    title: convertToLang(props.translation[APK_SIZE], "APP SIZE"),
+                    dataIndex: 'apk_size',
+                    key: 'apk_size',
                 },
             ],
         }
@@ -135,10 +141,10 @@ class Apk extends React.Component {
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
-            title: convertToLang(this.props.translation[Alert_Delete_APK], Alert_Delete_APK),
+            title: convertToLang(this.props.translation[Alert_Delete_APK], "Are you sure, you want to delete the Apk ?"),
             content: '',
-            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-            cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No"),
             onOk: () => {
                 this.props.deleteApk(appId);
                 return new Promise((resolve, reject) => {
@@ -366,8 +372,8 @@ class Apk extends React.Component {
                             <AppFilter
                                 translation={this.props.translation}
                                 handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder={convertToLang(this.props.translation[APK_SEARCH], APK_SEARCH)}
-                                addButtonText={convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
+                                searchPlaceholder={convertToLang(this.props.translation[APK_SEARCH], "Search APK")}
+                                addButtonText={convertToLang(this.props.translation[APK_UPLOAD], "Upload APK")}
                                 isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
@@ -417,22 +423,20 @@ class Apk extends React.Component {
                                 width="620px"
                                 className="upload_apk_popup"
                                 visible={this.state.uploadApkModal}
-                                title={convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
+                                title={convertToLang(this.props.translation[APK_UPLOAD], "Upload APK")}
                                 onOk={() => { }}
                                 onCancel={() => {
                                     this.hideUploadApkModal()
                                 }}
-                                okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
+                                okText={convertToLang(this.props.translation[Button_Save], "Save")}
                                 footer={null}
                             >
                                 <AddApk
-
+                                    translation={this.props.translation}
                                     hideUploadApkModal={this.hideUploadApkModal}
                                     ref='uploadApk'
                                 />
                             </Modal>
-
-
                         </div>}
             </div>
         )

@@ -84,6 +84,10 @@
     margin: 6px 0;
 }
 
+.manage_ac h5 {
+    line-height: 18px;
+}
+
 .manage_ac .ant-card-body {
     height: 260px;
     position: relative;

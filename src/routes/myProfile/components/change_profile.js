@@ -42,15 +42,15 @@ export default class ChangeProfile extends Component {
             <div>
                 <Modal
                     visible={visible}
-                    title= {convertToLang(this.props.translation[Change_Profile], Change_Profile)}
+                    title= {convertToLang(this.props.translation[Change_Profile], "Change Profile")}
                     maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={false}
                     // cancelText="Cancel"
                     className="prof_f_b"
-                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
 
                 <EditFormCreate 
@@ -94,13 +94,13 @@ class EditForm extends Component {
             <Form onSubmit={this.handleSubmit}>
 
                 <Form.Item
-                    label= {convertToLang(this.props.translation[Name], Name)}
+                    label= {convertToLang(this.props.translation[Name], "Name")}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 12 }}
                 >
                  {this.props.form.getFieldDecorator('name', {
                       initialValue: this.props.profile.name,
-                    rules: [{ required: true, message: convertToLang(this.props.translation[User_Name_require], User_Name_require) }],
+                    rules: [{ required: true, message: convertToLang(this.props.translation[User_Name_require], "Name is Required") }],
                 })(
 
                     <Input />
@@ -135,8 +135,8 @@ class EditForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                 <Button key="back" type="button" onClick={this.props.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}</Button>
-                    <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], Button_submit)}</Button>
+                 <Button key="back" type="button" onClick={this.props.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
+                    <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                 </Form.Item>
 
             </Form>

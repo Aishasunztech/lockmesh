@@ -1,16 +1,20 @@
 import React, { Fragment } from 'react'
 import { Avatar, Table, Switch } from "antd";
 import { BASE_URL } from '../../../constants/Application';
+import { APK } from '../../../constants/ApkConstants';
+import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
+import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
+import { convertToLang } from '../../utils/commonUtils';
 
 const DealerApps = (props) => {
     let columns = [
         {
-            title: 'APK',
+            title: convertToLang(props.translation[APK], "APK"),
             dataIndex: 'apk',
             key: 'apk',
         },
         {
-            title: 'APP NAME',
+            title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
             dataIndex: 'apk_name',
             width: "100",
             key: 'apk_name',
@@ -21,17 +25,17 @@ const DealerApps = (props) => {
             defaultSortOrder: "ascend"
         },
         {
-            title: 'GUEST',
+            title: convertToLang(props.translation[Guest], "GUEST"),
             dataIndex: 'guest',
             key: 'guest'
         },
         {
-            title: 'ENCRYPTED',
+            title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
             dataIndex: 'encrypted',
             key: 'encrypted'
         },
         {
-            title: 'ENABLE',
+            title: convertToLang(props.translation[ENABLE], "ENABLE"),
             dataIndex: 'enable',
             key: 'enable'
         },
@@ -95,12 +99,12 @@ const DealerApps = (props) => {
         columns = [
 
             {
-                title: 'APK',
+                title: convertToLang(props.translation[APK], "APK"),
                 dataIndex: 'apk',
                 key: 'apk',
             },
             {
-                title: 'APP NAME',
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'apk_name',
                 width: "100",
                 key: 'apk_name',

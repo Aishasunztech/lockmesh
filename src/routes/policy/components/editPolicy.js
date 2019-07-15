@@ -13,6 +13,9 @@ import {
 import styles from './policy.css';
 import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
+import { POLICY_SAVE_CONFIRMATION } from '../../../constants/PolicyConstants';
+import { Button_Save, Button_Cancel } from '../../../constants/ButtonConstants';
+import { convertToLang } from '../../utils/commonUtils';
 
 const TextArea = Input;
 const TabPane = Tabs.TabPane;
@@ -383,7 +386,7 @@ class EditPolicy extends Component {
                 // console.log("from data ois", dupmVar)
 
                 Modal.confirm({
-                    title: 'Are You Sure, You Want to Save Changes',
+                    title: convertToLang(this.props.translation[POLICY_SAVE_CONFIRMATION], "Are You Sure, You Want to Save Changes"),
                     onOk: () => {
                         this.props.SavePolicyChanges(dupmVar);
                         this.props.editPolicyModalHide();
@@ -393,7 +396,9 @@ class EditPolicy extends Component {
                         this.setState({ tabSelected: '1' })
 
                     },
-                    okText: 'Save',
+                    // okText: 'Save',
+                    okText: convertToLang(this.props.translation[Button_Save], "Save"),
+                    cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
                 });
             }
         })

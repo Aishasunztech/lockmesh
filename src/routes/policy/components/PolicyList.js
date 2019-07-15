@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Card, Row, Col, Modal, Button, message, Table, Icon, Switch } from "antd";
 import update from 'react-addons-update';
-
+import CustomScrollbars from "../../../util/CustomScrollbars";
 import PolicyInfo from './PolicyInfo';
 import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 import styles from './policy.css';
-import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes } from '../../../constants/ButtonConstants';
+import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';
 import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION } from '../../../constants/PolicyConstants';
 const confirm = Modal.confirm;
@@ -81,12 +81,13 @@ class PolicyList extends Component {
     SavePolicyChanges = (record) => {
 
         Modal.confirm({
-            title: convertToLang(this.props.translation[POLICY_SAVE_CONFIRMATION], POLICY_SAVE_CONFIRMATION),
+            title: convertToLang(this.props.translation[POLICY_SAVE_CONFIRMATION], "Are You Sure, You Want to Save Changes"),
             onOk: () => {
                 this.props.SavePolicyChanges(record);
             },
             // content: 'Bla bla ...',
-            okText: convertToLang(this.props.translation[Button_Save], Button_Save),
+            okText: convertToLang(this.props.translation[Button_Save], "Save"),
+            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         });
     }
 
@@ -94,13 +95,13 @@ class PolicyList extends Component {
     deletePolicy = (id) => {
         let _this = this
         confirm({
-            title: convertToLang(this.props.translation[POLICY_DELETE_CONFIRMATION], POLICY_DELETE_CONFIRMATION),
+            title: convertToLang(this.props.translation[POLICY_DELETE_CONFIRMATION], "Do you want to delete this Policy?"),
             onOk() {
                 _this.props.handlePolicyStatus(1, 'delete_status', id)
             },
             onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-            cancelText: convertToLang(this.props.translation[Button_No], Button_No)
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No")
 
         });
     }
@@ -118,7 +119,7 @@ class PolicyList extends Component {
                         (
                             <Fragment>
                                 <Button
-                                    style={{ marginRight: 7, marginLeft: 7 }}
+                                    style={{ marginRight: 7, marginLeft: 7, textTransform: "uppercase" }}
                                     type="primary"
                                     size="small"
                                     onClick={() => {
@@ -127,15 +128,15 @@ class PolicyList extends Component {
                                         this.props.editPolicyModal(policy)
                                     }}
                                 >
-                                    {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
+                                    {convertToLang(this.props.translation[Button_Edit], "EDIT")}
                                 </Button>
                                 <Button
-                                    style={{ marginRight: 7 }}
+                                    style={{ marginRight: 7, textTransform: "uppercase" }}
                                     type="danger"
                                     size="small"
                                     onClick={() => { this.deletePolicy(policy.id) }}
                                 >
-                                    {convertToLang(this.props.translation[Button_Delete], Button_Delete)}
+                                    {convertToLang(this.props.translation[Button_Delete], "DELETE")}
                                 </Button>
                             </Fragment>) : null
                 ,
@@ -182,13 +183,13 @@ class PolicyList extends Component {
 
         let _this = this
         confirm({
-            title: convertToLang(this.props.translation[POLICY_CHANGE_DEFAULT_CONFIRMATION], POLICY_CHANGE_DEFAULT_CONFIRMATION),
+            title: convertToLang(this.props.translation[POLICY_CHANGE_DEFAULT_CONFIRMATION], "Do you want to change your default Policy?"),
             onOk() {
                 _this.props.defaultPolicyChange(e, policy_id)
             },
             onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-            cancelText: convertToLang(this.props.translation[Button_No], Button_No)
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No")
 
         });
     }
@@ -241,65 +242,64 @@ class PolicyList extends Component {
         }
     }
     render() {
-        console.log(this.state.expandedRowKeys, 'keys are')
+        // console.log(this.state.expandedRowKeys, 'keys are')
         return (
             <Fragment>
-                <Card>
-                    <Table
-                        scroll={{ x: 600 }}
-                        className="devices policy_expand"
-                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
-                        size="default"
-                        bordered
-                        expandIcon={(props) => this.customExpandIcon(props)}
-                        // onExpand={this.onExpandRow}
-
-                        expandedRowRender={(record) => {
-                            // console.log("expandTabSelected", record);
-                            // console.log("table row", this.state.expandTabSelected[record.rowKey]);
-                            return (
-                                <Fragment>
-                                    {
+                <Card className="fix_card policy_fix_card">
+                    <hr className="fix_header_border" style={{ top: "57px" }} />
+                    <CustomScrollbars className="gx-popover-scroll">
+                        <Table
+                            className="devices policy_expand"
+                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
+                            size="default"
+                            bordered
+                            expandIcon={(props) => this.customExpandIcon(props)}
+                            // onExpand={this.onExpandRow}
+                            expandedRowRender={(record) => {
+                                // console.log("expandTabSelected", record);
+                                // console.log("table row", this.state.expandTabSelected[record.rowKey]);
+                                return (
+                                    <div>{
                                         this.state.savePolicyButton ?
-                                            <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], Button_Save_Changes)} </Button>
-                                            : false
-                                    }
-                                    <PolicyInfo
-                                        selected={this.state.expandTabSelected[record.rowKey]}
-                                        policy={record}
-                                        isSwitch={this.state.isSwitch && this.state[record.rowKey] === record.rowKey ? true : false}
-                                        rowId={record.policy_id}
-                                        handleEditPolicy={this.props.handleEditPolicy}
-                                        handleCheckAll={this.props.handleCheckAll}
-                                        // edit={true}
-                                        guestAlldealerApps={this.props.guestAlldealerApps}
-                                        encryptedAlldealerApps={this.props.encryptedAlldealerApps}
-                                        enableAlldealerApps={this.props.enableAlldealerApps}
-
-                                        guestAllappPermissions={this.props.guestAllappPermissions}
-                                        encryptedAllappPermissions={this.props.encryptedAllappPermissions}
-                                        enableAllappPermissions={this.props.enableAllappPermissions}
-
-                                        guestAllallExtensions={this.props.guestAllallExtensions}
-                                        encryptedAllallExtensions={this.props.encryptedAllallExtensions}
-                                        enableAllallExtensions={this.props.enableAllallExtension}
-                                        handleAppGotted={this.props.handleAppGotted}
-                                        appsGotted={this.props.appsGotted}
-                                        translation={this.props.translation}
-                                    />
-                                </Fragment>
-                            )
-                        }}
-                        // expandIconColumnIndex={1}         
-                        expandIconColumnIndex={2}
-                        expandedRowKeys={this.state.expandedRowKeys}
-                        expandIconAsCell={false}
-                        columns={this.props.columns}
-                        dataSource={this.renderList(this.props.policies)}
-                        pagination={{ pageSize: this.state.pagination, size: "midddle" }}
-                        rowKey="policy_list"
-                        ref='policy_table'
-                    />
+                                            <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], "Save Changes")} </Button>
+                                            : false}
+                                        <PolicyInfo
+                                            selected={this.state.expandTabSelected[record.rowKey]}
+                                            policy={record}
+                                            isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
+                                            rowId={record.policy_id}
+                                            handleEditPolicy={this.props.handleEditPolicy}
+                                            handleCheckAll={this.props.handleCheckAll}
+                                            // edit={true}
+                                            guestAlldealerApps={this.props.guestAlldealerApps}
+                                            encryptedAlldealerApps={this.props.encryptedAlldealerApps}
+                                            enableAlldealerApps={this.props.enableAlldealerApps}
+                                            guestAllappPermissions={this.props.guestAllappPermissions}
+                                            encryptedAllappPermissions={this.props.encryptedAllappPermissions}
+                                            enableAllappPermissions={this.props.enableAllappPermissions}
+                                            guestAllallExtensions={this.props.guestAllallExtensions}
+                                            encryptedAllallExtensions={this.props.encryptedAllallExtensions}
+                                            enableAllallExtensions={this.props.enableAllallExtension}
+                                            handleAppGotted={this.props.handleAppGotted}
+                                            appsGotted={this.props.appsGotted}
+                                            translation={this.props.translation}
+                                        />
+                                    </div>
+                                )
+                            }}
+                            // expandIconColumnIndex={1}         
+                            expandIconColumnIndex={2}
+                            expandedRowKeys={this.state.expandedRowKeys}
+                            expandIconAsCell={false}
+                            columns={this.props.columns}
+                            dataSource={this.renderList(this.props.policies)}
+                            pagination={false
+                                // { pageSize: this.state.pagination, size: "midddle" }
+                            }
+                            rowKey="policy_list"
+                            ref='policy_table'
+                        />
+                    </CustomScrollbars>
                 </Card>
 
             </Fragment>

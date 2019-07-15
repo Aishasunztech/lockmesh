@@ -77,7 +77,7 @@ class Policy extends Component {
             //     width: 800,
             // },
             {
-                title: convertToLang(this.props.translation[POLICY_ACTION], POLICY_ACTION),
+                title: convertToLang(this.props.translation[POLICY_ACTION], "ACTION"),
                 align: "center",
                 dataIndex: 'action',
                 key: "action",
@@ -85,7 +85,7 @@ class Policy extends Component {
             {
                 title: (
                     <span>
-                        {convertToLang(this.props.translation[POLICY_INFO], POLICY_INFO)}
+                        {convertToLang(this.props.translation[POLICY_INFO], "POLICY INFO")}
                         {/* <Popover placement="top" content='dumy'>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover> */}
@@ -97,7 +97,7 @@ class Policy extends Component {
             {
                 title: (
                     <span>
-                        {convertToLang(this.props.translation[POLICY_PERMISSIONS], POLICY_PERMISSIONS)}
+                        {convertToLang(this.props.translation[POLICY_PERMISSIONS], "PERMISSIONS")}
                         <Popover placement="top" content={PERMISSION_HELPING_TEXT}>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover>
@@ -110,7 +110,7 @@ class Policy extends Component {
             {
                 title: (
                     <span>
-                        {convertToLang(this.props.translation[POLICY_STATUS], POLICY_STATUS)}
+                        {convertToLang(this.props.translation[POLICY_STATUS], "STATUS")}
                         <Popover placement="top" content={STATUS_HELPING_TEXT}>
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover>
@@ -128,14 +128,14 @@ class Policy extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[POLICY_NAME], POLICY_NAME)}
+                        placeholder={convertToLang(props.translation[POLICY_NAME], "POLICY NAME")}
                     />
                 ),
                 dataIndex: 'policy_name',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[POLICY_NAME], POLICY_NAME),
+                        title: convertToLang(props.translation[POLICY_NAME], "POLICY NAME"),
                         align: "center",
                         dataIndex: 'policy_name',
                         key: "policy_name",
@@ -154,14 +154,14 @@ class Policy extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[POLICY_COMMAND], POLICY_COMMAND)}
+                        placeholder={convertToLang(props.translation[POLICY_COMMAND], "POLICY COMMAND")}
                     />
                 ),
                 dataIndex: 'policy_command',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[POLICY_COMMAND], POLICY_COMMAND),
+                        title: convertToLang(props.translation[POLICY_COMMAND], "POLICY COMMAND"),
                         align: "center",
                         className: '',
                         dataIndex: 'policy_command',
@@ -181,14 +181,14 @@ class Policy extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[POLICY_NOTE], POLICY_NOTE)}
+                        placeholder={convertToLang(props.translation[POLICY_NOTE], "POLICY NOTE")}
                     />
                 ),
                 dataIndex: 'policy_note',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[POLICY_NOTE], POLICY_NOTE),
+                        title: convertToLang(props.translation[POLICY_NOTE], "POLICY NOTE"),
                         align: "center",
                         className: '',
                         dataIndex: 'policy_note',
@@ -206,7 +206,7 @@ class Policy extends Component {
                 key: 'policy_size',
             },
             {
-                title: convertToLang(this.props.translation[POLICY_DEFAULT], POLICY_DEFAULT),
+                title: convertToLang(this.props.translation[POLICY_DEFAULT], "DEFAULT"),
                 dataIndex: 'default_policy',
                 key: 'default_policy',
             },
@@ -370,9 +370,9 @@ class Policy extends Component {
     handlePolicyModal = (visible) => {
         let _this = this;
         Modal.confirm({
-            title: convertToLang(this.props.translation[POLICY_SAVE_CHANGES], POLICY_SAVE_CHANGES),
-            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-            cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+            title: convertToLang(this.props.translation[POLICY_SAVE_CHANGES], "Save changes to Policy?"),
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No"),
             onOk() {
                 _this.setState({
                     goToLastTab: true,
@@ -412,9 +412,9 @@ class Policy extends Component {
 
         let _this = this;
         Modal.confirm({
-            title: convertToLang(this.props.translation[POLICY_SAVE_CHANGES], POLICY_SAVE_CHANGES),
-            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-            cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+            title: convertToLang(this.props.translation[POLICY_SAVE_CHANGES], "Save changes to Policy?"),
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No"),
             onOk() {
 
                 //   console.log('OK');
@@ -450,8 +450,8 @@ class Policy extends Component {
             <Fragment>
                 <AppFilter
                     handleFilterOptions={this.handleFilterOptions}
-                    searchPlaceholder= {convertToLang(this.props.translation[POLICY_SEARCH], POLICY_SEARCH)}
-                    addButtonText= {convertToLang(this.props.translation[POLICY_ADD], POLICY_ADD)}
+                    searchPlaceholder= {convertToLang(this.props.translation[POLICY_SEARCH], "Search Policy")}
+                    addButtonText= {convertToLang(this.props.translation[POLICY_ADD], "Add Policy")}
                     defaultPagingValue={this.state.defaultPagingValue}
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
@@ -496,11 +496,11 @@ class Policy extends Component {
                     width="730px"
                     className="policy_popup"
                     visible={this.state.policyModal}
-                    title={convertToLang(this.props.translation[POLICY_ADD], POLICY_ADD)}
+                    title={convertToLang(this.props.translation[POLICY_ADD], "Add Policy")}
                     onOk={() => this.handlePolicyModal2(false)}
                     onCancel={() => this.handlePolicyModal(false)}
                     destroyOnClose={true}
-                    okText= {convertToLang(this.props.translation[Button_Save], Button_Save)}
+                    okText= {convertToLang(this.props.translation[Button_Save], "Save")}
                     footer={null}
                     ref='modal'
                 >
@@ -521,10 +521,10 @@ class Policy extends Component {
                     className="policy_popup"
                     visible={this.state.editPolicyModal}
                     // destroyOnClose={true}
-                    title={convertToLang(this.props.translation[POLICY_EDIT], POLICY_EDIT)}
+                    title={convertToLang(this.props.translation[POLICY_EDIT], "Edit Policy")}
                     onOk={() => this.handlePolicyModal(false)}
                     onCancel={() => { this.editPolicyModalHide(); this.props.handleAppGotted(false) }}
-                    okText= {convertToLang(this.props.translation[Button_Update], Button_Update)}
+                    okText= {convertToLang(this.props.translation[Button_Update], "Update")}
                     footer={null}
                 >
                     <EditPolicy

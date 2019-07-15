@@ -30,8 +30,9 @@ import {
     APK_ACTION
 } from '../../constants/ApkConstants';
 
-import { componentSearch, titleCase } from "../utils/commonUtils";
-import { ADMIN, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
+import { componentSearch, titleCase, convertToLang } from "../utils/commonUtils";
+import { ADMIN, AUTO_UPDATE_ADMIN, Alert_Delete_APK } from "../../constants/Constants";
+import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 
 const question_txt = (
     <div>
@@ -118,10 +119,10 @@ class AutoUpdate extends React.Component {
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
-            title: 'Are you sure, you want to delete the Apk ?',
+            title: convertToLang(this.props.translation[Alert_Delete_APK], "Are you sure, you want to delete the Apk ?"),
             content: '',
-            okText: 'Yes',
-            cancelText: 'No',
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk: () => {
                 this.props.deleteApk(appId);
                 return new Promise((resolve, reject) => {
@@ -305,7 +306,7 @@ class AutoUpdate extends React.Component {
 
                             <div>
                                 <AppFilter
-                                    translation={this.props.translation}                  
+                                    translation={this.props.translation}
                                     handleFilterOptions={this.handleFilterOptions}
                                     searchPlaceholder="Search APK"
                                     addButtonText="Upload APK"
@@ -368,6 +369,7 @@ class AutoUpdate extends React.Component {
                                     footer={null}
                                 >
                                     <AddApk
+                                        translation={this.props.translation}
                                         autoUpdate={true}
                                         hideUploadApkModal={this.hideUploadApkModal}
                                         ref='uploadApk'

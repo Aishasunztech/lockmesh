@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, message } from 'antd';
 import AddForm from './AddForm';
+import { ADD_DEVICE } from '../../../constants/ActionTypes';
+import { convertToLang } from '../../utils/commonUtils';
+import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 export default class AddDevice extends Component {
 
@@ -78,13 +81,15 @@ export default class AddDevice extends Component {
                     width="600px"
                     visible={visible}
                     maskClosable={false}
-                    title="Add Device"
+                    title= {convertToLang(this.props.translation[ADD_DEVICE], "Add Device")} // "Add Device"
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
                     destroyOnClose={true}
                     bodyStyle={{ height: 500, overflow: "overlay" }}
+                    okText= {convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    cancelText= {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <AddForm
                         device={this.state.device}

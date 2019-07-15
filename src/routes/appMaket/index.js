@@ -73,7 +73,7 @@ class ApkMarket extends React.Component {
                         <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
                         <span className="sm_labels"> {app.app_name} </span>
                         {(app.dealer_type !== undefined) ? <span>
-                            <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], Switch_Button_Uninstall)} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], Switch_Button_Uninstall)} onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
+                            <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], "Uninstall")} onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
                         </span> : null}
                     </Fragment>,
                 description: `${app.app_name + index + 1}`,
@@ -149,14 +149,14 @@ class ApkMarket extends React.Component {
             <div>
                 {
                     this.props.isloading ? <CircularProgress /> :
-                        <Card>
+                        <Card >
                             <Row>
-                                <h4 className="sm_top_heading"> <Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], SPA_NOTIFICATION_BAR)} /> </h4>
+                                <h4 className="sm_top_heading"> <Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], "Move <b>(Available Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices.")} /> </h4>
                                 <Col md={12} sm={24} xs={24} className="text-center">
-                                    <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], SPA_TITEL_AVAILABLE_APPS)}</b></h4>
+                                    <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], "Available Apps")}</b></h4>
                                 </Col>
                                 <Col md={12} sm={24} xs={24} className="text-center sec_market">
-                                    <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], SPA_TITLE_SECURE_MARKET)}</b></h4>
+                                    <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Secure Market")}</b></h4>
                                 </Col>
                             </Row>
                             <Transfer
@@ -165,7 +165,7 @@ class ApkMarket extends React.Component {
 
                                         <div>
                                             <h4 className="sm_heading2">
-                                                <b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], SPA_TITEL_AVAILABLE_APPS)}</b>
+                                                <b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], "Available Apps")}</b>
                                             </h4>
 
                                         </div>
@@ -174,7 +174,7 @@ class ApkMarket extends React.Component {
                                     (
                                         <div>
                                             <h4 className="sm_heading2">
-                                                <b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], SPA_TITLE_SECURE_MARKET)}</b>
+                                                <b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Secure Market")}</b>
                                             </h4>
                                             <span>
                                                 <Popover placement="topRight" content={UNINSTALL_HELPING_TEXT}>
@@ -194,7 +194,7 @@ class ApkMarket extends React.Component {
                                 onSearch={this.handleSearch}
                                 onSelectChange={this.handleSelect}
                                 render={item => item.title}
-                                locale={{ itemUnit: convertToLang(this.props.translation[SPA_APP], SPA_APP), itemsUnit: convertToLang(this.props.translation[SPA_APPS], SPA_APPS) }}
+                                locale={{ itemUnit: convertToLang(this.props.translation[SPA_APP], "App"), itemsUnit: convertToLang(this.props.translation[SPA_APPS], "Apps") }}
                                 onItemSelect={this.handleSelect}
 
                             />

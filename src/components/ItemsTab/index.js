@@ -41,18 +41,18 @@ export default class ItemTabs extends Component {
                     onChange={(e) => this.tabChaged(e)}
                     className="price_table_tabs"
                 >
-                    <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], TAB_SIM_ID)} key={sim} >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key={sim} >
 
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], TAB_CHAT_ID)} key={chat} >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key={chat} >
                         {/* {this.props.simTabContent} */}
 
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], TAB_PGP_EMAIL)} key={pgp} >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], "PGP")} key={pgp} >
 
                         {/* {this.props.simTabContent} */}
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[TAB_VPN], TAB_VPN)} key={vpn} >
+                    <TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key={vpn} >
 
                         {/* {this.props.simTabContent} */}
                     </TabPane>

@@ -2,8 +2,10 @@
 // ********************* ACCOUNT HEADINGS
 export const MANAGE_DATA = "manage.data.id"; // Manage Data
 export const BACKUP_DATABASE = "backup_database.id"; // Backup Database
+export const BACKUP_NOW = "backup_NOW.id"; // Backup NOW
 export const PURCHASE_CREDITS = "purchase.credits.id"; // Purchase Credits
 export const PACKAGES_AND_IDS = "packages.and.ids.id"; // Packages and ID's
+export const BACKUP_DATABASE_DESCRIPTION_OF_MODAL_BODY = "BACKUP_DATABASE_DESCRIPTION_OF_MODAL_BODY.id"; // Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated Files first and open in Excel.
 
 export const ACCOUNT_MANAGE_DATA_01 = "account.manage.data.01.id"; // Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..
 export const ACCOUNT_MANAGE_DATA_02 = "account.manage.data.02.id"; // View/Edit your data
@@ -24,7 +26,7 @@ export const PACKAGE_TERM = "package.term.id"; // PACKAGE TERM
 export const PACKAGE_SERVICES = "package.services.id"; // PACKAGE SERVICES
 export const PACKAGE_PRICE = "package.price.id"; // PACKAGE PRICE
 export const PACKAGE_EXPIRY = "packege.expiry.id"; // PACKAGE EXPIRY
-export const PACKAGE_SEARCH ="package.search.id"; // PACKAGE_SEARCH
+export const PACKAGE_SEARCH ="package.search.id"; // PACKAGE SEARCH
 
 // Packages
 export const PACKAGE_SERVICE_NAME = "package.service.name.id"; // SERVICE NAME
