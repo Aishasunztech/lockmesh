@@ -26,7 +26,7 @@ export const PACKAGE_TERM = "package.term.id"; // PACKAGE TERM
 export const PACKAGE_SERVICES = "package.services.id"; // PACKAGE SERVICES
 export const PACKAGE_PRICE = "package.price.id"; // PACKAGE PRICE
 export const PACKAGE_EXPIRY = "packege.expiry.id"; // PACKAGE EXPIRY
-export const PACKAGE_SEARCH ="package.search.id"; // PACKAGE_SEARCH
+export const PACKAGE_SEARCH ="package.search.id"; // PACKAGE SEARCH
 
 // Packages
 export const PACKAGE_SERVICE_NAME = "package.service.name.id"; // SERVICE NAME

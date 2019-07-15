@@ -150,7 +150,7 @@ class AppFilter extends Component {
                                         valueKey="key"
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
-                                        placeholder={convertToLang(translation[Appfilter_Display], Appfilter_Display)}
+                                        placeholder={convertToLang(translation[Appfilter_Display], "Display")}
                                         className="display_"
                                         multiple={true}
                                         numberDisplayed={true}
@@ -179,7 +179,7 @@ class AppFilter extends Component {
                                                         <Checkbox
                                                             checked={allSelectedOpt} className="slct_all"
                                                         >
-                                                            {convertToLang(translation[Appfilter_SelectAll], Appfilter_SelectAll)}
+                                                            {convertToLang(translation[Appfilter_SelectAll], "Select All")}
                                                         </Checkbox>
                                                     </li>
                                                 );

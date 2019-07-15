@@ -178,7 +178,7 @@ class PurchaseCredit extends Component {
                 >
                     <div>
                         <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                            <p className="mb-4">(*)- {convertToLang(this.props.translation[Required_Fields], Required_Fields)}</p>
+                            <p className="mb-4">(*)- {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
                             < Form.Item
                                 style={{ marginBottom: 0 }}
                                 label="Credits"

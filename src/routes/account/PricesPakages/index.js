@@ -60,14 +60,14 @@ class Prices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[PACKAGE_NAME], PACKAGE_NAME)}
+                        placeholder={convertToLang(props.translation[PACKAGE_NAME], "PACKAGE NAME")}
                     />
                 ),
                 dataIndex: 'pkg_name',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[PACKAGE_NAME], PACKAGE_NAME),
+                        title: convertToLang(props.translation[PACKAGE_NAME], "PACKAGE NAME"),
                         align: "center",
                         className: '',
                         dataIndex: 'pkg_name',
@@ -87,14 +87,14 @@ class Prices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[PACKAGE_TERM], PACKAGE_TERM)}
+                        placeholder={convertToLang(props.translation[PACKAGE_TERM], "PACKAGE TERM")}
                     />
                 ),
                 dataIndex: 'pkg_term',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[PACKAGE_TERM], PACKAGE_TERM),
+                        title: convertToLang(props.translation[PACKAGE_TERM], "PACKAGE TERM"),
                         align: "center",
                         className: '',
                         dataIndex: 'pkg_term',
@@ -108,7 +108,7 @@ class Prices extends Component {
             }, {
                 title: (
                     <span>
-                        {convertToLang(props.translation[PACKAGE_SERVICES], PACKAGE_SERVICES)}
+                        {convertToLang(props.translation[PACKAGE_SERVICES], "PACKAGE SERVICES")}
                         {/* <Popover placement="top" >
                             <span className="helping_txt"><Icon type="info-circle" /></span>
                         </Popover> */}
@@ -128,14 +128,14 @@ class Prices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[PACKAGE_PRICE], PACKAGE_PRICE)}
+                        placeholder={convertToLang(props.translation[PACKAGE_PRICE], "PACKAGE PRICE")}
                     />
                 ),
                 dataIndex: 'pkg_price',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[PACKAGE_PRICE], PACKAGE_PRICE),
+                        title: convertToLang(props.translation[PACKAGE_PRICE], "PACKAGE PRICE"),
                         align: "center",
                         className: '',
                         dataIndex: 'pkg_price',
@@ -156,14 +156,14 @@ class Prices extends Component {
                         className="search_heading"
                         onKeyUp={this.handleSearch}
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[PACKAGE_EXPIRY], PACKAGE_EXPIRY)}
+                        placeholder={convertToLang(props.translation[PACKAGE_EXPIRY], "PACKAGE EXPIRY")}
                     />
                 ),
                 dataIndex: 'pkg_expiry',
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[PACKAGE_EXPIRY], PACKAGE_EXPIRY),
+                        title: convertToLang(props.translation[PACKAGE_EXPIRY], "PACKAGE EXPIRY"),
                         align: "center",
                         className: '',
                         dataIndex: 'pkg_expiry',
@@ -370,8 +370,8 @@ class Prices extends Component {
                 <div>
                     <AppFilter
                         // handleFilterOptions={this.handleFilterOptions}
-                        searchPlaceholder={convertToLang(this.props.translation[PACKAGE_SEARCH], PACKAGE_SEARCH)}
-                        addButtonText={convertToLang(this.props.translation[Button_SET_PRICE], Button_SET_PRICE)}
+                        searchPlaceholder={convertToLang(this.props.translation[PACKAGE_SEARCH], "PACKAGE SEARCH")}
+                        addButtonText={convertToLang(this.props.translation[Button_SET_PRICE], "Set Price")}
                         // defaultPagingValue={this.state.defaultPagingValue}
                         // selectedOptions={this.props.selectedOptions}
                         // options={this.state.options}
@@ -394,7 +394,7 @@ class Prices extends Component {
                             type="card"
                             onChange={(e) => this.setState({ outerTab: e })}
                         >
-                            <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_ID_PRICES], Tab_ID_PRICES)} key="1">
+                            <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_ID_PRICES], "ID Prices")} key="1">
                                 <div>
                                     <Tabs
                                         tabPosition={'left'}
@@ -402,16 +402,16 @@ class Prices extends Component {
                                         onChange={(e) => this.tabChaged(e)}
                                         className="price_table_tabs"
                                     >
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], TAB_SIM_ID)} key={sim} >
+                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key={sim} >
 
                                         </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], TAB_CHAT_ID)} key={chat} >
+                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key={chat} >
 
                                         </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], TAB_PGP_EMAIL)} key={pgp} >
+                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], "PGP")} key={pgp} >
 
                                         </Tabs.TabPane>
-                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_VPN], TAB_VPN)} key={vpn} >
+                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key={vpn} >
 
                                         </Tabs.TabPane>
                                     </Tabs>
@@ -424,7 +424,7 @@ class Prices extends Component {
                                     </div>
                                 </div>
                             </Tabs.TabPane>
-                            <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_PACKAGES], Tab_PACKAGES)} key="2">
+                            <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_PACKAGES], "PACKAGES")} key="2">
                                 <Table
                                     columns={this.columns}
                                     dataSource={this.renderList()}
@@ -439,8 +439,8 @@ class Prices extends Component {
                                                 <div>
                                                     <Table
                                                         columns={[
-                                                            { title: convertToLang(this.props.translation[PACKAGE_SERVICE_NAME], PACKAGE_SERVICE_NAME), dataIndex: 'name', key: 'name', align: 'center' },
-                                                            { title: convertToLang(this.props.translation[PACKAGE_INCLUDED], PACKAGE_INCLUDED), key: 'f_value', dataIndex: 'f_value', align: 'center' }]}
+                                                            { title: convertToLang(this.props.translation[PACKAGE_SERVICE_NAME], "SERVICE NAME"), dataIndex: 'name', key: 'name', align: 'center' },
+                                                            { title: convertToLang(this.props.translation[PACKAGE_INCLUDED], "INCLUDED"), key: 'f_value', dataIndex: 'f_value', align: 'center' }]}
                                                         dataSource={this.renderFeatures(record.pkg_features)}
                                                         pagination={false}
                                                     />
