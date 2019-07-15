@@ -50,6 +50,7 @@ class Prices extends Component {
                 dataIndex: 'sr',
                 key: 'sr',
                 align: "center",
+                render : (text, record, index) => ++index,
             },
             {
                 title: (
