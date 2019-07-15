@@ -2,7 +2,6 @@ import React from "react";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { Button, Card, Col, Row } from "antd";
 
-import IntlMessages from "util/IntlMessages";
 
 class SweetAlerts extends React.Component {
     constructor() {

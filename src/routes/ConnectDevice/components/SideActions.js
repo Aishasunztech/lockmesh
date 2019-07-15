@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
 import { Card, Row, Col, Button, message, Icon, Modal, Input, Tooltip, Progress } from "antd";
 import TableHistory from "./TableHistory";
 import SuspendDevice from '../../devices/components/SuspendDevice';
 import ActivateDevcie from '../../devices/components/ActivateDevice';
 
-import { componentSearch } from '../../utils/commonUtils';
+import { componentSearch, convertToLang } from '../../utils/commonUtils';
 import EditDevice from '../../devices/components/editDevice';
 import FlagDevice from '../../ConnectDevice/components/flagDevice';
 import WipeDevice from '../../ConnectDevice/components/wipeDevice';
@@ -17,6 +16,7 @@ import DealerApps from "./DealerApps";
 import PasswordForm from './PasswordForm';
 import DeviceSettings from './DeviceSettings';
 import Activity from './Activity';
+
 
 
 import {
@@ -35,15 +35,19 @@ import {
     writeImei,
     getActivities,
     hidePolicyConfirm,
-    applyPolicy
+    applyPolicy,
+    applySetting,
+    getProfiles
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
-    ADMIN, DEALER, SDEALER, SECURE_SETTING
+    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT
 } from "../../../constants/Constants";
 
 
 import { PUSH_APPS, PULL_APPS, POLICY } from "../../../constants/ActionTypes"
+import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG, Button_Save, Button_Cancel, Button_Ok, Button_Apply, Button_Back } from '../../../constants/ButtonConstants';
+import { DEVICE_ID, SETTINGS_TO_BE_SENT_TO_DEVICE } from '../../../constants/DeviceConstants';
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -76,6 +80,7 @@ class PasswordModal extends Component {
                     checkPass={this.props.checkPass}
                     actionType={this.props.actionType}
                     handleCancel={this.props.showPwdConfirmModal}
+                    translation={this.props.translation}
                     ref='pswdForm'
                 />
             </Modal >
@@ -117,13 +122,14 @@ class DealerAppModal extends Component {
                     </div>}
                 visible={this.props.pushAppsModal}
                 onOk={() => {
-                    if (this.props.selectedApps.length) {
-                        this.props.showPushAppsModal(false);
+                    if (this.props.selectedAppKeys.length) {
+                        // this.props.showPushAppsModal(false);
                         this.props.showSelectedAppsModal(true);
                     }
                 }}
                 onCancel={() => { this.props.showPushAppsModal(false); this.props.resetSeletedRows() }}
-                okText="Push Apps"
+                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
             >
                 <DealerApps
                     apk_list={this.props.apk_list}
@@ -132,6 +138,7 @@ class DealerAppModal extends Component {
                     selectedApps={this.props.selectedApps}
                     selectedAppKeys={this.props.selectedAppKeys}
                     handleChecked={this.props.handleChecked}
+                    translation={this.props.translation}
                 />
             </Modal>
         )
@@ -171,7 +178,7 @@ class PullAppModal extends Component {
                         <br /> Device ID: {this.props.device.device_id} </div>}
                 visible={this.props.pullAppsModal}
                 onOk={() => {
-                    if (this.props.selectedApps.length) {
+                    if (this.props.selectedAppKeys.length) {
                         this.props.showPullAppsModal(false);
                         this.props.showSelectedAppsModal(true);
                     }
@@ -186,7 +193,8 @@ class PullAppModal extends Component {
                     selectedApps={this.props.selectedApps}
                     selectedAppKeys={this.props.selectedAppKeys}
                     handleChecked={this.props.handleChecked}
-                    type={this.props.actionType == PUSH_APPS ? "push" : 'pull'}
+                    type={this.props.actionType === PUSH_APPS ? "push" : 'pull'}
+                    translation={this.props.translation}
                 />
             </Modal>
         )
@@ -195,7 +203,7 @@ class PullAppModal extends Component {
 
 
 const SelectedApps = (props) => {
-    console.log('selected app are', props.selectedApps)
+    // console.log('selected app are', props.selectedApps, props.actionType)
     return (
         <Modal
             // closable={false}
@@ -207,18 +215,28 @@ const SelectedApps = (props) => {
             onOk={() => {
                 props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
                 props.showSelectedAppsModal(false);
+                props.showPushAppsModal(false)
+                props.showPullAppsModal(false)
                 props.resetSeletedRows()
             }}
-            onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
-            okText={props.actionType == PUSH_APPS ? "Push Apps" : 'Pull Apps'}
+            // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
+            onCancel={() => {
+                props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
+                props.showSelectedAppsModal(false);
+            }}
+            // cancelText='Back'
+            cancelText={convertToLang(props.translation[Button_Back], Button_Back)}
+            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT) : convertToLang(props.translation[PULL_APPS_TEXT], PULL_APPS_TEXT)}
             destroyOnClose={true}
         >
             <DealerApps
                 apk_list={props.apk_list}
                 isSwitchable={false}
                 selectedApps={props.selectedApps}
-                type={props.actionType == PUSH_APPS ? "push" : 'pull'}
+                type={props.actionType == PUSH_APPS ? 'push' : 'pull'}
+                // buttonText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
                 disabledSwitch={true}
+                translation={props.translation}
             />
         </Modal>
     )
@@ -246,6 +264,7 @@ class SideActions extends Component {
             disabled: false,
             actionType: PUSH_APPS,
             selectedApps: [],
+            selectedApps2: [],
             activities: [],
             apk_list: [],
             policyId: '',
@@ -322,7 +341,7 @@ class SideActions extends Component {
         if (this.state.selectedAppKeys.length && this.state.selectedApps.length) {
 
             for (let app of this.state.selectedApps) {
-                console.log(this.state.selectedAppKeys.includes(app.apk_id), 'checking')
+                // console.log(this.state.selectedAppKeys.includes(app.apk_id), 'checking')
                 if (this.state.selectedAppKeys.includes(app.apk_id)) {
                     dumyList.push(app)
                 }
@@ -330,7 +349,7 @@ class SideActions extends Component {
         }
         this.setState({
             selectedAppsModal: visible,
-            selectedApps: dumyList
+            selectedApps2: dumyList
         })
     }
 
@@ -339,18 +358,31 @@ class SideActions extends Component {
     }
 
     onInputChange = (e) => {
-        this.props.hanldeProfileInput(this.state.saveProfileType, e.target.value);
+        this.setState({
+            profileName: e.target.value
+        })
 
     }
     saveProfile = () => {
 
         if (this.state.saveProfileType === "profile" && this.state.profileName !== '') {
+            let exts = [];
+            if (this.props.extensions.length) {
+                // console.log('saved profile will be', this.props.extensions);
+                for (let extension of this.props.extensions) {
+                    if (extension.uniqueName === SECURE_SETTING) {
+                        exts = extension.subExtension
+                        //   console.log(exts, 'sddsdsdsdsdsdsdsd')
+                    }
+                }
+            }
+
             this.props.saveProfile(this.props.app_list, {
                 adminPwd: this.props.adminPwd,
                 guestPwd: this.props.guestPwd,
                 encryptedPwd: this.props.encryptedPwd,
                 duressPwd: this.props.duressPwd,
-            }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, this.props.extensions);
+            }, this.state.profileName, this.props.usr_acc_id, this.props.controls.controls, exts);
         } else if (this.state.saveProfileType === "policy" && this.state.policyName !== '') {
             this.props.savePolicy(this.props.app_list,
                 {
@@ -360,7 +392,8 @@ class SideActions extends Component {
                     duressPwd: this.props.duressPwd,
                 }, this.state.saveProfileType, this.state.policyName, this.props.usr_acc_id);
         }
-        this.showSaveProfileModal(false)
+        this.showSaveProfileModal(false);
+        this.props.getProfiles(this.props.device.device_id)
     }
     transferDeviceProfile = (device_id) => {
         let _this = this;
@@ -384,17 +417,17 @@ class SideActions extends Component {
         // alert('its working', value)
         //    console.log('values sr', value)   
         try {
-            console.log(value, 'value')
+            // console.log(value, 'value')
             if (value.length) {
-                console.log(value, 'value')
+                // console.log(value, 'value')
                 if (status) {
-                    console.log('status')
+                    // console.log('status')
                     coppyList = this.state.apk_list;
                     status = false;
                 }
-                console.log(this.state.apk_list, 'coppy de', coppyList)
+                // console.log(this.state.apk_list, 'coppy de', coppyList)
                 let foundList = componentSearch(coppyList, value);
-                console.log('found devics', foundList)
+                // console.log('found devics', foundList)
                 if (foundList.length) {
                     this.setState({
                         apk_list: foundList,
@@ -418,6 +451,7 @@ class SideActions extends Component {
 
 
     showPushAppsModal = (visible) => {
+        // console.log('is callrd')
         if (visible) {
             this.setState({
                 pushAppsModal: visible,
@@ -470,7 +504,6 @@ class SideActions extends Component {
         //     }
         // });
 
-
         this.setState({
             // selectedApps: selectedApps,
             selectedAppKeys: selectedRowKeys
@@ -479,18 +512,18 @@ class SideActions extends Component {
     }
 
     handleChecked = (e, key, app_id) => {
-        console.log("handlechecked", e, key, app_id);
+        // console.log("handlechecked", e, key, app_id);
         this.state.selectedApps.map((el) => {
             if (el.apk_id === app_id) {
                 el[key] = e;
             }
         })
 
-        console.log('sate of selected app ', this.state.selectedApps)
+        // console.log('sate of selected app ', this.state.selectedApps)
     }
 
     handleFlag(flagged) {
-        if (flagged == 'Unflag') {
+        if (flagged === 'Unflag') {
             showConfirm(this.props.device, this.props.unflagged, this, "Do you really want to unflag the device ", 'flagged')
         } else {
             this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
@@ -498,34 +531,35 @@ class SideActions extends Component {
     }
 
 
-    applyHistory = (historyId, name = '') => {
+    applyHistory = (historyId, name = '', history) => {
         const historyType = this.state.historyType;
         if (historyType === 'history') {
 
         } else if (historyType === "profile") {
-
+            showConfirmProfile(this, name, history)
         } else if (historyType === POLICY) {
 
-            console.log(name);
             this.showPwdConfirmModal(true, POLICY)
             this.setState({
                 policyId: historyId,
                 policyName: name,
-                historyModal: false
+                historyModal: true
             })
         }
     }
 
 
     applyPushApps = () => {
-        this.props.applyPushApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+        this.props.applyPushApps(this.state.selectedApps2, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
+        this.props.getActivities(this.props.device_id)
     }
 
 
     applyPullApps = () => {
-        this.props.applyPullApps(this.state.selectedApps, this.props.device_id, this.props.usr_acc_id);
+        this.props.applyPullApps(this.state.selectedApps2, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
+        this.props.getActivities(this.props.device_id)
     }
 
     resetSeletedRows = () => {
@@ -533,14 +567,16 @@ class SideActions extends Component {
         this.setState({
             selectedAppKeys: [],
             selectedApps: [],
+            apk_list: this.props.apk_list
         })
     }
 
     render() {
-        console.log(this.state.apk_list, 'list apk')
-        const device_status = (this.props.device.account_status === "suspended") ? "Activate" : "Suspend";
-        const button_type = (device_status === "ACTIVATE") ? "dashed" : "danger";
-        const flagged = (this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'Flag';
+        // console.log(this.state.apk_list, 'list apk')
+        const device_status = (this.props.device.account_status === "suspended") ? convertToLang(this.props.translation[Button_Unsuspend], Button_Unsuspend) : convertToLang(this.props.translation[Button_Suspend], Button_Suspend);
+        const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
+        const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], Button_UNFLAG) : convertToLang(this.props.translation[Button_Flag], Button_Flag);
+        const flagged = ((this.props.device.flagged !== 'Not flagged') ? 'Unflag' : 'flag')
         return (
             <div className="gutter-box bordered">
                 <div className="gutter-example side_action">
@@ -556,29 +592,35 @@ class SideActions extends Component {
                                     placement="bottom"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
-                                    disabled={this.props.authUser.type == ADMIN ? false : true}
+                                    disabled={(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
-                                    Push
-                                </Button>
 
+                                    {/* <IntlMessages id="button.Push" /> */}
+                                    {convertToLang(this.props.translation[Button_Push], Button_Push)}
+                                </Button>
                                 <Button
-                                    disabled
+                                    // disabled
                                     type="primary"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showHistoryModal(true, "profile")}
                                 >
                                     <Icon type="select" />
-                                    Load Profile
+
+                                    {/* <IntlMessages id="button.LoadProfile" /> */}
+                                    {convertToLang(this.props.translation[Button_LoadProfile], Button_LoadProfile)}
                                 </Button>
                                 <Button
-                                    type="primary"
-                                    style={{ width: "100%", marginBottom: 16 }}
+                                    type="default"
+                                    className="btn_break_line"
                                     onClick={() => this.showHistoryModal(true, "policy")}
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#009700', color: '#fff' }}
                                 >
-                                    <Icon type="select" />
-                                    Load Policy
+                                    <Icon type="lock" className="lock_icon" />
+
+                                    {/* <IntlMessages id="button.LoadPolicy" /> */}
+                                    {convertToLang(this.props.translation[Button_LoadPolicy], Button_LoadPolicy)}
                                 </Button>
                                 <Button
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
@@ -586,7 +628,9 @@ class SideActions extends Component {
                                     style={{ width: "100%", marginBottom: 16, background: "#eed9c4", color: "#555", border: "1px solid #eab886" }}
                                 >
                                     {/* <Icon type="number" /> */}
-                                    IMEI
+
+                                    {/* <IntlMessages id="button.IMEI" /> */}
+                                    {convertToLang(this.props.translation[Button_IMEI], Button_IMEI)}
                                 </Button>
                             </Col>
                             <Col
@@ -599,29 +643,44 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
+                                    disabled={this.props.authUser.type === ADMIN ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
-                                    Pull
+
+                                    {/* <IntlMessages id="button.Pull" /> */}
+                                    {convertToLang(this.props.translation[Button_Pull], Button_Pull)}
                                 </Button>
                                 {/* </Tooltip> */}
 
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
                                     <Button type="primary " style={{ width: "100%", marginBottom: 15 }}
-                                        disabled={this.state.isSaveProfileBtn ? false : true}
+                                        // disabled={this.state.isSaveProfileBtn ? false : true}
                                         onClick={() => {
-                                            // this.showSaveProfileModal(true, 'profile') 
-                                            this.setState({ showChangesModal: true })
+                                            // if (this.state.isSaveProfileBtn) {
+                                            this.showSaveProfileModal(true, 'profile')
+                                            // }
+                                            // else {
+                                            //     Modal.warning({
+                                            //         title: "Please Change some setting to save Profile"
+                                            //     })
+                                            // }
+                                            // this.setState({ showChangesModal: true })
                                         }} >
-                                        <Icon type="save" style={{ fontSize: "14px" }} /> Save Profile
-                                        </Button>
+                                        <Icon type="save" style={{ fontSize: "14px" }} />
+
+                                        {/* <IntlMessages id="button.SaveProfile" /> */}
+                                        {convertToLang(this.props.translation[Button_SaveProfile], Button_SaveProfile)}
+                                    </Button>
                                     : null}
                                 <Button
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.refs.activity.showModal()}
                                 >
-                                    Activity
+
+                                    {/* <IntlMessages id="button.Activity" /> */}
+                                    {convertToLang(this.props.translation[Button_Activity], Button_Activity)}
                                 </Button>
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button
@@ -629,8 +688,10 @@ class SideActions extends Component {
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                     >
                                         <Icon type="file" />
-                                        SIM
-                                </Button>
+
+                                        {/* <IntlMessages id="button.SIM" /> */}
+                                        {convertToLang(this.props.translation[Button_SIM], Button_SIM)}
+                                    </Button>
                                 </Tooltip>
                             </Col>
                         </Row>
@@ -639,36 +700,46 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
                                 <Tooltip title="Coming Soon">
-                                    <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button>
+                                    <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />
+                                        {/* <IntlMessages id="button.Transfer" /> */}
+                                        {convertToLang(this.props.translation[Button_Transfer], Button_Transfer)} </Button>
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
                                 </Tooltip>
                                 <Button type={button_type}
-                                    onClick={() => (device_status === "Activate") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
+                                    onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
-                                    disabled={(flagged === 'Unflag') ? 'disabled' : ''}
+                                    disabled={(this.props.device.flagged !== 'Not flagged') ? 'disabled' : ''}
                                 >
                                     {(this.props.device.account_status === '') ? <div><Icon type="user-delete" /> {device_status}</div> : <div><Icon type="user-add" /> {device_status}</div>}
                                 </Button>
 
-                                <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" /> Wipe Device</Button>
+                                <Button type="default" className="btn_break_line" style={{ width: "100%", marginBottom: 16, backgroundColor: '#f31517', color: '#fff' }} onClick={() => this.refs.wipe_device.showModel(this.props.device, this.props.wipe)}><Icon type="lock" className="lock_icon" />
+
+                                    {/* <IntlMessages id="button.WipeDevice" /> */}
+                                    {convertToLang(this.props.translation[Button_WipeDevice], Button_WipeDevice)}
+                                </Button>
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#1b1b1b', color: '#fff' }}
                                     onClick={() => this.handleFlag(flagged)}
                                 >
-                                    <Icon type="flag" />{flagged}
+                                    <Icon type="flag" />{flaggedButtonText}
                                 </Button>
                                 <Button
                                     onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
-                                    <Icon type='disconnect' />Unlink</Button>
+                                    <Icon type='disconnect' />
+                                    {/* <IntlMessages id="button.Unlink" /> */}
+                                    {convertToLang(this.props.translation[Button_Unlink], Button_Unlink)}</Button>
                                 <Button
                                     onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                 >
                                     <Icon type='edit' />
-                                    Edit
+
+                                    {/* <IntlMessages id="button.Edit" /> */}
+                                    {convertToLang(this.props.translation[Button_Edit], Button_Edit)}
                                 </Button>
                             </Col>
                             <Tooltip title="Coming Soon" placement="bottom" >
@@ -690,26 +761,31 @@ class SideActions extends Component {
                     </Card>
                 </div>
                 <Modal
-                    title={<div>{this.state.historyType}  <br /> Device ID:  {this.props.device.device_id} </div>}
+                    title={<div>{(this.state.historyType == 'profile') ? convertToLang(this.props.translation[Button_LoadProfile], Button_LoadProfile) : this.state.historyType}  <br /> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}:  {this.props.device.device_id} </div>}
                     maskClosable={false}
                     style={{ top: 20 }}
                     visible={this.state.historyModal}
                     onOk={() => this.showHistoryModal(false, '')}
                     onCancel={() => this.showHistoryModal(false, '')}
                     className="load_policy_popup"
+                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     {(this.state.historyType === "history") ?
                         <TableHistory
                             histories={this.props.histories}
                             type={this.state.historyType}
                             applyHistory={this.applyHistory}
+                            translation={this.props.translation}
                         />
                         :
                         (this.state.historyType === "profile") ?
+                                    
                             <TableHistory
                                 histories={this.props.profiles}
                                 type={this.state.historyType}
                                 applyHistory={this.applyHistory}
+                                translation={this.props.translation}
                             />
                             :
                             (this.state.historyType === "policy") ?
@@ -717,6 +793,7 @@ class SideActions extends Component {
                                     histories={this.props.policies}
                                     type={this.state.historyType}
                                     applyHistory={this.applyHistory}
+                                    translation={this.props.translation}
                                 />
                                 :
                                 (this.state.historyType === undefined) ?
@@ -727,14 +804,16 @@ class SideActions extends Component {
 
                 <Modal
                     maskClosable={false}
-                    title="Confirm new Settings to be sent to Device"
+                    title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], SETTINGS_TO_BE_SENT_TO_DEVICE)}
                     visible={this.state.showChangesModal}
                     onOk={() => {
                         this.showSaveProfileModal(true, 'profile')
                         this.setState({ showChangesModal: false })
                     }}
                     onCancel={() => this.setState({ showChangesModal: false })}
-                    okText='Apply'
+                    // okText='Apply'
+                    okText={convertToLang(this.props.translation[Button_Apply], Button_Apply)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
                     <DeviceSettings
                         app_list={this.props.app_list}
@@ -746,24 +825,29 @@ class SideActions extends Component {
                         isGuestPwd={this.props.isGuestPwd}
                         controls={{ 'controls': this.state.changedCtrls }}
                         showChangedControls={true}
+                        translation={this.props.translation}
                     />
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
+                    title={<div> {convertToLang(this.props.translation[SAVE_PROFILE_TEXT], SAVE_PROFILE_TEXT)} <br /> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}:  {this.props.device.device_id} </div>}
                     closable={false}
                     maskClosable={false}
                     style={{ top: 20 }}
 
                     visible={this.state.saveProfileModal}
                     onOk={() => {
+                        this.setState({ profileName: '' })
                         this.saveProfile();
                     }}
-                    onCancel={() => this.showSaveProfileModal(false)}
-                    okText='Save'
-
+                    onCancel={() => { this.setState({ profileName: '' }); this.showSaveProfileModal(false) }}
+                    okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
-                    <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={(this.state.saveProfileType === "policy") ? this.state.policyName : this.state.profileName} />
+                    <Input placeholder={`Enter ${this.state.saveProfileType} name`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
+
+
 
                 <DealerAppModal
                     pushAppsModal={this.props.pushAppsModal}
@@ -777,6 +861,7 @@ class SideActions extends Component {
                     selectedApps={this.state.selectedApps}
                     handleChecked={this.handleChecked}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <PullAppModal
@@ -792,6 +877,7 @@ class SideActions extends Component {
                     handleChecked={this.handleChecked}
                     onCancelModel={this.onCancelModel}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <PasswordModal
@@ -799,59 +885,70 @@ class SideActions extends Component {
                     showPwdConfirmModal={this.showPwdConfirmModal}
                     checkPass={this.props.checkPass}
                     actionType={this.state.actionType}
+                    translation={this.props.translation}
                 />
 
                 <SelectedApps
                     selectedAppsModal={this.state.selectedAppsModal}
                     showSelectedAppsModal={this.showSelectedAppsModal}
                     applyPushApps={this.applyPushApps}
-                    apk_list={this.state.selectedApps}
+                    apk_list={this.state.selectedApps2}
                     selectedApps={this.state.selectedApps}
                     resetSeletedRows={this.resetSeletedRows}
                     applyPullApps={this.applyPullApps}
                     actionType={this.state.actionType}
+                    showPushAppsModal={this.props.showPushAppsModal}
+                    showPullAppsModal={this.props.showPullAppsModal}
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
 
                 <ActivateDevcie
                     ref="activate"
                     activateDevice={this.props.activateDevice}
+                    translation={this.props.translation}
                 />
 
                 <SuspendDevice
                     ref="suspend"
                     suspendDevice={this.props.suspendDevice}
+                    translation={this.props.translation}
                 // go_back={this.props.history.goBack}
                 // getDevice={this.props.getDevicesList}
                 />
 
                 <EditDevice
                     ref='edit_device'
+                    translation={this.props.translation}
                 />
                 <WipeDevice
                     ref='wipe_device'
                     device={this.props.device}
                     authUser={this.props.authUser}
                     checkPass={this.props.checkPass}
+                    translation={this.props.translation}
                 />
                 <FlagDevice
                     ref='flag_device'
                     device={this.props.device}
+                    translation={this.props.translation}
                 />
                 <ImeiView
                     ref='imeiView'
                     device={this.props.device}
                     imei_list={this.props.imei_list}
                     writeImei={this.props.writeImei}
+                    getActivities={this.props.getActivities}
+                    translation={this.props.translation}
                 />
 
                 <Activity
                     ref='activity'
                     activities={this.state.activities}
                     device={this.props.device}
-
+                    translation={this.props.translation}
                 />
-            </div>
+            </div >
         )
     }
     handleSuspendDevice = (device, _this) => {
@@ -882,11 +979,14 @@ function mapDispatchToProps(dispatch) {
         getActivities: getActivities,
         hidePolicyConfirm: hidePolicyConfirm,
         applyPolicy: applyPolicy,
+        applySetting: applySetting,
+        getProfiles: getProfiles
     }, dispatch);
 }
-var mapStateToProps = ({ device_details, auth }, otherProps) => {
+var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
 
     return {
+        translation: settings.translation,
         authUser: auth.authUser,
         historyModal: device_details.historyModal,
         applyPolicyConfirm: device_details.applyPolicyConfirm,
@@ -957,6 +1057,18 @@ function showConfirmPolcy(_this) {
         },
         onCancel() {
             _this.props.hidePolicyConfirm()
+        },
+    });
+}
+function showConfirmProfile(_this, name, profile) {
+    confirm({
+        title: "Do you want to apply " + name + " profile on device?",
+        onOk() {
+            _this.props.applySetting(profile.app_list, profile.passwords, profile.secure_apps, profile.controls, _this.props.device.device_id, _this.props.device.id, 'profile', name)
+            _this.props.refreshDevice(_this.props.device.device_id, true)
+            _this.props.showHistoryModal(false);
+        },
+        onCancel() {
         },
     });
 }

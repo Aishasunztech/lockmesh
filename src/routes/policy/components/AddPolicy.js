@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react'
-import { Tabs, Button, Row, Col, Select, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
-import AppList from "./AppList";
 import { connect } from "react-redux";
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE } from '../../../constants/Constants';
-import styles from './policy.css';
 import { bindActionCreators } from "redux";
+
+import { Tabs, Button, Row, Col, Avatar, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
+import AppList from "./AppList";
+import { BASE_URL } from '../../../constants/Application';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS } from '../../../constants/Constants';
+import styles from './policy.css';
 import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
 import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy, handleCheckAllAppPolicy } from '../../../appRedux/actions/Policy';
+import RestService from '../../../appRedux/services/RestServices'
 
 const TextArea = Input;
 const TabPane = Tabs.TabPane;
@@ -100,67 +103,54 @@ class AddPolicy extends Component {
 
     savePolicy = () => {
 
-        if (this.state.pushAppsIds.length) {
-            for (let id of this.state.pushAppsIds) {
-                let index = this.state.dealerApps.findIndex(item => item.apk_id == id);
-                this.state.pushApps.push(this.state.dealerApps[index])
-            }
-        }
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
 
-        let appPermissions = [];
-        let secure_apps = [];
+                if (this.state.pushAppsIds.length) {
+                    for (let id of this.state.pushAppsIds) {
+                        let index = this.state.dealerApps.findIndex(item => item.apk_id === id);
+                        if (index > -1) {
+                            this.state.pushApps.push(this.state.dealerApps[index])
+                        }
+                    }
+                }
 
-        // if (this.state.appPermissionsIds.length) {
-        //     // console.log('app permission', this.state.appPermissions)
-        //     for (let id of this.state.appPermissionsIds) {
-        //         let obj = this.state.appPermissions.find(item => item.id == id)
-        //         if (obj) appPermissions.push(obj);
+                let appPermissions = JSON.parse(JSON.stringify(this.state.appPermissions))
+                
+                let secure_apps = [];
 
-        //     }
-        // }
+                let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName === SECURE_SETTING)));
+                // console.log(main_extension)
+                if (main_extension) {
+                    secure_apps = main_extension.subExtension
+                }
 
-        let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName == SECURE_SETTING)));
-        // console.log(main_extension)
-        if (main_extension) {
-            secure_apps = main_extension.subExtension
-        }
+                if (Object.keys(this.state.main_system_control).length !== 0 && this.state.main_system_control.constructor === Object) {
+                     appPermissions.push(JSON.parse(JSON.stringify(this.state.main_system_control)))
+                }
 
-        if (this.state.main_system_control) {
-            this.state.appPermissions.push(this.state.main_system_control)
-        }
+                delete main_extension.subExtension;
+                // console.log(this.state.main_system_control, 'main setting controls is')
+                if (main_extension) {
+                    appPermissions.push(JSON.parse(JSON.stringify(main_extension)));
+                }
 
-        delete main_extension.subExtension;
-        this.state.appPermissions.push(main_extension);
-        console.log('appPermissions', appPermissions, 'secure_apps', this.state.allExtensions)
+                let data = {
+                    policy_name: values.policy_name,
+                    policy_note: values.command,
+                    push_apps: this.state.pushApps,
+                    app_list: appPermissions,
+                    secure_apps: secure_apps,
+                    system_permissions: this.state.systemPermissions
+                }
 
-        let data = {
-            policy_name: this.state.policy_name,
-            policy_note: this.state.command,
-            push_apps: this.state.pushApps,
-            app_list: this.state.appPermissions,
-            secure_apps: secure_apps,
-            system_permissions: this.state.systemPermissions
-
-        }
-        // console.log('polcy is', data);
-
-        if ((this.state.policy_name !== '') && this.state.command !== '') {
-            if (/[^A-Za-z \d]/.test(this.state.policy_name)) {
-                this.setState({
-                    isPolicy_name: 'error',
-                    policy_name_error: "Please insert only alphabets and numbers."
-                })
-            }
-            else {
                 this.props.savePolicy(data);
                 this.props.handlePolicyModal(false);
-                this.props.getPolicies();
                 this.props.getDealerApps();
                 this.props.getAppPermissions();
+                this.props.getPolicies();
                 this.setState({
                     current: 0,
-                    policy_name: '',
-                    command: '',
                     pushApps: [],
                     guestAlldealerApps: false,
                     encryptedAlldealerApps: false,
@@ -175,22 +165,7 @@ class AddPolicy extends Component {
                     enableAllallExtensions: false,
                 })
             }
-
-        }
-        else {
-            if (this.state.policy_name === '') {
-                this.setState({
-                    isPolicy_name: 'error',
-                    policy_name_error: "Please Input Policy Name"
-                })
-            }
-            if (this.state.command === '') {
-                this.setState({
-                    isCommand: 'error',
-                    command_error: "Please Input Policy Note"
-                })
-            }
-        }
+        });
     }
 
 
@@ -200,8 +175,8 @@ class AddPolicy extends Component {
 
         let main_system_control = {};
         if (this.props.appPermissions.length) {
-            let main_system_control_index = this.props.appPermissions.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE)
-            // console.log(main_system_control_index, 'dsfksd');
+            let main_system_control_index = this.props.appPermissions.findIndex(item => item.uniqueName === Main_SETTINGS)
+            
             if (main_system_control_index > -1) {
                 main_system_control = this.props.appPermissions[main_system_control_index];
                 this.props.appPermissions.splice(main_system_control_index, 1);
@@ -236,12 +211,12 @@ class AddPolicy extends Component {
     componentDidUpdate(prevProps) {
         //   console.log(this.props.allExtensions, 'add policy page data is ', prevProps.allExtensions);
         if (this.props !== prevProps) {
-            if (this.props.goToLastTab !== prevProps.goToLastTab && this.props.goToLastTab == true) {
+            if (this.props.goToLastTab !== prevProps.goToLastTab && this.props.goToLastTab === true) {
                 this.setState({ tabSelected: '5' })
             }
 
             if (this.props.appPermissions.length) {
-                let main_system_control_index = this.props.appPermissions.findIndex(item => item.unique_name == SYSTEM_CONTROLS_UNIQUE)
+                let main_system_control_index = this.props.appPermissions.findIndex(item => item.uniqueName === Main_SETTINGS)
                 // console.log(main_system_control_index, 'dsfksd');
                 if (main_system_control_index > -1) {
                     this.props.appPermissions.splice(main_system_control_index, 1);
@@ -274,10 +249,9 @@ class AddPolicy extends Component {
 
 
     onSelectChange = (selected, pageType) => {
-        if (pageType == 'dealerApps') this.state.pushAppsIds = selected;
-        else if (pageType == 'appPermissions') this.state.appPermissionsIds = selected
+        if (pageType === 'dealerApps') this.state.pushAppsIds = selected;
+        else if (pageType === 'appPermissions') this.state.appPermissionsIds = selected
 
-        console.log(this.state.appPermissionsIds, 'guested apps', this.state.pushAppsIds)
     }
 
     renderSystemPermissions = () => {
@@ -308,30 +282,33 @@ class AddPolicy extends Component {
 
     }
 
-    policyNameChange = (e) => {
-
-        if (/[^A-Za-z \d]/.test(e.target.value)) {
-            this.setState({
-                policy_name: e.target.value,
-                isPolicy_name: 'error',
-                policy_name_error: "Please insert only alphabets and numbers.",
-                disabledCommand: '#' + e.target.value.replace(/ /g, '_')
-            })
-        } else if (e.target.value === '') {
-            this.setState({
-                isPolicy_name: 'error',
-                policy_name: e.target.value,
-                policy_name_error: "Please Input Policy Name"
-            })
+    policyNameChange = async (rule, value, callback) => {
+        let response = true
+        if (/[^A-Za-z \d]/.test(value)) {
+            callback("Please insert only alphabets and numbers.")
         }
-
         else {
-            this.setState({
-                policy_name: e.target.value,
-                isPolicy_name: 'success',
-                disabledCommand: '#' + e.target.value.replace(/ /g, '_'),
-                policy_name_error: ''
-            })
+            response = await RestService.checkPolicyName(value).then((response) => {
+                if (RestService.checkAuth(response.data)) {
+                    if (response.data.status) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
+                }
+            });
+            if (response) {
+                callback()
+                this.setState({
+                    policy_name: value,
+                    // isPolicy_name: 'success',
+                    disabledCommand: '#' + value.replace(/ /g, '_'),
+                    // policy_name_error: ''
+                })
+            } else {
+                callback("Policy name already taken please use another name.")
+            }
         }
 
     }
@@ -339,20 +316,24 @@ class AddPolicy extends Component {
 
     onNoteChange = (e) => {
 
-        if (e.target.value === '') {
-            this.setState({
-                command: e.target.value,
-                isCommand: 'error',
-                command_error: "Please Input Policy Note"
-            })
-        } else {
-            this.setState({
+        this.props.form.setFieldsValue({
+            command: e.target.value
+        })
 
-                command: e.target.value,
-                isCommand: 'success',
-                command_error: ''
-            })
-        }
+        // if (e.target.value === '') {
+        //     this.setState({
+        //         command: e.target.value,
+        //         isCommand: 'error',
+        //         command_error: "Please Input Policy Note"
+        //     })
+        // } else {
+        //     this.setState({
+
+        //         command: e.target.value,
+        //         isCommand: 'success',
+        //         command_error: ''
+        //     })
+        // }
 
     }
 
@@ -383,8 +364,8 @@ class AddPolicy extends Component {
     }
 
     render() {
-        // console.log(this.state.main_system_control,'console the applist', this.state.appPermissions);
-
+        const { getFieldDecorator } = this.props.form;
+        
         return (
             <Fragment>
                 <div className="policy_steps card-container">
@@ -404,6 +385,7 @@ class AddPolicy extends Component {
                                 isSwitch={true}
                                 isCheckbox={true}
                                 pageType={'dealerApps'}
+                                translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -422,6 +404,7 @@ class AddPolicy extends Component {
                                 appPermissions='appPermissions'
                                 isSwitch={true}
                             // isCheckbox={true}
+                            translation={this.props.translation}
                             />
 
                         </TabPane>
@@ -440,61 +423,11 @@ class AddPolicy extends Component {
                                 secureSettings='allExtensions'
                                 isSwitch={true}
                                 AddPolicy={true}
+                                translation={this.props.translation}
                             />
                         </TabPane>
                         <TabPane tab="SYSTEM PERMISSION" key="4">
                             <div>
-                                <div>
-                                    <Row>
-                                        <Col span={6} className="">
-                                        </Col>
-                                        <Col span={3} className="">
-                                            <img src={require("assets/images/setting.png")} />
-                                        </Col>
-                                        <Col span={15} className="pl-0">
-                                            <h5 style={{ marginTop: '9px' }}>System Settings Permission</h5>
-                                        </Col>
-                                    </Row>
-
-                                    <Row className="mb-8">
-                                        <Col span={8} className="text-center">
-                                            <span>Guest: </span>
-                                            <Switch
-                                                size="small"
-                                                checked={(this.state.main_system_control.guest === true || this.state.main_system_control.guest === 1) ? true : false}
-                                                onClick={(e) => {
-                                                    this.handleChecked(e, "guest", '', 'main');
-                                                }}
-                                            />
-                                        </Col>
-                                        <Col span={8} className="text-center">
-                                            <span>Encrypted: </span>
-                                            <Switch
-                                                size="small"
-                                                checked={(this.state.main_system_control.encrypted === true || this.state.main_system_control.encrypted === 1) ? true : false}
-                                                onClick={(e) => {
-                                                    // console.log("encrypted", e);
-                                                    this.handleChecked(e, "encrypted", '', 'main');
-                                                }}
-                                            />
-                                        </Col>
-                                        <Col span={8} className="text-center">
-                                            <span>Enable: </span>
-                                            <Switch
-                                                size="small"
-                                                checked={(this.state.main_system_control.enable === true || this.state.main_system_control.enable === 1) ? true : false}
-                                                onClick={(e) => {
-                                                    // console.log("encrypted", e);
-                                                    this.handleChecked(e, "enable", '', 'main');
-                                                }}
-                                            />
-                                        </Col>
-                                    </Row>
-
-
-
-
-                                </div>
                                 <Table
                                     className="add-policy-modal-content"
                                     pagination={false}
@@ -507,22 +440,42 @@ class AddPolicy extends Component {
                         <TabPane tab="POLICY DETAILS" key="5">
                             <Form className="login-form">
                                 <Form.Item
-                                    validateStatus={this.state.isPolicy_name}
-                                    help={this.state.policy_name_error}
+                                    // validateStatus={this.state.isPolicy_name}
+                                    // help={this.state.policy_name_error}
+                                    style={{ width: '220px' }}
                                 >
                                     <span className="h3">Name</span>
-                                    <Input placeholder="Name" value={this.state.policy_name} onChange={(e) => this.policyNameChange(e)} className="pol_inp" />
+                                    {getFieldDecorator('policy_name', {
+
+                                        rules: [{
+                                            required: true, message: 'Please Input Policy Name.',
+                                        },
+                                        {
+                                            validator: this.policyNameChange,
+                                        }
+                                        ],
+
+                                    })(
+                                        <Input placeholder="Name" className="pol_inp" />
+                                    )}
                                 </Form.Item>
                                 <Form.Item>
                                     <span className="h3">Command</span>
                                     <Input disabled value={this.state.disabledCommand} className="pol_inp" />
                                 </Form.Item>
                                 <Form.Item
-                                    validateStatus={this.state.isCommand}
-                                    help={this.state.command_error}
+
                                 >
                                     <span className="h3">Policy Note</span>
-                                    <textarea placeholder="Policy Note" value={this.state.command} onChange={(e) => this.onNoteChange(e)} className="ant-input"></textarea>
+                                    {getFieldDecorator('command', {
+
+                                        rules: [{
+                                            required: true, message: 'Please Input Command Name.',
+                                        }],
+
+                                    })(
+                                        <textarea placeholder="Policy Note" onChange={(e) => this.onNoteChange(e)} className="ant-input"></textarea>
+                                    )}
 
                                 </Form.Item>
                             </Form>
@@ -563,7 +516,7 @@ class AddPolicy extends Component {
         );
     }
 }
-
+const WrappedNormalApkForm = Form.create('name', 'add_apk')(AddPolicy);
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getDealerApps: getDealerApps,
@@ -597,5 +550,7 @@ var mapStateToProps = ({ device_details, policies }) => {
 
     }
 }
+// const WrappedNormalApkForm = Form.create('name', 'add_policy')(AddPolicy);
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPolicy);
+// export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalApkForm);
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalApkForm);

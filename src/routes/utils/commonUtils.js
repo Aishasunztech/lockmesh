@@ -20,9 +20,12 @@ import {
 
 
 
+
 import React, { Component } from 'react';
 import { Input } from 'antd';
 import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../constants/DeviceConstants';
+
+import { cloneableGenerator } from 'redux-saga/utils';
 
 
 export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
@@ -113,8 +116,8 @@ export function componentSearch(arr, search) {
     obks.some((obk) => {
       if (obk) {
         let temp = el[obk];
-        if(obk == 'dealer_id')
-        temp = temp.toString()
+        if (obk === 'dealer_id')
+          temp = temp.toString()
         if ((typeof temp) === 'string') {
           if (temp.toLowerCase().includes(search.toLowerCase())) {
             foundDevices.push(el);
@@ -161,7 +164,7 @@ export function titleCase(str) {
         return dWord.charAt(0).toUpperCase() + dWord.substr(1) + char;
       })
     } else {
-      if (word == "id") {
+      if (word === "id" || word === "pgp" || word === "ip") {
         return word.toUpperCase();
       } else {
         return word.charAt(0).toUpperCase() + word.substr(1);
@@ -172,7 +175,7 @@ export function titleCase(str) {
 }
 export function checkRemainDays(createDate, validity) {
   var validDays = 0, createdDateTime, today, days;
-  if (validity != null) validDays = validity;
+  if (validity !== null) validDays = validity;
   createdDateTime = new Date(createDate);
   createdDateTime.setDate(createdDateTime.getDate() + validDays);
   today = new Date();
@@ -199,159 +202,11 @@ export function isBase64(str) {
   }
 }
 
-export function dealerColsWithSearch(searchBar = false, callBack = null) {
 
-  var searchInput = [
-    {
-      title: (
-        <Input.Search
-          name="dealer_id"
-          key="dealer_id"
-          id="dealer_id"
-          className="search_heading"
-          autoComplete="new-password"
-          placeholder={titleCase(DEALER_ID)}
-          onKeyUp={
-            (e) => {
-              callBack(e)
-            }
-          }
-
-        />
-      ),
-      dataIndex: 'dealer_id',
-      className: '',
-      children: []
-    },
-    {
-      title: (
-        <Input.Search
-          name="link_code"
-          key="link_code"
-          id="link_code"
-          className="search_heading"
-          autoComplete="new-password"
-          placeholder={titleCase(DEALER_PIN)}
-          onKeyUp={
-            (e) => {
-              callBack(e)
-            }
-          }
-
-        />
-      ),
-      dataIndex: 'link_code',
-      className: '',
-      children: []
-    },
-    {
-      title: (
-        <Input.Search
-          name="dealer_name"
-          key="dealer_name"
-          id="dealer_name"
-          className="search_heading"
-          autoComplete="new-password"
-          placeholder={titleCase(DEALER_NAME)}
-          onKeyUp={
-            (e) => {
-              callBack(e)
-            }
-          }
-
-        />
-      ),
-      dataIndex: 'dealer_name',
-      className: '',
-      children: []
-    },
-    {
-      title: (
-        <Input.Search
-          name="dealer_email"
-          key="dealer_email"
-          id="dealer_email"
-          className="search_heading"
-          autoComplete="new-password"
-          placeholder={titleCase(DEALER_EMAIL)}
-          onKeyUp={
-            (e) => {
-              callBack(e)
-            }
-          }
-
-        />
-      ),
-      dataIndex: 'dealer_email',
-      className: '',
-      children: []
-    },
-  ]
-
-
-  var child = [
-    {
-      title: DEALER_ID,
-      dataIndex: 'dealer_id',
-      key: 'dealer_id',
-      sorter: (a, b) => a.dealer_id - b.dealer_id,
-      align: 'center',
-      sortDirections: ['ascend', 'descend'],
-      className: '',
-    },
-    {
-      title: DEALER_PIN,
-      dataIndex: 'link_code',
-      key: 'link_code',
-      sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-      align: 'center',
-      sortDirections: ['ascend', 'descend'],
-      className: '',
-    },
-    {
-      title: DEALER_NAME,
-      dataIndex: 'dealer_name',
-      key: 'dealer_name',
-      sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-      align: 'center',
-      sortDirections: ['ascend', 'descend'],
-      className: '',
-    },
-    {
-      title: DEALER_EMAIL,
-      dataIndex: 'dealer_email',
-      key: 'dealer_email',
-      sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-      align: 'center',
-      sortDirections: ['ascend', 'descend'],
-      className: '',
-    },
-    {
-      title: DEALER_ACTION,
-      dataIndex: 'action',
-      key: 'action',
-      align: 'center',
-      className: '',
-    },
-
-  ];
-
-  if (searchBar) {
-    var result = searchInput.map((item, index) => {
-      let flag = true;
-      for (var i in child) {
-        if (child[i].dataIndex == item.dataIndex) {
-          item.children = [child[i]];
-          flag = false;
-          return item;
-        }
-      }
-      if (flag == true) {
-        return item;
-      }
-    })
-    return result;
-  } else {
-    return child;
-  }
+export function convertToLang(lngWord, constant) {
+  if (lngWord !== undefined && lngWord !== '' && lngWord !== null) {
+    return lngWord;
+  } else if (constant !== undefined && constant !== '' && constant !== null) {
+    return constant;
+  } else { return "N/A"; }
 }

@@ -120,6 +120,8 @@ class AutoUpdate extends React.Component {
         this.confirm({
             title: 'Are you sure, you want to delete the Apk ?',
             content: '',
+            okText: 'Yes',
+            cancelText: 'No',
             onOk: () => {
                 this.props.deleteApk(appId);
                 return new Promise((resolve, reject) => {
@@ -159,13 +161,13 @@ class AutoUpdate extends React.Component {
 
                 values.map((value) => {
                     // console.log(APK_PERMISSION, value, "columns", column);
-                    if (value === APK_PERMISSION && column.dataIndex == 'permission') {
+                    if (value.key === APK_PERMISSION) {
                         // console.log('......... ......', column.title)
-                        if (column.title.props.children[0] === value) {
+                        if (column.title.props.children[0] === value.key) {
                             dumydata[index].className = '';
                         }
                     }
-                    if (column.title === value) {
+                    if (column.dataIndex === value.key) {
                         dumydata[index].className = '';
                     }
                     // else if (column.title.props.children !== undefined) {
@@ -303,6 +305,7 @@ class AutoUpdate extends React.Component {
 
                             <div>
                                 <AppFilter
+                                    translation={this.props.translation}                  
                                     handleFilterOptions={this.handleFilterOptions}
                                     searchPlaceholder="Search APK"
                                     addButtonText="Upload APK"
@@ -329,7 +332,7 @@ class AutoUpdate extends React.Component {
                                         <div style={{ textAlign: "center" }}>
                                             {/* <Button
                                                 type="primary"
-                                                // disabled={(this.props.disableAddButton == true) ? true : false}
+                                                // disabled={(this.props.disableAddButton === true) ? true : false}
                                                 style={{ width: '12%', marginBottom:16 }}
                                             >
                                                 <Link to='/upload-apk'>Upload apk</Link>
@@ -348,6 +351,7 @@ class AutoUpdate extends React.Component {
                                     user={this.props.user}
                                     ref="listApk"
                                     link='autoUpdate'
+                                    translation={this.props.translation}
                                 />
 
                                 <Modal
@@ -364,7 +368,7 @@ class AutoUpdate extends React.Component {
                                     footer={null}
                                 >
                                     <AddApk
-
+                                        autoUpdate={true}
                                         hideUploadApkModal={this.hideUploadApkModal}
                                         ref='uploadApk'
                                     />
@@ -453,14 +457,15 @@ class AutoUpdate extends React.Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list, auth }) => {
+const mapStateToProps = ({ apk_list, auth, settings }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
-        options: apk_list.options,
+        options: settings.APKOptions,
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
-        user: auth.authUser
+        user: auth.authUser,
+        translation: settings.translation
     };
 }
 

@@ -11,7 +11,12 @@ import { addApk, getApkList, checkApkName } from "../../appRedux/actions/Apk";
 
 import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message, Modal, Avatar } from 'antd';
 import RestService from '../../appRedux/services/RestServices'
-
+import { Button_Save, Button_Cancel } from "../../constants/ButtonConstants";
+import { APK_UPLOAD, APK_UPLOAD_FILE, APK_UPLOAD_ICON } from "../../constants/ApkConstants";
+import { User_Name_require } from "../../constants/Constants";
+import { Required_Fields } from "../../constants/DeviceConstants";
+import { convertToLang } from '../utils/commonUtils';
+ 
 // import asyncComponent from "util/asyncComponent";
 
 // console.log('token', token);
@@ -72,6 +77,11 @@ class AddApk extends Component {
                     'name': values.name,
                     'size': size
                 }
+
+                if (this.props.autoUpdate) {
+                    form_data.autoUpdate = true;
+                }
+
                 this.props.addApk(form_data)
                 this.props.hideUploadApkModal();
 
@@ -160,6 +170,7 @@ class AddApk extends Component {
     }
 
     render() {
+        console.log(this.props.translation)
         const { getFieldDecorator } = this.props.form;
         let fileList = [];
         const formItemLayout = {
@@ -215,7 +226,7 @@ class AddApk extends Component {
                             logo = info.file.response.fileName;
                         }
                         success({
-                            title: 'file added Successfully ',
+                            title: info.file.response.msg,
                         });
 
                         _this.setState({ disableLogo: true });
@@ -223,7 +234,7 @@ class AddApk extends Component {
                     }
                     else {
                         error({
-                            title: 'Error While Uploading',
+                            title: info.file.response.msg,
                         });
                         fileList = []
                         _this.setState({ disableLogo: false });
@@ -274,14 +285,14 @@ class AddApk extends Component {
 
                         }
                         success({
-                            title: 'file added Successfully ',
+                            title: info.file.response.msg,
                         });
                         _this.setState({ disableApk: true });
                         // document.getElementById('apkSize').style.display = 'block'
                     }
                     else {
                         error({
-                            title: 'Error While Uploading',
+                            title: info.file.response.msg,
                         });
                         fileList2 = []
                         _this.setState({ disableApk: false });
@@ -298,12 +309,12 @@ class AddApk extends Component {
         return (
             <div>
                 <Card bordered={false}>
-                    <p>(*)- Required Fields</p>
+                    <p>(*)- {convertToLang(this.props.translation[Required_Fields], Required_Fields)}</p>
                     <Form onSubmit={this.handleSubmit} >
                         <Form.Item {...formItemLayout} label="Apk name" className="upload_file">
                             {getFieldDecorator('name', {
                                 rules: [{
-                                    required: true, message: 'Name is required',
+                                    required: true, message: convertToLang(this.props.translation[User_Name_require], User_Name_require),
                                 },
                                 {
                                     validator: this.checkUniqueName,
@@ -330,7 +341,7 @@ class AddApk extends Component {
                                     (
                                         <Upload {...props}>
                                             <Button className="width_100 upload_btn" type="default" >
-                                                <Icon type="folder-open" />UPLOAD ICON
+                                                <Icon type="folder-open" /> {convertToLang(this.props.translation[APK_UPLOAD_ICON], APK_UPLOAD_ICON)}
                                                 </Button>
                                             {/* <p className="ant-upload-drag-icon">
                                                     <Icon type="picture" />
@@ -357,7 +368,7 @@ class AddApk extends Component {
                                 })(
                                     <Upload  {...props2} >
                                         <Button className="width_100 upload_btn" type="default" >
-                                            <Icon type="folder-open" /> UPLOAD APK FILE
+                                            <Icon type="folder-open" /> {convertToLang(this.props.translation[APK_UPLOAD_FILE], APK_UPLOAD_FILE)}
                                                 </Button>
                                         {/* <p className="ant-upload-drag-icon">
                                                     <Icon type="file" />
@@ -376,8 +387,8 @@ class AddApk extends Component {
                         </Form.Item>
                         <Row className='modal_footer'>
                             <div>
-                                <Button key="back" className='submitButton' onClick={this.props.hideUploadApkModal}>Cancel</Button>
-                                <Button className='submitButton' type="primary" htmlType="submit" >Save</Button>
+                                <Button key="back" className='submitButton' onClick={this.props.hideUploadApkModal}>{convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}</Button>
+                                <Button className='submitButton' type="primary" htmlType="submit" >{convertToLang(this.props.translation[Button_Save], Button_Save)}</Button>
                             </div>
                         </Row>
                     </Form>
@@ -392,11 +403,12 @@ class AddApk extends Component {
 const WrappedNormalApkForm = Form.create('name', 'add_apk')(AddApk);
 
 
-const mapStateToProps = ({ apk_list }) => {
+const mapStateToProps = ({ apk_list ,settings }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
-        resetUploadForm: apk_list.resetUploadForm
+        resetUploadForm: apk_list.resetUploadForm,
+        translation: settings.translation
     };
 }
 

@@ -10,11 +10,29 @@ import { getApkList, changeAppStatus, deleteApk, editApk } from "../../appRedux/
 import { transferApps, getMarketApps, handleUninstall } from "../../appRedux/actions/AppMarket";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { ADMIN, DEALER } from "../../constants/Constants";
+import Markup from 'interweave';
 import styles from './appmarket.css'
+
+import {
+    SPA_APPS,
+    SPA_SEARCH,
+    SPA_NOTIFICATION_BAR,
+    SPA_TITEL_AVAILABLE_APPS,
+    SPA_TITLE_SECURE_MARKET,
+    SPA_UNINSTALL_HELPING_TEXT_FUN,
+    SPA_APP
+} from '../../constants/AppConstants';
+
+import {
+    Switch_Button_Uninstall
+} from '../../constants/ButtonConstants';
+
+import { convertToLang } from "../utils/commonUtils";
 
 const UNINSTALL_HELPING_TEXT = (
     <span>Turn toggle OFF to restrict app <br /> from being uninstalled by user</span>
 );
+
 
 class ApkMarket extends React.Component {
     constructor(props) {
@@ -55,7 +73,7 @@ class ApkMarket extends React.Component {
                         <Avatar size="medium" src={BASE_URL + "users/getFile/" + app.logo} />
                         <span className="sm_labels"> {app.app_name} </span>
                         {(app.dealer_type !== undefined) ? <span>
-                            <Switch className="sm_uninstall" size='small' unCheckedChildren="Uninstall" checkedChildren="Uninstall" onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall == 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
+                            <Switch className="sm_uninstall" size='small' unCheckedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], Switch_Button_Uninstall)} checkedChildren={convertToLang(this.props.translation[Switch_Button_Uninstall], Switch_Button_Uninstall)} onChange={(e) => { this.handleCheckChange(app.id, e) }} defaultChecked={(app.is_restrict_uninstall === 0) ? true : false} disabled={(this.props.user.type === ADMIN) ? false : app.disabled}></Switch>
                         </span> : null}
                     </Fragment>,
                 description: `${app.app_name + index + 1}`,
@@ -124,21 +142,21 @@ class ApkMarket extends React.Component {
 
     handleSelect = (list, e) => {
         // alert("asdsa")
-        console.log("handle select", e)
+        // console.log("handle select", e)
     }
     render() {
         return (
             <div>
                 {
                     this.props.isloading ? <CircularProgress /> :
-                        <Card >
+                        <Card>
                             <Row>
-                                <h4 className="sm_top_heading">Move <b>(Avaiable Apps)</b> to <b>(Secure Market)</b> to make them appear on your user's Secure Market apps on their devices</h4>
+                                <h4 className="sm_top_heading"> <Markup content={convertToLang(this.props.translation[SPA_NOTIFICATION_BAR], SPA_NOTIFICATION_BAR)} /> </h4>
                                 <Col md={12} sm={24} xs={24} className="text-center">
-                                    <h4 className="sm_heading1"><b>Avaiable Apps</b></h4>
+                                    <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], SPA_TITEL_AVAILABLE_APPS)}</b></h4>
                                 </Col>
                                 <Col md={12} sm={24} xs={24} className="text-center sec_market">
-                                    <h4 className="sm_heading1"><b>Secure Market</b></h4>
+                                    <h4 className="sm_heading1"><b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], SPA_TITLE_SECURE_MARKET)}</b></h4>
                                 </Col>
                             </Row>
                             <Transfer
@@ -147,7 +165,7 @@ class ApkMarket extends React.Component {
 
                                         <div>
                                             <h4 className="sm_heading2">
-                                                <b>Avaiable Apps</b>
+                                                <b>{convertToLang(this.props.translation[SPA_TITEL_AVAILABLE_APPS], SPA_TITEL_AVAILABLE_APPS)}</b>
                                             </h4>
 
                                         </div>
@@ -156,7 +174,7 @@ class ApkMarket extends React.Component {
                                     (
                                         <div>
                                             <h4 className="sm_heading2">
-                                                <b>Secure Market</b>
+                                                <b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], SPA_TITLE_SECURE_MARKET)}</b>
                                             </h4>
                                             <span>
                                                 <Popover placement="topRight" content={UNINSTALL_HELPING_TEXT}>
@@ -176,7 +194,7 @@ class ApkMarket extends React.Component {
                                 onSearch={this.handleSearch}
                                 onSelectChange={this.handleSelect}
                                 render={item => item.title}
-                                locale={{ itemUnit: 'App', itemsUnit: 'Apps' }}
+                                locale={{ itemUnit: convertToLang(this.props.translation[SPA_APP], SPA_APP), itemsUnit: convertToLang(this.props.translation[SPA_APPS], SPA_APPS) }}
                                 onItemSelect={this.handleSelect}
 
                             />
@@ -188,7 +206,7 @@ class ApkMarket extends React.Component {
     }
 }
 
-const mapStateToProps = ({ apk_list, auth, appMarket }) => {
+const mapStateToProps = ({ apk_list, auth, appMarket, settings }) => {
     // console.log(appMarket.isloading);
     return {
         isloading: appMarket.isloading,
@@ -198,7 +216,8 @@ const mapStateToProps = ({ apk_list, auth, appMarket }) => {
         DisplayPages: apk_list.DisplayPages,
         user: auth.authUser,
         secureMarketList: appMarket.secureMarketList,
-        availbleAppList: appMarket.availbleAppList
+        availbleAppList: appMarket.availbleAppList,
+        translation: settings.translation
     };
 }
 

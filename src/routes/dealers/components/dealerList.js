@@ -3,7 +3,87 @@ import { Table, Avatar, Switch, Button, Icon, Card, Modal } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 import EditDealer from './editDealer';
 import { Tabs } from 'antd';
-import EditApk from './editDealer';
+// import EditApk from './editDealer';
+import { ADMIN } from '../../../constants/Constants';
+import DealerDevicesList from '../../users/components/UserDeviceList';
+import { convertToLang } from '../../utils/commonUtils'
+import { Redirect } from 'react-router-dom';
+import CustomScrollbars from "../../../util/CustomScrollbars";
+import {
+    Tab_All,
+    Tab_Active,
+    Tab_Expired,
+    Tab_Trial,
+    Tab_Suspended,
+    Tab_PreActivated,
+    Tab_PendingActivation,
+    Tab_Transfer,
+    Tab_Unlinked,
+    Tab_Flagged,
+    Tab_ComingSoon,
+    Tab_Archived,
+} from '../../../constants/TabConstants';
+
+import {
+    Button_Modify,
+    Button_Delete,
+    Button_Activate,
+    Button_Connect,
+    Button_Yes,
+    Button_Ok,
+    Button_ok,
+    Button_Cancel,
+    Button_Suspend,
+    Button_Unsuspend,
+    Button_Edit,
+    Button_passwordreset,
+    Button_submit,
+    Button_Flag,
+    Button_UNFLAG,
+    Button_SetPassword,
+    Button_Apply,
+    Button_Undo,
+    Button_Redo,
+    Button_Clear,
+    Button_Refresh,
+    Button_Next,
+    Button_previous,
+    Button_Add_Dealer,
+    Button_Add_S_dealer,
+    Button_Add_Admin,
+    Button_UploadApk,
+    Button_Save,
+    Button_Update,
+    Button_Open,
+    Button_Sample,
+    Button_Import,
+    Button_Export,
+    Button_Release,
+    Button_View,
+    Button_ChangePassword,
+    Button_ChangeEmail,
+    Button_AddPolicy,
+    Button_Add,
+    Button_AddExceptSelected,
+    Button_AddAll,
+    Button_RemoveAll,
+    Button_RemoveExcept,
+    Button_BackupNow,
+    Button_DeleteUser,
+    Button_AddApps,
+    Button_Push,
+    Button_LoadProfile,
+    Button_LoadPolicy,
+    Button_IMEI,
+    Button_Pull,
+    Button_SaveProfile,
+    Button_Activity,
+    Button_SIM,
+    Button_Transfer,
+    Button_WipeDevice,
+    Button_Unlink,
+} from '../../../constants/ButtonConstants';
+
 const TabPane = Tabs.TabPane;
 
 let data = [];
@@ -16,6 +96,9 @@ class DealerList extends Component {
             searchText: '',
             columns: [],
             pagination: this.props.pagination,
+            expandedRowKeys: [],
+            redirect: false,
+            dealer_id: '',
 
         };
         this.renderList = this.renderList.bind(this);
@@ -33,10 +116,40 @@ class DealerList extends Component {
 
         if (this.props !== prevProps) {
             this.setState({
-                columns: this.props.columns
+                columns: this.props.columns,
+                expandedRowKeys: this.props.expandedRowKeys
             })
         }
     }
+
+    customExpandIcon(props) {
+        if (props.expanded) {
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-down" /> </a>
+        } else {
+
+            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                props.onExpand(props.record, e);
+            }}><Icon type="caret-right" /></a>
+        }
+    }
+
+    onExpandRow = (expanded, record) => {
+        // console.log(expanded, 'data is expanded', record);
+        if (expanded) {
+            if (!this.state.expandedRowKeys.includes(record.row_key)) {
+                this.state.expandedRowKeys.push(record.row_key);
+                this.setState({ expandedRowKeys: this.state.expandedRowKeys })
+            }
+        } else if (!expanded) {
+            if (this.state.expandedRowKeys.includes(record.row_key)) {
+                let list = this.state.expandedRowKeys.filter(item => item !== record.row_key)
+                this.setState({ expandedRowKeys: list })
+            }
+        }
+    }
+
 
     handleCheckChange = (values) => {
 
@@ -82,26 +195,33 @@ class DealerList extends Component {
     }
 
 
+
+
+
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
-            const dealer_status = (dealer.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
+            const dealer_status = (dealer.account_status === "suspended") ? convertToLang(this.props.translation[Button_Activate], Button_Activate) : convertToLang(this.props.translation[Button_Suspend], Button_Suspend);
             const button_type = (dealer_status === "ACTIVATE") ? "dashed" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
             data.push({
                 'row_key': dealer.dealer_id,
                 'accounts': <span>
-                    <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', width: '60px' }}
+                    <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', textTransform: "uppercase" }}
                         onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
                         {(dealer.account_status === '') ? <div>{dealer_status}</div> : <div> {dealer_status}</div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 8px 0 0' }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>EDIT</Button>
-                    <Button type={undo_button_type} size='small' style={{ margin: '0', width: '60px' }}
+                    <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
+                    <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
                         onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
-                        {(dealer.unlink_status === 0) ? <div> DELETE</div> : <div> UNDO</div>}
-
+                        {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], Button_Delete)} </div> : <div> {convertToLang(this.props.translation[Button_Undo], Button_Undo)} </div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px' }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >PASSWORD RESET</Button>
+                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], Button_passwordreset)}</Button>
+                    {(this.props.user.type === ADMIN) ?
+                        <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], Button_Connect)}</Button>
+                        :
+                        null
+                    }
                 </span>,
                 'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
                 'counter': ++index,
@@ -111,7 +231,8 @@ class DealerList extends Component {
                 'parent_dealer': dealer.parent_dealer ? dealer.parent_dealer : 'N/A',
                 'parent_dealer_id': dealer.parent_dealer_id ? dealer.parent_dealer_id : 'N/A',
                 'connected_devices': dealer.connected_devices[0].total ? dealer.connected_devices[0].total : 'N/A',
-                'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A'
+                'dealer_token': dealer.dealer_token ? dealer.dealer_token : 'N/A',
+                'devicesList': dealer.devicesList
 
             })
         });
@@ -119,21 +240,42 @@ class DealerList extends Component {
     }
 
     render() {
-        // console.log(this.state.pagination)
-        return (
-            <Card className="border_top_0">
-                <Table size="middle"
-                    className="gx-table-responsive devices table"
-                    bordered
-                    scroll={{ x: 500 }}
-                    columns={this.state.columns}
-                    rowKey='row_key'
-                    align='center'
-                    pagination={{ pageSize: this.state.pagination, size: "midddle" }}
-                    dataSource={this.renderList(this.props.dealersList)}
-                />
-                <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} />
+        // console.log(this.props.dealersList, 'dealers list console');
 
+        return (
+
+            <Card className="fix_card dealer_fix_card">
+                <CustomScrollbars className="gx-popover-scroll">
+                    <Table
+                        size="middle"
+                        className="gx-table-responsive devices table"
+                        bordered={true}
+                        columns={this.state.columns}
+                        rowKey='row_key'
+                        align='center'
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
+                        pagination={false}
+                        dataSource={this.renderList(this.props.dealersList)}
+                        expandIcon={(props) => this.customExpandIcon(props)}
+                        expandedRowRender={(record) => {
+                            // console.log("table row", record);
+                            return (
+                                <DealerDevicesList
+                                    ref='dealerDeviceList'
+                                    record={record}
+                                    translation={this.props.translation}
+                                />
+                                // <span>its working</span>
+                            );
+                        }}
+                        expandIconColumnIndex={2}
+                        expandedRowKeys={this.state.expandedRowKeys}
+                        onExpand={this.onExpandRow}
+                        expandIconAsCell={false}
+                        defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
+                    />
+                    <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
+                </CustomScrollbars>
             </Card>
         )
     }
@@ -163,7 +305,8 @@ export default class Tab extends Component {
             dealersList: this.props.dealersList,
             tabselect: this.props.tabselect,
             selectedOptions: this.props.selectedOptions,
-            tabselect: this.props.tabselect
+            tabselect: this.props.tabselect,
+            expandedRowKeys: []
 
         }
     }
@@ -185,22 +328,24 @@ export default class Tab extends Component {
                 dealersList: this.props.dealersList,
                 columns: this.props.columns,
                 tabselect: this.props.tabselect,
-                selectedOptions: this.props.selectedOptions
+                selectedOptions: this.props.selectedOptions,
+                expandedRowKeys: this.props.expandedRowsKey
             })
         }
     }
 
     render() {
+        // console.log(this.state.expandedRowsKey, 'key')
         return (
             <Fragment>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab="All" key="1" >
+                    <TabPane tab={<span> {convertToLang(this.props.translation[Tab_All], Tab_All)} ({this.props.allDealers})</span>} key="1" >
                     </TabPane>
-                    <TabPane tab={<span className="green">Active</span>} key="2" forceRender={true}>
+                    <TabPane tab={<span className="green"> {convertToLang(this.props.translation[Tab_Active], Tab_Active)} ({this.props.activeDealers})</span>} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="yellow">Suspended</span>} key="4" forceRender={true}>
+                    <TabPane tab={<span className="yellow"> {convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)} ({this.props.suspendDealers})</span>} key="4" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="orange">Archived</span>} key="3" forceRender={true}>
+                    <TabPane tab={<span className="orange"> {convertToLang(this.props.translation[Tab_Archived], Tab_Archived)} ({this.props.unlinkedDealers})</span>} key="3" forceRender={true}>
                     </TabPane>
                 </Tabs>
                 <DealerList
@@ -215,6 +360,10 @@ export default class Tab extends Component {
                     pagination={this.props.pagination}
                     editDealer={this.props.editDealer}
                     updatePassword={this.props.updatePassword}
+                    location={this.props.location}
+                    expandedRowKeys={this.state.expandedRowKeys}
+                    user={this.props.user}
+                    translation={this.props.translation}
                 />
             </Fragment>
 

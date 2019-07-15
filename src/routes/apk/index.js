@@ -17,6 +17,10 @@ import { getDropdown, postDropdown, postPagination, getPagination } from '../../
 import AppFilter from "../../components/AppFilter";
 import AddApk from '../addApk/index'
 
+import {
+    convertToLang
+} from '../utils/commonUtils'
+
 import { BASE_URL } from '../../constants/Application';
 import ListApk from './components/ListApk';
 
@@ -26,10 +30,14 @@ import {
     APK_APP_NAME,
     APK_APP_LOGO,
     APK_PERMISSION,
-    APK_ACTION
+    APK_ACTION,
+    APK_SEARCH,
+    APK_UPLOAD
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
+import { ACTION, Alert_Delete_APK } from "../../constants/Constants";
+import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
 
 const question_txt = (
     <div>
@@ -64,15 +72,15 @@ class Apk extends React.Component {
             showUploadData: {},
             columns: [
                 {
-                    title: APK_ACTION,
+                    title: convertToLang(props.translation[ACTION], ACTION),
                     dataIndex: 'action',
                     key: 'action',
-                    className: 'row'
+                    className: 'row m-0'
                 },
                 {
                     title: (
                         <span>
-                            {APK_PERMISSION}
+                            {convertToLang(props.translation[APK_PERMISSION], APK_PERMISSION)}
                             <Popover placement="top" content={question_txt}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
@@ -84,7 +92,7 @@ class Apk extends React.Component {
                 {
                     title:
                         <span>
-                            {APK_SHOW_ON_DEVICE}
+                            {convertToLang(props.translation[APK_SHOW_ON_DEVICE], APK_SHOW_ON_DEVICE)}
                             <Popover placement="top" content={SHOW_DEVICE_TEXT}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
@@ -94,12 +102,12 @@ class Apk extends React.Component {
                     key: 'apk_status',
                 },
                 {
-                    title: APK,
+                    title: convertToLang(props.translation[APK], APK),
                     dataIndex: 'apk',
                     key: 'apk',
                 },
                 {
-                    title: APK_APP_NAME,
+                    title: convertToLang(props.translation[APK_APP_NAME], APK_APP_NAME),
                     dataIndex: 'apk_name',
                     width: "100",
                     key: 'apk_name',
@@ -108,7 +116,7 @@ class Apk extends React.Component {
                     defaultSortOrder: "ascend"
                 },
                 {
-                    title: APK_APP_LOGO,
+                    title: convertToLang(props.translation[APK_APP_LOGO], APK_APP_LOGO),
                     dataIndex: 'apk_logo',
                     key: 'apk_logo',
                 },
@@ -127,8 +135,10 @@ class Apk extends React.Component {
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
-            title: 'Are you sure, you want to delete the Apk ?',
+            title: convertToLang(this.props.translation[Alert_Delete_APK], Alert_Delete_APK),
             content: '',
+            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
+            cancelText: convertToLang(this.props.translation[Button_No], Button_No),
             onOk: () => {
                 this.props.deleteApk(appId);
                 return new Promise((resolve, reject) => {
@@ -168,13 +178,13 @@ class Apk extends React.Component {
 
                 values.map((value) => {
                     // console.log(APK_PERMISSION, value, "columns", column);
-                    if ((value === APK_PERMISSION && column.dataIndex == 'permission') || (value === APK_SHOW_ON_DEVICE && column.dataIndex == 'apk_status')) {
+                    if ((value.key === APK_PERMISSION && column.dataIndex === 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex === 'apk_status')) {
                         // console.log('......... ......', column.title)
-                        if (column.title.props.children[0] === value) {
+                        if (column.title.props.children[0] === convertToLang(this.props.translation[value.key], value.key)) {
                             dumydata[index].className = '';
                         }
                     }
-                    if (column.title === value) {
+                    if (column.dataIndex === value.key) {
                         dumydata[index].className = '';
                     }
                     // else if (column.title.props.children !== undefined) {
@@ -249,7 +259,7 @@ class Apk extends React.Component {
                 this.setState({
                     apk_list: this.filterList('On', this.props.apk_list),
                     column: this.columns,
-     
+
                 })
 
                 break;
@@ -257,24 +267,24 @@ class Apk extends React.Component {
                 this.setState({
                     apk_list: this.filterList('Off', this.props.apk_list),
                     column: this.columns,
-          
+
                 })
                 break;
 
-                default:
-                    this.setState({
-                        apk_list: this.props.apk_list,
-                        column: this.columns,
-                     
-                    })
+            default:
+                this.setState({
+                    apk_list: this.props.apk_list,
+                    column: this.columns,
+
+                })
                 break;
         }
     }
-    
+
     filterList = (type, dealers) => {
         let dumyDealers = [];
         dealers.filter(function (apk) {
-            let dealerStatus = apk.apk_status ;
+            let dealerStatus = apk.apk_status;
             if (dealerStatus === type) {
                 dumyDealers.push(apk);
             }
@@ -288,6 +298,10 @@ class Apk extends React.Component {
             this.setState({
                 apk_list: this.props.apk_list
             })
+        }
+
+        if (this.props.selectedOptions !== prevProps.selectedOptions) {
+            this.handleCheckChange(this.props.selectedOptions)
         }
     }
     componentWillMount() {
@@ -350,9 +364,10 @@ class Apk extends React.Component {
 
                         <div>
                             <AppFilter
+                                translation={this.props.translation}
                                 handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder="Search APK"
-                                addButtonText="Upload APK"
+                                searchPlaceholder={convertToLang(this.props.translation[APK_SEARCH], APK_SEARCH)}
+                                addButtonText={convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
                                 isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
@@ -376,7 +391,7 @@ class Apk extends React.Component {
                                     <div style={{ textAlign: "center" }}>
                                         {/* <Button
                                             type="primary"
-                                            // disabled={(this.props.disableAddButton == true) ? true : false}
+                                            // disabled={(this.props.disableAddButton === true) ? true : false}
                                             style={{ width: '12%', marginBottom:16 }}
                                         >
                                             <Link to='/upload-apk'>Upload apk</Link>
@@ -394,6 +409,7 @@ class Apk extends React.Component {
                                 pagination={this.props.DisplayPages}
                                 user={this.props.user}
                                 ref="listApk"
+                                translation={this.props.translation}
                             />
 
                             <Modal
@@ -401,12 +417,12 @@ class Apk extends React.Component {
                                 width="620px"
                                 className="upload_apk_popup"
                                 visible={this.state.uploadApkModal}
-                                title="Upload APK"
+                                title={convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
                                 onOk={() => { }}
                                 onCancel={() => {
                                     this.hideUploadApkModal()
                                 }}
-                                okText="Save"
+                                okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
                                 footer={null}
                             >
                                 <AddApk
@@ -493,14 +509,15 @@ class Apk extends React.Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list, auth }) => {
+const mapStateToProps = ({ apk_list, auth, settings }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
-        options: apk_list.options,
+        options: settings.APKOptions,
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
-        user: auth.authUser
+        user: auth.authUser,
+        translation: settings.translation
     };
 }
 

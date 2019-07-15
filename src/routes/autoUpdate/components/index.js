@@ -21,7 +21,7 @@ class Apk extends Component {
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <Link to="/apk-list">
-                                    <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                    <Card className="manage_sec manage_sec1" style={{ borderRadius: 12 }}>
                                         <div>
                                             <h2 style={{ textAlign: "center" }}>Manage App</h2>
                                             <Divider className="mb-0" />
@@ -57,7 +57,7 @@ class Apk extends Component {
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <Link to="/policy">
-                                    <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                    <Card className="manage_sec manage_sec1" style={{ borderRadius: 12 }}>
                                         <div>
                                             <h2 style={{ textAlign: "center" }}>Manage Policy</h2>
                                             <Divider className="mb-0" />
@@ -81,7 +81,7 @@ class Apk extends Component {
                             <div>
                                 <div>
                                     <Link to="/app-market">
-                                        <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                        <Card className="manage_sec manage_sec1" style={{ borderRadius: 12 }}>
                                             <div className="image_1">
                                                 <h2 style={{ textAlign: "center" }}>Secure Market</h2>
                                                 <Divider className="mb-0" />
@@ -110,11 +110,12 @@ class Apk extends Component {
         )
     }
 }
-var mapStateToProps = ({ auth }) => {
+var mapStateToProps = ({ auth, settings }) => {
     // console.log('devices AUTH', auth.authUser);
     //  console.log('devices is', devices);
     return {
         user: auth.authUser,
+        translation: settings.translation
     };
 }
 

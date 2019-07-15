@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Link } from 'react-router-dom';
 import styles from './account.css'
+import { Markup } from 'interweave';
 import {
     importCSV,
     exportCSV,
@@ -11,19 +12,98 @@ import {
     getUsedPGPEmails,
     getUsedChatIds,
     getUsedSimIds,
-    insertNewData
+    insertNewData,
+    createBackupDB,
+    checkPass,
+    showBackupModal,
+    // saveIDPrices,
+    // setPackage,
+    getPackages,
+    purchaseCredits,
+    purchaseCreditsFromCC
 } from "../../appRedux/actions/Account";
+
+import { convertToLang } from '../utils/commonUtils';
+
 
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider } from "antd";
 import { BASE_URL } from "../../constants/Application";
+import {
+    MANAGE_DATA,
+    BACKUP_DATABASE,
+    PURCHASE_CREDITS,
+    PACKAGES_AND_IDS,
+    ACCOUNT_MANAGE_DATA_01,
+    ACCOUNT_MANAGE_DATA_02,
+    ACCOUNT_MANAGE_DATA_03,
+    UPLOAD_FILE,
+    UPLOAD_FILE_Ext,
+    BACKUP_DATABASE_DESCRIPTION,
+    PURCHASE_CREDITS_DESCRIPTION,
+    PACKAGES_AND_IDS_01,
+    PACKAGES_AND_IDS_02,
+    PACKAGES_AND_IDS_03,
+} from "../../constants/AccountConstants";
+
+import {
+    Button_Open,
+    Button_BUY,
+    Button_Ok,
+    Button_Cancel,
+    Button_submit,
+} from '../../constants/ButtonConstants'
 import {
     getSimIDs,
     getChatIDs,
     getPGPEmails,
 } from "../../appRedux/actions/Devices";
+
+import PasswordForm from '../ConnectDevice/components/PasswordForm';
+import PurchaseCredit from "./components/PurchaseCredit";
+import { ADMIN, PUSH_APP_TEXT } from "../../constants/Constants";
+import { APP_ADD_MORE } from "../../constants/AppConstants";
+// import SetPricingModal from './PricesPakages/SetPricingModal';
+
 const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
+
+class PasswordModal extends Component {
+    // console.log('object,', props.actionType)
+    render() {
+        return (
+            <Modal
+                // closable={false}
+                maskClosable={false}
+                style={{ top: 20 }}
+                width="330px"
+                className="push_app"
+                title=""
+                visible={this.props.pwdConfirmModal}
+                footer={false}
+                onOk={() => {
+                }}
+                onCancel={() => {
+                    this.props.showPwdConfirmModal(false)
+                    this.refs.pswdForm.resetFields()
+                }
+                }
+                // okText="Push Apps"
+                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], PUSH_APP_TEXT)}
+                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+            >
+                <PasswordForm
+                    checkPass={this.props.checkPass}
+                    actionType='back_up'
+                    handleCancel={this.props.showPwdConfirmModal}
+                    ref='pswdForm'
+                />
+            </Modal >
+        )
+    }
+}
+
+
 
 class Account extends Component {
     constructor(props) {
@@ -36,23 +116,14 @@ class Account extends Component {
             dataVisible: false,
             dataFieldName: '',
             dataFieldTitle: '',
-            sim_ids: [],
-            chat_ids: [],
-            pgp_emails: [],
-            used_pgp_emails: [],
-            used_sim_ids: [],
-            used_chat_ids: [],
-            sim_ids_page: 10,
-            chat_ids_page: 10,
-            pgp_emails_page: 10,
-            used_pgp_emails_page: 10,
-            used_sim_ids_page: 10,
-            used_chat_ids_page: 10,
+            purchase_modal: false,
             selectedRowKeys: [],
             duplicate_ids: [],
             newData: [],
-            duplicate_modal_show: false
-
+            duplicate_modal_show: false,
+            showBackupModal: false,
+            pwdConfirmModal: false,
+            pricing_modal: false,
         }
     }
 
@@ -65,42 +136,7 @@ class Account extends Component {
         });
     }
 
-    showViewmodal = (dataVisible, dataFieldName = "", dataFieldTitle = "") => {
-        // console.log(dataFieldName);
-        if (dataFieldName === "sim_ids") {
-            this.props.getSimIDs();
-        } else if (dataFieldName === "pgp_emails") {
-            this.props.getPGPEmails();
-        } else if (dataFieldName === "chat_ids") {
-            this.props.getChatIDs();
-        } else if (dataFieldName === "used_pgp_emails") {
-            this.props.getUsedPGPEmails();
-        } else if (dataFieldName === "used_chat_ids") {
-            this.props.getUsedChatIds();
-        } else if (dataFieldName === "used_sim_ids") {
-            this.props.getUsedSimIds();
-        }
-        this.setState({
-            dataVisible: dataVisible,
-            dataFieldName: dataFieldName,
-            dataFieldTitle: dataFieldTitle
-        });
-    }
-
     componentDidMount() {
-        this.props.getSimIDs();
-        this.props.getPGPEmails();
-        this.props.getChatIDs();
-        this.props.getUsedPGPEmails();
-        this.props.getUsedChatIds();
-        this.props.getUsedSimIds();
-        // this.props.getUsedSimIDs()
-        // console.log("this.props.chat_ids", this.props.chat_ids);
-        // this.setState({
-        //     sim_ids: this.props.sim_ids,
-        //     pgp_emails: this.props.pgp_emails,
-        //     chat_ids: this.props.chat_ids,
-        // });
     }
     componentDidUpdate(prevProps, nextProps) {
         if (prevProps !== nextProps) {
@@ -117,29 +153,29 @@ class Account extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length || this.props.used_pgp_emails.length !== nextProps.used_pgp_emails.length || this.props.used_chat_ids.length !== nextProps.used_chat_ids.length || this.props.used_sim_ids.length !== nextProps.used_sim_ids.length) {
+        if (this.props.backUpModal !== nextProps.backUpModal) {
             // if (this.props.sim_ids.length !== nextProps.sim_ids.length || this.props.pgp_emails.length !== nextProps.pgp_emails.length || this.props.chat_ids.length !== nextProps.chat_ids.length) {
             this.setState({
-                sim_ids: nextProps.sim_ids,
-                chat_ids: nextProps.chat_ids,
-                pgp_emails: nextProps.pgp_emails,
-                used_pgp_emails: nextProps.used_pgp_emails,
-                used_chat_ids: nextProps.used_chat_ids,
-                used_sim_ids: nextProps.used_sim_ids,
-                duplicate_modal_show: nextProps.duplicate_modal_show,
-                duplicate_ids: nextProps.duplicate_ids,
-                duplicate_data_type: nextProps.duplicate_data_type,
-                newData: nextProps.newData
+                newData: nextProps.newData,
+                backUpModal: nextProps.backUpModal
             });
         } else if (this.props.duplicate_modal_show !== nextProps.duplicate_modal_show) {
             this.setState({
-                duplicate_modal_show: nextProps.duplicate_modal_show,
-                duplicate_ids: nextProps.duplicate_ids,
-                duplicate_data_type: nextProps.duplicate_data_type,
                 newData: nextProps.newData
             })
         }
     }
+    createBackupDB = () => {
+
+        this.props.createBackupDB();
+        this.setState({
+            backUpModal: false
+        })
+        this.props.showBackupModal(false)
+
+    }
+
+
     uploadFile = (file) => {
         this.setState({
             file: file
@@ -169,6 +205,14 @@ class Account extends Component {
     exportCSV = (fieldName) => {
         this.props.exportCSV(fieldName);
     }
+
+    showPwdConfirmModal = (visible) => {
+        // alert('hello');
+        this.setState({
+            pwdConfirmModal: visible,
+        })
+    }
+
     searchField = (originalData, fieldName, value) => {
         let demoData = [];
         if (value.length) {
@@ -180,7 +224,7 @@ class Account extends Component {
                         if (data[fieldName].toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }
-                    } else if (data[fieldName] != null) {
+                    } else if (data[fieldName] !== null) {
                         if (data[fieldName].toString().toUpperCase().includes(value.toUpperCase())) {
                             demoData.push(data);
                         }
@@ -198,79 +242,15 @@ class Account extends Component {
             return originalData;
         }
     }
-    handleSearch = (e, dataName) => {
-
-        let fieldName = e.target.name;
-        let fieldValue = e.target.value;
-
-        if (dataName === "sim_ids") {
-            let searchedData = this.searchField(this.props.sim_ids, fieldName, fieldValue);
-            this.setState({
-                sim_ids: searchedData
-            });
-        } else if (dataName === "chat_ids") {
-            let searchedData = this.searchField(this.props.chat_ids, fieldName, fieldValue);
-            this.setState({
-                chat_ids: searchedData
-            });
-        } else if (dataName === "pgp_emails") {
-            let searchedData = this.searchField(this.props.pgp_emails, fieldName, fieldValue);
-            this.setState({
-                pgp_emails: searchedData
-            });
-        } else if (dataName === "used_pgp_emails") {
-            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
-            let searchedData = this.searchField(this.props.used_pgp_emails, fieldName, fieldValue);
-            this.setState({
-                used_pgp_emails: searchedData
-            });
-        } else if (dataName === "used_chat_ids") {
-            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
-            let searchedData = this.searchField(this.props.used_chat_ids, fieldName, fieldValue);
-            // console.log(searchedData);
-            this.setState({
-                used_chat_ids: searchedData
-            });
-        } else if (dataName === "used_sim_ids") {
-            // console.log(this.props.used_pgp_emails, fieldName, fieldValue)
-            let searchedData = this.searchField(this.props.used_sim_ids, fieldName, fieldValue);
-            this.setState({
-                used_sim_ids: searchedData
-            });
-        }
-    }
-
-    handlePagination = (e, dataName) => {
-        if (dataName === "sim_ids") {
-            this.setState({
-                sim_ids_page: e
-            });
-        } else if (dataName === "chat_ids") {
-            this.setState({
-                chat_ids_page: e
-            });
-        } else if (dataName === "pgp_emails") {
-            this.setState({
-                pgp_emails_page: e
-            });
-        } else if (dataName == "used_pgp_emails") {
-            this.setState({
-                used_pgp_emails_page: e
-            });
-        } else if (dataName == "used_chat_ids") {
-            this.setState({
-                used_chat_ids_page: e
-            });
-        } else if (dataName == "used_sim_ids") {
-            this.setState({
-                used_sim_ids_page: e
-            });
-        }
-    }
 
     showModal = () => {
         this.setState({
             visible1: true,
+        });
+    }
+    showBackupModal = () => {
+        this.setState({
+            backUpModal: true,
         });
     }
 
@@ -284,8 +264,10 @@ class Account extends Component {
 
     handleCancel = (e) => {
         // console.log(e);
+        this.props.showBackupModal(false)
         this.setState({
             visible1: false,
+            backUpModal: false,
             selectedRowKeys: [],
         });
     }
@@ -331,6 +313,18 @@ class Account extends Component {
             });
         }
     }
+    showPurchaseModal = (e, visible) => {
+        this.setState({
+            purchase_modal: visible
+        })
+    }
+
+    showPricingModal = (visible) => {
+        this.setState({
+            pricing_modal: visible
+        });
+    }
+
     render() {
 
         if (this.props.showMsg) {
@@ -386,7 +380,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'sim_id',
                 key: "sim_id",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -395,7 +389,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'start_date',
                 key: "start_date",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
 
             },
@@ -404,7 +398,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'expiry_date',
                 key: "expiry_date",
-                className: this.state.duplicate_data_type == 'sim_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'sim_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -412,7 +406,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'chat_id',
                 key: "chat_id",
-                className: this.state.duplicate_data_type == 'chat_id' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'chat_id' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             },
             {
@@ -420,7 +414,7 @@ class Account extends Component {
                 align: "center",
                 dataIndex: 'pgp_email',
                 key: "pgp_email",
-                className: this.state.duplicate_data_type == 'pgp_email' ? '' : 'hide',
+                className: this.state.duplicate_data_type === 'pgp_email' ? '' : 'hide',
                 sortDirections: ['ascend', 'descend'],
             }
         ]
@@ -432,518 +426,411 @@ class Account extends Component {
                 </Row>
                 <div style={{ marginTop: -60 }}>
                     <Row>
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8} >
-                            <Modal
-                                maskClosable={false}
-                                title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! Duplicate Data</span></div>}
-                                visible={this.state.duplicate_modal_show}
-                                onOk={this.InsertNewData}
-                                onCancel={this.handleCancelDuplicate}
-                                okText='Submit'
-                                okButtonProps={{
-                                    disabled: this.state.newData.length ? false : true
-                                }}
-                            >
+                        {(this.props.user.type === ADMIN) ?
+                            <Fragment>
+                                <Col xs={24} sm={24} md={8} lg={8} xl={8} >
+                                    <Modal
+                                        maskClosable={false}
+                                        title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! Duplicate Data</span></div>}
+                                        visible={this.state.duplicate_modal_show}
+                                        onOk={this.InsertNewData}
+                                        onCancel={this.handleCancelDuplicate}
+                                        // okText='Submit'
+                                        okText={convertToLang(this.props.translation[Button_submit], Button_submit)}
+                                        cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                                        okButtonProps={{
+                                            disabled: this.state.newData.length ? false : true
+                                        }}
+                                    >
 
-                                <Table
-                                    bordered
-                                    columns={duplicateModalColumns}
-                                    dataSource={
-                                        this.state.duplicate_ids.map(row => {
-                                            if (this.state.duplicate_data_type == 'chat_id') {
-                                                return {
-                                                    key: row.chat_id,
-                                                    chat_id: row.chat_id
-                                                }
-                                            } else if (this.state.duplicate_data_type == 'pgp_email') {
-                                                return {
-                                                    key: row.pgp_email,
-                                                    pgp_email: row.pgp_email
-                                                }
-                                            }
-                                            else if (this.state.duplicate_data_type == 'sim_id') {
-                                                return {
-                                                    key: row.id,
-                                                    sim_id: row[this.state.duplicate_data_type],
-                                                    start_date: row.start_date,
-                                                    expiry_date: row.expiry_date
-                                                }
-                                            }
-
-                                        })
-                                    }
-
-                                    pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
-
-                                />
-                                <span className="warning_hr">
-                                    <hr />
-                                </span>
-                                <h2>New Data</h2>
-
-                                <Table
-                                    bordered
-                                    columns={duplicateModalColumns}
-                                    dataSource={
-                                        this.state.newData.map(row => {
-                                            if (this.state.duplicate_data_type == 'chat_id') {
-                                                return {
-                                                    key: row.chat_id,
-                                                    chat_id: row.chat_id
-                                                }
-                                            } else if (this.state.duplicate_data_type == 'pgp_email') {
-                                                return {
-                                                    key: row.pgp_email,
-                                                    pgp_email: row.pgp_email
-                                                }
-                                            }
-                                            else if (this.state.duplicate_data_type == 'sim_id') {
-                                                return {
-                                                    key: row.id,
-                                                    sim_id: row[this.state.duplicate_data_type],
-                                                    start_date: row.start_date,
-                                                    expiry_date: row.expiry_date
-                                                }
-                                            }
-
-                                        })
-                                    }
-
-                                    pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
-
-                                />
-                            </Modal>
-                            <div>
-                                <Link to="#" onClick={this.showModal}>
-                                    <Card className="manage_ac" style={{ borderRadius: 12 }}>
-                                        <div>
-                                            <h2 style={{ textAlign: "center" }}>Manage Data</h2>
-                                            <Divider className="mb-0" />
-                                            <Row style={{ padding: '12px 0 0px' }}>
-                                                <Col span={7} className="" style={{ textAlign: "center" }}>
-                                                    <Icon type="form" className="and_icon" />
-                                                </Col>
-                                                <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                    <p style={{}}><span className="diamond_icon">&#9670;</span>Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..</p>
-                                                    <p style={{}}><span className="diamond_icon">&#9670;</span>Upload/View/Edit your data</p>
-                                                    <p><span className="diamond_icon">&#9670;</span>Release previously used data back to system</p>
-                                                    <p className="more_txt">and more...</p>
-                                                </Col>
-                                            </Row>
-                                        </div>
-                                    </Card>
-                                    <Button type="primary" size="small" className="open_btn">Open</Button>
-                                </Link>
-                                <Modal
-                                    maskClosable={false}
-                                    className="manage_data"
-                                    width="450px"
-                                    title="Manage Data"
-                                    visible={this.state.visible1}
-                                    onOk={this.handleOk}
-                                    onCancel={this.handleCancel}
-                                    centered
-                                >
-                                    <div className="profile_table">
-                                        <Fragment>
-                                            <Modal
-                                                maskClosable={false}
-                                                className="m_d_pop"
-                                                visible={this.state.visible}
-                                                title={`Import ${this.state.fieldValue}`}
-                                                // onOk={this.handleOk}
-                                                onCancel={
-                                                    () => {
-                                                        this.showImportModal(false);
+                                        <Table
+                                            bordered
+                                            columns={duplicateModalColumns}
+                                            dataSource={
+                                                this.state.duplicate_ids.map(row => {
+                                                    if (this.state.duplicate_data_type === 'chat_id') {
+                                                        return {
+                                                            key: row.chat_id,
+                                                            chat_id: row.chat_id
+                                                        }
+                                                    } else if (this.state.duplicate_data_type === 'pgp_email') {
+                                                        return {
+                                                            key: row.pgp_email,
+                                                            pgp_email: row.pgp_email
+                                                        }
                                                     }
-                                                }
-                                                footer={[
-                                                    <Button key="back" onClick={() => {
-                                                        this.showImportModal(false);
-                                                    }}>Cancel</Button>,
+                                                    else if (this.state.duplicate_data_type === 'sim_id') {
+                                                        return {
+                                                            key: row.id,
+                                                            sim_id: row[this.state.duplicate_data_type],
+                                                            start_date: row.start_date,
+                                                            expiry_date: row.expiry_date
+                                                        }
+                                                    }
 
-                                                    <Button key="submit" ref="formSubmission" type="primary" onClick={(e) => this.handleSubmit()} >
-                                                        Submit
-                                                        </Button>
-                                                ]}>
-                                                <Form onSubmit={(e) => { this.handleSubmit(e) }}>
+                                                })
+                                            }
 
-                                                    {/* <Form.Item label="Name* " labelCol={{ span: 7 }} wrapperCol={{ span: 12 }}>
-                                                        <Input disabled type='text' required={true} value={this.state.apk_name} onChange={(event) => this.setState({ apk_name: event.target.value })} />
-                                                        </Form.Item> */}
-                                                    <Row>
-                                                        <Col span={24} className="upload_file">
-                                                            <Form.Item
-                                                            >
-                                                                <div className="dropbox">
+                                            pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
 
-                                                                    <Upload.Dragger  {...props} disabled={(file === null) ? false : true} >
-                                                                        <p className="ant-upload-drag-icon">
-                                                                            <Icon type="file-excel" />
-                                                                        </p>
-                                                                        <h2 className="ant-upload-hint">UPLOAD FILE </h2>
-                                                                        <p className="ant-upload-text">Upload file (.xls, .xlsx, .csv)</p>
-                                                                    </Upload.Dragger>
-                                                                </div>
-                                                            </Form.Item>
+                                        />
+                                        <span className="warning_hr">
+                                            <hr />
+                                        </span>
+                                        <h2>New Data</h2>
+
+                                        <Table
+                                            bordered
+                                            columns={duplicateModalColumns}
+                                            dataSource={
+                                                this.state.newData.map(row => {
+                                                    if (this.state.duplicate_data_type === 'chat_id') {
+                                                        return {
+                                                            key: row.chat_id,
+                                                            chat_id: row.chat_id
+                                                        }
+                                                    } else if (this.state.duplicate_data_type === 'pgp_email') {
+                                                        return {
+                                                            key: row.pgp_email,
+                                                            pgp_email: row.pgp_email
+                                                        }
+                                                    }
+                                                    else if (this.state.duplicate_data_type === 'sim_id') {
+                                                        return {
+                                                            key: row.id,
+                                                            sim_id: row[this.state.duplicate_data_type],
+                                                            start_date: row.start_date,
+                                                            expiry_date: row.expiry_date
+                                                        }
+                                                    }
+
+                                                })
+                                            }
+
+                                            pagination={{ pageSize: Number(this.state.sim_ids_page), size: "middle" }}
+
+                                        />
+                                    </Modal>
+                                    <div>
+
+                                        <Link to="/account/managedata" onClick={this.showModal}>
+                                            {/* <Link to="#" > */}
+                                            <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                                <div>
+                                                    <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], MANAGE_DATA)} </h2>
+                                                    <Divider className="mb-0" />
+                                                    <Row style={{ padding: '12px 0 0px' }}>
+                                                        <Col span={7} className="" style={{ textAlign: "center" }}>
+                                                            <Icon type="form" className="and_icon" />
+                                                        </Col>
+                                                        <Col span={16} style={{ padding: 0 }} className="crd_txt">
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], ACCOUNT_MANAGE_DATA_01)} />  </p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], ACCOUNT_MANAGE_DATA_02)} /> </p>
+                                                            <p className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], ACCOUNT_MANAGE_DATA_03)} />  </p>
+                                                            <p className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</p>
                                                         </Col>
                                                     </Row>
-                                                </Form>
-                                            </Modal>
+                                                </div>
+                                            </Card>
+                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                        </Link>
 
-                                            <Modal
-                                                maskClosable={false}
-                                                className="m_d_pop"
-                                                visible={this.state.dataVisible}
-                                                title={`${this.state.dataFieldTitle}`}
-                                                // onOk={this.handleOk}
-                                                onCancel={
-                                                    () => {
-                                                        this.showViewmodal(false);
-                                                        this.setState({
-                                                            selectedRowKeys: [],
-                                                            used_chat_ids: this.props.used_chat_ids,
-                                                            used_sim_ids: this.props.used_sim_ids,
-                                                            used_pgp_emails: this.props.used_pgp_emails,
-                                                        })
-                                                    }
-                                                }
-                                                onOk={
-                                                    () => {
-                                                        this.showViewmodal(false);
-                                                        this.setState({
-                                                            selectedRowKeys: [],
-                                                            used_chat_ids: this.props.used_chat_ids,
-                                                            used_sim_ids: this.props.used_sim_ids,
-                                                            used_pgp_emails: this.props.used_pgp_emails,
-                                                        })
-                                                    }
-                                                }
-                                            >
-                                                {(this.state.dataFieldName === "sim_ids") ?
-                                                    <Fragment>
-                                                        <div className="row">
+                                        <Modal
+                                            maskClosable={false}
+                                            className="manage_data"
+                                            width="450px"
+                                            title="Manage Data"
+                                            visible={this.state.visible1}
+                                            onOk={this.handleOk}
+                                            onCancel={this.handleCancel}
+                                            centered
+                                        >
+                                            <div className="profile_table">
+                                                <Fragment>
+                                                    <Modal
+                                                        maskClosable={false}
+                                                        className="m_d_pop"
+                                                        visible={this.state.visible}
+                                                        title={`Import ${this.state.fieldValue}`}
+                                                        // onOk={this.handleOk}
+                                                        onCancel={
+                                                            () => {
+                                                                this.showImportModal(false);
+                                                            }
+                                                        }
+                                                        footer={[
+                                                            <Button key="back" onClick={() => {
+                                                                this.showImportModal(false);
+                                                            }}>Cancel</Button>,
 
-                                                            <div className="col-md-12">
-                                                                <Input.Search
-                                                                    name="sim_id"
-                                                                    key="sim_id"
-                                                                    id="sim_id"
-                                                                    className="search_heading1"
-                                                                    onKeyUp={
-                                                                        (e) => {
-                                                                            this.handleSearch(e, 'sim_ids')
-                                                                        }
-                                                                    }
-                                                                    autoComplete="new-password"
-                                                                    placeholder="SIM ID"
-                                                                />
-                                                            </div>
-                                                            <div className="col-md-6 pr-8">
-                                                                <Input.Search
-                                                                    name="start_date"
-                                                                    key="start_date"
-                                                                    id="start_date"
-                                                                    className="search_heading1"
-                                                                    onKeyUp={
-                                                                        (e) => {
-                                                                            this.handleSearch(e, 'sim_ids')
-                                                                        }
-                                                                    }
-                                                                    autoComplete="new-password"
-                                                                    placeholder="START DATE"
-                                                                />
-                                                            </div>
-                                                            <div className="col-md-6 pl-8">
-                                                                <Input.Search
-                                                                    name="expiry_date"
-                                                                    key="expiry_date"
-                                                                    id="expiry_date"
-                                                                    className="search_heading1"
-                                                                    onKeyUp={
-                                                                        (e) => {
-                                                                            this.handleSearch(e, 'sim_ids')
-                                                                        }
-                                                                    }
-                                                                    autoComplete="new-password"
-                                                                    placeholder="EXPIRY DATE"
-                                                                />
-                                                            </div>
-                                                        </div>
+                                                            <Button key="submit" ref="formSubmission" type="primary" onClick={(e) => this.handleSubmit()} >
+                                                                Submit
+                                                        </Button>
+                                                        ]}>
+                                                        <Form onSubmit={(e) => { this.handleSubmit(e) }}>
 
-                                                        <Table
-                                                            columns={[
-                                                                {
-                                                                    title: 'SIM ID',
-                                                                    align: "center",
-                                                                    dataIndex: 'sim_id',
-                                                                    key: "sim_id",
-                                                                    className: '',
-                                                                    sorter: (a, b) => { return a.sim_id - b.sim_id },
-                                                                    sortDirections: ['ascend', 'descend'],
+                                                            {/* <Form.Item label="Name* " labelCol={{ span: 7 }} wrapperCol={{ span: 12 }}>
+                                                        <Input disabled type='text' required={true} value={this.state.apk_name} onChange={(event) => this.setState({ apk_name: event.target.value })} />
+                                                        </Form.Item> */}
+                                                            <Row>
+                                                                <Col span={24} className="upload_file">
+                                                                    <Form.Item
+                                                                    >
+                                                                        <div className="dropbox">
 
-                                                                },
-                                                                {
-                                                                    title: 'START DATE',
-                                                                    align: "center",
-                                                                    dataIndex: 'start_date',
-                                                                    key: "start_date",
-                                                                    className: '',
-                                                                    sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
-                                                                    sortDirections: ['ascend', 'descend'],
+                                                                            <Upload.Dragger  {...props} disabled={(file === null) ? false : true} >
+                                                                                <p className="ant-upload-drag-icon">
+                                                                                    <Icon type="file-excel" />
+                                                                                </p>
+                                                                                <h2 className="ant-upload-hint">UPLOAD FILE </h2>
+                                                                                <p className="ant-upload-text">Upload file (.xls, .xlsx, .csv)</p>
+                                                                            </Upload.Dragger>
+                                                                        </div>
+                                                                    </Form.Item>
+                                                                </Col>
+                                                            </Row>
+                                                        </Form>
+                                                    </Modal>
 
-                                                                },
-                                                                {
-                                                                    title: 'EXPIRY DATE',
-                                                                    align: "center",
-                                                                    dataIndex: 'expiry_date',
-                                                                    key: "expiry_date",
-                                                                    className: '',
-                                                                    sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
-                                                                    sortDirections: ['ascend', 'descend'],
-                                                                },
-                                                            ]}
-                                                            dataSource={
-                                                                this.state.sim_ids.map(sim_id => {
-                                                                    return {
-                                                                        key: sim_id.id,
-                                                                        sim_id: sim_id.sim_id,
-                                                                        start_date: sim_id.start_date,
-                                                                        expiry_date: sim_id.expiry_date
-                                                                    }
+                                                    <Modal
+                                                        maskClosable={false}
+                                                        className="m_d_pop"
+                                                        visible={this.state.dataVisible}
+                                                        title={`${this.state.dataFieldTitle}`}
+                                                        // onOk={this.handleOk}
+                                                        onCancel={
+                                                            () => {
+                                                                this.showViewmodal(false);
+                                                                this.setState({
+                                                                    selectedRowKeys: [],
+                                                                    used_chat_ids: this.props.used_chat_ids,
+                                                                    used_sim_ids: this.props.used_sim_ids,
+                                                                    used_pgp_emails: this.props.used_pgp_emails,
                                                                 })
                                                             }
-                                                            scroll={{ y: 250 }}
-                                                            pagination={false}
-
-                                                        />
-                                                    </Fragment>
-                                                    : (this.state.dataFieldName === "chat_ids") ?
-                                                        <Fragment>
-                                                            <div className="row">
-
-                                                                <div className="col-md-12">
-                                                                    <Input.Search
-                                                                        name="chat_id"
-                                                                        key="chat_id"
-                                                                        id="chat_id"
-                                                                        className="search_heading1"
-                                                                        onKeyUp={
-                                                                            (e) => {
-                                                                                this.handleSearch(e, 'chat_ids')
-                                                                            }
-                                                                        }
-                                                                        autoComplete="new-password"
-                                                                        placeholder="CHAT ID"
-                                                                    />
-                                                                </div>
-                                                            </div>
-
-                                                            <Table
-                                                                columns={[
-                                                                    {
-                                                                        title: 'CHAT ID',
-                                                                        align: "center",
-                                                                        dataIndex: 'chat_id',
-                                                                        key: "chat_id",
-                                                                        className: '',
-                                                                        sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
-                                                                        sortDirections: ['ascend', 'descend'],
-                                                                    },
-                                                                ]}
-                                                                dataSource={
-                                                                    this.state.chat_ids.map(chat_id => {
-                                                                        return {
-                                                                            key: chat_id.id,
-                                                                            chat_id: chat_id.chat_id,
-                                                                        }
-                                                                    })
-                                                                }
-                                                                scroll={{ y: 250 }}
-                                                                pagination={false}
-
-
-                                                            />
-                                                        </Fragment>
-                                                        : (this.state.dataFieldName === "pgp_emails") ?
+                                                        }
+                                                        onOk={
+                                                            () => {
+                                                                this.showViewmodal(false);
+                                                                this.setState({
+                                                                    selectedRowKeys: [],
+                                                                    used_chat_ids: this.props.used_chat_ids,
+                                                                    used_sim_ids: this.props.used_sim_ids,
+                                                                    used_pgp_emails: this.props.used_pgp_emails,
+                                                                })
+                                                            }
+                                                        }
+                                                    >
+                                                        {(this.state.dataFieldName === "sim_ids") ?
                                                             <Fragment>
                                                                 <div className="row">
+
                                                                     <div className="col-md-12">
                                                                         <Input.Search
-                                                                            name="pgp_email"
-                                                                            key="pgp_email"
-                                                                            id="pgp_email"
+                                                                            name="sim_id"
+                                                                            key="sim_id"
+                                                                            id="sim_id"
                                                                             className="search_heading1"
                                                                             onKeyUp={
                                                                                 (e) => {
-                                                                                    this.handleSearch(e, 'pgp_emails')
+                                                                                    this.handleSearch(e, 'sim_ids')
                                                                                 }
                                                                             }
                                                                             autoComplete="new-password"
-                                                                            placeholder="PGP Email"
+                                                                            placeholder="SIM ID"
+                                                                        />
+                                                                    </div>
+                                                                    <div className="col-md-6 pr-8">
+                                                                        <Input.Search
+                                                                            name="start_date"
+                                                                            key="start_date"
+                                                                            id="start_date"
+                                                                            className="search_heading1"
+                                                                            onKeyUp={
+                                                                                (e) => {
+                                                                                    this.handleSearch(e, 'sim_ids')
+                                                                                }
+                                                                            }
+                                                                            autoComplete="new-password"
+                                                                            placeholder="START DATE"
+                                                                        />
+                                                                    </div>
+                                                                    <div className="col-md-6 pl-8">
+                                                                        <Input.Search
+                                                                            name="expiry_date"
+                                                                            key="expiry_date"
+                                                                            id="expiry_date"
+                                                                            className="search_heading1"
+                                                                            onKeyUp={
+                                                                                (e) => {
+                                                                                    this.handleSearch(e, 'sim_ids')
+                                                                                }
+                                                                            }
+                                                                            autoComplete="new-password"
+                                                                            placeholder="EXPIRY DATE"
                                                                         />
                                                                     </div>
                                                                 </div>
 
                                                                 <Table
-                                                                    size="middle"
                                                                     columns={[
                                                                         {
-                                                                            title: 'PGP EMAILS',
+                                                                            title: 'SIM ID',
                                                                             align: "center",
-                                                                            dataIndex: 'pgp_email',
-                                                                            key: "pgp_email",
+                                                                            dataIndex: 'sim_id',
+                                                                            key: "sim_id",
                                                                             className: '',
-                                                                            sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
+                                                                            sorter: (a, b) => { return a.sim_id - b.sim_id },
                                                                             sortDirections: ['ascend', 'descend'],
 
                                                                         },
+                                                                        {
+                                                                            title: 'START DATE',
+                                                                            align: "center",
+                                                                            dataIndex: 'start_date',
+                                                                            key: "start_date",
+                                                                            className: '',
+                                                                            sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
+                                                                            sortDirections: ['ascend', 'descend'],
+
+                                                                        },
+                                                                        {
+                                                                            title: 'EXPIRY DATE',
+                                                                            align: "center",
+                                                                            dataIndex: 'expiry_date',
+                                                                            key: "expiry_date",
+                                                                            className: '',
+                                                                            sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
+                                                                            sortDirections: ['ascend', 'descend'],
+                                                                        },
                                                                     ]}
-
                                                                     dataSource={
-                                                                        this.state.pgp_emails.map(email => {
+                                                                        this.state.sim_ids.map(sim_id => {
                                                                             return {
-                                                                                key: email.id,
-                                                                                pgp_email: email.pgp_email,
-
+                                                                                key: sim_id.id,
+                                                                                sim_id: sim_id.sim_id,
+                                                                                start_date: sim_id.start_date,
+                                                                                expiry_date: sim_id.expiry_date
                                                                             }
                                                                         })
                                                                     }
-
                                                                     scroll={{ y: 250 }}
                                                                     pagination={false}
+
                                                                 />
                                                             </Fragment>
-                                                            : (this.state.dataFieldName === "used_pgp_emails") ?
+                                                            : (this.state.dataFieldName === "chat_ids") ?
                                                                 <Fragment>
                                                                     <div className="row">
+
                                                                         <div className="col-md-12">
                                                                             <Input.Search
-                                                                                name="pgp_email"
-                                                                                key="used_pgp_emails"
-                                                                                id="used_pgp_emails"
+                                                                                name="chat_id"
+                                                                                key="chat_id"
+                                                                                id="chat_id"
                                                                                 className="search_heading1"
                                                                                 onKeyUp={
                                                                                     (e) => {
-                                                                                        this.handleSearch(e, 'used_pgp_emails')
+                                                                                        this.handleSearch(e, 'chat_ids')
                                                                                     }
                                                                                 }
                                                                                 autoComplete="new-password"
-                                                                                placeholder="USED PGP Email"
+                                                                                placeholder="CHAT ID"
                                                                             />
                                                                         </div>
                                                                     </div>
 
                                                                     <Table
-                                                                        size="middle"
-                                                                        rowSelection={rowSelection}
                                                                         columns={[
                                                                             {
-                                                                                title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all pgp emails.", this, 'pgp_email') }}>Release selected</Button>,
+                                                                                title: 'CHAT ID',
                                                                                 align: "center",
-                                                                                dataIndex: 'action',
-                                                                                key: "action",
+                                                                                dataIndex: 'chat_id',
+                                                                                key: "chat_id",
                                                                                 className: '',
-                                                                            },
-                                                                            {
-                                                                                title: 'USED PGP EMAILS',
-                                                                                align: "center",
-                                                                                dataIndex: 'used_pgp_email',
-                                                                                key: "used_pgp_email",
-                                                                                className: '',
-                                                                                sorter: (a, b) => { return a.used_pgp_email.localeCompare(b.used_pgp_email) },
+                                                                                sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
                                                                                 sortDirections: ['ascend', 'descend'],
-
                                                                             },
-
                                                                         ]}
-
                                                                         dataSource={
-                                                                            this.state.used_pgp_emails.map(email => {
+                                                                            this.state.chat_ids.map(chat_id => {
                                                                                 return {
-                                                                                    key: email.id,
-                                                                                    used_pgp_email: email.pgp_email,
-                                                                                    action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this pgp email.", this, "pgp_email", email.id) }}>Release</Button>
-
+                                                                                    key: chat_id.id,
+                                                                                    chat_id: chat_id.chat_id,
                                                                                 }
                                                                             })
                                                                         }
                                                                         scroll={{ y: 250 }}
                                                                         pagination={false}
+
+
                                                                     />
-                                                                </Fragment> : (this.state.dataFieldName === "used_sim_ids") ?
+                                                                </Fragment>
+                                                                : (this.state.dataFieldName === "pgp_emails") ?
                                                                     <Fragment>
                                                                         <div className="row">
                                                                             <div className="col-md-12">
                                                                                 <Input.Search
-                                                                                    name="sim_id"
-                                                                                    key="used_sim_ids"
-                                                                                    id="used_sim_ids"
+                                                                                    name="pgp_email"
+                                                                                    key="pgp_email"
+                                                                                    id="pgp_email"
                                                                                     className="search_heading1"
                                                                                     onKeyUp={
                                                                                         (e) => {
-                                                                                            this.handleSearch(e, 'used_sim_ids')
+                                                                                            this.handleSearch(e, 'pgp_emails')
                                                                                         }
                                                                                     }
                                                                                     autoComplete="new-password"
-                                                                                    placeholder="USED SIM IDS"
+                                                                                    placeholder="PGP Email"
                                                                                 />
                                                                             </div>
                                                                         </div>
 
                                                                         <Table
                                                                             size="middle"
-                                                                            rowSelection={rowSelection}
                                                                             columns={[
                                                                                 {
-                                                                                    title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all sim ids.", this, 'sim_id') }}>Release selected</Button>,
+                                                                                    title: 'PGP EMAILS',
                                                                                     align: "center",
-                                                                                    dataIndex: 'action',
-                                                                                    key: "action",
+                                                                                    dataIndex: 'pgp_email',
+                                                                                    key: "pgp_email",
                                                                                     className: '',
-                                                                                },
-                                                                                {
-                                                                                    title: 'USED SIM IDS',
-                                                                                    align: "center",
-                                                                                    dataIndex: 'used_sim_ids',
-                                                                                    key: "used_sim_ids",
-                                                                                    className: '',
-                                                                                    sorter: (a, b) => { return a.used_sim_ids.localeCompare(b.used_sim_ids) },
+                                                                                    sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
                                                                                     sortDirections: ['ascend', 'descend'],
 
                                                                                 },
-
                                                                             ]}
 
                                                                             dataSource={
-                                                                                this.state.used_sim_ids.map(email => {
+                                                                                this.state.pgp_emails.map(email => {
                                                                                     return {
                                                                                         key: email.id,
-                                                                                        used_sim_ids: email.sim_id,
-                                                                                        action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this sim id.", this, "sim_id", email.id) }}>Release</Button>
+                                                                                        pgp_email: email.pgp_email,
 
                                                                                     }
                                                                                 })
                                                                             }
+
                                                                             scroll={{ y: 250 }}
                                                                             pagination={false}
                                                                         />
-                                                                    </Fragment> : (this.state.dataFieldName === "used_chat_ids") ?
+                                                                    </Fragment>
+                                                                    : (this.state.dataFieldName === "used_pgp_emails") ?
                                                                         <Fragment>
                                                                             <div className="row">
                                                                                 <div className="col-md-12">
                                                                                     <Input.Search
-                                                                                        name="chat_id"
-                                                                                        key="used_chat_ids"
-                                                                                        id="used_chat_ids"
+                                                                                        name="pgp_email"
+                                                                                        key="used_pgp_emails"
+                                                                                        id="used_pgp_emails"
                                                                                         className="search_heading1"
                                                                                         onKeyUp={
                                                                                             (e) => {
-                                                                                                this.handleSearch(e, 'used_chat_ids')
+                                                                                                this.handleSearch(e, 'used_pgp_emails')
                                                                                             }
                                                                                         }
                                                                                         autoComplete="new-password"
-                                                                                        placeholder="USED CHAT IDS"
+                                                                                        placeholder="USED PGP Email"
                                                                                     />
                                                                                 </div>
                                                                             </div>
@@ -953,30 +840,31 @@ class Account extends Component {
                                                                                 rowSelection={rowSelection}
                                                                                 columns={[
                                                                                     {
-                                                                                        title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all Chat ids.", this, 'chat_id') }}>Release selected</Button>,
+                                                                                        title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all pgp emails.", this, 'pgp_email') }}>Release selected</Button>,
                                                                                         align: "center",
                                                                                         dataIndex: 'action',
                                                                                         key: "action",
                                                                                         className: '',
                                                                                     },
                                                                                     {
-                                                                                        title: 'USED CHAT IDS',
+                                                                                        title: 'USED PGP EMAILS',
                                                                                         align: "center",
-                                                                                        dataIndex: 'used_chat_ids',
-                                                                                        key: "used_chat_ids",
+                                                                                        dataIndex: 'used_pgp_email',
+                                                                                        key: "used_pgp_email",
                                                                                         className: '',
-                                                                                        sorter: (a, b) => { return a.used_chat_ids.localeCompare(b.used_chat_ids) },
+                                                                                        sorter: (a, b) => { return a.used_pgp_email.localeCompare(b.used_pgp_email) },
                                                                                         sortDirections: ['ascend', 'descend'],
 
                                                                                     },
 
                                                                                 ]}
+
                                                                                 dataSource={
-                                                                                    this.state.used_chat_ids.map(email => {
+                                                                                    this.state.used_pgp_emails.map(email => {
                                                                                         return {
                                                                                             key: email.id,
-                                                                                            used_chat_ids: email.chat_id,
-                                                                                            action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this Chat id.", this, "chat_id", email.id) }}>Release</Button>
+                                                                                            used_pgp_email: email.pgp_email,
+                                                                                            action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this pgp email.", this, "pgp_email", email.id) }}>Release</Button>
 
                                                                                         }
                                                                                     })
@@ -984,179 +872,367 @@ class Account extends Component {
                                                                                 scroll={{ y: 250 }}
                                                                                 pagination={false}
                                                                             />
-                                                                        </Fragment> : null
-                                                }
-                                            </Modal>
-                                            <Row>
-                                                <div className="col-md-12 ac_card">
-                                                    <Card style={{ borderRadius: 12 }}>
-                                                        <div>
-                                                            {/* <h2 style={{ textAlign: "center" }}><a href="#"></a> Manage Data</h2>
+                                                                        </Fragment> : (this.state.dataFieldName === "used_sim_ids") ?
+                                                                            <Fragment>
+                                                                                <div className="row">
+                                                                                    <div className="col-md-12">
+                                                                                        <Input.Search
+                                                                                            name="sim_id"
+                                                                                            key="used_sim_ids"
+                                                                                            id="used_sim_ids"
+                                                                                            className="search_heading1"
+                                                                                            onKeyUp={
+                                                                                                (e) => {
+                                                                                                    this.handleSearch(e, 'used_sim_ids')
+                                                                                                }
+                                                                                            }
+                                                                                            autoComplete="new-password"
+                                                                                            placeholder="USED SIM IDS"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <Table
+                                                                                    size="middle"
+                                                                                    rowSelection={rowSelection}
+                                                                                    columns={[
+                                                                                        {
+                                                                                            title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all sim ids.", this, 'sim_id') }}>Release selected</Button>,
+                                                                                            align: "center",
+                                                                                            dataIndex: 'action',
+                                                                                            key: "action",
+                                                                                            className: '',
+                                                                                        },
+                                                                                        {
+                                                                                            title: 'USED SIM IDS',
+                                                                                            align: "center",
+                                                                                            dataIndex: 'used_sim_ids',
+                                                                                            key: "used_sim_ids",
+                                                                                            className: '',
+                                                                                            sorter: (a, b) => { return a.used_sim_ids.localeCompare(b.used_sim_ids) },
+                                                                                            sortDirections: ['ascend', 'descend'],
+
+                                                                                        },
+
+                                                                                    ]}
+
+                                                                                    dataSource={
+                                                                                        this.state.used_sim_ids.map(email => {
+                                                                                            return {
+                                                                                                key: email.id,
+                                                                                                used_sim_ids: email.sim_id,
+                                                                                                action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this sim id.", this, "sim_id", email.id) }}>Release</Button>
+
+                                                                                            }
+                                                                                        })
+                                                                                    }
+                                                                                    scroll={{ y: 250 }}
+                                                                                    pagination={false}
+                                                                                />
+                                                                            </Fragment> : (this.state.dataFieldName === "used_chat_ids") ?
+                                                                                <Fragment>
+                                                                                    <div className="row">
+                                                                                        <div className="col-md-12">
+                                                                                            <Input.Search
+                                                                                                name="chat_id"
+                                                                                                key="used_chat_ids"
+                                                                                                id="used_chat_ids"
+                                                                                                className="search_heading1"
+                                                                                                onKeyUp={
+                                                                                                    (e) => {
+                                                                                                        this.handleSearch(e, 'used_chat_ids')
+                                                                                                    }
+                                                                                                }
+                                                                                                autoComplete="new-password"
+                                                                                                placeholder="USED CHAT IDS"
+                                                                                            />
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <Table
+                                                                                        size="middle"
+                                                                                        rowSelection={rowSelection}
+                                                                                        columns={[
+                                                                                            {
+                                                                                                title: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release all Chat ids.", this, 'chat_id') }}>Release selected</Button>,
+                                                                                                align: "center",
+                                                                                                dataIndex: 'action',
+                                                                                                key: "action",
+                                                                                                className: '',
+                                                                                            },
+                                                                                            {
+                                                                                                title: 'USED CHAT IDS',
+                                                                                                align: "center",
+                                                                                                dataIndex: 'used_chat_ids',
+                                                                                                key: "used_chat_ids",
+                                                                                                className: '',
+                                                                                                sorter: (a, b) => { return a.used_chat_ids.localeCompare(b.used_chat_ids) },
+                                                                                                sortDirections: ['ascend', 'descend'],
+
+                                                                                            },
+
+                                                                                        ]}
+                                                                                        dataSource={
+                                                                                            this.state.used_chat_ids.map(email => {
+                                                                                                return {
+                                                                                                    key: email.id,
+                                                                                                    used_chat_ids: email.chat_id,
+                                                                                                    action: <Button type="danger" size="small" onClick={() => { this.showConfirm("Do you really want to Release this Chat id.", this, "chat_id", email.id) }}>Release</Button>
+
+                                                                                                }
+                                                                                            })
+                                                                                        }
+                                                                                        scroll={{ y: 250 }}
+                                                                                        pagination={false}
+                                                                                    />
+                                                                                </Fragment> : null
+                                                        }
+                                                    </Modal>
+                                                    <Row>
+                                                        <div className="col-md-12 ac_card">
+                                                            <Card style={{ borderRadius: 12 }}>
+                                                                <div>
+                                                                    {/* <h2 style={{ textAlign: "center" }}><a href="#"></a> Manage Data</h2>
                                                             <Divider className="mb-0" /> */}
-                                                            <Row style={{ padding: '16px' }}>
-                                                                <div className="inline_b">
-                                                                    <span className="headings">PGP Emails</span>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'used_pgp_emails', 'USED PGP EMAILS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'pgp_emails', 'PGP Emails') }} size='small' className="pull-right imp_btn">View</Button>
-                                                                    <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
-                                                                        this.exportCSV('pgp_emails');
-                                                                    }} >Export</Button>
-                                                                    <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                                                    <Row style={{ padding: '16px' }}>
+                                                                        <div className="inline_b">
+                                                                            <span className="headings">PGP Emails</span>
+                                                                            <Button onClick={() => { this.showViewmodal(true, 'used_pgp_emails', 'USED PGP EMAILS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                            <Button onClick={() => { this.showViewmodal(true, 'pgp_emails', 'PGP Emails') }} size='small' className="pull-right imp_btn">View</Button>
+                                                                            <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                                                                this.exportCSV('pgp_emails');
+                                                                            }} >Export</Button>
+                                                                            {/* <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
                                                                         this.showImportModal(true, "pgp_emails", "PGP Emails")
-                                                                    }}>Import</Button>
-                                                                    <a href={`${BASE_URL}users/getFile/import_pgp_emails.xlsx`}>
-                                                                        <Button size='small' className="pull-right imp_btn" type="dashed">Sample</Button>
-                                                                    </a>
+                                                                    }}>Import</Button> */}
+                                                                            <a href={`${BASE_URL}users/getFile/import_pgp_emails.xlsx`}>
+                                                                                <Button size='small' className="pull-right imp_btn" type="dashed">Sample</Button>
+                                                                            </a>
 
-
-                                                                </div>
-                                                                <div className="inline_b">
-                                                                    <span className="headings">Chat IDs</span>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'used_chat_ids', 'USED CHAT IDS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'chat_ids', 'Chat IDs') }} size='small' className="pull-right imp_btn">View</Button>
-                                                                    <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
-                                                                        this.exportCSV('chat_ids');
-                                                                    }} >Export</Button>
-                                                                    <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                                                        </div>
+                                                                        <div className="inline_b">
+                                                                            <span className="headings">Chat IDs</span>
+                                                                            <Button onClick={() => { this.showViewmodal(true, 'used_chat_ids', 'USED CHAT IDS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                            <Button onClick={() => { this.showViewmodal(true, 'chat_ids', 'Chat IDs') }} size='small' className="pull-right imp_btn">View</Button>
+                                                                            <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
+                                                                                this.exportCSV('chat_ids');
+                                                                            }} >Export</Button>
+                                                                            {/* <Button size='small' className="pull-right imp_btn" type="primary" onClick={() => {
                                                                         this.showImportModal(true, "chat_ids", "Chat IDs")
-                                                                    }}>Import</Button>
-                                                                    <a href={`${BASE_URL}users/getFile/import_chat_ids.xlsx`}>
-                                                                        <Button size='small' className="pull-right imp_btn" type="dashed" >Sample</Button>
-                                                                    </a>
+                                                                    }}>Import</Button> */}
+                                                                            <a href={`${BASE_URL}users/getFile/import_chat_ids.xlsx`}>
+                                                                                <Button size='small' className="pull-right imp_btn" type="dashed" >Sample</Button>
+                                                                            </a>
 
-                                                                </div>
-                                                                <div className="inline_b">
-                                                                    <span className="headings">SIM IDs</span>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'used_sim_ids', 'USED SIM IDS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
-                                                                    <Button onClick={() => { this.showViewmodal(true, 'sim_ids', 'Sim IDs') }} size='small' className="pull-right imp_btn mb-0">View</Button>
-                                                                    <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
-                                                                        this.exportCSV('sim_ids');
-                                                                    }} >Export</Button>
-                                                                    <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
+                                                                        </div>
+                                                                        <div className="inline_b">
+                                                                            <span className="headings">SIM IDs</span>
+                                                                            <Button onClick={() => { this.showViewmodal(true, 'used_sim_ids', 'USED SIM IDS') }} size='small' className="pull-right  exp_btn" type="dashed">Release</Button>
+                                                                            <Button onClick={() => { this.showViewmodal(true, 'sim_ids', 'Sim IDs') }} size='small' className="pull-right imp_btn mb-0">View</Button>
+                                                                            <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
+                                                                                this.exportCSV('sim_ids');
+                                                                            }} >Export</Button>
+                                                                            {/* <Button size='small' className="pull-right imp_btn mb-0" type="primary" onClick={() => {
                                                                         this.showImportModal(true, "sim_ids", "Sim IDs")
-                                                                    }}>Import</Button>
+                                                                    }}>Import</Button> */}
 
-                                                                    <a href={`${BASE_URL}users/getFile/import_sim_ids.xlsx`}>
-                                                                        <Button size='small' className="pull-right imp_btn mb-0" type="dashed">Sample</Button>
-                                                                    </a>
+                                                                            <a href={`${BASE_URL}users/getFile/import_sim_ids.xlsx`}>
+                                                                                <Button size='small' className="pull-right imp_btn mb-0" type="dashed">Sample</Button>
+                                                                            </a>
 
+                                                                        </div>
+                                                                    </Row>
                                                                 </div>
+                                                            </Card>
+                                                        </div>
+                                                    </Row>
+
+                                                </Fragment>
+                                            </div>
+
+                                        </Modal>
+                                    </div>
+                                </Col>
+                                <Col xs={24} sm={24} md={8} lg={8} xl={8} >
+
+                                    <Modal
+                                        width="400px"
+                                        className="back_db"
+                                        maskClosable={false}
+                                        title={<div>BACKUP DATABASE</div>}
+                                        visible={this.state.backUpModal}
+                                        onOk={this.createBackupDB}
+                                        onCancel={this.handleCancel}
+                                        okText='BACKUP NOW'
+                                        okButtonDisabled={true}
+                                        centered
+                                    >
+                                        <div>
+                                            <p style={{ margin: 13 }}>Hit 'BACKUP NOW' button below to back up your complete system database. To access your database unzip generated Files first and open in Excel. </p>
+                                        </div>
+                                    </Modal>
+                                    <div>
+                                        <div>
+                                            <Link to="#" onClick={() => this.showPwdConfirmModal(true)}>
+                                                <Card className="manage_ac" style={{ borderRadius: 12 }}>
+                                                    <div>
+                                                        <div>
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> {convertToLang(this.props.translation[BACKUP_DATABASE], BACKUP_DATABASE)} </h2>
+                                                            <Divider className="mb-0" />
+                                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                                <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                    <Icon type="database" className="and_icon" />
+                                                                </Col>
+                                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                    <p>
+                                                                        {convertToLang(this.props.translation[BACKUP_DATABASE_DESCRIPTION], BACKUP_DATABASE_DESCRIPTION)}
+                                                                    </p>
+                                                                </Col>
                                                             </Row>
                                                         </div>
-                                                    </Card>
-                                                </div>
-                                            </Row>
-
-                                        </Fragment>
+                                                    </div>
+                                                </Card>
+                                                <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                            </Link>
+                                            {/* <div className="middle">
+                                        <div className="text">Coming Soon</div>
+                                    </div> */}
+                                        </div>
                                     </div>
-
-                                </Modal>
-                            </div>
-                        </Col>
+                                </Col>
+                            </Fragment>
+                            : null}
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
-                                <div className="contenar">
-                                    <a href="javascript:void(0)" >
+                                <div>
+                                    <a href="javascript:void(0)"
+                                        // onClick={(e) => {
+                                        //     this.showPurchaseModal(e, true);
+                                        // }}
+                                    >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
-                                                    <Row>
-                                                        <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="branches" />  Manage Tokens</h2>
-                                                            <Divider className="mb-0" />
-                                                            <div className="crd_txt">
-                                                                <p><span className="diamond_icon">&#9670;</span>Distribute tokens</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Set prices and delay for each token</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Set permissions for Tokens</p>
-                                                                <p className="more_txt">and more...</p>
-                                                            </div>
-                                                        </div>
-                                                    </Row>
+                                                    <div className="ac_card">
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PURCHASE_CREDITS], PURCHASE_CREDITS)} </h2>
+                                                        <Divider className="mb-0" />
+                                                        <Row style={{ padding: '12px 0 0px' }}>
+                                                            <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                <Icon type="dollar" className="and_icon" />
+                                                            </Col>
+                                                            <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                <p>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], PURCHASE_CREDITS_DESCRIPTION)}</p>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
                                                 </Fragment>
                                             </div>
                                         </Card>
+                                        <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
                                     </a>
-                                    <div className="middle">
-                                        <div className="text">Coming Soon</div>
-                                    </div>
+                                    <PurchaseCredit
+                                        showPurchaseModal={this.showPurchaseModal}
+                                        purchase_modal={this.state.purchase_modal}
+                                        purchaseCredits={this.props.purchaseCredits}
+                                        purchaseCreditsFromCC={this.props.purchaseCreditsFromCC}
+                                        translation={this.props.translation}
+                                    />
                                 </div>
                             </div>
                         </Col>
+
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <div>
                                 <div className="contenar">
-                                    <a href="javascript:void(0)">
+                                    {/* <a href="javascript:void(0)" onClick={() => this.showPricingModal(true)}> */}
+                                    <Link to={"/set-prices"}>
+                                        {/* <Link to={"/set-prices/" + this.props.whiteLabelInfo.name}> */}
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">
                                                 <Fragment>
                                                     <Row>
                                                         <div className="col-md-12 ac_card">
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="credit-card" /> Payment Gateway</h2>
+                                                            <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PACKAGES_AND_IDS], PACKAGES_AND_IDS)} </h2>
                                                             <Divider className="mb-0" />
-                                                            <div className="crd_txt">
-                                                                <p><span className="diamond_icon">&#9670;</span>Add/edit payment gateway</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Set permissions</p>
-                                                                <p><span className="diamond_icon">&#9670;</span>Customize prices and packages</p>
-                                                                <p className="more_txt">and more...</p>
-                                                            </div>
+                                                            <Row style={{ padding: '12px 0 0px' }}>
+                                                                <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                                    <Icon type="dollar" className="and_icon" />
+                                                                </Col>
+                                                                <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
+                                                                    <div className="crd_txt">
+                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], PACKAGES_AND_IDS_01)}</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], PACKAGES_AND_IDS_02)}</p>
+                                                                        <p><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], PACKAGES_AND_IDS_03)}</p>
+                                                                        <p className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</p>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+
                                                         </div>
                                                     </Row>
                                                 </Fragment>
                                             </div>
                                         </Card>
-                                    </a>
-                                    <div className="middle">
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                        {/* </a> */}
+                                    </Link>
+                                    {/* <div className="middle">
+                                        <SetPricingModal
+                                            showPricingModal={this.showPricingModal}
+                                            pricing_modal={this.state.pricing_modal}
+                                            // LabelName = {this.props.whiteLabelInfo.name}
+                                            saveIDPrices={this.props.saveIDPrices}
+                                            setPackage={this.props.setPackage}
+                                        // whitelabel_id={this.props.whiteLabelInfo.id}
+
+                                        />
+                                    </div> */}
+                                    {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </Col>
                     </Row>
                 </div>
-
-            </div >
-
-
+                <PasswordModal
+                    translation={this.props.translation}
+                    pwdConfirmModal={this.state.pwdConfirmModal}
+                    showPwdConfirmModal={this.showPwdConfirmModal}
+                    checkPass={this.props.checkPass}
+                    translation= {this.props.translation}
+                />
+            </div>
         );
-
     }
 }
 
 // export default Account;
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getSimIDs: getSimIDs,
-        getChatIDs: getChatIDs,
-        getPGPEmails: getPGPEmails,
         importCSV: importCSV,
         exportCSV: exportCSV,
-        getUsedPGPEmails: getUsedPGPEmails,
-        getUsedChatIds: getUsedChatIds,
-        getUsedSimIds: getUsedSimIds,
         releaseCSV: releaseCSV,
-        insertNewData: insertNewData
+        insertNewData: insertNewData,
+        createBackupDB: createBackupDB,
+        checkPass: checkPass,
+        showBackupModal: showBackupModal,
+        // saveIDPrices: saveIDPrices,
+        // setPackage: setPackage,
+        getPackages: getPackages,
+        purchaseCredits: purchaseCredits,
+        purchaseCreditsFromCC: purchaseCreditsFromCC
     }, dispatch);
 }
-var mapStateToProps = ({ account, devices }) => {
-    // console.log("sim_ids", devices.sim_ids);
-    // console.log("chat_ids", devices.chat_ids);
-    // console.log("used_pgp_emails", account.used_pgp_emails);
-    // console.log("used_caht", account.used_chat_ids);
-    // console.log("used_sadas", account.used_sim_ids);
+
+var mapStateToProps = ({ account, devices, settings, auth }) => {
     return {
         msg: account.msg,
         showMsg: account.showMsg,
-        sim_ids: devices.sim_ids,
-        chat_ids: devices.chat_ids,
-        pgp_emails: devices.pgp_emails,
-        used_pgp_emails: account.used_pgp_emails,
-        used_chat_ids: account.used_chat_ids,
-        used_sim_ids: account.used_sim_ids,
-        duplicate_data_type: account.duplicate_data_type,
-        duplicate_ids: account.duplicate_ids,
-        duplicate_modal_show: account.duplicate_modal_show,
-        newData: account.newData
+        newData: account.newData,
+        backUpModal: account.backUpModal,
+        translation: settings.translation,
+        user: auth.authUser
     };
 }
 

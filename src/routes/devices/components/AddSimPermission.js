@@ -63,7 +63,7 @@ class SimPermissionForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            console.log(err, 'form', values.name);
+            // console.log(err, 'form', values.name);
             if (values.name === '') {
                 this.setState({
                     validateStatus: 'error',
@@ -91,8 +91,8 @@ class SimPermissionForm extends Component {
     handleNameValidation = (event) => {
         var fieldvalue = event.target.value;
 
-        console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
-        console.log('vlaue', fieldvalue)
+        // console.log('rest ', /[^A-Za-z \d]/.test(fieldvalue));
+        // console.log('vlaue', fieldvalue)
 
         if (fieldvalue === '') {
             this.setState({

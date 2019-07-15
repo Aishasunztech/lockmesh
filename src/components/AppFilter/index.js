@@ -5,6 +5,7 @@ import styles from "./appfilter.css";
 import Picky from 'react-picky';
 import 'react-picky/dist/picky.css';
 import { withRouter, Redirect, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -13,7 +14,36 @@ import {
     getUser
 } from "../../appRedux/actions/Auth";
 
+import {
+    Tab_All,
+    Tab_Active,
+    Tab_Expired,
+    Tab_Trial,
+    Tab_Suspended,
+    Tab_PreActivated,
+    Tab_PendingActivation,
+    Tab_Transfer,
+    Tab_Unlinked,
+    Tab_Flagged,
+    Tab_ComingSoon,
+    Tab_Archived,
+} from '../../constants/TabConstants';
 
+import {
+    Devices_Top_Bar,
+    Appfilter_SelectAll,
+    Appfilter_ShowDevices,
+    Appfilter_SearchDevices,
+    Dealer_Top_Bar,
+    Appfilter_ShowDealer,
+    Appfilter_SearchDealer,
+    Appfilter_Display
+} from '../../constants/AppFilterConstants';
+
+import { convertToLang } from '../../routes/utils/commonUtils';
+// Picky.prototype={
+//     value: new PropTypes.object(),
+// }
 class AppFilter extends Component {
     constructor(props) {
         super(props);
@@ -25,7 +55,6 @@ class AppFilter extends Component {
     }
 
     componentDidMount() {
-        //  console.log("componentDidMount selectedOptions appfilter", this.props.selectedOptions);
         this.setState({
             selectedDisplayValues: this.props.selectedOptions,
         });
@@ -54,7 +83,7 @@ class AppFilter extends Component {
     }
 
     setDropdowns(values) {
-        // console.log('values of undefined', values);
+        // console.log('setDropdowns val : ', values)
         this.setState({
             selectedDisplayValues: values,
         });
@@ -82,24 +111,34 @@ class AppFilter extends Component {
     }
 
     render() {
-        // console.log(" Current State", this.props)
+        const { translation } = this.props;
+        // console.log(" Current State options are ", this.props.options)
         let fullScreenClass1 = "";
         let fullScreenClass2 = "";
 
         if (this.props.isAddButton === false) {
-            fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-3";
+            fullScreenClass1 = "col-md-4";
+            fullScreenClass2 = "col-md-4";
         } else {
             fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-2";
+            fullScreenClass2 = "col-md-3";
         }
 
-        // console.log(this.props.options);
         const Search = Input.Search;
-        //  console.log('render ...', this.props.selectedOptions);
+        //  console.log('render props selectedOptions ...', this.props.selectedOptions);
+        //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
+        //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
+        let allSelectedOpt;
+        if (this.props.options !== undefined) {
+            if (this.props.options.length === this.state.selectedDisplayValues.length) {
+                allSelectedOpt = true;
+            } else { allSelectedOpt = false }
+            //  console.log('allSelectedOpt val are: ', allSelectedOpt)
+        }
+
         return (
             // className="gutter-example"
-            <Card >
+            <Card className="sticky_top_bar">
                 <Row gutter={16} className="filter_top">
                     <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
@@ -108,10 +147,13 @@ class AppFilter extends Component {
                                     <Icon type="down" className="down_icon" />
                                     <Picky
                                         options={this.props.options}
+                                        valueKey="key"
+                                        labelKey="value"
                                         value={this.state.selectedDisplayValues}
-                                        placeholder="Display"
+                                        placeholder={convertToLang(translation[Appfilter_Display], Appfilter_Display)}
                                         className="display_"
                                         multiple={true}
+                                        numberDisplayed={true}
                                         includeSelectAll={true}
                                         onChange={values => this.setDropdowns(values)}
                                         dropdownHeight={300}
@@ -134,11 +176,11 @@ class AppFilter extends Component {
                                                         onKeyPress={toggleSelectAll}
                                                         key={tabIndex}
                                                     >
-                                                        {/* required to select item */}
-                                                        {/* <input type="checkbox" checked={isSelected} readOnly /> */}
                                                         <Checkbox
-                                                            checked={allSelected} className="slct_all"
-                                                        >SELECT ALL</Checkbox>
+                                                            checked={allSelectedOpt} className="slct_all"
+                                                        >
+                                                            {convertToLang(translation[Appfilter_SelectAll], Appfilter_SelectAll)}
+                                                        </Checkbox>
                                                     </li>
                                                 );
                                             }
@@ -154,16 +196,15 @@ class AppFilter extends Component {
                                             valueKey,
                                             multiple
                                         }) => {
+
                                             return (
                                                 <li
                                                     style={style} // required
                                                     className={isSelected ? 'selected' : ''} // required to indicate is selected
-                                                    key={item} // required
-                                                    onClick={() => selectValue(item)}
+                                                    key={item.key} // required
+                                                    onClick={() => selectValue({ "key": item.key, "value": convertToLang(this.props.translation[item.value], item.value) })}
                                                 >
-                                                    {/* required to select item */}
-                                                    {/* <input type="checkbox" checked={isSelected} readOnly /> */}
-                                                    <Checkbox checked={isSelected}>{item}</Checkbox>
+                                                    <Checkbox checked={isSelected}>{convertToLang(this.props.translation[item.value], item.value)}</Checkbox>
 
                                                 </li>
                                             );
@@ -192,23 +233,27 @@ class AppFilter extends Component {
                             />
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
-                        <div className="gutter-box">
-                            <Select
-                                value={this.state.DisplayPages}
-                                //  defaultValue={this.state.DisplayPages}
-                                style={{ width: '100%' }}
-                                // onSelect={value => this.setState({DisplayPages:value})}
-                                onChange={value => this.handlePagination(value)}
-                            >
-                                <Select.Option value="10" >10</Select.Option>
-                                <Select.Option value="20">20</Select.Option>
-                                <Select.Option value="30">30</Select.Option>
-                                <Select.Option value="50">50</Select.Option>
-                                <Select.Option value="100">100</Select.Option>
-                            </Select>
-                        </div>
-                    </Col>
+                    {/* {(false) ?//!this.props.setPrice
+                        <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
+                            <div className="gutter-box">
+                                <Select
+                                    value={this.state.DisplayPages}
+                                    //  defaultValue={this.state.DisplayPages}
+                                    style={{ width: '100%' }}
+                                    // onSelect={value => this.setState({DisplayPages:value})}
+                                    onChange={value => this.handlePagination(value)}
+                                >
+                                    <Select.Option value="10" >10</Select.Option>
+                                    <Select.Option value="20">20</Select.Option>
+                                    <Select.Option value="30">30</Select.Option>
+                                    <Select.Option value="50">50</Select.Option>
+                                    <Select.Option value="100">100</Select.Option>
+                                </Select>
+                            </div>
+                        </Col>
+                        :
+                        <Col />
+                    } */}
                     <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
                         <div className="gutter-box">
                             {
@@ -224,52 +269,61 @@ class AppFilter extends Component {
                                         </Button>
 
                                         : (this.props.addDealer) ?
-                                        <Button
-                                            type="primary"
-                                            disabled={(this.props.disableAddButton === true) ? true : false}
-                                            style={{ width: '100%' }}
-                                            onClick={() => this.props.addDealer(true)}
-                                        >
-                                            {this.props.addButtonText}
-                                        </Button>
-                                        :
-                                        (this.props.AddDeviceModal) ?
                                             <Button
                                                 type="primary"
                                                 disabled={(this.props.disableAddButton === true) ? true : false}
                                                 style={{ width: '100%' }}
-                                                onClick={() => this.props.handleDeviceModal(true)}
+                                                onClick={() => this.props.addDealer(true)}
                                             >
                                                 {this.props.addButtonText}
                                             </Button>
                                             :
-                                            (this.props.AddPolicyModel) ?
+                                            (this.props.AddDeviceModal) ?
                                                 <Button
                                                     type="primary"
                                                     disabled={(this.props.disableAddButton === true) ? true : false}
                                                     style={{ width: '100%' }}
-                                                    onClick={() => this.props.handlePolicyModal(true)}
+                                                    onClick={() => this.props.handleDeviceModal(true)}
                                                 >
                                                     {this.props.addButtonText}
                                                 </Button>
-                                                : (this.props.handleUploadApkModal) ?
+                                                :
+                                                (this.props.AddPolicyModel) ?
                                                     <Button
                                                         type="primary"
                                                         disabled={(this.props.disableAddButton === true) ? true : false}
                                                         style={{ width: '100%' }}
-                                                        onClick={() => this.props.handleUploadApkModal(true)}
+                                                        onClick={() => this.props.handlePolicyModal(true)}
                                                     >
                                                         {this.props.addButtonText}
                                                     </Button>
-                                                    :
-                                                    <Button
-                                                        type="primary"
-                                                        disabled={(this.props.disableAddButton === true) ? true : false}
-                                                        style={{ width: '100%' }}
-                                                        onClick={() => this.props.handleUserModal()}
-                                                    >
-                                                        {this.props.addButtonText}
-                                                    </Button>
+                                                    : (this.props.handleUploadApkModal) ?
+                                                        <Button
+                                                            type="primary"
+                                                            disabled={(this.props.disableAddButton === true) ? true : false}
+                                                            style={{ width: '100%' }}
+                                                            onClick={() => this.props.handleUploadApkModal(true)}
+                                                        >
+                                                            {this.props.addButtonText}
+                                                        </Button>
+                                                        : (this.props.setPrice) ?
+                                                            <Button
+                                                                type="primary"
+                                                                disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                style={{ width: '100%' }}
+                                                                onClick={() => this.props.showPricingModal(true)}
+                                                            >
+                                                                {this.props.addButtonText}
+                                                            </Button>
+                                                            :
+                                                            <Button
+                                                                type="primary"
+                                                                disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                style={{ width: '100%' }}
+                                                                onClick={() => this.props.handleUserModal()}
+                                                            >
+                                                                {this.props.addButtonText}
+                                                            </Button>
 
 
                                     : null

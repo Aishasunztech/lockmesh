@@ -36,12 +36,12 @@ const DealerApps = (props) => {
             key: 'enable'
         },
     ];
-    
+
     const renderApps = (apk_list, isSwitchable, selectedAppKeys) => {
-        console.log(props.selectedAppKeys);
+        // console.log(props.selectedAppKeys);
         return apk_list.map((app) => {
 
-            let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false: false;
+            let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false : false;
             // let isAvailable = false;
             // console.log('isAvailable', isAvailable);
             return {
@@ -55,7 +55,7 @@ const DealerApps = (props) => {
                 apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
                 guest: ((isSwitchable || props.disabledSwitch) ?
                     <Switch
-                        defaultChecked={app.guest === true || app.guest == 1 ? true : false}
+                        defaultChecked={app.guest === true || app.guest === 1 ? true : false}
                         disabled={!isAvailable}
                         size={"small"}
                         onClick={(e) => {
@@ -64,7 +64,7 @@ const DealerApps = (props) => {
                     /> : (app.guest === true) ? 'On' : 'Off'),
                 encrypted: ((isSwitchable || props.disabledSwitch) ?
                     <Switch
-                    defaultChecked={app.encrypted === true || app.encrypted == 1 ? true : false}
+                        defaultChecked={app.encrypted === true || app.encrypted === 1 ? true : false}
 
                         disabled={!isAvailable}
                         size={"small"}
@@ -74,7 +74,7 @@ const DealerApps = (props) => {
                     /> : (app.encrypted === true) ? 'On' : 'Off'),
                 enable: ((isSwitchable || props.disabledSwitch) ?
                     <Switch
-                    defaultChecked={app.enable === true || app.enable == 1 ? true : false}
+                        defaultChecked={app.enable === true || app.enable === 1 ? true : false}
                         disabled={!isAvailable}
                         size={"small"}
                         onClick={(e) => {
@@ -91,7 +91,7 @@ const DealerApps = (props) => {
         selectedRowKeys: props.selectedAppKeys,
 
     };
-    if (props.type == 'pull') {
+    if (props.type === 'pull') {
         columns = [
 
             {
@@ -113,7 +113,7 @@ const DealerApps = (props) => {
         ];
     }
 
-    console.log('apk list is updated', props.apk_list)
+    // console.log('apk list is updated', props.apk_list)
     return (
         <Fragment>
             <Table

@@ -109,6 +109,12 @@
      color: #bfbfbf;
  }
 
+ .sticky_top_bar {
+     position: sticky;
+     top: 0;
+     z-index: 100;
+ }
+
  .picky__input::after {
      position: absolute;
      width: 0;
@@ -177,5 +183,9 @@
 
      .down_icon {
          top: 20px;
+     }
+
+     .sticky_top_bar {
+         position: relative;
      }
  }

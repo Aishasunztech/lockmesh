@@ -231,6 +231,67 @@ export function getPGPEmails() {
     }
 }
 
+// get All ids
+export function getAllSimIDs() {
+    return (dispatch) => {
+
+        RestService.getAllSimIDs().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+                dispatch({
+                    type: GET_SIM_IDS,
+                    payload: response.data.data
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+
+export function getAllChatIDs() {
+    return (dispatch) => {
+
+        RestService.getAllChatIDs().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+                dispatch({
+                    type: GET_CHAT_IDS,
+                    payload: response.data.data
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+
+export function getAllPGPEmails() {
+    return (dispatch) => {
+        // alert("hello");
+        RestService.getAllPGPEmails().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+                dispatch({
+                    type: GET_PGP_EMAILS,
+                    payload: response.data.data
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+}
+
 
 
 export function rejectDevice(device) {

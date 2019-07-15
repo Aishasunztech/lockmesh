@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form, Input, message } from 'antd';
+import { convertToLang } from '../../utils/commonUtils';
+import { Button_Ok, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
+import { Change_Profile, User_Name_require, Name } from '../../../constants/Constants';
 
 let form_data = '';
 export default class ChangeProfile extends Component {
@@ -39,13 +42,15 @@ export default class ChangeProfile extends Component {
             <div>
                 <Modal
                     visible={visible}
-                    title="Change Profile"
+                    title= {convertToLang(this.props.translation[Change_Profile], Change_Profile)}
                     maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={false}
-                    cancelText="Cancel"
+                    // cancelText="Cancel"
                     className="prof_f_b"
+                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
                 >
 
                 <EditFormCreate 
@@ -53,6 +58,7 @@ export default class ChangeProfile extends Component {
                     handleCancel={this.handleCancel}
                     updateUserProfile={this.props.updateUserProfile}
                     getUser={this.props.getUser}
+                    translation={this.props.translation}
                     
                 />
 
@@ -87,13 +93,13 @@ class EditForm extends Component {
             <Form onSubmit={this.handleSubmit}>
 
                 <Form.Item
-                    label="Name "
+                    label= {convertToLang(this.props.translation[Name], Name)}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 12 }}
                 >
                  {this.props.form.getFieldDecorator('name', {
                       initialValue: this.props.profile.name,
-                    rules: [{ required: true, message: 'Please input your Name!' }],
+                    rules: [{ required: true, message: convertToLang(this.props.translation[User_Name_require], User_Name_require) }],
                 })(
 
                     <Input />
@@ -128,8 +134,8 @@ class EditForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                 <Button key="back" type="button" onClick={this.props.handleCancel}>Cancel</Button>
-                    <Button type="primary" htmlType="submit">Submit</Button>
+                 <Button key="back" type="button" onClick={this.props.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}</Button>
+                    <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], Button_submit)}</Button>
                 </Form.Item>
 
             </Form>
