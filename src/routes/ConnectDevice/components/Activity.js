@@ -380,6 +380,7 @@ export default class Activity extends Component {
                                         controls={controls}
                                         show_all_apps={true}
                                         show_unchanged={true}
+                                        translation={this.props.translation}
                                     />
                                 )
 

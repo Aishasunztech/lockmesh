@@ -80,6 +80,7 @@ class PasswordModal extends Component {
                     checkPass={this.props.checkPass}
                     actionType={this.props.actionType}
                     handleCancel={this.props.showPwdConfirmModal}
+                    translation={this.props.translation}
                     ref='pswdForm'
                 />
             </Modal >
@@ -137,6 +138,7 @@ class DealerAppModal extends Component {
                     selectedApps={this.props.selectedApps}
                     selectedAppKeys={this.props.selectedAppKeys}
                     handleChecked={this.props.handleChecked}
+                    translation={this.props.translation}
                 />
             </Modal>
         )
@@ -192,6 +194,7 @@ class PullAppModal extends Component {
                     selectedAppKeys={this.props.selectedAppKeys}
                     handleChecked={this.props.handleChecked}
                     type={this.props.actionType === PUSH_APPS ? "push" : 'pull'}
+                    translation={this.props.translation}
                 />
             </Modal>
         )
@@ -777,7 +780,7 @@ class SideActions extends Component {
                         />
                         :
                         (this.state.historyType === "profile") ?
-
+                                    
                             <TableHistory
                                 histories={this.props.profiles}
                                 type={this.state.historyType}
@@ -822,6 +825,7 @@ class SideActions extends Component {
                         isGuestPwd={this.props.isGuestPwd}
                         controls={{ 'controls': this.state.changedCtrls }}
                         showChangedControls={true}
+                        translation={this.props.translation}
                     />
                 </Modal>
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
