@@ -45,7 +45,7 @@ const initialState = {
     isloading: true,
     copyPolicies: [],
     selectedOptions: [],
-    options: [POLICY_NAME, POLICY_NOTE],
+    options: [POLICY_NAME, POLICY_NOTE, ],
     allExtensions: [],
     appPermissions: [],
     allExtensionsCopy: [],
