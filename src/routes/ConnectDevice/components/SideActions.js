@@ -16,6 +16,7 @@ import DealerApps from "./DealerApps";
 import PasswordForm from './PasswordForm';
 import DeviceSettings from './DeviceSettings';
 import Activity from './Activity';
+import SimSettings from './SimSettings';
 
 
 
@@ -255,6 +256,7 @@ class SideActions extends Component {
         super(props);
 
         this.state = {
+            showSimModal: false,
             pullAppsModal: false,
             pushAppsModal: false,
             historyModal: false,
@@ -423,6 +425,14 @@ class SideActions extends Component {
         });
     }
 
+    handleSimModule = () => {
+        console.log('test sim module');
+
+        this.setState({
+            showSimModal: true
+        })
+    }
+
     handleComponentSearch = (value) => {
         // alert('its working', value)
         //    console.log('values sr', value)   
@@ -582,6 +592,7 @@ class SideActions extends Component {
     }
 
     render() {
+        console.log('extensions :', this.props.extensions)
         // console.log(this.state.apk_list, 'list apk')
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
@@ -692,17 +703,18 @@ class SideActions extends Component {
                                     {/* <IntlMessages id="button.Activity" /> */}
                                     {convertToLang(this.props.translation[Button_Activity], "Activity")}
                                 </Button>
-                                <Tooltip placement="left" title="Coming Soon">
+                                {/* <Tooltip placement="left" title="Coming Soon"> */}
                                     <Button
                                         type="default"
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
+                                        onClick={this.handleSimModule}
                                     >
                                         <Icon type="file" />
 
                                         {/* <IntlMessages id="button.SIM" /> */}
                                         {convertToLang(this.props.translation[Button_SIM], "SIM")}
                                     </Button>
-                                </Tooltip>
+                                {/* </Tooltip> */}
                             </Col>
                         </Row>
                     </Card>
@@ -838,6 +850,38 @@ class SideActions extends Component {
                         translation={this.props.translation}
                     />
                 </Modal>
+
+                    {/* SIM MODULE */}
+                    <Modal
+                    width='850px'
+                    maskClosable={false}
+                    title= "Sim Settings" // {convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
+                    visible={this.state.showSimModal}
+                    // onOk={() => {
+                    //     this.showSaveProfileModal(true, 'profile')
+                    //     this.setState({ showChangesModal: false })
+                    // }}
+                    onCancel={() => this.setState({ showSimModal: false })}
+                    // okText='Apply'
+                    // okText={convertToLang(this.props.translation[Button_Apply], "Apply")}
+                    // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                >
+                    <SimSettings
+                        // app_list={this.props.app_list}
+                        extension={this.props.extensions}
+                        // extensionUniqueName={SECURE_SETTING}
+                        // isAdminPwd={this.props.isAdminPwd}
+                        // isDuressPwd={this.props.isDuressPwd}
+                        // isEncryptedPwd={this.props.isEncryptedPwd}
+                        // isGuestPwd={this.props.isGuestPwd}
+                        // controls={{ 'controls': this.state.changedCtrls }}
+                        // showChangedControls={true}
+                        translation={this.props.translation}
+                    />
+                </Modal>
+
+                    {/* END SIM MODULE */}
+
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
                     title={<div> {convertToLang(this.props.translation[SAVE_PROFILE_TEXT], "SAVE PROFILE")} <br /> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}:  {this.props.device.device_id} </div>}

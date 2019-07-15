@@ -83,7 +83,7 @@ class SettingAppPermissions extends Component {
   renderApps = () => {
 
     let extension = this.state.extension;
-    // console.log("render list extension", extension);
+    console.log("render list extension", extension);
 
     if (this.state.extension !== undefined && this.state.extension !== null && Object.keys(extension).length) {
 
