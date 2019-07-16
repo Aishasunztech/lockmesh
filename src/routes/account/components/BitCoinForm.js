@@ -4,6 +4,9 @@ import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Tabl
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Confirm } from '../../../constants/ButtonConstants';
 import { WARNNING } from '../../../constants/Constants';
+import CoinbaseCommerceButton from 'react-coinbase-commerce';
+// import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
+
 
 const confirm = Modal.confirm;
 
@@ -82,7 +85,7 @@ class BitCoinForm extends Component {
                         }
                     }
                 >
-                    {/* <CoinbaseCommerceButton checkoutId={'be05fae1-b47e-46b0-9632-891411337942'}/> */}
+                    <CoinbaseCommerceButton checkoutId={'be05fae1-b47e-46b0-9632-891411337942'}/>
 
                     {/* <Form style={{ marginTop: 20 }} onSubmit={this.handleSubmit} autoComplete="new-password">
                         <Form.Item

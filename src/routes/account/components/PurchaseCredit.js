@@ -223,7 +223,7 @@ class PurchaseCredit extends Component {
                                         <Select.Option value="USD">USD</Select.Option>
                                         <Select.Option value="CAD">CAD</Select.Option>
                                         <Select.Option value="EUR">EUR</Select.Option>
-                                        <Select.Option value="BTC">BTC(bitcoin)</Select.Option>
+                                        {/* <Select.Option value="BTC">BTC(bitcoin)</Select.Option> */}
                                         {/* <Select.Option value="">Select PGP Email</Select.Option> */}
 
                                     </Select>
