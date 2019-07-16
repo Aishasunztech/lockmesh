@@ -6,7 +6,7 @@ import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { APK_APP_NAME } from '../../../constants/ApkConstants';
 import { Guest, ENCRYPTED, ENABLE, EXTENSION_NAME, ADMIN_PASSWORD_IS_CHANGED, ENCRYPTED_PASSWORD_IS_CHANGED, GUEST_PASSWORD_IS_CHANGED, DURESS_PASSWORD_IS_CHANGED } from '../../../constants/TabConstants';
 import { DEVICE_STATUS } from '../../../constants/DeviceConstants';
-
+import { appsColumns, extensionColumns, controlColumns } from '../../utils/columnsUtils';
 // import AppList from "./AppList";
 
 export default class TableHistory extends Component {
@@ -20,54 +20,9 @@ export default class TableHistory extends Component {
             push_apps: []
         }
 
-        this.appsColumns = [
-            {
-                title: convertToLang(this.props.translation[APK_APP_NAME], APK_APP_NAME),
-                dataIndex: 'label',
-                key: '1',
-                render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
-            }, {
-                title: convertToLang(this.props.translation[Guest], Guest),
-                dataIndex: 'guest',
-                key: '2',
-            }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
-                dataIndex: 'encrypted',
-                key: '3',
-            }, {
-                title: convertToLang(this.props.translation[ENABLE], ENABLE),
-                dataIndex: 'enable',
-                key: '4',
-            }
-        ];
-        this.extensionColumns = [
-            {
-                title: convertToLang(this.props.translation[EXTENSION_NAME], EXTENSION_NAME),
-                dataIndex: 'label',
-                key: '1',
-                render: text => <a href="javascript:;" style={{ fontSize: 12 }}> {text}</ a>,
-            }, {
-                title: convertToLang(this.props.translation[Guest], Guest),
-                dataIndex: 'guest',
-                key: '2',
-            }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
-                dataIndex: 'encrypted',
-                key: '3',
-            }
-        ];
-        this.controlColumns = [
-            {
-                title: convertToLang(this.props.translation[PERMISSION_NAME], PERMISSION_NAME),
-                dataIndex: 'label',
-                key: '1',
-                render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
-            }, {
-                title: convertToLang(this.props.translation[DEVICE_STATUS], DEVICE_STATUS),
-                dataIndex: 'status',
-                key: '2',
-            }
-        ];
+        this.appsColumns = appsColumns(props.translation);
+        this.extensionColumns = extensionColumns(props.translation);
+        this.controlColumns = controlColumns(props.translation);
     }
 
     cotrolsValues = () => {
@@ -219,6 +174,12 @@ export default class TableHistory extends Component {
             })
             this.filterAppList()
             this.filterExtensions()
+        }
+
+        if (this.props.translation != prevProps.translation) {
+            this.appsColumns = appsColumns(this.props.translation);
+            this.extensionColumns = extensionColumns(this.props.translation);
+            this.controlColumns = controlColumns(this.props.translation);
         }
     }
 

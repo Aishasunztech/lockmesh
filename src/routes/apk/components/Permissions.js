@@ -397,16 +397,11 @@ class Permissions extends Component {
       // console.log('object recrd', dealer);
       if (this.state.permissions) {
         is_included = this.state.permissions.includes(dealer.dealer_id);
-
       }
       let common = {
         'key': dealer.dealer_id,
         'row_key': dealer.dealer_id,
-        'dealer_id': (
-          <div data-column="DEALER ID">
-            {dealer.dealer_id ? dealer.dealer_id : 'N/A'}
-          </div>
-        ),
+        'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
         'dealer_name': (
           // <div data-column="DEALER NAME">
             dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
@@ -452,7 +447,6 @@ class Permissions extends Component {
     return (data);
   }
   render() {
-
     const { redirect } = this.state;
     if (redirect && this.state.dealer_id !== '') {
       return <Redirect to={{

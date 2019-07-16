@@ -436,6 +436,9 @@ class Permissions extends Component {
     return (data);
   }
   render() {
+
+
+    console.log(this.state.dealerList)
     const { redirect } = this.state;
     if (redirect && this.state.dealer_id !== '') {
       return <Redirect to={{
