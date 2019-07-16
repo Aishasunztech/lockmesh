@@ -201,8 +201,8 @@ class DealerList extends Component {
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
-            const dealer_status = (dealer.account_status === "suspended") ? convertToLang(this.props.translation[Button_Activate], Button_Activate) : convertToLang(this.props.translation[Button_Suspend], Button_Suspend);
-            const button_type = (dealer_status === "ACTIVATE") ? "dashed" : "danger";
+            const dealer_status = (dealer.account_status === "suspended") ? convertToLang(this.props.translation[Button_Activate], "Activate") : convertToLang(this.props.translation[Button_Suspend], "Suspend");
+            const button_type = (dealer_status === "ACTIVATE") ? "default" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
             data.push({
                 'row_key': dealer.dealer_id,
@@ -211,14 +211,14 @@ class DealerList extends Component {
                         onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
                         {(dealer.account_status === '') ? <div>{dealer_status}</div> : <div> {dealer_status}</div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], Button_Edit)}</Button>
+                    <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
                     <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
                         onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
-                        {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], Button_Delete)} </div> : <div> {convertToLang(this.props.translation[Button_Undo], Button_Undo)} </div>}
+                        {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], Button_Delete)} </div> : <div> {convertToLang(this.props.translation[Button_Undo], "UNDELETE")} </div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], Button_passwordreset)}</Button>
+                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
                     {(this.props.user.type === ADMIN) ?
-                        <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], Button_Connect)}</Button>
+                        <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], "Connect")}</Button>
                         :
                         null
                     }
@@ -241,10 +241,9 @@ class DealerList extends Component {
 
     render() {
         // console.log(this.props.dealersList, 'dealers list console');
-
         return (
-
             <Card className="fix_card dealer_fix_card">
+                <hr className="fix_header_border" style={{ top: "57px" }} />
                 <CustomScrollbars className="gx-popover-scroll">
                     <Table
                         size="middle"
@@ -339,13 +338,13 @@ export default class Tab extends Component {
         return (
             <Fragment>
                 <Tabs defaultActiveKey="1" type='card' className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab={<span> {convertToLang(this.props.translation[Tab_All], Tab_All)} ({this.props.allDealers})</span>} key="1" >
+                    <TabPane tab={<span> {convertToLang(this.props.translation[Tab_All], "All")} ({this.props.allDealers})</span>} key="1" >
                     </TabPane>
-                    <TabPane tab={<span className="green"> {convertToLang(this.props.translation[Tab_Active], Tab_Active)} ({this.props.activeDealers})</span>} key="2" forceRender={true}>
+                    <TabPane tab={<span className="green"> {convertToLang(this.props.translation[Tab_Active], "Active")} ({this.props.activeDealers})</span>} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="yellow"> {convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)} ({this.props.suspendDealers})</span>} key="4" forceRender={true}>
+                    <TabPane tab={<span className="yellow"> {convertToLang(this.props.translation[Tab_Suspended], "Suspended")} ({this.props.suspendDealers})</span>} key="4" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={<span className="orange"> {convertToLang(this.props.translation[Tab_Archived], Tab_Archived)} ({this.props.unlinkedDealers})</span>} key="3" forceRender={true}>
+                    <TabPane tab={<span className="orange"> {convertToLang(this.props.translation[Tab_Archived], "Archived")} ({this.props.unlinkedDealers})</span>} key="3" forceRender={true}>
                     </TabPane>
                 </Tabs>
                 <DealerList

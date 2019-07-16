@@ -8,6 +8,8 @@ import {
     submitPassword
 } from "../../../appRedux/actions/ConnectDevice"
 import styles from "./password.css";
+import { convertToLang } from '../../utils/commonUtils';
+import { ONLY_NUMBER_ARE_ALLOWED, PASSWORDS_ARE_INCONSISTENT, PLEASE_INPUT_YOUR_PASSWORD, Password_TEXT, PLEASE_CONFIRM_YOUR_PASSWORD, PASSWORD_AGAIN, SET_PASSWORD } from '../../../constants/DeviceConstants';
 
 
 class Password extends Component {
@@ -56,7 +58,7 @@ class Password extends Component {
         const form = this.props.form;
         if((value!==undefined) && value.length>0 && !Number(value)){
             // form.validateFields(['pwd'], {force:true});
-            callback("Only Number are allowed");
+            callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
         }
 
         if (value && this.state.confirmDirty) {
@@ -69,10 +71,10 @@ class Password extends Component {
         const form = this.props.form;
         if((value!==undefined) && value.length>0 && !Number(value)){
             // form.validateFields(['pwd'], {force:true});
-            callback("Only Number are allowed");
+            callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
         }
         if (value && value !== form.getFieldValue('pwd')) {
-            callback('passwords are inconsistent!');
+            callback(convertToLang(this.props.translation[PASSWORDS_ARE_INCONSISTENT], "passwords are inconsistent!"));
         } else {
             callback();
         }
@@ -89,14 +91,14 @@ class Password extends Component {
                         this.props.form.getFieldDecorator('pwd', {
                             rules: [
                                 {
-                                    required: true, message: 'Please input your password!',
+                                    required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_YOUR_PASSWORD], "Please input your password!"),
                                 }, {
                                     validator: this.validateToNextPassword,
                                 }
                             ],
                         })(
 
-                            <Input.Password placeholder="Password" type="password" style={{ width: '100%' }} />
+                            <Input.Password placeholder={convertToLang(this.props.translation[Password_TEXT], "Password")} type="password" style={{ width: '100%' }} />
                         )
                     }
                 </Form.Item>
@@ -106,19 +108,19 @@ class Password extends Component {
                         this.props.form.getFieldDecorator('confirm', {
                             rules: [
                                 {
-                                    required: true, message: 'Please confirm your password!',
+                                    required: true, message: convertToLang(this.props.translation[PLEASE_CONFIRM_YOUR_PASSWORD], "Please confirm your password!"),
                                 }, {
                                     validator: this.compareToFirstPassword,
                                 }
                             ],
                         })(
-                            <Input.Password type="password" placeholder="Password Again" onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
+                            <Input.Password type="password" placeholder={convertToLang(this.props.translation[PASSWORD_AGAIN], "Password Again")} onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
                         )
                     }
                 </Form.Item>
 
                 <Form.Item {...this.formItemLayout} className="pwdinput">
-                    <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}>Set Password</Button>
+                    <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[SET_PASSWORD], "Set Password")}</Button>
                 </Form.Item>
             </Form>
         )

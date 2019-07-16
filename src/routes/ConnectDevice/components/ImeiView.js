@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumber } from 'antd';
-import { componentSearch, getFormattedDate } from '../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang } from '../../utils/commonUtils';
 import WriteImeiFrom from './WriteImeiForm'
 import Moment from 'react-moment'
+import { MANAGE_IMEI, DEVICE_ID, DEVICE_IMEI_1, IMEI_1_NUMBER, SR_NO, CHANGED_DATE, DEVICE_IMEI_2, IMEI_2_NUMBER, GENERATE_IMEI_NUMBER, WRITE_IMEI_2_TEXT } from '../../../constants/DeviceConstants';
+import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 // import EditForm from './editForm';
 let editDevice;
@@ -202,9 +204,11 @@ export default class ImeiView extends Component {
                     maskClosable={false}
                     width='850px'
                     visible={visible}
-                    title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>MANAGE IMEI</span> <div className="text-center"><Button> <a href='https://dyrk.org/tools/imei/' target='blank'> Generate IMEI number</a></Button></div> <br /> <span>Device ID: {(this.props.device.id) ? this.props.device.device_id : ''}</span></div>}
+                    title={<div> <span style={{ position: "absolute", lineHeight: "36px" }}>{convertToLang(this.props.translation[MANAGE_IMEI],"MANAGE IMEI")}</span> <div className="text-center"><Button> <a href='https://dyrk.org/tools/imei/' target='blank'> {convertToLang(this.props.translation[GENERATE_IMEI_NUMBER],"Generate IMEI number")}</a></Button></div> <br /> <span>{convertToLang(this.props.translation[DEVICE_ID],"Device ID: ")} {(this.props.device.id) ? this.props.device.device_id : ''}</span></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
+                    okText={convertToLang(this.props.translation[Button_Ok],"Ok")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel],"Cancel")}
                     footer={null}
                     className="edit_form"
                     bodyStyle={{ height: 500, overflow: "overlay" }}
@@ -223,7 +227,7 @@ export default class ImeiView extends Component {
                             <Fragment>
                                 <div className="row">
                                     <div className="col-md-3">
-                                        <h4 className="imei_heading">IMEI 1</h4>
+                                        <h4 className="imei_heading">{convertToLang(this.props.translation[DEVICE_IMEI_1],"IMEI 1")}</h4>
                                     </div>
                                     <div className="col-md-9">
                                         <Input.Search
@@ -237,7 +241,7 @@ export default class ImeiView extends Component {
                                                 }
                                             }
                                             autoComplete="new-password"
-                                            placeholder="IMEI 1 NUMBER"
+                                            placeholder={convertToLang(this.props.translation[IMEI_1_NUMBER],"IMEI 1 NUMBER")}
                                         />
                                     </div>
                                 </div>
@@ -245,17 +249,17 @@ export default class ImeiView extends Component {
                                 <Table
                                     columns={[
                                         {
-                                            title: 'No.',
+                                            title: convertToLang(this.props.translation[SR_NO],"No."),
                                             align: "center",
                                             dataIndex: 'tableIndex',
                                             key: "tableIndex",
                                             className: '',
-                                            sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
-                                            sortDirections: ['ascend', 'descend'],
-
+                                            // sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
+                                            // sortDirections: ['ascend', 'descend'],
+                                            render : (text, record, index) => ++index,
                                         },
                                         {
-                                            title: "IMEI 1",
+                                            title: convertToLang(this.props.translation[DEVICE_IMEI_1],"IMEI 1"),
                                             align: "center",
                                             dataIndex: 'imei',
                                             key: "imei",
@@ -265,7 +269,7 @@ export default class ImeiView extends Component {
 
                                         },
                                         {
-                                            title: 'Changed Date',
+                                            title: convertToLang(this.props.translation[CHANGED_DATE],"Changed Date"),
                                             align: "center",
                                             dataIndex: 'changed_time',
                                             key: "changed_time",
@@ -286,7 +290,7 @@ export default class ImeiView extends Component {
                         <Col span={11} md={11} sm={23} xs={23} className="p-16 imei_col_11 mt-16">
                             <WriteImeiFrom
                                 ref='form2'
-                                buttonText='WRITE IMEI 2'
+                                buttonText={convertToLang(this.props.translation[WRITE_IMEI_2_TEXT],"WRITE IMEI 2")}
                                 type='IMEI2'
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
@@ -296,7 +300,7 @@ export default class ImeiView extends Component {
 
                                 <div className="row">
                                     <div className="col-md-3">
-                                        <h4 className="imei_heading">IMEI 2</h4>
+                                        <h4 className="imei_heading">{convertToLang(this.props.translation[DEVICE_IMEI_2],"IMEI 2")}</h4>
                                     </div>
                                     <div className="col-md-9">
                                         <Input.Search
@@ -310,7 +314,7 @@ export default class ImeiView extends Component {
                                                 }
                                             }
                                             autoComplete="new-password"
-                                            placeholder="IMEI 2 NUMBER"
+                                            placeholder={convertToLang(this.props.translation[IMEI_2_NUMBER],"IMEI 2 NUMBER")}
                                         />
                                     </div>
                                 </div>
@@ -318,17 +322,17 @@ export default class ImeiView extends Component {
                                 <Table
                                     columns={[
                                         {
-                                            title: 'No.',
+                                            title: convertToLang(this.props.translation[SR_NO],"No."),
                                             align: "center",
                                             dataIndex: 'tableIndex',
                                             key: "tableIndex",
                                             className: '',
-                                            sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
-                                            sortDirections: ['ascend', 'descend'],
-
+                                            // sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
+                                            // sortDirections: ['ascend', 'descend'],
+                                            render : (text, record, index) => ++index,
                                         },
                                         {
-                                            title: 'IMEI 2',
+                                            title: convertToLang(this.props.translation[DEVICE_IMEI_2],"IMEI 2"),
                                             align: "center",
                                             dataIndex: 'imei',
                                             key: "imei",
@@ -338,7 +342,7 @@ export default class ImeiView extends Component {
 
                                         },
                                         {
-                                            title: 'Changed Date',
+                                            title: convertToLang(this.props.translation[CHANGED_DATE],"Changed Date"),
                                             align: "center",
                                             dataIndex: 'changed_time',
                                             key: "changed_time",

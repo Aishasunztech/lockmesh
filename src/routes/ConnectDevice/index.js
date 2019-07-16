@@ -67,9 +67,9 @@ import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
 import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
-import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE } from "../../constants/DeviceConstants";
+import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE, DEVICE_NOT_SYNCED, DEVICE_IS } from "../../constants/DeviceConstants";
 
-import { mobileMainMenu, mobileSubMenu } from '../utils/columnsUtils';
+import { mobileMainMenu, mobileManagePasswords } from '../utils/columnsUtils';
 
 const success = Modal.success
 const error = Modal.error
@@ -91,7 +91,7 @@ class ConnectDevice extends Component {
     }
     // console.log("hello every body", this.props);
     this.mainMenu = mobileMainMenu(props.translation);
-    this.subMenu = mobileSubMenu(props.translation);
+    this.subMenu = mobileManagePasswords(props.translation);
   }
 
   changePage = (pageName) => {
@@ -177,13 +177,17 @@ class ConnectDevice extends Component {
         messageType: this.props.messageType
       })
     }
-    if (this.props.translation != prevProps.translation) {
-      this.mainMenu = mobileMainMenu(this.props.translation);
-      this.subMenu = mobileSubMenu(this.props.translation);
-    }
+    // if (this.props.translation != prevProps.translation) {
+    //   this.mainMenu = mobileMainMenu(this.props.translation);
+    //   this.subMenu = mobileManagePasswords(this.props.translation);
+    // }
   }
 
   componentWillReceiveProps(nextProps) {
+    if (this.props.translation != nextProps.translation) {
+      this.mainMenu = mobileMainMenu(nextProps.translation);
+      this.subMenu = mobileManagePasswords(nextProps.translation);
+    }
     if (this.props !== nextProps) {
       // console.log('object, ', nextProps.showMessage)
     }
@@ -260,6 +264,7 @@ class ConnectDevice extends Component {
       return (
         <SettingAppPermissions
           pageName={this.props.pageName}
+          translation={this.props.translation}
         />
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
@@ -273,7 +278,7 @@ class ConnectDevice extends Component {
         encryptedAllExt={this.props.encryptedAllExt}
         checked_app_id={this.props.checked_app_id}
         secureSettingsMain={this.props.secureSettingsMain}
-
+        translation={this.props.translation}
       />);
     } else if (this.props.pageName === MANAGE_PASSWORD) {
       return (
@@ -293,9 +298,9 @@ class ConnectDevice extends Component {
       )
 
     } else if (this.props.pageName === NOT_AVAILABLE) {
-      return (<div><h1 className="not_syn_txt"><a>Device is {this.props.status}</a></h1></div>);
+      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS],"Device is ")} {this.props.status}</a></h1></div>);
     } else {
-      return (<div><h1 className="not_syn_txt"><a>Device is not Synced</a></h1></div>)
+      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
     }
   }
 
@@ -564,12 +569,12 @@ class ConnectDevice extends Component {
                 </Row>
                 <Modal
                   maskClosable={false}
-                  title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], SETTINGS_TO_BE_SENT_TO_DEVICE)}
+                  title={convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
                   visible={this.state.showChangesModal}
                   onOk={this.applyActions}
                   onCancel={this.onCancel}
-                  cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
-                  okText={convertToLang(this.props.translation[Button_Apply], Button_Apply)}
+                  cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                  okText={convertToLang(this.props.translation[Button_Apply], "Apply")}
                 >
                   <DeviceSettings
                     app_list={this.props.app_list}
@@ -603,7 +608,7 @@ class ConnectDevice extends Component {
                 : null : null}
 
 
-        </div> : <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], DEVICE_NOT_FOUND)} </h1>
+        </div> : <h1>{convertToLang(this.props.translation[DEVICE_NOT_FOUND], "Device Not Found")} </h1>
     )
   }
 }

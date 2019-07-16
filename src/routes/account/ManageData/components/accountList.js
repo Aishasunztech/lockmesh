@@ -80,15 +80,15 @@ class AccountList extends Component {
     render() {
         // console.log('data list at::', this.props.dataList)
         return (
-            <Card bordered={false}>
-                <Tabs defaultActiveKey="1" type="card" tabPosition="left" className="manage_data" onChange={this.callback}>
-                    <TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], TAB_CHAT_ID)} key="1" >
+            <Card bordered={false} className="fix_card m_d_fix_table">
+                <Tabs defaultActiveKey="1" type="card" tabPosition="left" className="m_d_table_tabs" onChange={this.callback}>
+                    <TabPane tab={convertToLang(this.props.translation[TAB_CHAT_ID], "CHAT")} key="1" >
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], TAB_PGP_EMAIL)} key="2" forceRender={true}>
+                    <TabPane tab={convertToLang(this.props.translation[TAB_PGP_EMAIL], "PGP")} key="2" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], TAB_SIM_ID)} key="3" forceRender={true}>
+                    <TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SIM")} key="3" forceRender={true}>
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[TAB_VPN], TAB_VPN)} key="4" forceRender={true}>
+                    <TabPane tab={convertToLang(this.props.translation[TAB_VPN], "VPN")} key="4" forceRender={true}>
                     </TabPane>
 
                 </Tabs>
@@ -96,7 +96,7 @@ class AccountList extends Component {
                     size="middle"
                     className="gx-table-responsive devices table m_d_table"
                     bordered
-                    scroll={{ x: 500 }}
+                    //scroll={{ x: 500 }}
                     columns={this.state.columns}
                     rowKey='row_key'
                     align='center'
@@ -146,10 +146,10 @@ export default class Tab extends Component {
         return (
             <Fragment>
                 <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>
-                    <TabPane tab={convertToLang(this.props.translation[Tab_All], Tab_All)} key="all" >
+                    <TabPane tab={convertToLang(this.props.translation[Tab_All], "All")} key="all" >
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[Tab_USED], Tab_USED)} key="1" forceRender={true} > </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[Tab_UNUSED], Tab_UNUSED)} key="0" forceRender={true} > </TabPane>
+                    <TabPane tab={convertToLang(this.props.translation[Tab_USED], "USED")} key="1" forceRender={true} > </TabPane>
+                    <TabPane tab={convertToLang(this.props.translation[Tab_UNUSED], "UNUSED")} key="0" forceRender={true} > </TabPane>
 
                 </Tabs>
                 <AccountList
@@ -167,7 +167,7 @@ export default class Tab extends Component {
                     // editDealer={this.props.editDealer}
                     // updatePassword={this.props.updatePassword}
                     handleChangeInnerTab={this.props.handleChangeInnerTab}
-                    translation= {this.props.translation}
+                    translation={this.props.translation}
                 />
             </Fragment>
 

@@ -113,7 +113,7 @@ class Devices extends Component {
             filteredDevices: [],
             flaggedDevices: [],
             copy_status: true,
-            translation: []
+            translation: {}
         }
         this.copyDevices = [];
 
@@ -733,7 +733,7 @@ class Devices extends Component {
                                 selectedOptions={this.props.selectedOptions}
                                 searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], Appfilter_SearchDevices)}
                                 defaultPagingValue={this.state.defaultPagingValue}
-                                addButtonText={convertToLang(this.props.translation[Button_Add_Device], Button_Add_Device)}
+                                addButtonText={convertToLang(this.props.translation[Button_Add_Device], "Add Device")}
                                 options={this.props.options}
                                 isAddButton={this.props.user.type !== ADMIN}
                                 AddDeviceModal={true}
@@ -783,7 +783,7 @@ class Devices extends Component {
                                 msg={this.props.msg}
                                 showMsg={this.props.showMsg}
                             />
-                            <AddDevice ref="add_device" />
+                            <AddDevice ref="add_device" translation={this.state.translation} />
                         </Fragment>
                 }
             </Fragment>

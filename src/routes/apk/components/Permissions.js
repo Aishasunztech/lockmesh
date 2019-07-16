@@ -80,7 +80,7 @@ class Permissions extends Component {
       })
     }
 
-  
+
 
   }
 
@@ -128,9 +128,9 @@ class Permissions extends Component {
   saveAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], Alert_Allow_Permission_Delaer),
-      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], "Do you realy Want to allow Permission for all Dealers?"),
+      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(this.props.translation[Button_No], "No"),
       onOk() {
         _this.saveAllDealers()
       },
@@ -167,10 +167,10 @@ class Permissions extends Component {
 
           }
         }
-        this.setState({
-          dealer_ids: [],
-          permissions: this.state.permissions
-        })
+      })
+      this.setState({
+        dealer_ids: [],
+        permissions: this.state.permissions
       })
 
       // console.log(this.state.selectedRowKeys);
@@ -325,9 +325,9 @@ class Permissions extends Component {
   removeAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], Alert_Remove_Permission_Delaer),
-      okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-      cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], "Do you realy Want to Remove Permission for all Dealers?"),
+      okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+      cancelText: convertToLang(this.props.translation[Button_No], "No"),
       onOk() {
         _this.removeAllDealers();
       },
@@ -404,7 +404,7 @@ class Permissions extends Component {
         'dealer_id': dealer.dealer_id ? dealer.dealer_id : 'N/A',
         'dealer_name': (
           // <div data-column="DEALER NAME">
-            dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
+          dealer.dealer_name ? <a onClick={() => { this.goToDealer(dealer) }}>{dealer.dealer_name}</a> : 'N/A'
           // </div>
         ),
         'dealer_email': (
@@ -434,7 +434,7 @@ class Permissions extends Component {
                   <Button size="small" type="danger" onClick={() => {
                     this.rejectPemission(dealer.dealer_id)
                   }}> 
-                  {convertToLang(this.props.translation[Button_Remove], Button_Remove)} 
+                  {convertToLang(this.props.translation[Button_Remove], "Remove")} 
                     </Button>
                 </div>
               )
@@ -460,37 +460,37 @@ class Permissions extends Component {
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
           <Col className="gutter-row" sm={10} xs={15} md={5}>
             <div className="gutter-box text-left">
-              <h2>{convertToLang(this.props.translation[Permission_List], Permission_List)}</h2>
+              <h2>{convertToLang(this.props.translation[Permission_List], "Permission List")}</h2>
             </div>
           </Col>
           <Col className="gutter-row" sm={4} xs={9} md={3}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], Button_Add)}</Button>
+                onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={6} xs={12} md={5}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], Button_AddExceptSelected)}</Button>
+                onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={4} xs={12} md={3}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
-                onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], Button_AddAll)}</Button>
+                onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={5} xs={12} md={3}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
-                onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], Button_RemoveAll)}</Button>
+                onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={7} xs={12} md={4}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
-                onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], Button_RemoveExcept)}</Button>
+                onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
             </div>
           </Col>
           <Col className="gutter-row" sm={12} xs={24} md={8}>
@@ -508,8 +508,7 @@ class Permissions extends Component {
           </Col>
 
         </Row>
-        <Row gutter={24}>
-
+        <Row gutter={24} style={{ marginBottom: '24px' }}>
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
@@ -527,13 +526,13 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Add_Modal_Title], PERMISSION_Add_Modal_Title)}
+          title={convertToLang(this.props.translation[PERMISSION_Add_Modal_Title], "Add Dealer to permissions list for this App")}
           visible={this.state.showDealersModal}
           onOk={() => {
             this.savePermission()
           }}
-          okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
-          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+          okText={convertToLang(this.props.translation[Button_Save], "Save")}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
           onCancel={() => {
             this.showDealersModal(false)
           }}
@@ -555,10 +554,10 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Remove_Modal_Title], PERMISSION_Remove_Modal_Title)}
+          title={convertToLang(this.props.translation[PERMISSION_Remove_Modal_Title], "Remove Dealers from permissions list for this App")}
           visible={this.state.removeSelectedDealersModal}
-          okText={convertToLang(this.props.translation[Button_DeleteExceptSelected], Button_DeleteExceptSelected)}
-          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+          okText={convertToLang(this.props.translation[Button_DeleteExceptSelected], "Delete Except Selected")}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
           onOk={() => {
             this.removeSelectedDealers()
           }}
@@ -582,10 +581,10 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Add_Except_Selected_Modal_Title], PERMISSION_Add_Except_Selected_Modal_Title)}
+          title={convertToLang(this.props.translation[PERMISSION_Add_Except_Selected_Modal_Title], "Remove Dealers from permissions list for this App")}
           visible={this.state.addSelectedDealersModal}
-          okText={convertToLang(this.props.translation[Button_AddExceptSelected], Button_AddExceptSelected)}
-          cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+          okText={convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}
+          cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
           onOk={() => {
             this.addSelectedDealers()
           }}

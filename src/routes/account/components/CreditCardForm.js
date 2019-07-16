@@ -4,7 +4,8 @@ import RestService from '../../../appRedux/services/RestServices';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import { convertToLang } from '../../utils/commonUtils';
-import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
+import { Button_Ok, Button_Cancel, Button_Confirm } from '../../../constants/ButtonConstants';
+import { WARNNING } from '../../../constants/Constants';
 // import axios from 'axios';
 // import 'react-credit-cards/lib/styles.scss';
 
@@ -229,9 +230,11 @@ export default CreditCardForm;
 
 function showConfirm(_this, msg, values, creditInfo) {
     confirm({
-        title: 'WARNNING!',
+        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
         content: msg,
-        okText: "Confirm",
+        // okText: "Confirm",
+        okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             _this.props.purchaseCreditsFromCC(values, creditInfo)
             _this.props.cancelPurchaseModal()

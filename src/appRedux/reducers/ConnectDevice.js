@@ -58,10 +58,13 @@ import {
 } from "../../constants/ActionTypes";
 
 import {
-    NOT_AVAILABLE, MAIN_MENU,
+    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE,
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
+import { Button_Cancel } from '../../constants/ButtonConstants';
+import { convertToLang } from '../../routes/utils/commonUtils';
+import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
 
 const warning = Modal.warning;
 const confirm = Modal.confirm;
@@ -85,6 +88,10 @@ const initialState = {
     syncStatus: false,
     device: {},
     allExtensions: [],
+
+    wipeDevice: {},
+    wipeDeviceID: '',
+    wipeDevieStatus: '',
 
     checked_app_id: {},
     app_list: [],
@@ -605,8 +612,14 @@ export default (state = initialState, action) => {
                         pullAppsModal: true
                     }
                 } else if (action.payload.actionType === WIPE_DEVICE) {
-
-                    showConfirm1(action.payload.device, "Do you really want to Wipe the device " + action.payload.device.device_id + "?")
+                    return {
+                        ...state,
+                        // wipeDevice: action.payload.device,
+                        // msg: "Do you really want to Wipe the device " + action.payload.device.device_id + "?",
+                        // wipeDeviceID: action.payload.device.device_id,
+                        wipeDevieStatus: new Date()
+                    }
+                    // showConfirm1(action.payload.device, "Do you really want to Wipe the device " + action.payload.device.device_id + "?")
                 }
                 else if (action.payload.actionType === POLICY) {
                     return {
@@ -1235,27 +1248,30 @@ function handleCheckedAllExts(extensions) {
     }
 }
 
-function showConfirm1(device, msg, buttonText) {
-    confirm({
-        title: 'WARNNING!',
-        content: msg,
-        okText: buttonText,
-        onOk() {
-            showConfirm(device, "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.")
-        },
-        onCancel() { },
-    });
-}
-function showConfirm(device, msg) {
-    confirm({
-        title: 'WARNNING!',
-        content: msg,
-        okText: "PROCEED WITH WIPING THE DEVICE",
-        onOk() {
-            actions.wipe(device)
-        },
-        onCancel() {
+// function showConfirm1(device, msg, buttonText) {
+//     confirm({
+//         title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
+//         content: msg,
+//         okText: buttonText,
+//         cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+//         onOk() {
+//             showConfirm(device, convertToLang(this.props.translation[WIPE_DEVICE_DESCRIPTION], "This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action."))
+//         },
+//         onCancel() { },
+//     });
+// }
+// function showConfirm(device, msg) {
+//     confirm({
+//         title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
+//         content: msg,
+//         // okText: "PROCEED WITH WIPING THE DEVICE",
+//         okText: convertToLang(this.props.translation[PROCEED_WITH_WIPING_THE_DEVICE], "PROCEED WITH WIPING THE DEVICE"),
+//         cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+//         onOk() {
+//             actions.wipe(device)
+//         },
+//         onCancel() {
 
-        },
-    });
-}
+//         },
+//     });
+// }

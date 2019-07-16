@@ -480,7 +480,7 @@ class UserDeviceList extends Component {
                 style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
                 text = "Activate";
             }
-            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`/connect-device/${btoa(device.device_id)}`.trim()}> {convertToLang(this.props.translation[Button_Connect], Button_Connect)} </Link></Button>
+            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`/connect-device/${btoa(device.device_id)}`.trim()}> {convertToLang(this.props.translation[Button_Connect], "Connect")} </Link></Button>
             // console.log(device.usr_device_id);
             return {
                 rowKey: index,
@@ -539,10 +539,10 @@ class UserDeviceList extends Component {
         // console.log('dealer state', this.state.devicesList);
         return (
             <Fragment>
-                <Card>
+                <Card className="expand_row_card">
                     <Row>
-                        <Col span={6}>
-                            <div className="search_heading">
+                        <Col span={6} >
+                            <div className="search_heading pl-16">
                                 <Search
                                     placeholder={
                                         //<IntlMessages id="appfilter.SearchDevices" />
@@ -577,11 +577,13 @@ class UserDeviceList extends Component {
                         </Col>
 
                     </Row>
-                    <div className="overflow_x">
+                    <div className="expand_row">
                         <Table
                             columns={this.listdeviceCols}
                             dataSource={this.renderDevices(this.state.devicesList)}
-                            pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
+                            pagination={false
+                                //{ pageSize: Number(this.state.pagination), size: "midddle" }
+                            }
                         />
                     </div>
                 </Card>

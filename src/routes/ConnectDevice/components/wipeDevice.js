@@ -54,6 +54,7 @@ export default class WipeDevice extends Component {
                         handleCancel={this.handleCancel}
                         actionType="WIPE_DEVICE"
                         ref='pswdForm'
+                        translation={this.props.translation}
                     />
                 </Modal>
             </div>

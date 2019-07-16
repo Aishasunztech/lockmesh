@@ -1,5 +1,6 @@
 export const DEVICE_ID = "tableHeadings.DEVICEID";
 export const DEVICE_EDIT = "tableHeadings.DEVICEedit";
+export const ADD_DEVICE = "tableHeadings.ADDDEVICE";
 export const USER_ID = "tableHeadings.USERID";
 export const DEVICE_REMAINING_DAYS =  "tableHeadings.REMAININGDAYS";
 export const DEVICE_FLAGGED =  "tableHeadings.FLAGGED";
@@ -39,3 +40,54 @@ export const Device_Valid_days_Required = "device.valid.days.required.id";  // V
 export const DEVICE_NOT_FOUND = "Device.Not.Found.id"; // Device Not Found
 export const SETTINGS_TO_BE_SENT_TO_DEVICE = "Settings.to.be.sent.to.Device.id"; // Confirm new Settings to be sent to Device 
 export const HISTORY_DATE = "History.Date.id"; // History Date
+
+
+//new 12/7/19
+export const ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE = "Are.you.sure.you.want.activate.the.device.id"; // Are you sure, you want to activate the device
+export const ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE = "Are.you.sure.you.want.suspend.the.device.id"; // Are you sure, you want to suspend the device 
+export const ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE = "Are.you.sure.you.want.transfer.the.device.id"; // Are you sure, you want to transfer the device 
+export const ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE = "Are.you.sure.you.want.delete.the.device.id"; // Are you sure, you want to delete the device 
+
+
+
+export const SINGLE_DEVICE = "Single.Device.id"; // Single Device
+export const DUPLICATE_DEVICES = "Duplicate Devices.id"; // Duplicate Devices
+export const SELECT_USER_ID = "Select.User.ID.id"; // Select User ID
+export const USER_ID_IS_REQUIRED = "User.ID.is.Required.id"; // User ID is Required
+export const SELECT_PGP_EMAILS = "Select.PGP.Emails.id"; // Select PGP Emails
+
+export const DUPLICATE_DEVICES_REQUIRED = "Duplicate.devices.required.id" // Number of Duplicate devices required
+export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id";
+
+
+
+
+// device  connect
+export const SET_PASSWORD = "Set.Password.id"; // Set Password
+export const ONLY_NUMBER_ARE_ALLOWED = "Only.Number.are.allowed.id";
+export const PASSWORDS_ARE_INCONSISTENT ="passwords.are.inconsistent!.id"; // passwords are inconsistent!
+export const PLEASE_INPUT_YOUR_PASSWORD ="Please.input.your.password.id"; // Please input your password!
+export const Password_TEXT = "Password.id";
+export const PLEASE_CONFIRM_YOUR_PASSWORD = "Please.confirm.your.password.id";
+export const PASSWORD_AGAIN = "Password.Again.id";
+
+// 
+export const WIFI = "Wifi.id";
+export const BLUETOOTH ="Bluetooth.id";
+export const HOTSPOT ="Hotspot.id";
+export const SCREENSHOTS = "Screenshots.id";
+export const BLOCK_CALLS = "BLOCK.CALLS.id"; 
+export const NOT_AVAILABLE ="Not Available.id"
+export const WIPE_DEVICE_DESCRIPTION = "WIPE_DEVICE_DESCRIPTION.id"; // This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.
+export const DEVICE_NOT_SYNCED = "Device_not_Synced.id"; // Device is not Synced
+export const DEVICE_IS = "Device.is.id"; // Device is
+
+
+export const MANAGE_IMEI = "MANAGE.IMEI.id"; // MANAGE IMEI
+export const GENERATE_IMEI_NUMBER = "Generate.IMEI.number.id"; // Generate IMEI number
+export const IMEI_1_NUMBER = "IMEI.1.NUMBER.id"; // IMEI 1 NUMBER
+export const SR_NO = "SR.NO.ID"; 
+export const CHANGED_DATE ="Changed.Date.id"; // Changed Date
+export const WRITE_IMEI_2_TEXT = "WRITE IMEI 2.id"; // WRITE IMEI 2
+export const IMEI_2_NUMBER = "IMEI.2.NUMBER.id"; // IMEI 2 NUMBER
+export const DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE = "Do.you.really.want.to.unflag.the.device.id"; // Do you really want to unflag the device

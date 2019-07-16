@@ -7,25 +7,29 @@ import { checkValue, convertToLang } from '../../utils/commonUtils'
 
 import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
 import {
-    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Modal_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require
+    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Model_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require, Not_valid_Email
 } from '../../../constants/Constants';
 import AddUser from '../../users/components/AddUser';
 import {
     addUser,
     getUserList
 } from "../../../appRedux/actions/Users";
-import { 
-    Required_Fields, 
-    DEVICE_ID, USER_ID, 
-    DEVICE_SIM_ID, 
-    DEVICE_Select_SIM_ID, 
-    DEVICE_CHAT_ID, 
-    Device_Note, 
-    Device_Valid_For, 
-    Device_Valid_days_Required , 
-    DEVICE_Select_CHAT_ID
+import {
+    Required_Fields,
+    DEVICE_ID, USER_ID,
+    DEVICE_SIM_ID,
+    DEVICE_Select_SIM_ID,
+    DEVICE_CHAT_ID,
+    Device_Note,
+    Device_Valid_For,
+    Device_Valid_days_Required,
+    DEVICE_Select_CHAT_ID,
+    SELECT_USER_ID,
+    USER_ID_IS_REQUIRED,
+    SELECT_PGP_EMAILS
 } from '../../../constants/DeviceConstants';
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
+import { LABEL_DATA_PGP_EMAIL } from '../../../constants/LabelConstants';
 
 class EditDevice extends Component {
 
@@ -127,9 +131,8 @@ class EditDevice extends Component {
 
         return (
             <div>
-
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                    <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], Required_Fields)}</p>
+                    <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
                     <Form.Item
                         label={(this.props.device.finalStatus !== DEVICE_PRE_ACTIVATION) ? convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID) : null}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
@@ -151,7 +154,7 @@ class EditDevice extends Component {
                         :
                         <Fragment>
                             <Form.Item
-                                label={convertToLang(this.props.translation[USER_ID], USER_ID)}
+                                label={convertToLang(this.props.translation[USER_ID], "USER ID")}
                                 labelCol={{ span: 8, xs: 24, md: 8, sm: 24 }}
                                 wrapperCol={{ span: 10 }}
                             >
@@ -160,14 +163,14 @@ class EditDevice extends Component {
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
                                     rules: [{
-                                        required: true, message: 'User ID is Required !',
+                                        required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
                                     }]
                                 })(
                                     <Select
                                         className="pos_rel"
                                         setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
-                                        placeholder="Select User ID"
+                                        placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
                                         optionFilterProp="children"
                                         onChange={this.handleUserChange}
                                         filterOption={
@@ -178,7 +181,7 @@ class EditDevice extends Component {
                                             }
                                         }
                                     >
-                                        <Select.Option value="">Select User ID</Select.Option>
+                                        <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
                                         {users_list.map((item, index) => {
                                             return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
                                         })}
@@ -199,7 +202,7 @@ class EditDevice extends Component {
                                         type="primary"
                                         onClick={() => this.handleUserModal()}
                                     >
-                                        {convertToLang(this.props.translation[Button_Add_User], Button_Add_User)}
+                                        {convertToLang(this.props.translation[Button_Add_User], "Add User")}
                                     </Button>
                                 }
 
@@ -235,7 +238,8 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="PGP Email "
+                        label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
+                        // label="PGP Email "
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         showSearch
@@ -243,19 +247,19 @@ class EditDevice extends Component {
                         {this.props.form.getFieldDecorator('pgp_email', {
                             initialValue: this.props.device.pgp_email,
                             rules: [{
-                                type: 'email', message: 'The input is not valid E-mail!',
+                                type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], 'The input is not valid E-mail!'),
                             }],
                         })(
                             <Select
                                 showSearch
-                                placeholder="Select PGP Emails"
+                                placeholder={convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}
                                 optionFilterProp="children"
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value="">Select PGP Email</Select.Option>
+                                <Select.Option value="">{convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}</Select.Option>
                                 {this.props.pgp_emails.map((pgp_email) => {
                                     return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                                 })}
@@ -264,7 +268,7 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label={convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID)}
+                        label={convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID")}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         showSearch
@@ -274,14 +278,14 @@ class EditDevice extends Component {
                         })(
                             <Select
                                 showSearch
-                                placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], DEVICE_Select_SIM_ID)}
+                                placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "SIM ID")}
                                 optionFilterProp="children"
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value=""> {convertToLang(this.props.translation[DEVICE_Select_SIM_ID], DEVICE_Select_SIM_ID)} </Select.Option>
+                                <Select.Option value="">{convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select SIM ID")}</Select.Option>
                                 {this.props.sim_ids.map((sim_id, index) => {
                                     return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
                                 })}
@@ -289,7 +293,7 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label={convertToLang(this.props.translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID)}
+                        label={convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID")}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         showSearch
@@ -300,14 +304,16 @@ class EditDevice extends Component {
                             // <Input />
                             <Select
                                 showSearch
-                                placeholder={convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], DEVICE_Select_CHAT_ID)}
+                                placeholder={convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select CHAT ID")}
                                 optionFilterProp="children"
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                filterOption={(input, option) =>
+                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
                             >
-                                <Select.Option value=""> {convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], DEVICE_Select_CHAT_ID)} </Select.Option>
+                                <Select.Option value="">{convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select Chat ID")}</Select.Option>
                                 {this.props.chat_ids.map((chat_id, index) => {
                                     return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                 })}
@@ -318,7 +324,7 @@ class EditDevice extends Component {
 
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
                         <Form.Item
-                            label={convertToLang(this.props.translation[Modal_text], Modal_text)}
+                            label={convertToLang(this.props.translation[Model_text], "Modal")}
                             labelCol={{ span: 8, xs: 24, sm: 8 }}
                             wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         >
@@ -330,7 +336,7 @@ class EditDevice extends Component {
                         </Form.Item>
                     }
                     <Form.Item
-                        label={convertToLang(this.props.translation[Start_Date], Start_Date)}
+                        label={convertToLang(this.props.translation[Start_Date], "Start Date ")}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
@@ -342,14 +348,14 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label={convertToLang(this.props.translation[Expire_Date], Expire_Date)}
+                        label={convertToLang(this.props.translation[Expire_Date], "Expire Date ")}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
                         {this.props.form.getFieldDecorator('expiry_date', {
                             initialValue: this.props.device.expiry_date,
                             rules: [{
-                                required: true, message: convertToLang(this.props.translation[Expire_Date_Require], Expire_Date_Require),
+                                required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
                             }],
                         })(
                             <Select
@@ -369,7 +375,7 @@ class EditDevice extends Component {
                         <Fragment>
 
                             <Form.Item
-                                label={convertToLang(this.props.translation[Device_Note], Device_Note)}
+                                label={convertToLang(this.props.translation[Device_Note], "Note ")}
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
@@ -381,14 +387,14 @@ class EditDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label={convertToLang(this.props.translation[Device_Valid_For], Device_Valid_For)}
+                                label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS)  ")}
                                 labelCol={{ span: 8, xs: 24, sm: 8 }}
                                 wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
                                 {this.props.form.getFieldDecorator('validity', {
                                     initialValue: this.props.device.validity,
                                     rules: [{
-                                        required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], Device_Valid_days_Required),
+                                        required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required "),
                                     }],
                                 })(
                                     <InputNumber min={1} />
@@ -452,8 +458,8 @@ class EditDevice extends Component {
                             sm: { span: 24, offset: 0 },
                         }}
                     >
-                        <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} > {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}</Button>
-                        <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], Button_submit)}</Button>
+                        <Button key="back" type="button" onClick={() => { this.props.handleCancel(); this.handleCancelForm() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
+                        <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                     </Form.Item>
 
                 </Form>

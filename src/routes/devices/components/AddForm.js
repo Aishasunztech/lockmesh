@@ -14,7 +14,11 @@ import {
     addUser,
     getUserList
 } from "../../../appRedux/actions/Users";
-import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants';
+import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
+import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2 } from '../../../constants/DeviceConstants';
+import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID } from '../../../constants/LabelConstants';
+import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require } from '../../../constants/Constants';
+import { DEALER_PIN } from '../../../constants/DealerConstants';
 const confirm = Modal.confirm;
 
 const duplicate_txt = (
@@ -121,9 +125,9 @@ class AddDevice extends Component {
             <div>
                 {(this.props.preActive) ?
                     <Radio.Group className="width_100 text-center" onChange={this.handleChange} ref='option' defaultValue="0" buttonStyle="solid">
-                        <Radio.Button className="dev_radio_btn" value="0">Single Device</Radio.Button>
+                        <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
                         <Radio.Button className="dev_radio_btn" value="1">
-                            <a>Duplicate Devices</a>
+                            <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Duplicate Devices")}</a>
                             <Popover content={duplicate_txt} placement="bottomRight">
                                 <Icon type="info-circle" style={{ marginLeft: 8 }} />
                             </Popover>
@@ -131,10 +135,10 @@ class AddDevice extends Component {
                     </Radio.Group>
                     : null}
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                    <p style={{ marginLeft: 36 }}>(*)- Required Fields</p>
+                    <p style={{ marginLeft: 36 }}>(*)- {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
                     {(this.props.preActive) ? null :
                         <Form.Item
-                            label="Device ID "
+                            label={convertToLang(this.props.translation[DEVICE_ID], "Device ID ")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                         >
@@ -154,7 +158,7 @@ class AddDevice extends Component {
                         :
                         <Fragment>
                             <Form.Item
-                                label="USER ID"
+                                label={convertToLang(this.props.translation[USER_ID], "USER ID")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 10 }}
                             >
@@ -163,19 +167,19 @@ class AddDevice extends Component {
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : addNewUserValue,
                                     rules: [{
-                                        required: true, message: 'User ID is Required !',
+                                        required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], 'User ID is Required !'),
                                     }]
                                 })(
                                     <Select
                                         className="pos_rel"
                                         setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
-                                        placeholder="Select User ID"
+                                        placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
                                         optionFilterProp="children"
                                         onChange={this.handleUserChange}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     >
-                                        <Select.Option value="">Select User ID</Select.Option>
+                                        <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
                                         {users_list.map((item, index) => {
                                             return (<Select.Option key={index} value={item.user_id}>{item.user_id} ( {item.user_name} )</Select.Option>)
                                         })}
@@ -195,7 +199,7 @@ class AddDevice extends Component {
                                     type="primary"
                                     onClick={() => this.handleUserModal()}
                                 >
-                                    Add User
+                                    {convertToLang(this.props.translation[Button_Add_User], "Add User")}
                                 </Button>
 
                             </Form.Item>
@@ -241,19 +245,19 @@ class AddDevice extends Component {
                                 )}
                             </Form.Item>
                             <Form.Item
-                                label="PGP Email "
+                                label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
                                 {this.props.form.getFieldDecorator('pgp_email', {
                                     initialValue: this.state.pgp_email,
                                     rules: [{
-                                        type: 'email', message: 'The input is not valid E-mail!',
+                                        type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], 'The input is not valid E-mail!'),
                                     }],
                                 })(
                                     <Select
                                         showSearch
-                                        placeholder="Select PGP Emails"
+                                        placeholder={convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}
                                         optionFilterProp="children"
                                         onChange={(e) => this.setState({ pgp_email: e })}
                                         // onFocus={handleFocus}
@@ -262,7 +266,7 @@ class AddDevice extends Component {
                                         autoComplete="new-password"
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     >
-                                        <Select.Option value="">Select PGP Email</Select.Option>
+                                        <Select.Option value="">{convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}</Select.Option>
                                         {this.props.pgp_emails.map((pgp_email) => {
                                             return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                                         })}
@@ -272,7 +276,7 @@ class AddDevice extends Component {
                             </Form.Item>
 
                             <Form.Item
-                                label="Chat ID"
+                                label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -282,14 +286,14 @@ class AddDevice extends Component {
                                     // <Input />
                                     <Select
                                         showSearch
-                                        placeholder="Select Chat ID"
+                                        placeholder={convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select Chat ID")}
                                         optionFilterProp="children"
                                         onChange={(value) => this.setState({ chat_id: value })}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     >
-                                        <Select.Option value="">Select Chat ID</Select.Option>
+                                        <Select.Option value="">{convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select Chat ID")}</Select.Option>
                                         {this.props.chat_ids.map((chat_id, index) => {
                                             return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                         })}
@@ -297,7 +301,7 @@ class AddDevice extends Component {
                                 )}
                             </Form.Item>
                             <Form.Item
-                                label="Client ID "
+                                label={convertToLang(this.props.translation[DEVICE_CLIENT_ID], "Client ID ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -313,7 +317,7 @@ class AddDevice extends Component {
                             </Form.Item>
 
                             <Form.Item
-                                label="Sim ID "
+                                label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -323,14 +327,14 @@ class AddDevice extends Component {
                                     <Select
                                         // className="pos_rel"
                                         showSearch
-                                        placeholder="Select Sim ID"
+                                        placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}
                                         optionFilterProp="children"
                                         onChange={(value) => this.setState({ sim_id: value })}
                                         // onFocus={handleFocus}
                                         // onBlur={handleBlur}
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                     >
-                                        <Select.Option value="">Select Sim ID</Select.Option>
+                                        <Select.Option value="">{convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}</Select.Option>
                                         {this.props.sim_ids.map((sim_id, index) => {
                                             return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
                                         })}
@@ -350,7 +354,7 @@ class AddDevice extends Component {
 
                             {(this.props.preActive) ? null :
                                 <Form.Item
-                                    label="Model"
+                                    label= {convertToLang(this.props.translation[DEVICE_MODEL], "Model ")}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 14 }}
                                 >
@@ -361,7 +365,7 @@ class AddDevice extends Component {
                                     )}
                                 </Form.Item>} </Fragment> : null}
                     <Form.Item
-                        label="Policy "
+                        label= {convertToLang(this.props.translation[POLICY], "Policy ")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
@@ -370,14 +374,14 @@ class AddDevice extends Component {
                         })(
                             <Select
                                 showSearch
-                                placeholder="Select Policy"
+                                placeholder={convertToLang(this.props.translation[POLICY], "Select Policy ")}
                                 optionFilterProp="children"
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value="">Select Policy</Select.Option>
+                                <Select.Option value="">{convertToLang(this.props.translation[POLICY], "Select Policy ")}</Select.Option>
                                 {this.props.policies.map((policy, index) => {
                                     return (<Select.Option key={index} value={policy.id}>{policy.policy_name}</Select.Option>)
                                 })}
@@ -385,7 +389,7 @@ class AddDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Start Date "
+                        label= {convertToLang(this.props.translation[Start_Date], "Start Date ")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
@@ -397,14 +401,14 @@ class AddDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Expiry Date "
+                        label= {convertToLang(this.props.translation[Expire_Date], "Expiry Date ")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
                         {this.props.form.getFieldDecorator('expiry_date', {
                             initialValue: this.props.new ? "" : this.props.device.expiry_date,
                             rules: [{
-                                required: true, message: 'Expiry Date is Required !',
+                                required: true, message: convertToLang(this.props.translation[Expire_Date_Require], "Expiry Date is Required ! "),
                             }],
                         })(
                             <Select
@@ -424,7 +428,7 @@ class AddDevice extends Component {
                     {(this.props.preActive) ?
                         <Fragment>
                             <Form.Item
-                                label="NOTE "
+                                label= {convertToLang(this.props.translation[Device_Note], "NOTE ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -436,14 +440,14 @@ class AddDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label="VALID FOR(DAYS)"
+                                label= {convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS) ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
                                 {this.props.form.getFieldDecorator('validity', {
                                     initialValue: '',
                                     rules: [{
-                                        required: true, message: 'Valid days required',
+                                        required: true, message: convertToLang(this.props.translation[Device_Valid_days_Required], "Valid days required "),
                                     }],
                                 })(
                                     <InputNumber min={1} />
@@ -454,14 +458,14 @@ class AddDevice extends Component {
                         </Fragment> : null}
                     {(this.state.type === 1) ?
                         <Form.Item
-                            label="DUPLICATE"
+                            label= {convertToLang(this.props.translation[DUPLICATE_DEVICES], "DUPLICATE ")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                         >
                             {this.props.form.getFieldDecorator('duplicate', {
                                 initialValue: '',
                                 rules: [{
-                                    required: true, message: 'Number of Duplicate devices required',
+                                    required: true, message: convertToLang(this.props.translation[DUPLICATE_DEVICES_REQUIRED], 'Number of Duplicate devices required'),
                                 }],
                             })(
                                 <InputNumber min={2} />
@@ -471,7 +475,7 @@ class AddDevice extends Component {
                     {(this.props.preActive === false) ?
                         (<Fragment>
                             <Form.Item
-                                label="Dealer Pin "
+                                label= {convertToLang(this.props.translation[DEALER_PIN], "Dealer Pin ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -480,7 +484,7 @@ class AddDevice extends Component {
                             </Form.Item>
 
                             <Form.Item
-                                label="IMEI 1 "
+                                label= {convertToLang(this.props.translation[DEVICE_IMEI_1], "IMEI 1 ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -489,7 +493,7 @@ class AddDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label="SIM 1 "
+                                label= {convertToLang(this.props.translation[DEVICE_SIM_1], "SIM 1 ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -497,7 +501,7 @@ class AddDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label="IMEI 2 "
+                                label= {convertToLang(this.props.translation[DEVICE_IMEI_2], "IMEI 2 ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -506,7 +510,7 @@ class AddDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label="SIM 2 "
+                                label= {convertToLang(this.props.translation[DEVICE_SIM_2], "SIM 2 ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
