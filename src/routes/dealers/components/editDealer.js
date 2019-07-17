@@ -132,7 +132,7 @@ export default class EditDealer extends Component {
             <div>
                 <Modal
                     visible={visible}
-                    title={convertToLang(this.props.translation[EDIT_DEALER_Text], "EDIT DEALER")}
+                    title={convertToLang(this.props.translation[EDIT_DEALER_Text], "Edit Dealer")}
                     maskClosable={false}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}

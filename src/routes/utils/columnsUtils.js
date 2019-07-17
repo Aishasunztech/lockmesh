@@ -1,6 +1,7 @@
 import React from "react";
 import { Input, Button, Icon, Select, Popover } from "antd";
 import { titleCase, convertToLang } from './commonUtils';
+import { Markup } from 'interweave';
 import {
     DEVICE_ID,
     DEVICE_REMAINING_DAYS,
@@ -78,14 +79,7 @@ import {
     GUEST_PASSWORD_IS_CHANGED,
     DURESS_PASSWORD_IS_CHANGED
 } from '../../constants/TabConstants';
-import { APK_APP_NAME } from "../../constants/ApkConstants";
-
-const usersColumns_question_txt = (
-    <div>
-        <p>Press <a style={{ fontSize: 14 }}><Icon type="caret-right" /> </a> to View Devices<br></br> list of this User</p>
-    </div>
-);
-
+import { APK_APP_NAME, APK_PERMISSION_HELPING_TEXT } from "../../constants/ApkConstants";
 
 /////////////////////////////////////////
 // **************************************
@@ -849,7 +843,8 @@ export function usersColumns(translation, handleSearch) {
                     title: (
                         <span>
                             {convertToLang(translation[DEVICE_ID], "DEVICE ID")}
-                            <Popover placement="top" content={usersColumns_question_txt}>
+                            <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
+                                `<p>Press <a style="font-size: 20px;vertical-align: middle;margin-left: 4px;"><i class="fa fa-caret-right" aria-hidden="true"></i> </a> to View Devices<br/> list of this User</p>`)} />)}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
                         </span>
@@ -1449,7 +1444,7 @@ export function sDealerColumns(translation, handleSearch) {
             className: '',
             children: [
                 {
-                    title: convertToLang(translation[Parent_Dealer_ID],  "Parent Dealer ID"),
+                    title: convertToLang(translation[Parent_Dealer_ID], "Parent Dealer ID"),
                     dataIndex: 'parent_dealer_id',
                     key: 'parent_dealer_id',
                     className: '',
@@ -1671,7 +1666,7 @@ export function appsColumns(translation) {
             key: '1',
             render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
         }, {
-            title: convertToLang(translation[Guest], Guest),
+            title: convertToLang(translation[Guest], "Guest"),
             dataIndex: 'guest',
             key: '2',
         }, {
