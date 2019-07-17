@@ -33,13 +33,15 @@ import {
     APK_ACTION,
     APK_SEARCH,
     APK_UPLOAD,
-    APK_SIZE
+    APK_SIZE,
+    SHOW_APK
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
-import { ACTION, Alert_Delete_APK } from "../../constants/Constants";
+import { ACTION, Alert_Delete_APK, SEARCH } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
 import { apkColumns } from "../utils/columnsUtils";
+import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 
 const question_txt = (
     <div>
@@ -281,7 +283,7 @@ class Apk extends React.Component {
         return (
             <Select
                 showSearch
-                placeholder="Show APK"
+                placeholder={convertToLang(this.props.translation[SHOW_APK], "Show APK")}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -289,9 +291,9 @@ class Apk extends React.Component {
                 }}
                 onChange={this.handleChange}
             >
-                <Select.Option value="all">All</Select.Option>
-                <Select.Option value="active">Active</Select.Option>
-                <Select.Option value="disabled">Disabled</Select.Option>
+                <Select.Option value="all">{convertToLang(this.props.translation[Tab_All], "All")}</Select.Option>
+                <Select.Option value="active">{convertToLang(this.props.translation[Tab_Active], "Active")}</Select.Option>
+                <Select.Option value="disabled">{convertToLang(this.props.translation[Tab_Disabled], "Disabled")}</Select.Option>
             </Select>
         );
     }
@@ -403,7 +405,7 @@ class Apk extends React.Component {
                 <div style={{ padding: 8 }}>
                     <Input
                         ref={node => { this.searchInput = node; }}
-                        placeholder={`Search ${dataIndex}`}
+                        placeholder={`${convertToLang(this.props.translation[SEARCH], "Search")} ${dataIndex}`}
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}

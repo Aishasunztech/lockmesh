@@ -28,12 +28,14 @@ import {
     APK_APP_LOGO,
     APK_PERMISSION,
     APK_ACTION,
-    APK_SEARCH
+    APK_SEARCH,
+    SHOW_APK
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase, convertToLang } from "../utils/commonUtils";
 import { ADMIN, AUTO_UPDATE_ADMIN, Alert_Delete_APK } from "../../constants/Constants";
 import { Button_Yes, Button_No, Button_UploadApk } from "../../constants/ButtonConstants";
+import { Tab_All, Tab_Active, Tab_Disabled } from "../../constants/TabConstants";
 
 const question_txt = (
     <div>
@@ -263,7 +265,7 @@ class AutoUpdate extends React.Component {
         return (
             <Select
                 showSearch
-                placeholder="Show APK"
+                placeholder={convertToLang(this.props.translation[SHOW_APK], "Show APK")}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -271,9 +273,9 @@ class AutoUpdate extends React.Component {
                 }}
                 onChange={this.handleChange}
             >
-                <Select.Option value="all">All</Select.Option>
-                <Select.Option value="active">Active</Select.Option>
-                <Select.Option value="disabled">Disabled</Select.Option>
+               <Select.Option value="all">{convertToLang(this.props.translation[Tab_All], "All")}</Select.Option>
+                <Select.Option value="active">{convertToLang(this.props.translation[Tab_Active], "Active")}</Select.Option>
+                <Select.Option value="disabled">{convertToLang(this.props.translation[Tab_Disabled], "Disabled")}</Select.Option>
             </Select>
         );
     }

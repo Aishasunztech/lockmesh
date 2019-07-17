@@ -11,6 +11,8 @@ export const Tab_Flagged = "tab.Flagged";
 export const Tab_ComingSoon = "tab.ComingSoon";
 export const Tab_Archived = "tab.Archived";
 
+export const Tab_Disabled = "tab.Disabled"; 
+
 
 // ACCOUNT MANAGE DATA
 // export const LABEL_DATA_CHAT = 'CHATid';
