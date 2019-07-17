@@ -12,8 +12,10 @@ export const APK_UPLOAD = "apk.upload.id"; // Upload APK
 export const APK_UPLOAD_FILE = "apk.upload.file.id"; // Upload APK FILE
 export const APK_UPLOAD_ICON = "apk.upload.icon.id"; // Upload ICON
 export const Permission_List = "permission.list.id"; // Permission List
-export const APK_PERMISSION_HELPING_TEXT = "apk.permission.helping.text.id"; // <p>Appuyez sur <a style={{ fontSize: 14 }}><Icon type='caret-right' /> </a> pour afficher la liste <br></br>des périphériques de cet utilisateur.</p>
+export const APK_PERMISSION_HELPING_TEXT = "apk.permission.helping.text.id"; //<p>Appuyez sur <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;"><i class="fa fa-caret-right" aria-hidden="true"></i> </a> pour ajouter, supprimer <br/>ou afficher les Revendeurs qui ont la <br/>permission d'utiliser cette appli</p>
+export const SHOW_ON_DEVCIE_HELPING_TEXT = "show.on.device.helping.text.id"; // <p>Affiche  <b>l'application</b> dans le menu <b>d'Installation</b> de l'appareils</p>
+export const USER_DEVICES_HELPING_TEXT = "user.device.helping.text.id"; //
 
 export const PERMISSION_Add_Modal_Title = "permission.add.modal.title.id"; // Add Dealer to permissions list for this App
 export const PERMISSION_Remove_Modal_Title = "permission.remove.modal.title.id"; // Remove Dealers from permissions list for this App
-export const PERMISSION_Add_Except_Selected_Modal_Title = "permission.add.except.selected.modal.title.id"; // Remove Dealers from permissions list for this App
+export const PERMISSION_Add_Except_Selected_Modal_Title = "permission.add.except.selected.modal.title.id"; // Remove Dealers from permissions list for this App 

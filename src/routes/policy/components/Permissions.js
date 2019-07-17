@@ -517,7 +517,7 @@ class Permissions extends Component {
           width='665px'
           maskClosable={false}
           className="permiss_tabl"
-          title="Add Dealer to permissions list for this App"
+          title={convertToLang(this.props.translation[PERMISSION_Add_Modal_Title], "Add Dealers to permissions list for this App")}
           visible={this.state.showDealersModal}
           onOk={() => {
             this.savePermission()
@@ -546,7 +546,7 @@ class Permissions extends Component {
           width='665px'
           maskClosable={false}
           className="permiss_tabl"
-          title="Remove Dealers from permissions list for this App"
+          title={convertToLang(this.props.translation[PERMISSION_Remove_Modal_Title], "Remove Dealers from permissions list for this App")}
           visible={this.state.removeSelectedDealersModal}
           onOk={() => {
             this.removeSelectedDealers()
@@ -575,7 +575,7 @@ class Permissions extends Component {
           width='665px'
           maskClosable={false}
           className="permiss_tabl"
-          title="Add Dealers to permissions list for this App"
+          title={convertToLang(this.props.translation[PERMISSION_Add_Modal_Title], "Add Dealers to permissions list for this App")}
           visible={this.state.addSelectedDealersModal}
           onOk={() => {
             this.addSelectedDealers()

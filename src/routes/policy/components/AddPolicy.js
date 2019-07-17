@@ -1,15 +1,17 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { convertToLang } from '../../utils/commonUtils';
 
 import { Tabs, Button, Row, Col, Avatar, Input, Form, Checkbox, Icon, Steps, message, Table, Divider, Tag, Switch } from "antd";
 import AppList from "./AppList";
 import { BASE_URL } from '../../../constants/Application';
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS } from '../../../constants/Constants';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, APPLICATION_PERMISION, SECURE_SETTING, SYSTEM_CONTROLS_UNIQUE, Main_SETTINGS, APPS, POLICY_DETAILS } from '../../../constants/Constants';
 import styles from './policy.css';
 import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
 import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy, handleCheckAllAppPolicy } from '../../../appRedux/actions/Policy';
 import RestService from '../../../appRedux/services/RestServices'
+import { NAME, COMMAND, POLICY_NOTE, POLICY_COMMAND, PLEASE_INPUT_POLICY_NAME } from '../../../constants/PolicyConstants';
 
 const TextArea = Input;
 const TabPane = Tabs.TabPane;
@@ -116,7 +118,7 @@ class AddPolicy extends Component {
                 }
 
                 let appPermissions = JSON.parse(JSON.stringify(this.state.appPermissions))
-                
+
                 let secure_apps = [];
 
                 let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName === SECURE_SETTING)));
@@ -126,7 +128,7 @@ class AddPolicy extends Component {
                 }
 
                 if (Object.keys(this.state.main_system_control).length !== 0 && this.state.main_system_control.constructor === Object) {
-                     appPermissions.push(JSON.parse(JSON.stringify(this.state.main_system_control)))
+                    appPermissions.push(JSON.parse(JSON.stringify(this.state.main_system_control)))
                 }
 
                 delete main_extension.subExtension;
@@ -176,7 +178,7 @@ class AddPolicy extends Component {
         let main_system_control = {};
         if (this.props.appPermissions.length) {
             let main_system_control_index = this.props.appPermissions.findIndex(item => item.uniqueName === Main_SETTINGS)
-            
+
             if (main_system_control_index > -1) {
                 main_system_control = this.props.appPermissions[main_system_control_index];
                 this.props.appPermissions.splice(main_system_control_index, 1);
@@ -365,12 +367,12 @@ class AddPolicy extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        
+
         return (
             <Fragment>
                 <div className="policy_steps card-container">
                     <Tabs size="small" tabPosition='left' type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
-                        <TabPane tab="APPS" key="1">
+                        <TabPane tab={convertToLang(this.props.translation[APPS], "APPS")} key="1">
                             <AppList
                                 apk_list={this.state.dealerApps}
                                 dataLength={this.state.dealerApps.length}
@@ -387,9 +389,8 @@ class AddPolicy extends Component {
                                 pageType={'dealerApps'}
                                 translation={this.props.translation}
                             />
-
                         </TabPane>
-                        <TabPane tab="APP PERMISSION" key="2">
+                        <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "APP PERMISSION")} key="2">
                             <AppList
                                 apk_list={this.state.appPermissions}
                                 dataLength={this.state.appPermissions.length}
@@ -403,13 +404,11 @@ class AddPolicy extends Component {
                                 pageType={'appPermissions'}
                                 appPermissions='appPermissions'
                                 isSwitch={true}
-                            // isCheckbox={true}
-                            translation={this.props.translation}
+                                // isCheckbox={true}
+                                translation={this.props.translation}
                             />
-
                         </TabPane>
-                        <TabPane tab="SETTINGS PERMISSION" key="3">
-
+                        <TabPane tab={convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "SETTINGS PERMISSION")} key="3">
                             <AppList
                                 allExtensions={this.state.allExtensions}
                                 dataLength={this.state.allExtensions.length}
@@ -426,7 +425,7 @@ class AddPolicy extends Component {
                                 translation={this.props.translation}
                             />
                         </TabPane>
-                        <TabPane tab="SYSTEM PERMISSION" key="4">
+                        <TabPane tab={convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")} key="4">
                             <div>
                                 <Table
                                     className="add-policy-modal-content"
@@ -437,18 +436,18 @@ class AddPolicy extends Component {
                             </div>
 
                         </TabPane>
-                        <TabPane tab="POLICY DETAILS" key="5">
+                        <TabPane tab={convertToLang(this.props.translation[POLICY_DETAILS], "POLICY DETAILS")} key="5">
                             <Form className="login-form">
                                 <Form.Item
                                     // validateStatus={this.state.isPolicy_name}
                                     // help={this.state.policy_name_error}
                                     style={{ width: '220px' }}
                                 >
-                                    <span className="h3">Name</span>
+                                    <span className="h3">{convertToLang(this.props.translation[NAME], "Name")}</span>
                                     {getFieldDecorator('policy_name', {
 
                                         rules: [{
-                                            required: true, message: 'Please Input Policy Name.',
+                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Name"),
                                         },
                                         {
                                             validator: this.policyNameChange,
@@ -456,25 +455,23 @@ class AddPolicy extends Component {
                                         ],
 
                                     })(
-                                        <Input placeholder="Name" className="pol_inp" />
+                                        <Input placeholder={convertToLang(this.props.translation[NAME], "Name")} className="pol_inp" />
                                     )}
                                 </Form.Item>
                                 <Form.Item>
-                                    <span className="h3">Command</span>
+                                    <span className="h3">{convertToLang(this.props.translation[POLICY_COMMAND], "Policy Command")}</span>
                                     <Input disabled value={this.state.disabledCommand} className="pol_inp" />
                                 </Form.Item>
-                                <Form.Item
-
-                                >
-                                    <span className="h3">Policy Note</span>
+                                <Form.Item>
+                                    <span className="h3">{convertToLang(this.props.translation[POLICY_NOTE], "Policy Note")}</span>
                                     {getFieldDecorator('command', {
 
                                         rules: [{
-                                            required: true, message: 'Please Input Command Name.',
+                                            required: true, message:  convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Name"),
                                         }],
 
                                     })(
-                                        <textarea placeholder="Policy Note" onChange={(e) => this.onNoteChange(e)} className="ant-input"></textarea>
+                                        <textarea placeholder={convertToLang(this.props.translation[POLICY_NOTE], "Policy Note")} onChange={(e) => this.onNoteChange(e)} className="ant-input"></textarea>
                                     )}
 
                                 </Form.Item>

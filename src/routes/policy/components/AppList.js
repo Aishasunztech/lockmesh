@@ -406,11 +406,9 @@ class AppList extends Component {
                         <div>
                             <Row>
                                 <Col span={6} className="">
-
                                 </Col>
                                 <Col span={3} className="">
                                 <Avatar src={`${BASE_URL}users/getFile/${this.state.mainExtension.icon}`} style={{ width: "30px", height: "30px" }} />
-                          
                                     {/* <img src={require("assets/images/setting.png")} /> */}
                                 </Col>
                                 <Col span={15} className="pl-0">
@@ -476,7 +474,6 @@ class AppList extends Component {
                                 <Col className="text-center pr-2 pl-2" span={4}></Col>
                                 <Col className="text-center pr-2 pl-2" span={4}>
                                     <span className="policy_s_txt">{convertToLang(this.props.translation[GUEST_ALL], "Guest All")}</span>
-
                                     <Switch checked={this.state.guestAll ? true : false}
                                         size='small'
                                         className="ml-4"
@@ -485,7 +482,7 @@ class AppList extends Component {
                                             this.handleCheckedAll(e, "guestAll");
                                         }} />
                                 </Col>
-                                <Col className="text-center pr-2 pl-2" span={5}>
+                                <Col className="text-center pr-2 pl-2" span={4}>
                                     <span className="policy_s_txt">{convertToLang(this.props.translation[Encrypted_ALL], "Encrypted All")}</span>
                                     <Switch checked={this.state.encryptedAll ? true : false}
                                         size='small'

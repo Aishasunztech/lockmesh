@@ -11,8 +11,12 @@ import { convertToLang } from '../../utils/commonUtils';
 import styles from './policy.css';
 import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';
+<<<<<<< HEAD
 import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION, EXPAND } from '../../../constants/PolicyConstants';
 import { Tab_All } from '../../../constants/TabConstants';
+=======
+import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION, POLICY_EXPAND } from '../../../constants/PolicyConstants';
+>>>>>>> c79587a9c4cf1239e10cdb40abe69846027e9d75
 const confirm = Modal.confirm;
 
 class PolicyList extends Component {
@@ -150,7 +154,11 @@ class PolicyList extends Component {
                         }>
                             <Icon type="arrow-down" style={{ fontSize: 15 }} />
                         </a>
+<<<<<<< HEAD
                         <span className="exp_txt">{convertToLang(this.props.translation[EXPAND], "Expand")}</span>
+=======
+                        <span className="exp_txt">{convertToLang(this.props.translation[POLICY_EXPAND], "Expand")}</span>
+>>>>>>> c79587a9c4cf1239e10cdb40abe69846027e9d75
                     </Fragment>
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}</span>,
