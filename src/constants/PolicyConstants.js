@@ -26,9 +26,5 @@ export const POLICY_SAVE_CONFIRMATION = "policy.save.confirmation.id"; // 'Are Y
 export const POLICY_DELETE_CONFIRMATION = "policy.delete.confirmation.id"; //  'Do you want to delete this Policy?',  
 export const POLICY_CHANGE_DEFAULT_CONFIRMATION = "policy.change.default.confirmation.id"; // 'Do you want to change your default Policy?',
 export const ACTIVITY = "ACTIVITY.id"; // ACTIVITY
-<<<<<<< HEAD
 export const EXPAND = "expand.id"; 
-=======
 export const PLEASE_INPUT_POLICY_NAME = "Please.Input.Policy.Name.id"; // Please Input Policy Name 
-
->>>>>>> c79587a9c4cf1239e10cdb40abe69846027e9d75

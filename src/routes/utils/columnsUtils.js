@@ -79,9 +79,6 @@ import {
     GUEST_PASSWORD_IS_CHANGED,
     DURESS_PASSWORD_IS_CHANGED
 } from '../../constants/TabConstants';
-<<<<<<< HEAD
-import { APK_APP_NAME, APK_PERMISSION_HELPING_TEXT, APK_PERMISSION, APK_SHOW_ON_DEVICE, APK, APK_APP_LOGO, APK_SIZE } from "../../constants/ApkConstants";
-=======
 import {
     APK_APP_NAME,
     APK_PERMISSION,
@@ -106,7 +103,6 @@ import {
 } from "../../constants/PolicyConstants";
 
 
->>>>>>> c79587a9c4cf1239e10cdb40abe69846027e9d75
 
 /////////////////////////////////////////
 // **************************************
