@@ -1,5 +1,5 @@
 // APP Constants
-export const VERSION = '3.1'
+export const VERSION = '3.2'
 
 // ACL
 export const ADMIN = "admin";
