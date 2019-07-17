@@ -519,22 +519,22 @@ class Account extends Component {
                                             {/* <Link to="#" > */}
                                             <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                 <div>
-                                                    <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], MANAGE_DATA)} </h2>
+                                                    <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[MANAGE_DATA], "Manage Data")} </h2>
                                                     <Divider className="mb-0" />
                                                     <Row style={{ padding: '12px 0 0px' }}>
                                                         <Col span={7} className="" style={{ textAlign: "center" }}>
                                                             <Icon type="form" className="and_icon" />
                                                         </Col>
                                                         <Col span={16} style={{ padding: 0 }} className="crd_txt">
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], ACCOUNT_MANAGE_DATA_01)} />  </h5>
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], ACCOUNT_MANAGE_DATA_02)} /> </h5>
-                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], ACCOUNT_MANAGE_DATA_03)} />  </h5>
-                                                            <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</h5>
+                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_01], "Manage data such as SIM ID, <br style={{ marginLeft: 4 }} />CHAT ID, PGP Email, etc..")} />  </h5>
+                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_02], "View/Edit your data")} /> </h5>
+                                                            <h5 className="disp_in_flex"><span className="diamond_icon">&#9670;</span><Markup content={convertToLang(this.props.translation[ACCOUNT_MANAGE_DATA_03], "Release previously used data back to system")} />  </h5>
+                                                            <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
                                                         </Col>
                                                     </Row>
                                                 </div>
                                             </Card>
-                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                         </Link>
 
                                         <Modal
@@ -1081,7 +1081,7 @@ class Account extends Component {
                                                 <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                     <div>
                                                         <div>
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> {convertToLang(this.props.translation[BACKUP_DATABASE], BACKUP_DATABASE)} </h2>
+                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> {convertToLang(this.props.translation[BACKUP_DATABASE], "BACKUP DATABASE")} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1089,14 +1089,14 @@ class Account extends Component {
                                                                 </Col>
                                                                 <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                     <h5>
-                                                                        {convertToLang(this.props.translation[BACKUP_DATABASE_DESCRIPTION], BACKUP_DATABASE_DESCRIPTION)}
+                                                                        {convertToLang(this.props.translation[BACKUP_DATABASE_DESCRIPTION], "This feature allows you to keep a backup of the complete system database for offline safekeeping")}
                                                                     </h5>
                                                                 </Col>
                                                             </Row>
                                                         </div>
                                                     </div>
                                                 </Card>
-                                                <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                                <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                             </Link>
                                             {/* <div className="middle">
                                         <div className="text">Coming Soon</div>
@@ -1118,21 +1118,21 @@ class Account extends Component {
                                             <div className="profile_table image_1">
                                                 <Fragment>
                                                     <div className="ac_card">
-                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PURCHASE_CREDITS], PURCHASE_CREDITS)} </h2>
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PURCHASE_CREDITS], "Purchase Credits")} </h2>
                                                         <Divider className="mb-0" />
                                                         <Row style={{ padding: '12px 0 0px' }}>
                                                             <Col span={8} className="" style={{ textAlign: "center" }}>
                                                                 <Icon type="dollar" className="and_icon" />
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
-                                                                <h5>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], PURCHASE_CREDITS_DESCRIPTION)}</h5>
+                                                                <h5>{convertToLang(this.props.translation[PURCHASE_CREDITS_DESCRIPTION], "Buy more Credits instantly with Bitcoin or Credit card and check out using our secure payment gateway.")}</h5>
                                                             </Col>
                                                         </Row>
                                                     </div>
                                                 </Fragment>
                                             </div>
                                         </Card>
-                                        <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">Buy</Button>
+                                        <Button type="default" style={{ backgroundColor: "red", color: "#fff" }} size="small" className="open_btn">{convertToLang(this.props.translation[Button_BUY], "Buy")}</Button>
                                     </a>
                                     <PurchaseCredit
                                         showPurchaseModal={this.showPurchaseModal}
@@ -1155,7 +1155,7 @@ class Account extends Component {
                                             <Fragment>
                                                 <Row>
                                                     <div className="col-md-12 ac_card">
-                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PACKAGES_AND_IDS], PACKAGES_AND_IDS)} </h2>
+                                                        <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[PACKAGES_AND_IDS], "Packages and ID's")} </h2>
                                                         <Divider className="mb-0" />
                                                         <Row style={{ padding: '12px 0 0px' }}>
                                                             <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1163,10 +1163,10 @@ class Account extends Component {
                                                             </Col>
                                                             <Col span={16} style={{ paddingLeft: 0 }} className="crd_txt">
                                                                 <div className="crd_txt">
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], PACKAGES_AND_IDS_01)}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], PACKAGES_AND_IDS_02)}</h5>
-                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], PACKAGES_AND_IDS_03)}</h5>
-                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], APP_ADD_MORE)}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_01], "Distribute tokens")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_02], "Set prices and delay for each token")}</h5>
+                                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[PACKAGES_AND_IDS_03], "Set permissions for Tokens")}</h5>
+                                                                    <h5 className="more_txt">{convertToLang(this.props.translation[APP_ADD_MORE], "and more...")}</h5>
                                                                 </div>
                                                             </Col>
                                                         </Row>
@@ -1175,7 +1175,7 @@ class Account extends Component {
                                             </Fragment>
                                         </div>
                                     </Card>
-                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], Button_Open)} </Button>
+                                    <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     {/* </a> */}
                                 </Link>
                                 {/* <div className="middle">

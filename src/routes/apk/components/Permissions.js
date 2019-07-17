@@ -80,7 +80,7 @@ class Permissions extends Component {
       })
     }
 
-  
+
 
   }
 
@@ -167,10 +167,10 @@ class Permissions extends Component {
 
           }
         }
-        this.setState({
-          dealer_ids: [],
-          permissions: this.state.permissions
-        })
+      })
+      this.setState({
+        dealer_ids: [],
+        permissions: this.state.permissions
       })
 
       // console.log(this.state.selectedRowKeys);

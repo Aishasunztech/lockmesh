@@ -200,16 +200,22 @@ class Policy extends Component {
                     }
                 ]
             },
-
+            {
+                title: "Policy Size",
+                dataIndex: 'policy_size',
+                key: 'policy_size',
+            },
             {
                 title: convertToLang(this.props.translation[POLICY_DEFAULT], "DEFAULT"),
                 dataIndex: 'default_policy',
                 key: 'default_policy',
             },
+
         ];
+        
         this.state = {
             policyModal: false,
-            policies: (this.props.policies) ? this.props.policies : [],
+            policies: (props.policies) ? props.policies : [],
             formRefresh: false,
             current: 0,
             goToLastTab: false,

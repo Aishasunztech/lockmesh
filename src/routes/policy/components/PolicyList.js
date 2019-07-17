@@ -107,19 +107,14 @@ class PolicyList extends Component {
     }
 
     renderList(list) {
-        let policy_list = list.filter((data) => {
-            // if (data.type === "policy") {
-            return data
-            // }
-        })
-        return policy_list.map((policy, index) => {
+
+        return list.map((policy, index) => {
 
             return {
                 rowKey: index,
                 isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy : false,
                 policy_id: policy.id,
                 action:
-
                     (policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ?
                         (
                             <Fragment>
@@ -170,9 +165,16 @@ class PolicyList extends Component {
                 app_list: policy.app_list,
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
+                policy_size: policy.policy_size,
                 default_policy: (
-                    <Switch size='small' checked={policy.is_default} onChange={(e) => { this.handleDefaultChange(e, policy.id) }} disabled={(policy.status === 1 || policy.status === true) ? false : true} />
+                    <Switch
+                        size='small'
+                        checked={policy.is_default}
+                        onChange={(e) => { this.handleDefaultChange(e, policy.id) }}
+                        disabled={(policy.status === 1 || policy.status === true) ? false : true}
+                    />
                 ),
+                
             }
         });
 

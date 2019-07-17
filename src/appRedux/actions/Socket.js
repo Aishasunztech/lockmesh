@@ -66,6 +66,7 @@ export const ackSinglePullApp = (socket, deviceId) => {
         })
     }
 }
+
 export const ackFinishedPullApps = (socket, deviceId) => {
     return (dispatch) => {
         socket.on(ACK_FINISHED_PULL_APPS + deviceId, (response) => {
@@ -76,6 +77,7 @@ export const ackFinishedPullApps = (socket, deviceId) => {
         })
     }
 }
+
 export const actionInProcess = (socket, deviceId) => {
     return (dispatch) => {
         socket.on(ACTION_IN_PROCESS + deviceId, (response) => {

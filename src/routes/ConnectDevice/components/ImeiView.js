@@ -254,9 +254,9 @@ export default class ImeiView extends Component {
                                             dataIndex: 'tableIndex',
                                             key: "tableIndex",
                                             className: '',
-                                            sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
-                                            sortDirections: ['ascend', 'descend'],
-
+                                            // sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
+                                            // sortDirections: ['ascend', 'descend'],
+                                            render : (text, record, index) => ++index,
                                         },
                                         {
                                             title: convertToLang(this.props.translation[DEVICE_IMEI_1],"IMEI 1"),
@@ -327,9 +327,9 @@ export default class ImeiView extends Component {
                                             dataIndex: 'tableIndex',
                                             key: "tableIndex",
                                             className: '',
-                                            sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
-                                            sortDirections: ['ascend', 'descend'],
-
+                                            // sorter: (a, b) => { return a.tableIndex.toString().localeCompare(b.tableIndex.toString()) },
+                                            // sortDirections: ['ascend', 'descend'],
+                                            render : (text, record, index) => ++index,
                                         },
                                         {
                                             title: convertToLang(this.props.translation[DEVICE_IMEI_2],"IMEI 2"),

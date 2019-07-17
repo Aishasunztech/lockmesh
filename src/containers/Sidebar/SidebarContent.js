@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Menu, Icon, Badge, Modal, Popover } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-
+// import { ThemeProvider, ChatList } from '@livechat/ui-kit'
 
 import SidebarLogo from "./SidebarLogo";
 
@@ -32,11 +32,9 @@ import {
 } from "../../constants/ThemeSetting";
 
 import {
-  Sidebar_main,
   Sidebar_devices,
   Sidebar_users,
   Sidebar_dealers,
-  Sidebar_policy,
   Sidebar_sdealers,
   Sidebar_app,
   Sidebar_account,
@@ -248,10 +246,7 @@ class SidebarContent extends Component {
                 {/* </Link> */}
               </Menu.Item>
             </Menu>
-
-
             :
-
             <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
               <Menu.Item key="devices">
                 <Link to="/devices">
