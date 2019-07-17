@@ -37,6 +37,7 @@ export const VERIFY_CODE = 'VERIFY_CODE';
 export const CODE_VERIFIED = 'CODE_VERIFIED';
 export const GOTO_LOGIN = 'GOTO_LOGIN';
 export const LOGIN_HISTORY = 'LOGIN_HISTORY';
+
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
 export const SUSPEND_DEVICE = 'SUSPEND_DEVICE';
@@ -92,7 +93,7 @@ export const GET_PROFILES = 'GET_PROFILES';
 export const GET_DEVICE_HISTORIES = 'GET_DEVICE_HISTORIES';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const GET_APPS_PERMISSIONS = 'GET_APPS_PERMISSIONS';
-
+export const DEVICE_SYNCED = 'device_synced';
 export const SUBMIT_PASSWORD = 'SUBMIT_PASSWORD';
 export const GUEST_PASSWORD = 'guest_password';
 export const ENCRYPTED_PASSWORD = 'encrypted_password';

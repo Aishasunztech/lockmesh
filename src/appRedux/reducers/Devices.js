@@ -294,7 +294,7 @@ export default (state = initialState, action) => {
             break;
 
         case GET_DROPDOWN: {
-            console.log( "Reducer " ,action.payload)
+            // console.log( "Reducer " ,action.payload)
             // console.log(GET_DROPDOWN);
             // console.log({
             //     ...state,
