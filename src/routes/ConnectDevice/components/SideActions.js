@@ -49,7 +49,7 @@ import {
 
 import { PUSH_APPS, PULL_APPS, POLICY, PROFILE } from "../../../constants/ActionTypes"
 import { Button_Push, Button_LoadProfile, Button_LoadPolicy, Button_IMEI, Button_Pull, Button_SaveProfile, Button_Activity, Button_SIM, Button_Transfer, Button_WipeDevice, Button_Unlink, Button_Edit, Button_Suspend, Button_Unsuspend, Button_Flag, Button_UNFLAG, Button_Save, Button_Cancel, Button_Ok, Button_Apply, Button_Back, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
-import { DEVICE_ID, SETTINGS_TO_BE_SENT_TO_DEVICE, ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE, WIPE_DEVICE_DESCRIPTION, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE, DO_YOU_WANT_TO_APPLY, POLICY_ON_DEVICE, ENTER, DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE } from '../../../constants/DeviceConstants';
+import { DEVICE_ID, SETTINGS_TO_BE_SENT_TO_DEVICE, ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE, WIPE_DEVICE_DESCRIPTION, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE, DO_YOU_WANT_TO_APPLY, POLICY_ON_DEVICE, ENTER, DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE, ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE } from '../../../constants/DeviceConstants';
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -627,7 +627,7 @@ class SideActions extends Component {
                                     // disabled
                                     type="primary"
                                     style={{ width: "100%", marginBottom: 16 }}
-                                    onClick={() => this.showHistoryModal(true, convertToLang(this.props.translation[PROFILE], "Profile"))}
+                                    onClick={() => this.showHistoryModal(true, "profile")}
                                 >
                                     <Icon type="select" />
 
@@ -637,7 +637,7 @@ class SideActions extends Component {
                                 <Button
                                     type="default"
                                     className="btn_break_line"
-                                    onClick={() => this.showHistoryModal(true, convertToLang(this.props.translation[POLICY], "Policy"))}
+                                    onClick={() => this.showHistoryModal(true, "policy")}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#009700', color: '#fff' }}
                                 >
                                     <Icon type="lock" className="lock_icon" />
@@ -751,7 +751,7 @@ class SideActions extends Component {
                                     <Icon type="flag" />{flaggedButtonText}
                                 </Button>
                                 <Button
-                                    onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, "Do you really want to unlink the device ", 'unlink')}
+                                    onClick={() => showConfirm(this.props.device, this.props.unlinkDevice, this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE], "Do you really want to unlink the device "), 'unlink')}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} >
                                     <Icon type='disconnect' />
                                     {/* <IntlMessages id="button.Unlink" /> */}
@@ -900,7 +900,7 @@ class SideActions extends Component {
                     okText={convertToLang(this.props.translation[Button_Save], "Save")}
                     cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
-                    <Input placeholder={`${convertToLang(this.props.translation[ENTER], "Enter")} this.state.saveProfileType ${convertToLang(this.props.translation[Name], "Name")}`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
+                    <Input placeholder={`${convertToLang(this.props.translation[ENTER], "Enter")} ${(this.state.saveProfileType == 'profile') ? convertToLang(this.props.translation[PROFILE], "Profile") : (this.state.saveProfileType == 'policy') ? convertToLang(this.props.translation[POLICY], "Policy") : this.state.saveProfileType} ${convertToLang(this.props.translation[Name], "Name")}`} required onChange={(e) => { this.onInputChange(e) }} value={this.state.profileName} />
                 </Modal>
 
 
@@ -1105,6 +1105,8 @@ function showConfirm(device, action, _this, msg, type) {
 
             }).catch(() => console.log(''));
         },
+        okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
         onCancel() { },
     });
 }

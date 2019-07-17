@@ -47,6 +47,7 @@ export const ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE = "Are.you.sure.you.want.
 export const ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE = "Are.you.sure.you.want.suspend.the.device.id"; // Are you sure, you want to suspend the device 
 export const ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE = "Are.you.sure.you.want.transfer.the.device.id"; // Are you sure, you want to transfer the device 
 export const ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE = "Are.you.sure.you.want.delete.the.device.id"; // Are you sure, you want to delete the device 
+export const ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE = "Are.you.sure.you.want.UNLINK.the.device.id"; // Are you sure, you want to UNLINK the device 
 
 
 
@@ -103,3 +104,9 @@ export const PANEL_PASSWORD_MODAL ="PANEL.PASSWORD.modal.id"; // <h4>PANEL PASSW
 export const ENTER = "Enter.id"; // Enter
 export const PROFILE = "PROFILE.id"; // PROFILE
 export const DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE = "Do.you.really.want.to.Wipe.the.device.id"; // Do you really want to Wipe the device
+
+export const FLAG_DEVICE = "Flag.Device.id"; // Flag Device
+export const STOLEN = "Stolen.id"; // Stolen
+export const LOST = "Lost.id"; // 
+export const DEFECTIVE = "Defective.id"; // 
+export const OTHER = "Other.id"; // 
