@@ -35,8 +35,6 @@ import {
     HANDLE_CHECK_MAIN_SETTINGS,
     UNDO_CONTROLS,
     REDO_CONTROLS,
-    GET_APPS_PERMISSIONS,
-    HANDLE_CHECK_APP_POLICY,
     GET_IMIE_HISTORY,
     GET_POLICIES,
     SHOW_PUSH_APPS_MODAL,
@@ -48,7 +46,8 @@ import {
     HIDE_POLICY_CONFIRM,
     APPLY_POLICY,
     CLEAR_APPLICATIONS,
-    CLEAR_STATE
+    CLEAR_STATE,
+    DEVICE_SYNCED
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -385,16 +384,6 @@ export function applySetting(app_list, passwords, extensions, controls, device_i
         RestService.applySettings(device_setting, device_id, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
-
-                    dispatch({
-                        type: SHOW_MESSAGE,
-                        payload: {
-                            showMessage: true,
-                            messageType: 'success',
-                            messageText: response.data.msg,
-                            type: type
-                        }
-                    })
                     dispatch({
                         type: SETTINGS_APPLIED,
                         payload: response.data
@@ -977,14 +966,25 @@ export const reSyncDevice = (deviceId) => {
         RestService.reSyncDevice(deviceId).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: "device_synced"
+                    type: DEVICE_SYNCED,
+                    payload: response.data.status
                 });
+
             } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
             }
         })
+    }
+}
+
+export const clearResyncFlag = () => {
+    return (dispatch) => {
+        dispatch({
+            type: DEVICE_SYNCED,
+            payload: false
+        });
     }
 }
 

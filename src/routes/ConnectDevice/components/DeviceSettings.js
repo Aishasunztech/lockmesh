@@ -208,7 +208,6 @@ export default class TableHistory extends Component {
                     return {
                         key: item.app_id,
                         label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                        // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
                         guest: <Switch
                             size="small"
                             value={item.guest}
@@ -234,12 +233,8 @@ export default class TableHistory extends Component {
     }
 
     render() {
-        // console.log(this.props.extensions, 'data li s t of exte')
-        // console.log(this.props.passwords);
         return (
             <div>
-                {/* {
-                    this.state.applist.length ? */}
                 {
                     this.props.isPushApps === true && this.props.type !== 'profile' ?
                         <div>
@@ -256,7 +251,8 @@ export default class TableHistory extends Component {
                             />
                         </div> : null
                 }
-                {this.state.applist.length > 0 ?
+                {
+                    this.state.applist.length > 0 ?
                     <div>
                         <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)} </Divider>
                         <Table
@@ -269,8 +265,8 @@ export default class TableHistory extends Component {
                             pagination={false}
 
                         />
-                    </div> : false}
-                {/* : false}  */}
+                    </div> : false
+                }
                 {
                     this.state.extensions.length ?
                         <div>
@@ -286,14 +282,13 @@ export default class TableHistory extends Component {
                                 pagination={false}
 
                             /></div>
-                        : false}
+                        : false
+                }
                 {
                     this.props.showChangedControls ?
                         Object.entries(this.state.controls).length > 0 ?
                             Object.entries(this.state.controls.controls).length > 0 ?
-
                                 <div>
-                                    {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
                                     <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)}</Divider>
 
                                     <Table
@@ -335,11 +330,14 @@ export default class TableHistory extends Component {
                         }
                         {
                             this.props.passwords.admin_password ? <div> <Badge status="success" text={convertToLang(this.props.translation[ADMIN_PASSWORD_IS_CHANGED], ADMIN_PASSWORD_IS_CHANGED)} /> </div> : false
-                        }{
+                        }
+                        {
                             this.props.passwords.encrypted_password ? <div><Badge status="error" text={convertToLang(this.props.translation[ENCRYPTED_PASSWORD_IS_CHANGED], ENCRYPTED_PASSWORD_IS_CHANGED)} /> </div> : false
-                        }{
+                        }
+                        {
                             this.props.passwords.guest_password ? <div><Badge status="processing" text={convertToLang(this.props.translation[GUEST_PASSWORD_IS_CHANGED], GUEST_PASSWORD_IS_CHANGED)} /></div> : false
-                        }{
+                        }
+                        {
                             this.props.passwords.duress_password ? <div><Badge status="warning" text={convertToLang(this.props.translation[DURESS_PASSWORD_IS_CHANGED], DURESS_PASSWORD_IS_CHANGED)} /></div> : false
                         }
                     </div>
@@ -351,11 +349,14 @@ export default class TableHistory extends Component {
                         }
                         {
                             this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
-                        }{
+                        }
+                        {
                             this.props.isEncryptedPwd ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
-                        }{
+                        }
+                        {
                             this.props.isGuestPwd ? <div><Badge status="processing" text='Guest Password is changed' /></div> : false
-                        }{
+                        }
+                        {
                             this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false
                         }
                     </div>
