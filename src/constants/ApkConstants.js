@@ -12,6 +12,7 @@ export const APK_UPLOAD = "apk.upload.id"; // Upload APK
 export const APK_UPLOAD_FILE = "apk.upload.file.id"; // Upload APK FILE
 export const APK_UPLOAD_ICON = "apk.upload.icon.id"; // Upload ICON
 export const Permission_List = "permission.list.id"; // Permission List
+export const APK_PERMISSION_HELPING_TEXT = "apk.permission.helping.text.id"; // <p>Appuyez sur <a style={{ fontSize: 14 }}><Icon type='caret-right' /> </a> pour afficher la liste <br></br>des périphériques de cet utilisateur.</p>
 
 export const PERMISSION_Add_Modal_Title = "permission.add.modal.title.id"; // Add Dealer to permissions list for this App
 export const PERMISSION_Remove_Modal_Title = "permission.remove.modal.title.id"; // Remove Dealers from permissions list for this App
