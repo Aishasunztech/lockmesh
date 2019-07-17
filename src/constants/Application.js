@@ -10,6 +10,7 @@ switch (hostName) {
         // TITLE = "LockMesh"
         // SUPERADMIN = ''
         break;
+
     case "lockmesh.com":
         URL = "https://api.lockmesh.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
@@ -20,6 +21,17 @@ switch (hostName) {
         SUPERADMIN = 'https://api.meshguard.co/'
         TITLE = "LockMesh"
         break;
+    case "http://www.lockmesh.com":
+        URL = "https://api.lockmesh.com/"
+        SUPERADMIN = 'https://api.meshguard.co/'
+        TITLE = "LockMesh"
+        break;
+    case "https://www.lockmesh.com":
+        URL = "https://api.lockmesh.com/"
+        SUPERADMIN = 'https://api.meshguard.co/'
+        TITLE = "LockMesh"
+        break;
+        
     case "titansecureserver.com":
         URL = "https://api.titansecureserver.com/"
         SUPERADMIN = 'https://api.meshguard.co/'
@@ -30,6 +42,17 @@ switch (hostName) {
             SUPERADMIN = 'https://api.meshguard.co/'
             TITLE = "TitanLocker"
             break;
+    case "http://www.titansecureserver.com":
+        URL = "https://api.titansecureserver.com/"
+        SUPERADMIN = 'https://api.meshguard.co/'
+        TITLE = "TitanLocker"
+        break;
+    case "https://www.titansecureserver.com":
+        URL = "https://api.titansecureserver.com/"
+        SUPERADMIN = 'https://api.meshguard.co/'
+        TITLE = "TitanLocker"
+        break;    
+    
     case "dev.lockmesh.com":
         URL = "https://devapi.lockmesh.com/"
         SUPERADMIN = 'https://devapi.meshguard.co/'
