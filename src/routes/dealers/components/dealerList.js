@@ -201,7 +201,7 @@ class DealerList extends Component {
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
-            console.log('dealer.account_status is: ', dealer.account_status);
+            // console.log('dealer.account_status is: ', dealer.account_status);
             const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
             const button_type = (dealer_status === "Activate") ? "default" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
