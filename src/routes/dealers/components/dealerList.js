@@ -201,15 +201,16 @@ class DealerList extends Component {
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
-            const dealer_status = (dealer.account_status === "suspended") ? convertToLang(this.props.translation[Button_Activate], "Activate") : convertToLang(this.props.translation[Button_Suspend], "Suspend");
-            const button_type = (dealer_status === "ACTIVATE") ? "default" : "danger";
+            console.log('dealer.account_status is: ', dealer.account_status);
+            const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
+            const button_type = (dealer_status === "Activate") ? "default" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
             data.push({
                 'row_key': dealer.dealer_id,
                 'accounts': <span>
                     <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', textTransform: "uppercase" }}
                         onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
-                        {(dealer.account_status === '') ? <div>{dealer_status}</div> : <div> {dealer_status}</div>}
+                        {((dealer.account_status === '') || (dealer.account_status === null)) ? <div>{convertToLang(this.props.translation[Button_Suspend], "Suspend")}</div> : <div> {convertToLang(this.props.translation[Button_Activate], "Activate")}</div>}
                     </Button>
                     <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
                     <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}

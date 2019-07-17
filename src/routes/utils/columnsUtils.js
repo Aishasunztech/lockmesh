@@ -1714,3 +1714,72 @@ export function controlColumns(translation) {
         }
     ]);
 }
+
+export function apkColumns(translation) {
+    return ([
+        {
+            title: convertToLang(translation[ACTION], "ACTION"),
+            dataIndex: 'action',
+            key: 'action',
+            className: 'row m-0'
+        },
+        {
+            title: (
+                <span>
+                    {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
+                    <Popover placement="top" content={(<span>
+                        Press
+            <a style={{ fontSize: 14 }}>
+                            <Icon type="caret-right" />
+                        </a>
+                        to Add, remove or View
+            <br></br>the Dealers who have permission
+            <br></br> to use this App
+        </span>)}>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>),
+            dataIndex: 'permission',
+            key: 'permission',
+            className: ''
+        },
+        {
+            title:
+                <span>
+                    {convertToLang(translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE")}
+                    <Popover placement="top" content={(<div>
+                        <span>Shows app in <b>Install Apps</b> <br />menu on Devices</span>
+                    </div>)}>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>,
+            // title: 'SHOW ON DEVICE',
+            dataIndex: 'apk_status',
+            key: 'apk_status',
+        },
+        {
+            title: convertToLang(translation[APK], "APK"),
+            dataIndex: 'apk',
+            key: 'apk',
+        },
+        {
+            title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
+            dataIndex: 'apk_name',
+            width: "100",
+            key: 'apk_name',
+            sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
+            sortDirections: ['ascend', 'descend'],
+            defaultSortOrder: "ascend"
+        },
+        {
+            title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
+            dataIndex: 'apk_logo',
+            key: 'apk_logo',
+        },
+        {
+            title: convertToLang(translation[APK_SIZE], "APP SIZE"),
+            dataIndex: 'apk_size',
+            key: 'apk_size',
+        },
+    ])
+}
