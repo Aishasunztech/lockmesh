@@ -20,3 +20,4 @@ export const POLICY_SAVE_CONFIRMATION = "policy.save.confirmation.id"; // 'Are Y
 export const POLICY_DELETE_CONFIRMATION = "policy.delete.confirmation.id"; //  'Do you want to delete this Policy?',  
 export const POLICY_CHANGE_DEFAULT_CONFIRMATION = "policy.change.default.confirmation.id"; // 'Do you want to change your default Policy?',
 export const ACTIVITY = "ACTIVITY.id"; // ACTIVITY
+export const EXPAND = "expand.id"; 

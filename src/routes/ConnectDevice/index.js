@@ -177,17 +177,17 @@ class ConnectDevice extends Component {
         messageType: this.props.messageType
       })
     }
-    // if (this.props.translation != prevProps.translation) {
-    //   this.mainMenu = mobileMainMenu(this.props.translation);
-    //   this.subMenu = mobileManagePasswords(this.props.translation);
-    // }
+    if (this.props.translation != prevProps.translation) {
+      this.mainMenu = mobileMainMenu(this.props.translation);
+      this.subMenu = mobileManagePasswords(this.props.translation);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.translation != nextProps.translation) {
-      this.mainMenu = mobileMainMenu(nextProps.translation);
-      this.subMenu = mobileManagePasswords(nextProps.translation);
-    }
+    // if (this.props.translation != nextProps.translation) {
+    //   this.mainMenu = mobileMainMenu(nextProps.translation);
+    //   this.subMenu = mobileManagePasswords(nextProps.translation);
+    // }
     if (this.props !== nextProps) {
       // console.log('object, ', nextProps.showMessage)
     }

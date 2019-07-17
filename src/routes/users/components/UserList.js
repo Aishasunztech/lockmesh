@@ -76,7 +76,7 @@ class UserList extends Component {
                                         type="danger"
                                         size="small"
                                         style={{ textTransform: 'uppercase' }}
-                                        onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
+                                        onClick={() => showConfirm(this.props.deleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_DELETE_USER], "Do you want to DELETE user "), 'DELETE USER')}
                                     >
                                         {convertToLang(this.props.translation[Button_Delete], "DELETE")}
                                     </Button>
@@ -84,7 +84,7 @@ class UserList extends Component {
                                         type="dashed"
                                         size="small"
                                         style={{ textTransform: 'uppercase' }}
-                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
+                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, convertToLang(this.props.translation[UNDO], "Do you want to UNDO user "), 'UNDO')}
                                     >
                                         {convertToLang(this.props.translation[Button_Undo], "UNDELETE")}
                                     </Button>

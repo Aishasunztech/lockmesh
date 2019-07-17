@@ -68,6 +68,7 @@ export const ONLY_NUMBER_ARE_ALLOWED = "Only.Number.are.allowed.id";
 export const PASSWORDS_ARE_INCONSISTENT ="passwords.are.inconsistent!.id"; // passwords are inconsistent!
 export const PLEASE_INPUT_YOUR_PASSWORD ="Please.input.your.password.id"; // Please input your password!
 export const Password_TEXT = "Password.id";
+export const ENTER_PASSWORD = "enter.Password.id";
 export const PLEASE_CONFIRM_YOUR_PASSWORD = "Please.confirm.your.password.id";
 export const PASSWORD_AGAIN = "Password.Again.id";
 
@@ -91,3 +92,14 @@ export const CHANGED_DATE ="Changed.Date.id"; // Changed Date
 export const WRITE_IMEI_2_TEXT = "WRITE IMEI 2.id"; // WRITE IMEI 2
 export const IMEI_2_NUMBER = "IMEI.2.NUMBER.id"; // IMEI 2 NUMBER
 export const DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE = "Do.you.really.want.to.unflag.the.device.id"; // Do you really want to unflag the device
+
+export const DO_YOU_WANT_TO_APPLY = "Do.you.want.to.apply.id"; // Do you want to apply
+export const POLICY_ON_DEVICE = "policy.on.device.id"; // policy on device?
+export const DO_YOU_WANT_TO = "Do.you.want.to.id"; // Do you want to
+export const OF_THIS = "of.this.id"// of this
+
+
+export const PANEL_PASSWORD_MODAL ="PANEL.PASSWORD.modal.id"; // <h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>
+export const ENTER = "Enter.id"; // Enter
+export const PROFILE = "PROFILE.id"; // PROFILE
+export const DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE = "Do.you.really.want.to.Wipe.the.device.id"; // Do you really want to Wipe the device

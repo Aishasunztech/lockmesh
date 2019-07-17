@@ -79,7 +79,7 @@ import {
     GUEST_PASSWORD_IS_CHANGED,
     DURESS_PASSWORD_IS_CHANGED
 } from '../../constants/TabConstants';
-import { APK_APP_NAME, APK_PERMISSION_HELPING_TEXT } from "../../constants/ApkConstants";
+import { APK_APP_NAME, APK_PERMISSION_HELPING_TEXT, APK_PERMISSION, APK_SHOW_ON_DEVICE, APK, APK_APP_LOGO, APK_SIZE } from "../../constants/ApkConstants";
 
 /////////////////////////////////////////
 // **************************************
@@ -1640,7 +1640,7 @@ export function mobileManagePasswords(translation) {
 
         {
             pageName: GUEST_PASSWORD,
-            value: convertToLang(translation[SET_GUEST_PASSWORD], "Set Guest Password")
+            value: convertToLang(translation[SET_GUEST_PASSWORD], "Set Guest Passwordasd")
         },
         {
             pageName: ENCRYPTED_PASSWORD,

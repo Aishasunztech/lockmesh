@@ -11,7 +11,8 @@ import { convertToLang } from '../../utils/commonUtils';
 import styles from './policy.css';
 import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';
-import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION } from '../../../constants/PolicyConstants';
+import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION, EXPAND } from '../../../constants/PolicyConstants';
+import { Tab_All } from '../../../constants/TabConstants';
 const confirm = Modal.confirm;
 
 class PolicyList extends Component {
@@ -149,10 +150,10 @@ class PolicyList extends Component {
                         }>
                             <Icon type="arrow-down" style={{ fontSize: 15 }} />
                         </a>
-                        <span className="exp_txt">Expand</span>
+                        <span className="exp_txt">{convertToLang(this.props.translation[EXPAND], "Expand")}</span>
                     </Fragment>
                 ,
-                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
+                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}</span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
                 policy_status: (<Switch size='small' checked={policy.status === 1 || policy.status === true ? true : false}
                     onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
@@ -174,7 +175,7 @@ class PolicyList extends Component {
                         disabled={(policy.status === 1 || policy.status === true) ? false : true}
                     />
                 ),
-                
+
             }
         });
 

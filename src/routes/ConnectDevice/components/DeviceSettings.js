@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Divider, Badge, Switch } from "antd";
-import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME } from '../../../constants/Constants';
+import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME, PUSH_APPS_TEXT } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { APK_APP_NAME } from '../../../constants/ApkConstants';
@@ -243,7 +243,7 @@ export default class TableHistory extends Component {
                 {
                     this.props.isPushApps === true && this.props.type !== 'profile' ?
                         <div>
-                            <Divider > {convertToLang(this.props.translation[PUSH_APPS], PUSH_APPS)} </Divider>
+                            <Divider > {convertToLang(this.props.translation[PUSH_APPS_TEXT], "PUSH APPS")} </Divider>
                             <Table
                                 style={{ margin: 0, padding: 0 }}
                                 size='default'
@@ -258,7 +258,7 @@ export default class TableHistory extends Component {
                 }
                 {this.state.applist.length > 0 ?
                     <div>
-                        <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)} </Divider>
+                        <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISION")} </Divider>
                         <Table
                             style={{ margin: 0, padding: 0 }}
                             size='default'
@@ -274,7 +274,7 @@ export default class TableHistory extends Component {
                 {
                     this.state.extensions.length ?
                         <div>
-                            <Divider> {convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)}</Divider>
+                            <Divider> {convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "SECURE SETTING PERMISSION")}</Divider>
 
                             <Table
                                 style={{ margin: 0, padding: 0 }}
@@ -294,7 +294,7 @@ export default class TableHistory extends Component {
 
                                 <div>
                                     {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
-                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)}</Divider>
+                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
 
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -312,7 +312,7 @@ export default class TableHistory extends Component {
                             Object.entries(this.state.controls).length > 0 ?
                                 Object.entries(this.state.controls.controls).length > 0 ?
                                     <div>
-                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)}</Divider>
+                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
                                         <Table
                                             style={{ margin: 0, padding: 0 }}
                                             size='default'
@@ -331,32 +331,32 @@ export default class TableHistory extends Component {
                     <div>
                         {
                             this.props.passwords.admin_password || this.props.passwords.guest_password || this.props.passwords.encrypted_password || this.props.passwords.duress_password ?
-                                <Divider>{convertToLang(this.props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)} </Divider> : false
+                                <Divider>{convertToLang(this.props.translation[MANAGE_PASSWORDS], "Manage Password")} </Divider> : false
                         }
                         {
-                            this.props.passwords.admin_password ? <div> <Badge status="success" text={convertToLang(this.props.translation[ADMIN_PASSWORD_IS_CHANGED], ADMIN_PASSWORD_IS_CHANGED)} /> </div> : false
+                            this.props.passwords.admin_password ? <div> <Badge status="success" text={convertToLang(this.props.translation[ADMIN_PASSWORD_IS_CHANGED], "Admin Password is changed")} /> </div> : false
                         }{
-                            this.props.passwords.encrypted_password ? <div><Badge status="error" text={convertToLang(this.props.translation[ENCRYPTED_PASSWORD_IS_CHANGED], ENCRYPTED_PASSWORD_IS_CHANGED)} /> </div> : false
+                            this.props.passwords.encrypted_password ? <div><Badge status="error" text={convertToLang(this.props.translation[ENCRYPTED_PASSWORD_IS_CHANGED], "Encrypted Password is changed")} /> </div> : false
                         }{
-                            this.props.passwords.guest_password ? <div><Badge status="processing" text={convertToLang(this.props.translation[GUEST_PASSWORD_IS_CHANGED], GUEST_PASSWORD_IS_CHANGED)} /></div> : false
+                            this.props.passwords.guest_password ? <div><Badge status="processing" text={convertToLang(this.props.translation[GUEST_PASSWORD_IS_CHANGED], "Guest Password is changed")} /></div> : false
                         }{
-                            this.props.passwords.duress_password ? <div><Badge status="warning" text={convertToLang(this.props.translation[DURESS_PASSWORD_IS_CHANGED], DURESS_PASSWORD_IS_CHANGED)} /></div> : false
+                            this.props.passwords.duress_password ? <div><Badge status="warning" text={convertToLang(this.props.translation[DURESS_PASSWORD_IS_CHANGED], "Duress Password is changed")} /></div> : false
                         }
                     </div>
                     :
                     <div>
                         {
                             this.props.isAdminPwd || this.props.isEncryptedPwd || this.props.isGuestPwd || this.props.isDuressPwd ?
-                                <Divider> {convertToLang(this.props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)} </Divider> : false
+                                <Divider> {convertToLang(this.props.translation[MANAGE_PASSWORDS], "Manage Password")} </Divider> : false
                         }
                         {
-                            this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
+                            this.props.isAdminPwd ? <div> <Badge status="success" text={convertToLang(this.props.translation[ADMIN_PASSWORD_IS_CHANGED], "Admin Password is changed")} /> </div> : false
                         }{
-                            this.props.isEncryptedPwd ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
+                            this.props.isEncryptedPwd ? <div><Badge status="error" text={convertToLang(this.props.translation[ENCRYPTED_PASSWORD_IS_CHANGED], "Encrypted Password is changed")} /> </div> : false
                         }{
-                            this.props.isGuestPwd ? <div><Badge status="processing" text='Guest Password is changed' /></div> : false
+                            this.props.isGuestPwd ? <div><Badge status="processing" text={convertToLang(this.props.translation[GUEST_PASSWORD_IS_CHANGED], "Guest Password is changed")} /></div> : false
                         }{
-                            this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false
+                            this.props.isDuressPwd ? <div><Badge status="warning" text={convertToLang(this.props.translation[DURESS_PASSWORD_IS_CHANGED], "Duress Password is changed")} /></div> : false
                         }
                     </div>
                 }

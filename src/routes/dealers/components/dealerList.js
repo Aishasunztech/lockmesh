@@ -32,6 +32,8 @@ import {
     Button_Undo,
     Button_Edit,
     Button_passwordreset,
+    Button_Ok,
+    Button_Cancel,
     // Button_Unsuspend,
     // Button_submit,
     // Button_Ok,
@@ -83,6 +85,7 @@ import {
     // Button_WipeDevice,
     // Button_Unlink,
 } from '../../../constants/ButtonConstants';
+import { DO_YOU_WANT_TO, OF_THIS } from '../../../constants/DeviceConstants';
 
 const TabPane = Tabs.TabPane;
 
@@ -209,15 +212,15 @@ class DealerList extends Component {
                 'row_key': dealer.dealer_id,
                 'accounts': <span>
                     <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', textTransform: "uppercase" }}
-                        onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
+                        onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
                         {((dealer.account_status === '') || (dealer.account_status === null)) ? <div>{convertToLang(this.props.translation[Button_Suspend], "Suspend")}</div> : <div> {convertToLang(this.props.translation[Button_Activate], "Activate")}</div>}
                     </Button>
                     <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
                     <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
-                        onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
+                        onClick={() => (dealer.unlink_status === 0) ? showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
                         {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], Button_Delete)} </div> : <div> {convertToLang(this.props.translation[Button_Undo], "UNDELETE")} </div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
+                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(this, dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
                     {(this.props.user.type === ADMIN) ?
                         <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], "Connect")}</Button>
                         :
@@ -281,9 +284,17 @@ class DealerList extends Component {
     }
 }
 
-function showConfirm(id, action, btn_title) {
+function showConfirm(_this, id, action, btn_title) {
+    let title_Action = '';
+    if (btn_title == 'SUSPEND') {
+        title_Action = convertToLang(_this.props.translation[Button_Suspend], "Suspend ");
+    } else if (btn_title == 'DELETE') {
+        title_Action = convertToLang(_this.props.translation[Button_Delete], "Delete");
+    } else {
+        title_Action = btn_title;
+    }
     confirm({
-        title: 'Do you want to ' + btn_title + ' of this ' + window.location.pathname.split("/").pop() + ' ?',
+        title: convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ") + title_Action + convertToLang(_this.props.translation[OF_THIS], " of this ") + window.location.pathname.split("/").pop() + ' ?',
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
@@ -295,6 +306,8 @@ function showConfirm(id, action, btn_title) {
 
             }).catch(() => console.log('Oops errors!'));
         },
+        okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
         onCancel() { },
     });
 }

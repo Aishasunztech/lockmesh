@@ -99,6 +99,7 @@ class PasswordModal extends Component {
                     actionType='back_up'
                     handleCancel={this.props.showPwdConfirmModal}
                     ref='pswdForm'
+                    translation={this.props.translation}
                 />
             </Modal >
         )

@@ -42,7 +42,7 @@ export const APPLICATION_PERMISION = 'application.permission.id'; // Application
 export const SECURE_SETTING_PERMISSION = 'secure.settings.permission.id'; // Secure Settings Permission
 export const SECURE_SETTINGS = 'secure.settings.id'; // Secure Settings
 export const SYSTEM_PERMISSION = 'system.permission.id';// System Permission
-export const MANAGE_PASSWORDS = 'manage.passwords.id'; //MANAGE PASSWORDS
+export const MANAGE_PASSWORDS = 'manage.passwords.id'; // Manage Password
 export const POLICY_DETAILS = 'policy.details.id'; // Policy Details
 export const SELECT_APPS = "SELECT.APPS.id";
 export const SELECTED_APPS = "SELECTED.APPS.id";
@@ -90,6 +90,7 @@ export const twelve_month = '12.month.id'; // 12 month
 
 export const ACTION = "action.id"; // ACTION
 export const SEARCH = "search.id"; // Search
+export const SEARCH_APPS = "search_APPS.id"; // Search APPS
 export const Model_text = "modal.text" // Model
 export const DATE = "DATE.id"; // DATE
 export const Start_Date = "start.date"; // Start Date
