@@ -79,7 +79,30 @@ import {
     GUEST_PASSWORD_IS_CHANGED,
     DURESS_PASSWORD_IS_CHANGED
 } from '../../constants/TabConstants';
-import { APK_APP_NAME, APK_PERMISSION_HELPING_TEXT } from "../../constants/ApkConstants";
+import {
+    APK_APP_NAME,
+    APK_PERMISSION,
+    APK_SHOW_ON_DEVICE,
+    APK, APK_APP_LOGO,
+    APK_SIZE,
+    USER_DEVICES_HELPING_TEXT,
+    APK_PERMISSION_HELPING_TEXT,
+    SHOW_ON_DEVCIE_HELPING_TEXT
+} from "../../constants/ApkConstants";
+import {
+    POLICY_ACTION,
+    POLICY_INFO,
+    POLICY_PERMISSIONS,
+    POLICY_STATUS, POLICY_NAME,
+    POLICY_APP_NAME, POLICY_COMMAND,
+    POLICY_NOTE,
+    POLICY_DEFAULT,
+    POLICY_PERMISSION_HELPING_TEXT,
+    POLICY_STATUS_HELPING_TEXT,
+    POLICY_SIZE
+} from "../../constants/PolicyConstants";
+
+
 
 /////////////////////////////////////////
 // **************************************
@@ -843,8 +866,10 @@ export function usersColumns(translation, handleSearch) {
                     title: (
                         <span>
                             {convertToLang(translation[DEVICE_ID], "DEVICE ID")}
-                            <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
-                                `<p>Press <a style="font-size: 20px;vertical-align: middle;margin-left: 4px;"><i class="fa fa-caret-right" aria-hidden="true"></i> </a> to View Devices<br/> list of this User</p>`)} />)}>
+                            <Popover placement="top" content={(<Markup content={convertToLang(translation[USER_DEVICES_HELPING_TEXT],
+                                `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                </a> to View Devices<br/> list of this User</p>`)} />)}>
                                 <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
                         </span>
@@ -1714,6 +1739,161 @@ export function controlColumns(translation) {
         }
     ]);
 }
+export function policyColumns(translation, handleSearch) {
+    return ([
+        //     title: 'ACTIONS',
+        //     dataIndex: 'action',
+        //     align: 'center',
+        //     className: 'row',
+        //     width: 800,
+        // },
+        {
+            title: convertToLang(translation[POLICY_ACTION], "ACTION"),
+            align: "center",
+            dataIndex: 'action',
+            key: "action",
+        },
+        {
+            title: (
+                <span>
+                    {convertToLang(translation[POLICY_INFO], "POLICY INFO")}
+                    {/* <Popover placement="top" content='dumy'>
+                            <span className="helping_txt"><Icon type="info-circle" /></span>
+                        </Popover> */}
+                </span>),
+            dataIndex: 'policy_info',
+            key: 'policy_info',
+            className: 'row'
+        },
+        {
+            title: (
+                <span>
+                    {convertToLang(translation[POLICY_PERMISSIONS], "PERMISSIONS")}
+                    <Popover placement="top" content={
+                        (<Markup content={convertToLang(translation[POLICY_PERMISSION_HELPING_TEXT],
+                            `<span>Add dealers who are allowed <br/> to use this Policy</span>`)} />
+                        )
+                    }>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>
+            ),
+            dataIndex: 'permission',
+            key: 'permission',
+            className: 'row '
+        },
+        {
+            title: (
+                <span>
+                    {convertToLang(translation[POLICY_STATUS], "STATUS")}
+                    <Popover placement="top" content={
+                        (<Markup content={convertToLang(translation[POLICY_STATUS_HELPING_TEXT],
+                            `<span>Enable or Disable this policy using <br/> the toggle below.  When disabled,  <br />it cannot be pushed to devices</span>`)} />
+                        )
+                    }>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>
+            ),
+            dataIndex: 'policy_status',
+            key: 'policy_status',
+        },
+        {
+            title: (
+                <Input.Search
+                    name="policy_name"
+                    key="policy_name"
+                    id="policy_name"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[POLICY_NAME], "POLICY NAME")}
+                />
+            ),
+            dataIndex: 'policy_name',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[POLICY_NAME], "POLICY NAME"),
+                    align: "center",
+                    dataIndex: 'policy_name',
+                    key: "policy_name",
+                    className: '',
+                    sorter: (a, b) => { return a.policy_name.localeCompare(b.policy_name) },
+                }
+            ],
+            sortDirections: ['ascend', 'descend'],
+        },
+        {
+            title: (
+                <Input.Search
+                    name="command_name"
+                    key="command_name"
+                    id="command_name"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[POLICY_COMMAND], "POLICY COMMAND")}
+                />
+            ),
+            dataIndex: 'policy_command',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[POLICY_COMMAND], "POLICY COMMAND"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'policy_command',
+                    key: 'policy_command',
+                    sorter: (a, b) => { return a.policy_command.localeCompare(b.policy_command) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="policy_note"
+                    key="policy_note"
+                    id="policy_note"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[POLICY_NOTE], "POLICY NOTE")}
+                />
+            ),
+            dataIndex: 'policy_note',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[POLICY_NOTE], "POLICY NOTE"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'policy_note',
+                    key: 'policy_note',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: convertToLang(translation[POLICY_SIZE], "POLICY SIZE"),
+            dataIndex: 'policy_size',
+            key: 'policy_size',
+        },
+        {
+            title: convertToLang(translation[POLICY_DEFAULT], "DEFAULT"),
+            dataIndex: 'default_policy',
+            key: 'default_policy',
+        },
+
+    ]
+    )
+};
+
 
 export function apkColumns(translation) {
     return ([
@@ -1727,15 +1907,12 @@ export function apkColumns(translation) {
             title: (
                 <span>
                     {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
-                    <Popover placement="top" content={(<span>
-                        Press
-            <a style={{ fontSize: 14 }}>
-                            <Icon type="caret-right" />
-                        </a>
-                        to Add, remove or View
-            <br></br>the Dealers who have permission
-            <br></br> to use this App
-        </span>)}>
+                    <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
+                        `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+                            <i class="fa fa-caret-right" aria-hidden="true"></i> 
+                            </a> to Add, remove or View
+                            <br/> the Dealers who have permission
+                            <br/>to use this App</p>`)} />)}>
                         <span className="helping_txt"><Icon type="info-circle" /></span>
                     </Popover>
                 </span>),
@@ -1747,9 +1924,9 @@ export function apkColumns(translation) {
             title:
                 <span>
                     {convertToLang(translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE")}
-                    <Popover placement="top" content={(<div>
-                        <span>Shows app in <b>Install Apps</b> <br />menu on Devices</span>
-                    </div>)}>
+                    <Popover placement="top"
+                        content={(<Markup content={convertToLang(translation[SHOW_ON_DEVCIE_HELPING_TEXT],
+                            `<p>Shows app in <b>Install Apps</b> <br />menu on Devices`)} />)}>
                         <span className="helping_txt"><Icon type="info-circle" /></span>
                     </Popover>
                 </span>,
