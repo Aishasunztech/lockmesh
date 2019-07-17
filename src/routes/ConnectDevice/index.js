@@ -446,49 +446,22 @@ class ConnectDevice extends Component {
     let color = getColor(finalStatus)
     let onlineStatus = this.props.device_details.online
     let onlineColor = (onlineStatus === 'offline') ? { color: 'red' } : { color: 'green' }
-    let totalApps = (this.props.noOfApp_push_pull === undefined || this.props.noOfApp_push_pull === 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
-    let completeApps = (this.props.noOfApp_pushed_pulled === undefined) ? 0 : this.props.noOfApp_pushed_pulled
-    let completeStep = this.props.complete_policy_step;
-    let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
+    
+    // Policy Loading
+
+    // let totalApps = (this.props.noOfApp_push_pull === undefined || this.props.noOfApp_push_pull === 0) ? this.props.noOfApp_push_pull_device : this.props.noOfApp_push_pull
+    // let completeApps = (this.props.noOfApp_pushed_pulled === undefined) ? 0 : this.props.noOfApp_pushed_pulled
+    // let completeStep = this.props.complete_policy_step;
+    // let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
+    
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
-          {/* || this.props.is_in_process || this.props.device_details.is_push_apps */}
+          
           {this.props.isLoading ?
             <div className="gx-loader-view">
               <CircularProgress />
             </div> :
-            (this.props.is_in_process || this.props.is_push_apps === 1 || policy_loading === 1) ?
-              <div>
-
-                <CircularProgress />
-
-                {/* {(this.props.device_details.online === 'online') ?
-                  null : <CircularProgress />
-                } */}
-                {/* <Modal
-                  width='auto'
-                  centered
-                  maskClosable={false}
-                  visible={(this.props.device_details.online === 'online') ? true : false}
-                  footer={null}
-                  closable={false}
-                > */}
-                {/* {(policy_loading === 1) ?
-
-                    <Progress className='prog' type="circle" percent={(completeStep / 4) * 100} format={percent => `Step ${completeStep} of ${4}`} />
-                    :
-                    <Progress className='prog' type="circle" percent={(completeApps / totalApps) * 100} format={percent => `${completeApps} of ${totalApps}`} />
-                  } */}
-                {/* <Progress type="circle" percent={100} /> */}
-                {/* </Modal> */}
-
-                {/* <ProgressBar
-                  total={}
-                  completed={}
-                /> */}
-              </div>
-              :
               <div>
                 <Row gutter={16} type="flex" align="top">
                   <Col className="gutter-row left_bar" xs={24} sm={24} md={24} lg={24} xl={8} span={8}>
@@ -533,16 +506,12 @@ class ConnectDevice extends Component {
                           <Button type="default" className="nav_btn" onClick={() => {
                             this.changePage("main_menu")
                           }} />
-                          {/* <Button type="default" icon="border" className="nav_btn" /> */}
 
                         </Button.Group>
                       </div>
-
-
                     </Card>
                   </Col>
                   <Col className="gutter-row right_bar" xs={24} sm={24} md={24} lg={24} xl={8}>
-                    {/*  */}
                     <SideActions
                       translation={this.props.translation}
                       device={this.props.device_details}
