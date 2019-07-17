@@ -54,7 +54,8 @@ import {
     CLEAR_APPLICATIONS,
     SAVE_PROFILE,
     EDIT_DEVICE,
-    CLEAR_STATE
+    CLEAR_STATE,
+    ADD_SIM_REGISTER
 } from "../../constants/ActionTypes";
 
 import {
@@ -164,6 +165,9 @@ const initialState = {
     noOfApp_pushed_pulled: 0,
     is_push_apps: 0,
     is_policy_process: 0,
+
+    // sim module
+    sim_list: [{ iccid: "a", name: "b", note: "c", guest: true, encrypt: false }],
 
 };
 
@@ -1132,6 +1136,15 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 applyPolicyConfirm: false,
+            }
+        }
+
+        case ADD_SIM_REGISTER: {
+            // console.log('at red:', action.payload)
+            state.sim_list.push(action.payload)
+            return {
+                ...state,
+                sim_list: state.sim_list
             }
         }
 

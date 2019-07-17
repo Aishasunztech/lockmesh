@@ -16,7 +16,7 @@ import DealerApps from "./DealerApps";
 import PasswordForm from './PasswordForm';
 import DeviceSettings from './DeviceSettings';
 import Activity from './Activity';
-import SimSettings from './SimSettings';
+import SimSettings from './SimSettings/index';
 
 
 

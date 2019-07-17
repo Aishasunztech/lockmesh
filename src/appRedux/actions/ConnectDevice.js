@@ -48,7 +48,8 @@ import {
     HIDE_POLICY_CONFIRM,
     APPLY_POLICY,
     CLEAR_APPLICATIONS,
-    CLEAR_STATE
+    CLEAR_STATE,
+    ADD_SIM_REGISTER
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1077,6 +1078,28 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
                     type: PULL_APPS,
                     payload: response.data
 
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+// ********* Sim Module
+export const simRegister = (data) => {
+    console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.simRegister(data).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: ADD_SIM_REGISTER,
+                    payload: data
+                    // payload: response.data
                 })
             } else {
                 dispatch({

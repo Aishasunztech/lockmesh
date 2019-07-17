@@ -217,3 +217,8 @@ export const PURCHASE_CREDITS = 'PURCHASE_CREDITS';
 export const GET_PRICES = 'GET_PRICES';
 export const SET_PRICE = 'SET_PRICE';
 export const RESET_PRICE = 'RESET_PRICE';
+
+
+
+// Sim Module (connect device)
+export const ADD_SIM_REGISTER = "ADD_SIM_REGISTER";

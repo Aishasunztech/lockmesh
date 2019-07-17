@@ -4,17 +4,17 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
     handleCheckExtension,
-    handleCheckAllExtension
+    handleCheckAllExtension,
+    simRegister
+} from "../../../../appRedux/actions/ConnectDevice";
+import { BASE_URL } from '../../../../constants/Application';
 
-} from "../../../appRedux/actions/ConnectDevice";
-import { BASE_URL } from '../../../constants/Application';
-
-import ExtensionDropdown from './ExtensionDropdown';
-import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../constants/TabConstants';
-import { convertToLang } from '../../utils/commonUtils';
-import { SECURE_SETTING_PERMISSION, NOT_AVAILABLE, SECURE_SETTINGS } from '../../../constants/Constants';
-import { Button_Add } from '../../../constants/ButtonConstants';
-
+import ExtensionDropdown from '../ExtensionDropdown';
+import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../../constants/TabConstants';
+import { convertToLang } from '../../../utils/commonUtils';
+import { SECURE_SETTING_PERMISSION, NOT_AVAILABLE, SECURE_SETTINGS } from '../../../../constants/Constants';
+import { Button_Add, Button_Cancel } from '../../../../constants/ButtonConstants';
+import AddRegistrationModal from './AddRegistrationModal';
 
 
 class SimSettings extends Component {
@@ -26,6 +26,7 @@ class SimSettings extends Component {
                 title: "#",
                 dataIndex: 'counter',
                 key: 'counter',
+                render: (text, record, index) => ++index,
             },
             {
                 title: "ICC-ID",
@@ -70,35 +71,53 @@ class SimSettings extends Component {
             columns: columns,
             extension: {},
             uniqueName: '',
+            sims: this.props.sim_list,
             guestAllExt: false,
             encryptedAllExt: false,
-            addSimRegistrationModal: false
+            addSimRegistrationModal: false,
         }
     }
 
-    componentDidMount() {
-        if (this.props.isExtension) {
-            this.setState({
-                extension: this.props.extension,
-                pageName: this.props.pageName
-            })
-        }
+    // componentDidMount() {
+    //     // if (this.props.isExtension) {
+    //     this.setState({
+    //         extension: this.props.extension,
+    //         pageName: this.props.pageName,
+    //         sims: this.props.sim_list,
+    //     })
+    //     // }
 
-    }
+    // }
 
     componentWillReceiveProps(nextprops) {
+        console.log('at componentWillReceiveProps ', this.props.sim_list)
 
-        if (this.props.isExtension) {
-            // alert("hello");
-            this.setState({
-                extension: nextprops.extension,
-                encryptedAllExt: nextprops.encryptedAllExt,
-                guestAllExt: nextprops.guestAllExt
-            })
-        }
+        // if (this.props.isExtension) {
+        // alert("hello");
+        this.setState({
+            extension: nextprops.extension,
+            encryptedAllExt: nextprops.encryptedAllExt,
+            guestAllExt: nextprops.guestAllExt,
+            sims: nextprops.sim_list
+        })
+        // }
 
     }
 
+    componentDidUpdate(prevProps) {
+        console.log('at did update ', this.props.sim_list)
+        this.setState({
+            // extension: this.props.extension,
+            // encryptedAllExt: this.props.encryptedAllExt,
+            // guestAllExt: this.props.guestAllExt,
+            sims: this.props.sim_list
+        })
+    }
+
+    handleSimModal = () => {
+        // let handleSubmit = this.props.addUser;
+        this.refs.add_sim_reg.showModal();
+    }
 
     handleChecked = (e, key, app_id = '000') => {
         this.props.handleCheckExtension(e, key, app_id, this.props.pageName);
@@ -113,39 +132,44 @@ class SimSettings extends Component {
             this.props.handleCheckAllExtension(key, 'encrypted', value, this.props.pageName);
         }
     }
-    renderApps = () => {
 
-        let extension = this.state.extension;
-        // console.log("render list extension", extension);
+    setDataLimit = () => {
+        this.setState({
 
-        if (this.state.extension !== undefined && this.state.extension !== null && Object.keys(extension).length) {
+        })
+    }
+    renderSimList = () => {
 
-            return this.state.extension.subExtension.map((ext, index) => {
+        let sims = this.state.sims;
+        console.log("render list sims", sims);
+
+        if (sims !== undefined && sims !== null && sims.length > 0) {
+
+            return sims.map((ext, index) => {
                 return {
                     key: index,
-                    name: (
-                        <Fragment>
-                            <Avatar
-                                className="perm_icons"
-                                size={"small"}
-                                src={`${BASE_URL}users/getFile/${ext.icon}`}
-                            // style={{ width: "30px", height: "30px" }} 
-                            />
-                            <div className="line_break"><a className="perm_txt">{ext.label}</a></div>
-                        </Fragment>),
-                    // name: ext.label,
-                    guest: <Switch checked={ext.guest === 1 ? true : false} size="small"
+                    counter: ++index,
+                    iccid: ext.iccid,
+                    name: ext.name,
+                    status: 'not inseted',
+                    note: 'Good Network',
+                    guest: <Switch
+                        checked={ext.guest ? true : false}
+                        size="small"
                         onClick={(e) => {
                             // console.log("guest", e);
-                            this.handleChecked(e, "guest", ext.app_id);
+                            // this.handleChecked(e, "guest", ext.app_id);
                         }}
                     />,
-                    encrypted: <Switch checked={ext.encrypted === 1 ? true : false} size="small"
+                    encrypted: <Switch
+                        checked={ext.encrypt ? true : false}
+                        size="small"
                         onClick={(e) => {
                             // console.log("guest", e);
-                            this.handleChecked(e, "encrypted", ext.app_id);
+                            // this.handleChecked(e, "encrypted", ext.app_id);
                         }}
-                    />
+                    />,
+                    dataLimit: (<Button type="danger" onClick={this.setDataLimit}>Set</Button>),
                 }
             })
         }
@@ -178,14 +202,20 @@ class SimSettings extends Component {
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                                 // console.log("guest", e);
-                                this.handleChecked(e, "guest");
-                            }} checked={extension.guest === 1 ? true : false} size="small" />
+                                // this.handleChecked(e, "guest");
+                            }}
+                                // checked={extension.guest === 1 ? true : false} 
+                                size="small"
+                            />
                         </Col>
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
                                 // console.log("guest", e);
-                                this.handleChecked(e, "encrypted");
-                            }} checked={extension.encrypted === 1 ? true : false} size="small" />
+                                // this.handleChecked(e, "encrypted");
+                            }}
+                                // checked={extension.encrypted === 1 ? true : false} 
+                                size="small"
+                            />
                         </Col>
                         <Col span={6} />
                     </Row>
@@ -196,14 +226,20 @@ class SimSettings extends Component {
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                                 // console.log("guest", e);
-                                this.handleChecked(e, "guest");
-                            }} checked={extension.guest === 1 ? true : false} size="small" />
+                                // this.handleChecked(e, "guest");
+                            }}
+                                // checked={extension.guest === 1 ? true : false} 
+                                size="small"
+                            />
                         </Col>
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
                                 // console.log("guest", e);
-                                this.handleChecked(e, "encrypted");
-                            }} checked={extension.encrypted === 1 ? true : false} size="small" />
+                                // this.handleChecked(e, "encrypted");
+                            }}
+                                // checked={extension.encrypted === 1 ? true : false} 
+                                size="small"
+                            />
                         </Col>
                         <Col span={6} />
                     </Row>
@@ -218,52 +254,34 @@ class SimSettings extends Component {
                                 // disabled
                                 type="primary"
                                 // style={{ width: "100%", marginBottom: 16 }}
-                                onClick={() => {
-                                    this.setState({
-                                        addSimRegistrationModal: true
-                                    })
-                                }}
+                                onClick={this.handleSimModal}
                             >
-                                {/* <Icon type="select" /> */}
                                 <Icon type="folder-add" />
-
-                                {/* <IntlMessages id="button.LoadProfile" /> */}
                                 {convertToLang(this.props.translation[Button_Add], "Add")}
                             </Button>
                         </Col>
+
                     </Row>
                     <br />
                     {/* <div className="sec_set_table"> */}
                     <div className="">
-                        <Table dataSource={this.renderApps()} columns={this.state.columns} pagination={false} scroll={{ y: 276 }} />
+                        <Table dataSource={this.renderSimList()} columns={this.state.columns} pagination={false} scroll={{ y: 276 }} />
                     </div>
 
+                    <AddRegistrationModal
+                        ref="add_sim_reg"
+                        simRegister={this.props.simRegister}
+                        translation={this.props.translation}
+                    />
 
-                    {/* Add SIM REG */}
-                    < Modal
-                        // width='850px'
-                        maskClosable={false}
-                        title="Add Sim Registration" // {convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
-                        visible={this.state.addSimRegistrationModal}
-                        // onOk={() => {
-                        //     this.showSaveProfileModal(true, 'profile')
-                        //     this.setState({ showChangesModal: false })
-                        // }}
-                        onCancel={() => this.setState({ addSimRegistrationModal: false })
-                        }
-                    // okText='Apply'
-                    // okText={convertToLang(this.props.translation[Button_Apply], "Apply")}
-                    // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
-                    >
-                       <h1>hi</h1>
-                    </Modal >
+                    
 
                 </Fragment>
             )
         } else {
             return (
                 <Fragment>
-                    <h1 class="not_syn_txt"><a>{convertToLang(this.props.translation[SECURE_SETTINGS], "Secure Settings")} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
+                    <h1 class="not_syn_txt">{convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</h1>
                 </Fragment>
             )
         }
@@ -276,7 +294,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         // showHistoryModal: showHistoryModal
         handleCheckExtension: handleCheckExtension,
-        handleCheckAllExtension: handleCheckAllExtension
+        handleCheckAllExtension: handleCheckAllExtension,
+        simRegister: simRegister
         // handleCheckAll: handleCheckAll
     }, dispatch);
 }
@@ -288,21 +307,23 @@ var mapStateToProps = ({ device_details }, ownProps) => {
 
     let extension = device_details.extensions.find(o => o.uniqueName === pageName);
     // console.log("extensions_", device_details.secureSettingsMain);
+    console.log('at compont: ', device_details.sim_list);
 
-    if (extension !== undefined) {
-        return {
-            isExtension: true,
-            extension: extension,
-            guestAllExt: device_details.guestAllExt,
-            encryptedAllExt: device_details.encryptedAllExt,
-            checked_app_id: device_details.checked_app_id,
+    // if (extension !== undefined) {
+    return {
+        isExtension: true,
+        extension: extension,
+        guestAllExt: device_details.guestAllExt,
+        encryptedAllExt: device_details.encryptedAllExt,
+        checked_app_id: device_details.checked_app_id,
+        sim_list: device_details.sim_list,
 
-        }
-    } else {
-        return {
-            isExtension: false
-        }
     }
+    // } else {
+    //     return {
+    //         isExtension: false
+    //     }
+    // }
 
 }
 
