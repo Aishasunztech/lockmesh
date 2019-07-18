@@ -82,7 +82,7 @@ export const NOT_AVAILABLE = "Not Available.id"
 export const WIPE_DEVICE_DESCRIPTION = "WIPE_DEVICE_DESCRIPTION.id"; // This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.
 export const DEVICE_NOT_SYNCED = "Device_not_Synced.id"; // Device is not Synced
 export const DEVICE_IS = "Device.is.id"; // Device is
-
+export const Suspended_TEXT = "Suspended_TEXT.id";
 export const MANAGE_IMEI = "MANAGE.IMEI.id"; // MANAGE IMEI
 export const GENERATE_IMEI_NUMBER = "Generate.IMEI.number.id"; // Generate IMEI number
 export const WRITE_IMEI_1 = "WRITE_IMEI_1.id"; // WRITE IMEI 1
@@ -93,6 +93,8 @@ export const CHANGED_DATE = "Changed.Date.id"; // Changed Date IMEI_Number_must_
 export const IMEI_NUMBER_MUST_BE_15_DIGITS_LONG = "IMEI_Number_must_be_15_digits_long.id"; // IMEI Number must be 15 digits long  
 export const IMEI_NUMBER_REQUIRED = "IMEI_NUMBER_REQUIRED.id"; // IMEI NUMBER REQUIRED 
 export const Enter_IMEI_Number = "Enter_IMEI_Number.id"; // IMEI NUMBER REQUIRED   
+export const ORIGNAL = "ORIGNAL.id"; // ORIGNAL    
+export const CURRENT = "CURRENT.id"; // CURRENT    
 
 export const SR_NO = "SR.NO.ID"; //
 export const STOLEN = "Stolen.id"; // Stolen LOST

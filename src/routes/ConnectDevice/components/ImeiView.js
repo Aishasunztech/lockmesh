@@ -3,7 +3,7 @@ import { Modal, message, Button, Table, Input, Select, Row, Col, Form, InputNumb
 import { componentSearch, getFormattedDate, convertToLang } from '../../utils/commonUtils';
 import WriteImeiFrom from './WriteImeiForm'
 import Moment from 'react-moment'
-import { MANAGE_IMEI, DEVICE_ID, DEVICE_IMEI_1, IMEI_1_NUMBER, SR_NO, CHANGED_DATE, DEVICE_IMEI_2, IMEI_2_NUMBER, GENERATE_IMEI_NUMBER, WRITE_IMEI_2_TEXT, WRITE_IMEI_1, WRITE_IMEI_2 } from '../../../constants/DeviceConstants';
+import { MANAGE_IMEI, DEVICE_ID, DEVICE_IMEI_1, IMEI_1_NUMBER, SR_NO, CHANGED_DATE, DEVICE_IMEI_2, IMEI_2_NUMBER, GENERATE_IMEI_NUMBER, WRITE_IMEI_2_TEXT, WRITE_IMEI_1, WRITE_IMEI_2, ORIGNAL, CURRENT } from '../../../constants/DeviceConstants';
 import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
 
 // import EditForm from './editForm';
@@ -161,7 +161,7 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: imei + ' (ORIGNAL)',
+                    imei: imei + ` (${convertToLang(this.props.translation[ORIGNAL], "ORIGNAL")})`,
                     changed_time: getFormattedDate(device.created_at)
                 }
             } else {
@@ -169,7 +169,7 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: (imeiLength === i) ? imei + ' (CURRENT)' : imei,
+                    imei: (imeiLength === i) ? imei + ` (${convertToLang(this.props.translation[CURRENT], "CURRENT")})` : imei,
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
@@ -181,7 +181,7 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: imei + ' (ORIGNAL)',
+                    imei: imei + ` (${convertToLang(this.props.translation[ORIGNAL], "ORIGNAL")})`,
                     changed_time: getFormattedDate(device.created_at)
                 }
             } else {
@@ -189,7 +189,7 @@ export default class ImeiView extends Component {
                 return {
                     key: index,
                     tableIndex: i,
-                    imei: (imeiLength === i) ? imei + ' (CURRENT)' : imei,
+                    imei: (imeiLength === i) ? imei + ` (${convertToLang(this.props.translation[CURRENT], "CURRENT")})` : imei,
                     changed_time: getFormattedDate(device.created_at)
                 }
             }
@@ -296,6 +296,7 @@ export default class ImeiView extends Component {
                                 writeImei={this.props.writeImei}
                                 device={this.props.device}
                                 getActivities={this.props.getActivities}
+                                translation={this.props.translation}
                             />
                             <Fragment>
 
