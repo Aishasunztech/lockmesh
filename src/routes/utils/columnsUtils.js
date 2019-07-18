@@ -28,7 +28,9 @@ import {
     DEVICE_DEALER_NAME,
     DEVICE_S_DEALER,
     DEVICE_S_DEALER_NAME,
-    USER_ID
+    USER_ID,
+    DEVICE_TYPE,
+    DEVICE_VERSION
 } from '../../constants/DeviceConstants';
 import {
     // DEVICE_ID,
@@ -106,7 +108,7 @@ export function devicesColumns(translation, handleSearch) {
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
-            render : (text, record, index) => ++index,
+            render: (text, record, index) => ++index,
         },
         {
             title: convertToLang(translation[ACTION], "ACTION"),
@@ -167,7 +169,7 @@ export function devicesColumns(translation, handleSearch) {
                     key: "device_id",
                     sorter: (a, b) => {
                         let list = a.device_id.localeCompare(b.device_id);
-                        
+
                         return list
                     }, //
                     sortDirections: ['ascend', 'descend'],
@@ -245,6 +247,54 @@ export function devicesColumns(translation, handleSearch) {
                     dataIndex: 'online',
                     key: 'online',
                     sorter: (a, b) => { return a.online.props.children[1].localeCompare(b.online.props.children[1]) },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="type"
+                    key="type"
+                    id="type"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEVICE_TYPE], DEVICE_TYPE)}
+                />
+            ),
+            dataIndex: 'type',
+            children: [
+                {
+                    title: convertToLang(translation[DEVICE_TYPE], DEVICE_TYPE),
+                    align: "center",
+                    dataIndex: 'type',
+                    key: 'type',
+                    sorter: (a, b) => { return a.type.props.children[1].localeCompare(b.type.props.children[1]) },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="version"
+                    key="version"
+                    id="version"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEVICE_VERSION], DEVICE_VERSION)}
+                />
+            ),
+            dataIndex: 'version',
+            children: [
+                {
+                    title: convertToLang(translation[DEVICE_VERSION], DEVICE_VERSION),
+                    align: "center",
+                    dataIndex: 'version',
+                    key: 'version',
+                    sorter: (a, b) => { return a.version.props.children[1].localeCompare(b.version.props.children[1]) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -793,7 +843,7 @@ export function usersColumns(translation, handleSearch) {
             dataIndex: 'counter',
             align: 'center',
             className: 'row',
-            render : (text, record, index) => ++index,
+            render: (text, record, index) => ++index,
         },
         {
             title: convertToLang(translation[ACTION], "ACTION"),
@@ -1201,7 +1251,7 @@ export function dealerColumns(translation, handleSearch) {
         dataIndex: 'counter',
         align: 'center',
         className: 'row',
-        render : (text, record, index) => ++index,
+        render: (text, record, index) => ++index,
     }, {
         title: '',
         dataIndex: 'accounts',

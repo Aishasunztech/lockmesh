@@ -15,7 +15,8 @@ import {
     SET_PRICE,
     RESET_PRICE,
     GET_PACKAGES,
-    PURCHASE_CREDITS
+    PURCHASE_CREDITS,
+    GET_PARENT_PACKAGES
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -101,7 +102,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_PACKAGES: {
-            // console.log(action.response, 'response of get prices')
+            console.log(action.response, 'response of get prices')
 
             return {
                 ...state,
@@ -260,6 +261,9 @@ export default (state = initialState, action) => {
                 ...state,
                 backUpModal: action.payload,
             }
+
+       
+
         case PURCHASE_CREDITS:
             // console.log(action.response);
             if (action.response.status) {

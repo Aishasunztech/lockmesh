@@ -20,6 +20,7 @@ import {
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
     UNFLAG_DEVICE,
+    GET_PARENT_PACKAGES
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -75,6 +76,8 @@ const initialState = {
     sim_ids: [],
     chat_ids: [],
     pgp_emails: [],
+
+    parent_packages: [],
     // options: [
     //     { "key": DEVICE_ID, "value": convertToLang(translation[DEVICE_ID], DEVICE_ID) },
     //     { "key": USER_ID, "value": convertToLang(translation[USER_ID], USER_ID) },
@@ -294,7 +297,7 @@ export default (state = initialState, action) => {
             break;
 
         case GET_DROPDOWN: {
-            console.log( "Reducer " ,action.payload)
+            console.log("Reducer ", action.payload)
             // console.log(GET_DROPDOWN);
             // console.log({
             //     ...state,
@@ -376,6 +379,14 @@ export default (state = initialState, action) => {
                 devices: filteredDevices,
             }
         }
+
+        case GET_PARENT_PACKAGES:
+            console.log(action.response.data);
+
+            return {
+                ...state,
+                parent_packages: action.response.data,
+            }
         default:
             return state;
 

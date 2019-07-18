@@ -40,6 +40,8 @@ import {
   DEVICE_DEALER_NAME,
   DEVICE_S_DEALER,
   DEVICE_S_DEALER_NAME,
+  DEVICE_TYPE,
+  DEVICE_VERSION,
 } from '../../../constants/DeviceConstants';
 
 import {
@@ -54,10 +56,10 @@ import {
 } from '../../../constants/DealerConstants';
 
 import {
-	APK_SHOW_ON_DEVICE,
-	APK,
-	APK_APP_NAME,
-	APK_APP_LOGO,
+  APK_SHOW_ON_DEVICE,
+  APK,
+  APK_APP_NAME,
+  APK_APP_LOGO,
   APK_PERMISSION,
   APK_SIZE
 } from '../../../constants/ApkConstants';
@@ -81,6 +83,8 @@ export var initialSettings = {
     { "key": "validity", "value": DEVICE_REMAINING_DAYS },
     { "key": "status", "value": DEVICE_STATUS },
     { "key": "online", "value": DEVICE_MODE },
+    { "key": "type", "value": DEVICE_TYPE },
+    { "key": "version", "value": DEVICE_VERSION },
     { "key": "flagged", "value": DEVICE_FLAGGED },
     { "key": "name", "value": DEVICE_NAME },
     { "key": "account_email", "value": DEVICE_ACCOUNT_EMAIL },
@@ -115,12 +119,12 @@ export var initialSettings = {
     { "key": "parent_dealer_id", "value": Parent_Dealer_ID },
   ],
   APKOptions: [
-    { "key": "permission", "value": APK_PERMISSION},
-    { "key": "apk_status", "value": APK_SHOW_ON_DEVICE},
-    { "key": "apk", "value": APK},
-    { "key": "apk_name", "value": APK_APP_NAME},
-    { "key": "apk_logo", "value": APK_APP_LOGO},
-    { "key": "apk_size", "value": APK_SIZE},
+    { "key": "permission", "value": APK_PERMISSION },
+    { "key": "apk_status", "value": APK_SHOW_ON_DEVICE },
+    { "key": "apk", "value": APK },
+    { "key": "apk_name", "value": APK_APP_NAME },
+    { "key": "apk_logo", "value": APK_APP_LOGO },
+    { "key": "apk_size", "value": APK_SIZE },
   ],
   //  locale: {
   //   languageId: 'english',

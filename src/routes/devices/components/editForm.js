@@ -324,7 +324,7 @@ class EditDevice extends Component {
 
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
                         <Form.Item
-                            label={convertToLang(this.props.translation[Model_text], "Modal")}
+                            label={convertToLang(this.props.translation[Model_text], "Model")}
                             labelCol={{ span: 8, xs: 24, sm: 8 }}
                             wrapperCol={{ span: 14, md: 14, xs: 24 }}
                         >
