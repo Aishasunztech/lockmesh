@@ -84,7 +84,7 @@ class UserList extends Component {
                                         type="dashed"
                                         size="small"
                                         style={{ textTransform: 'uppercase' }}
-                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, convertToLang(this.props.translation[UNDO], "Do you want to UNDO user "), 'UNDO')}
+                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, convertToLang(this.props.translation[UNDO], "Do you want to UNDELETE user "), 'UNDO')}
                                     >
                                         {convertToLang(this.props.translation[Button_Undo], "UNDELETE")}
                                     </Button>
