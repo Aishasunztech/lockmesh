@@ -64,13 +64,11 @@ class SidebarContent extends Component {
     }
   }
 
+
   languageMenu = () => (
     <ul className="gx-sub-popover">
       {this.state.languageData.map(language =>
-        <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
-          // this.props.switchLanguage(language)
-          this.changeLng(language)
-        }>
+        <li className={`gx-media gx-pointer ${(language.id == this.props.lng_id) ? "noClick" : ""}`} key={JSON.stringify(language)} onClick={(e) => this.changeLng(language)}>
           <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`} />
           <span className="gx-language-text">{language.name}</span>
         </li>
@@ -321,6 +319,8 @@ class SidebarContent extends Component {
 const mapStateToProps = ({ settings, devices, sidebar }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
 
+  // console.log('lng id is: ', translation["lng_id"])
+
   return {
     navStyle,
     themeType,
@@ -330,7 +330,8 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
     languageData: languages,
-    translation: translation
+    translation: translation,
+    lng_id: translation["lng_id"],
   }
 };
 export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest })(SidebarContent);

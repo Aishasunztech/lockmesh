@@ -184,10 +184,10 @@ class ConnectDevice extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (this.props.translation != nextProps.translation) {
-    //   this.mainMenu = mobileMainMenu(nextProps.translation);
-    //   this.subMenu = mobileManagePasswords(nextProps.translation);
-    // }
+    if (this.props.translation != nextProps.translation) {
+      this.mainMenu = mobileMainMenu(nextProps.translation);
+      this.subMenu = mobileManagePasswords(nextProps.translation);
+    }
     if (this.props !== nextProps) {
       // console.log('object, ', nextProps.showMessage)
     }

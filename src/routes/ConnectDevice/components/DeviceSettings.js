@@ -192,6 +192,14 @@ export default class TableHistory extends Component {
         this.filterExtensions();
     }
 
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.translation != nextProps.translation) {
+            this.appsColumns = appsColumns(nextProps.translation);
+            this.extensionColumns = extensionColumns(nextProps.translation);
+            this.controlColumns = controlColumns(nextProps.translation);
+        }
+    }
     renderData = (datalist) => {
         // console.log(JSON.parse(datalist));
         // console.log(this.props.type, 'datalist is type of');
@@ -207,7 +215,7 @@ export default class TableHistory extends Component {
                     // console.log(item);
                     return {
                         key: item.app_id,
-                        label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                        app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
                         // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
                         guest: <Switch
                             size="small"
