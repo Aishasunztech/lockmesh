@@ -489,7 +489,7 @@ export function pushApps(apps, deviceId, userAccId) {
                         payload: {
                             showMessage: true,
                             messageType: 'success',
-                            messageText: "settings are applied"
+                            messageText: "Settings are applied"
                         }
                     })
                     dispatch({
@@ -501,7 +501,7 @@ export function pushApps(apps, deviceId, userAccId) {
                         payload: {
                             showMessage: false,
                             messageType: 'success',
-                            messageText: 'settings are applied'
+                            messageText: 'Settings are applied'
                         }
                     })
                 }

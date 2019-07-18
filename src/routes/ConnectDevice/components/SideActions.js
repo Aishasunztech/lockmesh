@@ -43,7 +43,7 @@ import {
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
-    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT, PUSH_APPS_TEXT, SELECTED_APPS, SELECT_APPS, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Name, SEARCH_APPS
+    ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT, PUSH_APPS_TEXT, SELECTED_APPS, SELECT_APPS, PROCEED_WITH_WIPING_THE_DEVICE, Name, SEARCH_APPS, WARNING
 } from "../../../constants/Constants";
 
 
@@ -121,7 +121,7 @@ class DealerAppModal extends Component {
                             autoComplete="new-password"
                             placeholder={convertToLang(this.props.translation[SEARCH_APPS], "Search Apps")}
                         />
-                        <br />{convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID: ")}  {this.props.device.device_id}
+                        <br />{`${convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}:`}  {this.props.device.device_id}
                     </div>}
                 visible={this.props.pushAppsModal}
                 onOk={() => {
@@ -164,7 +164,7 @@ class PullAppModal extends Component {
                 style={{ top: 20 }}
                 width="650px"
                 title={
-                    <div className="pp_popup">{convertToLang(this.props.translation[SELECT_APPS], "Select Apps ")}
+                    <div className="pp_popup">{convertToLang(this.props.translation[SELECT_APPS], "Select Apps")}
                         <Input.Search
                             name="pull_apps"
                             key="pull_apps"
@@ -178,7 +178,7 @@ class PullAppModal extends Component {
                             autoComplete="new-password"
                             placeholder={convertToLang(this.props.translation[SEARCH_APPS], "Search Apps")}
                         />
-                        <br /> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID: ")} {this.props.device.device_id} </div>}
+                        <br /> {`${convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}:`} {this.props.device.device_id} </div>}
                 visible={this.props.pullAppsModal}
                 onOk={() => {
                     if (this.props.selectedAppKeys) {
@@ -322,7 +322,7 @@ class SideActions extends Component {
             showConfirmPolcy(this)
         }
 
-        if(this.props.wipeDevieStatus != nextProps.wipeDevieStatus) {
+        if (this.props.wipeDevieStatus != nextProps.wipeDevieStatus) {
             showConfirm1(nextProps, this.props.device, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE], "Do you really want to Wipe the device ") + this.props.device.device_id + "?")
         }
     }
@@ -709,7 +709,7 @@ class SideActions extends Component {
                                     <Button
                                         type="default"
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
-                                        // onClick={this.handleSimModule}
+                                    // onClick={this.handleSimModule}
                                     >
                                         <Icon type="file" />
 
@@ -853,20 +853,20 @@ class SideActions extends Component {
                     />
                 </Modal>
 
-                    {/* SIM MODULE */}
-                    <Modal
+                {/* SIM MODULE */}
+                <Modal
                     width='850px'
                     maskClosable={false}
-                    title= "Sim Settings" // {convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
+                    title="Sim Settings" // {convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
                     visible={this.state.showSimModal}
                     // onOk={() => {
                     //     this.showSaveProfileModal(true, 'profile')
                     //     this.setState({ showChangesModal: false })
                     // }}
                     onCancel={() => this.setState({ showSimModal: false })}
-                    // okText='Apply'
-                    // okText={convertToLang(this.props.translation[Button_Apply], "Apply")}
-                    // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                // okText='Apply'
+                // okText={convertToLang(this.props.translation[Button_Apply], "Apply")}
+                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <SimSettings
                         // app_list={this.props.app_list}
@@ -882,7 +882,7 @@ class SideActions extends Component {
                     />
                 </Modal>
 
-                    {/* END SIM MODULE */}
+                {/* END SIM MODULE */}
 
                 {/* title={this.state.profileType[0] + this.state.profileType.substring(1,this.state.profileType.length).toLowerCase()} */}
                 <Modal
@@ -1138,7 +1138,7 @@ function showConfirmProfile(_this, name, profile) {
 
 function showConfirm1(props, device, msg, buttonText = "") {
     confirm({
-        title: convertToLang(props.translation[WARNNING], "WARNNING!"),
+        title: convertToLang(props.translation[WARNING], "WARNING!"),
         content: msg,
         okText: buttonText,
         cancelText: convertToLang(props.translation[Button_Cancel], "Cancel"),
@@ -1150,7 +1150,7 @@ function showConfirm1(props, device, msg, buttonText = "") {
 }
 function showConfirmWipe(props, device, msg) {
     confirm({
-        title: convertToLang(props.translation[WARNNING], "WARNNING!"),
+        title: convertToLang(props.translation[WARNING], "WARNING!"),
         content: msg,
         // okText: "PROCEED WITH WIPING THE DEVICE",
         okText: convertToLang(props.translation[PROCEED_WITH_WIPING_THE_DEVICE], "PROCEED WITH WIPING THE DEVICE"),

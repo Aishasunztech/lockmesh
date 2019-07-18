@@ -45,6 +45,8 @@ import {
     PACKAGES_AND_IDS_03,
     BACKUP_NOW,
     BACKUP_DATABASE_DESCRIPTION_OF_MODAL_BODY,
+    DUPLICATE_DATA,
+    NEW_DATA,
 } from "../../constants/AccountConstants";
 
 import {
@@ -53,6 +55,7 @@ import {
     Button_Ok,
     Button_Cancel,
     Button_submit,
+    Button_BackupNow
 } from '../../constants/ButtonConstants'
 import {
     getSimIDs,
@@ -300,7 +303,7 @@ class Account extends Component {
     showConfirm = (msg, _this, pageName, id = 0) => {
         if (_this.state.selectedRowKeys.length > 0 || id !== 0) {
             confirm({
-                title: 'WARNNING! ' + msg,
+                title: 'WARNING! ' + msg,
                 okText: "Confirm",
                 onOk() {
                     if (id !== 0) {
@@ -434,7 +437,8 @@ class Account extends Component {
                                 <Col xs={24} sm={24} md={8} lg={8} xl={8} >
                                     <Modal
                                         maskClosable={false}
-                                        title={<div><Icon type="question-circle" className='warning' /><span> WARNNING! Duplicate Data</span></div>}
+                                        title={<div><Icon type="question-circle" className='warning' /><span>
+                                            {convertToLang(this.props.translation[DUPLICATE_DATA], "DUPLICATE_DATAWARNING! Duplicate Data")} </span></div>}
                                         visible={this.state.duplicate_modal_show}
                                         onOk={this.InsertNewData}
                                         onCancel={this.handleCancelDuplicate}
@@ -480,7 +484,7 @@ class Account extends Component {
                                         <span className="warning_hr">
                                             <hr />
                                         </span>
-                                        <h2>New Data</h2>
+                                        <h2>{convertToLang(this.props.translation[NEW_DATA], "New Data")} </h2>
 
                                         <Table
                                             bordered
@@ -546,7 +550,7 @@ class Account extends Component {
                                             visible={this.state.visible1}
                                             onOk={this.handleOk}
                                             onCancel={this.handleCancel}
-                                            okText= {convertToLang(this.props.translation[Button_Ok], "Ok")}
+                                            okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
                                             cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                             centered
                                         >
@@ -570,7 +574,7 @@ class Account extends Component {
 
                                                             <Button key="submit" ref="formSubmission" type="primary" onClick={(e) => this.handleSubmit()} >
                                                                 {convertToLang(this.props.translation[Button_submit], "Submit")}
-                                                        </Button>
+                                                            </Button>
                                                         ]}>
                                                         <Form onSubmit={(e) => { this.handleSubmit(e) }}>
 
@@ -603,7 +607,7 @@ class Account extends Component {
                                                         visible={this.state.dataVisible}
                                                         title={`${this.state.dataFieldTitle}`}
                                                         // onOk={this.handleOk}
-                                                        okText = {convertToLang(this.props.translation[Button_Ok], "Ok")}
+                                                        okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
                                                         cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                                         onCancel={
                                                             () => {
@@ -1067,8 +1071,8 @@ class Account extends Component {
                                         visible={this.state.backUpModal}
                                         onOk={this.createBackupDB}
                                         onCancel={this.handleCancel}
-                                        okText={convertToLang(this.props.translation[BACKUP_NOW], "BACKUP NOW")}
-                                        cancelText= {convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                                        okText={convertToLang(this.props.translation[Button_BackupNow], "BACKUP NOW")}
+                                        cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                         okButtonDisabled={true}
                                         centered
                                     >
@@ -1082,7 +1086,9 @@ class Account extends Component {
                                                 <Card className="manage_ac" style={{ borderRadius: 12 }}>
                                                     <div>
                                                         <div>
-                                                            <h2 style={{ textAlign: "center" }}> <Icon type="lock" className="lock_icon2" /> {convertToLang(this.props.translation[BACKUP_DATABASE], "BACKUP DATABASE")} </h2>
+                                                            <h2 style={{ textAlign: "center", width: "75%", margin: "0 auto" }}>
+                                                                <Icon type="lock" className="lock_icon2" />
+                                                                {convertToLang(this.props.translation[BACKUP_DATABASE], "BACKUP DATABASE")} </h2>
                                                             <Divider className="mb-0" />
                                                             <Row style={{ padding: '12px 0 0px' }}>
                                                                 <Col span={8} className="" style={{ textAlign: "center" }}>
@@ -1111,9 +1117,9 @@ class Account extends Component {
                             <div>
                                 <div>
                                     <a href="javascript:void(0)"
-                                        // onClick={(e) => {
-                                        //     this.showPurchaseModal(e, true);
-                                        // }}
+                                    // onClick={(e) => {
+                                    //     this.showPurchaseModal(e, true);
+                                    // }}
                                     >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">

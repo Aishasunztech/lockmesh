@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, message, Radio, Button, Form } from 'antd';
+import { convertToLang } from '../../utils/commonUtils';
+import { FLAG_DEVICE } from '../../../constants/ActionTypes';
+import { FLAG_DEVICE_HEADING, STOLEN, DEFECTIVE, LOST, OTHER } from '../../../constants/DeviceConstants';
+import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants';
 // import EditForm from './editForm';
 // let editDevice;
 export default class FlagDevice extends Component {
@@ -32,8 +36,6 @@ export default class FlagDevice extends Component {
         this.setState({ visible: false });
         this.state.refreshDevice(this.state.device.device_id)
     }
-
-
     handleCancel = () => {
         this.setState({ visible: false });
     }
@@ -46,15 +48,13 @@ export default class FlagDevice extends Component {
                 <Modal
                     maskClosable={false}
                     visible={visible}
-                    title={<div>Flag Device <br /> Device ID: {this.state.device.device_id}</div>}
+                    title={<div>{convertToLang(this.props.translation[FLAG_DEVICE_HEADING], "Flag Device")} <br /> Device ID: {this.state.device.device_id}</div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="flag_device"
                 >
-
                     <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-
                         <Form.Item className="edit_ftr_1 border_btm"
                             wrapperCol={{
                                 xs: { span: 24, offset: 0 },
@@ -62,10 +62,10 @@ export default class FlagDevice extends Component {
                             }}
                         >
                             <Radio.Group ref='option' defaultValue="Stolen" buttonStyle="solid">
-                                <Radio.Button value="Stolen">Stolen</Radio.Button>
-                                <Radio.Button value="Lost">Lost</Radio.Button>
-                                <Radio.Button value="Defective">Defective</Radio.Button>
-                                <Radio.Button value="Other">Other</Radio.Button>
+                                <Radio.Button value="Stolen">{convertToLang(this.props.translation[STOLEN], "Stolen")}</Radio.Button>
+                                <Radio.Button value="Lost">{convertToLang(this.props.translation[LOST], "Lost")}</Radio.Button>
+                                <Radio.Button value="Defective">{convertToLang(this.props.translation[DEFECTIVE], "Defective")}</Radio.Button>
+                                <Radio.Button value="Other">{convertToLang(this.props.translation[OTHER], "Other")}</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
                         <Form.Item className="edit_ftr_1"
@@ -75,8 +75,8 @@ export default class FlagDevice extends Component {
                             }}
                         >
                             <div className="text-right">
-                                <Button key="back" type="button" onClick={this.handleCancel}>Cancel</Button>
-                                <Button type="primary" htmlType="submit">Submit</Button>
+                                <Button key="back" type="button" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
+                                <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                             </div>
                         </Form.Item>
                     </Form>

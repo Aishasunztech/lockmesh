@@ -175,7 +175,7 @@ class AppList extends Component {
                 <Table
                     style={{ margin: 0, padding: 0 }}
                     size='small'
-                    scroll={this.props.isHistory ? {} : { y: 360 }}
+                    scroll={this.props.isHistory ? {} : { y: 370 }}
                     bordered={false}
                     columns={this.appsColumns}
                     align='center'

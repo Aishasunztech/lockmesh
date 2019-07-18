@@ -61,7 +61,8 @@ class PassworForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <Markup content={convertToLang(this.props.translation[PANEL_PASSWORD_MODAL], "<h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>")} />
+                    <Markup content={convertToLang(this.props.translation[PANEL_PASSWORD_MODAL], 
+                    "<h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>")} />
                 </Form.Item>
 
                 <Form.Item

@@ -90,7 +90,7 @@ export const twelve_month = '12.month.id'; // 12 month
 
 export const ACTION = "action.id"; // ACTION
 export const SEARCH = "search.id"; // Search
-export const SEARCH_APPS = "search_APPS.id"; // Search APPS
+export const SEARCH_APPS = "search_APPS.id"; // Search APPS 
 export const Model_text = "modal.text" // Model
 export const DATE = "DATE.id"; // DATE
 export const Start_Date = "start.date"; // Start Date
@@ -114,7 +114,7 @@ export const DEVICES = "devices.id"; // DEVICES
 
 export const Profile_Info = "profile.info.id"; // Profile Info
 export const Change_Profile = "change.profile.id"; // Change Profile
-export const SAVE_PROFILE_TEXT = "save.profile.text.id"; // Save Profile
+export const SAVE_PROFILE_TEXT = "save.profile.text.id"; // Save Profile 
 
 export const Edit_Profile = "edit.profile.id"; // Edit Profile
 export const Edit_Profile_01 = "edit.profile.01.id"; // Change password
@@ -157,11 +157,10 @@ export const Nav_Style = "nav.style.id"; //  Nav Style
 
 // ==============================
 export const SIGN_IN = "app.userAuth.signIn";
-
 export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME
 export const SELECT = "select.id"; // Select
 export const ALERT_TO_SURE_DELETE_ALL_DEVICES = "ALERT_TO_SURE_DELETE_ALL_DEVICES.id"; // Are you sure, you want to delete All these devices
-export const WARNNING = "WARNNING.id"; 
+export const WARNING = "WARNING.id"; 
 export const PROCEED_WITH_WIPING_THE_DEVICE = "PROCEED.WITH.WIPING.THE.DEVICE.id";
 
 export const CREDITS = "CREDITS.id";

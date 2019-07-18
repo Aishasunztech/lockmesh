@@ -74,7 +74,7 @@ class Password extends Component {
             callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
         }
         if (value && value !== form.getFieldValue('pwd')) {
-            callback(convertToLang(this.props.translation[PASSWORDS_ARE_INCONSISTENT], "passwords are inconsistent!"));
+            callback(convertToLang(this.props.translation[PASSWORDS_ARE_INCONSISTENT], "Passwords are inconsistent!"));
         } else {
             callback();
         }
