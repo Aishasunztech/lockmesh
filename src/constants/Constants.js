@@ -129,8 +129,8 @@ export const ENTER_NEW_PASSWORD = "Enter.New.Password.id"; // Enter New Password
 export const NEW_PASSWORD = "New.Password.id"; // New Password
 export const ENTER_CURRENT_PASSWORD = "Enter.Current.Password.id"; // Enter Current Password
 export const CURRENT_PASSWORD = "Current.Password.id"; // Current Password
-export const CONFIRM_NEW_PASSWORD  = "Confirm.New.Password.id"; // Confirm New Password
-export const CONFIRM_PASSWORD  = "Confirm.Password.id"; // Confirm Password
+export const CONFIRM_NEW_PASSWORD = "Confirm.New.Password.id"; // Confirm New Password
+export const CONFIRM_PASSWORD = "Confirm.Password.id"; // Confirm Password
 
 
 export const Date_Text = "date.text.id"; // Date
@@ -166,11 +166,14 @@ export const PROCEED_WITH_WIPING_THE_DEVICE = "PROCEED.WITH.WIPING.THE.DEVICE.id
 export const CREDITS = "CREDITS.id";
 export const CREDITS_CASH_REQUESTS = "CREDITS.CASH.REQUESTS.id";
 export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id";
-export const ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST= "Are.you.sure.you.want.to.decline.this.request.id"; // Are you sure you want to decline this request ?
-export const ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST= "Are.you.sure.you.want.to.accept.this.request.id"; // Are you sure you want to accept this request ?
+export const ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST = "Are.you.sure.you.want.to.decline.this.request.id"; // Are you sure you want to decline this request ?
+export const ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST = "Are.you.sure.you.want.to.accept.this.request.id"; // Are you sure you want to accept this request ?
 export const PROFILE_NAME = "PROFILE.NAME.id"; // PROFILE NAME
 
 export const GUEST_ALL = "Guest.All.id"; // Guest All
 export const Encrypted_ALL = "Encrypted.All.id"; // Encrypted All
 export const Enable_ALL = "Enable.All.id"; // Enable All
 // export const GUEST_ALL = "Guest.All.id"; // Guest All
+export const PASSWORD_SAVED = "PASSWORD.SAVED.id";
+export const POLICY_DELETED_SUCCESSFULLY = "Policy.Deleted.Successfully.id"; // Policy Deleted Successfully
+export const STATUS_UPDATED = "Status.Updated.id"; // Status Changed Sccessfully

@@ -47,6 +47,7 @@ export const ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE = "Are.you.sure.you.want.
 export const ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE = "Are.you.sure.you.want.suspend.the.device.id"; // Are you sure, you want to suspend the device 
 export const ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE = "Are.you.sure.you.want.transfer.the.device.id"; // Are you sure, you want to transfer the device 
 export const ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE = "Are.you.sure.you.want.delete.the.device.id"; // Are you sure, you want to delete the device 
+export const ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE = "Are.you.sure.you.want.UNLINK.the.device.id"; // Are you sure, you want to UNLINK the device 
 
 
 
@@ -98,7 +99,6 @@ export const STOLEN = "Stolen.id"; // Stolen LOST
 export const LOST = "Lost.id"; // Lost 
 export const DEFECTIVE = "Defective.id"; // Defective 
 export const OTHER = "Other.id"; // Other 
-export const FLAG_DEVICE_HEADING = "FlagDevice.id"; //Flag Device
 export const DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE = "Do.you.really.want.to.unflag.the.device.id"; // Do you really want to unflag the device
 
 export const DO_YOU_WANT_TO_APPLY = "Do.you.want.to.apply.id"; // Do you want to apply
@@ -111,3 +111,5 @@ export const PANEL_PASSWORD_MODAL = "PANEL.PASSWORD.modal.id"; // <h4>PANEL PASS
 export const ENTER = "Enter.id"; // Enter
 export const PROFILE = "PROFILE.id"; // PROFILE
 export const DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE = "Do.you.really.want.to.Wipe.the.device.id"; // Do you really want to Wipe the device
+
+export const FLAG_DEVICE = "FlagDevice.id"; // Flag Device

@@ -18,27 +18,27 @@ export default class Activity extends Component {
         super(props);
         this.appsColumns = [
             {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[Guest], "GUEST"),
+                title: convertToLang(props.translation[Guest], "GUEST"),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
+                title: convertToLang(props.translation[ENABLE], "ENABLE"),
                 dataIndex: 'enable',
                 key: '4',
             }
         ];
         this.pullAppsColumns = [
             {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
@@ -46,7 +46,7 @@ export default class Activity extends Component {
         ];
         this.policyColumns = [
             {
-                title: convertToLang(this.props.translation[POLICY_NAME], "POLICY NAME"),
+                title: convertToLang(props.translation[POLICY_NAME], "POLICY NAME"),
                 dataIndex: 'policy_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
@@ -55,13 +55,13 @@ export default class Activity extends Component {
 
         this.imeiColumns = [
             {
-                title: convertToLang(this.props.translation[DEVICE_IMEI_1], "IMEI1"),
+                title: convertToLang(props.translation[DEVICE_IMEI_1], "IMEI1"),
                 dataIndex: 'imei1',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             },
             {
-                title: convertToLang(this.props.translation[DEVICE_IMEI_2], "IMEI2"),
+                title: convertToLang(props.translation[DEVICE_IMEI_2], "IMEI2"),
                 dataIndex: 'imei2',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,

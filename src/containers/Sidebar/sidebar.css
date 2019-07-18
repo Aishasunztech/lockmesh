@@ -119,6 +119,11 @@
     padding: 0px 4px;
 }
 
+.noClick {
+    /* background-color: red; */
+    pointer-events: none;
+}
+
 @media screen and (max-width: 768px) {
     .edit_ftr_1 .ant-radio-button-wrapper {
         padding: 0;

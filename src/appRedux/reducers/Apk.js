@@ -135,7 +135,8 @@ export default (state = initialState, action) => {
 			// console.log(APK_STATUS_CHANGED)
 			let objIndex = state.apk_list.findIndex((obj => obj.apk_id === action.payload));
 			// console.log('index of item',objIndex);
-			message.success('Status Changed Successfully')
+			// message.success('Status Changed Successfully')
+			message.success(action.msg)
 			if (state.apk_list[objIndex].apk_status === 'Off') {
 				// console.log('apk_status_off',state.apk_list[objIndex].apk_status);
 				state.apk_list[objIndex].apk_status = "On";
@@ -224,7 +225,7 @@ export default (state = initialState, action) => {
 				authenticate = true
 			} else {
 				error({
-					title: 'Invalid email or password. Please try again.',
+					title: action.payload.msg, // 'Invalid email or password. Please try again.',
 				});;
 			}
 			return {

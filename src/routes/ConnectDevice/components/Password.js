@@ -49,7 +49,7 @@ class Password extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
     
             if (!err) {
-                this.props.submitPassword(values, this.state.pwdType);
+                this.props.submitPassword(values, this.state.pwdType, this.props.translation);
             }
         });
     }

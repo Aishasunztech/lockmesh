@@ -15,7 +15,7 @@ import {
 import styles from './policy.css';
 import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
-import { POLICY_SAVE_CONFIRMATION, PLEASE_INPUT_POLICY_NAME } from '../../../constants/PolicyConstants';
+import { POLICY_SAVE_CONFIRMATION, PLEASE_INPUT_POLICY_NAME, POLICY_APP_NAME } from '../../../constants/PolicyConstants';
 import { Button_Save, Button_Cancel } from '../../../constants/ButtonConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
@@ -114,7 +114,7 @@ class EditPolicy extends Component {
 
         this.appsColumns = [
             {
-                title: 'APP NAME',
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,

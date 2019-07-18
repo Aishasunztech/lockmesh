@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, message, Radio, Button, Form } from 'antd';
+import { FLAG_DEVICE, DEVICE_ID, STOLEN, LOST, DEFECTIVE, OTHER } from '../../../constants/DeviceConstants';
+import { Button_Cancel, Button_Ok, Button_submit } from '../../../constants/ButtonConstants';
 import { convertToLang } from '../../utils/commonUtils';
-import { FLAG_DEVICE } from '../../../constants/ActionTypes';
-import { FLAG_DEVICE_HEADING, STOLEN, DEFECTIVE, LOST, OTHER } from '../../../constants/DeviceConstants';
-import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants';
 // import EditForm from './editForm';
 // let editDevice;
 export default class FlagDevice extends Component {
@@ -48,8 +47,10 @@ export default class FlagDevice extends Component {
                 <Modal
                     maskClosable={false}
                     visible={visible}
-                    title={<div>{convertToLang(this.props.translation[FLAG_DEVICE_HEADING], "Flag Device")} <br /> Device ID: {this.state.device.device_id}</div>}
+                    title={<div>{convertToLang(this.props.translation[FLAG_DEVICE], "Flag Device")} <br /> {convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}: {this.state.device.device_id}</div>}
                     onOk={this.handleOk}
+                    okText= {convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText= {convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                     onCancel={this.handleCancel}
                     footer={null}
                     className="flag_device"

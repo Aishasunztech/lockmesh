@@ -37,25 +37,25 @@ class AppList extends Component {
 
         this.appsColumns2 = [
             {
-                title: convertToLang(this.props.translation[POLICY_ACTION], "ACTION"),
+                title: convertToLang(props.translation[POLICY_ACTION], "ACTION"),
                 dataIndex: 'action',
                 key: '5',
                 // render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[Guest], "Guest"),
+                title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
+                title: convertToLang(props.translation[ENABLE], "ENABLE"),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -63,20 +63,20 @@ class AppList extends Component {
 
         this.appsColumns = [
             {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[Guest], "Guest"),
+                title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
+                title: convertToLang(props.translation[ENABLE], "ENABLE"),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -84,16 +84,16 @@ class AppList extends Component {
 
         this.extensionColumns = [
             {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[Guest], "Guest"),
+                title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
                 dataIndex: 'encrypted',
                 key: '3',
             }

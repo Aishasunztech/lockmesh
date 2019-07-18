@@ -148,7 +148,7 @@ export function handleAppGotted(value) {
     }
 }
 
-export function handlePolicyStatus(e, key, id) {
+export function handlePolicyStatus(e, key, id, translation={}) {
     let data = { value: e, key: key, id: id }
     return (dispatch) => {
         RestService.deleteORStatusPolicy(data).then((response) => {
@@ -162,7 +162,8 @@ export function handlePolicyStatus(e, key, id) {
                             value: e,
                             key: key,
                             id: id,
-                        }
+                        },
+                        translation
                     })
                 } else {
                     dispatch({

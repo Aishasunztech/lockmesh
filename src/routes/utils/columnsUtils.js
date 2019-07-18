@@ -1687,7 +1687,7 @@ export function appsColumns(translation) {
     return ([
         {
             title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
-            dataIndex: 'label',
+            dataIndex: 'app_name',
             key: '1',
             render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
         }, {

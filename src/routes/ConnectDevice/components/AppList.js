@@ -14,6 +14,7 @@ import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_LoadProfile, Button_On, Button_Off } from '../../../constants/ButtonConstants';
+import { appsColumns } from '../../utils/columnsUtils';
 
 
 class AppList extends Component {
@@ -29,26 +30,27 @@ class AppList extends Component {
             app_list_count: 0,
         }
 
-        this.appsColumns = [
-            {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
-                dataIndex: 'app_name',
-                key: '1',
-                render: text => <a href="javascript:;">{text}</a>,
-            }, {
-                title: convertToLang(this.props.translation[Guest], "GUEST"),
-                dataIndex: 'guest',
-                key: '2',
-            }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
-                dataIndex: 'encrypted',
-                key: '3',
-            }, {
-                title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
-                dataIndex: 'enable',
-                key: '4',
-            }
-        ];
+        this.appsColumns = appsColumns(props.translation);
+        // [
+        //     {
+        //         title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
+        //         dataIndex: 'app_name',
+        //         key: '1',
+        //         render: text => <a href="javascript:;">{text}</a>,
+        //     }, {
+        //         title: convertToLang(props.translation[Guest], "GUEST"),
+        //         dataIndex: 'guest',
+        //         key: '2',
+        //     }, {
+        //         title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
+        //         dataIndex: 'encrypted',
+        //         key: '3',
+        //     }, {
+        //         title: convertToLang(props.translation[ENABLE], "ENABLE"),
+        //         dataIndex: 'enable',
+        //         key: '4',
+        //     }
+        // ];
     }
 
     componentDidMount() {
@@ -71,6 +73,10 @@ class AppList extends Component {
             encryptedAll: nextProps.encryptedAll,
             enableAll: nextProps.enableAll
         })
+
+        if(this.props.translation != nextProps.translation) {
+            this.appsColumns = appsColumns(nextProps.translation);
+        }
     }
 
     handleCheckedAll = (key, value) => {
