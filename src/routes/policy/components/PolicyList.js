@@ -97,13 +97,13 @@ class PolicyList extends Component {
     deletePolicy = (id) => {
         let _this = this
         confirm({
-            title: convertToLang(this.props.translation[POLICY_DELETE_CONFIRMATION], "Do you want to delete this Policy?"),
+            title: convertToLang(_this.props.translation[POLICY_DELETE_CONFIRMATION], "Do you want to delete this Policy?"),
             onOk() {
-                _this.props.handlePolicyStatus(1, 'delete_status', id)
+                _this.props.handlePolicyStatus(1, 'delete_status', id, _this.props.translation)
             },
             onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-            cancelText: convertToLang(this.props.translation[Button_No], "No")
+            okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(_this.props.translation[Button_No], "No")
 
         });
     }
@@ -157,7 +157,7 @@ class PolicyList extends Component {
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}</span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
                 policy_status: (<Switch size='small' checked={policy.status === 1 || policy.status === true ? true : false}
-                    onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
+                    onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id, this.props.translation) }
                     } disabled={(policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ? false : true
                     } />),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",

@@ -251,6 +251,7 @@ export const checkPass = (user) => {
                     type: CHECK_BACKUP_PASS,
                     payload: {
                         PasswordMatch: response.data,
+                        msg: response.data.msg
                     }
                 })
             }
