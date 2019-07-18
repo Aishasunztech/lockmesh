@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Icon, Popover, Checkbox } from 'antd';
 import Styles from "./Applist.css";
+import { Encrypted_ALL, GUEST_ALL } from '../../../constants/Constants';
+import { convertToLang } from '../../utils/commonUtils';
 
 
 export default class ExtensionDropdown extends Component {
@@ -10,7 +12,7 @@ export default class ExtensionDropdown extends Component {
         this.state = {
             guestAll: false,
         }
-           
+
     }
     componentDidMount() {
         // console.log("AppDropdown");
@@ -22,17 +24,17 @@ export default class ExtensionDropdown extends Component {
     }
     componentWillReceiveProps(nextProps) {
         // if(this.props !== nextProps){
-            // alert("hello");
-            // console.log("appdropdown nextprops", nextProps);
-            // this.state[this.checked_app_id.key] = this.checked_app_id.value;
-            this.setState({
-                guestAll: nextProps.guestAll,
-                encryptedAll: nextProps.encryptedAll,
+        // alert("hello");
+        // console.log("appdropdown nextprops", nextProps);
+        // this.state[this.checked_app_id.key] = this.checked_app_id.value;
+        this.setState({
+            guestAll: nextProps.guestAll,
+            encryptedAll: nextProps.encryptedAll,
 
-            })
+        })
         // }
     }
-    handleCheckedAll = (e,key) => {
+    handleCheckedAll = (e, key) => {
         // console.log("hello world");
         // console.log(e.target.checked,key);
         this.props.handleCheckedAll(key, e.target.checked);
@@ -42,10 +44,10 @@ export default class ExtensionDropdown extends Component {
             <div className="applist_menu">
                 <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "guestAllExt");
-                }}>Guests All</Checkbox><br></br>
+                }}>{convertToLang(this.props.translation[GUEST_ALL], "Guests All")}</Checkbox><br></br>
                 <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "encryptedAllExt");
-                }}>Encrypted All</Checkbox><br></br>
+                }}> {convertToLang(this.props.translation[Encrypted_ALL], "Encrypted All")}</Checkbox><br></br>
             </div>
         );
     }

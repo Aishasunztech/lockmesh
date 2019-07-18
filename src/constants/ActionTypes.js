@@ -149,7 +149,7 @@ export const LOAD_PROFILE = 'LOAD_PROFILE';
 export const SHOW_HISTORY_MODAL = 'SHOW_HISTORY_MODAL';
 export const SHOW_SAVE_PROFILE_MODAL = 'SHOW_SAVE_PROFILE_MODAL';
 export const HANDLE_PROFILE_INPUT = 'HANDLE_PROFILE_INPUT';
-export const POLICY = 'policy';
+export const POLICY = 'policy.id';
 export const PROFILE = 'profile';
 export const SAVE_PROFILE = 'SAVE_PROFILE';
 export const UNLINK_DEVICE = 'UNLINK_DEVICE';
@@ -218,3 +218,8 @@ export const PURCHASE_CREDITS = 'PURCHASE_CREDITS';
 export const GET_PRICES = 'GET_PRICES';
 export const SET_PRICE = 'SET_PRICE';
 export const RESET_PRICE = 'RESET_PRICE';
+
+
+
+// Sim Module (connect device)
+export const ADD_SIM_REGISTER = "ADD_SIM_REGISTER";

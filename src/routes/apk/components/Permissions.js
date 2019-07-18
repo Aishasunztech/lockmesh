@@ -581,7 +581,7 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Add_Except_Selected_Modal_Title], "Remove Dealers from permissions list for this App")}
+          title={convertToLang(this.props.translation[PERMISSION_Add_Except_Selected_Modal_Title], "Add Except Dealers from permissions list for this App")}
           visible={this.state.addSelectedDealersModal}
           okText={convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}
           cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}

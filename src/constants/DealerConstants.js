@@ -1,4 +1,5 @@
 export const DEALER_ID = 'dealer.id'; // DEALER ID
+export const DEALER_TEXT = 'dealer.text.id'; // DEALER
 export const DEALER_NAME = 'dealer.name.id'; // DEALER NAME
 export const DEALER_EMAIL = 'dealer.email.id'; // DEALER EMAIL
 export const DEALER_PIN = 'dealer.pin.id'; // DEALER PIN

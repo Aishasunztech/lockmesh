@@ -20,7 +20,7 @@ import {
     Appfilter_SearchDealer, Appfilter_ShowDealer
 } from '../../constants/AppFilterConstants';
 import {
-    ADMIN,
+    // ADMIN,
     DEALER,
     SDEALER,
 } from '../../constants/Constants'
@@ -30,21 +30,21 @@ import {
     Button_Cancel,
     Button_Add_Dealer,
     Button_Add_S_dealer,
-    Button_Add_Admin,
+    // Button_Add_Admin,
 } from '../../constants/ButtonConstants';
 
-import {
-    DEVICES
-} from '../../constants/UserConstants';
+// import {
+//     DEVICES
+// } from '../../constants/UserConstants';
 
 import {
-    DEALER_ID,
-    DEALER_NAME,
-    DEALER_EMAIL,
-    DEALER_PIN,
-    DEALER_DEVICES,
-    DEALER_TOKENS,
-    DEALER_ACTION,
+    // DEALER_ID,
+    // DEALER_NAME,
+    // DEALER_EMAIL,
+    // DEALER_PIN,
+    // DEALER_DEVICES,
+    // DEALER_TOKENS,
+    // DEALER_ACTION,
     Parent_Dealer,
     Parent_Dealer_ID,
 } from '../../constants/DealerConstants';
@@ -362,6 +362,7 @@ class Dealers extends Component {
                 suspendDealers: this.filterList('suspended', this.props.dealers),
                 unlinkedDealers: this.filterList('unlinked', this.props.dealers),
             })
+            this.handleChangetab(this.state.tabselect);
         }
         if (this.props.translation !== prevProps.translation) {
             this.setState({

@@ -202,6 +202,7 @@
 
 .ant-tabs .ant-tabs-left-bar .ant-tabs-tab {
     text-align: center;
+    text-transform: uppercase;
 }
 
 .ant-tabs-vertical.ant-tabs-card .ant-tabs-card-bar.ant-tabs-left-bar .ant-tabs-tab-active {

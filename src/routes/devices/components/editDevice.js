@@ -67,7 +67,7 @@ export default class EditDealer extends Component {
                     width="600px"
                     visible={visible}
                     maskClosable={false}
-                    title={<div> {convertToLang(this.props.translation[DEVICE_EDIT], DEVICE_EDIT)} <br /> <span> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}: {this.state.device.device_id} </span></div>}
+                    title={<div> {convertToLang(this.props.translation[DEVICE_EDIT], "Device Edit")} <br /> <span> {convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}: {this.state.device.device_id} </span></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}

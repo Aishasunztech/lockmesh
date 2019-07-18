@@ -224,7 +224,7 @@ export default (state = initialState, action) => {
                     });
                 } else {
                     error({
-                        title: "Given email is already in use. Please choose different Email",
+                        title: action.response.msg, // "Given email is already in use. Please choose different Email",
                     });
                 }
             }

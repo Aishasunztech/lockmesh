@@ -5,7 +5,7 @@ import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Confirm } from '../../../constants/ButtonConstants';
-import { WARNNING } from '../../../constants/Constants';
+import { WARNING } from '../../../constants/Constants';
 // import axios from 'axios';
 // import 'react-credit-cards/lib/styles.scss';
 
@@ -230,7 +230,7 @@ export default CreditCardForm;
 
 function showConfirm(_this, msg, values, creditInfo) {
     confirm({
-        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
+        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
         content: msg,
         // okText: "Confirm",
         okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),

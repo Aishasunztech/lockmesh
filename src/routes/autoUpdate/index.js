@@ -27,12 +27,15 @@ import {
     APK_APP_NAME,
     APK_APP_LOGO,
     APK_PERMISSION,
-    APK_ACTION
+    APK_ACTION,
+    APK_SEARCH,
+    SHOW_APK
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase, convertToLang } from "../utils/commonUtils";
 import { ADMIN, AUTO_UPDATE_ADMIN, Alert_Delete_APK } from "../../constants/Constants";
-import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
+import { Button_Yes, Button_No, Button_UploadApk } from "../../constants/ButtonConstants";
+import { Tab_All, Tab_Active, Tab_Disabled } from "../../constants/TabConstants";
 
 const question_txt = (
     <div>
@@ -62,7 +65,7 @@ class AutoUpdate extends React.Component {
             showUploadData: {},
             columns: [
                 {
-                    title: APK_ACTION,
+                    title:  convertToLang(this.props.translation[APK_ACTION], "ACTION"),
                     dataIndex: 'action',
                     key: 'action',
                     className: 'row'
@@ -86,12 +89,12 @@ class AutoUpdate extends React.Component {
                 //     key: 'apk_status',
                 // },
                 {
-                    title: APK,
+                    title:convertToLang(this.props.translation[APK], "APK") ,
                     dataIndex: 'apk',
                     key: 'apk',
                 },
                 {
-                    title: APK_APP_NAME,
+                    title: convertToLang(this.props.translation[APK_APP_NAME], "APP NAME"),
                     dataIndex: 'apk_name',
                     width: "100",
                     key: 'apk_name',
@@ -100,7 +103,7 @@ class AutoUpdate extends React.Component {
                     defaultSortOrder: "ascend"
                 },
                 {
-                    title: APK_APP_LOGO,
+                    title: convertToLang(this.props.translation[APK_APP_LOGO], "APP LOGO"),
                     dataIndex: 'apk_logo',
                     key: 'apk_logo',
                 },
@@ -119,7 +122,7 @@ class AutoUpdate extends React.Component {
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
-            title: convertToLang(this.props.translation[Alert_Delete_APK], "Are you sure, you want to delete the Apk ?"),
+            title: convertToLang(this.props.translation[Alert_Delete_APK], "Are you sure, you want to delete the Apk?"),
             content: '',
             okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
             cancelText: convertToLang(this.props.translation[Button_No], 'No'),
@@ -262,7 +265,7 @@ class AutoUpdate extends React.Component {
         return (
             <Select
                 showSearch
-                placeholder="Show APK"
+                placeholder={convertToLang(this.props.translation[SHOW_APK], "Show APK")}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -270,9 +273,9 @@ class AutoUpdate extends React.Component {
                 }}
                 onChange={this.handleChange}
             >
-                <Select.Option value="all">All</Select.Option>
-                <Select.Option value="active">Active</Select.Option>
-                <Select.Option value="disabled">Disabled</Select.Option>
+               <Select.Option value="all">{convertToLang(this.props.translation[Tab_All], "All")}</Select.Option>
+                <Select.Option value="active">{convertToLang(this.props.translation[Tab_Active], "Active")}</Select.Option>
+                <Select.Option value="disabled">{convertToLang(this.props.translation[Tab_Disabled], "Disabled")}</Select.Option>
             </Select>
         );
     }
@@ -308,8 +311,8 @@ class AutoUpdate extends React.Component {
                                 <AppFilter
                                     translation={this.props.translation}
                                     handleFilterOptions={this.handleFilterOptions}
-                                    searchPlaceholder="Search APK"
-                                    addButtonText="Upload APK"
+                                    searchPlaceholder={convertToLang(this.props.translation[APK_SEARCH], "Search APK")}
+                                    addButtonText={convertToLang(this.props.translation[Button_UploadApk], "Upload Apk")}
                                     isAddButton={this.props.user.type === ADMIN || this.props.user.type === AUTO_UPDATE_ADMIN}
                                     defaultPagingValue={this.props.DisplayPages}
                                     options={this.props.options}
