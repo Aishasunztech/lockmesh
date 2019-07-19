@@ -10,7 +10,7 @@ import BitCoinForm from './BitCoinForm';
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Cancel, Button_Confirm } from '../../../constants/ButtonConstants';
-import { PUSH_APP_TEXT, WARNNING } from '../../../constants/Constants';
+import { PUSH_APP_TEXT, WARNING } from '../../../constants/Constants';
 import { Required_Fields } from '../../../constants/DeviceConstants';
 // import 'react-credit-cards/lib/styles.scss';
 
@@ -223,7 +223,7 @@ class PurchaseCredit extends Component {
                                         <Select.Option value="USD">USD</Select.Option>
                                         <Select.Option value="CAD">CAD</Select.Option>
                                         <Select.Option value="EUR">EUR</Select.Option>
-                                        <Select.Option value="BTC">BTC(bitcoin)</Select.Option>
+                                        {/* <Select.Option value="BTC">BTC(bitcoin)</Select.Option> */}
                                         {/* <Select.Option value="">Select PGP Email</Select.Option> */}
 
                                     </Select>
@@ -316,7 +316,7 @@ export default PurchaseCredit;
 
 function showConfirm(_this, msg, values) {
     confirm({
-        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
+        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
         content: msg,
         // okText: "Confirm",
         okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),

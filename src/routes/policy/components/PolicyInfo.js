@@ -2,11 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { Tabs, Table, Switch, Row, Col, Avatar } from 'antd';
 import { BASE_URL } from '../../../constants/Application';
 import Permissions from "./Permissions";
-import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, Main_SETTINGS, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING } from '../../../constants/Constants';
+import { SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, Main_SETTINGS, APPLICATION_PERMISION, POLICY_DETAILS, SYSTEM_CONTROLS_UNIQUE, SECURE_SETTING, APPS } from '../../../constants/Constants';
 import AppList from "./AppList";
 import { convertToLang } from '../../utils/commonUtils';
-import { Tab_POLICY_SELECTED_APPS, Tab_POLICY_Dealer_PERMISSIONS } from '../../../constants/TabConstants';
+import { Tab_POLICY_SELECTED_APPS, Tab_POLICY_Dealer_PERMISSIONS, Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { POLICY_NAME, NAME, POLICY_ACTION, POLICY_NOTE, POLICY_COMMAND } from '../../../constants/PolicyConstants';
+import { SPA_APPS } from '../../../constants/AppConstants';
 
 const TabPane = Tabs.TabPane;
 
@@ -167,8 +168,7 @@ export default class PolicyInfo extends Component {
         return (
             <Fragment>
                 <Tabs className="exp_tabs_policy" onChange={this.callback} activeKey={this.state.selected} type="card">
-                    <TabPane tab={convertToLang(this.props.translation[Tab_POLICY_SELECTED_APPS], "Selected Apps")} key="1">
-
+                    <TabPane tab={convertToLang(this.props.translation[APPS], "APPS")} key="1">
                         <AppList
                             apk_list={this.state.policy.push_apps}
                             handleCheckApp={this.handleCheckApp}
@@ -184,7 +184,7 @@ export default class PolicyInfo extends Component {
                             translation={this.props.translation}
                         />
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "Application Permission")} key="2">
+                    <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISSION")} key="2">
                         <AppList
                             apk_list={this.state.policy.app_list}
                             handleEditPolicy={this.props.handleEditPolicy}
@@ -200,7 +200,7 @@ export default class PolicyInfo extends Component {
                             translation={this.props.translation}
                         />
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")} key="3">
+                    <TabPane tab={convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "SECURE SETTINGS PERMISSION")} key="3">
                         <Fragment>
                             <Row>
                                 <Col span={8} className="">
@@ -209,13 +209,13 @@ export default class PolicyInfo extends Component {
                                     <Avatar src={`${BASE_URL}users/getFile/${this.state.secure_setting_app.icon}`} style={{ width: "30px", height: "30px" }} />
                                 </Col>
                                 <Col span={6} className="pl-0">
-                                    <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
+                                    <h5 style={{ marginTop: '9px' }}>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>
                                 </Col>
                             </Row>
                             <Row className="mb-8" style={{ marginTop: 10 }}>
                                 <Col span={6}></Col>
                                 <Col span={4} className="text-center">
-                                    <span>Guest: </span>
+                                    <span>{convertToLang(this.props.translation[Guest], "Guest")} </span>
                                     <Switch
                                         disabled
                                         size="small"
@@ -223,7 +223,7 @@ export default class PolicyInfo extends Component {
                                     />
                                 </Col>
                                 <Col span={4} className="text-center">
-                                    <span>Encrypted: </span>
+                                    <span>{convertToLang(this.props.translation[ENCRYPTED], "Encrypted")} </span>
                                     <Switch
                                         disabled
                                         size="small"
@@ -231,13 +231,12 @@ export default class PolicyInfo extends Component {
                                     />
                                 </Col>
                                 <Col span={4} className="text-center">
-                                    <span>Enable: </span>
+                                    <span>{convertToLang(this.props.translation[ENABLE], "Enable")}</span>
                                     <Switch
                                         disabled
                                         size="small"
                                         checked={this.state.secure_setting_app !== '' ? (this.state.secure_setting_app.enable === true || this.state.secure_setting_app.enable === 1) ? true : false : false}
                                     />
-
                                 </Col>
                                 <Col span={6}></Col>
                             </Row>
@@ -258,7 +257,7 @@ export default class PolicyInfo extends Component {
                             translation={this.props.translation}
                         />
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[SYSTEM_PERMISSION], "System Permission")} key="4">
+                    <TabPane tab={convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")} key="4">
                         {/* <Fragment>
                             <Row>
                                 <Col span={8} className="">
@@ -310,7 +309,7 @@ export default class PolicyInfo extends Component {
                             columns={this.columnsSystemPermission}>
                         </Table>
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[POLICY_DETAILS], "Policy Details")} key="5">
+                    <TabPane tab={convertToLang(this.props.translation[POLICY_DETAILS], "POLICY DETAILS")} key="5">
                         <Table
                             pagination={false}
                             dataSource={PolicyDetail}

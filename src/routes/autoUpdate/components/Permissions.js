@@ -478,7 +478,6 @@ class Permissions extends Component {
           }}
           okText= {convertToLang(this.props.translation[Button_DeleteExceptSelected], Button_DeleteExceptSelected)}
           cancelText= {convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
-          
           onCancel={() => {
             this.removeSelectedDealersModal(false)
           }}

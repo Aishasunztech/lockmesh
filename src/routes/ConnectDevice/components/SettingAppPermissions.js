@@ -83,7 +83,7 @@ class SettingAppPermissions extends Component {
   renderApps = () => {
 
     let extension = this.state.extension;
-    // console.log("render list extension", extension);
+    console.log("render list extension", extension);
 
     if (this.state.extension !== undefined && this.state.extension !== null && Object.keys(extension).length) {
 
@@ -130,10 +130,10 @@ class SettingAppPermissions extends Component {
             handleCheckedAll={this.handleCheckedAll}
           />
           <Row className="first_head">
-            <Col span={7} className="pr-0">
+            <Col span={4} className="pr-0">
               <img src={require("assets/images/setting.png")} />
             </Col>
-            <Col span={17} className="pl-4 pr-0">
+            <Col span={20} className="pl-4 pr-0">
               <h5>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>
             </Col>
           </Row>
@@ -158,7 +158,7 @@ class SettingAppPermissions extends Component {
             </Col>
           </Row>
           <div className="sec_set_table">
-            <Table dataSource={this.renderApps()} columns={this.state.columns} pagination={false} scroll={{ y: 276 }} />
+            <Table dataSource={this.renderApps()} columns={this.state.columns} pagination={false} scroll={{ y: 286 }} />
           </div>
 
         </Fragment>

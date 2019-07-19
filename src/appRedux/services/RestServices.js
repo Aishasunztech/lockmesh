@@ -226,15 +226,15 @@ const RestService = {
     SavePolicyChanges: (record) => {
         // console.log('check perm:: ', record);
         // return;
-        if(record.push_apps.length) {
+        if (record.push_apps.length) {
             record.push_apps.forEach((app) => {
                 app.guest = (app.guest !== undefined) ? app.guest : false;
                 app.enable = (app.enable !== undefined) ? app.enable : false;
                 app.encrypted = (app.encrypted !== undefined) ? app.encrypted : false;
             });
         }
-        
-// if(record)
+
+        // if(record)
         record.app_list.forEach((app) => {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
@@ -244,7 +244,7 @@ const RestService = {
             app.guest = (app.guest !== undefined) ? app.guest : false;
             app.enable = (app.enable !== undefined) ? app.enable : false;
         })
-        
+
         let data = {
             id: record.id,
             push_apps: JSON.stringify(record.push_apps),
@@ -588,14 +588,18 @@ const RestService = {
         // console.log(data, 'data')
         return axios.post(BASE_URL + 'users/save-package', { data }, RestService.getHeader());
     },
-    getPrices: (dealer_id) => {
+    getPrices: () => {
         // console.log(dealer_id, 'whte label on get price')
-        return axios.get(BASE_URL + 'users/get-prices/' + dealer_id, RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-prices', RestService.getHeader());
     },
 
-    getPackages: (dealer_id) => {
+    getPackages: () => {
         // console.log(dealer_id, 'whte label on get price')
-        return axios.get(BASE_URL + 'users/get-packages/' + dealer_id, RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-packages', RestService.getHeader());
+    },
+    getParentPackages: () => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-parent-packages', RestService.getHeader());
     },
     checkPackageName: (name) => {
 
@@ -723,6 +727,11 @@ const RestService = {
     acceptRequest: (request) => {
         // console.log(device);
         return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
+    },
+
+    simRegister: (data) => {
+        console.log('at sev', data);
+        return axios.post(BASE_URL + 'users/sim-register' , { data }, RestService.getHeader());
     },
 
 

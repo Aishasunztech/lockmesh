@@ -17,7 +17,7 @@ import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text
 } from "../../constants/Constants";
 import { DEALER_ID, DEALER_NAME, Parent_Dealer, DEALER_TOKENS, Login_History, DEALER_PIN } from '../../constants/DealerConstants';
-import { Button_Edit, Button_Cancel, Button_Open, Button_Ok } from '../../constants/ButtonConstants';
+import { Button_Edit, Button_Cancel, Button_Open, Button_Ok, Button_On, Button_Off } from '../../constants/ButtonConstants';
 import { IP_ADDRESS } from '../../constants/DeviceConstants';
 
 // import {Link} from 'react-router-dom';
@@ -261,8 +261,8 @@ class Profile extends Component {
                                     </Col>
                                     <Col span={6} style={{ padding: "16px 16px 0 " }}>
                                         <Switch
-                                            checkedChildren="ON"
-                                            unCheckedChildren="OFF"
+                                            checkedChildren={convertToLang(this.props.translation[Button_On], "ON")}
+                                            unCheckedChildren={convertToLang(this.props.translation[Button_Off], "OFF")}
                                             defaultChecked={(this.props.profile.two_factor_auth === 1 || this.props.profile.two_factor_auth === true) ? true : false}
                                             onChange={(e) => {
                                                 this.twoFactorAuth(e);

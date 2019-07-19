@@ -68,7 +68,13 @@ import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
 import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
-import { DEVICE_NOT_FOUND, SETTINGS_TO_BE_SENT_TO_DEVICE, DEVICE_NOT_SYNCED, DEVICE_IS } from "../../constants/DeviceConstants";
+import {
+  DEVICE_NOT_FOUND,
+  SETTINGS_TO_BE_SENT_TO_DEVICE,
+  DEVICE_NOT_SYNCED,
+  DEVICE_IS,
+  Suspended_TEXT
+} from "../../constants/DeviceConstants";
 
 import { mobileMainMenu, mobileManagePasswords } from '../utils/columnsUtils';
 
@@ -178,10 +184,10 @@ class ConnectDevice extends Component {
         messageType: this.props.messageType
       })
     }
-    // if (this.props.translation != prevProps.translation) {
-    //   this.mainMenu = mobileMainMenu(this.props.translation);
-    //   this.subMenu = mobileManagePasswords(this.props.translation);
-    // }
+    if (this.props.translation != prevProps.translation) {
+      this.mainMenu = mobileMainMenu(this.props.translation);
+      this.subMenu = mobileManagePasswords(this.props.translation);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -192,19 +198,20 @@ class ConnectDevice extends Component {
     if (this.props !== nextProps) {
       // console.log('object, ', nextProps.showMessage)
       if (nextProps.reSync) {
-        let deviceId = isBase64(nextProps.match.params.device_id);
-        this.props.clearResyncFlag();
-        this.props.getDeviceDetails(deviceId);
-        this.props.getAppJobQueue(deviceId);
-        this.props.getDeviceApps(deviceId);
-        this.props.getProfiles(deviceId);
-        this.props.getPolicies(deviceId);
-        this.props.getDeviceHistories(deviceId);
-        this.props.getImeiHistory(deviceId);
-        this.props.getDealerApps();
-        this.props.getActivities(deviceId)
-        this.onBackHandler();
-        this.props.endLoading();
+
+        // let deviceId = isBase64(nextProps.match.params.device_id);
+        // this.props.clearResyncFlag();
+        // this.props.getDeviceDetails(deviceId);
+        // this.props.getAppJobQueue(deviceId);
+        // this.props.getDeviceApps(deviceId);
+        // this.props.getProfiles(deviceId);
+        // this.props.getPolicies(deviceId);
+        // this.props.getDeviceHistories(deviceId);
+        // this.props.getImeiHistory(deviceId);
+        // this.props.getDealerApps();
+        // this.props.getActivities(deviceId)
+        // this.onBackHandler();
+        // this.props.endLoading();
       }
     }
   }
@@ -315,7 +322,8 @@ class ConnectDevice extends Component {
       )
 
     } else if (this.props.pageName === NOT_AVAILABLE) {
-      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")} {this.props.status}</a></h1></div>);
+      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
+        {(this.props.status == 'Suspended') ? convertToLang(this.props.translation[Suspended_TEXT], "Suspended") : this.props.status}</a></h1></div>);
     } else {
       return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
     }
@@ -406,19 +414,19 @@ class ConnectDevice extends Component {
     // console.log('ref', deviceId)
     if (resync) {
       this.props.reSyncDevice(deviceId);
-      // setTimeout(() => {
-      //   this.props.getDeviceDetails(deviceId);
-      //   this.props.getAppJobQueue(deviceId);
-      //   this.props.getDeviceApps(deviceId);
-      //   this.props.getProfiles(deviceId);
-      //   this.props.getPolicies(deviceId);
-      //   this.props.getDeviceHistories(deviceId);
-      //   this.props.getImeiHistory(deviceId);
-      //   this.props.getDealerApps();
-      //   this.props.getActivities(deviceId)
-      //   this.onBackHandler();
-      //   this.props.endLoading();
-      // }, 10000);
+      setTimeout(() => {
+        this.props.getDeviceDetails(deviceId);
+        this.props.getAppJobQueue(deviceId);
+        this.props.getDeviceApps(deviceId);
+        this.props.getProfiles(deviceId);
+        this.props.getPolicies(deviceId);
+        this.props.getDeviceHistories(deviceId);
+        this.props.getImeiHistory(deviceId);
+        this.props.getDealerApps();
+        this.props.getActivities(deviceId)
+        this.onBackHandler();
+        this.props.endLoading();
+      }, 10000);
     } else {
       this.props.getDeviceDetails(deviceId);
       this.props.getAppJobQueue(deviceId);

@@ -37,25 +37,25 @@ class AppList extends Component {
 
         this.appsColumns2 = [
             {
-                title: convertToLang(this.props.translation[POLICY_ACTION], "ACTION"),
+                title: convertToLang(props.translation[POLICY_ACTION], "ACTION"),
                 dataIndex: 'action',
                 key: '5',
                 // render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[Guest], "Guest"),
+                title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
+                title: convertToLang(props.translation[ENABLE], "ENABLE"),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -63,20 +63,20 @@ class AppList extends Component {
 
         this.appsColumns = [
             {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[Guest], "Guest"),
+                title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
                 dataIndex: 'encrypted',
                 key: '3',
             }, {
-                title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
+                title: convertToLang(props.translation[ENABLE], "ENABLE"),
                 dataIndex: 'enable',
                 key: '4',
             }
@@ -84,16 +84,16 @@ class AppList extends Component {
 
         this.extensionColumns = [
             {
-                title: convertToLang(this.props.translation[POLICY_APP_NAME], "APP NAME"),
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
             }, {
-                title: convertToLang(this.props.translation[Guest], "Guest"),
+                title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
                 key: '2',
             }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
                 dataIndex: 'encrypted',
                 key: '3',
             }
@@ -406,11 +406,9 @@ class AppList extends Component {
                         <div>
                             <Row>
                                 <Col span={6} className="">
-
                                 </Col>
                                 <Col span={3} className="">
                                 <Avatar src={`${BASE_URL}users/getFile/${this.state.mainExtension.icon}`} style={{ width: "30px", height: "30px" }} />
-                          
                                     {/* <img src={require("assets/images/setting.png")} /> */}
                                 </Col>
                                 <Col span={15} className="pl-0">
@@ -476,7 +474,6 @@ class AppList extends Component {
                                 <Col className="text-center pr-2 pl-2" span={4}></Col>
                                 <Col className="text-center pr-2 pl-2" span={4}>
                                     <span className="policy_s_txt">{convertToLang(this.props.translation[GUEST_ALL], "Guest All")}</span>
-
                                     <Switch checked={this.state.guestAll ? true : false}
                                         size='small'
                                         className="ml-4"
@@ -485,7 +482,7 @@ class AppList extends Component {
                                             this.handleCheckedAll(e, "guestAll");
                                         }} />
                                 </Col>
-                                <Col className="text-center pr-2 pl-2" span={5}>
+                                <Col className="text-center pr-2 pl-2" span={4}>
                                     <span className="policy_s_txt">{convertToLang(this.props.translation[Encrypted_ALL], "Encrypted All")}</span>
                                     <Switch checked={this.state.encryptedAll ? true : false}
                                         size='small'

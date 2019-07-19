@@ -1,5 +1,6 @@
 export const LABEL = 'label.id'; // LABEL
 
+export const DUMY_TRANS_ID = 'dumy.id.id'; // CHAT ID
 export const LABEL_DATA_CHAT_ID = 'chat.id.id'; // CHAT ID
 export const LABEL_DATA_SIM_ID = 'sim.id.id'; // SIM ID
 export const LABEL_DATA_PGP_EMAIL = 'pgp.email.id'; // PGP EMAIL

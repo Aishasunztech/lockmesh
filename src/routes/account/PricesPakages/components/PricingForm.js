@@ -56,10 +56,10 @@ class PricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={6}>
                         <Button type="primary" onClick={() => this.setPrice('1 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
-                    <Col span={7}>
+                    <Col span={5}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData[one_month] ? this.props.innerTabData[one_month] : 0 : 0}</h4>
                     </Col>
                 </Row>
@@ -75,10 +75,10 @@ class PricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={6}>
                         <Button type="primary" onClick={() => this.setPrice('3 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
-                    <Col span={7}>
+                    <Col span={5}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData[three_month] ? this.props.innerTabData[three_month] : 0 : 0}</h4>
                     </Col>
                 </Row>
@@ -93,10 +93,10 @@ class PricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={6}>
                         <Button type="primary" onClick={() => this.setPrice('6 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
-                    <Col span={7}>
+                    <Col span={5}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData[six_month] ? this.props.innerTabData[six_month] : 0 : 0}</h4>
                     </Col>
                 </Row>
@@ -110,10 +110,10 @@ class PricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={6}>
                         <Button type="primary" onClick={() => this.setPrice('12 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
-                    <Col span={7}>
+                    <Col span={5}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData[twelve_month] ? this.props.innerTabData[twelve_month] : 0 : 0}</h4>
                     </Col>
                 </Row>
