@@ -82,8 +82,6 @@ class BitCoinForm extends Component {
                         }
                     }
                 >
-                    {/* <CoinbaseCommerceButton checkoutId={'be05fae1-b47e-46b0-9632-891411337942'}/> */}
-
                     {/* <Form style={{ marginTop: 20 }} onSubmit={this.handleSubmit} autoComplete="new-password">
                         <Form.Item
                             style={{ marginBottom: 0 }}

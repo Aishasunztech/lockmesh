@@ -215,6 +215,8 @@ class DevicesList extends Component {
                 ),
                 status: (<span style={color} > {status}</span>),
                 flagged: device.flagged,
+                type: checkValue(device.type),
+                version: checkValue(device.version),
                 device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
@@ -330,7 +332,7 @@ class DevicesList extends Component {
         })
     }
 
-    onExpandRow = (expanded, record) => { 
+    onExpandRow = (expanded, record) => {
         // console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.key)) {
@@ -451,13 +453,13 @@ class DevicesList extends Component {
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
-                    activateDevice={activateDevice} 
+                    activateDevice={activateDevice}
                     translation={this.props.translation}
-                    />
+                />
                 <SuspendDevice ref="suspend"
-                    suspendDevice={suspendDevice} 
+                    suspendDevice={suspendDevice}
                     translation={this.props.translation}
-                    />
+                />
                 <Card className="fix_card devices_fix_card">
                     <hr className="fix_header_border" style={{ top: "56px" }} />
                     <CustomScrollbars className="gx-popover-scroll ">
@@ -641,13 +643,13 @@ class DevicesList extends Component {
                                                 columns={
                                                     [
                                                         {
-                                                            title: convertToLang(this.props.translation[Name],"Name"),
+                                                            title: convertToLang(this.props.translation[Name], "Name"),
                                                             dataIndex: 'name',
                                                             key: "name",
                                                             align: "center",
                                                             className: "bold"
                                                         }, {
-                                                            title: convertToLang(this.props.translation[Value],"Value"),
+                                                            title: convertToLang(this.props.translation[Value], "Value"),
                                                             dataIndex: "values",
                                                             key: "value",
                                                             align: "center"
@@ -663,13 +665,13 @@ class DevicesList extends Component {
                                                 columns={
                                                     [
                                                         {
-                                                            title: convertToLang(this.props.translation[Name],"Name"),
+                                                            title: convertToLang(this.props.translation[Name], "Name"),
                                                             dataIndex: 'name',
                                                             key: "name",
                                                             align: "center",
                                                             className: "bold"
                                                         }, {
-                                                            title: convertToLang(this.props.translation[Value],"Value"),
+                                                            title: convertToLang(this.props.translation[Value], "Value"),
                                                             dataIndex: "values",
                                                             key: "value",
                                                             align: "center"
