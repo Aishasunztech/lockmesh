@@ -177,8 +177,7 @@ class Apk extends Component {
                                                             <Icon type="appstore" className="policy_icon" />
                                                         </Col>
                                                         <Col span={16} style={{ padding: 0 }}>
-                                                            <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_SM_01], "Add/remove apps in")}</h5>
-                                                            <h5> {convertToLang(this.props.translation[APP_SM_02], "Secure Market")}</h5>
+                                                            <h5 style={{ marginBottom: 2 }}><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_SM_01], "Add/remove apps in Secure Market")}</h5>
                                                             <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[APP_SM_03], "Set permissions")}</h5>
                                                             <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                         </Col>
@@ -233,7 +232,7 @@ class Apk extends Component {
                                                     </Col>
                                                     <Col span={16} style={{ padding: 0 }}>
                                                         <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                            <Markup content={convertToLang(this.props.translation[APP_DT_01], "BYOD Launcher Apk, Tools, <br />etc... can be found here")} />
+                                                            <Markup content={convertToLang(this.props.translation[APP_DT_01], "BYOD Launcher Apk, Tools, etc... can be found here")} />
                                                         </h5>
                                                         <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                     </Col>
@@ -276,18 +275,18 @@ class Apk extends Component {
                                     <Link to="#">
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
-                                                <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_SECURE_PANEL_APK], "Secure Panel APK")} </h2>
+                                                <h2 className="text-center">{convertToLang(this.props.translation[APP_SECURE_PANEL_APK], "Secure Panel APK")} </h2>
                                                 <Divider className="mb-0" />
                                                 <Row style={{ padding: '12px 0 0px' }}>
-                                                    <Col span={8} className="" style={{ textAlign: "center" }}>
+                                                    <Col span={8} className="text-center">
                                                         <Icon type="idcard" className="policy_icon" />
                                                     </Col>
-                                                    <Col span={16}>
+                                                    <Col span={16} style={{ padding: '0' }}>
                                                         <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                            <Markup content={convertToLang(this.props.translation[APP_SPA_01], "Edit/Create Users and add <br />permissions for the Secure Panel Apk")} />
+                                                            <Markup content={convertToLang(this.props.translation[APP_SPA_01], "Edit/Create Users and add permissions for the Secure Panel Apk")} />
                                                         </h5>
                                                         <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                            <Markup content={convertToLang(this.props.translation[APP_SPA_02], APP_SPA_02)} />
+                                                            <Markup content={convertToLang(this.props.translation[APP_SPA_02], "Very useful tool for your Customer Support staff")} />
                                                         </h5>
                                                         <h5 className="more_txt"> {convertToLang(this.props.translation[APP_ADD_MORE], "and more...")} </h5>
                                                     </Col>

@@ -18,7 +18,7 @@ export const APP_MP_02 = "app.mp.02.id"; // Set Policy  Permission
 
 
 // Secure Market Description list
-export const APP_SM_01 = "app.sm.01.id"; // Add/remove apps in
+export const APP_SM_01 = "app.sm.01.id"; // Add/remove apps in Secure Market
 export const APP_SM_02 = "app.sm.02.id"; // Secure Market
 export const APP_SM_03 = "app.sm.03.id"; // Set permissions
 

@@ -12,6 +12,7 @@ import { getDealerApps, } from '../../../appRedux/actions/ConnectDevice';
 import { handleCheckAppPolicy, getAppPermissions, handleChekSystemPermission, savePolicy, handleCheckAllAppPolicy } from '../../../appRedux/actions/Policy';
 import RestService from '../../../appRedux/services/RestServices'
 import { NAME, COMMAND, POLICY_NOTE, POLICY_COMMAND, PLEASE_INPUT_POLICY_NAME } from '../../../constants/PolicyConstants';
+import { Tab_SECURE_SETTING } from '../../../constants/TabConstants';
 
 const TextArea = Input;
 const TabPane = Tabs.TabPane;
@@ -390,7 +391,7 @@ class AddPolicy extends Component {
                                 translation={this.props.translation}
                             />
                         </TabPane>
-                        <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "APP PERMISSION")} key="2">
+                        <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISSION")} key="2">
                             <AppList
                                 apk_list={this.state.appPermissions}
                                 dataLength={this.state.appPermissions.length}
@@ -408,7 +409,7 @@ class AddPolicy extends Component {
                                 translation={this.props.translation}
                             />
                         </TabPane>
-                        <TabPane tab={convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "SETTINGS PERMISSION")} key="3">
+                        <TabPane tab={convertToLang(this.props.translation[Tab_SECURE_SETTING], "SETTINGS PERMISSION")} key="3">
                             <AppList
                                 allExtensions={this.state.allExtensions}
                                 dataLength={this.state.allExtensions.length}

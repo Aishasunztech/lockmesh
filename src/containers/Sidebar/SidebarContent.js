@@ -42,6 +42,7 @@ import {
   Sidebar_logout,
   Alert_Change_Language,
   ARE_YOU_SURE_YOU_WANT_TO_LOGOUT,
+  PIN_TEXT,
 } from '../../constants/SidebarConstants'
 
 // import languageData from "./languageData";
@@ -182,7 +183,7 @@ class SidebarContent extends Component {
               translation={this.props.translation}
             />
             <span className="font_14">
-              {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
+              {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? `${convertToLang(translation[PIN_TEXT], 'PIN :')}` : null}
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
             <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>

@@ -45,6 +45,7 @@ import {
 import { getStatus, componentSearch, titleCase, checkValue, getColor, convertToLang } from '../../utils/commonUtils';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 import { Button_Connect } from '../../../constants/ButtonConstants';
+import { Appfilter_SearchDevices } from '../../../constants/AppFilterConstants';
 // import styles from './user.css';
 
 var coppyDevices = [];
@@ -544,9 +545,7 @@ class UserDeviceList extends Component {
                         <Col span={6} >
                             <div className="search_heading pl-16">
                                 <Search
-                                    placeholder={
-                                        //<IntlMessages id="appfilter.SearchDevices" />
-                                        "Search Devices"}
+                                    placeholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
                                     onChange={e => this.handleComponentSearch(e.target.value)}
                                     style={{ width: '100%' }}
                                 />

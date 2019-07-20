@@ -51,8 +51,9 @@ export const ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE = "Are.you.sure.you.want.UN
 
 
 
-export const SINGLE_DEVICE = "Single.Device.id"; // Single Device
-export const DUPLICATE_DEVICES = "Duplicate Devices.id"; // Duplicate Devices
+export const SINGLE_DEVICE = "Single.Device.id"; // Single Device 
+export const DUPLICATE_DEVICES = "Duplicate.Devices.id"; // Duplicate Devices
+export const DUPLICATE_DEVICES_HELPING_TEXT = "DUPLICATE_DEVICES_HELPING_TEXT.id"; // Generate multiple activation <br /> codes with same settings 
 export const SELECT_USER_ID = "Select.User.ID.id"; // Select User ID
 export const USER_ID_IS_REQUIRED = "User.ID.is.Required.id"; // User ID is Required
 export const SELECT_PGP_EMAILS = "Select.PGP.Emails.id"; // Select PGP Emails

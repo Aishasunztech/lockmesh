@@ -729,7 +729,7 @@ class Devices extends Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
-                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], Appfilter_SearchDevices)}
+                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText={convertToLang(this.props.translation[Button_Add_Device], "Add Device")}
                                 options={this.props.options}
