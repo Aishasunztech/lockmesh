@@ -53,11 +53,8 @@ export default class AddDevice extends Component {
         this.setState({ visible: false });
     }
 
-    handleSubmitReg = (values) => {
-        this.props.simRegister(values);
-        // this.setState({
-        //     handleSubmit: values
-        // })
+    handleSubmitReg = (total, values) => {
+        this.props.simRegister(total, values);
     }
 
     render() {
@@ -81,6 +78,9 @@ export default class AddDevice extends Component {
                         AddSimHandler={this.handleSubmitReg}
                         handleCancel={this.handleCancel}
                         translation={this.props.translation}
+                        deviceID={this.props.deviceID}
+                        device={this.props.device}
+                        total_dvc={this.props.total_dvc}
                         ref="add_sim_reg_form"
                     />
                 </Modal >

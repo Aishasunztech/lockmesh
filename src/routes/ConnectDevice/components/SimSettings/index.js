@@ -5,7 +5,9 @@ import { bindActionCreators } from "redux";
 import {
     handleCheckExtension,
     handleCheckAllExtension,
-    simRegister
+    handleSimUpdate,
+    simRegister,
+    getSims,
 } from "../../../../appRedux/actions/ConnectDevice";
 import { BASE_URL } from '../../../../constants/Application';
 
@@ -71,57 +73,74 @@ class SimSettings extends Component {
             columns: columns,
             extension: {},
             uniqueName: '',
-            sims: this.props.sim_list,
+            // sims: this.props.sim_list,
             guestAllExt: false,
             encryptedAllExt: false,
             addSimRegistrationModal: false,
         }
     }
 
-    // componentDidMount() {
-    //     // if (this.props.isExtension) {
-    //     this.setState({
-    //         extension: this.props.extension,
-    //         pageName: this.props.pageName,
-    //         sims: this.props.sim_list,
-    //     })
-    //     // }
-
-    // }
-
-    componentWillReceiveProps(nextprops) {
-        console.log('at componentWillReceiveProps ', this.props.sim_list)
+    componentDidMount() {
+        this.props.getSims(this.props.deviceID);
 
         // if (this.props.isExtension) {
+        // this.setState({
+        //     extension: this.props.extension,
+        //     pageName: this.props.pageName,
+        //     sims: this.props.sim_list,
+        // })
+        // // }
+
+    }
+
+    componentWillReceiveProps(nextprops) {
+        // this.props.getSims(nextprops.deviceID);
+        console.log('at componentWillReceiveProps ', nextprops.sim_list)
+
+        if (this.props.simUpdated != nextprops.simUpdated) {
+            this.props.getSims(nextprops.deviceID);
+        }
+        // if (this.props.isExtension) {
         // alert("hello");
-        this.setState({
-            extension: nextprops.extension,
-            encryptedAllExt: nextprops.encryptedAllExt,
-            guestAllExt: nextprops.guestAllExt,
-            sims: nextprops.sim_list
-        })
+        // if (this.props.sim_list != nextprops.sim_list) {
+
+        //     this.setState({
+        //         // extension: nextprops.extension,
+        //         // encryptedAllExt: nextprops.encryptedAllExt,
+        //         // guestAllExt: nextprops.guestAllExt,
+        //         sims: nextprops.sim_list
+        //     })
         // }
 
     }
 
-    componentDidUpdate(prevProps) {
-        console.log('at did update ', this.props.sim_list)
-        this.setState({
-            // extension: this.props.extension,
-            // encryptedAllExt: this.props.encryptedAllExt,
-            // guestAllExt: this.props.guestAllExt,
-            sims: this.props.sim_list
-        })
-    }
+    // componentDidUpdate(prevProps) {
+    //     console.log(this.props.sim_list.length, prevProps.sim_list.length)
+    //     if (this.props.sim_list.length != prevProps.sim_list.length) {
+    //         console.log('at did update ', this.props.sim_list)
+    //         this.setState({
+    //             // extension: this.props.extension,
+    //             // encryptedAllExt: this.props.encryptedAllExt,
+    //             // guestAllExt: this.props.guestAllExt,
+    //             sims: this.props.sim_list
+    //         })
+    //     }
+    // }
 
     handleSimModal = () => {
         // let handleSubmit = this.props.addUser;
         this.refs.add_sim_reg.showModal();
     }
 
-    handleChecked = (e, key, app_id = '000') => {
-        this.props.handleCheckExtension(e, key, app_id, this.props.pageName);
+    handleChecked = (e, id, label) => {
+        let value =  (e == true) ? 1 : 0;
+        this.props.handleSimUpdate({ id, label, value });
     }
+
+    // handleGuestAll = (e, label) => {
+    //     console.log(label, '======== ',e)
+
+    // }
 
     handleCheckedAll = (key, value) => {
 
@@ -134,67 +153,60 @@ class SimSettings extends Component {
     }
 
     setDataLimit = () => {
-        this.setState({
+        console.log('set data limit')
+        // this.setState({
 
-        })
+        // })
     }
     renderSimList = () => {
 
-        let sims = this.state.sims;
+        let sims = this.props.sim_list;
         console.log("render list sims", sims);
 
-        if (sims !== undefined && sims !== null && sims.length > 0) {
 
-            return sims.map((ext, index) => {
+        if (sims !== undefined && sims !== null && sims.length > 0) {
+            // let checkGst = sims.filter(e => e.guest != 1);
+            // if (checkEnc.length > 0) guestSimAll = 0; else guestSimAll = 1
+
+
+            return sims.map((sim, index) => {
+                console.log('---------------- ', sim.dataLimit)
+
                 return {
                     key: index,
                     counter: ++index,
-                    iccid: ext.iccid,
-                    name: ext.name,
+                    iccid: sim.iccid,
+                    name: sim.name,
                     status: 'not inseted',
                     note: 'Good Network',
                     guest: <Switch
-                        checked={ext.guest ? true : false}
+                        checked={(sim.guest == 1) ? true : false}
                         size="small"
                         onClick={(e) => {
                             // console.log("guest", e);
-                            // this.handleChecked(e, "guest", ext.app_id);
+                            this.handleChecked(e, sim.id, "guest");
                         }}
                     />,
                     encrypted: <Switch
-                        checked={ext.encrypt ? true : false}
+                        checked={(sim.encrypt == 1) ? true : false}
                         size="small"
                         onClick={(e) => {
                             // console.log("guest", e);
-                            // this.handleChecked(e, "encrypted", ext.app_id);
+                            this.handleChecked(e, sim.id, "encrypt");
                         }}
-                    />,
-                    dataLimit: (<Button type="danger" onClick={this.setDataLimit}>Set</Button>),
+                    />, // 
+                    dataLimit: '20 MB', // ((sim.data_limit == "" || sim.data_limit == 0 || sim.data_limit == '0') ? <Button type="danger" onClick={this.setDataLimit}>Set</Button> : sim.data_limit),
                 }
             })
         }
     }
     render() {
-        const { extension, isExtension } = this.props;
-        console.log('extenion te is', extension)
-        // if (isExtension) {
+        const { guestSimAll, encryptSimAll } = this.props;
+        console.log('guestSimAll stat is', this.state.sims)
         if (true) {
             return (
                 <Fragment>
-                    {/* <ExtensionDropdown
-                        checked_app_id={null}
-                        encryptedAll={this.state.encryptedAllExt}
-                        guestAll={this.state.guestAllExt}
-                        handleCheckedAll={this.handleCheckedAll}
-                    /> */}
-                    {/* <Row className="first_head">
-                        <Col span={7} className="pr-0">
-                            <img src={require("assets/images/setting.png")} />
-                        </Col>
-                        <Col span={17} className="pl-4 pr-0">
-                            <h5>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>
-                        </Col>
-                    </Row> */}
+                 
                     <Row className="">
                         {/* <Row className="sec_head"> */}
                         <Col span={4} />
@@ -226,18 +238,18 @@ class SimSettings extends Component {
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                                 // console.log("guest", e);
-                                // this.handleChecked(e, "guest");
+                                this.handleChecked(e, "all", "guest");
                             }}
-                                // checked={extension.guest === 1 ? true : false} 
+                                checked={guestSimAll === 1 ? true : false}
                                 size="small"
                             />
                         </Col>
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
                                 // console.log("guest", e);
-                                // this.handleChecked(e, "encrypted");
+                                this.handleChecked(e, "all", "encrypt");
                             }}
-                                // checked={extension.encrypted === 1 ? true : false} 
+                                checked={encryptSimAll === 1 ? true : false}
                                 size="small"
                             />
                         </Col>
@@ -265,16 +277,23 @@ class SimSettings extends Component {
                     <br />
                     {/* <div className="sec_set_table"> */}
                     <div className="">
-                        <Table dataSource={this.renderSimList()} columns={this.state.columns} pagination={false} scroll={{ y: 276 }} />
+                        <Table
+                            dataSource={this.renderSimList()}
+                            columns={this.state.columns}
+                            pagination={false}
+                        />
                     </div>
 
                     <AddRegistrationModal
                         ref="add_sim_reg"
                         simRegister={this.props.simRegister}
                         translation={this.props.translation}
+                        deviceID={this.props.deviceID}
+                        device={this.props.device}
+                        total_dvc={this.props.sim_list}
                     />
 
-                    
+
 
                 </Fragment>
             )
@@ -293,37 +312,29 @@ class SimSettings extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         // showHistoryModal: showHistoryModal
-        handleCheckExtension: handleCheckExtension,
-        handleCheckAllExtension: handleCheckAllExtension,
-        simRegister: simRegister
+        // handleCheckExtension: handleCheckExtension,
+        // handleCheckAllExtension: handleCheckAllExtension,
+        handleSimUpdate: handleSimUpdate,
+        simRegister: simRegister,
+        getSims: getSims,
         // handleCheckAll: handleCheckAll
     }, dispatch);
 }
 
 
-var mapStateToProps = ({ device_details }, ownProps) => {
+var mapStateToProps = ({ device_details }) => {
     // console.log(device_details, "applist ownprops", ownProps);
-    const pageName = ownProps.pageName;
+    console.log('at sim compont device is : ', device_details.device);
+    // console.log('guestSimAll is', device_details.guestSimAll)
 
-    let extension = device_details.extensions.find(o => o.uniqueName === pageName);
-    // console.log("extensions_", device_details.secureSettingsMain);
-    console.log('at compont: ', device_details.sim_list);
-
-    // if (extension !== undefined) {
     return {
-        isExtension: true,
-        extension: extension,
-        guestAllExt: device_details.guestAllExt,
-        encryptedAllExt: device_details.encryptedAllExt,
-        checked_app_id: device_details.checked_app_id,
         sim_list: device_details.sim_list,
+        guestSimAll: device_details.guestSimAll,
+        encryptSimAll: device_details.encryptSimAll,
+        device: device_details.device,
+        simUpdated: device_details.simUpdated
 
     }
-    // } else {
-    //     return {
-    //         isExtension: false
-    //     }
-    // }
 
 }
 

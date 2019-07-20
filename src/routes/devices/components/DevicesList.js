@@ -22,7 +22,8 @@ import {
     ADMIN,
     Name,
     Value,
-    ALERT_TO_SURE_DELETE_ALL_DEVICES
+    ALERT_TO_SURE_DELETE_ALL_DEVICES,
+    DEALER
 } from '../../../constants/Constants'
 import {
     Button_Modify,
@@ -237,7 +238,7 @@ class DevicesList extends Component {
                 model: checkValue(device.model),
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+                dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),

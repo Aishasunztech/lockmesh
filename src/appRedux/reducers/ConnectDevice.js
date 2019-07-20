@@ -55,7 +55,9 @@ import {
     SAVE_PROFILE,
     EDIT_DEVICE,
     CLEAR_STATE,
-    ADD_SIM_REGISTER
+    ADD_SIM_REGISTER,
+    GET_SIMS,
+    UPDATE_SIM
 } from "../../constants/ActionTypes";
 
 import {
@@ -167,7 +169,10 @@ const initialState = {
     is_policy_process: 0,
 
     // sim module
-    sim_list: [{ iccid: "a", name: "b", note: "c", guest: true, encrypt: false }],
+    sim_list: [],
+    guestSimAll: 0,
+    encryptSimAll: 0,
+    simUpdated: false,
 
 };
 
@@ -1140,12 +1145,79 @@ export default (state = initialState, action) => {
         }
 
         case ADD_SIM_REGISTER: {
-            // console.log('at red:', action.payload)
-            state.sim_list.push(action.payload)
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state,
+                    sim_list: [...state.sim_list, action.payload]
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state
+                }
+            }
+        }
+
+        case GET_SIMS: {
+            // console.log('abaid at red:', action.payload.data)
+            // console.log(state.sim_list);
+            let sims = action.payload.data;
+            let checkEnc = sims.filter(e => e.encrypt != 1);
+            let checkGst = sims.filter(e => e.guest != 1);
+            let guestSimAll;
+            let encryptSimAll;
+            // console.log('guestSimAll ', guestSimAll);
+            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1
+            if (checkEnc.length > 0) { encryptSimAll = 0; } else { encryptSimAll = 1; }
+            // console.log('guestSimAll ', guestSimAll);
+            // console.log('checkEnc ', checkEnc);
+            // console.log('checkGst ', checkGst);
+            // // console.log('sims ', sims);
+            // console.log('sims ', sims);
             return {
                 ...state,
-                sim_list: state.sim_list
+                sim_list: sims,
+                guestSimAll,
+                encryptSimAll
             }
+        }
+
+        case UPDATE_SIM: {
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state,
+                    simUpdated: new Date()
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state
+                }
+            }
+            // console.log('abaid at red UPDATE_SIMS:', action.payload)
+            // let copySims = state.sim_list;
+            // let arr = copySims.filter(e => e.id == action.payload.id);
+            // let obj = arr[0];
+
+            // console.log('obj is ',obj);
+            // // obj[""]
+            // console.log('state is: ', state.sim_list)
+            // let sims = action.payload.data;
+            // console.log('sims ',sims);
+            // return {
+            //     ...state,
+            //     // sim_list: sims
+            // }
         }
 
         case WRITE_IMEI: {

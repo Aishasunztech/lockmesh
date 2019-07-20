@@ -425,7 +425,8 @@ class SideActions extends Component {
         });
     }
 
-    handleSimModule = () => {
+    handleSimModule = (e) => {
+        e.preventDefault();
         console.log('test sim module');
 
         this.setState({
@@ -867,15 +868,7 @@ class SideActions extends Component {
                     // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <SimSettings
-                        // app_list={this.props.app_list}
-                        extension={this.props.extensions}
-                        // extensionUniqueName={SECURE_SETTING}
-                        // isAdminPwd={this.props.isAdminPwd}
-                        // isDuressPwd={this.props.isDuressPwd}
-                        // isEncryptedPwd={this.props.isEncryptedPwd}
-                        // isGuestPwd={this.props.isGuestPwd}
-                        // controls={{ 'controls': this.state.changedCtrls }}
-                        // showChangedControls={true}
+                        deviceID={this.props.device_id}
                         translation={this.props.translation}
                     />
                 </Modal>
