@@ -347,13 +347,6 @@ class DevicesList extends Component {
         }
     }
 
-    // componentWillReceiveProps() {
-    //     this.setState({
-    //         devices: this.props.devices,
-    //         columns: this.props.columns
-    //     })
-
-    // }
 
     scrollBack = () => {
         let element = document.getElementById('scrolltablelist');

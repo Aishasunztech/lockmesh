@@ -26,6 +26,7 @@ class PricingForm extends Component {
         }
     }
     setPrice = (fieldName) => {
+        // console.log(fieldName);
         if (fieldName) {
             let value = this.props.form.getFieldValue(fieldName)
             if (value > 0) {
@@ -40,14 +41,14 @@ class PricingForm extends Component {
     }
 
     render() {
-        console.log(this.props.innerTabData, 'props are for inner tab data')
+        // console.log(this.props.innerTabData, 'props are for inner tab data')
 
         const { getFieldDecorator } = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Row>
                     <Col span={13}>
-                        <Form.Item label= {convertToLang(this.props.translation[one_month], "1 month")}
+                        <Form.Item label={convertToLang(this.props.translation[one_month], "1 month")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('1 month', {
@@ -60,7 +61,7 @@ class PricingForm extends Component {
                         <Button type="primary" onClick={() => this.setPrice('1 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
                     <Col span={7}>
-                        <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData[one_month] ? this.props.innerTabData[one_month] : 0 : 0}</h4>
+                        <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['1 month'] ? this.props.innerTabData['1 month'] : 0 : 0}</h4>
                     </Col>
                 </Row>
 
@@ -79,7 +80,7 @@ class PricingForm extends Component {
                         <Button type="primary" onClick={() => this.setPrice('3 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
                     <Col span={7}>
-                        <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData[three_month] ? this.props.innerTabData[three_month] : 0 : 0}</h4>
+                        <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['3 month'] ? this.props.innerTabData['3 month'] : 0 : 0}</h4>
                     </Col>
                 </Row>
                 <Row>
@@ -97,7 +98,7 @@ class PricingForm extends Component {
                         <Button type="primary" onClick={() => this.setPrice('6 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
                     <Col span={7}>
-                        <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData[six_month] ? this.props.innerTabData[six_month] : 0 : 0}</h4>
+                        <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['6 month'] ? this.props.innerTabData['6 month'] : 0 : 0}</h4>
                     </Col>
                 </Row>
                 <Row>
@@ -114,7 +115,7 @@ class PricingForm extends Component {
                         <Button type="primary" onClick={() => this.setPrice('12 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
                     <Col span={7}>
-                        <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData[twelve_month] ? this.props.innerTabData[twelve_month] : 0 : 0}</h4>
+                        <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['12 month'] ? this.props.innerTabData['12 month'] : 0 : 0}</h4>
                     </Col>
                 </Row>
 

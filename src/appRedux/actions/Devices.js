@@ -13,7 +13,8 @@ import {
     REJECT_DEVICE,
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
-    GET_PARENT_PACKAGES
+    GET_PARENT_PACKAGES,
+    GET_PRODUCT_PRICES
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -362,6 +363,24 @@ export const getParentPackages = () => {
                 console.log("Response", response.data);
                 dispatch({
                     type: GET_PARENT_PACKAGES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
+    }
+}
+export const getProductPrices = () => {
+    return (dispatch) => {
+        RestService.getProductPrices().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log("Response", response.data);
+                dispatch({
+                    type: GET_PRODUCT_PRICES,
                     response: response.data
                 })
             } else {

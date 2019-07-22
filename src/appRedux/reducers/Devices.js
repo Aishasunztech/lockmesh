@@ -20,7 +20,8 @@ import {
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
     UNFLAG_DEVICE,
-    GET_PARENT_PACKAGES
+    GET_PARENT_PACKAGES,
+    GET_PRODUCT_PRICES
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -109,6 +110,7 @@ const initialState = {
     // ],
     // options: ["DEVICE ID", "REMAINING DAYS", "FLAGGED", "STATUS", "MODE", "DEVICE NAME", "ACCOUNT EMAIL", "ACTIVATION CODE", "PGP EMAIL", "CHAT ID", "CLIENT ID", "DEALER ID", "DEALER PIN", "MAC ADDRESS", "SIM ID", "IMEI 1", "SIM 1", "IMEI 2", "SIM 2", "SERIAL NUMBER", "MODEL", "START DATE", "EXPIRY DATE", "DEALER NAME", "S-DEALER", "S-DEALER NAME"],
     newDevices: [],
+    product_prices: [],
 };
 
 export default (state = initialState, action) => {
@@ -386,6 +388,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 parent_packages: action.response.data,
+            }
+        case GET_PRODUCT_PRICES:
+            // console.log(action.response.data);
+
+            return {
+                ...state,
+                product_prices: action.response.data,
             }
         default:
             return state;

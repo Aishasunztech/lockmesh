@@ -601,6 +601,10 @@ const RestService = {
         // console.log(dealer_id, 'whte label on get price')
         return axios.get(BASE_URL + 'users/get-parent-packages', RestService.getHeader());
     },
+    getProductPrices: () => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-parent-product-prices', RestService.getHeader());
+    },
     checkPackageName: (name) => {
 
         return axios.patch(BASE_URL + 'users/check-package-name', { name }, RestService.getHeader());
