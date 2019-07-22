@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import CustomScrollbars from "../../util/CustomScrollbars";
-
+import { Markup } from 'interweave';
 import { updatePassword } from "../../appRedux/actions/Dealers";
 import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
 import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch, Input } from 'antd';
@@ -17,7 +17,7 @@ import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text
 } from "../../constants/Constants";
 import { DEALER_ID, DEALER_NAME, Parent_Dealer, DEALER_TOKENS, Login_History, DEALER_PIN } from '../../constants/DealerConstants';
-import { Button_Edit, Button_Cancel, Button_Open, Button_Ok } from '../../constants/ButtonConstants';
+import { Button_Edit, Button_Cancel, Button_Open, Button_Ok, Button_On, Button_Off } from '../../constants/ButtonConstants';
 import { IP_ADDRESS } from '../../constants/DeviceConstants';
 
 // import {Link} from 'react-router-dom';
@@ -108,26 +108,26 @@ class Profile extends Component {
         let commonColumns = [
             {
                 key: 1,
-                name: <a> {convertToLang(this.props.translation[DEALER_ID], DEALER_ID)} </a>,
+                name: <a> {convertToLang(this.props.translation[DEALER_ID], "DEALER ID")} </a>,
                 value: this.props.profile.id,
             }, {
                 key: 2,
-                name: <a>{convertToLang(this.props.translation[DEALER_PIN], DEALER_PIN)}</a>,
+                name: <a>{convertToLang(this.props.translation[DEALER_PIN], "DEALER PIN")}</a>,
                 value: (this.props.profile.dealer_pin) ? this.props.profile.dealer_pin : 'N/A',
             },
             {
                 key: 3,
-                name: <a>{convertToLang(this.props.translation[DEALER_NAME], DEALER_NAME)} </a>,
+                name: <a>{convertToLang(this.props.translation[DEALER_NAME], "DEALER NAME")} </a>,
                 value: this.props.profile.name,
             },
             {
                 key: 4,
-                name: <a>{convertToLang(this.props.translation[Login_Email], Login_Email)}</a>,
+                name: <a>{convertToLang(this.props.translation[Login_Email], "LOGIN EMAIL")}</a>,
                 value: this.props.profile.email,
             },
             {
                 key: 5,
-                name: <a>{convertToLang(this.props.translation[DEVICES], DEVICES)}</a>,
+                name: <a>{convertToLang(this.props.translation[DEVICES], "DEVICES")}</a>,
                 value: this.props.profile.type === 'admin' ? 'All' : this.props.profile.connected_devices,
             },
         ]
@@ -135,7 +135,7 @@ class Profile extends Component {
         if (this.props.profile.type === SDEALER) {
             columnData = {
                 key: 6,
-                name: <a>{convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer)}</a>,
+                name: <a>{convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER")}</a>,
                 value: (this.props.profile.connected_dealer === 0) ? "N/A" : this.props.profile.connected_dealer,
             }
         }
@@ -146,7 +146,7 @@ class Profile extends Component {
             dataSource.push(columnData);
             dataSource.push({
                 key: 7,
-                name: <a>{convertToLang(this.props.translation[DEALER_TOKENS], DEALER_TOKENS)}</a>,
+                name: <a>{convertToLang(this.props.translation[DEALER_TOKENS], "TOKENS")}</a>,
                 value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
             });
 
@@ -155,13 +155,13 @@ class Profile extends Component {
                 ...commonColumns,
                 {
                     key: 7,
-                    name: <a>{convertToLang(this.props.translation[DEALER_TOKENS], DEALER_TOKENS)}</a>,
+                    name: <a>{convertToLang(this.props.translation[DEALER_TOKENS], "TOKENS")}</a>,
                     value: (this.props.profile.dealer_token) ? this.props.profile.dealer_token : 'N/A',
                 },
                 {
                     key: 6,
-                    name: <a>{convertToLang(this.props.translation[Login_History], Login_History)}</a>,
-                    value: <Button size="small" type='primary' onClick={() => { this.showLoginHistory() }} > {convertToLang(this.props.translation[Button_Open], Button_Open)}  </Button>,
+                    name: <a><Markup content={convertToLang(this.props.translation[Login_History], "LOGIN HISTORY")} /> </a>,
+                    value: <Button size="small" type='primary' style={{ textTransform: "uppercase" }} onClick={() => { this.showLoginHistory() }} > {convertToLang(this.props.translation[Button_Open], "OPEN")}  </Button>,
                 }
 
             ];
@@ -169,12 +169,12 @@ class Profile extends Component {
         // console.log('datasource', dataSource);
 
         const columns = [{
-            title: convertToLang(this.props.translation[Name], Name),
+            title: convertToLang(this.props.translation[Name], "Name"),
             dataIndex: 'name',
             key: 'name',
             className: 'dealer_info'
         }, {
-            title: convertToLang(this.props.translation[Value], Value),
+            title: convertToLang(this.props.translation[Value], "Value"),
             dataIndex: 'value',
             key: 'value',
             className: 'dealer_value'
@@ -193,7 +193,7 @@ class Profile extends Component {
                                     <div className="profile_table">
                                         <Row>
                                             <Col span={24}>
-                                                <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[Profile_Info], Profile_Info)}</h2>
+                                                <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[Profile_Info], "Profile Info")}</h2>
                                             </Col>
                                         </Row>
                                         <Table columns={columns} dataSource={dataSource} bordered={true} pagination={false} showHeader={false}></Table>
@@ -206,7 +206,7 @@ class Profile extends Component {
                                 <a onClick={this.showModal1}>
                                     <Card className="manage_sec_pro" style={{ borderRadius: 12 }}>
                                         <div>
-                                            <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[Edit_Profile], Edit_Profile)}</h2>
+                                            <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[Edit_Profile], "Edit Profile")}</h2>
                                             <Divider className="mb-0" />
                                             <Row style={{ padding: '12px 0px 0px' }}>
                                                 <Col span={8} className="text-center ">
@@ -216,9 +216,9 @@ class Profile extends Component {
                                                     <p>({this.props.profile.type})</p>
                                                 </Col>
                                                 <Col span={16} style={{ padding: 0, marginTop: 12 }}>
-                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_01], Edit_Profile_01)}</h5>
-                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_02], Edit_Profile_02)}</h5>
-                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_03], Edit_Profile_03)}  </h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_01], "Change password")}</h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_02], "Change Email")}</h5>
+                                                    <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Edit_Profile_03], "Enable Dual Authentication")}  </h5>
                                                     {/* <h5 className="more_txt">and more...</h5> */}
                                                 </Col>
                                             </Row>
@@ -231,38 +231,38 @@ class Profile extends Component {
 
                                         </div>
                                     </Card>
-                                    <Button type="primary" size="small" className="open_btn open_btn1">{convertToLang(this.props.translation[Button_Open], Button_Open)}</Button>
+                                    <Button type="primary" size="small" className="open_btn open_btn1">{convertToLang(this.props.translation[Button_Open], "OPEN")}</Button>
                                 </a>
                             </div>
                             <Modal
                                 maskClosable={false}
-                                title={<div>{convertToLang(this.props.translation[Edit_Profile], Edit_Profile)} <a className="edit_a_tag" onClick={() => this.refs.change_profile.showModal()} >{convertToLang(this.props.translation[Button_Edit], Button_Edit)}</a></div>}
+                                title={<div>{convertToLang(this.props.translation[Edit_Profile], "Edit Profile")} <a className="edit_a_tag" onClick={() => this.refs.change_profile.showModal()} >{convertToLang(this.props.translation[Button_Edit], "EDIT")}</a></div>}
                                 visible={this.state.visible}
                                 onOk={this.handleOk1}
                                 onCancel={this.handleCancel1}
                                 footer={false}
-                                okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                                okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                             >
                                 <Row justify='center' style={{}}>
                                     <Col span={12} style={{ padding: "0 16px 0" }} className="change_pass">
                                         <Button type="primary" size="small" style={{ width: "100%" }}
-                                            onClick={() => this.refs.change_password.showModal()} icon="unlock">{convertToLang(this.props.translation[Change_Password], Change_Password)}</Button>
+                                            onClick={() => this.refs.change_password.showModal()} icon="unlock">{convertToLang(this.props.translation[Change_Password], "Change Password")}</Button>
                                     </Col>
                                     <Col span={6}></Col>
                                     <Col span={6}></Col>
                                     <Col span={12} style={{ padding: "16px 16px 0 " }} className="change_email">
-                                        <Button disabled size="small" type="primary" style={{ width: "100%" }} icon="mail">{convertToLang(this.props.translation[Change_Email], Change_Email)}</Button>
+                                        <Button disabled size="small" type="primary" style={{ width: "100%" }} icon="mail">{convertToLang(this.props.translation[Change_Email], "Change Email")}</Button>
                                     </Col>
                                     <Col span={6}></Col>
                                     <Col span={6}></Col>
-                                    <Col span={12} style={{ padding: "16px 16px 0 " }}>
-                                        <h3>{convertToLang(this.props.translation[Login_Email_Authentication], Login_Email_Authentication)}</h3>
+                                    <Col span={14} style={{ padding: "16px 16px 0 " }}>
+                                        <h3>{convertToLang(this.props.translation[Login_Email_Authentication], "Login Email Authentication")}</h3>
                                     </Col>
                                     <Col span={6} style={{ padding: "16px 16px 0 " }}>
                                         <Switch
-                                            checkedChildren="ON"
-                                            unCheckedChildren="OFF"
+                                            checkedChildren={convertToLang(this.props.translation[Button_On], "ON")}
+                                            unCheckedChildren={convertToLang(this.props.translation[Button_Off], "OFF")}
                                             defaultChecked={(this.props.profile.two_factor_auth === 1 || this.props.profile.two_factor_auth === true) ? true : false}
                                             onChange={(e) => {
                                                 this.twoFactorAuth(e);
@@ -274,7 +274,7 @@ class Profile extends Component {
                         <Customizer1 ref="Customize33" />
                     </Row>
                 </div>
-                <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} />
+                <ChangePassword ref="change_password" profile={this.props.profile} func={this.props.updatePassword} translation={this.props.translation} />
                 <ChangeProfile
                     ref="change_profile"
                     profile={this.props.profile}
@@ -285,7 +285,7 @@ class Profile extends Component {
 
                 <Modal
                     maskClosable={false}
-                    title={<div>{convertToLang(this.props.translation[Login_History], Login_History)} </div>}
+                    title={<div>{convertToLang(this.props.translation[Login_History], "Login History")} </div>}
                     visible={this.state.historyModel}
                     onOk={this.handleOk1}
                     onCancel={this.handleCancelHistory}
@@ -293,8 +293,8 @@ class Profile extends Component {
                     centered
                     footer={false}
                     //bodyStyle={{ height: 500, overflow: "overlay" }}
-                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <Fragment>
                         {/* <div className="row">
@@ -328,7 +328,7 @@ class Profile extends Component {
 
                                     },
                                     {
-                                        title: convertToLang(this.props.translation[IP_ADDRESS], IP_ADDRESS),
+                                        title: convertToLang(this.props.translation[IP_ADDRESS], "IP ADDRESS"),
                                         align: "center",
                                         dataIndex: 'imei',
                                         key: "imei",
@@ -338,7 +338,7 @@ class Profile extends Component {
 
                                     },
                                     {
-                                        title: convertToLang(this.props.translation[Date_Text], Date_Text),
+                                        title: convertToLang(this.props.translation[Date_Text], "Date"),
                                         align: "center",
                                         dataIndex: 'changed_time',
                                         key: "changed_time",

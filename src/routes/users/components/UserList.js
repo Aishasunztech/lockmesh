@@ -8,7 +8,6 @@ import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } fro
 import UserDeviceList from './UserDeviceList'
 import AddUser from './AddUser';
 import { getFormattedDate, convertToLang } from '../../utils/commonUtils';
-
 import {
     Button_Delete,
     Button_Edit,
@@ -67,10 +66,9 @@ class UserList extends Component {
                                 type="primary"
                                 size="small"
                                 style={{ textTransform: 'uppercase' }}
-                                onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, 'Edit User')}
+                                onClick={() => this.refs.edit_user.showModal(this.props.editUser, user, convertToLang(this.props.translation[EDIT_USER], "Edit User"))}
                             >
-                                {/* <IntlMessages id="button.Edit" />  */}
-                                {this.props.translation[Button_Edit]}
+                                {convertToLang(this.props.translation[Button_Edit], "EDIT")}
                             </Button>
                             {(user.devicesList.length === 0) ?
                                 (user.del_status == 0) ?
@@ -78,19 +76,17 @@ class UserList extends Component {
                                         type="danger"
                                         size="small"
                                         style={{ textTransform: 'uppercase' }}
-                                        onClick={() => showConfirm(this.props.deleteUser, user.user_id, "Do you want to DELETE user ", 'DELETE USER')}
+                                        onClick={() => showConfirm(this.props.deleteUser, user.user_id, convertToLang(this.props.translation[DO_YOU_WANT_TO_DELETE_USER], "Do you want to DELETE user "), 'DELETE USER')}
                                     >
-                                        {/* <IntlMessages id="button.Delete" /> */}
-                                        {this.props.translation[Button_Delete]}
+                                        {convertToLang(this.props.translation[Button_Delete], "DELETE")}
                                     </Button>
                                     : <Button
                                         type="dashed"
                                         size="small"
                                         style={{ textTransform: 'uppercase' }}
-                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, "Do you want to UNDO user ", 'UNDO')}
+                                        onClick={() => showConfirm(this.props.undoDeleteUser, user.user_id, convertToLang(this.props.translation[UNDO], "Do you want to UNDELETE user "), 'UNDO')}
                                     >
-                                        {/* <IntlMessages id="button.Undo" />  */}
-                                        {this.props.translation[Button_Undo]}
+                                        {convertToLang(this.props.translation[Button_Undo], "UNDELETE")}
                                     </Button>
                                 : null
                             }
@@ -98,7 +94,6 @@ class UserList extends Component {
                     </Fragment>
                 )
                 ,
-
                 user_id: user.user_id,
                 devices: (user.devicesList) ? user.devicesList.length : 0,
                 devicesList: user.devicesList,
@@ -162,6 +157,7 @@ class UserList extends Component {
         return (
             <Fragment>
                 <Card className="fix_card users_fix_card">
+                    <hr className="fix_header_border" style={{ top: "59px" }} />
                     <CustomScrollbars className="gx-popover-scroll">
                         <Table
                             className="users_list"

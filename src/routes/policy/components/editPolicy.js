@@ -7,12 +7,19 @@ import {
     APPLICATION_PERMISION,
     SYSTEM_CONTROLS_UNIQUE,
     SECURE_SETTING,
-    Main_SETTINGS
+    Main_SETTINGS,
+    POLICY_DETAILS,
+    APPS
 } from '../../../constants/Constants';
 
 import styles from './policy.css';
 import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
+import { POLICY_SAVE_CONFIRMATION, PLEASE_INPUT_POLICY_NAME, POLICY_APP_NAME, POLICY_NOTE, POLICY_COMMAND, NAME } from '../../../constants/PolicyConstants';
+import { Button_Save, Button_Cancel } from '../../../constants/ButtonConstants';
+import { convertToLang } from '../../utils/commonUtils';
+import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE, Tab_SECURE_SETTING } from '../../../constants/TabConstants';
+import { SPA_APPS } from '../../../constants/AppConstants';
 
 const TextArea = Input;
 const TabPane = Tabs.TabPane;
@@ -107,7 +114,7 @@ class EditPolicy extends Component {
 
         this.appsColumns = [
             {
-                title: 'APP NAME',
+                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
                 dataIndex: 'app_name',
                 key: '1',
                 render: text => <a href="javascript:;">{text}</a>,
@@ -383,7 +390,7 @@ class EditPolicy extends Component {
                 // console.log("from data ois", dupmVar)
 
                 Modal.confirm({
-                    title: 'Are You Sure, You Want to Save Changes',
+                    title: convertToLang(this.props.translation[POLICY_SAVE_CONFIRMATION], "Are You Sure, You Want to Save Changes"),
                     onOk: () => {
                         this.props.SavePolicyChanges(dupmVar);
                         this.props.editPolicyModalHide();
@@ -393,7 +400,9 @@ class EditPolicy extends Component {
                         this.setState({ tabSelected: '1' })
 
                     },
-                    okText: 'Save',
+                    // okText: 'Save',
+                    okText: convertToLang(this.props.translation[Button_Save], "Save"),
+                    cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
                 });
             }
         })
@@ -485,7 +494,7 @@ class EditPolicy extends Component {
             <Fragment>
                 <div className="policy_steps">
                     <Tabs tabPosition="left" size="small" type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
-                        <TabPane tab="APPS" key="1">
+                        <TabPane tab={convertToLang(this.props.translation[APPS], "APPS")} key="1">
                             <AppList
                                 apk_list={this.state.editAblePolicy.push_apps}
                                 dataLength={this.state.editAblePolicy.push_apps.length}
@@ -510,7 +519,7 @@ class EditPolicy extends Component {
                             />
 
                         </TabPane>
-                        <TabPane tab="APP PERMISSION" key="2">
+                        <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "Application Permission")} key="2">
                             <AppList
                                 dataLength={this.state.editAblePolicy.app_list.length}
                                 apk_list={this.state.editAblePolicy.app_list}
@@ -533,61 +542,57 @@ class EditPolicy extends Component {
                             />
 
                         </TabPane>
-                        <TabPane tab="SETTINGS PERMISSION" key="3">
+                        <TabPane tab={convertToLang(this.props.translation[Tab_SECURE_SETTING], "SECURE SETTINGS")} key="3">
+                            {this.state.main_extension !== undefined ?
+                                <div>
+                                    <Row>
+                                        <Col span={6} className="">
+                                        </Col>
+                                        <Col span={3} className="">
+                                            <Avatar src={`${BASE_URL}users/getFile/${this.state.main_extension.icon}`} style={{ width: "30px", height: "30px" }} />
+                                            {/* <img src={require("assets/images/setting.png")} /> */}
+                                        </Col>
+                                        <Col span={15} className="pl-0">
+                                            <h5 style={{ marginTop: '9px' }}>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={8} className="text-center">
+                                            <span>{convertToLang(this.props.translation[Guest], "Guest:")} </span>
+                                            <Switch
+                                                size="small"
+                                                checked={(this.state.main_extension.guest === true || this.state.main_extension.guest === 1) ? true : false}
 
+                                                onClick={(e) => {
+                                                    this.handleChecked2(e, "guest", '', 'main');
+                                                }}
+                                            />
+                                        </Col>
+                                        <Col span={8} className="text-center">
+                                            <span>{convertToLang(this.props.translation[ENCRYPTED], "Encrypted:")} </span>
+                                            <Switch
+                                                size="small"
 
-                            {
-                                this.state.main_extension !== undefined ?
-
-                                    <div>
-                                        <Row>
-                                            <Col span={6} className="">
-                                            </Col>
-                                            <Col span={3} className="">
-                                                <Avatar src={`${BASE_URL}users/getFile/${this.state.main_extension.icon}`} style={{ width: "30px", height: "30px" }} />
-                                                {/* <img src={require("assets/images/setting.png")} /> */}
-                                            </Col>
-                                            <Col span={15} className="pl-0">
-                                                <h5 style={{ marginTop: '9px' }}>Secure Settings Permission</h5>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col span={8} className="text-center">
-                                                <span>Guest: </span>
-                                                <Switch
-                                                    size="small"
-                                                    checked={(this.state.main_extension.guest === true || this.state.main_extension.guest === 1) ? true : false}
-
-                                                    onClick={(e) => {
-                                                        this.handleChecked2(e, "guest", '', 'main');
-                                                    }}
-                                                />
-                                            </Col>
-                                            <Col span={8} className="text-center">
-                                                <span>Encrypted: </span>
-                                                <Switch
-                                                    size="small"
-
-                                                    checked={(this.state.main_extension.encrypted === true || this.state.main_extension.encrypted === 1) ? true : false}
-                                                    onClick={(e) => {
-                                                        // console.log("encrypted", e);
-                                                        this.handleChecked2(e, "encrypted", '', 'main');
-                                                    }}
-                                                />
-                                            </Col>
-                                            <Col span={8} className="text-center">
-                                                <span>Enable: </span>
-                                                <Switch
-                                                    size="small"
-                                                    checked={(this.state.main_extension.enable === true || this.state.main_extension.enable === 1) ? true : false}
-                                                    onClick={(e) => {
-                                                        // console.log("encrypted", e);
-                                                        this.handleChecked2(e, "enable", '', 'main');
-                                                    }}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </div> : null}
+                                                checked={(this.state.main_extension.encrypted === true || this.state.main_extension.encrypted === 1) ? true : false}
+                                                onClick={(e) => {
+                                                    // console.log("encrypted", e);
+                                                    this.handleChecked2(e, "encrypted", '', 'main');
+                                                }}
+                                            />
+                                        </Col>
+                                        <Col span={8} className="text-center">
+                                            <span>{convertToLang(this.props.translation[ENABLE], "Enable:")} </span>
+                                            <Switch
+                                                size="small"
+                                                checked={(this.state.main_extension.enable === true || this.state.main_extension.enable === 1) ? true : false}
+                                                onClick={(e) => {
+                                                    // console.log("encrypted", e);
+                                                    this.handleChecked2(e, "enable", '', 'main');
+                                                }}
+                                            />
+                                        </Col>
+                                    </Row>
+                                </div> : null}
                             <AppList
                                 dataLength={this.state.editAblePolicy.secure_apps.length}
                                 allExtensions={this.state.editAblePolicy.secure_apps}
@@ -609,7 +614,7 @@ class EditPolicy extends Component {
                                 translation={this.props.translation}
                             />
                         </TabPane>
-                        <TabPane tab="SYSTEM PERMISSION" key="4">
+                        <TabPane tab={convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")} key="4">
                             <div>
                                 {/* {
                                     this.state.main_system_control !== undefined ?
@@ -665,12 +670,13 @@ class EditPolicy extends Component {
                                     pagination={false}
                                     dataSource={this.renderSystemPermissions()}
                                     bordered
-                                    columns={columns}>
+                                    columns={columns}
+                                    className="add-policy-modal-content">
                                 </Table>
                             </div>
 
                         </TabPane>
-                        <TabPane tab="POLICY DETAILS" key="5">
+                        <TabPane tab={convertToLang(this.props.translation[POLICY_DETAILS], "POLICY DETAILS")} key="5">
                             <Form className="login-form">
                                 <Form.Item
                                 // validateStatus={this.state.isPolicy_name}
@@ -680,7 +686,7 @@ class EditPolicy extends Component {
                                     {getFieldDecorator('policy_name', {
                                         initialValue: this.state.policy_name,
                                         rules: [{
-                                            required: true, message: 'Please Input Policy Name.',
+                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Name"),
                                         },
                                         {
                                             validator: this.policyNameChange,
@@ -688,11 +694,11 @@ class EditPolicy extends Component {
                                         ],
 
                                     })(
-                                        <Input placeholder="Name" className="pol_inp" />
+                                        <Input placeholder={convertToLang(this.props.translation[NAME], "NAME")} className="pol_inp" />
                                     )}
                                 </Form.Item>
                                 <Form.Item>
-                                    <span className="h3">Command Name</span>
+                                    <span className="h3">{convertToLang(this.props.translation[POLICY_COMMAND], "Policy Command")}</span>
                                     {getFieldDecorator('command_name', {
                                         initialValue: '#' + this.state.policy_name.replace(/ /g, '_'),
 
@@ -704,24 +710,24 @@ class EditPolicy extends Component {
                                 // validateStatus={this.state.isCommand}
                                 // help={this.state.command_error}
                                 >
-                                    <span className="h3">Policy Note</span>
+                                    <span className="h3">{convertToLang(this.props.translation[POLICY_NOTE], "Policy Note")}</span>
                                     {getFieldDecorator('command', {
                                         initialValue: this.state.command,
 
                                         rules: [{
-                                            required: true, message: 'Please Input Policy Name.',
+                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Name"),
                                         }],
 
                                     })(
-                                        <textarea placeholder="Policy Note" className="ant-input"></textarea>
+                                        <textarea placeholder={convertToLang(this.props.translation[POLICY_NOTE], "Policy Note")} className="ant-input"></textarea>
                                     )}
                                 </Form.Item>
                             </Form>
                         </TabPane>
                     </Tabs>
                     <div className="text-center">
-                        <Button className="mt-10" onClick={() => this.onCancel()}>Cancel</Button>
-                        <Button className="mt-10" type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
+                        <Button className="mt-10" onClick={() => this.onCancel()}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
+                        <Button className="mt-10" type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>{convertToLang(this.props.translation[Button_Save], "Save")}</Button>
                     </div>
 
 

@@ -6,6 +6,11 @@ import {
     PULL_APPS,
     POLICY
 } from "../../../constants/ActionTypes"
+import { PANEL_PASSWORD_MODAL, PLEASE_INPUT_YOUR_PASSWORD, ENTER_PASSWORD } from '../../../constants/DeviceConstants';
+import { convertToLang } from '../../utils/commonUtils';
+import { Markup } from 'interweave';
+import { Button_submit } from '../../../constants/ButtonConstants';
+
 
 class PassworForm extends Component {
 
@@ -56,7 +61,8 @@ class PassworForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>
+                    <Markup content={convertToLang(this.props.translation[PANEL_PASSWORD_MODAL], 
+                    "<h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>")} />
                 </Form.Item>
 
                 <Form.Item
@@ -70,11 +76,11 @@ class PassworForm extends Component {
                             initialValue: '',
                             rules: [
                                 {
-                                    required: true, message: 'Please input your password!',
+                                    required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_YOUR_PASSWORD], "Please input your password!"),
                                 }
                             ],
                         })(
-                            <Input.Password className="password_field" type='password' required placeholder="Enter Password" autoComplete='password' />
+                            <Input.Password className="password_field" type='password' required placeholder={convertToLang(this.props.translation[ENTER_PASSWORD], "Enter Password")} autoComplete='password' />
                         )
                     }
                 </Form.Item>
@@ -84,7 +90,7 @@ class PassworForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <Button type="primary" htmlType="submit">Submit</Button>
+                    <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                 </Form.Item>
             </Form>
         )

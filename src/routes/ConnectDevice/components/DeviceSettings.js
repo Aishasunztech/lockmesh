@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react'
 import { Table, Divider, Badge, Switch } from "antd";
-import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME } from '../../../constants/Constants';
+import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME, PUSH_APPS_TEXT } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { APK_APP_NAME } from '../../../constants/ApkConstants';
 import { Guest, ENCRYPTED, ENABLE, EXTENSION_NAME, ADMIN_PASSWORD_IS_CHANGED, ENCRYPTED_PASSWORD_IS_CHANGED, GUEST_PASSWORD_IS_CHANGED, DURESS_PASSWORD_IS_CHANGED } from '../../../constants/TabConstants';
 import { DEVICE_STATUS } from '../../../constants/DeviceConstants';
-
+import { appsColumns, extensionColumns, controlColumns } from '../../utils/columnsUtils';
 // import AppList from "./AppList";
 
 export default class TableHistory extends Component {
@@ -20,54 +20,9 @@ export default class TableHistory extends Component {
             push_apps: []
         }
 
-        this.appsColumns = [
-            {
-                title: convertToLang(this.props.translation[APK_APP_NAME], APK_APP_NAME),
-                dataIndex: 'label',
-                key: '1',
-                render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
-            }, {
-                title: convertToLang(this.props.translation[Guest], Guest),
-                dataIndex: 'guest',
-                key: '2',
-            }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
-                dataIndex: 'encrypted',
-                key: '3',
-            }, {
-                title: convertToLang(this.props.translation[ENABLE], ENABLE),
-                dataIndex: 'enable',
-                key: '4',
-            }
-        ];
-        this.extensionColumns = [
-            {
-                title: convertToLang(this.props.translation[EXTENSION_NAME], EXTENSION_NAME),
-                dataIndex: 'label',
-                key: '1',
-                render: text => <a href="javascript:;" style={{ fontSize: 12 }}> {text}</ a>,
-            }, {
-                title: convertToLang(this.props.translation[Guest], Guest),
-                dataIndex: 'guest',
-                key: '2',
-            }, {
-                title: convertToLang(this.props.translation[ENCRYPTED], ENCRYPTED),
-                dataIndex: 'encrypted',
-                key: '3',
-            }
-        ];
-        this.controlColumns = [
-            {
-                title: convertToLang(this.props.translation[PERMISSION_NAME], PERMISSION_NAME),
-                dataIndex: 'label',
-                key: '1',
-                render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
-            }, {
-                title: convertToLang(this.props.translation[DEVICE_STATUS], DEVICE_STATUS),
-                dataIndex: 'status',
-                key: '2',
-            }
-        ];
+        this.appsColumns = appsColumns(props.translation);
+        this.extensionColumns = extensionColumns(props.translation);
+        this.controlColumns = controlColumns(props.translation);
     }
 
     cotrolsValues = () => {
@@ -220,6 +175,12 @@ export default class TableHistory extends Component {
             this.filterAppList()
             this.filterExtensions()
         }
+
+        if (this.props.translation != prevProps.translation) {
+            this.appsColumns = appsColumns(this.props.translation);
+            this.extensionColumns = extensionColumns(this.props.translation);
+            this.controlColumns = controlColumns(this.props.translation);
+        }
     }
 
     componentDidMount() {
@@ -231,6 +192,14 @@ export default class TableHistory extends Component {
         this.filterExtensions();
     }
 
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.translation != nextProps.translation) {
+            this.appsColumns = appsColumns(nextProps.translation);
+            this.extensionColumns = extensionColumns(nextProps.translation);
+            this.controlColumns = controlColumns(nextProps.translation);
+        }
+    }
     renderData = (datalist) => {
         // console.log(JSON.parse(datalist));
         // console.log(this.props.type, 'datalist is type of');
@@ -246,7 +215,7 @@ export default class TableHistory extends Component {
                     // console.log(item);
                     return {
                         key: item.app_id,
-                        label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                        app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
                         // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
                         guest: <Switch
                             size="small"
@@ -273,16 +242,12 @@ export default class TableHistory extends Component {
     }
 
     render() {
-        // console.log(this.props.extensions, 'data li s t of exte')
-        // console.log(this.props.passwords);
         return (
             <div>
-                {/* {
-                    this.state.applist.length ? */}
                 {
                     this.props.isPushApps === true && this.props.type !== 'profile' ?
                         <div>
-                            <Divider > {convertToLang(this.props.translation[PUSH_APPS], PUSH_APPS)} </Divider>
+                            <Divider > {convertToLang(this.props.translation[PUSH_APPS_TEXT], "PUSH APPS")} </Divider>
                             <Table
                                 style={{ margin: 0, padding: 0 }}
                                 size='default'
@@ -295,9 +260,10 @@ export default class TableHistory extends Component {
                             />
                         </div> : null
                 }
-                {this.state.applist.length > 0 ?
+                {
+                    this.state.applist.length > 0 ?
                     <div>
-                        <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], APPLICATION_PERMISION)} </Divider>
+                        <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISION")} </Divider>
                         <Table
                             style={{ margin: 0, padding: 0 }}
                             size='default'
@@ -308,12 +274,12 @@ export default class TableHistory extends Component {
                             pagination={false}
 
                         />
-                    </div> : false}
-                {/* : false}  */}
+                    </div> : false
+                }
                 {
                     this.state.extensions.length ?
                         <div>
-                            <Divider> {convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], SECURE_SETTING_PERMISSION)}</Divider>
+                            <Divider> {convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "SECURE SETTING PERMISSION")}</Divider>
 
                             <Table
                                 style={{ margin: 0, padding: 0 }}
@@ -325,15 +291,15 @@ export default class TableHistory extends Component {
                                 pagination={false}
 
                             /></div>
-                        : false}
+                        : false
+                }
                 {
                     this.props.showChangedControls ?
                         Object.entries(this.state.controls).length > 0 ?
                             Object.entries(this.state.controls.controls).length > 0 ?
-
                                 <div>
                                     {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
-                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)}</Divider>
+                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
 
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -351,7 +317,7 @@ export default class TableHistory extends Component {
                             Object.entries(this.state.controls).length > 0 ?
                                 Object.entries(this.state.controls.controls).length > 0 ?
                                     <div>
-                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], SYSTEM_PERMISSION)}</Divider>
+                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
                                         <Table
                                             style={{ margin: 0, padding: 0 }}
                                             size='default'
@@ -370,32 +336,32 @@ export default class TableHistory extends Component {
                     <div>
                         {
                             this.props.passwords.admin_password || this.props.passwords.guest_password || this.props.passwords.encrypted_password || this.props.passwords.duress_password ?
-                                <Divider>{convertToLang(this.props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)} </Divider> : false
+                                <Divider>{convertToLang(this.props.translation[MANAGE_PASSWORDS], "Manage Password")} </Divider> : false
                         }
                         {
-                            this.props.passwords.admin_password ? <div> <Badge status="success" text={convertToLang(this.props.translation[ADMIN_PASSWORD_IS_CHANGED], ADMIN_PASSWORD_IS_CHANGED)} /> </div> : false
+                            this.props.passwords.admin_password ? <div> <Badge status="success" text={convertToLang(this.props.translation[ADMIN_PASSWORD_IS_CHANGED], "Admin Password is changed")} /> </div> : false
                         }{
-                            this.props.passwords.encrypted_password ? <div><Badge status="error" text={convertToLang(this.props.translation[ENCRYPTED_PASSWORD_IS_CHANGED], ENCRYPTED_PASSWORD_IS_CHANGED)} /> </div> : false
+                            this.props.passwords.encrypted_password ? <div><Badge status="error" text={convertToLang(this.props.translation[ENCRYPTED_PASSWORD_IS_CHANGED], "Encrypted Password is changed")} /> </div> : false
                         }{
-                            this.props.passwords.guest_password ? <div><Badge status="processing" text={convertToLang(this.props.translation[GUEST_PASSWORD_IS_CHANGED], GUEST_PASSWORD_IS_CHANGED)} /></div> : false
+                            this.props.passwords.guest_password ? <div><Badge status="processing" text={convertToLang(this.props.translation[GUEST_PASSWORD_IS_CHANGED], "Guest Password is changed")} /></div> : false
                         }{
-                            this.props.passwords.duress_password ? <div><Badge status="warning" text={convertToLang(this.props.translation[DURESS_PASSWORD_IS_CHANGED], DURESS_PASSWORD_IS_CHANGED)} /></div> : false
+                            this.props.passwords.duress_password ? <div><Badge status="warning" text={convertToLang(this.props.translation[DURESS_PASSWORD_IS_CHANGED], "Duress Password is changed")} /></div> : false
                         }
                     </div>
                     :
                     <div>
                         {
                             this.props.isAdminPwd || this.props.isEncryptedPwd || this.props.isGuestPwd || this.props.isDuressPwd ?
-                                <Divider> {convertToLang(this.props.translation[MANAGE_PASSWORDS], MANAGE_PASSWORDS)} </Divider> : false
+                                <Divider> {convertToLang(this.props.translation[MANAGE_PASSWORDS], "Manage Password")} </Divider> : false
                         }
                         {
-                            this.props.isAdminPwd ? <div> <Badge status="success" text='Admin Password is changed' /> </div> : false
+                            this.props.isAdminPwd ? <div> <Badge status="success" text={convertToLang(this.props.translation[ADMIN_PASSWORD_IS_CHANGED], "Admin Password is changed")} /> </div> : false
                         }{
-                            this.props.isEncryptedPwd ? <div><Badge status="error" text='Encrypted Password is changed' /> </div> : false
+                            this.props.isEncryptedPwd ? <div><Badge status="error" text={convertToLang(this.props.translation[ENCRYPTED_PASSWORD_IS_CHANGED], "Encrypted Password is changed")} /> </div> : false
                         }{
-                            this.props.isGuestPwd ? <div><Badge status="processing" text='Guest Password is changed' /></div> : false
+                            this.props.isGuestPwd ? <div><Badge status="processing" text={convertToLang(this.props.translation[GUEST_PASSWORD_IS_CHANGED], "Guest Password is changed")} /></div> : false
                         }{
-                            this.props.isDuressPwd ? <div><Badge status="warning" text='Duress Password is changed' /></div> : false
+                            this.props.isDuressPwd ? <div><Badge status="warning" text={convertToLang(this.props.translation[DURESS_PASSWORD_IS_CHANGED], "Duress Password is changed")} /></div> : false
                         }
                     </div>
                 }

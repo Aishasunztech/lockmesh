@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import CustomScrollbars from "util/CustomScrollbars";
 
 import languageData from "../languageData";
-// import SearchBox from "components/SearchBox";
 import UserInfo from "components/UserInfo";
 // import AppNotification from "components/AppNotification";
 // import MailNotification from "components/MailNotification";
@@ -103,10 +102,7 @@ class InsideHeader extends Component {
                             Category <Icon type="down" />
                           </Button>
                         </Dropdown> 
-                        <SearchBox styleName="gx-popover-search-bar"
-                          placeholder="Search in app..."
-                          onChange={this.updateSearchChatUser.bind(this)}
-                          value={this.state.searchText} />
+                       
                       </div>
                     } trigger="click">
 

@@ -48,7 +48,7 @@
     font-size: 14px;
 }
 
-.ant-table-bordered .ant-table-thead>tr>th {
+.fix_card .ant-table-bordered .ant-table-thead>tr>th {
     border: 1px solid #e8e8e8;
     border-top: 0 !important;
     position: sticky;
@@ -62,22 +62,39 @@
     z-index: 1;
 }
 
+.apk_fix_card .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+    top: -1px;
+}
+
+.policy_fix_card .ant-table-thead>tr>th.ant-table-column-has-actions.ant-table-column-has-sorters {
+    top: 40px;
+}
+
+.fix_card .ant-card-body {
+    padding: 16px 0px !important;
+}
+
+.m_d_fix_table .ant-card-body {
+    padding: 16px 16px !important;
+}
+
 .font_14 {
     font-size: 14px !important;
 }
 
-.m_auto {
-    margin: 0 auto;
+.fix_card .ant-table-bordered .ant-table-header>table,
+.fix_card .ant-table-bordered .ant-table-body>table {
+    border: 0 !important;
 }
 
-.disp_flx {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-ink-bar {
-    visibility: visible;
+.fix_header_border {
+    border-bottom: 1px solid #e8e8e8;
+    position: relative;
+    z-index: 0;
+    top: 56px;
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 
 .fix_card {
@@ -104,8 +121,19 @@
     top: 140px;
 }
 
-.users_fix_card {
+.users_fix_card,
+.apk_fix_card,
+.policy_fix_card {
     top: 105px;
+}
+
+.sm_fix_card {
+    top: 16px;
+}
+
+.m_d_fix_table {
+    top: 143px;
+    overflow: scroll;
 }
 
 .gx-popover-scroll {
@@ -123,6 +151,20 @@
     right: 0px !important;
 }
 
+.m_auto {
+    margin: 0 auto;
+}
+
+.disp_flx {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-ink-bar {
+    visibility: visible;
+}
+
 .upper_case {
     text-transform: uppercase;
 }
@@ -138,6 +180,24 @@
 
 .width_100 {
     width: 100%
+}
+
+@media (max-width: 992px) {
+
+    .devices_fix_card,
+    .dealer_fix_card,
+    .m_d_fix_table {
+        top: 260px;
+    }
+
+    .apk_fix_card {
+        top: 220px;
+    }
+
+    .policy_fix_card,
+    .users_fix_card {
+        top: 176px;
+    }
 }
 
 .p-0 {

@@ -129,7 +129,7 @@ class AppFilter extends Component {
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
         //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
-        if (this.props.options !== undefined) {
+        if (this.state.selectedDisplayValues !== undefined && this.props.options !== undefined) {
             if (this.props.options.length === this.state.selectedDisplayValues.length) {
                 allSelectedOpt = true;
             } else { allSelectedOpt = false }
@@ -140,7 +140,7 @@ class AppFilter extends Component {
             // className="gutter-example"
             <Card className="sticky_top_bar">
                 <Row gutter={16} className="filter_top">
-                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             {(this.props.options !== undefined && this.props.options !== null) ?
                                 <Fragment>
@@ -150,7 +150,7 @@ class AppFilter extends Component {
                                         valueKey="key"
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
-                                        placeholder={convertToLang(translation[Appfilter_Display], Appfilter_Display)}
+                                        placeholder={convertToLang(translation[Appfilter_Display], "Display")}
                                         className="display_"
                                         multiple={true}
                                         numberDisplayed={true}
@@ -179,7 +179,7 @@ class AppFilter extends Component {
                                                         <Checkbox
                                                             checked={allSelectedOpt} className="slct_all"
                                                         >
-                                                            {convertToLang(translation[Appfilter_SelectAll], Appfilter_SelectAll)}
+                                                          <span className="upper_case">  {convertToLang(translation[Appfilter_SelectAll], "Select All")}</span>
                                                         </Checkbox>
                                                     </li>
                                                 );
@@ -218,12 +218,12 @@ class AppFilter extends Component {
 
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass1} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             {(this.props.handleFilterOptions !== undefined && this.props.handleFilterOptions !== null) ? this.props.handleFilterOptions() : null}
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             <Search
 
@@ -254,12 +254,11 @@ class AppFilter extends Component {
                         :
                         <Col />
                     } */}
-                    <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
+                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             {
                                 (this.props.isAddButton === true) ?
                                     (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
-
                                         <Button
                                             type="primary"
                                             disabled={(this.props.disableAddButton === true) ? true : false}
@@ -267,7 +266,6 @@ class AppFilter extends Component {
                                         >
                                             <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
                                         </Button>
-
                                         : (this.props.addDealer) ?
                                             <Button
                                                 type="primary"
@@ -330,7 +328,6 @@ class AppFilter extends Component {
                             }
                         </div>
                     </Col>
-
                 </Row>
             </Card>
         )

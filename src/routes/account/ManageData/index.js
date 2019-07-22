@@ -65,7 +65,7 @@ class ManageData extends Component {
                         id="sim_id"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[LABEL_DATA_SIM_ID], LABEL_DATA_SIM_ID)}
+                        placeholder={convertToLang(props.translation[LABEL_DATA_SIM_ID], "SIM ID")}
                         onKeyUp={this.handleSearch}
 
                     />
@@ -74,7 +74,7 @@ class ManageData extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[LABEL_DATA_SIM_ID], LABEL_DATA_SIM_ID),
+                        title: convertToLang(props.translation[LABEL_DATA_SIM_ID], "SIM ID"),
                         dataIndex: 'sim_id',
                         key: 'sim_id',
                         align: 'center',
@@ -92,7 +92,7 @@ class ManageData extends Component {
                         id="created_at"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[LABEL_DATA_CREATED_AT], LABEL_DATA_CREATED_AT)}
+                        placeholder={convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT")}
                         onKeyUp={this.handleSearch}
 
                     />
@@ -101,7 +101,7 @@ class ManageData extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], LABEL_DATA_CREATED_AT),
+                        title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
                         dataIndex: 'created_at',
                         key: 'created_at',
                         align: 'center',
@@ -128,7 +128,7 @@ class ManageData extends Component {
                         id="chat_id"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[LABEL_DATA_CHAT_ID], LABEL_DATA_CHAT_ID)}
+                        placeholder={convertToLang(props.translation[LABEL_DATA_CHAT_ID], "CHAT ID")}
                         onKeyUp={this.handleSearch}
 
                     />
@@ -137,7 +137,7 @@ class ManageData extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[LABEL_DATA_CHAT_ID], LABEL_DATA_CHAT_ID),
+                        title: convertToLang(props.translation[LABEL_DATA_CHAT_ID], "CHAT ID"),
                         dataIndex: 'chat_id',
                         key: 'chat_id',
                         align: 'center',
@@ -155,7 +155,7 @@ class ManageData extends Component {
                         id="created_at"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[LABEL_DATA_CREATED_AT], LABEL_DATA_CREATED_AT)}
+                        placeholder={convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT")}
                         onKeyUp={this.handleSearch}
 
                     />
@@ -164,7 +164,7 @@ class ManageData extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], LABEL_DATA_CREATED_AT),
+                        title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
                         dataIndex: 'created_at',
                         key: 'created_at',
                         align: 'center',
@@ -192,7 +192,7 @@ class ManageData extends Component {
                         id="vpn"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[LABEL_DATA_VPN], LABEL_DATA_VPN)}
+                        placeholder={convertToLang(props.translation[LABEL_DATA_VPN], "VPN")}
                         onKeyUp={this.handleSearch}
 
                     />
@@ -201,7 +201,7 @@ class ManageData extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[LABEL_DATA_VPN], LABEL_DATA_VPN),
+                        title: convertToLang(props.translation[LABEL_DATA_VPN], "VPN"),
                         dataIndex: 'vpn',
                         key: 'vpn',
                         align: 'center',
@@ -219,7 +219,7 @@ class ManageData extends Component {
                         id="created_at"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[LABEL_DATA_CREATED_AT], LABEL_DATA_CREATED_AT)}
+                        placeholder={convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT")}
                         onKeyUp={this.handleSearch}
 
                     />
@@ -228,7 +228,7 @@ class ManageData extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], LABEL_DATA_CREATED_AT),
+                        title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
                         dataIndex: 'created_at',
                         key: 'created_at',
                         align: 'center',
@@ -256,7 +256,7 @@ class ManageData extends Component {
                         id="pgp_email"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[LABEL_DATA_PGP_EMAIL], LABEL_DATA_PGP_EMAIL)}
+                        placeholder={convertToLang(props.translation[LABEL_DATA_PGP_EMAIL], "PGP EMAIL")}
                         onKeyUp={this.handleSearch}
 
                     />
@@ -265,7 +265,7 @@ class ManageData extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[LABEL_DATA_PGP_EMAIL], LABEL_DATA_PGP_EMAIL),
+                        title: convertToLang(props.translation[LABEL_DATA_PGP_EMAIL], "PGP EMAIL"),
                         dataIndex: 'pgp_email',
                         key: 'pgp_email',
                         align: 'center',
@@ -283,7 +283,7 @@ class ManageData extends Component {
                         id="created_at"
                         className="search_heading"
                         autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[LABEL_DATA_CREATED_AT], LABEL_DATA_CREATED_AT)}
+                        placeholder={convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT")}
                         onKeyUp={this.handleSearch}
 
                     />
@@ -292,7 +292,7 @@ class ManageData extends Component {
                 className: '',
                 children: [
                     {
-                        title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], LABEL_DATA_CREATED_AT),
+                        title: convertToLang(props.translation[LABEL_DATA_CREATED_AT], "CREATED AT"),
                         dataIndex: 'created_at',
                         key: 'created_at',
                         align: 'center',
@@ -513,15 +513,15 @@ class ManageData extends Component {
                         <div>
                             <Card >
                                 <Row gutter={16} className="filter_top">
-                                    <Col className="col-md-3 col-sm-6 col-xs-12">
+                                    <Col className="col-md-4 col-sm-6 col-xs-6">
                                         <div className="gutter-box">
-                                            <h1 style={{ lineHeight: "35px", marginBottom: 0 }}> {convertToLang(this.props.translation[MANAGE_DATA], MANAGE_DATA)} </h1>
+                                            <h1 style={{ lineHeight: "35px", marginBottom: 0 }}> {convertToLang(this.props.translation[MANAGE_DATA], "MANAGE DATA")} </h1>
                                         </div>
                                     </Col>
-                                    <Col className="col-md-7 col-sm-6 col-xs-12">
+                                    <Col className="col-md-6 col-sm-6 col-xs-6">
                                         <div className="gutter-box">
                                             <Search
-                                                placeholder={convertToLang(this.props.translation[Appfilter_SearchManageData], Appfilter_SearchManageData)}
+                                                placeholder={convertToLang(this.props.translation[Appfilter_SearchManageData], "Search")}
                                                 onChange={e => this.handleComponentSearch(e.target.value)}
                                                 style={{ width: '100%' }}
                                             />
@@ -547,7 +547,7 @@ class ManageData extends Component {
                                     <Col className="col-md-2 col-sm-6 col-xs-12">
                                         <div className="gutter-box">
                                             <Select
-                                                value={convertToLang(this.props.translation[Appfilter_Export], Appfilter_Export)}
+                                                value={convertToLang(this.props.translation[Appfilter_Export], "Export")}
                                                 //  defaultValue={this.state.DisplayPages}
                                                 style={{ width: '100%' }}
                                             // onSelect={value => this.setState({DisplayPages:value})}
@@ -557,22 +557,22 @@ class ManageData extends Component {
                                                     onClick={() => {
                                                         this.props.exportCSV('sim_ids');
                                                     }}
-                                                > {convertToLang(this.props.translation[Appfilter_Export], Appfilter_Export)} {convertToLang(this.props.translation[LABEL_DATA_SIM_ID], LABEL_DATA_SIM_ID)} </Select.Option>
+                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "SIM_ID")} </Select.Option>
                                                 <Select.Option value="20"
                                                     onClick={() => {
                                                         this.props.exportCSV('chat_ids');
                                                     }}
-                                                > {convertToLang(this.props.translation[Appfilter_Export], Appfilter_Export)} {convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], LABEL_DATA_CHAT_ID)} </Select.Option>
+                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "CHAT ID")} </Select.Option>
                                                 <Select.Option value="30"
                                                     onClick={() => {
                                                         this.props.exportCSV('pgp_emails');
                                                     }}
-                                                > {convertToLang(this.props.translation[Appfilter_Export], Appfilter_Export)} {convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], LABEL_DATA_PGP_EMAIL)} </Select.Option>
+                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP EMAIL")} </Select.Option>
                                                 <Select.Option value="50"
                                                 // onClick={() => {
                                                 //     this.exportCSV('vpn');
                                                 // }}
-                                                > {convertToLang(this.props.translation[Appfilter_Export], Appfilter_Export)} {convertToLang(this.props.translation[LABEL_DATA_VPN], LABEL_DATA_VPN)} </Select.Option>
+                                                > {convertToLang(this.props.translation[Appfilter_Export], "Export")} {convertToLang(this.props.translation[LABEL_DATA_VPN], "VPN")} </Select.Option>
                                             </Select>
                                         </div>
                                     </Col>

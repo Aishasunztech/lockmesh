@@ -32,12 +32,16 @@ import {
     APK_PERMISSION,
     APK_ACTION,
     APK_SEARCH,
-    APK_UPLOAD
+    APK_UPLOAD,
+    APK_SIZE,
+    SHOW_APK
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
-import { ACTION, Alert_Delete_APK } from "../../constants/Constants";
+import { ACTION, Alert_Delete_APK, SEARCH } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
+import { apkColumns } from "../utils/columnsUtils";
+import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 
 const question_txt = (
     <div>
@@ -65,62 +69,13 @@ class Apk extends React.Component {
     constructor(props) {
         super(props);
         let self = this;
+        let columns = apkColumns(props.translation);
         this.state = {
             apk_list: [],
             uploadApkModal: false,
             showUploadModal: false,
             showUploadData: {},
-            columns: [
-                {
-                    title: convertToLang(props.translation[ACTION], ACTION),
-                    dataIndex: 'action',
-                    key: 'action',
-                    className: 'row m-0'
-                },
-                {
-                    title: (
-                        <span>
-                            {convertToLang(props.translation[APK_PERMISSION], APK_PERMISSION)}
-                            <Popover placement="top" content={question_txt}>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover>
-                        </span>),
-                    dataIndex: 'permission',
-                    key: 'permission',
-                    className: ''
-                },
-                {
-                    title:
-                        <span>
-                            {convertToLang(props.translation[APK_SHOW_ON_DEVICE], APK_SHOW_ON_DEVICE)}
-                            <Popover placement="top" content={SHOW_DEVICE_TEXT}>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover>
-                        </span>,
-                    // title: 'SHOW ON DEVICE',
-                    dataIndex: 'apk_status',
-                    key: 'apk_status',
-                },
-                {
-                    title: convertToLang(props.translation[APK], APK),
-                    dataIndex: 'apk',
-                    key: 'apk',
-                },
-                {
-                    title: convertToLang(props.translation[APK_APP_NAME], APK_APP_NAME),
-                    dataIndex: 'apk_name',
-                    width: "100",
-                    key: 'apk_name',
-                    sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
-                    sortDirections: ['ascend', 'descend'],
-                    defaultSortOrder: "ascend"
-                },
-                {
-                    title: convertToLang(props.translation[APK_APP_LOGO], APK_APP_LOGO),
-                    dataIndex: 'apk_logo',
-                    key: 'apk_logo',
-                },
-            ],
+            columns: columns,
         }
 
         // this.columns = ;
@@ -135,10 +90,10 @@ class Apk extends React.Component {
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
-            title: convertToLang(this.props.translation[Alert_Delete_APK], Alert_Delete_APK),
+            title: convertToLang(this.props.translation[Alert_Delete_APK], "Are you sure, you want to delete the Apk ?"),
             content: '',
-            okText: convertToLang(this.props.translation[Button_Yes], Button_Yes),
-            cancelText: convertToLang(this.props.translation[Button_No], Button_No),
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No"),
             onOk: () => {
                 this.props.deleteApk(appId);
                 return new Promise((resolve, reject) => {
@@ -303,6 +258,12 @@ class Apk extends React.Component {
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
             this.handleCheckChange(this.props.selectedOptions)
         }
+
+        if(this.props.translation != prevProps.translation) {
+            this.setState({
+                columns: apkColumns(this.props.translation)
+            })
+        }
     }
     componentWillMount() {
         // alert("componentWillMount");
@@ -322,7 +283,7 @@ class Apk extends React.Component {
         return (
             <Select
                 showSearch
-                placeholder="Show APK"
+                placeholder={convertToLang(this.props.translation[SHOW_APK], "Show APK")}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -330,9 +291,9 @@ class Apk extends React.Component {
                 }}
                 onChange={this.handleChange}
             >
-                <Select.Option value="all">All</Select.Option>
-                <Select.Option value="active">Active</Select.Option>
-                <Select.Option value="disabled">Disabled</Select.Option>
+                <Select.Option value="all">{convertToLang(this.props.translation[Tab_All], "All")}</Select.Option>
+                <Select.Option value="active">{convertToLang(this.props.translation[Tab_Active], "Active")}</Select.Option>
+                <Select.Option value="disabled">{convertToLang(this.props.translation[Tab_Disabled], "Disabled")}</Select.Option>
             </Select>
         );
     }
@@ -366,8 +327,8 @@ class Apk extends React.Component {
                             <AppFilter
                                 translation={this.props.translation}
                                 handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder={convertToLang(this.props.translation[APK_SEARCH], APK_SEARCH)}
-                                addButtonText={convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
+                                searchPlaceholder={convertToLang(this.props.translation[APK_SEARCH], "Search APK")}
+                                addButtonText={convertToLang(this.props.translation[APK_UPLOAD], "Upload APK")}
                                 isAddButton={this.props.user.type === 'admin'}
                                 defaultPagingValue={this.props.DisplayPages}
                                 options={this.props.options}
@@ -417,22 +378,20 @@ class Apk extends React.Component {
                                 width="620px"
                                 className="upload_apk_popup"
                                 visible={this.state.uploadApkModal}
-                                title={convertToLang(this.props.translation[APK_UPLOAD], APK_UPLOAD)}
+                                title={convertToLang(this.props.translation[APK_UPLOAD], "Upload APK")}
                                 onOk={() => { }}
                                 onCancel={() => {
                                     this.hideUploadApkModal()
                                 }}
-                                okText={convertToLang(this.props.translation[Button_Save], Button_Save)}
+                                okText={convertToLang(this.props.translation[Button_Save], "Save")}
                                 footer={null}
                             >
                                 <AddApk
-
+                                    translation={this.props.translation}
                                     hideUploadApkModal={this.hideUploadApkModal}
                                     ref='uploadApk'
                                 />
                             </Modal>
-
-
                         </div>}
             </div>
         )
@@ -446,7 +405,7 @@ class Apk extends React.Component {
                 <div style={{ padding: 8 }}>
                     <Input
                         ref={node => { this.searchInput = node; }}
-                        placeholder={`Search ${dataIndex}`}
+                        placeholder={`${convertToLang(this.props.translation[SEARCH], "Search")} ${dataIndex}`}
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}

@@ -111,12 +111,17 @@
 }
 
 .cred_badge .ant-badge-count {
-    min-width: 35px;
     right: 0px;
     top: -3px;
     background-color: #52c41a;
     margin-bottom: 0;
     font-size: 11px;
+    padding: 0px 4px;
+}
+
+.noClick {
+    /* background-color: red; */
+    pointer-events: none;
 }
 
 @media screen and (max-width: 768px) {

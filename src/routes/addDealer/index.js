@@ -30,7 +30,7 @@ class AddDealer extends Component {
         if (/[^A-Za-z \d]/.test(fieldvalue)) {
             this.setState({
                 validateStatus: 'error',
-                help: convertToLang(this.props.translation[Only_alpha_numeric], Only_alpha_numeric)
+                help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
             })
         }
         else {
@@ -47,7 +47,7 @@ class AddDealer extends Component {
             if(values.name === ''){
                 this.setState({
                     validateStatus: 'error',
-                    help: convertToLang(this.props.translation[User_Name_require], User_Name_require)
+                    help: convertToLang(this.props.translation[User_Name_require], "Name is Required")
                 })
             }
             if (!err) {
@@ -55,7 +55,7 @@ class AddDealer extends Component {
                 if (/[^A-Za-z \d]/.test(values.name)) {
                     this.setState({
                         validateStatus: 'error',
-                        help: convertToLang(this.props.translation[Only_alpha_numeric], Only_alpha_numeric)
+                        help: convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers")
                     })
                 }else{
                     values.pageType = window.location.pathname.split("/").pop();
@@ -131,7 +131,7 @@ class AddDealer extends Component {
 
                             <Form.Item
                                 {...formItemLayout}
-                                label={convertToLang(this.props.translation[SELECT], SELECT)}
+                                label={convertToLang(this.props.translation[SELECT], "Select")}
                                 hasFeedback
 
 
@@ -139,7 +139,7 @@ class AddDealer extends Component {
                                 {getFieldDecorator('dealerId', {
 
                                 })(
-                                    <Select placeholder={convertToLang(this.props.translation[SELECT_Dealer], SELECT_Dealer)}>
+                                    <Select placeholder={convertToLang(this.props.translation[SELECT_Dealer], "Select Dealer")}>
                                         {this.props.dealersList.map((dealer, index) => {
                                             return (<Option key={index} value={dealer.dealer_id} ><strong>{dealer.dealer_name}</strong> ({dealer.dealer_email})</Option>)
                                         })
@@ -151,13 +151,13 @@ class AddDealer extends Component {
 
                     <Form.Item
                         {...formItemLayout}
-                        label={convertToLang(this.props.translation[Name], Name)}
+                        label={convertToLang(this.props.translation[Name], "Name")}
                         validateStatus={this.state.validateStatus}
                         help={this.state.help}
                     >
                         {getFieldDecorator('name', {
                             rules: [{
-                                required: true, message: convertToLang(this.props.translation[User_Name_require], User_Name_require),
+                                required: true, message: convertToLang(this.props.translation[User_Name_require], "Name is Required"),
                             }, {
                                 validator: this.validateToNextPassword,
                             }],
@@ -168,13 +168,13 @@ class AddDealer extends Component {
 
                     <Form.Item
                         {...formItemLayout}
-                        label={convertToLang(this.props.translation[Email], Email)}
+                        label={convertToLang(this.props.translation[Email], "Email")}
                     >
                         {getFieldDecorator('email', {
                             rules: [{
-                                type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], Not_valid_Email),
+                                type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], "The input is not valid E-mail!"),
                             }, {
-                                required: true, message: convertToLang(this.props.translation[PLZ_INPUT_Email], PLZ_INPUT_Email),
+                                required: true, message: convertToLang(this.props.translation[PLZ_INPUT_Email], "Please input your E-mail!"),
                             }],
                         })(
                             <Input />
@@ -202,6 +202,7 @@ class AddDealer extends Component {
 const AddDealerForm = Form.create()(AddDealer);
 
 var mapStateToProps = (dealers) => {
+    // console.log('s dealer list is: ', dealers.dealers.dealers2);
     // console.log("mapStateToProps");
     // console.log(dealers);
     // console.log('dealer', dealers);

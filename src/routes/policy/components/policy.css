@@ -7,7 +7,12 @@
 }
 
 .policy_steps .ant-table-body {
-    max-height: 250px;
+    max-height: 202px;
+    overflow: overlay;
+}
+
+.add-policy-modal-content .ant-table-body {
+    max-height: 235px;
     overflow: overlay;
 }
 
@@ -17,11 +22,6 @@
 
 .policy_steps .ant-tabs .ant-tabs-left-content {
     padding-left: 16px;
-}
-
-.add-policy-modal-content {
-    height: 309px;
-    overflow: overlay
 }
 
 .exp_row {
@@ -66,12 +66,11 @@
 } */
 
 .line_break2 {
-    width: 63px;
-    margin: 0 0 0 12px;
-    display: inline-block;
-    text-align: left;
+    width: auto;
+    margin: 4px 0 0;
+    display: block;
+    text-align: center;
     font-weight: 300;
-    vertical-align: middle;
 }
 
 .line_break22 {
@@ -202,6 +201,7 @@
 
 .ant-tabs .ant-tabs-left-bar .ant-tabs-tab {
     text-align: center;
+    text-transform: uppercase;
 }
 
 .ant-tabs-vertical.ant-tabs-card .ant-tabs-card-bar.ant-tabs-left-bar .ant-tabs-tab-active {

@@ -21,7 +21,8 @@ import {
     SET_PRICE,
     RESET_PRICE,
     GET_PACKAGES,
-    PURCHASE_CREDITS
+    PURCHASE_CREDITS,
+    GET_PARENT_PACKAGES
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -251,6 +252,7 @@ export const checkPass = (user) => {
                     type: CHECK_BACKUP_PASS,
                     payload: {
                         PasswordMatch: response.data,
+                        msg: response.data.msg
                     }
                 })
             }
@@ -310,9 +312,9 @@ export const setPackage = (data) => {
     }
 }
 
-export const getPrices = (data) => {
+export const getPrices = () => {
     return (dispatch) => {
-        RestService.getPrices(data).then((response) => {
+        RestService.getPrices().then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: GET_PRICES,
@@ -328,10 +330,11 @@ export const getPrices = (data) => {
     }
 }
 
-export const getPackages = (data) => {
+export const getPackages = () => {
     return (dispatch) => {
-        RestService.getPackages(data).then((response) => {
+        RestService.getPackages().then((response) => {
             if (RestService.checkAuth(response.data)) {
+                // console.log(response.data);
                 dispatch({
                     type: GET_PACKAGES,
                     response: response.data
@@ -345,6 +348,7 @@ export const getPackages = (data) => {
 
     }
 }
+
 
 export const resetPrice = () => {
     return (dispatch) => {

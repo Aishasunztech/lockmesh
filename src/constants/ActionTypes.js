@@ -37,6 +37,7 @@ export const VERIFY_CODE = 'VERIFY_CODE';
 export const CODE_VERIFIED = 'CODE_VERIFIED';
 export const GOTO_LOGIN = 'GOTO_LOGIN';
 export const LOGIN_HISTORY = 'LOGIN_HISTORY';
+
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
 export const SUSPEND_DEVICE = 'SUSPEND_DEVICE';
@@ -92,7 +93,7 @@ export const GET_PROFILES = 'GET_PROFILES';
 export const GET_DEVICE_HISTORIES = 'GET_DEVICE_HISTORIES';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const GET_APPS_PERMISSIONS = 'GET_APPS_PERMISSIONS';
-
+export const DEVICE_SYNCED = 'device_synced';
 export const SUBMIT_PASSWORD = 'SUBMIT_PASSWORD';
 export const GUEST_PASSWORD = 'guest_password';
 export const ENCRYPTED_PASSWORD = 'encrypted_password';
@@ -213,7 +214,15 @@ export const SHOW_BACKUP_MODAL = 'SHOW_BACKUP_MODAL';
 export const SAVE_ID_PRICES = 'SAVE_ID_PRICES';
 export const SAVE_PACKAGE = 'SAVE_PACKAGE';
 export const GET_PACKAGES = 'GET_PACKAGES';
+export const GET_PARENT_PACKAGES = 'GET_PARENT_PACKAGES';
 export const PURCHASE_CREDITS = 'PURCHASE_CREDITS';
 export const GET_PRICES = 'GET_PRICES';
 export const SET_PRICE = 'SET_PRICE';
 export const RESET_PRICE = 'RESET_PRICE';
+
+
+
+// Sim Module (connect device)
+export const ADD_SIM_REGISTER = "ADD_SIM_REGISTER";
+export const GET_SIMS = "GET_SIMS";
+export const UPDATE_SIM = "UPDATE_SIM";

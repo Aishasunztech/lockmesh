@@ -19,7 +19,11 @@ import {
     DEVICE_SUSPENDED,
     DEVICE_UNLINKED,
     DEVICE_TRIAL,
-    ADMIN
+    ADMIN,
+    Name,
+    Value,
+    ALERT_TO_SURE_DELETE_ALL_DEVICES,
+    DEALER
 } from '../../../constants/Constants'
 import {
     Button_Modify,
@@ -36,6 +40,7 @@ import {
     Button_submit,
     Button_Flag,
     Button_UNFLAG,
+    Button_No,
 } from '../../../constants/ButtonConstants';
 
 import {
@@ -55,6 +60,7 @@ import {
 
 import { isNull } from 'util';
 import { unlink } from 'fs';
+import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE } from '../../../constants/DeviceConstants';
 
 const TabPane = Tabs.TabPane;
 class DevicesList extends Component {
@@ -100,7 +106,7 @@ class DevicesList extends Component {
     deleteUnlinkedDevice = (action, device) => {
         let arr = [];
         arr.push(device);
-        let title = ' Are you sure, you want to delete the device';
+        let title = convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE], "Are you sure, you want to delete the device");
         this.confirmDelete(action, arr, title);
     }
     handleUserId = (user_id) => {
@@ -182,9 +188,9 @@ class DevicesList extends Component {
                 // sortOrder: {order},
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-                key: status === DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
-                counter: <div className="counter_w_td">{++index}</div>,
-                action: (<div className="device_action_w">{(status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
+                counter: ++index,
+                action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
@@ -199,21 +205,22 @@ class DevicesList extends Component {
                                         : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type === ADMIN) ?
                                             (<Fragment>
                                                 {/* <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment> */}
-                                                </Fragment>)
+                                            </Fragment>)
                                             : (device.status === DEVICE_PRE_ACTIVATION) ?
                                                 false
                                                 : (status === DEVICE_EXPIRED) ?
                                                     (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
                                                     : false
-                }</div>),
-                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect === '3') ? `${device.validity}` : "N/A" : "N/A",
-                device_id: status !== DEVICE_PRE_ACTIVATION ? checkValue(device.device_id) : "N/A",
-                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
-                status: <span style={color} > {status}</span>,
-                online: device.online === 'online' ? (<span style={{ color: "gr" }}>
-                    {device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) :
-                    (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
+
+
+                ),
+                status: (<span style={color} > {status}</span>),
                 flagged: device.flagged,
+                type: checkValue(device.type),
+                version: checkValue(device.version),
+                device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+                // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+                user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 validity: checkValue(device.validity),
                 name: checkValue(device.name),
                 activation_code: checkValue(device.activation_code),
@@ -231,7 +238,10 @@ class DevicesList extends Component {
                 sim_2: checkValue(device.simno2),
                 serial_number: checkValue(device.serial_number),
                 model: checkValue(device.model),
-                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+                // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+                // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+                dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
+                online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
                 start_date: checkValue(device.start_date),
@@ -257,7 +267,7 @@ class DevicesList extends Component {
         // console.log(this.state.selectedRows, 'selected keys', this.state.selectedRowKeys)
         // console.log(type);
         if (this.state.selectedRowKeys.length) {
-            let title = ' Are you sure, you want to delete All these devices';
+            let title = convertToLang(this.props.translation[ALERT_TO_SURE_DELETE_ALL_DEVICES], " Are you sure, you want to delete All these devices");
             let arr = [];
             // console.log('delete the device', this.state.selectedRowKeys);
             for (let id of this.state.selectedRowKeys) {
@@ -288,6 +298,8 @@ class DevicesList extends Component {
         this.confirm({
             title: title,
             content: '',
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk: (() => {
 
                 this.props.deleteUnlinkDevice(action, devices);
@@ -322,7 +334,7 @@ class DevicesList extends Component {
     }
 
     onExpandRow = (expanded, record) => {
-        console.log(expanded, 'data is expanded', record);
+        // console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.key)) {
                 this.state.expandedRowKeys.push(record.key);
@@ -442,10 +454,15 @@ class DevicesList extends Component {
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
-                    activateDevice={activateDevice} />
+                    activateDevice={activateDevice}
+                    translation={this.props.translation}
+                />
                 <SuspendDevice ref="suspend"
-                    suspendDevice={suspendDevice} />
+                    suspendDevice={suspendDevice}
+                    translation={this.props.translation}
+                />
                 <Card className="fix_card devices_fix_card">
+                    <hr className="fix_header_border" style={{ top: "56px" }} />
                     <CustomScrollbars className="gx-popover-scroll ">
                         <Table
                             // id="test"
@@ -477,17 +494,19 @@ class DevicesList extends Component {
                                 let showRecord2 = [];
 
                                 this.props.columns.map((column, index) => {
+                                    // console.log(column.dataIndex, ' test column: ', column);
                                     if (column.className === "row") {
                                     } else if (column.className === "hide") {
                                         let title = column.children[0].title;
-                                        if (title === "SIM ID" || title === "IMEI 1" || title === "SIM 1" || title === "IMEI 2" || title === "SIM 2") {
+                                        let dataIndex = column.dataIndex;
+                                        if (dataIndex === "sim_id" || dataIndex === "imei_1" || dataIndex === "sim_1" || dataIndex === "imei_2" || dataIndex === "sim_2") {
                                             showRecord2.push({
                                                 name: title,
                                                 values: record[column.dataIndex],
                                                 rowKey: title
                                             });
                                         } else {
-                                            if (title === "STATUS" || title === "DEALER NAME" || title === "S-DEALER Name") {
+                                            if (dataIndex === "status" || dataIndex === "dealer_name" || dataIndex === "s_dealer_name") {
                                                 if (record[column.dataIndex][0]) {
                                                     showRecord.push({
                                                         name: title,
@@ -576,13 +595,13 @@ class DevicesList extends Component {
                                 //                             columns={
                                 //                                 [
                                 //                                     {
-                                //                                         title: "Name",
+                                //                                         title: convertToLang(this.props.translation[Name],"Name"),
                                 //                                         dataIndex: 'name',
                                 //                                         key: "name",
                                 //                                         align: "center",
                                 //                                         className: "bold"
                                 //                                     }, {
-                                //                                         title: "Value",
+                                //                                         title: convertToLang(this.props.translation[Value],"Value"),
                                 //                                         dataIndex: "values",
                                 //                                         key: "value",
                                 //                                         align: "center"
@@ -598,13 +617,13 @@ class DevicesList extends Component {
                                 //                             columns={
                                 //                                 [
                                 //                                     {
-                                //                                         title: "Name",
+                                //                                         title: convertToLang(this.props.translation[Name],"Name"),
                                 //                                         dataIndex: 'name',
                                 //                                         key: "name",
                                 //                                         align: "center",
                                 //                                         className: "bold"
                                 //                                     }, {
-                                //                                         title: "Value",
+                                //                                         title: convertToLang(this.props.translation[Value],"Value"),
                                 //                                         dataIndex: "values",
                                 //                                         key: "value",
                                 //                                         align: "center"
@@ -625,13 +644,13 @@ class DevicesList extends Component {
                                                 columns={
                                                     [
                                                         {
-                                                            title: "Name",
+                                                            title: convertToLang(this.props.translation[Name], "Name"),
                                                             dataIndex: 'name',
                                                             key: "name",
                                                             align: "center",
                                                             className: "bold"
                                                         }, {
-                                                            title: "Value",
+                                                            title: convertToLang(this.props.translation[Value], "Value"),
                                                             dataIndex: "values",
                                                             key: "value",
                                                             align: "center"
@@ -647,13 +666,13 @@ class DevicesList extends Component {
                                                 columns={
                                                     [
                                                         {
-                                                            title: "Name",
+                                                            title: convertToLang(this.props.translation[Name], "Name"),
                                                             dataIndex: 'name',
                                                             key: "name",
                                                             align: "center",
                                                             className: "bold"
                                                         }, {
-                                                            title: "Value",
+                                                            title: convertToLang(this.props.translation[Value], "Value"),
                                                             dataIndex: "values",
                                                             key: "value",
                                                             align: "center"
@@ -679,7 +698,6 @@ class DevicesList extends Component {
                 />
                 <AddDevice ref="add_device"
                     translation={this.props.translation}
-
                 />
             </div >
 
@@ -736,9 +754,9 @@ export default class Tab extends Component {
     unflagConfirm = (device) => {
         let _this = this;
         confirm({
-            title: 'Do you really want to unflag the device ' + device.device_id,
-            okText: 'Yes',
-            cancelText: 'No',
+            title: convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device ') + device.device_id,
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk() {
                 _this.props.unflagged(device.device_id)
                 _this.props.activateDevice(device)

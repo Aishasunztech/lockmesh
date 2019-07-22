@@ -170,33 +170,33 @@ class Customizer extends Component {
 
     return <CustomScrollbars className="gx-customizer">
       <div className="gx-customizer-item">
-        <h6 className="gx-mb-3 gx-text-uppercase">{convertToLang(this.props.translation[Theme], Theme)}</h6>
+        <h6 className="gx-mb-3 gx-text-uppercase">{convertToLang(this.props.translation[Theme], "Theme")}</h6>
         <Radio.Group value={themeType} onChange={this.onThemeTypeChange}>
-          <Radio.Button value={THEME_TYPE_LITE}>{convertToLang(this.props.translation[Lite], Lite)}</Radio.Button>
-          <Radio.Button value={THEME_TYPE_SEMI_DARK}>{convertToLang(this.props.translation[Semi_Dark], Semi_Dark)}</Radio.Button>
-          <Radio.Button value={THEME_TYPE_DARK}>{convertToLang(this.props.translation[Dark], Dark)}</Radio.Button>
+          <Radio.Button value={THEME_TYPE_LITE}>{convertToLang(this.props.translation[Lite], "Lite")}</Radio.Button>
+          <Radio.Button value={THEME_TYPE_SEMI_DARK}>{convertToLang(this.props.translation[Semi_Dark], "Semi Dark")}</Radio.Button>
+          <Radio.Button value={THEME_TYPE_DARK}>{convertToLang(this.props.translation[Dark], "Dark")}</Radio.Button>
         </Radio.Group>
       </div>
       <div className="gx-customizer-item">
-        <h6 className="gx-mb-3 gx-text-uppercase">{convertToLang(this.props.translation[Colors], Colors)}</h6>
+        <h6 className="gx-mb-3 gx-text-uppercase">{convertToLang(this.props.translation[Colors], "Colors")}</h6>
         <Radio.Group className="gx-mb-3" value={colorSelection} onChange={this.onColorSelectionTypeChange}>
-          <Radio.Button value={THEME_COLOR_SELECTION_PRESET}>{convertToLang(this.props.translation[Preset_Color_Pallets], Preset_Color_Pallets)}</Radio.Button>
-          <Radio.Button value={THEME_COLOR_SELECTION_CUSTOMIZE}>{convertToLang(this.props.translation[Customize], Customize)}</Radio.Button>
+          <Radio.Button value={THEME_COLOR_SELECTION_PRESET}>{convertToLang(this.props.translation[Preset_Color_Pallets], "Preset Color Pallets")}</Radio.Button>
+          <Radio.Button value={THEME_COLOR_SELECTION_CUSTOMIZE}>{convertToLang(this.props.translation[Customize], "Customize")}</Radio.Button>
         </Radio.Group>
 
-        {colorSelection === THEME_COLOR_SELECTION_CUSTOMIZE ?
+        {colorSelection === "THEME COLOR SELECTION CUSTOMIZE" ?
           <div className="gx-cus-customiz">
             {colorPickers}
             <Button className="gx-mb-0"
               type="primary"
               onClick={this.resetTheme}>
-              {convertToLang(this.props.translation[Reset_Theme], Reset_Theme)}
+              {convertToLang(this.props.translation[Reset_Theme], "Reset Theme")}
             </Button>
           </div>
           : this.getPresetColors()}
       </div>
 
-      <h6 className="gx-mb-3 gx-text-uppercase">{convertToLang(this.props.translation[Nav_Style], Nav_Style)}</h6>
+      <h6 className="gx-mb-3 gx-text-uppercase">{convertToLang(this.props.translation[Nav_Style], "Nav Style")}</h6>
 
       {this.getNavStyles(navStyle)}
 
@@ -432,7 +432,7 @@ class Customizer extends Component {
             <a onClick={this.toggleCustomizer.bind(this)}>
               <Card className="manage_sec_pro" style={{ borderRadius: 12 }}>
                 <div>
-                  <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[Themes_And_Colors], Themes_And_Colors)}</h2>
+                  <h2 style={{ textAlign: "center" }}>{convertToLang(this.props.translation[Themes_And_Colors], "Themes and Colors")}</h2>
                   <Divider className="mb-0" />
                   <Row style={{ padding: '12px 0px 0px' }}>
                     <Col span={8} className="text-center">
@@ -440,14 +440,14 @@ class Customizer extends Component {
                       <img src={require("assets/images/theme.png")} ></img>
                     </Col>
                     <Col span={16} style={{ padding: 0, marginTop: 12 }}>
-                      <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Theme_list_01], Theme_list_01)}</h5>
-                      <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Theme_list_02], Theme_list_02)}</h5>
+                      <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Theme_list_01], "Edit Themes for the panel")}</h5>
+                      <h5><span className="diamond_icon">&#9670;</span>{convertToLang(this.props.translation[Theme_list_02], "Edit the color Schemes for the panel")}</h5>
                       {/* <h5 className="more_txt">and more...</h5> */}
                     </Col>
                   </Row>
                 </div>
               </Card>
-              <Button type="primary" size="small" className="open_btn open_btn1">{convertToLang(this.props.translation[Button_Open], Button_Open)}</Button>
+              <Button type="primary" size="small" className="open_btn open_btn1">{convertToLang(this.props.translation[Button_Open], "OPEN")}</Button>
             </a>
           </div>
         </Col>

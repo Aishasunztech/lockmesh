@@ -13,6 +13,7 @@ import {
     REJECT_DEVICE,
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
+    GET_PARENT_PACKAGES
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -291,9 +292,6 @@ export function getAllPGPEmails() {
         });
     }
 }
-
-
-
 export function rejectDevice(device) {
     return (dispatch) => {
         // console.log(device)
@@ -354,5 +352,24 @@ export function preActiveDevice(device) {
                 })
             }
         })
+    }
+}
+
+export const getParentPackages = () => {
+    return (dispatch) => {
+        RestService.getParentPackages().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                console.log("Response", response.data);
+                dispatch({
+                    type: GET_PARENT_PACKAGES,
+                    response: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+
     }
 }

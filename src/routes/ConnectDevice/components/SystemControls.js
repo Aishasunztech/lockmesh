@@ -2,7 +2,7 @@ import React, { Component, Fragment, Typography } from 'react';
 import { List, Switch, Col, Row } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { SYSTEM_PERMISSION } from '../../../constants/Constants';
+import { SYSTEM_PERMISSION, NOT_AVAILABLE } from '../../../constants/Constants';
 import {
   handleControlCheck,
   handleCheckAllExtension,
@@ -11,6 +11,8 @@ import {
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { Main_SETTINGS } from '../../../constants/Constants';
+import { HOTSPOT, BLUETOOTH, WIFI, SCREENSHOTS, BLOCK_CALLS } from '../../../constants/DeviceConstants';
+import { convertToLang } from '../../utils/commonUtils';
 
 export default class SystemControls extends Component {
   constructor(props) {
@@ -106,7 +108,7 @@ export default class SystemControls extends Component {
                 <List.Item>
                   <div className="row width_100">
                     <div className="col-md-10 col-sm-10 col-xs-10">
-                      <span>Wifi</span>
+                      <span>{convertToLang(this.props.translation[WIFI], "Wifi")}</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
                       <Switch checked={this.state.controls.wifi_status === 1 || this.state.controls.wifi_status === true ? true : false} size="small"
@@ -121,7 +123,7 @@ export default class SystemControls extends Component {
                 <List.Item>
                   <div className="row width_100">
                     <div className="col-md-10 col-sm-10 col-xs-10">
-                      <span>Bluetooth</span>
+                      <span>{convertToLang(this.props.translation[BLUETOOTH], "Bluetooth")}</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
                       <Switch checked={this.state.controls.bluetooth_status === 1 || this.state.controls.bluetooth_status === true ? true : false} size="small"
@@ -136,7 +138,7 @@ export default class SystemControls extends Component {
                 <List.Item>
                   <div className="row width_100">
                     <div className="col-md-10 col-sm-10 col-xs-10">
-                      <span>Hotspot</span>
+                      <span>{convertToLang(this.props.translation[HOTSPOT], "Hotspot")}</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
                       <Switch checked={this.state.controls.hotspot_status === 1 || this.state.controls.hotspot_status === true ? true : false} size="small"
@@ -151,7 +153,7 @@ export default class SystemControls extends Component {
                 <List.Item>
                   <div className="row width_100">
                     <div className="col-md-10 col-sm-10 col-xs-10">
-                      <span>Screenshots</span>
+                      <span>{convertToLang(this.props.translation[SCREENSHOTS], "Screenshots")}</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
                       <Switch checked={this.state.controls.screenshot_status === 1 || this.state.controls.screenshot_status === true ? true : false} size="small"
@@ -166,7 +168,7 @@ export default class SystemControls extends Component {
                 <List.Item>
                   <div className="row width_100">
                     <div className="col-md-10 col-sm-10 col-xs-10">
-                      <span>Block Calls</span>
+                      <span>{convertToLang(this.props.translation[BLOCK_CALLS], "Block Calls")}</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
                       <Switch checked={this.state.controls.call_status === 1 || this.state.controls.call_status === true ? true : false} size="small"
@@ -182,14 +184,14 @@ export default class SystemControls extends Component {
             </div>
           </Fragment> :
           <Fragment>
-            <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> Not Available</a></h1>
+            <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
           </Fragment>
       )
     }
     else {
       return (
         <Fragment>
-          <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> Not Available</a></h1>
+          <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
         </Fragment>
       )
     }

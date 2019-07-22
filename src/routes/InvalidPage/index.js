@@ -19,12 +19,12 @@ export default class InvalidPage extends Component {
                 </button>
               </div>
             </div>
-          </form> */}
+          </form> 
           <p className="gx-text-center">
             <Link className="gx-btn gx-btn-primary" to="/">
-              {/* <IntlMessages id="extraPages.goHome" /> */}
+               <IntlMessages id="extraPages.goHome" /> 
               </Link>
-          </p>
+          </p>*/}
         </div>
       </div>
     )

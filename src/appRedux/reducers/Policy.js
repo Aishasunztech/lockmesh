@@ -30,6 +30,8 @@ import {
 } from "../../constants/PolicyConstants";
 
 import { message, Modal } from 'antd';
+import { convertToLang } from "../../routes/utils/commonUtils";
+import { POLICY_DELETED_SUCCESSFULLY, STATUS_UPDATED } from "../../constants/Constants";
 
 const success = Modal.success
 const error = Modal.error
@@ -45,7 +47,7 @@ const initialState = {
     isloading: true,
     copyPolicies: [],
     selectedOptions: [],
-    options: [POLICY_NAME, POLICY_NOTE],
+    options: [POLICY_NAME, POLICY_NOTE, ],
     allExtensions: [],
     appPermissions: [],
     allExtensionsCopy: [],
@@ -382,12 +384,13 @@ export default (state = initialState, action) => {
                 if (action.payload.key === 'delete_status') {
                     changedState.splice(index, 1);
                     success({
-                        title: 'Policy Deleted Successfully',
+                        // title: 'Policy Deleted Successfully',
+                        title:  convertToLang(action.translation[POLICY_DELETED_SUCCESSFULLY], "Policy Deleted Successfully"),
                     });
 
                 } else if (action.payload.key === 'status') {
                     changedState[index][action.payload.key] = action.payload.value;
-                    message.success('Status Changed Sccessfully');
+                    message.success(convertToLang(action.translation[STATUS_UPDATED], 'Status Changed Sccessfully'));
                     // success({
                     //     title: ' Status Changed Sccessfully',
                     // });

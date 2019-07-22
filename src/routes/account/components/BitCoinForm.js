@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Table, Select, Divider, InputNumber } from "antd";
 
 import { convertToLang } from '../../utils/commonUtils';
-import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
+import { Button_Ok, Button_Cancel, Button_Confirm } from '../../../constants/ButtonConstants';
+import {  WARNING } from '../../../constants/Constants';
 
 const confirm = Modal.confirm;
 
@@ -72,8 +73,8 @@ class BitCoinForm extends Component {
                     title="BitCoin Information"
                     visible={this.props.bitCoinModal}
                     footer={false}
-                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                     onOk={() => {
                     }}
                     onCancel={(e) => {
@@ -81,8 +82,6 @@ class BitCoinForm extends Component {
                         }
                     }
                 >
-                    {/* <CoinbaseCommerceButton checkoutId={'be05fae1-b47e-46b0-9632-891411337942'}/> */}
-
                     {/* <Form style={{ marginTop: 20 }} onSubmit={this.handleSubmit} autoComplete="new-password">
                         <Form.Item
                             style={{ marginBottom: 0 }}
@@ -179,9 +178,11 @@ export default BitCoinForm;
 
 function showConfirm(_this, msg, values, creditInfo) {
     confirm({
-        title: 'WARNNING!',
+        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
         content: msg,
-        okText: "Confirm",
+        // okText: "Confirm",
+        okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+        cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             // _this.props.purchaseCreditsFromCC(values, creditInfo)
             // _this.props.cancelPurchaseModal()

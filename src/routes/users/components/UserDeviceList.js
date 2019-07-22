@@ -45,6 +45,7 @@ import {
 import { getStatus, componentSearch, titleCase, checkValue, getColor, convertToLang } from '../../utils/commonUtils';
 import { userDevicesListColumns } from '../../utils/columnsUtils';
 import { Button_Connect } from '../../../constants/ButtonConstants';
+import { Appfilter_SearchDevices } from '../../../constants/AppFilterConstants';
 // import styles from './user.css';
 
 var coppyDevices = [];
@@ -348,7 +349,7 @@ class UserDeviceList extends Component {
         }
 
         if (this.props.translation !== nextProps.translation) {
-            this.listdeviceCols = userDevicesListColumns(this.props.translation, this.handleSearch);
+            this.listdeviceCols = userDevicesListColumns(nextProps.translation, this.handleSearch);
         }
     }
     searchField = (originalData, fieldName, value) => {
@@ -480,7 +481,7 @@ class UserDeviceList extends Component {
                 style = { margin: '0 8px 0 0', width: '60px', display: 'none' }
                 text = "Activate";
             }
-            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`/connect-device/${btoa(device.device_id)}`.trim()}> {convertToLang(this.props.translation[Button_Connect], Button_Connect)} </Link></Button>
+            let ConnectBtn = <Button type="default" size="small" style={style}><Link to={`/connect-device/${btoa(device.device_id)}`.trim()}> {convertToLang(this.props.translation[Button_Connect], "Connect")} </Link></Button>
             // console.log(device.usr_device_id);
             return {
                 rowKey: index,
@@ -539,14 +540,12 @@ class UserDeviceList extends Component {
         // console.log('dealer state', this.state.devicesList);
         return (
             <Fragment>
-                <Card>
+                <Card className="expand_row_card">
                     <Row>
-                        <Col span={6}>
-                            <div className="search_heading">
+                        <Col span={6} >
+                            <div className="search_heading pl-16">
                                 <Search
-                                    placeholder={
-                                        //<IntlMessages id="appfilter.SearchDevices" />
-                                        "Search Devices"}
+                                    placeholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
                                     onChange={e => this.handleComponentSearch(e.target.value)}
                                     style={{ width: '100%' }}
                                 />
@@ -577,11 +576,13 @@ class UserDeviceList extends Component {
                         </Col>
 
                     </Row>
-                    <div className="overflow_x">
+                    <div className="expand_row">
                         <Table
                             columns={this.listdeviceCols}
                             dataSource={this.renderDevices(this.state.devicesList)}
-                            pagination={{ pageSize: Number(this.state.pagination), size: "midddle" }}
+                            pagination={false
+                                //{ pageSize: Number(this.state.pagination), size: "midddle" }
+                            }
                         />
                     </div>
                 </Card>

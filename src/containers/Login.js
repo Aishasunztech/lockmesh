@@ -63,8 +63,10 @@ class Login extends React.Component {
         LoginExp = false;
       } else if (this.props.loginFailedStatus != prevProps.loginFailedStatus) {
         message.error(alertMessage.toString());
-        // LoginExp = false;
       }
+      // else if (alertMessage == 'Invalid verification code') {
+      //   message.error(alertMessage.toString())
+      // }
     }
   }
 
@@ -117,7 +119,7 @@ class Login extends React.Component {
 
                 <FormItem>
                   <Button type="primary" className="gx-mb-0" htmlType="submit">
-                    {convertToLang(this.props.translation[SIGN_IN], SIGN_IN)}
+                    {convertToLang(this.props.translation[SIGN_IN], "SIGN IN")}
                     {/* <IntlMessages id="app.userAuth.signIn" /> */}
                   </Button>
                 </FormItem>
@@ -150,6 +152,7 @@ const mapStateToProps = ({ auth, settings }) => {
     authUser,
     loginFailedStatus
   } = auth;
+
   return {
     loader,
     alertMessage,

@@ -264,11 +264,13 @@
 }
 
 .add_user_btn {
-    position: absolute;
-    left: 230px;
-    top: -9px;
-    width: 40%;
-    padding: 0;
+    /* position: absolute; */
+    /* left: 230px; */
+    /* top: -9px; */
+    /* width: 40%; */
+    /* padding: 0; */
+    float: right;
+    margin: 8px 0 4px;
 }
 
 .add_sim_permission_btn {
@@ -280,7 +282,7 @@
 }
 
 .dev_radio_btn {
-    width: 35%;
+    width: 40%;
     text-align: center;
     margin-bottom: 16px !important;
 }
@@ -295,8 +297,13 @@
 
 @media screen and (max-width: 768px) {
     .add_user_btn {
-        left: 230px;
-        width: 50%;
+        /* position: absolute; */
+        /* left: 230px; */
+        /* top: -9px; */
+        /* width: 40%; */
+        /* padding: 0; */
+        float: right;
+        margin: 8px 0 4px;
     }
 
     .edit_form .ant-form-item-label {

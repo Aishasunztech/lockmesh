@@ -20,7 +20,7 @@ import {
     Appfilter_SearchDealer, Appfilter_ShowDealer
 } from '../../constants/AppFilterConstants';
 import {
-    ADMIN,
+    // ADMIN,
     DEALER,
     SDEALER,
 } from '../../constants/Constants'
@@ -30,21 +30,21 @@ import {
     Button_Cancel,
     Button_Add_Dealer,
     Button_Add_S_dealer,
-    Button_Add_Admin,
+    // Button_Add_Admin,
 } from '../../constants/ButtonConstants';
 
-import {
-    DEVICES
-} from '../../constants/UserConstants';
+// import {
+//     DEVICES
+// } from '../../constants/UserConstants';
 
 import {
-    DEALER_ID,
-    DEALER_NAME,
-    DEALER_EMAIL,
-    DEALER_PIN,
-    DEALER_DEVICES,
-    DEALER_TOKENS,
-    DEALER_ACTION,
+    // DEALER_ID,
+    // DEALER_NAME,
+    // DEALER_EMAIL,
+    // DEALER_PIN,
+    // DEALER_DEVICES,
+    // DEALER_TOKENS,
+    // DEALER_ACTION,
     Parent_Dealer,
     Parent_Dealer_ID,
 } from '../../constants/DealerConstants';
@@ -62,211 +62,6 @@ class Dealers extends Component {
     constructor(props) {
         super(props);
         const columns = dealerColumns(props.translation, this.handleSearch);
-        // const columns = [{
-        //     title: '#',
-        //     dataIndex: 'counter',
-        //     align: 'center',
-        //     className: 'row',
-        // }, {
-        //     title: '',
-        //     dataIndex: 'accounts',
-        //     align: 'center',
-        //     className: 'row',
-        //     width: 300,
-        // },
-        // {
-        //     title: (
-        //         <Input.Search
-        //             name="connected_devices"
-        //             key="connected_devices"
-        //             id="connected_devices"
-        //             className="search_heading"
-        //             autoComplete="new-password"
-        //             onKeyUp={this.handleSearch}
-        //             placeholder={convertToLang(props.translation[DEVICES], DEVICES)}
-
-        //         />
-        //     ),
-        //     dataIndex: 'connected_devices',
-        //     className: '',
-        //     children: [
-        //         {
-        //             title: convertToLang(props.translation[DEVICES], DEVICES),
-        //             dataIndex: 'connected_devices',
-        //             key: 'connected_devices',
-        //             // sorter: (a, b) => {
-        //             //     console.log(a);
-        //             //     // console.log(b);
-        //             //     return a.connected_devices.length;
-        //             // },
-        //             sorter: (a, b) => { return a.connected_devices - b.connected_devices },
-
-        //             align: 'center',
-        //             sortDirections: ['ascend', 'descend'],
-        //             className: '',
-        //         }
-        //     ]
-        // },
-        // {
-        //     title: (
-        //         <Input.Search
-        //             name="dealer_id"
-        //             key="dealer_id"
-        //             id="dealer_id"
-        //             className="search_heading"
-        //             autoComplete="new-password"
-        //             placeholder={convertToLang(props.translation[DEALER_ID], DEALER_ID)}
-        //             onKeyUp={this.handleSearch}
-
-        //         />
-        //     ),
-        //     dataIndex: 'dealer_id',
-        //     className: '',
-        //     children: [
-        //         {
-        //             title: convertToLang(props.translation[DEALER_ID], DEALER_ID),
-        //             dataIndex: 'dealer_id',
-        //             key: 'dealer_id',
-        //             align: 'center',
-        //             sorter: (a, b) => a.dealer_id - b.dealer_id,
-        //             sortDirections: ['ascend', 'descend'],
-        //             className: '',
-        //         }
-        //     ]
-        // }, {
-        //     title: (
-        //         <Input.Search
-        //             name="link_code"
-        //             key="link_code"
-        //             id="link_code"
-        //             className="search_heading"
-        //             autoComplete="new-password"
-        //             placeholder={convertToLang(props.translation[DEALER_PIN], DEALER_PIN)}
-        //             onKeyUp={this.handleSearch}
-
-        //         />
-        //     ),
-        //     dataIndex: 'link_code',
-        //     className: '',
-        //     children: [
-        //         {
-        //             title: convertToLang(props.translation[DEALER_PIN], DEALER_PIN),
-        //             dataIndex: 'link_code',
-        //             key: 'link_code',
-        //             // sorter: (a, b) => {
-        //             //     console.log(a);
-        //             //     // console.log(b);
-        //             //     return a.link_code.length;
-        //             // },
-        //             sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
-        //             align: 'center',
-        //             sortDirections: ['ascend', 'descend'],
-        //             className: '',
-        //         }
-        //     ]
-        // },
-        // {
-        //     title: (
-        //         <Input.Search
-        //             name="dealer_name"
-        //             key="dealer_name"
-        //             id="dealer_name"
-        //             className="search_heading"
-        //             autoComplete="new-password"
-        //             placeholder={convertToLang(props.translation[DEALER_NAME], DEALER_NAME)}
-        //             onKeyUp={this.handleSearch}
-
-        //         />
-        //     ),
-        //     dataIndex: 'dealer_name',
-        //     className: '',
-        //     children: [
-        //         {
-        //             title: convertToLang(props.translation[DEALER_NAME], DEALER_NAME),
-        //             dataIndex: 'dealer_name',
-        //             key: 'dealer_name',
-        //             // sorter: (a, b) => {
-        //             //     console.log(a);
-        //             //     // console.log(b);
-        //             //     return a.dealer_name.length;
-        //             // },
-        //             sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
-        //             align: 'center',
-        //             sortDirections: ['ascend', 'descend'],
-        //             className: '',
-        //         }
-        //     ]
-        // },
-        // {
-        //     title: (
-        //         <Input.Search
-        //             name="dealer_email"
-        //             key="dealer_email"
-        //             id="dealer_email"
-        //             className="search_heading"
-        //             autoComplete="new-password"
-        //             placeholder={convertToLang(props.translation[DEALER_EMAIL], DEALER_EMAIL)}
-        //             onKeyUp={this.handleSearch}
-
-        //         />
-        //     ),
-        //     dataIndex: 'dealer_email',
-        //     className: '',
-        //     children: [
-        //         {
-        //             title: convertToLang(props.translation[DEALER_EMAIL], DEALER_EMAIL),
-        //             dataIndex: 'dealer_email',
-        //             key: 'dealer_email',
-        //             // sorter: (a, b) => {
-        //             //     console.log(a);
-        //             //     // console.log(b);
-        //             //     return a.dealer_email.length;
-        //             // },
-        //             sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
-
-        //             align: 'center',
-        //             sortDirections: ['ascend', 'descend'],
-        //             className: '',
-        //         }
-        //     ]
-        // },
-
-
-        // {
-        //     title: (
-        //         <Input.Search
-        //             name="dealer_token"
-        //             key="dealer_token"
-        //             id="dealer_token"
-        //             className="search_heading"
-        //             autoComplete="new-password"
-        //             placeholder={convertToLang(props.translation[DEALER_TOKENS], DEALER_TOKENS)}
-        //             onKeyUp={this.handleSearch}
-
-        //         />
-        //     ),
-        //     dataIndex: 'dealer_token',
-        //     className: '',
-        //     children: [
-        //         {
-        //             title: convertToLang(props.translation[DEALER_TOKENS], DEALER_TOKENS),
-        //             dataIndex: 'dealer_token',
-        //             key: 'dealer_token',
-        //             // sorter: (a, b) => {
-        //             //     console.log(a);
-        //             //     // console.log(b);
-        //             //     return a.dealer_token.length;
-        //             // },
-        //             sorter: (a, b) => { return a.dealer_token.localeCompare(b.dealer_token) },
-
-        //         }
-        //     ]
-        // }
-        // ];
-        // console.log('c_length', columns.length);
-
         this.state = {
             dealers: [],
             loading: false,
@@ -425,7 +220,7 @@ class Dealers extends Component {
         return (
             <Select
                 showSearch
-                placeholder={convertToLang(this.props.translation[Appfilter_ShowDealer], Appfilter_ShowDealer)
+                placeholder={convertToLang(this.props.translation[Appfilter_ShowDealer], "Show Dealer")
                     // <IntlMessages id="appfilter.ShowDealer" />
                 }
                 optionFilterProp="children"
@@ -435,10 +230,10 @@ class Dealers extends Component {
                 }}
                 onChange={this.handleChange}
             >
-                <Select.Option value="all">{convertToLang(this.props.translation[Tab_All], Tab_All)}</Select.Option>
-                <Select.Option value="active">{convertToLang(this.props.translation[Tab_Active], Tab_Active)}</Select.Option>
-                <Select.Option value="suspended">{convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)}</Select.Option>
-                <Select.Option value="unlinked">{convertToLang(this.props.translation[Tab_Archived], Tab_Archived)}</Select.Option>
+                <Select.Option value="all">{convertToLang(this.props.translation[Tab_All], "All")}</Select.Option>
+                <Select.Option value="active">{convertToLang(this.props.translation[Tab_Active], "Active")}</Select.Option>
+                <Select.Option value="suspended">{convertToLang(this.props.translation[Tab_Suspended], "Suspended")}</Select.Option>
+                <Select.Option value="unlinked">{convertToLang(this.props.translation[Tab_Archived], "Archived")}</Select.Option>
             </Select>
         );
     }
@@ -545,12 +340,12 @@ class Dealers extends Component {
         }
         if ((window.location.pathname.split("/").pop() === 'sdealer') && (this.state.options.length <= 6)) {
             // alert('if sdealer')
-            this.state.options.push(convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer), convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID));
+            this.state.options.push(convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"), convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
         }
         else if ((window.location.pathname.split("/").pop() === 'dealer') && ((this.state.columns.length > 8) || (this.state.options.length > 6))) {
             // alert('if dealer')
-            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], Parent_Dealer_ID));
-            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], Parent_Dealer));
+            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer_ID], "PARENT DEALER ID"));
+            this.state.columns = this.state.columns.filter(lst => lst.title !== convertToLang(this.props.translation[Parent_Dealer], "PARENT DEALER"));
             this.state.options = this.state.options.slice(0, 6);
         }
 
@@ -567,6 +362,7 @@ class Dealers extends Component {
                 suspendDealers: this.filterList('suspended', this.props.dealers),
                 unlinkedDealers: this.filterList('unlinked', this.props.dealers),
             })
+            this.handleChangetab(this.state.tabselect);
         }
         if (this.props.translation !== prevProps.translation) {
             this.setState({
@@ -644,12 +440,12 @@ class Dealers extends Component {
         // console.log(this.props.location, 'location is the ')
         let dealerType;
         const type = this.state.dealer_type;
-        if (type === ADMIN) {
-            dealerType = convertToLang(this.props.translation[Button_Add_Admin], Button_Add_Admin)
-        } else if (type === DEALER) {
-            dealerType = convertToLang(this.props.translation[Button_Add_Dealer], Button_Add_Dealer)
+        // if (type === ADMIN) {
+        // dealerType = convertToLang(this.props.translation[Button_Add_Admin], Button_Add_Admin)}
+        if (type === DEALER) {
+            dealerType = convertToLang(this.props.translation[Button_Add_Dealer], "Add Dealer")
         } else if (type === SDEALER) {
-            dealerType = convertToLang(this.props.translation[Button_Add_S_dealer], Button_Add_S_dealer)
+            dealerType = convertToLang(this.props.translation[Button_Add_S_dealer], "Add S-dealer")
         }
         return (
 
@@ -667,8 +463,8 @@ class Dealers extends Component {
                                 footer={null}
                                 maskClosable={false}
                                 destroyOnClose={true}
-                                okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                                cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                                okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                             >
                                 <AddDealer
                                     handleCancel={this.handleCancel}
@@ -682,7 +478,7 @@ class Dealers extends Component {
 
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDealer], Appfilter_SearchDealer)}
+                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDealer], "Search Dealer")}
                                 defaultPagingValue={this.props.DisplayPages}
                                 addButtonText={dealerType}
                                 selectedOptions={this.props.selectedOptions}
@@ -740,8 +536,6 @@ class Dealers extends Component {
 
                     </Card> */}
                             <EditDealer ref='editDealer' getDealerList={this.props.getDealerList} translation={this.props.translation} />
-
-
                         </div>
                 }
             </div>

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, Button, Form, Input, message } from 'antd';
+import { Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
+import { convertToLang } from '../../utils/commonUtils';
+import { ENTER_NEW_PASSWORD, ENTER_CURRENT_PASSWORD, CONFIRM_NEW_PASSWORD, CURRENT_PASSWORD, CONFIRM_PASSWORD, NEW_PASSWORD } from '../../../constants/Constants';
+import { CHANGE_PASSWORD } from '../../../constants/ActionTypes';
 // import { BASE_URL } from "../../../constants/Application";
 let token = localStorage.getItem('token');
 let logo = '';
@@ -13,12 +17,12 @@ export default class ChangePassword extends Component {
 
         this.state = {
             visible: false,
-            curntpwd:'',
-            newpwd:'',
+            curntpwd: '',
+            newpwd: '',
 
         }
     }
-    
+
 
     showModal = (profile, func) => {
         // console.log('profile', this.props.profile);
@@ -90,14 +94,14 @@ export default class ChangePassword extends Component {
             <div>
                 <Modal
                     visible={visible}
-                    title="Change Password"
+                    title={convertToLang(this.props.translation[CHANGE_PASSWORD], "Change Password")}
                     onOk={this.handleOk}
                     maskClosable={false}
                     onCancel={this.handleCancel}
                     footer={[
-                        <Button key="back" onClick={this.handleCancel}>Cancel</Button>,
+                        <Button key="back" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>,
                         <Button key="submit" type="primary" loading={loading} onClick={this.handleSubmit}>
-                            Submit
+                            {convertToLang(this.props.translation[Button_submit], "Submit")}
                         </Button>,
                     ]}
                 >
@@ -105,36 +109,36 @@ export default class ChangePassword extends Component {
                     <Form >
 
                         <Form.Item
-                            label="Current Password "
+                            label={convertToLang(this.props.translation[CURRENT_PASSWORD], "Current Password ")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 12 }}
                         >
 
-                            <Input type='password' autoComplete="new-password" value={this.state.curntpwd} onChange={(event) => this.setState({ curntpwd: event.target.value })} placeholder="Enter Current Password" />
+                            <Input type='password' autoComplete="new-password" value={this.state.curntpwd} onChange={(event) => this.setState({ curntpwd: event.target.value })} placeholder={convertToLang(this.props.translation[ENTER_CURRENT_PASSWORD], "Enter Current Password")} />
 
                         </Form.Item>
 
                         <Form.Item
-                            label="New Password "
+                            label={convertToLang(this.props.translation[NEW_PASSWORD], "New Password ")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 12 }}
                             validateStatus={this.state.status}
                             help={this.state.help}
 
                         >
-                            <Input type='password' autoComplete="new-password" placeholder="Enter New Password" value={this.state.newPassword} onChange={(event) => this.setState({ newPassword: event.target.value })} />
+                            <Input type='password' autoComplete="new-password" placeholder={convertToLang(this.props.translation[ENTER_NEW_PASSWORD], "Enter New Password")} value={this.state.newPassword} onChange={(event) => this.setState({ newPassword: event.target.value })} />
 
                         </Form.Item>
 
                         <Form.Item
-                            label="Confirm Password "
+                            label={convertToLang(this.props.translation[CONFIRM_PASSWORD], "Confirm Password ")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 12 }}
                             validateStatus={this.state.status}
                             help={this.state.help}
 
                         >
-                            <Input type='password' autoComplete="new-password" placeholder="Confirm New Password" value={this.state.confirmPassword} onChange={(event) => this.setState({ confirmPassword: event.target.value })} />
+                            <Input type='password' autoComplete="new-password" placeholder={convertToLang(this.props.translation[CONFIRM_NEW_PASSWORD], "Confirm New Password")} value={this.state.confirmPassword} onChange={(event) => this.setState({ confirmPassword: event.target.value })} />
 
                         </Form.Item>
 
