@@ -201,7 +201,7 @@ class PullAppModal extends Component {
                 }}
                 onCancel={() => { this.props.showPullAppsModal(false); this.props.resetSeletedRows(); }}
                 // okText="Pull Apps"
-                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
+                okText={convertToLang(this.props.translation[PULL_APPS_TEXT], "PULL APP")}
                 cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
             >
                 <DealerApps
@@ -438,7 +438,8 @@ class SideActions extends Component {
         });
     }
 
-    handleSimModule = () => {
+    handleSimModule = (e) => {
+        e.preventDefault();
         console.log('test sim module');
 
         this.setState({
@@ -718,7 +719,7 @@ class SideActions extends Component {
                                 </Button>
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button
-                                        type="default"
+                                        type="default" 
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                     // onClick={this.handleSimModule}
                                     >
@@ -880,15 +881,7 @@ class SideActions extends Component {
                 // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <SimSettings
-                        // app_list={this.props.app_list}
-                        extension={this.props.extensions}
-                        // extensionUniqueName={SECURE_SETTING}
-                        // isAdminPwd={this.props.isAdminPwd}
-                        // isDuressPwd={this.props.isDuressPwd}
-                        // isEncryptedPwd={this.props.isEncryptedPwd}
-                        // isGuestPwd={this.props.isGuestPwd}
-                        // controls={{ 'controls': this.state.changedCtrls }}
-                        // showChangedControls={true}
+                        deviceID={this.props.device_id}
                         translation={this.props.translation}
                     />
                 </Modal>

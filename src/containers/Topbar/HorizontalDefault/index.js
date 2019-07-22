@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import CustomScrollbars from "util/CustomScrollbars";
 
 import languageData from "../languageData";
-import SearchBox from "components/SearchBox";
 import UserInfo from "components/UserInfo";
 // import AppNotification from "components/AppNotification";
 // import MailNotification from "components/MailNotification";
@@ -95,16 +94,7 @@ class HorizontalDefault extends Component {
                 {null}</Link>
               <Link to="/" className="gx-d-none gx-d-lg-block gx-pointer gx-mr-xs-5 gx-logo">{null}</Link>
               <div className="gx-header-search gx-d-none gx-d-lg-flex">
-                <SearchBox styleName="gx-lt-icon-search-bar-lg"
-                  placeholder="Search in app..."
-                  onChange={this.updateSearchChatUser.bind(this)}
-                  value={this.state.searchText} />
-
-                {/* <Select defaultValue="lucy" style={{width: 120}} onChange={handleChange}>
-                  <Option value="jack">Products</Option>
-                  <Option value="lucy">Apps</Option>
-                  <Option value="Yiminghe">Blogs</Option>
-                </Select> */}
+         
               </div>
 
               <ul className="gx-header-notifications gx-ml-auto">
@@ -116,10 +106,7 @@ class HorizontalDefault extends Component {
                           Category <Icon type="down" />
                         </Button>
                       </Dropdown>
-                      <SearchBox styleName="gx-popover-search-bar" z
-                        placeholder="Search in app..."
-                        onChange={this.updateSearchChatUser.bind(this)}
-                        value={this.state.searchText} />
+                    
                     </div>
                   } trigger="click">
                     <span className="gx-pointer gx-d-block"><i className="icon icon-search-new" /></span>

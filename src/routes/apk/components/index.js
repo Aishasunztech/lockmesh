@@ -254,7 +254,7 @@ class Apk extends Component {
                                 >
                                     <Row className="d_t_m">
                                         <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY], "Neutral Launcher (BYOD) v1.2 <b>(Android v8+)</b>")} ></Markup></h4>
-                                        <a href={`${BASE_URL}users/getFile/nlbyod.apk`}>
+                                        <a href={`${BASE_URL}users/getFile/nlbyod8.apk`}>
                                             <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}>
                                                 {convertToLang(this.props.translation[Button_DOWNLOAD], "Download")}
                                             </Button>
@@ -262,7 +262,7 @@ class Apk extends Component {
                                     </Row>
                                     <Row className="d_t_m">
                                         <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY_7], "Neutral Launcher (BYOD7) v1.2 <b>(Android v7)</b>")} ></Markup></h4>
-                                        <a href={`${BASE_URL}users/getFile/nlbyod.apk`}>
+                                        <a href={`${BASE_URL}users/getFile/nlbyod7.apk`}>
                                             <Button type="primary" size="default" style={{ margin: '0 0 0 16px', height: 30, lineHeight: '30px' }}>
                                                 {convertToLang(this.props.translation[Button_DOWNLOAD], "Download")}
                                             </Button>

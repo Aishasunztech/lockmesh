@@ -132,6 +132,7 @@ function mapDispatchToProps(dispatch) {
         submitPassword: submitPassword
     }, dispatch);
 }
+
 var mapStateToProps = ({ device_details, settings }) => {
 
     return {

@@ -588,14 +588,18 @@ const RestService = {
         // console.log(data, 'data')
         return axios.post(BASE_URL + 'users/save-package', { data }, RestService.getHeader());
     },
-    getPrices: (dealer_id) => {
+    getPrices: () => {
         // console.log(dealer_id, 'whte label on get price')
-        return axios.get(BASE_URL + 'users/get-prices/' + dealer_id, RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-prices', RestService.getHeader());
     },
 
-    getPackages: (dealer_id) => {
+    getPackages: () => {
         // console.log(dealer_id, 'whte label on get price')
-        return axios.get(BASE_URL + 'users/get-packages/' + dealer_id, RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-packages', RestService.getHeader());
+    },
+    getParentPackages: () => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-parent-packages', RestService.getHeader());
     },
     checkPackageName: (name) => {
 
@@ -725,9 +729,17 @@ const RestService = {
         return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
     },
 
-    simRegister: (data) => {
+    simRegister: (total, data) => {
         console.log('at sev', data);
-        return axios.post(BASE_URL + 'users/sim-register' , { data }, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/sim-register' , { data, total_dvc: total }, RestService.getHeader());
+    },
+    getSims: (device_id) => {
+        // console.log('at sev', data);
+        return axios.get(BASE_URL + 'users/get-sims/' + device_id, RestService.getHeader());
+    },
+    handleSimUpdate: (data) => {
+        console.log('at sev', data);
+        return axios.put(BASE_URL + 'users/sim-update' , data, RestService.getHeader());
     },
 
 

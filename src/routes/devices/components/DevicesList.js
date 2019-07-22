@@ -22,7 +22,8 @@ import {
     ADMIN,
     Name,
     Value,
-    ALERT_TO_SURE_DELETE_ALL_DEVICES
+    ALERT_TO_SURE_DELETE_ALL_DEVICES,
+    DEALER
 } from '../../../constants/Constants'
 import {
     Button_Modify,
@@ -215,6 +216,8 @@ class DevicesList extends Component {
                 ),
                 status: (<span style={color} > {status}</span>),
                 flagged: device.flagged,
+                type: checkValue(device.type),
+                version: checkValue(device.version),
                 device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
@@ -237,7 +240,7 @@ class DevicesList extends Component {
                 model: checkValue(device.model),
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+                dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
@@ -330,7 +333,7 @@ class DevicesList extends Component {
         })
     }
 
-    onExpandRow = (expanded, record) => { 
+    onExpandRow = (expanded, record) => {
         // console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.key)) {
@@ -451,13 +454,13 @@ class DevicesList extends Component {
         return (
             <div className="dev_table">
                 <ActivateDevcie ref="activate"
-                    activateDevice={activateDevice} 
+                    activateDevice={activateDevice}
                     translation={this.props.translation}
-                    />
+                />
                 <SuspendDevice ref="suspend"
-                    suspendDevice={suspendDevice} 
+                    suspendDevice={suspendDevice}
                     translation={this.props.translation}
-                    />
+                />
                 <Card className="fix_card devices_fix_card">
                     <hr className="fix_header_border" style={{ top: "56px" }} />
                     <CustomScrollbars className="gx-popover-scroll ">
@@ -641,13 +644,13 @@ class DevicesList extends Component {
                                                 columns={
                                                     [
                                                         {
-                                                            title: convertToLang(this.props.translation[Name],"Name"),
+                                                            title: convertToLang(this.props.translation[Name], "Name"),
                                                             dataIndex: 'name',
                                                             key: "name",
                                                             align: "center",
                                                             className: "bold"
                                                         }, {
-                                                            title: convertToLang(this.props.translation[Value],"Value"),
+                                                            title: convertToLang(this.props.translation[Value], "Value"),
                                                             dataIndex: "values",
                                                             key: "value",
                                                             align: "center"
@@ -663,13 +666,13 @@ class DevicesList extends Component {
                                                 columns={
                                                     [
                                                         {
-                                                            title: convertToLang(this.props.translation[Name],"Name"),
+                                                            title: convertToLang(this.props.translation[Name], "Name"),
                                                             dataIndex: 'name',
                                                             key: "name",
                                                             align: "center",
                                                             className: "bold"
                                                         }, {
-                                                            title: convertToLang(this.props.translation[Value],"Value"),
+                                                            title: convertToLang(this.props.translation[Value], "Value"),
                                                             dataIndex: "values",
                                                             key: "value",
                                                             align: "center"
