@@ -706,7 +706,7 @@ class SideActions extends Component {
                                 </Button>
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button
-                                        type="default"
+                                        type="default" 
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                         onClick={this.handleSimModule}
                                     >
