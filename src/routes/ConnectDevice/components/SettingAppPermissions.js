@@ -128,6 +128,7 @@ class SettingAppPermissions extends Component {
             encryptedAll={this.state.encryptedAllExt}
             guestAll={this.state.guestAllExt}
             handleCheckedAll={this.handleCheckedAll}
+            translation = {this.props.translation}
           />
           <Row className="first_head">
             <Col span={4} className="pr-0">
