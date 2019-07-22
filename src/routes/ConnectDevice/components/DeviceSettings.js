@@ -216,6 +216,7 @@ export default class TableHistory extends Component {
                     return {
                         key: item.app_id,
                         app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                        label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
                         // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
                         guest: <Switch
                             size="small"
