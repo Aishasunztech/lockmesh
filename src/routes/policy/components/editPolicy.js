@@ -15,10 +15,10 @@ import {
 import styles from './policy.css';
 import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
-import { POLICY_SAVE_CONFIRMATION, PLEASE_INPUT_POLICY_NAME, POLICY_APP_NAME } from '../../../constants/PolicyConstants';
+import { POLICY_SAVE_CONFIRMATION, PLEASE_INPUT_POLICY_NAME, POLICY_APP_NAME, POLICY_NOTE, POLICY_COMMAND, NAME } from '../../../constants/PolicyConstants';
 import { Button_Save, Button_Cancel } from '../../../constants/ButtonConstants';
 import { convertToLang } from '../../utils/commonUtils';
-import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
+import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE, Tab_SECURE_SETTING } from '../../../constants/TabConstants';
 import { SPA_APPS } from '../../../constants/AppConstants';
 
 const TextArea = Input;
@@ -542,7 +542,7 @@ class EditPolicy extends Component {
                             />
 
                         </TabPane>
-                        <TabPane tab={convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "SECURE SETTINGS PERMISSION")} key="3">
+                        <TabPane tab={convertToLang(this.props.translation[Tab_SECURE_SETTING], "SECURE SETTINGS")} key="3">
                             {this.state.main_extension !== undefined ?
                                 <div>
                                     <Row>
@@ -670,7 +670,8 @@ class EditPolicy extends Component {
                                     pagination={false}
                                     dataSource={this.renderSystemPermissions()}
                                     bordered
-                                    columns={columns}>
+                                    columns={columns}
+                                    className="add-policy-modal-content">
                                 </Table>
                             </div>
 
@@ -693,11 +694,11 @@ class EditPolicy extends Component {
                                         ],
 
                                     })(
-                                        <Input placeholder="Name" className="pol_inp" />
+                                        <Input placeholder={convertToLang(this.props.translation[NAME], "NAME")} className="pol_inp" />
                                     )}
                                 </Form.Item>
                                 <Form.Item>
-                                    <span className="h3">Command Name</span>
+                                    <span className="h3">{convertToLang(this.props.translation[POLICY_COMMAND], "Policy Command")}</span>
                                     {getFieldDecorator('command_name', {
                                         initialValue: '#' + this.state.policy_name.replace(/ /g, '_'),
 
@@ -709,7 +710,7 @@ class EditPolicy extends Component {
                                 // validateStatus={this.state.isCommand}
                                 // help={this.state.command_error}
                                 >
-                                    <span className="h3">Policy Note</span>
+                                    <span className="h3">{convertToLang(this.props.translation[POLICY_NOTE], "Policy Note")}</span>
                                     {getFieldDecorator('command', {
                                         initialValue: this.state.command,
 
@@ -718,15 +719,15 @@ class EditPolicy extends Component {
                                         }],
 
                                     })(
-                                        <textarea placeholder="Policy Note" className="ant-input"></textarea>
+                                        <textarea placeholder={convertToLang(this.props.translation[POLICY_NOTE], "Policy Note")} className="ant-input"></textarea>
                                     )}
                                 </Form.Item>
                             </Form>
                         </TabPane>
                     </Tabs>
                     <div className="text-center">
-                        <Button className="mt-10" onClick={() => this.onCancel()}>Cancel</Button>
-                        <Button className="mt-10" type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>Save</Button>
+                        <Button className="mt-10" onClick={() => this.onCancel()}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
+                        <Button className="mt-10" type="primary" onClick={() => this.SavePolicyChanges(this.state.policy_name, this.state.command)}>{convertToLang(this.props.translation[Button_Save], "Save")}</Button>
                     </div>
 
 

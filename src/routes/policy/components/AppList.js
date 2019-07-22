@@ -285,7 +285,7 @@ class AppList extends Component {
                 <Fragment>
                     <Avatar className="perm_icons ml-6" src={`${BASE_URL}users/getFile/${icon}`} style={{ width: "30px", height: "30px" }} />
 
-                    <div className="line_break2 line_break22">{label}</div>
+                    <div className="line_break2">{label}</div>
                 </Fragment>,
             guest:
                 // this.props.isSwitch ?

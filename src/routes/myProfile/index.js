@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import CustomScrollbars from "../../util/CustomScrollbars";
-
+import { Markup } from 'interweave';
 import { updatePassword } from "../../appRedux/actions/Dealers";
 import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
 import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch, Input } from 'antd';
@@ -160,7 +160,7 @@ class Profile extends Component {
                 },
                 {
                     key: 6,
-                    name: <a>{convertToLang(this.props.translation[Login_History], "LOGIN HISTORY")}</a>,
+                    name: <a><Markup content={convertToLang(this.props.translation[Login_History], "LOGIN HISTORY")} /> </a>,
                     value: <Button size="small" type='primary' style={{ textTransform: "uppercase" }} onClick={() => { this.showLoginHistory() }} > {convertToLang(this.props.translation[Button_Open], "OPEN")}  </Button>,
                 }
 
@@ -256,7 +256,7 @@ class Profile extends Component {
                                     </Col>
                                     <Col span={6}></Col>
                                     <Col span={6}></Col>
-                                    <Col span={12} style={{ padding: "16px 16px 0 " }}>
+                                    <Col span={14} style={{ padding: "16px 16px 0 " }}>
                                         <h3>{convertToLang(this.props.translation[Login_Email_Authentication], "Login Email Authentication")}</h3>
                                     </Col>
                                     <Col span={6} style={{ padding: "16px 16px 0 " }}>
