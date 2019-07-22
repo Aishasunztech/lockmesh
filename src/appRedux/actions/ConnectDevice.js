@@ -48,7 +48,9 @@ import {
     CLEAR_APPLICATIONS,
     CLEAR_STATE,
     DEVICE_SYNCED,
-    ADD_SIM_REGISTER
+    ADD_SIM_REGISTER,
+    GET_SIMS,
+    UPDATE_SIM
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1090,15 +1092,18 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
 }
 
 // ********* Sim Module
-export const simRegister = (data) => {
+export const simRegister = (total, data) => {
     console.log('data is: ', data)
     return (dispatch) => {
-        RestService.simRegister(data).then((response) => {
+        RestService.simRegister(total, data).then((response) => {
             console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data);
+                // data['id'] = 122;
+
                 dispatch({
                     type: ADD_SIM_REGISTER,
+                    response: response.data,
                     payload: data
                     // payload: response.data
                 })
@@ -1107,6 +1112,52 @@ export const simRegister = (data) => {
                     type: INVALID_TOKEN
                 })
             }
+        })
+    }
+}
+
+export const getSims = (device_id) => {
+    // console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.getSims(device_id).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: GET_SIMS,
+                    payload: response.data
+                    // payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
+        })
+    }
+}
+
+export const handleSimUpdate = (data) => {
+    console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.handleSimUpdate(data).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: UPDATE_SIM,
+                    response: response.data,
+                    payload: data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
         })
     }
 }

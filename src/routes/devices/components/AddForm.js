@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import AddUser from '../../users/components/AddUser';
 import { convertToLang } from '../../utils/commonUtils';
 import AddSimPermission from './AddSimPermission'
-
+import { Markup } from 'interweave';
 import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
@@ -15,17 +15,12 @@ import {
     getUserList
 } from "../../../appRedux/actions/Users";
 import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
-import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2 } from '../../../constants/DeviceConstants';
+import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2, DUPLICATE_DEVICES_HELPING_TEXT } from '../../../constants/DeviceConstants';
 import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID } from '../../../constants/LabelConstants';
-import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require } from '../../../constants/Constants';
+import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, SELECT_POLICY } from '../../../constants/Constants';
 import { DEALER_PIN } from '../../../constants/DealerConstants';
 const confirm = Modal.confirm;
 
-const duplicate_txt = (
-    <div>
-        <span>Generate multiple activation <br /> codes with same settings</span>
-    </div>
-);
 class AddDevice extends Component {
 
     constructor(props) {
@@ -128,8 +123,11 @@ class AddDevice extends Component {
                         <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
                         <Radio.Button className="dev_radio_btn" value="1">
                             <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Duplicate Devices")}</a>
-                            <Popover content={duplicate_txt} placement="bottomRight">
-                                <Icon type="info-circle" style={{ marginLeft: 8 }} />
+                            <Popover placement="bottomRight" content={(
+                                <Markup content={convertToLang(this.props.translation[DUPLICATE_DEVICES_HELPING_TEXT],
+                                    `<p>Generate multiple activation <br /> codes with same settings</p>`)} />
+                            )}>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
                         </Radio.Button>
                     </Radio.Group>
@@ -160,7 +158,7 @@ class AddDevice extends Component {
                             <Form.Item
                                 label={convertToLang(this.props.translation[USER_ID], "USER ID")}
                                 labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 10 }}
+                                wrapperCol={{ span: 14 }}
                             >
 
 
@@ -354,7 +352,7 @@ class AddDevice extends Component {
 
                             {(this.props.preActive) ? null :
                                 <Form.Item
-                                    label= {convertToLang(this.props.translation[DEVICE_MODEL], "Model ")}
+                                    label={convertToLang(this.props.translation[DEVICE_MODEL], "Model ")}
                                     labelCol={{ span: 8 }}
                                     wrapperCol={{ span: 14 }}
                                 >
@@ -365,7 +363,7 @@ class AddDevice extends Component {
                                     )}
                                 </Form.Item>} </Fragment> : null}
                     <Form.Item
-                        label= {convertToLang(this.props.translation[POLICY], "Policy ")}
+                        label={convertToLang(this.props.translation[POLICY], "Policy ")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
@@ -374,14 +372,14 @@ class AddDevice extends Component {
                         })(
                             <Select
                                 showSearch
-                                placeholder={convertToLang(this.props.translation[POLICY], "Select Policy ")}
+                                placeholder={convertToLang(this.props.translation[SELECT_POLICY], "Select Policy")}
                                 optionFilterProp="children"
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value="">{convertToLang(this.props.translation[POLICY], "Select Policy ")}</Select.Option>
+                                <Select.Option value="">{convertToLang(this.props.translation[SELECT_POLICY], "Select Policy ")}</Select.Option>
                                 {this.props.policies.map((policy, index) => {
                                     return (<Select.Option key={index} value={policy.id}>{policy.policy_name}</Select.Option>)
                                 })}
@@ -389,7 +387,7 @@ class AddDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label= {convertToLang(this.props.translation[Start_Date], "Start Date ")}
+                        label={convertToLang(this.props.translation[Start_Date], "Start Date ")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
@@ -401,7 +399,7 @@ class AddDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label= {convertToLang(this.props.translation[Expire_Date], "Expiry Date ")}
+                        label={convertToLang(this.props.translation[Expire_Date], "Expiry Date ")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
@@ -428,7 +426,7 @@ class AddDevice extends Component {
                     {(this.props.preActive) ?
                         <Fragment>
                             <Form.Item
-                                label= {convertToLang(this.props.translation[Device_Note], "NOTE ")}
+                                label={convertToLang(this.props.translation[Device_Note], "NOTE ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -440,7 +438,7 @@ class AddDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label= {convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS) ")}
+                                label={convertToLang(this.props.translation[Device_Valid_For], "VALID FOR(DAYS) ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -458,7 +456,7 @@ class AddDevice extends Component {
                         </Fragment> : null}
                     {(this.state.type == 1) ?
                         <Form.Item
-                            label= {convertToLang(this.props.translation[DUPLICATE_DEVICES], "DUPLICATE ")}
+                            label={convertToLang(this.props.translation[DUPLICATE_DEVICES], "DUPLICATE ")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 14 }}
                         >
@@ -475,7 +473,7 @@ class AddDevice extends Component {
                     {(this.props.preActive === false) ?
                         (<Fragment>
                             <Form.Item
-                                label= {convertToLang(this.props.translation[DEALER_PIN], "Dealer Pin ")}
+                                label={convertToLang(this.props.translation[DEALER_PIN], "Dealer Pin ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -484,7 +482,7 @@ class AddDevice extends Component {
                             </Form.Item>
 
                             <Form.Item
-                                label= {convertToLang(this.props.translation[DEVICE_IMEI_1], "IMEI 1 ")}
+                                label={convertToLang(this.props.translation[DEVICE_IMEI_1], "IMEI 1 ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -493,7 +491,7 @@ class AddDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label= {convertToLang(this.props.translation[DEVICE_SIM_1], "SIM 1 ")}
+                                label={convertToLang(this.props.translation[DEVICE_SIM_1], "SIM 1 ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -501,7 +499,7 @@ class AddDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label= {convertToLang(this.props.translation[DEVICE_IMEI_2], "IMEI 2 ")}
+                                label={convertToLang(this.props.translation[DEVICE_IMEI_2], "IMEI 2 ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >
@@ -510,7 +508,7 @@ class AddDevice extends Component {
 
                             </Form.Item>
                             <Form.Item
-                                label= {convertToLang(this.props.translation[DEVICE_SIM_2], "SIM 2 ")}
+                                label={convertToLang(this.props.translation[DEVICE_SIM_2], "SIM 2 ")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
                             >

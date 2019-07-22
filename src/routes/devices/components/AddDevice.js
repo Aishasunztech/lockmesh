@@ -3,7 +3,7 @@ import { Modal, message } from 'antd';
 import AddForm from './AddForm';
 import { ADD_DEVICE } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
-import { Button_Ok, Button_Cancel } from '../../../constants/ButtonConstants';
+import { Button_Ok, Button_Cancel, Button_Add_Device } from '../../../constants/ButtonConstants';
 
 export default class AddDevice extends Component {
 
@@ -81,7 +81,7 @@ export default class AddDevice extends Component {
                     width="600px"
                     visible={visible}
                     maskClosable={false}
-                    title= {convertToLang(this.props.translation[ADD_DEVICE], "Add Device")} // "Add Device"
+                    title= {convertToLang(this.props.translation[Button_Add_Device], "Add Device")} // "Add Device"
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}
