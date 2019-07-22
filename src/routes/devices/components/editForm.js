@@ -131,7 +131,6 @@ class EditDevice extends Component {
 
         return (
             <div>
-
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p className="mb-4">(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
                     <Form.Item
@@ -310,7 +309,9 @@ class EditDevice extends Component {
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                filterOption={(input, option) =>
+                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
                             >
                                 <Select.Option value="">{convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select Chat ID")}</Select.Option>
                                 {this.props.chat_ids.map((chat_id, index) => {

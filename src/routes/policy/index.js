@@ -23,7 +23,7 @@ import {
     postPagination,
     getPagination
 } from '../../appRedux/actions/Common';
-
+import { Markup } from 'interweave';
 import {
     getDealerApps,
 } from "../../appRedux/actions/ConnectDevice";
@@ -41,6 +41,7 @@ import {
     POLICY_SEARCH,
     POLICY_ADD,
     POLICY_EDIT,
+    POLICY_PERMISSION_HELPING_TEXT,
 } from "../../constants/PolicyConstants";
 
 import {
@@ -52,164 +53,21 @@ import {
 
 import { componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
 import { ADMIN } from '../../constants/Constants';
+import { policyColumns } from '../utils/columnsUtils';
 
 var coppyPolicy = [];
 var status = true;
-
-const PERMISSION_HELPING_TEXT = (
-    <span>Add dealers who are allowed  <br /> to use this Policy</span>
-);
-
-const STATUS_HELPING_TEXT = (
-    <span>Enable or Disable this policy using <br /> the toggle below.  When disabled,  <br />it cannot be pushed to devices</span>
-);
 
 class Policy extends Component {
     constructor(props) {
         super(props);
 
-        this.columns = [
-            // {
-            //     title: 'ACTIONS',
-            //     dataIndex: 'action',
-            //     align: 'center',
-            //     className: 'row',
-            //     width: 800,
-            // },
-            {
-                title: convertToLang(this.props.translation[POLICY_ACTION], "ACTION"),
-                align: "center",
-                dataIndex: 'action',
-                key: "action",
-            },
-            {
-                title: (
-                    <span>
-                        {convertToLang(this.props.translation[POLICY_INFO], "POLICY INFO")}
-                        {/* <Popover placement="top" content='dumy'>
-                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                        </Popover> */}
-                    </span>),
-                dataIndex: 'policy_info',
-                key: 'policy_info',
-                className: 'row'
-            },
-            {
-                title: (
-                    <span>
-                        {convertToLang(this.props.translation[POLICY_PERMISSIONS], "PERMISSIONS")}
-                        <Popover placement="top" content={PERMISSION_HELPING_TEXT}>
-                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                        </Popover>
-                    </span>
-                ),
-                dataIndex: 'permission',
-                key: 'permission',
-                className: 'row '
-            },
-            {
-                title: (
-                    <span>
-                        {convertToLang(this.props.translation[POLICY_STATUS], "STATUS")}
-                        <Popover placement="top" content={STATUS_HELPING_TEXT}>
-                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                        </Popover>
-                    </span>
-                ),
-                dataIndex: 'policy_status',
-                key: 'policy_status',
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="policy_name"
-                        key="policy_name"
-                        id="policy_name"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[POLICY_NAME], "POLICY NAME")}
-                    />
-                ),
-                dataIndex: 'policy_name',
-                className: '',
-                children: [
-                    {
-                        title: convertToLang(props.translation[POLICY_NAME], "POLICY NAME"),
-                        align: "center",
-                        dataIndex: 'policy_name',
-                        key: "policy_name",
-                        className: '',
-                        sorter: (a, b) => { return a.policy_name.localeCompare(b.policy_name) },
-                    }
-                ],
-                sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="command_name"
-                        key="command_name"
-                        id="command_name"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[POLICY_COMMAND], "POLICY COMMAND")}
-                    />
-                ),
-                dataIndex: 'policy_command',
-                className: '',
-                children: [
-                    {
-                        title: convertToLang(props.translation[POLICY_COMMAND], "POLICY COMMAND"),
-                        align: "center",
-                        className: '',
-                        dataIndex: 'policy_command',
-                        key: 'policy_command',
-                        sorter: (a, b) => { return a.policy_command.localeCompare(b.policy_command) },
+        this.columns = policyColumns(props.translation, this.handleSearch);
 
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
-            {
-                title: (
-                    <Input.Search
-                        name="policy_note"
-                        key="policy_note"
-                        id="policy_note"
-                        className="search_heading"
-                        onKeyUp={this.handleSearch}
-                        autoComplete="new-password"
-                        placeholder={convertToLang(props.translation[POLICY_NOTE], "POLICY NOTE")}
-                    />
-                ),
-                dataIndex: 'policy_note',
-                className: '',
-                children: [
-                    {
-                        title: convertToLang(props.translation[POLICY_NOTE], "POLICY NOTE"),
-                        align: "center",
-                        className: '',
-                        dataIndex: 'policy_note',
-                        key: 'policy_note',
-                        // ...this.getColumnSearchProps('status'),
-                        sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
 
-                        sortDirections: ['ascend', 'descend'],
-                    }
-                ]
-            },
-
-            {
-                title: convertToLang(this.props.translation[POLICY_DEFAULT], "DEFAULT"),
-                dataIndex: 'default_policy',
-                key: 'default_policy',
-            },
-        ];
         this.state = {
             policyModal: false,
-            policies: (this.props.policies) ? this.props.policies : [],
+            policies: (props.policies) ? props.policies : [],
             formRefresh: false,
             current: 0,
             goToLastTab: false,
@@ -268,6 +126,9 @@ class Policy extends Component {
                 encryptedAllappPermissions: this.props.encryptedAllappPermissions,
                 appsGotted: this.props.appsGotted
             })
+        }
+        if (this.props.translation != prevProps.translation) {
+            this.columns = policyColumns(this.props.translation, this.handleSearch);
         }
     }
 
@@ -444,8 +305,8 @@ class Policy extends Component {
             <Fragment>
                 <AppFilter
                     handleFilterOptions={this.handleFilterOptions}
-                    searchPlaceholder= {convertToLang(this.props.translation[POLICY_SEARCH], "Search Policy")}
-                    addButtonText= {convertToLang(this.props.translation[POLICY_ADD], "Add Policy")}
+                    searchPlaceholder={convertToLang(this.props.translation[POLICY_SEARCH], "Search Policy")}
+                    addButtonText={convertToLang(this.props.translation[POLICY_ADD], "Add Policy")}
                     defaultPagingValue={this.state.defaultPagingValue}
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
@@ -487,14 +348,14 @@ class Policy extends Component {
                 />
                 <Modal
                     maskClosable={false}
-                    width="730px"
+                    width="780px"
                     className="policy_popup"
                     visible={this.state.policyModal}
                     title={convertToLang(this.props.translation[POLICY_ADD], "Add Policy")}
                     onOk={() => this.handlePolicyModal2(false)}
                     onCancel={() => this.handlePolicyModal(false)}
                     destroyOnClose={true}
-                    okText= {convertToLang(this.props.translation[Button_Save], "Save")}
+                    okText={convertToLang(this.props.translation[Button_Save], "Save")}
                     footer={null}
                     ref='modal'
                 >
@@ -511,14 +372,14 @@ class Policy extends Component {
                 </Modal>
                 <Modal
                     maskClosable={false}
-                    width="730px"
+                    width="780px"
                     className="policy_popup"
                     visible={this.state.editPolicyModal}
                     // destroyOnClose={true}
                     title={convertToLang(this.props.translation[POLICY_EDIT], "Edit Policy")}
                     onOk={() => this.handlePolicyModal(false)}
                     onCancel={() => { this.editPolicyModalHide(); this.props.handleAppGotted(false) }}
-                    okText= {convertToLang(this.props.translation[Button_Update], "Update")}
+                    okText={convertToLang(this.props.translation[Button_Update], "Update")}
                     footer={null}
                 >
                     <EditPolicy

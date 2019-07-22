@@ -347,7 +347,7 @@ const RestService = {
     },
 
     updateUserProfile: (formData) => {
-        return axios.put(BASE_URL + 'users/updateProfile/' + formData, formData, RestService.getHeader());
+        return axios.put(BASE_URL + 'users/updateProfile/' + formData.dealerId, formData, RestService.getHeader());
     },
     getLoginHistory: () => {
         return axios.get(BASE_URL + 'users/login_history', RestService.getHeader());

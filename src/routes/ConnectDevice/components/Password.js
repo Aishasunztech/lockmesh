@@ -49,7 +49,7 @@ class Password extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
     
             if (!err) {
-                this.props.submitPassword(values, this.state.pwdType);
+                this.props.submitPassword(values, this.state.pwdType, this.props.translation);
             }
         });
     }
@@ -74,7 +74,7 @@ class Password extends Component {
             callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
         }
         if (value && value !== form.getFieldValue('pwd')) {
-            callback(convertToLang(this.props.translation[PASSWORDS_ARE_INCONSISTENT], "passwords are inconsistent!"));
+            callback(convertToLang(this.props.translation[PASSWORDS_ARE_INCONSISTENT], "Passwords are inconsistent!"));
         } else {
             callback();
         }
@@ -132,10 +132,10 @@ function mapDispatchToProps(dispatch) {
         submitPassword: submitPassword
     }, dispatch);
 }
-var mapStateToProps = ({ device_details }) => {
+var mapStateToProps = ({ device_details, settings }) => {
 
     return {
-
+        translation: settings.translation
     };
 }
 

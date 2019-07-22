@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, message, Radio, Button, Form, Input, Icon } from 'antd';
+import { convertToLang } from '../../utils/commonUtils';
 import {
 } from "../../../constants/ActionTypes"
+import { IMEI_NUMBER_MUST_BE_15_DIGITS_LONG, IMEI_NUMBER_REQUIRED, Enter_IMEI_Number } from '../../../constants/DeviceConstants';
 const confirm = Modal.confirm;
 const Search = Input.Search;
 class WriteImeiForm extends Component {
@@ -37,16 +39,16 @@ class WriteImeiForm extends Component {
                     {getFieldDecorator('imei', {
                         initialValue: '',
                         rules: [{
-                            required: true, message: 'IMEI number required',
+                            required: true, message: convertToLang(this.props.translation[IMEI_NUMBER_REQUIRED], "IMEI number required"),
                         },
                         {
-                            len: 15, message: 'IMEI Number must be 15 digits long',
+                            len: 15, message: convertToLang(this.props.translation[IMEI_NUMBER_MUST_BE_15_DIGITS_LONG], "IMEI Number must be 15 digits long"),
                         }
                         ],
                     })(
                         <Search
                             type="Number"
-                            placeholder="Enter IMEI Number"
+                            placeholder={convertToLang(this.props.translation[Enter_IMEI_Number], "Enter IMEI Number")}
                             enterButton={<a onClick={this.handleSubmit} type="primary">{this.props.buttonText}</a>}
                         />
                     )}

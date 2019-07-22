@@ -33,12 +33,15 @@ import {
     APK_ACTION,
     APK_SEARCH,
     APK_UPLOAD,
-    APK_SIZE
+    APK_SIZE,
+    SHOW_APK
 } from '../../constants/ApkConstants';
 
 import { componentSearch, titleCase } from "../utils/commonUtils";
-import { ACTION, Alert_Delete_APK } from "../../constants/Constants";
+import { ACTION, Alert_Delete_APK, SEARCH } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
+import { apkColumns } from "../utils/columnsUtils";
+import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 
 const question_txt = (
     <div>
@@ -66,67 +69,13 @@ class Apk extends React.Component {
     constructor(props) {
         super(props);
         let self = this;
+        let columns = apkColumns(props.translation);
         this.state = {
             apk_list: [],
             uploadApkModal: false,
             showUploadModal: false,
             showUploadData: {},
-            columns: [
-                {
-                    title: convertToLang(props.translation[ACTION], ACTION),
-                    dataIndex: 'action',
-                    key: 'action',
-                    className: 'row m-0'
-                },
-                {
-                    title: (
-                        <span>
-                            {convertToLang(props.translation[APK_PERMISSION], "PERMISSION")}
-                            <Popover placement="top" content={question_txt}>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover>
-                        </span>),
-                    dataIndex: 'permission',
-                    key: 'permission',
-                    className: ''
-                },
-                {
-                    title:
-                        <span>
-                            {convertToLang(props.translation[APK_SHOW_ON_DEVICE], "SHOW ON DEVICE")}
-                            <Popover placement="top" content={SHOW_DEVICE_TEXT}>
-                                <span className="helping_txt"><Icon type="info-circle" /></span>
-                            </Popover>
-                        </span>,
-                    // title: 'SHOW ON DEVICE',
-                    dataIndex: 'apk_status',
-                    key: 'apk_status',
-                },
-                {
-                    title: convertToLang(props.translation[APK], "APK"),
-                    dataIndex: 'apk',
-                    key: 'apk',
-                },
-                {
-                    title: convertToLang(props.translation[APK_APP_NAME], "APP NAME"),
-                    dataIndex: 'apk_name',
-                    width: "100",
-                    key: 'apk_name',
-                    sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
-                    sortDirections: ['ascend', 'descend'],
-                    defaultSortOrder: "ascend"
-                },
-                {
-                    title: convertToLang(props.translation[APK_APP_LOGO], "APP LOGO"),
-                    dataIndex: 'apk_logo',
-                    key: 'apk_logo',
-                },
-                {
-                    title: convertToLang(props.translation[APK_SIZE], "APP SIZE"),
-                    dataIndex: 'apk_size',
-                    key: 'apk_size',
-                },
-            ],
+            columns: columns,
         }
 
         // this.columns = ;
@@ -309,6 +258,12 @@ class Apk extends React.Component {
         if (this.props.selectedOptions !== prevProps.selectedOptions) {
             this.handleCheckChange(this.props.selectedOptions)
         }
+
+        if(this.props.translation != prevProps.translation) {
+            this.setState({
+                columns: apkColumns(this.props.translation)
+            })
+        }
     }
     componentWillMount() {
         // alert("componentWillMount");
@@ -328,7 +283,7 @@ class Apk extends React.Component {
         return (
             <Select
                 showSearch
-                placeholder="Show APK"
+                placeholder={convertToLang(this.props.translation[SHOW_APK], "Show APK")}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 filterOption={(input, option) => {
@@ -336,9 +291,9 @@ class Apk extends React.Component {
                 }}
                 onChange={this.handleChange}
             >
-                <Select.Option value="all">All</Select.Option>
-                <Select.Option value="active">Active</Select.Option>
-                <Select.Option value="disabled">Disabled</Select.Option>
+                <Select.Option value="all">{convertToLang(this.props.translation[Tab_All], "All")}</Select.Option>
+                <Select.Option value="active">{convertToLang(this.props.translation[Tab_Active], "Active")}</Select.Option>
+                <Select.Option value="disabled">{convertToLang(this.props.translation[Tab_Disabled], "Disabled")}</Select.Option>
             </Select>
         );
     }
@@ -450,7 +405,7 @@ class Apk extends React.Component {
                 <div style={{ padding: 8 }}>
                     <Input
                         ref={node => { this.searchInput = node; }}
-                        placeholder={`Search ${dataIndex}`}
+                        placeholder={`${convertToLang(this.props.translation[SEARCH], "Search")} ${dataIndex}`}
                         value={selectedKeys[0]}
                         onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}

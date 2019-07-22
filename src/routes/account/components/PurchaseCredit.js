@@ -10,7 +10,7 @@ import BitCoinForm from './BitCoinForm';
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Cancel, Button_Confirm } from '../../../constants/ButtonConstants';
-import { PUSH_APP_TEXT, WARNNING } from '../../../constants/Constants';
+import { PUSH_APP_TEXT, WARNING } from '../../../constants/Constants';
 import { Required_Fields } from '../../../constants/DeviceConstants';
 // import 'react-credit-cards/lib/styles.scss';
 
@@ -178,7 +178,7 @@ class PurchaseCredit extends Component {
                 >
                     <div>
                         <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                            <p className="mb-4">(*)- {convertToLang(this.props.translation[Required_Fields], Required_Fields)}</p>
+                            <p className="mb-4">(*)- {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
                             < Form.Item
                                 style={{ marginBottom: 0 }}
                                 label="Credits"
@@ -316,7 +316,7 @@ export default PurchaseCredit;
 
 function showConfirm(_this, msg, values) {
     confirm({
-        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
+        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
         content: msg,
         // okText: "Confirm",
         okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),

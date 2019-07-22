@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Modal, Table, Button, } from 'antd';
 import { Link } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
-import { ADMIN, WARNNING, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST } from '../../constants/Constants';
+import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING } from '../../constants/Constants';
 import { convertToLang } from '../../routes/utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT } from '../../constants/ButtonConstants';
 import { DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2, DEVICE_REQUESTS, DEVICE_SIM_1 } from '../../constants/DeviceConstants';
@@ -161,8 +161,8 @@ export default class NewDevices extends Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    okText={convertToLang(this.props.translation[Button_Ok], Button_Ok)}
-                    cancelText={convertToLang(this.props.translation[Button_Cancel], Button_Cancel)}
+                    okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     {(this.props.authUser.type === ADMIN) ? null :
                         <Fragment>
@@ -196,7 +196,7 @@ export default class NewDevices extends Component {
 
 function showConfirm(_this, msg, action, request) {
     confirm({
-        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
+        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
         content: msg,
         okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
         cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),

@@ -122,10 +122,10 @@ export default class PricingModal extends Component {
             <Modal
                 maskClosable={false}
                 destroyOnClose={true}
-                title={<div>{convertToLang(this.props.translation[Button_SET_PRICE], Button_SET_PRICE)}</div>}
+                title={<div>{convertToLang(this.props.translation[Button_SET_PRICE], "Set Price")}</div>}
                 visible={this.props.pricing_modal}
                 onOk={this.handleSubmit}
-                okText= {convertToLang(this.props.translation[Button_Save], Button_Save)}
+                okText= {convertToLang(this.props.translation[Button_Save], "Save")}
                 okButtonProps={{ disabled: this.state.outerTab === '1' ? !this.props.isPriceChanged : false }}
                 onCancel={() => { this.props.showPricingModal(false); this.props.resetPrice() }}
                 // footer={null}
@@ -137,7 +137,7 @@ export default class PricingModal extends Component {
                     type="card"
                     onChange={(e) => this.setState({ outerTab: e })}
                 >
-                    <TabPane tab={convertToLang(this.props.translation[Tab_SET_ID_PRICES], Tab_SET_ID_PRICES)} key="1">
+                    <TabPane tab={convertToLang(this.props.translation[Tab_SET_ID_PRICES], "Set ID Prices")} key="1">
                         <ItemsTab
                             innerTabChanged={this.innerTabChanged}
                             setPrice={this.props.setPrice}
@@ -145,7 +145,7 @@ export default class PricingModal extends Component {
                             translation={this.props.translation}
                         />
                     </TabPane>
-                    <TabPane tab={convertToLang(this.props.translation[Tab_SET_PACKAGES_PRICES], Tab_SET_PACKAGES_PRICES)} key="2">
+                    <TabPane tab={convertToLang(this.props.translation[Tab_SET_PACKAGES_PRICES], "Set Packages Price")} key="2">
                         <PackagePricingForm
                             showPricingModal={this.props.showPricingModal}
                             setPkgDetail={this.setPkgDetail}

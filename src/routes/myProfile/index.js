@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import CustomScrollbars from "../../util/CustomScrollbars";
-
+import { Markup } from 'interweave';
 import { updatePassword } from "../../appRedux/actions/Dealers";
 import { updateUserProfile, twoFactorAuth, getLoginHistory } from "../../appRedux/actions/Auth";
 import { Row, Col, Card, Table, Button, Divider, Icon, Modal, Switch, Input } from 'antd';
@@ -17,7 +17,7 @@ import {
     SDEALER, Login_Email, DEVICES, Name, Value, Profile_Info, Edit_Profile, Edit_Profile_02, Edit_Profile_03, Edit_Profile_01, Change_Password, Change_Email, Login_Email_Authentication, Date_Text
 } from "../../constants/Constants";
 import { DEALER_ID, DEALER_NAME, Parent_Dealer, DEALER_TOKENS, Login_History, DEALER_PIN } from '../../constants/DealerConstants';
-import { Button_Edit, Button_Cancel, Button_Open, Button_Ok } from '../../constants/ButtonConstants';
+import { Button_Edit, Button_Cancel, Button_Open, Button_Ok, Button_On, Button_Off } from '../../constants/ButtonConstants';
 import { IP_ADDRESS } from '../../constants/DeviceConstants';
 
 // import {Link} from 'react-router-dom';
@@ -160,7 +160,7 @@ class Profile extends Component {
                 },
                 {
                     key: 6,
-                    name: <a>{convertToLang(this.props.translation[Login_History], "LOGIN HISTORY")}</a>,
+                    name: <a><Markup content={convertToLang(this.props.translation[Login_History], "LOGIN HISTORY")} /> </a>,
                     value: <Button size="small" type='primary' style={{ textTransform: "uppercase" }} onClick={() => { this.showLoginHistory() }} > {convertToLang(this.props.translation[Button_Open], "OPEN")}  </Button>,
                 }
 
@@ -256,13 +256,13 @@ class Profile extends Component {
                                     </Col>
                                     <Col span={6}></Col>
                                     <Col span={6}></Col>
-                                    <Col span={12} style={{ padding: "16px 16px 0 " }}>
+                                    <Col span={14} style={{ padding: "16px 16px 0 " }}>
                                         <h3>{convertToLang(this.props.translation[Login_Email_Authentication], "Login Email Authentication")}</h3>
                                     </Col>
                                     <Col span={6} style={{ padding: "16px 16px 0 " }}>
                                         <Switch
-                                            checkedChildren="ON"
-                                            unCheckedChildren="OFF"
+                                            checkedChildren={convertToLang(this.props.translation[Button_On], "ON")}
+                                            unCheckedChildren={convertToLang(this.props.translation[Button_Off], "OFF")}
                                             defaultChecked={(this.props.profile.two_factor_auth === 1 || this.props.profile.two_factor_auth === true) ? true : false}
                                             onChange={(e) => {
                                                 this.twoFactorAuth(e);

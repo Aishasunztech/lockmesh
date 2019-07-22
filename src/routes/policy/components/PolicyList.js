@@ -11,7 +11,9 @@ import { convertToLang } from '../../utils/commonUtils';
 import styles from './policy.css';
 import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';
-import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION } from '../../../constants/PolicyConstants';
+import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION, EXPAND, POLICY_EXPAND } from '../../../constants/PolicyConstants';
+import { Tab_All } from '../../../constants/TabConstants';
+
 const confirm = Modal.confirm;
 
 class PolicyList extends Component {
@@ -95,31 +97,26 @@ class PolicyList extends Component {
     deletePolicy = (id) => {
         let _this = this
         confirm({
-            title: convertToLang(this.props.translation[POLICY_DELETE_CONFIRMATION], "Do you want to delete this Policy?"),
+            title: convertToLang(_this.props.translation[POLICY_DELETE_CONFIRMATION], "Do you want to delete this Policy?"),
             onOk() {
-                _this.props.handlePolicyStatus(1, 'delete_status', id)
+                _this.props.handlePolicyStatus(1, 'delete_status', id, _this.props.translation)
             },
             onCancel() { },
-            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-            cancelText: convertToLang(this.props.translation[Button_No], "No")
+            okText: convertToLang(_this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(_this.props.translation[Button_No], "No")
 
         });
     }
 
     renderList(list) {
-        let policy_list = list.filter((data) => {
-            // if (data.type === "policy") {
-            return data
-            // }
-        })
-        return policy_list.map((policy, index) => {
+
+        return list.map((policy, index) => {
 
             return {
                 rowKey: index,
                 isChangedPolicy: policy.isChangedPolicy ? policy.isChangedPolicy : false,
                 policy_id: policy.id,
                 action:
-
                     (policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ?
                         (
                             <Fragment>
@@ -154,13 +151,13 @@ class PolicyList extends Component {
                         }>
                             <Icon type="arrow-down" style={{ fontSize: 15 }} />
                         </a>
-                        <span className="exp_txt">Expand</span>
+                        <span className="exp_txt">{convertToLang(this.props.translation[POLICY_EXPAND], "Expand")}</span>
                     </Fragment>
                 ,
-                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{policy.permission_count}</span>,
+                permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}</span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
                 policy_status: (<Switch size='small' checked={policy.status === 1 || policy.status === true ? true : false}
-                    onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id) }
+                    onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id, this.props.translation) }
                     } disabled={(policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ? false : true
                     } />),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
@@ -170,9 +167,16 @@ class PolicyList extends Component {
                 app_list: policy.app_list,
                 controls: policy.controls,
                 secure_apps: policy.secure_apps,
+                policy_size: policy.policy_size,
                 default_policy: (
-                    <Switch size='small' checked={policy.is_default} onChange={(e) => { this.handleDefaultChange(e, policy.id) }} disabled={(policy.status === 1 || policy.status === true) ? false : true} />
+                    <Switch
+                        size='small'
+                        checked={policy.is_default}
+                        onChange={(e) => { this.handleDefaultChange(e, policy.id) }}
+                        disabled={(policy.status === 1 || policy.status === true) ? false : true}
+                    />
                 ),
+
             }
         });
 

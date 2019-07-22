@@ -404,13 +404,13 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
-                        title: "Apps are Being pushed",
+                        title: action.payload.msg, // "Apps are Being pushed"
                     });
                 } else {
                     // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                     warning({
-                        title: 'Warning Device Offline',
-                        content: 'Apps pushed to device. Action will be performed when device is back online',
+                        title: action.payload.msg, //  'Warning Device Offline',
+                        content: action.payload.content // "Apps pushed to device. Action will be performed when device is back online", // 'Apps pushed to device. Action will be performed when device is back online',
                     });
                 }
                 noOfApps = action.payload.noOfApps
@@ -428,14 +428,14 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
-                        title: "Policy is Being applied",
+                        title: action.payload.msg, // "Policy is Being applied",
                     });
 
                 } else {
                     // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                     warning({
-                        title: 'Warning Device Offline',
-                        content: 'Policy Applied to device. Action will be performed when device is back online',
+                        title: action.payload.msg, // 'Warning Device Offline',
+                        content: action.payload.content // 'Policy Applied to device. Action will be performed when device is back online',
                     });
                 }
             } else {
@@ -641,7 +641,7 @@ export default (state = initialState, action) => {
             }
             else {
                 error({
-                    title: "Password Did not Match. Please Try again.",
+                    title: action.payload.PasswordMatch.msg, // "Password Did not Match. Please Try again.",
                 });
             }
 
@@ -679,12 +679,12 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
-                        title: "Apps are Being pulled",
+                        title: action.payload.msg, // "Apps are Being pulled",
                     });
                 } else {
                     warning({
-                        title: 'Warning Device Offline',
-                        content: 'Apps pulled from device. Action will be performed when device is back online',
+                        title: action.payload.msg, //  'Warning Device Offline',
+                        content: action.payload.content // 'Apps pulled from device. Action will be performed when device is back online',
                     });
                 }
                 noOfApps = action.payload.noOfApps
@@ -1228,12 +1228,12 @@ export default (state = initialState, action) => {
 
                 if (action.payload.online) {
                     success({
-                        title: action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device.Restart device is required to apply IMEI.",
+                        title: action.imeiData.imeiNo + `${action.payload.title1}` + action.imeiData.type + `${action.payload.title2}`,
                     });
                 } else {
                     warning({
-                        title: 'Warning Device Offline',
-                        content: action.imeiData.imeiNo + ' write to ' + action.imeiData.type + '. Action will be performed when device is back online',
+                        title: action.payload.msg, //  'Warning Device Offline',
+                        content: action.imeiData.imeiNo + `${action.payload.content1}` + action.imeiData.type + `${action.payload.content2}`,
                     });
                 }
                 // console.log('new state is', state.imei_list)

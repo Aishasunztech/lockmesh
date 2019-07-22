@@ -129,7 +129,7 @@ class AppFilter extends Component {
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
         //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
         let allSelectedOpt;
-        if (this.state.selectedDisplayValues != undefined && this.props.options != undefined) {
+        if (this.state.selectedDisplayValues !== undefined && this.props.options !== undefined) {
             if (this.props.options.length === this.state.selectedDisplayValues.length) {
                 allSelectedOpt = true;
             } else { allSelectedOpt = false }
@@ -150,7 +150,7 @@ class AppFilter extends Component {
                                         valueKey="key"
                                         labelKey="value"
                                         value={this.state.selectedDisplayValues}
-                                        placeholder={convertToLang(translation[Appfilter_Display], Appfilter_Display)}
+                                        placeholder={convertToLang(translation[Appfilter_Display], "Display")}
                                         className="display_"
                                         multiple={true}
                                         numberDisplayed={true}
@@ -179,7 +179,7 @@ class AppFilter extends Component {
                                                         <Checkbox
                                                             checked={allSelectedOpt} className="slct_all"
                                                         >
-                                                            {convertToLang(translation[Appfilter_SelectAll], Appfilter_SelectAll)}
+                                                          <span className="upper_case">  {convertToLang(translation[Appfilter_SelectAll], "Select All")}</span>
                                                         </Checkbox>
                                                     </li>
                                                 );

@@ -12,77 +12,82 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import {
     Tab_All,
     Tab_Active,
-    Tab_Expired,
-    Tab_Trial,
-    Tab_Suspended,
-    Tab_PreActivated,
-    Tab_PendingActivation,
-    Tab_Transfer,
-    Tab_Unlinked,
-    Tab_Flagged,
-    Tab_ComingSoon,
     Tab_Archived,
+    Tab_Suspended,
+    // Tab_PreActivated,
+    // Tab_PendingActivation,
+    // Tab_Transfer,
+    // Tab_Trial,
+    // Tab_Expired,
+    // Tab_Unlinked,
+    // Tab_Flagged,
+    // Tab_ComingSoon,
 } from '../../../constants/TabConstants';
-
 import {
-    Button_Modify,
+    DEALER_TEXT
+} from '../../../constants/DealerConstants';
+import {
     Button_Delete,
     Button_Activate,
     Button_Connect,
-    Button_Yes,
-    Button_Ok,
-    Button_ok,
-    Button_Cancel,
     Button_Suspend,
-    Button_Unsuspend,
+    Button_Undo,
     Button_Edit,
     Button_passwordreset,
-    Button_submit,
-    Button_Flag,
-    Button_UNFLAG,
-    Button_SetPassword,
-    Button_Apply,
-    Button_Undo,
-    Button_Redo,
-    Button_Clear,
-    Button_Refresh,
-    Button_Next,
-    Button_previous,
-    Button_Add_Dealer,
-    Button_Add_S_dealer,
-    Button_Add_Admin,
-    Button_UploadApk,
-    Button_Save,
-    Button_Update,
-    Button_Open,
-    Button_Sample,
-    Button_Import,
-    Button_Export,
-    Button_Release,
-    Button_View,
-    Button_ChangePassword,
-    Button_ChangeEmail,
-    Button_AddPolicy,
-    Button_Add,
-    Button_AddExceptSelected,
-    Button_AddAll,
-    Button_RemoveAll,
-    Button_RemoveExcept,
-    Button_BackupNow,
-    Button_DeleteUser,
-    Button_AddApps,
-    Button_Push,
-    Button_LoadProfile,
-    Button_LoadPolicy,
-    Button_IMEI,
-    Button_Pull,
-    Button_SaveProfile,
-    Button_Activity,
-    Button_SIM,
-    Button_Transfer,
-    Button_WipeDevice,
-    Button_Unlink,
+    Button_Ok,
+    Button_Cancel,
+    // Button_Unsuspend,
+    // Button_submit,
+    // Button_Ok,
+    // Button_ok,
+    // Button_Cancel,
+    // Button_Flag,
+    // Button_UNFLAG,
+    // Button_SetPassword,
+    // Button_Apply,
+    // Button_Modify,
+    // Button_Redo,
+    // Button_Clear,
+    // Button_Refresh,
+    // Button_Yes,
+    // Button_Next,
+    // Button_previous,
+    // Button_Add_Dealer,
+    // Button_Add_S_dealer,
+    // Button_Add_Admin,
+    // Button_UploadApk,
+    // Button_Save,
+    // Button_Update,
+    // Button_Open,
+    // Button_Sample,
+    // Button_Import,
+    // Button_Export,
+    // Button_Release,
+    // Button_View,
+    // Button_ChangePassword,
+    // Button_ChangeEmail,
+    // Button_AddPolicy,
+    // Button_Add,
+    // Button_AddExceptSelected,
+    // Button_AddAll,
+    // Button_RemoveAll,
+    // Button_RemoveExcept,
+    // Button_BackupNow,
+    // Button_DeleteUser,
+    // Button_AddApps,
+    // Button_Push,
+    // Button_LoadProfile,
+    // Button_LoadPolicy,
+    // Button_IMEI,
+    // Button_Pull,
+    // Button_SaveProfile,
+    // Button_Activity,
+    // Button_SIM,
+    // Button_Transfer,
+    // Button_WipeDevice,
+    // Button_Unlink,
 } from '../../../constants/ButtonConstants';
+import { DO_YOU_WANT_TO, OF_THIS } from '../../../constants/DeviceConstants';
 
 const TabPane = Tabs.TabPane;
 
@@ -201,22 +206,23 @@ class DealerList extends Component {
     renderList(list) {
         data = [];
         list.map((dealer, index) => {
-            const dealer_status = (dealer.account_status === "suspended") ? convertToLang(this.props.translation[Button_Activate], "Activate") : convertToLang(this.props.translation[Button_Suspend], "Suspend");
-            const button_type = (dealer_status === "ACTIVATE") ? "default" : "danger";
+            // console.log('dealer.account_status is: ', dealer.account_status);
+            const dealer_status = (dealer.account_status === "suspended") ? "Activate" : "Suspend";
+            const button_type = (dealer_status === "Activate") ? "default" : "danger";
             const undo_button_type = (dealer.unlink_status === 0) ? 'danger' : "default";
             data.push({
                 'row_key': dealer.dealer_id,
                 'accounts': <span>
                     <Button type={button_type} size='small' style={{ margin: '0 8px 0 0', textTransform: "uppercase" }}
-                        onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
-                        {(dealer.account_status === '') ? <div>{dealer_status}</div> : <div> {dealer_status}</div>}
+                        onClick={() => ((dealer.account_status === '') || (dealer.account_status === null)) ? showConfirm(this, dealer.dealer_id, this.props.suspendDealer, 'SUSPEND') : showConfirm(this, dealer.dealer_id, this.props.activateDealer, 'ACTIVATE')}>
+                        {((dealer.account_status === '') || (dealer.account_status === null)) ? <div>{convertToLang(this.props.translation[Button_Suspend], "Suspend")}</div> : <div> {convertToLang(this.props.translation[Button_Activate], "Activate")}</div>}
                     </Button>
                     <Button type="primary" style={{ margin: '0 8px 0 0', textTransform: "uppercase" }} size='small' onClick={() => this.refs.editDealer.showModal(dealer, this.props.editDealer)}>{convertToLang(this.props.translation[Button_Edit], "Edit")}</Button>
                     <Button type={undo_button_type} size='small' style={{ margin: '0', textTransform: "uppercase" }}
-                        onClick={() => (dealer.unlink_status === 0) ? showConfirm(dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(dealer.dealer_id, this.props.undoDealer, 'UNDO')}>
+                        onClick={() => (dealer.unlink_status === 0) ? showConfirm(this, dealer.dealer_id, this.props.deleteDealer, 'DELETE') : showConfirm(this, dealer.dealer_id, this.props.undoDealer, 'UNDELETE')}>
                         {(dealer.unlink_status === 0) ? <div>{convertToLang(this.props.translation[Button_Delete], Button_Delete)} </div> : <div> {convertToLang(this.props.translation[Button_Undo], "UNDELETE")} </div>}
                     </Button>
-                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
+                    <Button type="primary" style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => showConfirm(this, dealer, this.props.updatePassword, 'RESET PASSWORD')} >{convertToLang(this.props.translation[Button_passwordreset], "Password Reset")}</Button>
                     {(this.props.user.type === ADMIN) ?
                         <Button style={{ margin: '0 0 0 8px', textTransform: "uppercase" }} size='small' onClick={() => { }} >{convertToLang(this.props.translation[Button_Connect], "Connect")}</Button>
                         :
@@ -280,9 +286,28 @@ class DealerList extends Component {
     }
 }
 
-function showConfirm(id, action, btn_title) {
+function showConfirm(_this, id, action, btn_title) {
+    let title_Action = '';
+    if (btn_title == 'SUSPEND') {
+        title_Action = convertToLang(_this.props.translation[Button_Suspend], "SUSPEND ");
+    } else if (btn_title == 'DELETE') {
+        title_Action = convertToLang(_this.props.translation[Button_Delete], "DELETE");
+    } else if (btn_title == 'UNDELETE') {
+        title_Action = convertToLang(_this.props.translation[Button_Undo], "UNDELETE");
+    } else if (btn_title == "RESET PASSWORD") {
+        title_Action = convertToLang(_this.props.translation[Button_passwordreset], "RESET PASSWORD");
+    } else {
+        title_Action = btn_title;
+    }
+
+    let value = window.location.pathname.split("/").pop();
+    if (value == 'dealer') {
+        value = convertToLang(_this.props.translation[DEALER_TEXT], "dealer");
+    } else {
+        value = value;
+    }
     confirm({
-        title: 'Do you want to ' + btn_title + ' of this ' + window.location.pathname.split("/").pop() + ' ?',
+        title: convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ") + title_Action + convertToLang(_this.props.translation[OF_THIS], " of this ") + value + ' ?',
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);
@@ -294,6 +319,8 @@ function showConfirm(id, action, btn_title) {
 
             }).catch(() => console.log('Oops errors!'));
         },
+        okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
+        cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),
         onCancel() { },
     });
 }

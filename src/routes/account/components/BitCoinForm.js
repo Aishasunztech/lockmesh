@@ -3,7 +3,7 @@ import { Card, Button, Row, Col, Icon, Modal, Form, Input, Upload, message, Tabl
 
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_Ok, Button_Cancel, Button_Confirm } from '../../../constants/ButtonConstants';
-import { WARNNING } from '../../../constants/Constants';
+import {  WARNING } from '../../../constants/Constants';
 
 const confirm = Modal.confirm;
 
@@ -180,7 +180,7 @@ export default BitCoinForm;
 
 function showConfirm(_this, msg, values, creditInfo) {
     confirm({
-        title: convertToLang(this.props.translation[WARNNING], "WARNNING!"),
+        title: convertToLang(this.props.translation[WARNING], "WARNING!"),
         content: msg,
         // okText: "Confirm",
         okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),

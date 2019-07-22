@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Menu, Icon, Badge, Modal, Popover } from "antd";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-
+// import { ThemeProvider, ChatList } from '@livechat/ui-kit'
 
 import SidebarLogo from "./SidebarLogo";
 
@@ -32,11 +32,9 @@ import {
 } from "../../constants/ThemeSetting";
 
 import {
-  Sidebar_main,
   Sidebar_devices,
   Sidebar_users,
   Sidebar_dealers,
-  Sidebar_policy,
   Sidebar_sdealers,
   Sidebar_app,
   Sidebar_account,
@@ -44,6 +42,7 @@ import {
   Sidebar_logout,
   Alert_Change_Language,
   ARE_YOU_SURE_YOU_WANT_TO_LOGOUT,
+  PIN_TEXT,
 } from '../../constants/SidebarConstants'
 
 // import languageData from "./languageData";
@@ -66,13 +65,11 @@ class SidebarContent extends Component {
     }
   }
 
+
   languageMenu = () => (
     <ul className="gx-sub-popover">
       {this.state.languageData.map(language =>
-        <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
-          // this.props.switchLanguage(language)
-          this.changeLng(language)
-        }>
+        <li className={`gx-media gx-pointer ${(language.id == this.props.lng_id) ? "noClick" : ""}`} key={JSON.stringify(language)} onClick={(e) => this.changeLng(language)}>
           <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`} />
           <span className="gx-language-text">{language.name}</span>
         </li>
@@ -186,7 +183,7 @@ class SidebarContent extends Component {
               translation={this.props.translation}
             />
             <span className="font_14">
-              {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
+              {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? `${convertToLang(translation[PIN_TEXT], 'PIN :')}` : null}
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? (localStorage.getItem('dealer_pin') === '' || localStorage.getItem('dealer_pin') === null || localStorage.getItem('dealer_pin') === undefined) ? null : localStorage.getItem('dealer_pin') : null}
             </span>
             <ul className="gx-app-nav mt-12" style={{ justifyContent: "center" }}>
@@ -248,10 +245,7 @@ class SidebarContent extends Component {
                 {/* </Link> */}
               </Menu.Item>
             </Menu>
-
-
             :
-
             <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
               <Menu.Item key="devices">
                 <Link to="/devices">
@@ -326,6 +320,8 @@ class SidebarContent extends Component {
 const mapStateToProps = ({ settings, devices, sidebar }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
 
+  // console.log('lng id is: ', translation["lng_id"])
+
   return {
     navStyle,
     themeType,
@@ -335,7 +331,8 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
     languageData: languages,
-    translation: translation
+    translation: translation,
+    lng_id: translation["lng_id"],
   }
 };
 export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest })(SidebarContent);

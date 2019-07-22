@@ -17,6 +17,8 @@ export const PURCHASE_CREDITS_DESCRIPTION = "purchase.credits.description.id"; /
 export const PACKAGES_AND_IDS_01 = "packages.and.ids.01.id"; // Distribute tokens
 export const PACKAGES_AND_IDS_02 = "packages.and.ids.02.id"; // Set prices and delay for each token
 export const PACKAGES_AND_IDS_03 = "packages.and.ids.03.id"; // Set permissions for Tokens
+export const DUPLICATE_DATA = "WARNING_Duplicate_Data.id"; // WARNING! Duplicate Data New.Data.id New Data
+export const NEW_DATA = "New.Data.id"; // WARNING! Duplicate Data  
 
 
 // ********************** Set prices and Packages
@@ -26,7 +28,7 @@ export const PACKAGE_TERM = "package.term.id"; // PACKAGE TERM
 export const PACKAGE_SERVICES = "package.services.id"; // PACKAGE SERVICES
 export const PACKAGE_PRICE = "package.price.id"; // PACKAGE PRICE
 export const PACKAGE_EXPIRY = "packege.expiry.id"; // PACKAGE EXPIRY
-export const PACKAGE_SEARCH ="package.search.id"; // PACKAGE_SEARCH
+export const PACKAGE_SEARCH ="package.search.id"; // PACKAGE SEARCH
 
 // Packages
 export const PACKAGE_SERVICE_NAME = "package.service.name.id"; // SERVICE NAME
