@@ -682,7 +682,7 @@ class EditPolicy extends Component {
                                 // validateStatus={this.state.isPolicy_name}
                                 // help={this.state.policy_name_error}
                                 >
-                                    <span className="h3">Name</span>
+                                    <span className="h3 upper_case">{convertToLang(this.props.translation[NAME], "Name")}</span>
                                     {getFieldDecorator('policy_name', {
                                         initialValue: this.state.policy_name,
                                         rules: [{
