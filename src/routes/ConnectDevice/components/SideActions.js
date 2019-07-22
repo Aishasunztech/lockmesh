@@ -704,7 +704,7 @@ class SideActions extends Component {
                                     {/* <IntlMessages id="button.Activity" /> */}
                                     {convertToLang(this.props.translation[Button_Activity], "Activity")}
                                 </Button>
-                                {/* <Tooltip placement="left" title="Coming Soon"> */}
+                                <Tooltip placement="left" title="Coming Soon">
                                     <Button
                                         type="default"
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
@@ -715,7 +715,7 @@ class SideActions extends Component {
                                         {/* <IntlMessages id="button.SIM" /> */}
                                         {convertToLang(this.props.translation[Button_SIM], "SIM")}
                                     </Button>
-                                {/* </Tooltip> */}
+                                </Tooltip>
                             </Col>
                         </Row>
                     </Card>
