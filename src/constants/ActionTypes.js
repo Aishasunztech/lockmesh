@@ -224,3 +224,5 @@ export const RESET_PRICE = 'RESET_PRICE';
 
 // Sim Module (connect device)
 export const ADD_SIM_REGISTER = "ADD_SIM_REGISTER";
+export const GET_SIMS = "GET_SIMS";
+export const UPDATE_SIM = "UPDATE_SIM";
