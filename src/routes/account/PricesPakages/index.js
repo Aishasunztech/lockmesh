@@ -50,7 +50,7 @@ class Prices extends Component {
                 dataIndex: 'sr',
                 key: 'sr',
                 align: "center",
-                render : (text, record, index) => ++index,
+                render: (text, record, index) => ++index,
             },
             {
                 title: (
@@ -497,7 +497,7 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ account, auth, settings }, otherprops) => {
-    // console.log(auth.authUser, ' authUser props are')
+    // console.log(account.isPriceChanged, ' authUser props are')
     return {
         auth: auth.authUser,
         prices: account.prices,

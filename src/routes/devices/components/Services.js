@@ -187,27 +187,47 @@ class ServicesList extends Component {
         // console.log(list);
         if (type === 'package') {
             return list.map((item, index) => {
-
-                // console.log(item.pkg_features);
                 let services = JSON.parse(item.pkg_features)
-                // console.log(services);
                 return {
-                    rowKey: index,
-                    pkg_name: item.pkg_name,
-                    sim_id: (services.sim_id) ? "YES" : "NO",
-                    sim_id2: (services.sim_id2) ? "YES" : "NO",
-                    chat_id: (services.chat_id) ? "YES" : "NO",
-                    pgp_email: (services.pgp_email) ? "YES" : "NO",
-                    vpn: (services.vpn) ? "YES" : "NO",
-                    pkg_price: item.pkg_price
+                    id: item.id,
+                    rowKey: item.id,
+                    pkg_name: `${item.pkg_name}`,
+                    sim_id: (services.sim_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                    sim_id2: (services.sim_id2) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                    chat_id: (services.chat_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                    pgp_email: (services.pgp_email) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                    vpn: (services.vpn) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
+                    pkg_price: `$${item.pkg_price}`,
+                    pkg_features: services,
                 }
             });
         } else {
             return list.map((item, index) => {
+                let price_for = ''
+                switch (item.price_for) {
+                    case 'sim_id':
+                        price_for = "SIM ID"
+                        break;
+                    case 'pgp_email':
+                        price_for = "PGP EMAIL"
+                        break;
+                    case 'chat_id':
+                        price_for = "CHAT ID"
+                        break;
+                    case 'vpn':
+                        price_for = "VPN"
+                        break;
+
+                    default:
+                        break;
+                }
+
                 return {
-                    rowKey: index,
-                    price_for: item.price_for,
-                    unit_price: item.unit_price,
+                    id: item.id,
+                    rowKey: item.id,
+                    price_for: `${price_for}`,
+                    unit_price: `$${item.unit_price}`,
+                    item: item.price_for
                 }
             });
         }
@@ -218,10 +238,12 @@ class ServicesList extends Component {
 
 
     resetSeletedRows = () => {
-        // console.log('table ref', this.refs.tablelist)
+        // console.log('table ref')
         this.setState({
-            selectedRowKeys: [],
-            selectedRows: [],
+            proSelectedRowKeys: [],
+            pkgSelectedRowKeys: [],
+            proSelectedRows: [],
+            PkgSelectedRows: [],
         })
     }
 
@@ -242,10 +264,10 @@ class ServicesList extends Component {
     }
 
     sideScroll(element, direction, speed, distance, step) {
-        console.log('hi sideScroll function')
+        // console.log('hi sideScroll function')
         // element.props.scroll.x=15;
         // element.props.style.scrollMargin="100px";
-        console.log('element is: ', element.props);
+        // console.log('element is: ', element.props);
         // console.log('direction is: ', direction);
         // console.log('speed is: ', speed);
         // console.log('distance is: ', distance);
@@ -266,32 +288,73 @@ class ServicesList extends Component {
     }
 
     handlePackageSelect = (selectedRowKeys, selectedRows) => {
-
+        // console.0log(selectedRowKeys, selectedRows);
         this.setState({ PkgSelectedRows: selectedRows, pkgSelectedRowKeys: selectedRowKeys })
 
     }
-    handlePackageSelect = (selectedRowKeys, selectedRows) => {
+    handleProSelect = (selectedRowKeys, selectedRows) => {
 
         this.setState({ proSelectedRows: selectedRows, proSelectedRowKeys: selectedRowKeys })
 
     }
+    handleCancel = () => {
+        this.resetSeletedRows();
+        this.props.handleCancel()
+
+        // this.setState({ proSelectedRows: selectedRows, proSelectedRowKeys: selectedRowKeys })
+    }
+    selectAll = () => {
+        this.resetSeletedRows()
+    }
+    handleSubmit = () => {
+        if (this.state.proSelectedRowKeys.length || this.state.pkgSelectedRowKeys.length) {
+            showConfirm(this)
+        }
+    }
+
 
     render() {
 
-        // console.log(this.packagesColumns);
-
         let packageRowSelection = {
+            // hideDefaultSelections: false,
+            onSelectAll: this.selectAll,
+            selectedRowKeys: this.state.pkgSelectedRowKeys,
             onChange: (selectedRowKeys, selectedRows) => {
                 this.handlePackageSelect(selectedRowKeys, selectedRows)
-
-                // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => {
-                if (this.state.pkgSelectedRowKeys.findIndex(record.id)) {
-                    console.log("Record found");
+                let disabled = false
+                // console.log(this.state.proSelectedRows, this.state.PkgSelectedRows);
+                if (this.state.proSelectedRows.length) {
+                    this.state.proSelectedRows.map((item) => {
+                        // console.log(record.pkg_features[item.item]);
+                        if (record.pkg_features[item.item] === true) {
+                            disabled = true
+                        }
+                    })
+                }
+                if (this.state.PkgSelectedRows.length) {
+                    this.state.PkgSelectedRows.map((item) => {
+                        // console.log(item, record);
+                        if (item.id !== record.id) {
+                            if (item.pkg_features.sim_id === true && record.pkg_features.sim_id === true) {
+                                disabled = true
+                            }
+                            if (item.pkg_features.chat_id === true && record.pkg_features.chat_id === true) {
+                                disabled = true
+                            }
+                            if (item.pkg_features.pgp_email === true && record.pkg_features.pgp_email === true) {
+                                disabled = true
+                            }
+                            if (item.pkg_features.vpn === true && record.pkg_features.vpn === true) {
+                                disabled = true
+                            }
+                        }
+
+                    })
                 }
                 return ({
-                    disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                    disabled: disabled, // Column configuration not to be checked
                     name: record.name,
                 })
             },
@@ -299,15 +362,29 @@ class ServicesList extends Component {
         };
 
         let productRowSelection = {
+            selectedRowKeys: this.state.proSelectedRowKeys,
+            onSelectAll: this.selectAll,
             onChange: (selectedRowKeys, selectedRows) => {
-                this.handlePriceSelect(selectedRowKeys, selectedRows)
+                this.handleProSelect(selectedRowKeys, selectedRows)
 
                 // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                name: record.name,
-            }),
+            getCheckboxProps: record => {
+                let disabled = false
+                if (this.state.PkgSelectedRows.length) {
+                    this.state.PkgSelectedRows.map((item) => {
+                        // console.log(item[record.price_for], record.price_for);
+                        if (item.pkg_features[record.item] === true) {
+                            disabled = true
+                        }
+                    })
+                }
+
+                return ({
+                    disabled: disabled, // Column configuration not to be checked
+                    name: record.name,
+                })
+            },
             //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
         };
 
@@ -345,29 +422,15 @@ class ServicesList extends Component {
                         }
                     />
 
-
                 </div >
+                <div className="edit_ftr_btn">
+                    <Button key="back" type="button" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
+                    <Button type="primary" onClick={this.handleSubmit} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT")}</Button>
+                </div>
 
             </Fragment>
 
         )
-    }
-
-    handleSuspendDevice = (device) => {
-        this.refs.suspend.handleSuspendDevice(device);
-    }
-
-    handleActivateDevice = (device) => {
-        this.refs.activate.handleActivateDevice(device);
-    }
-
-    handleRejectDevice = (device) => {
-
-        this.props.rejectDevice(device)
-    }
-    addDevice = (device) => {
-        // console.log(device);
-        // this.props.addDevice(device);
     }
 
 }
@@ -541,6 +604,8 @@ class Services extends Component {
     }
 
     callback = (key) => {
+        // console.log(this.refs.services.resetSeletedRows);
+        this.refs.services.resetSeletedRows();
         this.props.handleChangetab(key);
     }
 
@@ -563,12 +628,15 @@ class Services extends Component {
                     <ServicesList
                         parent_packages={this.props.parent_packages}
                         product_prices={this.props.product_prices}
-                        ref="devciesList"
+                        ref="services"
                         tabselect={this.props.tabselect}
                         // resetTabSelected={this.resetTabSelected}
                         user={this.props.user}
                         history={this.props.history}
                         translation={this.props.translation}
+                        handleCancel={this.props.handleCancel}
+                        handleServicesSubmit={this.props.handleServicesSubmit}
+                        serviceTerm={this.props.tabselect}
                     />
                 </div>
             </Fragment>
@@ -582,12 +650,13 @@ const WrappedAddDeviceForm = Form.create({ name: 'register' })(Services);
 export default WrappedAddDeviceForm;
 function showConfirm(_this, values) {
     confirm({
-        title: "Do You Really want to duplicate " + values.duplicate + " devices with same settings.",
+        title: "Do You Really want to apply selected services on device ? ",
         onOk() {
-            _this.props.AddDeviceHandler(values);
-            _this.props.hideModal();
-            _this.handleReset();
+            _this.props.handleServicesSubmit(_this.state.proSelectedRows, _this.state.PkgSelectedRows, _this.props.serviceTerm);
+            _this.handleCancel()
         },
-        onCancel() { },
+        onCancel() {
+
+        },
     });
 }

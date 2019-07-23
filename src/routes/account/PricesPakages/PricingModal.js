@@ -75,6 +75,7 @@ export default class PricingModal extends Component {
                     pkgFeatures: this.state.pkg_features,
                     dealer_id: this.props.dealer_id
                 }
+                // console.log(data);
                 this.props.setPackage(data);
                 this.props.showPricingModal(false);
                 this.setState({
@@ -125,7 +126,7 @@ export default class PricingModal extends Component {
                 title={<div>{convertToLang(this.props.translation[Button_SET_PRICE], "Set Price")}</div>}
                 visible={this.props.pricing_modal}
                 onOk={this.handleSubmit}
-                okText= {convertToLang(this.props.translation[Button_Save], "Save")}
+                okText={convertToLang(this.props.translation[Button_Save], "Save")}
                 okButtonProps={{ disabled: this.state.outerTab === '1' ? !this.props.isPriceChanged : false }}
                 onCancel={() => { this.props.showPricingModal(false); this.props.resetPrice() }}
                 // footer={null}
