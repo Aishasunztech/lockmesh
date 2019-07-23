@@ -477,6 +477,7 @@ class DevicesList extends Component {
                             size="middle"
                             bordered
                             columns={this.state.columns}
+                            onChange={this.props.onChangeTableSorting}
                             dataSource={this.renderList(this.props.devices)}
                             pagination={
                                 false
@@ -828,6 +829,7 @@ export default class Tab extends Component {
                         unflagConfirm={this.unflagConfirm}
                         history={this.props.history}
                         translation={this.props.translation}
+                        onChangeTableSorting={this.props.onChangeTableSorting}
                     />
                 </div>
             </Fragment>

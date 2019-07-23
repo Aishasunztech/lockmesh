@@ -94,10 +94,11 @@ var status = true;
 class Devices extends Component {
     constructor(props) {
         super(props);
-        var columns = devicesColumns(props.translation, this.handleSearch);
+        var columns = devicesColumns(null, props.translation, this.handleSearch);
 
 
         this.state = {
+            sortOrder: null,
             columns: columns,
             searchText: '',
             devices: [],
@@ -122,6 +123,15 @@ class Devices extends Component {
         this.handleChange = this.handleChange.bind(this);
 
     }
+
+    handleTableChange = (pagination, query, sorter) => {
+        // console.log('check sorter func: ', sorter)
+        const sortOrder = sorter.order || "ascend";
+        this.setState({
+            sortOrder,
+            columns: devicesColumns(sortOrder, this.props.translation, this.handleSearch)
+        });
+    };
 
     deleteAllUnlinked = () => {
         alert('Its working')
@@ -596,8 +606,9 @@ class Devices extends Component {
 
         if (this.props.translation !== prevProps.translation) {
             // console.log(this.columns)
+            console.log('this.state.sortOrder is ', this.state.sortOrder)
             this.setState({
-                columns: devicesColumns(this.props.translation, this.handleSearch)
+                columns: devicesColumns(this.state.sortOrder, this.props.translation, this.handleSearch)
 
             })
         }
@@ -747,6 +758,7 @@ class Devices extends Component {
                             />
 
                             <DevicesList
+                                onChangeTableSorting={this.handleTableChange}
                                 devices={this.state.devices}
                                 allDevices={this.state.allDevices.length}
                                 activeDevices={this.state.activeDevices.length}

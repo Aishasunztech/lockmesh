@@ -59,14 +59,21 @@ class Users extends Component {
         // this.state = {
         //     users: []
         // }
-        this.columns = usersColumns(props.translation, this.handleSearch);
+        this.columns = usersColumns(null, props.translation, this.handleSearch);
         this.state = {
+            sortOrder: null,
             users: [],
             originalUsers: [],
             expandedRowsKeys: [],
         }
 
     }
+
+    handleTableChange = (pagination, query, sorter) => {
+        // console.log('check sorter func: ', sorter)
+        const sortOrder = sorter.order || "ascend";
+        this.columns = usersColumns(sortOrder, this.props.translation, this.handleSearch);
+    };
 
     componentDidMount() {
         this.props.getUserList();
@@ -105,7 +112,7 @@ class Users extends Component {
             })
         }
         if (this.props.translation !== prevProps.translation) {
-            this.columns = usersColumns(this.props.translation, this.handleSearch);
+            this.columns = usersColumns(this.state.sortOrder, this.props.translation, this.handleSearch);
         }
     }
 
@@ -287,6 +294,7 @@ class Users extends Component {
                 />
                 <AddUser ref="add_user" translation={this.props.translation} />
                 <UserList
+                    onChangeTableSorting={this.handleTableChange}
                     editUser={this.props.editUser}
                     deleteUser={this.props.deleteUser}
                     undoDeleteUser={this.props.undoDeleteUser}

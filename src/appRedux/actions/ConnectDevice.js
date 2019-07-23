@@ -1161,3 +1161,10 @@ export const handleSimUpdate = (data) => {
         })
     }
 }
+
+
+
+// socket.on(Constants.RECV_SIM + device_id, (response) => {
+//     // console.log('ack ===== RECV_SIM =========> ', response)
+//     sockets.updateSimRecord(device_id, response);
+// })

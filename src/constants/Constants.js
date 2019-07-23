@@ -51,10 +51,10 @@ export const PUSH_APPS_TEXT = "push.apps.id"; // PUSH APPS
 export const PULL_APPS_TEXT = "pull.apps.id"; // PULL APPS
 export const PUSH = "push.id"; // PUSH
 export const PULL = "pull.id"; // PULL
-export const Alert_Allow_Permission_Delaer = "alert.allow.permission.dealer.id"; // Do you realy Want to allow Permission for all Dealers?
-export const Alert_Remove_Permission_Delaer = "alert.remove.permission.dealer.id"; // Do you realy Want to Remove Permission for all Dealers?
-export const Alert_Delete_APK = "alert.delete.apk.id"; // Are you sure, you want to delete the Apk ?
-export const POLICY = 'sidebar.policy';
+export const Alert_Allow_Permission_Delaer = "alert.allow.permission.dealer.id"; // Do you really Want to allow Permission for all Dealers?
+export const Alert_Remove_Permission_Delaer = "alert.remove.permission.dealer.id"; // Do you really Want to Remove Permission for all Dealers?
+export const Alert_Delete_APK = "ALERT.DELETE.APK.ID"; // Are you sure, you want to delete the Apk ?
+export const POLICY = 'policy';
 export const SELECT_POLICY = "Select.Policy.id"; // Select Policy
 
 // Constant Package Names

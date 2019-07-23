@@ -243,6 +243,7 @@ export default class ListApk extends Component {
                         bordered
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.apk_list)}
+                        onChange={this.handleTableChange}
                         pagination={false
                             //{ pageSize: Number(this.state.pagination) }
                         }

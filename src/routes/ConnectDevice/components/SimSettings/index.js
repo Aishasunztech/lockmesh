@@ -132,9 +132,12 @@ class SimSettings extends Component {
         this.refs.add_sim_reg.showModal();
     }
 
-    handleChecked = (e, id, label) => {
-        let value =  (e == true) ? 1 : 0;
-        this.props.handleSimUpdate({ id, label, value });
+    handleChecked = (e, obj, label) => {
+        let value = (e == true) ? 1 : 0;
+        obj[label] = value;
+        // console.log('obj is: ', obj)
+
+        this.props.handleSimUpdate({ obj, label, value });
     }
 
     // handleGuestAll = (e, label) => {
@@ -161,7 +164,7 @@ class SimSettings extends Component {
     renderSimList = () => {
 
         let sims = this.props.sim_list;
-        console.log("render list sims", sims);
+        // console.log("render list sims", sims);
 
 
         if (sims !== undefined && sims !== null && sims.length > 0) {
@@ -170,11 +173,12 @@ class SimSettings extends Component {
 
 
             return sims.map((sim, index) => {
-                console.log('---------------- ', sim.dataLimit)
+                // console.log('---------------- ', sim.dataLimit)
 
                 return {
                     key: index,
                     counter: ++index,
+                    // actions: (),
                     iccid: sim.iccid,
                     name: sim.name,
                     status: 'not inseted',
@@ -184,7 +188,7 @@ class SimSettings extends Component {
                         size="small"
                         onClick={(e) => {
                             // console.log("guest", e);
-                            this.handleChecked(e, sim.id, "guest");
+                            this.handleChecked(e, sim, "guest");
                         }}
                     />,
                     encrypted: <Switch
@@ -192,7 +196,7 @@ class SimSettings extends Component {
                         size="small"
                         onClick={(e) => {
                             // console.log("guest", e);
-                            this.handleChecked(e, sim.id, "encrypt");
+                            this.handleChecked(e, sim, "encrypt");
                         }}
                     />, // 
                     dataLimit: '20 MB', // ((sim.data_limit == "" || sim.data_limit == 0 || sim.data_limit == '0') ? <Button type="danger" onClick={this.setDataLimit}>Set</Button> : sim.data_limit),
@@ -201,12 +205,12 @@ class SimSettings extends Component {
         }
     }
     render() {
-        const { guestSimAll, encryptSimAll } = this.props;
-        console.log('guestSimAll stat is', this.state.sims)
+        const { guestSimAll, encryptSimAll, sim_list } = this.props;
+        console.log('guestSimAll stat is', sim_list)
         if (true) {
             return (
                 <Fragment>
-                 
+
                     <Row className="">
                         {/* <Row className="sec_head"> */}
                         <Col span={4} />
@@ -238,7 +242,11 @@ class SimSettings extends Component {
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                                 // console.log("guest", e);
-                                this.handleChecked(e, "all", "guest");
+                                this.handleChecked(e, {
+                                    id: "all",
+                                    device_id: sim_list.device_id,
+                                    iccid: sim_list.iccid
+                                }, "guest");
                             }}
                                 checked={guestSimAll === 1 ? true : false}
                                 size="small"
@@ -247,7 +255,11 @@ class SimSettings extends Component {
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
                                 // console.log("guest", e);
-                                this.handleChecked(e, "all", "encrypt");
+                                this.handleChecked(e, { 
+                                    id: "all", 
+                                    device_id: sim_list.device_id,
+                                    iccid: sim_list.iccid
+                                }, "encrypt");
                             }}
                                 checked={encryptSimAll === 1 ? true : false}
                                 size="small"

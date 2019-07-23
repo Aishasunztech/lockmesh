@@ -57,7 +57,8 @@ import {
     CLEAR_STATE,
     ADD_SIM_REGISTER,
     GET_SIMS,
-    UPDATE_SIM
+    UPDATE_SIM,
+    RECEIVE_SIM_DATA
 } from "../../constants/ActionTypes";
 
 import {
@@ -1164,21 +1165,14 @@ export default (state = initialState, action) => {
         }
 
         case GET_SIMS: {
-            // console.log('abaid at red:', action.payload.data)
-            // console.log(state.sim_list);
             let sims = action.payload.data;
             let checkEnc = sims.filter(e => e.encrypt != 1);
             let checkGst = sims.filter(e => e.guest != 1);
             let guestSimAll;
             let encryptSimAll;
-            // console.log('guestSimAll ', guestSimAll);
-            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1
-            if (checkEnc.length > 0) { encryptSimAll = 0; } else { encryptSimAll = 1; }
-            // console.log('guestSimAll ', guestSimAll);
-            // console.log('checkEnc ', checkEnc);
-            // console.log('checkGst ', checkGst);
-            // // console.log('sims ', sims);
-            // console.log('sims ', sims);
+            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
+            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
+
             return {
                 ...state,
                 sim_list: sims,
@@ -1186,6 +1180,15 @@ export default (state = initialState, action) => {
                 encryptSimAll
             }
         }
+        case RECEIVE_SIM_DATA: {
+            if (action.payload) {
+                return {
+                    ...state,
+                    simUpdated: new Date()
+                }
+            }
+        }
+
 
         case UPDATE_SIM: {
             if (action.response.status) {
@@ -1204,20 +1207,6 @@ export default (state = initialState, action) => {
                     ...state
                 }
             }
-            // console.log('abaid at red UPDATE_SIMS:', action.payload)
-            // let copySims = state.sim_list;
-            // let arr = copySims.filter(e => e.id == action.payload.id);
-            // let obj = arr[0];
-
-            // console.log('obj is ',obj);
-            // // obj[""]
-            // console.log('state is: ', state.sim_list)
-            // let sims = action.payload.data;
-            // console.log('sims ',sims);
-            // return {
-            //     ...state,
-            //     // sim_list: sims
-            // }
         }
 
         case WRITE_IMEI: {

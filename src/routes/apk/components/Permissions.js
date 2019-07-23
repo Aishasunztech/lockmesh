@@ -29,6 +29,7 @@ class Permissions extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      sortOrder: null,
       showDealersModal: false,
       dealer_ids: [],
       dealerList: [],
@@ -41,11 +42,19 @@ class Permissions extends Component {
       dealer_id: '',
       goToPage: '/dealer/dealer'
     }
-    this.addDealerCols = dealerColsWithSearch(props.translation, true, this.handleSearch);
-    this.addDealerColsInModal = dealerColsWithSearch(props.translation, true, this.handleSearchInModal);
-    this.listDealerCols = dealerColsWithSearch(props.translation);
+    this.addDealerCols = dealerColsWithSearch(null, props.translation, true, this.handleSearch);
+    this.addDealerColsInModal = dealerColsWithSearch(null, props.translation, true, this.handleSearchInModal);
+    this.listDealerCols = dealerColsWithSearch(null, props.translation);
 
   }
+
+  handleTableChange = (pagination, query, sorter) => {
+    // console.log('check sorter func: ', sorter)
+    const sortOrder = sorter.order || "ascend";
+    this.addDealerCols = dealerColsWithSearch(sortOrder, this.props.translation, true, this.handleSearch);
+    this.addDealerColsInModal = dealerColsWithSearch(sortOrder, this.props.translation, true, this.handleSearchInModal);
+    this.listDealerCols = dealerColsWithSearch(sortOrder, this.props.translation);
+  };
 
   componentDidMount() {
     this.props.getAllDealers()
@@ -60,9 +69,9 @@ class Permissions extends Component {
   componentWillReceiveProps(nextProps) {
 
     if (this.props.translation !== nextProps.translation) {
-      this.addDealerCols = dealerColsWithSearch(nextProps.translation, true, this.handleSearch);
-      this.addDealerColsInModal = dealerColsWithSearch(nextProps.translation, true, this.handleSearchInModal);
-      this.listDealerCols = dealerColsWithSearch(nextProps.translation);
+      this.addDealerCols = dealerColsWithSearch(this.state.sortOrder, nextProps.translation, true, this.handleSearch);
+      this.addDealerColsInModal = dealerColsWithSearch(this.state.sortOrder, nextProps.translation, true, this.handleSearchInModal);
+      this.listDealerCols = dealerColsWithSearch(this.state.sortOrder, nextProps.translation);
     }
 
     if (this.props.record.apk_id !== nextProps.record.apk_id) {
@@ -128,7 +137,7 @@ class Permissions extends Component {
   saveAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], "Do you realy Want to allow Permission for all Dealers?"),
+      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], "Do you really Want to allow Permission for all Dealers?"),
       okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
       cancelText: convertToLang(this.props.translation[Button_No], "No"),
       onOk() {
@@ -325,7 +334,7 @@ class Permissions extends Component {
   removeAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], "Do you realy Want to Remove Permission for all Dealers?"),
+      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], "Do you really Want to Remove Permission for all Dealers?"),
       okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
       cancelText: convertToLang(this.props.translation[Button_No], "No"),
       onOk() {
@@ -433,9 +442,9 @@ class Permissions extends Component {
                 <div data-column="ACTION">
                   <Button size="small" type="danger" onClick={() => {
                     this.rejectPemission(dealer.dealer_id)
-                  }}> 
-                  {convertToLang(this.props.translation[Button_Remove], "Remove")} 
-                    </Button>
+                  }}>
+                    {convertToLang(this.props.translation[Button_Remove], "Remove")}
+                  </Button>
                 </div>
               )
           }
@@ -515,6 +524,7 @@ class Permissions extends Component {
                 <Table
                   className="mb-24 expand_rows"
                   columns={this.listDealerCols}
+                  onChange={this.handleTableChange}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
                   pagination={false}
                   translation={this.props.translation}
@@ -540,6 +550,7 @@ class Permissions extends Component {
         >
           <DealerList
             columns={this.addDealerColsInModal}
+            onChangeTableSorting={this.handleTableChange}
             dealers={this.renderDealer(this.state.dealerListForModal)}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}

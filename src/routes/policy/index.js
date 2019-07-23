@@ -62,10 +62,11 @@ class Policy extends Component {
     constructor(props) {
         super(props);
 
-        this.columns = policyColumns(props.translation, this.handleSearch);
+        this.columns = policyColumns(null, props.translation, this.handleSearch);
 
 
         this.state = {
+            sortOrder: null,
             policyModal: false,
             policies: (props.policies) ? props.policies : [],
             formRefresh: false,
@@ -85,6 +86,12 @@ class Policy extends Component {
 
 
     }
+
+    handleTableChange = (pagination, query, sorter) => {
+        const sortOrder = sorter.order || "ascend";
+        this.columns = policyColumns(sortOrder, this.props.translation, this.handleSearch);
+    };
+
     componentDidMount() {
         // console.log(this.props, 'his')
         this.props.getPolicies();
@@ -128,7 +135,7 @@ class Policy extends Component {
             })
         }
         if (this.props.translation != prevProps.translation) {
-            this.columns = policyColumns(this.props.translation, this.handleSearch);
+            this.columns = policyColumns(this.state.sortOrder, this.props.translation, this.handleSearch);
         }
     }
 
@@ -320,6 +327,7 @@ class Policy extends Component {
                     translation={this.props.translation}
                 />
                 <PolicyList
+                    onChangeTableSorting={this.handleTableChange}
                     user={this.props.user}
                     columns={this.columns}
                     policies={this.state.policies}

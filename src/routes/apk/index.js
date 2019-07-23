@@ -69,8 +69,9 @@ class Apk extends React.Component {
     constructor(props) {
         super(props);
         let self = this;
-        let columns = apkColumns(props.translation);
+        let columns = apkColumns(null, props.translation);
         this.state = {
+            sortOrder: null,
             apk_list: [],
             uploadApkModal: false,
             showUploadModal: false,
@@ -87,6 +88,14 @@ class Apk extends React.Component {
 
 
     }
+
+    handleTableChange = (pagination, query, sorter) => {
+        const sortOrder = sorter.order || "ascend";
+        this.setState({
+            columns: apkColumns(sortOrder, this.props.translation)
+        })
+    };
+
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
@@ -261,7 +270,7 @@ class Apk extends React.Component {
 
         if(this.props.translation != prevProps.translation) {
             this.setState({
-                columns: apkColumns(this.props.translation)
+                columns: apkColumns(this.state.sortOrder, this.props.translation)
             })
         }
     }
@@ -360,6 +369,7 @@ class Apk extends React.Component {
                                     </div> : false
                             }
                             <ListApk
+                                onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
                                 // tableChangeHandler={this.tableChangeHandler}
