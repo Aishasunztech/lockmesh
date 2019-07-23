@@ -277,13 +277,13 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_TYPE], DEVICE_TYPE)}
+                    placeholder={convertToLang(translation[DEVICE_TYPE], "TYPE")}
                 />
             ),
             dataIndex: 'type',
             children: [
                 {
-                    title: convertToLang(translation[DEVICE_TYPE], DEVICE_TYPE),
+                    title: convertToLang(translation[DEVICE_TYPE], "TYPE"),
                     align: "center",
                     dataIndex: 'type',
                     key: 'type',
@@ -301,13 +301,13 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_VERSION], DEVICE_VERSION)}
+                    placeholder={convertToLang(translation[DEVICE_VERSION], "VERSION")}
                 />
             ),
             dataIndex: 'version',
             children: [
                 {
-                    title: convertToLang(translation[DEVICE_VERSION], DEVICE_VERSION),
+                    title: convertToLang(translation[DEVICE_VERSION], "VERSION"),
                     align: "center",
                     dataIndex: 'version',
                     key: 'version',

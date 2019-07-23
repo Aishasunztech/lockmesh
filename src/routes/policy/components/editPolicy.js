@@ -16,7 +16,7 @@ import styles from './policy.css';
 import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
 import { POLICY_SAVE_CONFIRMATION, PLEASE_INPUT_POLICY_NAME, POLICY_APP_NAME, POLICY_NOTE, POLICY_COMMAND, NAME } from '../../../constants/PolicyConstants';
-import { Button_Save, Button_Cancel } from '../../../constants/ButtonConstants';
+import { Button_Save, Button_Cancel, Button_AddApps, Button_Add } from '../../../constants/ButtonConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE, Tab_SECURE_SETTING } from '../../../constants/TabConstants';
 import { SPA_APPS } from '../../../constants/AppConstants';
@@ -732,13 +732,13 @@ class EditPolicy extends Component {
 
 
                     <Modal
-                        title="Add Apps"
+                        title={convertToLang(this.props.translation[Button_AddApps], "Add Apps")}
                         visible={this.state.addPushAppModal}
                         onOk={this.addItems}
                         onCancel={this.hideAddPushAppModal}
-                        okText="Add"
-                        cancelText="Cancel"
-                        width='700px'
+                        okText={convertToLang(this.props.translation[Button_Add], "Add")}
+                        cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                        width="400px"
                     >
                         <Table
                             className="exp_policy"
@@ -756,7 +756,7 @@ class EditPolicy extends Component {
 
                     </Modal>
                 </div>
-            </Fragment>
+            </Fragment >
         );
     }
 }
