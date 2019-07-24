@@ -100,6 +100,20 @@ export default class PolicyInfo extends Component {
         let secure_setting_app = '';
 
         if (this.props.policy.app_list.length) {
+            
+            this.props.push_apps.map((apk)=> {
+                let index = this.props.policy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
+                if(index && index !== -1){
+                    console.log(index)
+                    // console.log(editAblePolicy.push_apps[index]);
+
+                    this.props.policy.push_apps[index].apk = apk.apk;
+                    this.props.policy.push_apps[index].apk_name = apk.apk_name;
+                    this.props.policy.push_apps[index].logo = apk.logo;
+                    this.props.policy.push_apps[index].package_name = apk.package_name;
+                    this.props.policy.push_apps[index].version_name = apk.version_name;
+                }
+            })
             let system_control_index = this.props.policy.app_list.findIndex(app => app.uniqueName === Main_SETTINGS)
             if (system_control_index > -1) {
                 system_setting_app = this.props.policy.app_list[system_control_index]
