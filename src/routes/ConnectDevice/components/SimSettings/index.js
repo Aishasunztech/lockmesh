@@ -109,7 +109,7 @@ class SimSettings extends Component {
 
     handleChecked = (e, obj, label) => {
         console.log('obj is: ', obj)
-        return
+        // return
         // let value = (e == true) ? '1' : '0';
         if (obj.id == 'all') {
             e = (e == true) ? '1' : '0';
@@ -221,8 +221,8 @@ class SimSettings extends Component {
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                                 this.handleChecked(e, {
                                     id: "all",
-                                    device_id: sim_list.device_id,
-                                    iccid: sim_list.iccid
+                                    device_id: sim_list[0].device_id,
+                                    // iccid: sim_list.iccid
                                 }, "guest");
                             }}
                                 checked={guestSimAll === 1 ? true : false}
