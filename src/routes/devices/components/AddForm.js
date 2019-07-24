@@ -43,6 +43,7 @@ class AddDevice extends Component {
             pgp_email: '',
             chat_id: '',
             sim_id: '',
+            sim_id2: '',
             selectedPackage: null,
             vpn: '',
             packageId: '',
@@ -60,7 +61,8 @@ class AddDevice extends Component {
             services: false,
             checkServices: {
                 display: 'none',
-            }
+            },
+            term: ''
         }
     }
 
@@ -70,6 +72,11 @@ class AddDevice extends Component {
             // console.log('form', values);
             if (this.state.services) {
                 if (!err) {
+                    // console.log(this.state.products);
+                    // console.log(this.state.packages);
+                    values.products = this.state.products;
+                    values.packages = this.state.packages;
+                    values.term = this.state.term;
                     if (this.state.type == 1) {
                         showConfirm(this, values);
                     } else {
@@ -167,12 +174,17 @@ class AddDevice extends Component {
         let disablePgp = true;
         let disableSim = true;
         let vpn = '';
-        let packagesIds = []
-        let productIds = []
+        let packagesData = []
+        let productData = []
         // console.log(products, packages);
         if (packages && packages.length) {
             packages.map((item) => {
-                packagesIds.push(item.id)
+                let data = {
+                    id: item.id,
+                    pkg_features: item.pkg_features,
+                    pkg_price: item.pkg_price
+                }
+                packagesData.push(data)
                 let services = item.pkg_features;
                 if (services.chat_id) {
                     disableChat = false
@@ -191,7 +203,13 @@ class AddDevice extends Component {
         }
         if (products && products.length) {
             products.map((item) => {
-                productIds.push(item.id)
+                let data = {
+                    id: item.id,
+                    item: item.item,
+                    price: item.unit_price
+                }
+
+                productData.push(data)
                 if (item.item == 'chat_id') {
                     disableChat = false
                 }
@@ -217,11 +235,12 @@ class AddDevice extends Component {
             disableSim: disableSim,
             disableChat: disableChat,
             disablePgp: disablePgp,
-            packages: packagesIds,
-            products: productIds,
+            packages: packagesData,
+            products: productData,
             expiry_date: expiry_date,
             services: services,
-            checkServices: (services) ? { display: 'none' } : { display: 'inline', color: "Red", margin: 0 }
+            checkServices: (services) ? { display: 'none' } : { display: 'inline', color: "Red", margin: 0 },
+            term: term
         })
     }
 
@@ -414,7 +433,7 @@ class AddDevice extends Component {
 
 
     render() {
-        // console.log('id is', this.state.services);
+        // console.log('id is', this.state.products, this.state.packages);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
         var lastObject = users_list[0]
@@ -668,6 +687,35 @@ class AddDevice extends Component {
                                 )}
                             </Form.Item>
                             <Form.Item
+                                label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Sim ID 2 ")}
+                                labelCol={{ span: 8 }}
+                                wrapperCol={{ span: 14 }}
+                            >
+                                {this.props.form.getFieldDecorator('sim_id2', {
+                                    initialValue: this.state.sim_id2
+                                })(
+                                    <Select
+                                        // className="pos_rel"
+                                        showSearch
+                                        placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}
+                                        optionFilterProp="children"
+                                        onChange={(value) => this.setState({ sim_id2: value })}
+                                        // onFocus={handleFocus}
+                                        // onBlur={handleBlur}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        disabled={this.state.disableSim}
+                                    >
+                                        <Select.Option value="">{convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
+                                        {this.props.sim_ids.map((sim_id, index) => {
+                                            if (index > 0) {
+
+                                                return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                            }
+                                        })}
+                                    </Select>,
+                                )}
+                            </Form.Item>
+                            <Form.Item
                                 label={convertToLang(this.props.translation[DUMY_TRANS_ID], "VPN")}
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 14 }}
@@ -760,7 +808,7 @@ class AddDevice extends Component {
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
-                        {this.props.form.getFieldDecorator('start_date', {
+                        {this.props.form.getFieldDecorator('expiry_date', {
                             initialValue: this.state.expiry_date,
                         })(
 

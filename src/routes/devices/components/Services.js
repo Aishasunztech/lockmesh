@@ -30,7 +30,7 @@ class ServicesList extends Component {
 
     constructor(props) {
         super(props);
-        this.confirm = Modal.confirm;
+        // this.confirm = Modal.confirm;
 
         const packagesColumns = [
             {
