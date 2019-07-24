@@ -118,7 +118,7 @@ class EditApkForm extends Component {
                     'details': details
                 }
                 this.props.editApk(form_data);
-                this.props.getApkList();
+                // this.props.getApkList();
                 this.props.handleCancel();
                 //  console.log(form_data);
             }
@@ -149,7 +149,6 @@ class EditApkForm extends Component {
 
 
     checkUniqueName = async (rule, value, callback) => {
-        const form = this.props.form;
         if (/[^A-Za-z. \d]/.test(value)) {
             callback('Please insert a valid name.');
         } else {
@@ -275,11 +274,6 @@ class EditApkForm extends Component {
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
                             size = info.file.response.size
-                            // packageName = info.file.response.packageName;
-                            // versionCode = info.file.response.versionCode;
-                            // versionName = info.file.response.versionName;
-                            // details = info.file.response.details;
-                            // console.log('apk name', apk);
                         }
                         successMessage({
                             title: info.file.response.msg
@@ -306,55 +300,60 @@ class EditApkForm extends Component {
 
         return (
             <Form onSubmit={this.handleSubmit}>
-                <Form.Item {...formItemLayout} label="Apk name" className="upload_file">
-                    {getFieldDecorator('name', {
-                        initialValue: this.props.app.apk_name,
-                        rules: [{
-                            required: true, message: 'Name is required',
-                        },
-                        {
-                            validator: this.checkUniqueName,
-                        },
-                        ],
-                    })(
-                        <Input />
-                    )}
-                </Form.Item>
-                <Form.Item label="Apk Icon" {...formItemLayout} className="upload_file">
-                    <div className="dropbox">
-                        {getFieldDecorator('icon', {}
+                <Form.Item
+                    {...formItemLayout}
+                    label="Apk name"
+                    className="upload_file"
+                >
+                    {
+                        getFieldDecorator('name', {
+                            initialValue: this.props.app.apk_name,
+                            rules: [{
+                                required: true, message: 'Name is required',
+                            },
+                            {
+                                validator: this.checkUniqueName,
+                            },
+                            ],
+                        })(
+                            <Input />
                         )
-                            (
-                                <Upload {...props} >
-                                    <Button className="width_100 upload_btn" type="default" >
-                                        <Icon type="folder-open" />UPLOAD ICON
+                    }
+                </Form.Item>
+                <Form.Item
+                    label="Apk Icon"
+                    {...formItemLayout}
+                    className="upload_file"
+                >
+                    <div className="dropbox">
+                        {
+                            getFieldDecorator('icon', {})
+                                (
+                                    <Upload {...props} >
+                                        <Button className="width_100 upload_btn" type="default" >
+                                            <Icon type="folder-open" />UPLOAD ICON
                                     </Button>
-                                    {/* <p className="ant-upload-drag-icon">
-                                            <Icon type="picture" />
-                                        </p>
-                                        <h2 className="ant-upload-hint">UPLOAD LOGO </h2>
-                                        <p className="ant-upload-text">Upload file (.jpg,.png)</p> */}
-                                </Upload>
-                            )}
+                                    </Upload>
+                                )}
 
                     </div>
                 </Form.Item>
-                <Form.Item label="Apk file" className="upload_file" {...formItemLayout}>
+                <Form.Item
+                    label="Apk file"
+                    className="upload_file"
+                    {...formItemLayout}
+                >
                     <div className="dropbox">
-                        {getFieldDecorator('apk', {}
-                        )
-                            (
-                                <Upload  {...props2}>
-                                    <Button className="width_100 upload_btn" type="default" >
-                                        <Icon type="folder-open" /> UPLOAD APK FILE
-                                                </Button>
-                                    {/* <p className="ant-upload-drag-icon">
-                                            <Icon type="file" />
-                                        </p>
-                                        <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
-                                        <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
-                                </Upload>
-                            )
+                        {
+                            getFieldDecorator('apk', {})
+                                (
+                                    <Upload  {...props2}>
+                                        <Button className="width_100 upload_btn" type="default" >
+                                            <Icon type="folder-open" /> UPLOAD APK FILE
+                                    </Button>
+
+                                    </Upload>
+                                )
                         }
                     </div>
                 </Form.Item>
