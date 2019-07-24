@@ -58,7 +58,8 @@ import {
     ADD_SIM_REGISTER,
     GET_SIMS,
     UPDATE_SIM,
-    RECEIVE_SIM_DATA
+    RECEIVE_SIM_DATA,
+    DELETE_SIM
 } from "../../constants/ActionTypes";
 
 import {
@@ -1208,6 +1209,25 @@ export default (state = initialState, action) => {
                 }
             }
         }
+
+        // case DELETE_SIM: {
+        //     if (action.response.status) {
+        //         success({
+        //             title: action.response.msg,
+        //         });
+        //         return {
+        //             ...state,
+        //             simUpdated: new Date()
+        //         }
+        //     } else {
+        //         error({
+        //             title: action.response.msg,
+        //         });
+        //         return {
+        //             ...state
+        //         }
+        //     }
+        // }
 
         case WRITE_IMEI: {
             if (action.payload.status) {

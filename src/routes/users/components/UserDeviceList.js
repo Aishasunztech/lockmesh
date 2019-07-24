@@ -69,7 +69,7 @@ class UserDeviceList extends Component {
     handleTableChange = (pagination, query, sorter) => {
         // console.log('check sorter func: ', sorter)
         const sortOrder = sorter.order || "ascend";
-        this.listdeviceCols = userDevicesListColumns(sortOrder, props.translation, this.handleSearch)
+        this.listdeviceCols = userDevicesListColumns(sortOrder, this.props.translation, this.handleSearch)
     };
 
     componentDidMount() {

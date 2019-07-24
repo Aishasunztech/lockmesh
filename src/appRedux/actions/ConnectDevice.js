@@ -51,7 +51,8 @@ import {
     CLEAR_STATE,
     ADD_SIM_REGISTER,
     GET_SIMS,
-    UPDATE_SIM
+    UPDATE_SIM,
+    DELETE_SIM
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1135,6 +1136,27 @@ export const getSims = (device_id) => {
             }
 
 
+        })
+    }
+}
+
+export const deleteSim = (data) => {
+    console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.deleteSim(data).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: UPDATE_SIM, // DELETE_SIM,
+                    response: response.data,
+                    payload: data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
         })
     }
 }

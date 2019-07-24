@@ -202,7 +202,7 @@ class DevicesList extends Component {
                                     (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                                     : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
                                         (<Fragment>{DeleteBtn}</Fragment>)
-                                        : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type === ADMIN) ?
+                                        : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN) ?
                                             (<Fragment>
                                                 {/* <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment> */}
                                             </Fragment>)
