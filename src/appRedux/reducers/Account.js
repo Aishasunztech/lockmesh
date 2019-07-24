@@ -240,6 +240,9 @@ export default (state = initialState, action) => {
         }
         case CHECK_BACKUP_PASS:
             if (action.payload.PasswordMatch.password_matched) {
+                // success({
+                //     title: action.payload.msg,
+                // });
                 return {
                     ...state,
                     backUpModal: true,
@@ -247,7 +250,7 @@ export default (state = initialState, action) => {
             }
             else {
                 error({
-                    title: "Password Did not Match. Please Try again.",
+                    title: action.payload.msg,
                 });
                 return {
                     ...state,

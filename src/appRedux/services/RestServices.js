@@ -732,5 +732,20 @@ const RestService = {
         // console.log(device);
         return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
     },
+
+    simRegister: (total, data) => {
+        console.log('at sev', data);
+        return axios.post(BASE_URL + 'users/sim-register' , { data, total_dvc: total }, RestService.getHeader());
+    },
+    getSims: (device_id) => {
+        // console.log('at sev', data);
+        return axios.get(BASE_URL + 'users/get-sims/' + device_id, RestService.getHeader());
+    },
+    handleSimUpdate: (data) => {
+        console.log('at sev', data);
+        return axios.put(BASE_URL + 'users/sim-update' , data, RestService.getHeader());
+    },
+
+
 }
 export default RestService;

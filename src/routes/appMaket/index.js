@@ -194,7 +194,7 @@ class ApkMarket extends React.Component {
                                 onSearch={this.handleSearch}
                                 onSelectChange={this.handleSelect}
                                 render={item => item.title}
-                                locale={{ itemUnit: convertToLang(this.props.translation[SPA_APP], "App"), itemsUnit: convertToLang(this.props.translation[SPA_APPS], "Apps") }}
+                                locale={{ itemUnit: convertToLang(this.props.translation[SPA_APP], "App"), itemsUnit: convertToLang(this.props.translation[SPA_APP], "Apps") }}
                                 onItemSelect={this.handleSelect}
 
                             />

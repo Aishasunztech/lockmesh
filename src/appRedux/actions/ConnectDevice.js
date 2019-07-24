@@ -35,8 +35,6 @@ import {
     HANDLE_CHECK_MAIN_SETTINGS,
     UNDO_CONTROLS,
     REDO_CONTROLS,
-    GET_APPS_PERMISSIONS,
-    HANDLE_CHECK_APP_POLICY,
     GET_IMIE_HISTORY,
     GET_POLICIES,
     SHOW_PUSH_APPS_MODAL,
@@ -48,12 +46,18 @@ import {
     HIDE_POLICY_CONFIRM,
     APPLY_POLICY,
     CLEAR_APPLICATIONS,
-    CLEAR_STATE
+    CLEAR_STATE,
+    DEVICE_SYNCED,
+    ADD_SIM_REGISTER,
+    GET_SIMS,
+    UPDATE_SIM
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
 
 import { Modal } from 'antd';
+import { convertToLang } from "../../routes/utils/commonUtils";
+import { PASSWORD_SAVED } from "../../constants/Constants";
 const success = Modal.success;
 const error = Modal.error;
 
@@ -280,7 +284,7 @@ export function wipe(device) {
             }
             else {
                 error({
-                    title: "Device Not Wiped.Please Try again.",
+                    title: response.data.msg, // "Device Not Wiped.Please Try again.",
                 });
             }
         });
@@ -385,16 +389,6 @@ export function applySetting(app_list, passwords, extensions, controls, device_i
         RestService.applySettings(device_setting, device_id, usr_acc_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
-
-                    dispatch({
-                        type: SHOW_MESSAGE,
-                        payload: {
-                            showMessage: true,
-                            messageType: 'success',
-                            messageText: response.data.msg,
-                            type: type
-                        }
-                    })
                     dispatch({
                         type: SETTINGS_APPLIED,
                         payload: response.data
@@ -488,7 +482,7 @@ export function pushApps(apps, deviceId, userAccId) {
                         payload: {
                             showMessage: true,
                             messageType: 'success',
-                            messageText: "settings are applied"
+                            messageText: "Settings are applied"
                         }
                     })
                     dispatch({
@@ -500,7 +494,7 @@ export function pushApps(apps, deviceId, userAccId) {
                         payload: {
                             showMessage: false,
                             messageType: 'success',
-                            messageText: 'settings are applied'
+                            messageText: 'Settings are applied'
                         }
                     })
                 }
@@ -626,14 +620,14 @@ export function handleCheckAllExtension(keyAll, key, value, uniqueName) {
 
 
 
-export function submitPassword(passwords, pwdType) {
+export function submitPassword(passwords, pwdType, translation = {}) {
     return (dispatch) => {
         dispatch({
             type: SHOW_MESSAGE,
             payload: {
                 showMessage: true,
                 messageType: 'success',
-                messageText: "Password saved"
+                messageText: convertToLang(translation[PASSWORD_SAVED], "Password saved")
             }
         })
         dispatch({
@@ -645,7 +639,7 @@ export function submitPassword(passwords, pwdType) {
             payload: {
                 showMessage: false,
                 messageType: 'success',
-                messageText: "Password saved"
+                messageText: convertToLang(translation[PASSWORD_SAVED], "Password saved")
             }
         })
     }
@@ -716,7 +710,7 @@ export function saveProfile(app_list, passwords = null, profileName, usr_acc_id,
                     payload: {
                         showMessage: false,
                         messageType: 'success',
-                        messageText: "Profile saved successfully"
+                        messageText: response.data.msg //"Profile saved successfully"
                     }
                 })
 
@@ -775,7 +769,7 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
                     payload: {
                         showMessage: false,
                         messageType: 'success',
-                        messageText: "Profile saved successfully"
+                        messageText: response.data.msg, // "Profile saved successfully"
                     }
                 })
 
@@ -977,14 +971,25 @@ export const reSyncDevice = (deviceId) => {
         RestService.reSyncDevice(deviceId).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: "device_synced"
+                    type: DEVICE_SYNCED,
+                    payload: response.data.status
                 });
+
             } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
             }
         })
+    }
+}
+
+export const clearResyncFlag = () => {
+    return (dispatch) => {
+        dispatch({
+            type: DEVICE_SYNCED,
+            payload: false
+        });
     }
 }
 
@@ -1018,8 +1023,7 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: PUSH_APPS,
-                    payload: response.data
-
+                    payload: response.data,
                 })
             } else {
                 dispatch({
@@ -1036,7 +1040,7 @@ export const applyPolicy = (deviceId, userAccId, policyId) => {
                 // console.log(response.data);
                 dispatch({
                     type: APPLY_POLICY,
-                    payload: response.data
+                    payload: response.data,
                 })
             } else {
                 dispatch({
@@ -1083,6 +1087,77 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
                     type: INVALID_TOKEN
                 })
             }
+        })
+    }
+}
+
+// ********* Sim Module
+export const simRegister = (total, data) => {
+    console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.simRegister(total, data).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                // data['id'] = 122;
+
+                dispatch({
+                    type: ADD_SIM_REGISTER,
+                    response: response.data,
+                    payload: data
+                    // payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export const getSims = (device_id) => {
+    // console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.getSims(device_id).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: GET_SIMS,
+                    payload: response.data
+                    // payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
+        })
+    }
+}
+
+export const handleSimUpdate = (data) => {
+    console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.handleSimUpdate(data).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: UPDATE_SIM,
+                    response: response.data,
+                    payload: data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
         })
     }
 }

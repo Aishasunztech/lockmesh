@@ -5,6 +5,8 @@ import AddUser from '../../users/components/AddUser';
 import { convertToLang } from '../../utils/commonUtils';
 import Services from './Services'
 
+import AddSimPermission from './AddSimPermission'
+import { Markup } from 'interweave';
 import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
@@ -15,20 +17,15 @@ import {
     getUserList
 } from "../../../appRedux/actions/Users";
 import { Button_Cancel, Button_submit, Button_Add_User } from '../../../constants/ButtonConstants';
-import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2 } from '../../../constants/DeviceConstants';
 import { LABEL_DATA_PGP_EMAIL, LABEL_DATA_SIM_ID, LABEL_DATA_CHAT_ID, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
-import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require } from '../../../constants/Constants';
+import { SINGLE_DEVICE, DUPLICATE_DEVICES, Required_Fields, USER_ID, DEVICE_ID, USER_ID_IS_REQUIRED, SELECT_PGP_EMAILS, DEVICE_Select_CHAT_ID, SELECT_USER_ID, DEVICE_CLIENT_ID, DEVICE_Select_SIM_ID, DEVICE_MODE, DEVICE_MODEL, Device_Note, Device_Valid_For, Device_Valid_days_Required, DUPLICATE_DEVICES_REQUIRED, DEVICE_IMEI_1, DEVICE_SIM_1, DEVICE_IMEI_2, DEVICE_SIM_2, DUPLICATE_DEVICES_HELPING_TEXT } from '../../../constants/DeviceConstants';
+import { Not_valid_Email, POLICY, Start_Date, Expire_Date, Expire_Date_Require, SELECT_POLICY } from '../../../constants/Constants';
 import { DEALER_PIN } from '../../../constants/DealerConstants';
 import moment from 'moment';
 
 const confirm = Modal.confirm;
 const success = Modal.success
-const error = Modal.error
-const duplicate_txt = (
-    <div>
-        <span>Generate multiple activation <br /> codes with same settings</span>
-    </div>
-);
+
 class AddDevice extends Component {
 
     constructor(props) {
@@ -446,8 +443,11 @@ class AddDevice extends Component {
                         <Radio.Button className="dev_radio_btn" value="0">{convertToLang(this.props.translation[SINGLE_DEVICE], "Single Device")}</Radio.Button>
                         <Radio.Button className="dev_radio_btn" value="1">
                             <a>{convertToLang(this.props.translation[DUPLICATE_DEVICES], "Duplicate Devices")}</a>
-                            <Popover content={duplicate_txt} placement="bottomRight">
-                                <Icon type="info-circle" style={{ marginLeft: 8 }} />
+                            <Popover placement="bottomRight" content={(
+                                <Markup content={convertToLang(this.props.translation[DUPLICATE_DEVICES_HELPING_TEXT],
+                                    `<p>Generate multiple activation <br /> codes with same settings</p>`)} />
+                            )}>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
                             </Popover>
                         </Radio.Button>
                     </Radio.Group>
@@ -478,7 +478,7 @@ class AddDevice extends Component {
                             <Form.Item
                                 label={convertToLang(this.props.translation[USER_ID], "USER ID")}
                                 labelCol={{ span: 8 }}
-                                wrapperCol={{ span: 10 }}
+                                wrapperCol={{ span: 14 }}
                             >
 
 
@@ -776,14 +776,14 @@ class AddDevice extends Component {
                         })(
                             <Select
                                 showSearch
-                                placeholder={convertToLang(this.props.translation[POLICY], "Select Policy ")}
+                                placeholder={convertToLang(this.props.translation[SELECT_POLICY], "Select Policy")}
                                 optionFilterProp="children"
                                 // onChange={handleChange}
                                 // onFocus={handleFocus}
                                 // onBlur={handleBlur}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Select.Option value="">{convertToLang(this.props.translation[POLICY], "Select Policy ")}</Select.Option>
+                                <Select.Option value="">{convertToLang(this.props.translation[SELECT_POLICY], "Select Policy ")}</Select.Option>
                                 {this.props.policies.map((policy, index) => {
                                     return (<Select.Option key={index} value={policy.id}>{policy.policy_name}</Select.Option>)
                                 })}

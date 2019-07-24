@@ -54,7 +54,11 @@ import {
     CLEAR_APPLICATIONS,
     SAVE_PROFILE,
     EDIT_DEVICE,
-    CLEAR_STATE
+    CLEAR_STATE,
+    DEVICE_SYNCED,
+    ADD_SIM_REGISTER,
+    GET_SIMS,
+    UPDATE_SIM
 } from "../../constants/ActionTypes";
 
 import {
@@ -62,9 +66,9 @@ import {
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
-import { Button_Cancel } from '../../constants/ButtonConstants';
-import { convertToLang } from '../../routes/utils/commonUtils';
-import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
+// import { Button_Cancel } from '../../constants/ButtonConstants';
+// import { convertToLang } from '../../routes/utils/commonUtils';
+// import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
 
 const warning = Modal.warning;
 const confirm = Modal.confirm;
@@ -164,6 +168,13 @@ const initialState = {
     noOfApp_pushed_pulled: 0,
     is_push_apps: 0,
     is_policy_process: 0,
+    reSync: false,
+    
+    // sim module
+    sim_list: [],
+    guestSimAll: 0,
+    encryptSimAll: 0,
+    simUpdated: false,
 
 };
 
@@ -272,7 +283,7 @@ export default (state = initialState, action) => {
             }
         }
 
-        case UNFLAG_DEVICE:
+        case UNFLAG_DEVICE: {
             // console.log(action.response.msg);
             if (action.response.status) {
                 success({
@@ -289,7 +300,8 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: false,
             }
-        case WIPE_DEVICE:
+        }
+        case WIPE_DEVICE: {
             // console.log(action.response.msg);
             if (action.response.status) {
                 success({
@@ -306,7 +318,7 @@ export default (state = initialState, action) => {
                 ...state,
                 isloading: false,
             }
-
+        }
         case GET_DEVICE_APPS: {
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
@@ -395,13 +407,13 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
-                        title: "Apps are Being pushed",
+                        title: action.payload.msg, // "Apps are Being pushed"
                     });
                 } else {
                     // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                     warning({
-                        title: 'Warning Device Offline',
-                        content: 'Apps pushed to device. Action will be performed when device is back online',
+                        title: action.payload.msg, //  'Warning Device Offline',
+                        content: action.payload.content // "Apps pushed to device. Action will be performed when device is back online", // 'Apps pushed to device. Action will be performed when device is back online',
                     });
                 }
                 noOfApps = action.payload.noOfApps
@@ -419,14 +431,14 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
-                        title: "Policy is Being applied",
+                        title: action.payload.msg, // "Policy is Being applied",
                     });
 
                 } else {
                     // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                     warning({
-                        title: 'Warning Device Offline',
-                        content: 'Policy Applied to device. Action will be performed when device is back online',
+                        title: action.payload.msg, // 'Warning Device Offline',
+                        content: action.payload.content // 'Policy Applied to device. Action will be performed when device is back online',
                     });
                 }
             } else {
@@ -452,10 +464,29 @@ export default (state = initialState, action) => {
             }
         }
         case SETTINGS_APPLIED: {
-            // console.log(SETTINGS_APPLIED);
-            // console.log(action.payload);
+
+            if (action.payload.status) {
+                if (action.payload.online) {
+                    success({
+                        title: action.payload.msg,
+                    });
+
+                } else {
+                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: action.payload.msg,
+                    });
+                }
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+
             return {
                 ...state,
+                changedCtrls: {},
                 pageName: MAIN_MENU,
                 showMessage: false,
                 applyBtn: false,
@@ -588,6 +619,7 @@ export default (state = initialState, action) => {
                 applyBtn: true
             }
         }
+
         case ADMIN_PASSWORD: {
             return {
                 ...state,
@@ -597,6 +629,7 @@ export default (state = initialState, action) => {
                 applyBtn: true
             }
         }
+
         case CHECKPASS: {
             if (action.payload.PasswordMatch.password_matched) {
                 // alert(action.payload.actionType);
@@ -632,17 +665,19 @@ export default (state = initialState, action) => {
             }
             else {
                 error({
-                    title: "Password Did not Match. Please Try again.",
+                    title: action.payload.PasswordMatch.msg, // "Password Did not Match. Please Try again.",
                 });
             }
 
         }
+
         case POLICY: {
             return {
                 ...state,
                 policyName: action.payload
             }
         }
+
         case PROFILE: {
             return {
                 ...state,
@@ -670,12 +705,12 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
                 if (action.payload.online) {
                     success({
-                        title: "Apps are Being pulled",
+                        title: action.payload.msg, // "Apps are Being pulled",
                     });
                 } else {
                     warning({
-                        title: 'Warning Device Offline',
-                        content: 'Apps pulled from device. Action will be performed when device is back online',
+                        title: action.payload.msg, //  'Warning Device Offline',
+                        content: action.payload.content // 'Apps pulled from device. Action will be performed when device is back online',
                     });
                 }
                 noOfApps = action.payload.noOfApps
@@ -837,7 +872,6 @@ export default (state = initialState, action) => {
             let extensions = state.extensions;
             state.undoExtensions.push(JSON.parse(JSON.stringify(changedExtensions)));
             let check = handleCheckedAllExts(extensions);
-            console.log("undo extensions", state.undoExtensions)
 
             return {
                 ...state,
@@ -878,11 +912,8 @@ export default (state = initialState, action) => {
                 // ...check
             }
         }
+
         case UNDO_EXTENSIONS: {
-            console.log('action', UNDO_EXTENSIONS)
-            console.log(state.undoExtensions, 'undo ex')
-            console.log(state.redoExtensions, 'redo ext')
-            console.log(state.extensions, ' ext')
 
             if (state.undoExtensions.length > 1) {
 
@@ -894,7 +925,6 @@ export default (state = initialState, action) => {
                 if (state.undoExtensions.length === 1) {
                     return {
                         ...state,
-
                         undoBtn: false,
                         redoBtn: true,
                         extensions: JSON.parse(JSON.stringify(state.undoExtensions[state.undoExtensions.length - 1]))
@@ -913,12 +943,8 @@ export default (state = initialState, action) => {
                 };
             }
         }
+
         case REDO_EXTENSIONS: {
-            console.log('action', REDO_EXTENSIONS)
-            console.log(state.undoExtensions, 'undo ex')
-            console.log(state.redoExtensions, 'redo ext')
-            console.log(state.extensions, ' ext')
-            // console.log('REDUCER UNDO');
             if (state.redoExtensions.length > 0) {
 
                 let extensions = state.redoExtensions[state.redoExtensions.length - 1];
@@ -978,18 +1004,19 @@ export default (state = initialState, action) => {
                 ...check
             }
         }
+
         case HANDLE_CHECK_ALL: {
             let applications = JSON.parse(JSON.stringify(state.app_list));
             applications.forEach(app => {
                 // console.log(app[action.payload.key], 'kkkkkk', 'guest')
+                app.isChanged = true;
                 if (app.default_app !== 1) {
                     app[action.payload.key] = action.payload.value;
-                    app.isChanged = true;
                 } else if (app.default_app === 1 && action.payload.key === 'guest') {
-                    app.isChanged = true;
                     app[action.payload.key] = action.payload.value;
                 }
             })
+
             state[action.payload.keyAll] = action.payload.value;
             state.undoApps.push(JSON.parse(JSON.stringify(applications)));
 
@@ -1039,6 +1066,7 @@ export default (state = initialState, action) => {
                 };
             }
         }
+
         case REDO_APPS: {
             if (state.redoApps.length > 0) {
 
@@ -1098,7 +1126,6 @@ export default (state = initialState, action) => {
             }
         }
 
-
         case GET_DEALER_APPS: {
 
             return {
@@ -1107,6 +1134,7 @@ export default (state = initialState, action) => {
                 apk_list_dump: action.payload
             }
         }
+
         case SHOW_PUSH_APPS_MODAL: {
             return {
                 ...state,
@@ -1135,6 +1163,82 @@ export default (state = initialState, action) => {
             }
         }
 
+        case ADD_SIM_REGISTER: {
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state,
+                    sim_list: [...state.sim_list, action.payload]
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state
+                }
+            }
+        }
+
+        case GET_SIMS: {
+            // console.log('abaid at red:', action.payload.data)
+            // console.log(state.sim_list);
+            let sims = action.payload.data;
+            let checkEnc = sims.filter(e => e.encrypt != 1);
+            let checkGst = sims.filter(e => e.guest != 1);
+            let guestSimAll;
+            let encryptSimAll;
+            // console.log('guestSimAll ', guestSimAll);
+            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1
+            if (checkEnc.length > 0) { encryptSimAll = 0; } else { encryptSimAll = 1; }
+            // console.log('guestSimAll ', guestSimAll);
+            // console.log('checkEnc ', checkEnc);
+            // console.log('checkGst ', checkGst);
+            // // console.log('sims ', sims);
+            // console.log('sims ', sims);
+            return {
+                ...state,
+                sim_list: sims,
+                guestSimAll,
+                encryptSimAll
+            }
+        }
+
+        case UPDATE_SIM: {
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state,
+                    simUpdated: new Date()
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state
+                }
+            }
+            // console.log('abaid at red UPDATE_SIMS:', action.payload)
+            // let copySims = state.sim_list;
+            // let arr = copySims.filter(e => e.id == action.payload.id);
+            // let obj = arr[0];
+
+            // console.log('obj is ',obj);
+            // // obj[""]
+            // console.log('state is: ', state.sim_list)
+            // let sims = action.payload.data;
+            // console.log('sims ',sims);
+            // return {
+            //     ...state,
+            //     // sim_list: sims
+            // }
+        }
+
         case WRITE_IMEI: {
             if (action.payload.status) {
                 // if (action.payload.insertedData !== null) {
@@ -1143,24 +1247,31 @@ export default (state = initialState, action) => {
 
                 if (action.payload.online) {
                     success({
-                        title: action.imeiData.imeiNo + " successfully written to " + action.imeiData.type + " on Device.Restart device is required to apply IMEI.",
+                        title: action.imeiData.imeiNo + `${action.payload.title1}` + action.imeiData.type + `${action.payload.title2}`,
                     });
                 } else {
                     warning({
-                        title: 'Warning Device Offline',
-                        content: action.imeiData.imeiNo + ' write to ' + action.imeiData.type + '. Action will be performed when device is back online',
+                        title: action.payload.msg, //  'Warning Device Offline',
+                        content: action.imeiData.imeiNo + `${action.payload.content1}` + action.imeiData.type + `${action.payload.content2}`,
                     });
                 }
                 // console.log('new state is', state.imei_list)
-            }
-            else {
+            } else {
                 error({
                     title: action.payload.msg,
                 });
             }
+
             return {
                 ...state,
                 // imei_list: [...state.imei_list]
+            }
+        }
+
+        case DEVICE_SYNCED: {
+            return {
+                ...state,
+                reSync: action.payload
             }
         }
         default:

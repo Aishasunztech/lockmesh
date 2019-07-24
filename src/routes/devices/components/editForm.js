@@ -348,7 +348,7 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label={convertToLang(this.props.translation[Expire_Date], "Expire Date ")}
+                        label={convertToLang(this.props.translation[Expire_Date], "Extend Expire Date")}
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
                         wrapperCol={{ span: 14, md: 14, xs: 24 }}
                     >
@@ -361,11 +361,11 @@ class EditDevice extends Component {
                             <Select
                                 style={{ width: '100%' }}
                             >
-                                {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>{convertToLang(this.props.translation[DEVICE_TRIAL], DEVICE_TRIAL)} (7 {convertToLang(this.props.translation[Days], Days)})</Select.Option> : null}
-                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={1}> {convertToLang(this.props.translation[one_month], one_month)} </Select.Option> : null}
-                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={3}>{convertToLang(this.props.translation[three_month], three_month)}</Select.Option> : null}
-                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={6}>{convertToLang(this.props.translation[six_month], six_month)}</Select.Option> : null}
-                                {(this.props.device.finalStatus !== DEVICE_TRIAL) ? <Select.Option value={12}>{convertToLang(this.props.translation[twelve_month], twelve_month)}</Select.Option> : null}
+                                {/* {(this.props.device.finalStatus === DEVICE_TRIAL || this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? <Select.Option value={0}>{convertToLang(this.props.translation[DEVICE_TRIAL], DEVICE_TRIAL)} (7 {convertToLang(this.props.translation[Days], Days)})</Select.Option> : null} */}
+                                <Select.Option value={1}> {convertToLang(this.props.translation[one_month], one_month)} </Select.Option>
+                                <Select.Option value={3}>{convertToLang(this.props.translation[three_month], three_month)}</Select.Option>
+                                <Select.Option value={6}>{convertToLang(this.props.translation[six_month], six_month)}</Select.Option>
+                                <Select.Option value={12}>{convertToLang(this.props.translation[twelve_month], twelve_month)}</Select.Option>
                             </Select>
                         )}
 

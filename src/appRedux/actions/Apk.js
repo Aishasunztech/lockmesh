@@ -62,7 +62,8 @@ export function changeAppStatus(appId, appStatus) {
 
                 dispatch({
                     type: "APK_STATUS_CHANGED",
-                    payload: appId
+                    payload: appId,
+                    msg: response.data.msg
                 });
 
 
@@ -196,6 +197,7 @@ export function authenticateUpdateUser(data) {
                 dispatch({
                     type: AUTHENTICATE_UPDATE_USER,
                     payload: response.data,
+                    msg: response.data.msg
                 })
 
             } else {

@@ -406,36 +406,36 @@ class Devices extends Component {
         var devices = [];
         switch (value) {
             case '4':
-                devices = this.state.activeDevices
+                // devices = this.state.activeDevices
                 this.setState({
-                    devices: devices,
+                    devices: this.filterList(DEVICE_ACTIVATED, this.props.devices), // devices,
                     column: this.state.columns,
                     tabselect: '4',
                     copy_status: true
                 })
                 break;
             case '9':
-                devices = this.state.trialDevices
+                // devices = this.state.trialDevices
                 this.setState({
-                    devices: devices,
+                    devices: this.filterList(DEVICE_TRIAL, this.props.devices), // devices,
                     column: this.state.columns,
                     tabselect: '9',
                     copy_status: true
                 })
                 break;
             case '7':
-                devices = this.state.suspendDevices
+                // devices = this.state.suspendDevices
                 this.setState({
-                    devices: devices,
+                    devices: this.filterList(DEVICE_SUSPENDED, this.props.devices), // devices,
                     column: this.state.columns,
                     tabselect: '7',
                     copy_status: true
                 })
                 break;
             case '6':
-                devices = this.state.expireDevices
+                // devices = this.state.expireDevices
                 this.setState({
-                    devices: devices,
+                    devices: this.filterList(DEVICE_EXPIRED, this.props.devices), // devices,
                     column: this.state.columns,
                     tabselect: '6',
                     copy_status: true
@@ -443,34 +443,34 @@ class Devices extends Component {
                 break;
             case '1':
                 this.setState({
-                    devices: this.state.allDevices,
+                    devices: this.props.devices,
                     column: this.state.columns,
                     tabselect: '1',
                     copy_status: true
                 })
                 break;
             case "5":
-                devices = this.state.unlinkedDevices
+                // devices = this.state.unlinkedDevices
                 this.setState({
-                    devices: devices,
+                    devices: this.filterList(DEVICE_UNLINKED, this.props.devices), // devices,
                     column: this.state.columns,
                     tabselect: '5',
                     copy_status: true
                 })
                 break;
             case "2":
-                devices = this.state.pendingDevices
+                // devices = this.state.pendingDevices
                 this.setState({
-                    devices: devices,
+                    devices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices), // devices,
                     column: this.state.columns,
                     tabselect: '2',
                     copy_status: true
                 })
                 break;
             case "3":
-                devices = this.state.preActiveDevices
+                // devices = this.state.preActiveDevices
                 this.setState({
-                    devices: devices,
+                    devices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices), //  devices,
                     column: this.state.columns,
                     tabselect: '3',
                     copy_status: true
@@ -486,7 +486,7 @@ class Devices extends Component {
                 break;
             case "10":
                 this.setState({
-                    devices: this.state.flaggedDevices,
+                    devices: this.filterList(DEVICE_FLAGGED, this.props.devices), // this.state.flaggedDevices,
                     column: this.state.columns,
                     tabselect: '10',
                     copy_status: true
@@ -494,7 +494,7 @@ class Devices extends Component {
                 break;
             default:
                 this.setState({
-                    devices: this.state.allDevices,
+                    devices: this.props.devices,
                     column: this.state.columns,
                     tabselect: '1',
                     copy_status: true
@@ -590,9 +590,7 @@ class Devices extends Component {
 
 
             })
-            // this.copyDevices = this.props.devices;
-            // this.handleChangetab(this.state.tabselect);
-            // this.handleCheckChange(this.props.selectedOptions);
+            this.handleChangetab(this.state.tabselect);
 
         }
 
@@ -731,7 +729,7 @@ class Devices extends Component {
                             <AppFilter
                                 handleFilterOptions={this.handleFilterOptions}
                                 selectedOptions={this.props.selectedOptions}
-                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], Appfilter_SearchDevices)}
+                                searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
                                 defaultPagingValue={this.state.defaultPagingValue}
                                 addButtonText={convertToLang(this.props.translation[Button_Add_Device], "Add Device")}
                                 options={this.props.options}
