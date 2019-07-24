@@ -54,13 +54,13 @@ class TableHistory extends Component {
 
             return ({
                 key: history.id,
-                history_date: (type === "history") ? history.created_at : (type === POLICY) ? history.policy_name : (type === "profile") ? history.profile_name : null,
+                history_date: (type === "history") ? history.created_at : (type === 'policy') ? history.policy_name : (type === "profile") ? history.profile_name : null,
                 action: (
                     <Button
                         size="small"
                         className="mb-0"
                         onClick={() => {
-                            if (type === POLICY) {
+                            if (type === 'policy') {
                                 callback(history.id, history.policy_name, history);
                             } else {
                                 callback(history.id, history.profile_name, history);

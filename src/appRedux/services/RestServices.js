@@ -588,14 +588,18 @@ const RestService = {
         // console.log(data, 'data')
         return axios.post(BASE_URL + 'users/save-package', { data }, RestService.getHeader());
     },
-    getPrices: (dealer_id) => {
+    getPrices: () => {
         // console.log(dealer_id, 'whte label on get price')
-        return axios.get(BASE_URL + 'users/get-prices/' + dealer_id, RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-prices', RestService.getHeader());
     },
 
-    getPackages: (dealer_id) => {
+    getPackages: () => {
         // console.log(dealer_id, 'whte label on get price')
-        return axios.get(BASE_URL + 'users/get-packages/' + dealer_id, RestService.getHeader());
+        return axios.get(BASE_URL + 'users/get-packages', RestService.getHeader());
+    },
+    getParentPackages: () => {
+        // console.log(dealer_id, 'whte label on get price')
+        return axios.get(BASE_URL + 'users/get-parent-packages', RestService.getHeader());
     },
     checkPackageName: (name) => {
 

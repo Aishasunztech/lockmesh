@@ -201,7 +201,7 @@ class PullAppModal extends Component {
                 }}
                 onCancel={() => { this.props.showPullAppsModal(false); this.props.resetSeletedRows(); }}
                 // okText="Pull Apps"
-                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
+                okText={convertToLang(this.props.translation[PULL_APPS_TEXT], "PULL APP")}
                 cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
             >
                 <DealerApps

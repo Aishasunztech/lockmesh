@@ -37,6 +37,7 @@ export const VERIFY_CODE = 'VERIFY_CODE';
 export const CODE_VERIFIED = 'CODE_VERIFIED';
 export const GOTO_LOGIN = 'GOTO_LOGIN';
 export const LOGIN_HISTORY = 'LOGIN_HISTORY';
+
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
 export const SUSPEND_DEVICE = 'SUSPEND_DEVICE';
@@ -92,7 +93,7 @@ export const GET_PROFILES = 'GET_PROFILES';
 export const GET_DEVICE_HISTORIES = 'GET_DEVICE_HISTORIES';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const GET_APPS_PERMISSIONS = 'GET_APPS_PERMISSIONS';
-
+export const DEVICE_SYNCED = 'device_synced';
 export const SUBMIT_PASSWORD = 'SUBMIT_PASSWORD';
 export const GUEST_PASSWORD = 'guest_password';
 export const ENCRYPTED_PASSWORD = 'encrypted_password';
@@ -148,7 +149,7 @@ export const LOAD_PROFILE = 'LOAD_PROFILE';
 export const SHOW_HISTORY_MODAL = 'SHOW_HISTORY_MODAL';
 export const SHOW_SAVE_PROFILE_MODAL = 'SHOW_SAVE_PROFILE_MODAL';
 export const HANDLE_PROFILE_INPUT = 'HANDLE_PROFILE_INPUT';
-export const POLICY = 'policy.id';
+export const POLICY = 'policy';
 export const PROFILE = 'profile';
 export const SAVE_PROFILE = 'SAVE_PROFILE';
 export const UNLINK_DEVICE = 'UNLINK_DEVICE';
@@ -213,6 +214,7 @@ export const SHOW_BACKUP_MODAL = 'SHOW_BACKUP_MODAL';
 export const SAVE_ID_PRICES = 'SAVE_ID_PRICES';
 export const SAVE_PACKAGE = 'SAVE_PACKAGE';
 export const GET_PACKAGES = 'GET_PACKAGES';
+export const GET_PARENT_PACKAGES = 'GET_PARENT_PACKAGES';
 export const PURCHASE_CREDITS = 'PURCHASE_CREDITS';
 export const GET_PRICES = 'GET_PRICES';
 export const SET_PRICE = 'SET_PRICE';

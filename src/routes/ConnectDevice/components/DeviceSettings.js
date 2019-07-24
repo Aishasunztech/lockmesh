@@ -216,6 +216,7 @@ export default class TableHistory extends Component {
                     return {
                         key: item.app_id,
                         app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                        label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
                         // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
                         guest: <Switch
                             size="small"
@@ -242,12 +243,8 @@ export default class TableHistory extends Component {
     }
 
     render() {
-        // console.log(this.props.extensions, 'data li s t of exte')
-        // console.log(this.props.passwords);
         return (
             <div>
-                {/* {
-                    this.state.applist.length ? */}
                 {
                     this.props.isPushApps === true && this.props.type !== 'profile' ?
                         <div>
@@ -264,7 +261,8 @@ export default class TableHistory extends Component {
                             />
                         </div> : null
                 }
-                {this.state.applist.length > 0 ?
+                {
+                    this.state.applist.length > 0 ?
                     <div>
                         <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISION")} </Divider>
                         <Table
@@ -277,8 +275,8 @@ export default class TableHistory extends Component {
                             pagination={false}
 
                         />
-                    </div> : false}
-                {/* : false}  */}
+                    </div> : false
+                }
                 {
                     this.state.extensions.length ?
                         <div>
@@ -294,12 +292,12 @@ export default class TableHistory extends Component {
                                 pagination={false}
 
                             /></div>
-                        : false}
+                        : false
+                }
                 {
                     this.props.showChangedControls ?
                         Object.entries(this.state.controls).length > 0 ?
                             Object.entries(this.state.controls.controls).length > 0 ?
-
                                 <div>
                                     {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
                                     <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
