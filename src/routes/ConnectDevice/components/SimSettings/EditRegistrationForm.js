@@ -18,8 +18,8 @@ class AddUserForm extends Component {
             help: '',
             iccidHelp: '',
             visible: false,
-            guest: props.editSim.guest,
-            encrypt: props.editSim.encrypt,
+            guest: props.editSim.guest ? true: false,
+            encrypt: props.editSim.encrypt ? true: false,
             validateStatus: ''
         }
     }
@@ -31,10 +31,9 @@ class AddUserForm extends Component {
             // console.log('iccid is: ', values['iccid'])
             // let checkICCID = this.isValidLuhn(values['iccid'])
             values['guest'] = this.state.guest ? 1 : 0;
-            values['encrypt'] = this.state.encrypt ? 1: 0;
+            values['encrypt'] = this.state.encrypt ? 1 : 0;
             values['data_limit'] = "";
             values['device_id'] = this.props.deviceID;
-            // console.log('total dvc: ', this.props.total_dvc.length);
 
             if (!err) {
                 this.props.AddSimHandler(values);
@@ -195,7 +194,7 @@ class AddUserForm extends Component {
                                     guest: !this.state.guest
                                 })
                             }}
-                                defaultChecked={this.state.guest}
+                                checked={this.state.guest ? true : false}
                                 size="small"
                             />
                         </Col>
@@ -205,7 +204,7 @@ class AddUserForm extends Component {
                                     encrypt: !this.state.encrypt
                                 })
                             }}
-                                defaultChecked={this.state.encrypt}
+                                checked={this.state.encrypt ? true : false}
                                 size="small"
                             />
                         </Col>

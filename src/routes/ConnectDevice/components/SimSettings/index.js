@@ -5,20 +5,18 @@ import { bindActionCreators } from "redux";
 import {
     handleSimUpdate,
     simRegister,
-    simUnRegister,
+    simHistory,
     getSims,
     deleteSim,
 } from "../../../../appRedux/actions/ConnectDevice";
-import { BASE_URL } from '../../../../constants/Application';
-
-import ExtensionDropdown from '../ExtensionDropdown';
 import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../../constants/TabConstants';
 import { convertToLang } from '../../../utils/commonUtils';
-import { SECURE_SETTING_PERMISSION, NOT_AVAILABLE, SECURE_SETTINGS } from '../../../../constants/Constants';
 import { Button_Add, Button_Cancel } from '../../../../constants/ButtonConstants';
 import AddRegistrationModal from './AddRegistrationModal';
 import EditRegistrationModal from './EditRegistrationModal';
 
+
+let status = true;
 
 class SimSettings extends Component {
 
@@ -80,8 +78,8 @@ class SimSettings extends Component {
             columns: columns,
             extension: {},
             uniqueName: '',
-            // sims: this.props.sim_list,
             addSimRegistrationModal: false,
+            historyModal: false,
             sim: {},
             visible: false,
             guestAllExt: 0,
@@ -92,17 +90,17 @@ class SimSettings extends Component {
 
         this.confirm = Modal.confirm;
         this.handleDeleteSim = this.handleDeleteSim.bind(this);
-
     }
 
     componentDidMount() {
         this.props.getSims(this.props.deviceID);
+        this.props.simHistory(this.props.deviceID);
     }
 
-    componentWillReceiveProps(nextprops) {
-        // console.log('at componentWillReceiveProps ', nextprops.sim_list)
-        if (this.props.simUpdated != nextprops.simUpdated) {
-            this.props.getSims(nextprops.deviceID);
+    componentWillReceiveProps(nextProps) {
+        if (this.props.simUpdated != nextProps.simUpdated) {
+            this.props.getSims(nextProps.deviceID);
+            status = true;
         }
     }
 
@@ -111,23 +109,13 @@ class SimSettings extends Component {
     }
 
     handleChecked = (e, obj, label) => {
-        console.log('obj is: ', obj)
-        console.log('label is: ', label)
-        console.log('value is: ', e)
-        // return;
-        // if (label == 'guest') {
         obj[label] = e ? 1 : 0;
-        // obj['encrypt'] = (obj.encrypt) ? true : false;
-        // } else {
-        // obj[label] = e ? 1 : 0;
-        // obj['guest'] = (obj.guest) ? true : false;
-        // }
-        this.props.handleSimUpdate({ obj, label, value: e });
+        // console.log('status ', status);
+        if (status) {
+            this.props.handleSimUpdate({ obj, label, value: e });
+            status = false;
+        }
     }
-
-    // handleChecked = (e, obj, label) => {
-
-    // }
 
     setDataLimit = () => {
         console.log('set data limit')
@@ -151,7 +139,7 @@ class SimSettings extends Component {
 
     renderSimList = () => {
         let sims = this.props.sim_list;
-        console.log("render list sims", sims);
+        // console.log("render list sims", sims);
         if (sims !== undefined && sims !== null && sims.length > 0) {
 
             return sims.map((sim, index) => {
@@ -189,13 +177,12 @@ class SimSettings extends Component {
             unrEncrypt,
             sim_list,
         } = this.props;
-        console.log('sim list is ', sim_list);
-        // if (sim_list.length) { }
+        // console.log('sim list is ', sim_list);
         return (
             <div>
                 <Fragment>
-
                     <Row className="">
+
                         {/* <Row className="sec_head"> */}
                         <Col span={4} />
                         <Col span={6}><h4>Enable All <small>(Unregistered)</small></h4></Col>
@@ -299,17 +286,6 @@ class SimSettings extends Component {
                     />
 
                 </Fragment>
-
-
-                {/* <Modal
-                    maskClosable={false}
-                    title="Are you sure to delete Registered Sim?"
-                    visible={this.state.visible}
-                    onOk={this.deleteSim}
-                    onCancel={this.handleCancel}
-                >
-
-                </Modal > */}
             </div>
 
         )
@@ -321,7 +297,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         handleSimUpdate: handleSimUpdate,
         simRegister: simRegister,
-        simUnRegister: simUnRegister,
+        simHistory: simHistory,
         deleteSim: deleteSim,
         getSims: getSims,
     }, dispatch);
@@ -329,7 +305,7 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }) => {
-    console.log('device_details ', device_details.unrGuest)
+    // console.log('device_details ', device_details.simHistoryList)
     return {
         encryptSimAll: device_details.encryptSimAll,
         guestSimAll: device_details.guestSimAll,
@@ -338,6 +314,7 @@ var mapStateToProps = ({ device_details }) => {
         simUpdated: device_details.simUpdated,
         sim_list: device_details.sim_list,
         device: device_details.device,
+        simHistoryList: device_details.simHistoryList,
     }
 }
 

@@ -51,7 +51,8 @@ import {
     ADD_SIM_REGISTER,
     GET_SIMS,
     UPDATE_SIM,
-    DELETE_SIM
+    DELETE_SIM,
+    SIM_HISTORY
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -1094,19 +1095,17 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
 
 // ********* Sim Module
 export const simRegister = (data) => {
-    console.log('data is: ', data)
+    // console.log('data is: ', data)
     return (dispatch) => {
         RestService.simRegister(data).then((response) => {
-            console.log('response is: ', response);
+            // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
-                // data['id'] = 122;
+                // console.log(response.data);
 
                 dispatch({
                     type: ADD_SIM_REGISTER,
                     response: response.data,
                     payload: data
-                    // payload: response.data
                 })
             } else {
                 dispatch({
@@ -1117,25 +1116,22 @@ export const simRegister = (data) => {
     }
 }
 
-export const simUnRegister = (data) => {
-    console.log('data is: ', data)
+export const simHistory = (device_id) => {
+    console.log('device_id is: ', device_id)
     return (dispatch) => {
-        RestService.handleSimUpdate(data).then((response) => {
+        RestService.simHistory(device_id).then((response) => {
             console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data);
-                // dispatch({
-                //     type: UPDATE_SIM,
-                //     response: response.data,
-                //     payload: data
-                // })
+                dispatch({
+                    type: SIM_HISTORY,
+                    payload: response.data
+                })
             } else {
                 dispatch({
                     type: INVALID_TOKEN
                 })
             }
-
-
         })
     }
 }
@@ -1171,9 +1167,9 @@ export const deleteSim = (data) => {
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data);
                 dispatch({
-                    type: UPDATE_SIM, // DELETE_SIM,
+                    type: DELETE_SIM,
                     response: response.data,
-                    payload: data
+                    payload: data,
                 })
             } else {
                 dispatch({

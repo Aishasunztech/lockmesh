@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -17,6 +17,7 @@ import PasswordForm from './PasswordForm';
 import DeviceSettings from './DeviceSettings';
 import Activity from './Activity';
 import SimSettings from './SimSettings/index';
+import SimHistory from './SimSettings/SimHistory';
 
 
 
@@ -40,6 +41,7 @@ import {
     applySetting,
     getProfiles,
     wipe,
+    simHistory
 } from "../../../appRedux/actions/ConnectDevice";
 
 import {
@@ -294,6 +296,7 @@ class SideActions extends Component {
     }
 
     componentDidMount() {
+        this.props.simHistory(this.props.device_id);
 
         this.setState({
             historyModal: this.props.historyModal,
@@ -329,6 +332,11 @@ class SideActions extends Component {
                 // selectedApps: nextProps.apk_list
             })
         }
+
+        if (this.props.simDeleted != nextProps.simDeleted) {
+            this.props.simHistory(this.props.device_id);
+        }
+
         if (nextProps.applyPolicyConfirm) {
             showConfirmPolcy(this)
         }
@@ -517,6 +525,10 @@ class SideActions extends Component {
             // console.log("save pushed apps", this.state.selectedApps);
         } else {
         }
+    }
+
+    handleSimHistory = () => {
+        this.refs.history_sim.showModal();
     }
 
 
@@ -718,16 +730,16 @@ class SideActions extends Component {
                                     {convertToLang(this.props.translation[Button_Activity], "Activity")}
                                 </Button>
                                 {/* <Tooltip placement="left" title="Coming Soon"> */}
-                                    <Button
-                                        type="default" 
-                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
-                                        onClick={this.handleSimModule}
-                                    >
-                                        <Icon type="file" />
+                                <Button
+                                    type="default"
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
+                                    onClick={this.handleSimModule}
+                                >
+                                    <Icon type="file" />
 
-                                        {/* <IntlMessages id="button.SIM" /> */}
-                                        {convertToLang(this.props.translation[Button_SIM], "SIM")}
-                                    </Button>
+                                    {/* <IntlMessages id="button.SIM" /> */}
+                                    {convertToLang(this.props.translation[Button_SIM], "SIM")}
+                                </Button>
                                 {/* </Tooltip> */}
                             </Col>
                         </Row>
@@ -869,22 +881,33 @@ class SideActions extends Component {
                 <Modal
                     width='850px'
                     maskClosable={false}
-                    title="Sim Settings" // {convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
+                    title={<div>Sim Settings {<Fragment>
+                        <Button
+                            type="primary"
+                            size="small"
+                            onClick={this.handleSimHistory}
+                        >
+                            History
+                        {/* {convertToLang(this.props.translation[Button_Add], "Add")} */}
+                        </Button></Fragment>}
+                    </div>}
+                    // {convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
                     visible={this.state.showSimModal}
-                    // onOk={() => {
-                    //     this.showSaveProfileModal(true, 'profile')
-                    //     this.setState({ showChangesModal: false })
-                    // }}
                     onCancel={() => this.setState({ showSimModal: false })}
-                // okText='Apply'
-                // okText={convertToLang(this.props.translation[Button_Apply], "Apply")}
-                // cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <SimSettings
                         deviceID={this.props.device_id}
                         translation={this.props.translation}
                     />
                 </Modal>
+
+                <SimHistory
+                    ref="history_sim"
+                    translation={this.props.translation}
+                    simHistoryList={this.props.simHistoryList}
+                />
+
+
 
                 {/* END SIM MODULE */}
 
@@ -1024,6 +1047,7 @@ class SideActions extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        simHistory: simHistory,
         showHistoryModal: showHistoryModal,
         showSaveProfileModal: showSaveProfileModal,
         saveProfile: saveProfile,
@@ -1046,6 +1070,8 @@ function mapDispatchToProps(dispatch) {
 var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
     // console.log('test: ' , device_details.wipeDeviceID)
     return {
+        simDeleted: device_details.simDeleted,
+        simHistoryList: device_details.simHistoryList,
         translation: settings.translation,
         authUser: auth.authUser,
         historyModal: device_details.historyModal,

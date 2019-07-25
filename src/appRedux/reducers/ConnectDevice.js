@@ -60,7 +60,8 @@ import {
     GET_SIMS,
     UPDATE_SIM,
     RECEIVE_SIM_DATA,
-    DELETE_SIM
+    DELETE_SIM,
+    SIM_HISTORY
 } from "../../constants/ActionTypes";
 
 import {
@@ -171,7 +172,7 @@ const initialState = {
     is_push_apps: 0,
     is_policy_process: 0,
     reSync: false,
-    
+
     // sim module
     sim_list: [],
     guestSimAll: 0,
@@ -179,6 +180,8 @@ const initialState = {
     unrGuest: 0,
     unrEncrypt: 0,
     simUpdated: false,
+    simDeleted: false,
+    simHistoryList: [],
 
 };
 
@@ -1186,6 +1189,14 @@ export default (state = initialState, action) => {
             }
         }
 
+        case SIM_HISTORY: {
+
+            return {
+                ...state,
+                simHistoryList: action.payload.data
+            }
+        }
+
         case GET_SIMS: {
             let sims = action.payload.data;
             let checkEnc = sims.filter(e => e.encrypt != true);
@@ -1222,8 +1233,37 @@ export default (state = initialState, action) => {
             }
         }
 
+        case DELETE_SIM: {
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+
+                console.log('sim list is: ', state.sim_list)
+                console.log('rev data is: ', action.payload)
+                let sims = state.sim_list.filter(e => e.id != action.payload.id)
+                return {
+                    ...state,
+                    sim_list: sims,
+                    simDeleted: new Date()
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state
+                }
+            }
+        }
 
         case UPDATE_SIM: {
+            if (action.delete) {
+                return {
+                    ...state,
+                    simDeleted: new Date(),
+                }
+            }
             if (action.response.status) {
                 success({
                     title: action.response.msg,

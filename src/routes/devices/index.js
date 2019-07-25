@@ -125,7 +125,7 @@ class Devices extends Component {
     }
 
     handleTableChange = (pagination, query, sorter) => {
-        // console.log('check sorter func: ', sorter)
+        console.log('check sorter func: ', sorter)
         const sortOrder = sorter.order || "ascend";
         this.setState({
             sortOrder,

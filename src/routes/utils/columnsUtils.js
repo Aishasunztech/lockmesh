@@ -124,9 +124,9 @@ import {
 // **************************************
 /////////////////////////////////////////
 
-export function devicesColumns(sortOrder= null, translation, handleSearch) {
-    // console.log('sortOrder is: ', sortOrder);
-    return ([
+export function devicesColumns(sortOrder = null, translation, handleSearch) {
+    console.log('sortOrder is: ', sortOrder);
+    let deviceColumns = [
         {
             title: "#",
             dataIndex: 'counter',
@@ -198,7 +198,7 @@ export function devicesColumns(sortOrder= null, translation, handleSearch) {
                         return list
                     }, //
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
+                    sortOrder,
                 }
             ],
         }, {
@@ -225,7 +225,7 @@ export function devicesColumns(sortOrder= null, translation, handleSearch) {
                         console.log(a); return a.user_id.props.children.localeCompare(b.user_id.props.children)
                     },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
+                    sortOrder,
                 }
             ],
         },
@@ -578,8 +578,8 @@ export function devicesColumns(sortOrder= null, translation, handleSearch) {
                     key: 'dealer_name',
                     sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
                     sortDirections: ['ascend', 'descend'],
-                    sortOrder,
-                    
+                    // sortOrder,
+
 
                 }
             ]
@@ -885,11 +885,27 @@ export function devicesColumns(sortOrder= null, translation, handleSearch) {
                 }
             ]
         },
-    ]);
+    ]
+
+    let dvcs = deviceColumns.map((item) => {
+
+        // if (sortOrder !== null && sortOrder != '{}') {
+        //     console.log('sorter not empty')
+        //     if (item.dataIndex === sortOrder.field) {
+        //         console.log('sorter field match')
+        //         console.log('final sortOrder is: ', sortOrder.order || "ascend");
+        //         item.children['sortOrder'] = sortOrder.order || "ascend"
+        //     }
+        // }
+        return item;
+    })
+
+
+    return (dvcs);
 }
 
 
-export function usersColumns(sortOrder= null, translation, handleSearch) {
+export function usersColumns(sortOrder = null, translation, handleSearch) {
     return ([
         {
             title: "#",
@@ -1055,7 +1071,7 @@ export function usersColumns(sortOrder= null, translation, handleSearch) {
 }
 
 
-export function userDevicesListColumns(sortOrder= null, translation, handleSearch) {
+export function userDevicesListColumns(sortOrder = null, translation, handleSearch) {
     return ([
         {
             // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
@@ -1316,7 +1332,7 @@ export function userDevicesListColumns(sortOrder= null, translation, handleSearc
 }
 
 
-export function dealerColumns(sortOrder= null, translation, handleSearch) {
+export function dealerColumns(sortOrder = null, translation, handleSearch) {
     return ([{
         title: '#',
         dataIndex: 'counter',
@@ -1588,7 +1604,7 @@ export function sDealerColumns(translation, handleSearch) {
 }
 
 
-export function dealerColsWithSearch(sortOrder= null, translation, searchBar = false, callBack = null) {
+export function dealerColsWithSearch(sortOrder = null, translation, searchBar = false, callBack = null) {
 
     var searchInput = [
         {
@@ -1849,7 +1865,7 @@ export function controlColumns(translation) {
         }
     ]);
 }
-export function policyColumns(sortOrder= null, translation, handleSearch) {
+export function policyColumns(sortOrder = null, translation, handleSearch) {
     return ([
         //     title: 'ACTIONS',
         //     dataIndex: 'action',
@@ -2008,7 +2024,7 @@ export function policyColumns(sortOrder= null, translation, handleSearch) {
 };
 
 
-export function apkColumns(sortOrder= null, translation) {
+export function apkColumns(sortOrder = null, translation) {
     return ([
         {
             title: convertToLang(translation[ACTION], "ACTION"),
