@@ -43,24 +43,7 @@ import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConsta
 import { apkColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 
-const question_txt = (
-    <div>
-        <span>
-            Press
-            <a style={{ fontSize: 14 }}>
-                <Icon type="caret-right" />
-            </a>
-            to Add, remove or View
-            <br></br>the Dealers who have permission
-            <br></br> to use this App
-        </span>
-    </div>
-);
-const SHOW_DEVICE_TEXT = (
-    <div>
-        <span>Shows app in <b>Install Apps</b> <br />menu on Devices</span>
-    </div>
-);
+
 var status = true;
 var coppyApks = [];
 
@@ -68,7 +51,6 @@ class Apk extends React.Component {
 
     constructor(props) {
         super(props);
-        let self = this;
         let columns = apkColumns(props.translation);
         this.state = {
             apk_list: [],
@@ -87,6 +69,7 @@ class Apk extends React.Component {
 
 
     }
+
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
@@ -123,7 +106,6 @@ class Apk extends React.Component {
     handleCheckChange = (values) => {
         let dumydata = this.state.columns;
 
-        // console.log('values', values)
         if (values.length) {
             this.state.columns.map((column, index) => {
 
@@ -132,9 +114,9 @@ class Apk extends React.Component {
                 }
 
                 values.map((value) => {
-                    // console.log(APK_PERMISSION, value, "columns", column);
+                    
                     if ((value.key === APK_PERMISSION && column.dataIndex === 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex === 'apk_status')) {
-                        // console.log('......... ......', column.title)
+                        
                         if (column.title.props.children[0] === convertToLang(this.props.translation[value.key], value.key)) {
                             dumydata[index].className = '';
                         }
@@ -173,8 +155,9 @@ class Apk extends React.Component {
 
     handlePagination = (value) => {
         this.refs.listApk.handlePagination(value);
-        this.props.postPagination(value, 'apk');
+        // this.props.postPagination(value, 'apk');
     }
+
     handleComponentSearch = (value) => {
         try {
             if (value.length) {
@@ -271,7 +254,7 @@ class Apk extends React.Component {
         // this.props.getDevicesList();
         //  console.log('apk did mount', this.props.getDropdown('apk'));
         this.props.getDropdown('apk');
-        this.props.getPagination('apk')
+        // this.props.getPagination('apk')
     }
     componentDidMount() {
         // alert("hello213");
@@ -314,10 +297,11 @@ class Apk extends React.Component {
     render() {
         // console.log(this.state.columns);
         if (this.props.user.type === 'dealer') {
-            this.state.columns[0].className = 'hide';
+            this.state.columns[1].className = 'hide';
         } else {
-            this.state.columns[0].className = 'row';
+            this.state.columns[1].className = 'row m-0';
         }
+        
         return (
             <div>
                 {
@@ -339,13 +323,6 @@ class Apk extends React.Component {
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
                             />
-                            {/* <div className="row">
-                                <div className="col-sm-12">
-                                    <a href="http://api.lockmesh.com/users/getFile/apk-ScreenLocker-v4.45.apk" style={{ display:'flex', justifyContent: 'center'}}>
-                                        <button style={{ width: "19%", padding: '0 8px', backgroundColor: '#ccc' }} className="btn btn-default"><Icon type="download" /> ScreenLocker apk (v4.45)</button>
-                                    </a>
-                                </div> 
-                            </div> */}
 
                             {
                                 (this.props.user.type === 'admin') ?

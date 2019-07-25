@@ -1955,6 +1955,13 @@ export function policyColumns(translation, handleSearch) {
 export function apkColumns(translation) {
     return ([
         {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
             title: convertToLang(translation[ACTION], "ACTION"),
             dataIndex: 'action',
             key: 'action',

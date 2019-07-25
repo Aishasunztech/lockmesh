@@ -169,7 +169,6 @@ export default class PolicyInfo extends Component {
     }
 
     render() {
-        // console.log(this.props.appsGotted, 'info list is ', this.state.secure_setting_app)
 
         const PolicyDetail = [{
             key: 1,
@@ -178,7 +177,7 @@ export default class PolicyInfo extends Component {
             command: this.state.policy.policy_command,
 
         }]
-        // console.log(this.state.policy);
+        
         return (
             <Fragment>
                 <Tabs className="exp_tabs_policy" onChange={this.callback} activeKey={this.state.selected} type="card">

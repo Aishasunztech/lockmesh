@@ -159,64 +159,57 @@ class DealerAppModal extends Component {
     }
 }
 
-class PullAppModal extends Component {
-    // const PullAppModal = (props) => {
-
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-
-        return (
-            <Modal
-                maskClosable={false}
-                destroyOnClose={true}
-                style={{ top: 20 }}
-                width="650px"
-                title={
-                    <div className="pp_popup">{convertToLang(this.props.translation[SELECT_APPS], "Select Apps")}
-                        <Input.Search
-                            name="pull_apps"
-                            key="pull_apps"
-                            id="pull_apps"
-                            className="search_heading1"
-                            onKeyUp={
-                                (e) => {
-                                    this.props.handleComponentSearch(e.target.value, 'pull_apps')
-                                }
+const PullAppModal = (props) => {
+    console.log("Pull apps: ", props)
+    return (
+        <Modal
+            maskClosable={false}
+            destroyOnClose={true}
+            style={{ top: 20 }}
+            width="650px"
+            title={
+                <div className="pp_popup">{convertToLang(props.translation[SELECT_APPS], "Select Apps")}
+                    <Input.Search
+                        name="pull_apps"
+                        key="pull_apps"
+                        id="pull_apps"
+                        className="search_heading1"
+                        onKeyUp={
+                            (e) => {
+                                props.handleComponentSearch(e.target.value, 'pull_apps')
                             }
-                            autoComplete="new-password"
-                            placeholder={convertToLang(this.props.translation[SEARCH_APPS], "Search Apps")}
-                        />
-                        <br /> {`${convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}:`} {this.props.device.device_id} </div>}
-                visible={this.props.pullAppsModal}
-                onOk={() => {
-                    if (this.props.selectedAppKeys) {
-                        if (this.props.selectedAppKeys.length) {
-                            this.props.showPullAppsModal(false);
-                            this.props.showSelectedAppsModal(true);
                         }
+                        autoComplete="new-password"
+                        placeholder={convertToLang(props.translation[SEARCH_APPS], "Search Apps")}
+                    />
+                    <br /> {`${convertToLang(props.translation[DEVICE_ID], "DEVICE ID")}:`} {props.device.device_id} </div>}
+            visible={props.pullAppsModal}
+            onOk={() => {
+                if (props.selectedAppKeys) {
+                    if (props.selectedAppKeys.length) {
+                        props.showPullAppsModal(false);
+                        props.showSelectedAppsModal(true);
                     }
-                }}
-                onCancel={() => { this.props.showPullAppsModal(false); this.props.resetSeletedRows(); }}
-                // okText="Pull Apps"
-                okText={convertToLang(this.props.translation[PULL_APPS_TEXT], "PULL APP")}
-                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
-            >
-                <DealerApps
-                    apk_list={this.props.apk_list}
-                    onSelectChange={this.props.onSelectChange}
-                    isSwitchable={true}
-                    selectedApps={this.props.selectedApps}
-                    selectedAppKeys={this.props.selectedAppKeys}
-                    handleChecked={this.props.handleChecked}
-                    type={this.props.actionType === PUSH_APPS ? "push" : 'pull'}
-                    translation={this.props.translation}
-                />
-            </Modal>
-        )
-    }
+                }
+            }}
+            onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
+            // okText="Pull Apps"
+            okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APP")}
+            cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
+        >
+            <DealerApps
+                apk_list={props.apk_list}
+                onSelectChange={props.onSelectChange}
+                isSwitchable={true}
+                selectedApps={props.selectedApps}
+                selectedAppKeys={props.selectedAppKeys}
+                handleChecked={props.handleChecked}
+                type={props.actionType === PUSH_APPS ? "push" : 'pull'}
+                translation={props.translation}
+            />
+        </Modal>
+    )
+
 }
 
 
@@ -606,8 +599,7 @@ class SideActions extends Component {
     }
 
     render() {
-        console.log('extensions :', this.props.extensions)
-        // console.log(this.state.apk_list, 'list apk')
+        
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG") : convertToLang(this.props.translation[Button_Flag], "Flag");
@@ -719,7 +711,7 @@ class SideActions extends Component {
                                 </Button>
                                 <Tooltip placement="left" title="Coming Soon">
                                     <Button
-                                        type="default" 
+                                        type="default"
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                     // onClick={this.handleSimModule}
                                     >
@@ -928,6 +920,7 @@ class SideActions extends Component {
                     pullAppsModal={this.state.pullAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
+                    // apk_list={this.state.apk_list}
                     apk_list={this.state.apk_list}
                     onSelectChange={this.onSelectChange}
                     showSelectedAppsModal={this.showSelectedAppsModal}
