@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import {
     handleSimUpdate,
     simRegister,
+    simUnRegister,
     getSims,
     deleteSim,
 } from "../../../../appRedux/actions/ConnectDevice";
@@ -61,13 +62,13 @@ class SimSettings extends Component {
                 dataIndex: 'note',
                 key: 'note',
             }, {
-                title: convertToLang(props.translation[Guest], "Guest"),
+                title: "Guest",//  convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
                 key: 'guest',
             }, {
-                title: convertToLang(props.translation[ENCRYPTED], "Encrypted"),
-                dataIndex: 'encrypted',
-                key: 'encrypted',
+                title: convertToLang(props.translation[ENCRYPT], "Encrypt"),
+                dataIndex: 'encrypt',
+                key: 'encrypt',
             }, {
                 title: "Data Limit",
                 dataIndex: 'dataLimit',
@@ -80,11 +81,13 @@ class SimSettings extends Component {
             extension: {},
             uniqueName: '',
             // sims: this.props.sim_list,
-            guestAllExt: false,
-            encryptedAllExt: false,
             addSimRegistrationModal: false,
             sim: {},
             visible: false,
+            guestAllExt: 0,
+            encryptedAllExt: 0,
+            unrGuest: 0,
+            unrEncrypt: 0,
         }
 
         this.confirm = Modal.confirm;
@@ -109,28 +112,22 @@ class SimSettings extends Component {
 
     handleChecked = (e, obj, label) => {
         console.log('obj is: ', obj)
-        // return
-        // let value = (e == true) ? '1' : '0';
-        if (obj.id == 'all') {
-            e = (e == true) ? '1' : '0';
-            // if (label == 'guest') {
-            //     obj[label] = e;
-            //     // obj['encrypt'] = (obj.encrypt == 1) ? true : false;
-            // } else {
-            //     obj[label] = e;
-            // }
-        } else {
-            if (label == 'guest') {
-                obj[label] = e;
-                obj['encrypt'] = (obj.encrypt == 1) ? true : false;
-            } else {
-                obj[label] = e;
-                obj['guest'] = (obj.guest == 1) ? true : false;
-            }
-        }
-
+        console.log('label is: ', label)
+        console.log('value is: ', e)
+        // return;
+        // if (label == 'guest') {
+        obj[label] = e ? 1 : 0;
+        // obj['encrypt'] = (obj.encrypt) ? true : false;
+        // } else {
+        // obj[label] = e ? 1 : 0;
+        // obj['guest'] = (obj.guest) ? true : false;
+        // }
         this.props.handleSimUpdate({ obj, label, value: e });
     }
+
+    // handleChecked = (e, obj, label) => {
+
+    // }
 
     setDataLimit = () => {
         console.log('set data limit')
@@ -170,12 +167,12 @@ class SimSettings extends Component {
                     status: (sim.status != undefined) ? sim.status : "N/A",
                     note: (sim.note != undefined) ? sim.note : "N/A",
                     guest: <Switch
-                        checked={(sim.guest == 1) ? true : false}
+                        checked={(sim.guest) ? true : false}
                         size="small"
                         onClick={(e) => this.handleChecked(e, sim, "guest")}
                     />,
-                    encrypted: <Switch
-                        checked={(sim.encrypt == 1) ? true : false}
+                    encrypt: <Switch
+                        checked={(sim.encrypt) ? true : false}
                         size="small"
                         onClick={(e) => this.handleChecked(e, sim, "encrypt")}
                     />,
@@ -185,8 +182,15 @@ class SimSettings extends Component {
         }
     }
     render() {
-        const { guestSimAll, encryptSimAll, sim_list } = this.props;
+        const {
+            guestSimAll,
+            encryptSimAll,
+            unrGuest,
+            unrEncrypt,
+            sim_list,
+        } = this.props;
         console.log('sim list is ', sim_list);
+        // if (sim_list.length) { }
         return (
             <div>
                 <Fragment>
@@ -197,17 +201,25 @@ class SimSettings extends Component {
                         <Col span={6}><h4>Enable All <small>(Unregistered)</small></h4></Col>
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
-                                // this.handleChecked(e, "guest");
+                                this.handleChecked(e, {
+                                    id: "unrAll",
+                                    device_id: this.props.deviceID,
+                                    unrEncrypt: unrEncrypt ? 1 : 0
+                                }, "unrGuest");
                             }}
-                                // checked={extension.guest === 1 ? true : false} 
+                                checked={unrGuest ? true : false}
                                 size="small"
                             />
                         </Col>
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
-                                // this.handleChecked(e, "encrypted");
+                                this.handleChecked(e, {
+                                    id: "unrAll",
+                                    device_id: this.props.deviceID,
+                                    unrGuest: unrGuest ? 1 : 0
+                                }, "unrEncrypt");
                             }}
-                                // checked={extension.encrypted === 1 ? true : false} 
+                                checked={unrEncrypt ? true : false}
                                 size="small"
                             />
                         </Col>
@@ -221,11 +233,10 @@ class SimSettings extends Component {
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                                 this.handleChecked(e, {
                                     id: "all",
-                                    device_id: sim_list[0].device_id,
-                                    // iccid: sim_list.iccid
+                                    device_id: this.props.deviceID,
                                 }, "guest");
                             }}
-                                checked={guestSimAll === 1 ? true : false}
+                                checked={guestSimAll ? true : false}
                                 size="small"
                             />
                         </Col>
@@ -233,11 +244,11 @@ class SimSettings extends Component {
                             <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
                                 this.handleChecked(e, {
                                     id: "all",
-                                    device_id: sim_list.device_id,
-                                    iccid: sim_list.iccid
+                                    device_id: this.props.deviceID,
+                                    iccid: sim_list ? sim_list[0].iccid : '',
                                 }, "encrypt");
                             }}
-                                checked={encryptSimAll === 1 ? true : false}
+                                checked={encryptSimAll ? true : false}
                                 size="small"
                             />
                         </Col>
@@ -310,6 +321,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         handleSimUpdate: handleSimUpdate,
         simRegister: simRegister,
+        simUnRegister: simUnRegister,
         deleteSim: deleteSim,
         getSims: getSims,
     }, dispatch);
@@ -317,9 +329,12 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }) => {
+    console.log('device_details ', device_details.unrGuest)
     return {
         encryptSimAll: device_details.encryptSimAll,
         guestSimAll: device_details.guestSimAll,
+        unrGuest: device_details.unrGuest,
+        unrEncrypt: device_details.unrEncrypt,
         simUpdated: device_details.simUpdated,
         sim_list: device_details.sim_list,
         device: device_details.device,

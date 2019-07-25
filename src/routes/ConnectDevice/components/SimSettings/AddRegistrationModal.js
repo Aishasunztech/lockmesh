@@ -53,8 +53,8 @@ export default class AddDevice extends Component {
         this.setState({ visible: false });
     }
 
-    handleSubmitReg = (total, values) => {
-        this.props.simRegister(total, values);
+    handleSubmitReg = (values) => {
+        this.props.simRegister(values);
     }
 
     render() {

@@ -30,14 +30,14 @@ class AddUserForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('iccid is: ', values['iccid'])
             // let checkICCID = this.isValidLuhn(values['iccid'])
-            values['guest'] = (this.state.guest) ? 1 : 0;
-            values['encrypt'] = (this.state.encrypt) ? 1 : 0;
+           
+            values['guest'] = this.state.guest ? 1 : 0;
+            values['encrypt'] = this.state.encrypt ? 1: 0;
             values['data_limit'] = "";
             values['device_id'] = this.props.deviceID;
-            // console.log('total dvc: ', this.props.total_dvc.length);
 
             if (!err) {
-                this.props.AddSimHandler(this.props.total_dvc.length, values);
+                this.props.AddSimHandler(values);
                 this.props.handleCancel();
                 this.handleReset();
             }

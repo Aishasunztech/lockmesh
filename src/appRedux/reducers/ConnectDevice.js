@@ -176,6 +176,8 @@ const initialState = {
     sim_list: [],
     guestSimAll: 0,
     encryptSimAll: 0,
+    unrGuest: 0,
+    unrEncrypt: 0,
     simUpdated: false,
 
 };
@@ -1186,8 +1188,17 @@ export default (state = initialState, action) => {
 
         case GET_SIMS: {
             let sims = action.payload.data;
-            let checkEnc = sims.filter(e => e.encrypt != 1);
-            let checkGst = sims.filter(e => e.guest != 1);
+            let checkEnc = sims.filter(e => e.encrypt != true);
+            let checkGst = sims.filter(e => e.guest != true);
+
+            let checkunrEncrypt = sims.filter(e => e.unrEncrypt != true);
+            let checkunrGuest = sims.filter(e => e.unrGuest != true);
+
+            let unrGuest;
+            let unrEncrypt;
+            if (checkunrGuest.length > 0) unrGuest = 0; else unrGuest = 1;
+            if (checkunrEncrypt.length > 0) unrEncrypt = 0; else unrEncrypt = 1;
+
             let guestSimAll;
             let encryptSimAll;
             if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
@@ -1197,7 +1208,9 @@ export default (state = initialState, action) => {
                 ...state,
                 sim_list: sims,
                 guestSimAll,
-                encryptSimAll
+                encryptSimAll,
+                unrEncrypt,
+                unrGuest,
             }
         }
         case RECEIVE_SIM_DATA: {
@@ -1228,25 +1241,6 @@ export default (state = initialState, action) => {
                 }
             }
         }
-
-        // case DELETE_SIM: {
-        //     if (action.response.status) {
-        //         success({
-        //             title: action.response.msg,
-        //         });
-        //         return {
-        //             ...state,
-        //             simUpdated: new Date()
-        //         }
-        //     } else {
-        //         error({
-        //             title: action.response.msg,
-        //         });
-        //         return {
-        //             ...state
-        //         }
-        //     }
-        // }
 
         case WRITE_IMEI: {
             if (action.payload.status) {
