@@ -1093,10 +1093,10 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
 }
 
 // ********* Sim Module
-export const simRegister = (total, data) => {
+export const simRegister = (data) => {
     console.log('data is: ', data)
     return (dispatch) => {
-        RestService.simRegister(total, data).then((response) => {
+        RestService.simRegister(data).then((response) => {
             console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data);
@@ -1113,6 +1113,29 @@ export const simRegister = (total, data) => {
                     type: INVALID_TOKEN
                 })
             }
+        })
+    }
+}
+
+export const simUnRegister = (data) => {
+    console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.handleSimUpdate(data).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                // dispatch({
+                //     type: UPDATE_SIM,
+                //     response: response.data,
+                //     payload: data
+                // })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
         })
     }
 }

@@ -729,9 +729,9 @@ const RestService = {
         return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
     },
 
-    simRegister: (total, data) => {
+    simRegister: (data) => {
         // console.log('at sev', data);
-        return axios.post(BASE_URL + 'users/sim-register', { data, total_dvc: total }, RestService.getHeader());
+        return axios.post(BASE_URL + 'users/sim-register', { data }, RestService.getHeader());
     },
     getSims: (device_id) => {
         // console.log('at sev', data);
