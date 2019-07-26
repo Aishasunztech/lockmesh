@@ -10,8 +10,7 @@ import { Required_Fields, DEVICE_SIM_ID, DEVICE_Select_SIM_ID, ONLY_NUMBER_ARE_A
 import { Guest, ENCRYPT } from '../../../../constants/TabConstants';
 
 
-class AddUserForm extends Component {
-
+class RegisterSimForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,9 +29,9 @@ class AddUserForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('iccid is: ', values['iccid'])
             // let checkICCID = this.isValidLuhn(values['iccid'])
-           
+
             values['guest'] = this.state.guest ? 1 : 0;
-            values['encrypt'] = this.state.encrypt ? 1: 0;
+            values['encrypt'] = this.state.encrypt ? 1 : 0;
             values['data_limit'] = "";
             values['device_id'] = this.props.deviceID;
 
@@ -41,7 +40,6 @@ class AddUserForm extends Component {
                 this.props.handleCancel();
                 this.handleReset();
             }
-
         });
     }
 
@@ -73,36 +71,19 @@ class AddUserForm extends Component {
         callback();
     }
 
-
-    componentDidMount() {
-    }
     handleReset = () => {
         this.props.form.resetFields();
     }
-
-    // handleChecked = (e, name) => {
-    //     e.preventDefault();
-    //     this.setState({
-    //         name: !this.state.name
-    //     })
-    // }
-
 
     handleCancel = () => {
         this.handleReset();
         this.props.handleCancel();
     }
-    handleChange = (e) => {
-        this.setState({ type: e.target.value });
-    }
 
     render() {
-        console.log('props of coming', this.props.device);
-        //  alert(this.props.device.device_id);
-        const { visible, loading } = this.state;
         var deviceSimIds = [];
-        deviceSimIds[0] = this.props.device.sim_id // this.state.sim_ids;
-        console.log(deviceSimIds)
+        deviceSimIds[0] = this.props.device.sim_id;
+        // console.log(deviceSimIds)
         if (deviceSimIds[0] === undefined || deviceSimIds[0] === 'undefined' || deviceSimIds[0] === "N/A" || deviceSimIds[0] === '' || deviceSimIds[0] === null) {
             deviceSimIds = []
         }
@@ -116,8 +97,6 @@ class AddUserForm extends Component {
                         label="ICC-ID" // {convertToLang(this.props.translation[Name], "Name")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
-                    // validateStatus={this.state.validateStatus}
-                    // help={this.state.iccidHelp}
                     >
                         {this.props.form.getFieldDecorator('iccid', {
                             initialValue: '',
@@ -139,8 +118,6 @@ class AddUserForm extends Component {
                         label="Name" // {convertToLang(this.props.translation[Name], "Name")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
-                    // validateStatus={this.state.validateStatus}
-                    // help={this.state.help}
                     >
                         {this.props.form.getFieldDecorator('name', {
                             initialValue: '',
@@ -158,13 +135,11 @@ class AddUserForm extends Component {
                         label={convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
-                    // showSearch
                     >
                         {this.props.form.getFieldDecorator('sim_id', {
                             initialValue: '',
                         })(
                             <Select
-                                // showSearch
                                 placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "SIM ID")}
                                 optionFilterProp="children"
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -198,7 +173,6 @@ class AddUserForm extends Component {
                                     guest: !this.state.guest
                                 })
                             }}
-                                //  checked={guest === 1 ? true : false} 
                                 size="small"
                             />
                         </Col>
@@ -208,7 +182,6 @@ class AddUserForm extends Component {
                                     encrypt: !this.state.encrypt
                                 })
                             }}
-                                // checked={encrypted === 1 ? true : false} 
                                 size="small"
                             />
                         </Col>
@@ -231,5 +204,5 @@ class AddUserForm extends Component {
     }
 }
 
-const WrappedAddDeviceForm = Form.create()(AddUserForm);
-export default WrappedAddDeviceForm;
+const WrappedRegisterSimForm = Form.create()(RegisterSimForm);
+export default WrappedRegisterSimForm;

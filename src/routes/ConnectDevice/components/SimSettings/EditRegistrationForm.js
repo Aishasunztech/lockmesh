@@ -3,14 +3,14 @@ import { Col, Row, Switch, Button, Form, Input, Select, InputNumber } from 'antd
 import { checkValue, convertToLang } from '../../../utils/commonUtils'
 
 import {
-    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
+    User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
 } from '../../../../constants/Constants';
 import { Button_Cancel, Button_submit, Button_Add } from '../../../../constants/ButtonConstants';
 import { Required_Fields, DEVICE_SIM_ID, DEVICE_Select_SIM_ID, ONLY_NUMBER_ARE_ALLOWED } from '../../../../constants/DeviceConstants';
 import { Guest, ENCRYPT } from '../../../../constants/TabConstants';
 
 
-class AddUserForm extends Component {
+class EditSim extends Component {
 
     constructor(props) {
         super(props);
@@ -18,8 +18,8 @@ class AddUserForm extends Component {
             help: '',
             iccidHelp: '',
             visible: false,
-            guest: props.editSim.guest ? true: false,
-            encrypt: props.editSim.encrypt ? true: false,
+            guest: props.editSim.guest ? true : false,
+            encrypt: props.editSim.encrypt ? true : false,
             validateStatus: ''
         }
     }
@@ -79,13 +79,6 @@ class AddUserForm extends Component {
         this.props.form.resetFields();
     }
 
-    // handleChecked = (e, name) => {
-    //     e.preventDefault();
-    //     this.setState({
-    //         name: !this.state.name
-    //     })
-    // }
-
 
     handleCancel = () => {
         this.handleReset();
@@ -96,11 +89,11 @@ class AddUserForm extends Component {
     }
 
     render() {
-        console.log('props of editSim', this.props.editSim);
+        // console.log('props of editSim', this.props.editSim);
         const { editSim } = this.props;
 
         let deviceSimIds = [];
-        deviceSimIds[0] = editSim.sim_id // this.state.sim_ids;
+        deviceSimIds[0] = editSim.sim_id;
         console.log(deviceSimIds)
         if (deviceSimIds[0] === undefined || deviceSimIds[0] === 'undefined' || deviceSimIds[0] === "N/A" || deviceSimIds[0] === '' || deviceSimIds[0] === null) {
             deviceSimIds = []
@@ -135,8 +128,6 @@ class AddUserForm extends Component {
                         label="Name" // {convertToLang(this.props.translation[Name], "Name")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
-                    // validateStatus={this.state.validateStatus}
-                    // help={this.state.help}
                     >
                         {this.props.form.getFieldDecorator('name', {
                             initialValue: editSim.name ? editSim.name : '',
@@ -154,13 +145,11 @@ class AddUserForm extends Component {
                         label={convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
-                    // showSearch
                     >
                         {this.props.form.getFieldDecorator('sim_id', {
                             initialValue: editSim.sim_id ? editSim.sim_id : '',
                         })(
                             <Select
-                                // showSearch
                                 placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "SIM ID")}
                                 optionFilterProp="children"
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -227,5 +216,5 @@ class AddUserForm extends Component {
     }
 }
 
-const WrappedAddDeviceForm = Form.create()(AddUserForm);
-export default WrappedAddDeviceForm;
+const WrappedEditSim = Form.create()(EditSim);
+export default WrappedEditSim;

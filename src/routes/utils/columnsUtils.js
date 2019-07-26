@@ -124,7 +124,7 @@ import {
 // **************************************
 /////////////////////////////////////////
 
-export function devicesColumns(sortOrder = null, translation, handleSearch) {
+export function devicesColumns(sortOrder, translation, handleSearch) {
     console.log('sortOrder is: ', sortOrder);
     let deviceColumns = [
         {
@@ -198,7 +198,7 @@ export function devicesColumns(sortOrder = null, translation, handleSearch) {
                         return list
                     }, //
                     sortDirections: ['ascend', 'descend'],
-                    sortOrder,
+                    // sortOrder,
                 }
             ],
         }, {
@@ -889,14 +889,17 @@ export function devicesColumns(sortOrder = null, translation, handleSearch) {
 
     let dvcs = deviceColumns.map((item) => {
 
-        // if (sortOrder !== null && sortOrder != '{}') {
-        //     console.log('sorter not empty')
-        //     if (item.dataIndex === sortOrder.field) {
-        //         console.log('sorter field match')
-        //         console.log('final sortOrder is: ', sortOrder.order || "ascend");
-        //         item.children['sortOrder'] = sortOrder.order || "ascend"
-        //     }
-        // }
+        if (sortOrder !== null && sortOrder != '{}') {
+            console.log('sorter not empty')
+            
+            if (item.dataIndex === sortOrder.field) {
+                console.log('sorter field match')
+                console.log('final sortOrder is: ', sortOrder.order || "ascend");
+                item.children['sortOrder'] = sortOrder.order || "ascend"
+            } else {
+                // item.children['sortOrder'] = null
+            }
+        } 
         return item;
     })
 
@@ -984,7 +987,7 @@ export function usersColumns(sortOrder = null, translation, handleSearch) {
                     onFilter: (value, record) => record.devices.indexOf(value) === 0,
                     sorter: (a, b) => { return a.devices - b.devices },
                     // sortDirections: ['ascend', 'descend'],
-                    sortOrder,
+                    // sortOrder,
                 }
             ],
         },

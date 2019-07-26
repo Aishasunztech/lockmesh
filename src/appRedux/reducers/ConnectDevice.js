@@ -1239,8 +1239,6 @@ export default (state = initialState, action) => {
                     title: action.response.msg,
                 });
 
-                console.log('sim list is: ', state.sim_list)
-                console.log('rev data is: ', action.payload)
                 let sims = state.sim_list.filter(e => e.id != action.payload.id)
                 return {
                     ...state,

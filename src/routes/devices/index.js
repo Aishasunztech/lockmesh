@@ -126,10 +126,23 @@ class Devices extends Component {
 
     handleTableChange = (pagination, query, sorter) => {
         console.log('check sorter func: ', sorter)
-        const sortOrder = sorter.order || "ascend";
+        const sortOrder = (sorter.order) ? sorter.order : "ascend";
+        console.log('sortOrder: ', sortOrder)
+
+        let { columns } = this.state;
+        console.log(columns);
+
+        columns.forEach(column => {
+            if (column.dataIndex !== 'action' && column.dataIndex !== 'counter') {
+                if (column.dataIndex === sorter.field) {
+                    column.children[0]['sortOrder'] = sortOrder
+                } else {
+                    column.children[0]['sortOrder'] = sortOrder;
+                }
+            }
+        })
         this.setState({
-            sortOrder,
-            columns: devicesColumns(sortOrder, this.props.translation, this.handleSearch)
+            columns: columns
         });
     };
 
