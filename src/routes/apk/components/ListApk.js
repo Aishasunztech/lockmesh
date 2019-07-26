@@ -123,7 +123,7 @@ export default class ListApk extends Component {
                                 <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
                                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
                                 <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                    this.props.handleConfirmDelete(app.apk_id);
+                                    this.props.handleConfirmDelete(app.apk_id, app);
                                 }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                             </Fragment>
                         </div>
@@ -236,7 +236,7 @@ export default class ListApk extends Component {
                                             <Permissions className="exp_row22" record={record} translation={this.props.translation} />
                                         </Tabs.TabPane>
                                         <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
-                                                                                       
+
                                         </Tabs.TabPane>
                                     </Tabs>
                                 </Fragment>
