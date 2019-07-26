@@ -100,8 +100,8 @@ export const Days = "days.id";
 
 export const User_Name_require = "user.name.require"; // Name is Required
 export const Only_alpha_numeric = "only.alpha.numeric.id"; // Please insert only alphabets and numbers
-export const Not_valid_Email = "not.valid.email.id"; // The input is not valid E-mail!
-export const PLZ_INPUT_Email = "not.valid.email.id"; // Please input your E-mail!
+export const Not_valid_Email = "not.valid.email.id"; // The input is not a valid E-mail!
+export const PLZ_INPUT_Email = "please.input.your.email.id"; // Please input your E-mail!
 export const Required_Email = "require.email.id"; // Email is Required !
 export const Insert_Valid_Dealer_Name = "insert.valid.dealer.name.id"; // Please Insert Dealer Name
 export const Email = "email.id"; // Email
@@ -164,7 +164,7 @@ export const WARNING = "WARNING.id";
 export const PROCEED_WITH_WIPING_THE_DEVICE = "PROCEED.WITH.WIPING.THE.DEVICE.id";
 
 export const CREDITS = "CREDITS.id";
-export const CREDITS_CASH_REQUESTS = "CREDITS.CASH.REQUESTS.id";
+export const CREDITS_CASH_REQUESTS = "CREDITS.CASH.REQUESTS.id"; //CREDITS CASH REQUESTS
 export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id";
 export const ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST = "Are.you.sure.you.want.to.decline.this.request.id"; // Are you sure you want to decline this request ?
 export const ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST = "Are.you.sure.you.want.to.accept.this.request.id"; // Are you sure you want to accept this request ?
