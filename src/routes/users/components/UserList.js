@@ -181,7 +181,7 @@ class UserList extends Component {
                             expandIconAsCell={false}
                             defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                             columns={this.state.columns}
-                            onChange={this.onChangeTableSorting}
+                            onChange={this.props.onChangeTableSorting}
                             dataSource={this.renderList(this.state.users)}
                             pagination={false}
                             ref='user_table'

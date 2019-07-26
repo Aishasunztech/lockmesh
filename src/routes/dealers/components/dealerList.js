@@ -261,7 +261,7 @@ class DealerList extends Component {
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.row_key) ? 'exp_row' : ''}
                         pagination={false}
                         dataSource={this.renderList(this.props.dealersList)}
-                        onChange={this.onChangeTableSorting}
+                        onChange={this.props.onChangeTableSorting}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             // console.log("table row", record);
@@ -269,6 +269,7 @@ class DealerList extends Component {
                                 <DealerDevicesList
                                     ref='dealerDeviceList'
                                     record={record}
+                                    // onChangeTableSorting={this.props.onChangeTableSorting}
                                     translation={this.props.translation}
                                 />
                                 // <span>its working</span>
@@ -376,7 +377,7 @@ export default class Tab extends Component {
                     </TabPane>
                 </Tabs>
                 <DealerList
-                    onChangeTableSorting={this.onChangeTableSorting}
+                    onChangeTableSorting={this.props.onChangeTableSorting}
                     dealersList={this.state.dealersList}
                     suspendDealer={this.props.suspendDealer}
                     activateDealer={this.props.activateDealer}

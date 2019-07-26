@@ -94,11 +94,12 @@ var status = true;
 class Devices extends Component {
     constructor(props) {
         super(props);
-        var columns = devicesColumns(null, props.translation, this.handleSearch);
+        var columns = devicesColumns(props.translation, this.handleSearch);
 
 
         this.state = {
-            sortOrder: null,
+            sorterKey: '',
+            sortOrder: 'ascend',
             columns: columns,
             searchText: '',
             devices: [],
@@ -114,7 +115,7 @@ class Devices extends Component {
             filteredDevices: [],
             flaggedDevices: [],
             copy_status: true,
-            translation: {}
+            translation: {},
         }
         this.copyDevices = [];
 
@@ -125,26 +126,30 @@ class Devices extends Component {
     }
 
     handleTableChange = (pagination, query, sorter) => {
-        console.log('check sorter func: ', sorter)
-        const sortOrder = (sorter.order) ? sorter.order : "ascend";
-        console.log('sortOrder: ', sortOrder)
-
         let { columns } = this.state;
-        console.log(columns);
 
         columns.forEach(column => {
-            if (column.dataIndex !== 'action' && column.dataIndex !== 'counter') {
-                if (column.dataIndex === sorter.field) {
-                    column.children[0]['sortOrder'] = sortOrder
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
                 } else {
-                    column.children[0]['sortOrder'] = sortOrder;
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
                 }
             }
         })
         this.setState({
             columns: columns
         });
-    };
+    }
 
     deleteAllUnlinked = () => {
         alert('Its working')
@@ -621,7 +626,7 @@ class Devices extends Component {
             // console.log(this.columns)
             console.log('this.state.sortOrder is ', this.state.sortOrder)
             this.setState({
-                columns: devicesColumns(this.state.sortOrder, this.props.translation, this.handleSearch)
+                columns: devicesColumns(this.props.translation, this.handleSearch)
 
             })
         }

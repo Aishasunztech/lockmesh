@@ -124,9 +124,9 @@ import {
 // **************************************
 /////////////////////////////////////////
 
-export function devicesColumns(sortOrder, translation, handleSearch) {
-    console.log('sortOrder is: ', sortOrder);
-    let deviceColumns = [
+export function devicesColumns(translation, handleSearch) {
+
+    return ([
         {
             title: "#",
             dataIndex: 'counter',
@@ -167,7 +167,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     className: 'hide',
                     sorter: (a, b) => { return a.validity - b.validity },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ],
         },
@@ -198,7 +197,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                         return list
                     }, //
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ],
         }, {
@@ -222,10 +220,9 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     dataIndex: 'user_id',
                     key: "user_id",
                     sorter: (a, b) => {
-                        console.log(a); return a.user_id.props.children.localeCompare(b.user_id.props.children)
+                        return a.user_id.props.children.localeCompare(b.user_id.props.children)
                     },
                     sortDirections: ['ascend', 'descend'],
-                    sortOrder,
                 }
             ],
         },
@@ -251,7 +248,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'status',
                     sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -276,7 +272,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'online',
                     sorter: (a, b) => { return a.online.props.children[1].localeCompare(b.online.props.children[1]) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -349,7 +344,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'flagged',
                     sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -374,7 +368,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'name',
                     sorter: (a, b) => { return a.name.localeCompare(b.name) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                     editable: true,
 
                 }
@@ -403,7 +396,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'account_email',
                     sorter: (a, b) => { return a.account_email.localeCompare(b.account_email) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -427,7 +419,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     dataIndex: 'activation_code',
                     sorter: (a, b) => { return a.activation_code - b.activation_code },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -453,7 +444,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'client_id',
                     sorter: (a, b) => { return a.client_id.localeCompare(b.client_id) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -477,7 +467,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     dataIndex: 'pgp_email',
                     sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -502,7 +491,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'sim_id',
                     sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -527,7 +515,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'chat_id',
                     sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -553,7 +540,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'dealer_id',
                     sorter: (a, b) => { return a.dealer_id - b.dealer_id },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -578,7 +564,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'dealer_name',
                     sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
 
 
                 }
@@ -605,7 +590,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'dealer_pin',
                     sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -630,7 +614,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'mac_address',
                     sorter: (a, b) => { return a.mac_address.localeCompare(b.mac_address) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -656,7 +639,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'imei_1',
                     sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -681,7 +663,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'sim_1',
                     sorter: (a, b) => { return a.sim_1.localeCompare(b.sim_1) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -706,7 +687,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'imei_2',
                     sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -731,7 +711,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'sim_2',
                     sorter: (a, b) => { return a.sim_2.localeCompare(b.sim_2) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -756,7 +735,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'serial_number',
                     sorter: (a, b) => { return a.serial_number.localeCompare(b.serial_number) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -782,7 +760,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'model',
                     sorter: (a, b) => { return a.model.localeCompare(b.model) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -808,7 +785,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 's_dealer',
                     sorter: (a, b) => { return a.s_dealer.localeCompare(b.s_dealer) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -833,7 +809,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 's_dealer_name',
                     sorter: (a, b) => { return a.s_dealer_name.localeCompare(b.s_dealer_name) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         }, {
@@ -857,7 +832,6 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'start_date',
                     sorter: (a, b) => { return a.start_date.localeCompare(b.start_date) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         }, {
@@ -881,34 +855,14 @@ export function devicesColumns(sortOrder, translation, handleSearch) {
                     key: 'expiry_date',
                     sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
-    ]
-
-    let dvcs = deviceColumns.map((item) => {
-
-        if (sortOrder !== null && sortOrder != '{}') {
-            console.log('sorter not empty')
-            
-            if (item.dataIndex === sortOrder.field) {
-                console.log('sorter field match')
-                console.log('final sortOrder is: ', sortOrder.order || "ascend");
-                item.children['sortOrder'] = sortOrder.order || "ascend"
-            } else {
-                // item.children['sortOrder'] = null
-            }
-        } 
-        return item;
-    })
-
-
-    return (dvcs);
+    ]);
 }
 
 
-export function usersColumns(sortOrder = null, translation, handleSearch) {
+export function usersColumns(translation, handleSearch) {
     return ([
         {
             title: "#",
@@ -947,7 +901,6 @@ export function usersColumns(sortOrder = null, translation, handleSearch) {
                         return a.user_id.localeCompare(b.user_id)
                     },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ],
         },
@@ -987,7 +940,6 @@ export function usersColumns(sortOrder = null, translation, handleSearch) {
                     onFilter: (value, record) => record.devices.indexOf(value) === 0,
                     sorter: (a, b) => { return a.devices - b.devices },
                     // sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ],
         },
@@ -1012,7 +964,6 @@ export function usersColumns(sortOrder = null, translation, handleSearch) {
                 key: 'user_name',
                 sorter: (a, b) => { return a.user_name.localeCompare(b.user_name) },
                 sortDirections: ['ascend', 'descend'],
-                // sortOrder,
             }]
         },
         {
@@ -1036,7 +987,6 @@ export function usersColumns(sortOrder = null, translation, handleSearch) {
                 key: 'email',
                 sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
                 sortDirections: ['ascend', 'descend'],
-                // sortOrder,
             }]
         },
         {
@@ -1067,14 +1017,13 @@ export function usersColumns(sortOrder = null, translation, handleSearch) {
                 key: 'created_at',
                 sorter: (a, b) => { return a.created_at.localeCompare(b.created_at.toString()) },
                 sortDirections: ['ascend', 'descend'],
-                // sortOrder,
             }]
         },
     ]);
 }
 
 
-export function userDevicesListColumns(sortOrder = null, translation, handleSearch) {
+export function userDevicesListColumns(translation, handleSearch) {
     return ([
         {
             // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
@@ -1105,7 +1054,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     dataIndex: 'activation_code',
                     sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -1130,7 +1078,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     key: 'dealer_pin',
                     sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -1155,7 +1102,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     key: "device_id",
                     sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ],
         },
@@ -1179,10 +1125,9 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     align: "center",
                     dataIndex: 'status',
                     key: 'status',
-                    sorter: (a, b) => { console.log('done', a.status); return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                    sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
 
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         }, {
@@ -1206,7 +1151,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     key: 'expiry_date',
                     sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -1230,7 +1174,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     dataIndex: 'pgp_email',
                     sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         }, {
@@ -1255,7 +1198,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
 
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         }, {
@@ -1279,7 +1221,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     key: 'sim_id',
                     sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         }, {
@@ -1303,7 +1244,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     key: 'imei_1',
                     sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         }, {
@@ -1327,7 +1267,6 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
                     key: 'imei_2',
                     sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -1335,7 +1274,7 @@ export function userDevicesListColumns(sortOrder = null, translation, handleSear
 }
 
 
-export function dealerColumns(sortOrder = null, translation, handleSearch) {
+export function dealerColumns(translation, handleSearch) {
     return ([{
         title: '#',
         dataIndex: 'counter',
@@ -1368,16 +1307,9 @@ export function dealerColumns(sortOrder = null, translation, handleSearch) {
                 title: convertToLang(translation[DEALER_DEVICES], "DEVICES"),
                 dataIndex: 'connected_devices',
                 key: 'connected_devices',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.connected_devices.length;
-                // },
                 sorter: (a, b) => { return a.connected_devices - b.connected_devices },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
-                // sortOrder,
                 className: '',
             }
         ]
@@ -1405,7 +1337,6 @@ export function dealerColumns(sortOrder = null, translation, handleSearch) {
                 align: 'center',
                 sorter: (a, b) => a.dealer_id - b.dealer_id,
                 sortDirections: ['ascend', 'descend'],
-                // sortOrder,
                 className: '',
             }
         ]
@@ -1429,16 +1360,9 @@ export function dealerColumns(sortOrder = null, translation, handleSearch) {
                 title: convertToLang(translation[DEALER_PIN], "DEALER PIN"),
                 dataIndex: 'link_code',
                 key: 'link_code',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.link_code.length;
-                // },
                 sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
-                // sortOrder,
                 className: '',
             }
         ]
@@ -1463,16 +1387,9 @@ export function dealerColumns(sortOrder = null, translation, handleSearch) {
                 title: convertToLang(translation[DEALER_NAME], "DEALER NAME"),
                 dataIndex: 'dealer_name',
                 key: 'dealer_name',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.dealer_name.length;
-                // },
                 sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
-                // sortOrder,
                 className: '',
             }
         ]
@@ -1506,7 +1423,6 @@ export function dealerColumns(sortOrder = null, translation, handleSearch) {
 
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
-                // sortOrder,
                 className: '',
             }
         ]
@@ -1607,7 +1523,7 @@ export function sDealerColumns(translation, handleSearch) {
 }
 
 
-export function dealerColsWithSearch(sortOrder = null, translation, searchBar = false, callBack = null) {
+export function dealerColsWithSearch(translation, searchBar = false, callBack = null) {
 
     var searchInput = [
         {
@@ -1704,16 +1620,14 @@ export function dealerColsWithSearch(sortOrder = null, translation, searchBar = 
             key: 'dealer_id',
             sorter: (a, b) => a.dealer_id - b.dealer_id,
             sortDirections: ['ascend', 'descend'],
-            // sortOrder,
             className: '',
         },
         {
             title: convertToLang(translation[DEALER_PIN], "DEALER PIN"),
             dataIndex: 'link_code',
             key: 'link_code',
-            sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+            sorter: (a, b) => { return a.link_code.props.children.localeCompare(b.link_code.props.children) },
             sortDirections: ['ascend', 'descend'],
-            // sortOrder,
             className: '',
         },
         {
@@ -1722,7 +1636,6 @@ export function dealerColsWithSearch(sortOrder = null, translation, searchBar = 
             key: 'dealer_name',
             sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
             sortDirections: ['ascend', 'descend'],
-            // sortOrder,
             className: '',
         },
         {
@@ -1731,7 +1644,6 @@ export function dealerColsWithSearch(sortOrder = null, translation, searchBar = 
             key: 'dealer_email',
             sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
             sortDirections: ['ascend', 'descend'],
-            // sortOrder,
             className: '',
         },
         {
@@ -1868,7 +1780,7 @@ export function controlColumns(translation) {
         }
     ]);
 }
-export function policyColumns(sortOrder = null, translation, handleSearch) {
+export function policyColumns(translation, handleSearch) {
     return ([
         //     title: 'ACTIONS',
         //     dataIndex: 'action',
@@ -1952,7 +1864,6 @@ export function policyColumns(sortOrder = null, translation, handleSearch) {
                 }
             ],
             sortDirections: ['ascend', 'descend'],
-            // sortOrder,
         },
         {
             title: (
@@ -1978,7 +1889,6 @@ export function policyColumns(sortOrder = null, translation, handleSearch) {
                     sorter: (a, b) => { return a.policy_command.localeCompare(b.policy_command) },
 
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -2007,7 +1917,6 @@ export function policyColumns(sortOrder = null, translation, handleSearch) {
                     sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
 
                     sortDirections: ['ascend', 'descend'],
-                    // sortOrder,
                 }
             ]
         },
@@ -2027,7 +1936,7 @@ export function policyColumns(sortOrder = null, translation, handleSearch) {
 };
 
 
-export function apkColumns(sortOrder = null, translation) {
+export function apkColumns(translation) {
     return ([
         {
             title: convertToLang(translation[ACTION], "ACTION"),
@@ -2078,7 +1987,6 @@ export function apkColumns(sortOrder = null, translation) {
             key: 'apk_name',
             sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
             sortDirections: ['ascend', 'descend'],
-            // sortOrder,
             defaultSortOrder: "ascend"
         },
         {

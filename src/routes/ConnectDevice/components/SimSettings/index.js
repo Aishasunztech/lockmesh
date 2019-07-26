@@ -305,7 +305,7 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }) => {
-    // console.log('device_details ', device_details.simHistoryList)
+    console.log('device_details  unrGuest ', device_details.unrGuest)
     return {
         encryptSimAll: device_details.encryptSimAll,
         guestSimAll: device_details.guestSimAll,

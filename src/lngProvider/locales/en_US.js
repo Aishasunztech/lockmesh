@@ -217,6 +217,9 @@ let enLang={
   "tableHeadings.REMAININGDAYS": "Remaining Days",
   "parent.dealer.id": "PARENT DEALER",
   "parent.dealer.id.id": "PARENT DEALER ID",
+  "tableHeadings.TYPE": "Type",
+  "tableHeadings.VERSION": "Version",
+  "apk.size.id": "APK SIZE",
 }
 
 export default enLang;

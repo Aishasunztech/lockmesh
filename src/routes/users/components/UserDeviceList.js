@@ -56,21 +56,52 @@ const Search = Input.Search;
 class UserDeviceList extends Component {
     constructor(props) {
         super(props);
+        var listdeviceCols = userDevicesListColumns(props.translation, this.handleSearch)
+
         this.state = {
-            sortOrder: null,
+            sorterKey: '',
+            sortOrder: 'ascend',
+            listdeviceCols: listdeviceCols,
             devicesList: this.props.record.devicesList ? this.props.record.devicesList : [],
             permissions: [],
             pagination: 10
 
         }
-        this.listdeviceCols = userDevicesListColumns(null, props.translation, this.handleSearch)
+        
     }
 
+    // handleTableChange = (pagination, query, sorter) => {
+    //     // console.log('check sorter func: ', sorter)
+    //     const sortOrder = sorter.order || "ascend";
+    //     this.listdeviceCols = userDevicesListColumns(sortOrder, this.props.translation, this.handleSearch)
+    // };
+
     handleTableChange = (pagination, query, sorter) => {
-        // console.log('check sorter func: ', sorter)
-        const sortOrder = sorter.order || "ascend";
-        this.listdeviceCols = userDevicesListColumns(sortOrder, this.props.translation, this.handleSearch)
-    };
+        console.log('check sorter func: ', sorter)
+        let columns = this.state.listdeviceCols;
+
+        columns.forEach(column => {
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+                }
+            }
+        })
+        this.setState({ 
+            listdeviceCols: columns
+         });
+    }
 
     componentDidMount() {
 
@@ -90,7 +121,9 @@ class UserDeviceList extends Component {
         }
 
         if (this.props.translation !== nextProps.translation) {
-            this.listdeviceCols = userDevicesListColumns(this.state.sortOrder, nextProps.translation, this.handleSearch);
+            this.setState({
+                listdeviceCols: userDevicesListColumns(nextProps.translation, this.handleSearch)
+            })
         }
     }
     searchField = (originalData, fieldName, value) => {
@@ -319,7 +352,7 @@ class UserDeviceList extends Component {
                     </Row>
                     <div className="expand_row">
                         <Table
-                            columns={this.listdeviceCols}
+                            columns={this.state.listdeviceCols}
                             onChange={this.handleTableChange}
                             dataSource={this.renderDevices(this.state.devicesList)}
                             pagination={false

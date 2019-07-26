@@ -28,8 +28,15 @@ const confirm = Modal.confirm;
 class Permissions extends Component {
   constructor(props) {
     super(props);
+    this.addDealerCols = dealerColsWithSearch(props.translation, true, this.handleSearch);
+    var addDealerColsInModal = dealerColsWithSearch(props.translation, true, this.handleSearchInModal);
+    var listDealerCols = dealerColsWithSearch(props.translation);
+
     this.state = {
-      sortOrder: null,
+      sorterKey: '',
+      sortOrder: 'ascend',
+      listDealerCols: listDealerCols,
+      addDealerColsInModal: addDealerColsInModal,
       showDealersModal: false,
       dealer_ids: [],
       dealerList: [],
@@ -42,19 +49,39 @@ class Permissions extends Component {
       dealer_id: '',
       goToPage: '/dealer/dealer'
     }
-    this.addDealerCols = dealerColsWithSearch(null, props.translation, true, this.handleSearch);
-    this.addDealerColsInModal = dealerColsWithSearch(null, props.translation, true, this.handleSearchInModal);
-    this.listDealerCols = dealerColsWithSearch(null, props.translation);
+
 
   }
 
+
   handleTableChange = (pagination, query, sorter) => {
-    // console.log('check sorter func: ', sorter)
-    const sortOrder = sorter.order || "ascend";
-    this.addDealerCols = dealerColsWithSearch(sortOrder, this.props.translation, true, this.handleSearch);
-    this.addDealerColsInModal = dealerColsWithSearch(sortOrder, this.props.translation, true, this.handleSearchInModal);
-    this.listDealerCols = dealerColsWithSearch(sortOrder, this.props.translation);
-  };
+    console.log('check sorter func: ', sorter)
+    let columns = this.state.addDealerColsInModal;
+    console.log('columns are: ', columns);
+
+    columns.forEach(column => {
+      if (column.children) {
+        if (Object.keys(sorter).length > 0) {
+          if (column.dataIndex == sorter.field) {
+            if (this.state.sorterKey == sorter.field) {
+              column.children[0]['sortOrder'] = sorter.order;
+            } else {
+              column.children[0]['sortOrder'] = "ascend";
+            }
+          } else {
+            column.children[0]['sortOrder'] = "";
+          }
+          this.setState({ sorterKey: sorter.field });
+        } else {
+          if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+        }
+      }
+    })
+    this.setState({
+      addDealerColsInModal: columns
+    });
+  }
+
 
   componentDidMount() {
     this.props.getAllDealers()
@@ -69,9 +96,11 @@ class Permissions extends Component {
   componentWillReceiveProps(nextProps) {
 
     if (this.props.translation !== nextProps.translation) {
-      this.addDealerCols = dealerColsWithSearch(this.state.sortOrder, nextProps.translation, true, this.handleSearch);
-      this.addDealerColsInModal = dealerColsWithSearch(this.state.sortOrder, nextProps.translation, true, this.handleSearchInModal);
-      this.listDealerCols = dealerColsWithSearch(this.state.sortOrder, nextProps.translation);
+      this.addDealerCols = dealerColsWithSearch(nextProps.translation, true, this.handleSearch);
+      this.setState({
+        addDealerColsInModal: dealerColsWithSearch(nextProps.translation, true, this.handleSearchInModal),
+        listDealerCols: dealerColsWithSearch(nextProps.translation)
+      })
     }
 
     if (this.props.record.apk_id !== nextProps.record.apk_id) {
@@ -523,7 +552,7 @@ class Permissions extends Component {
               <Col className="gutter-row" span={24}>
                 <Table
                   className="mb-24 expand_rows"
-                  columns={this.listDealerCols}
+                  columns={this.state.listDealerCols}
                   onChange={this.handleTableChange}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
                   pagination={false}
@@ -549,7 +578,7 @@ class Permissions extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <DealerList
-            columns={this.addDealerColsInModal}
+            columns={this.state.addDealerColsInModal}
             onChangeTableSorting={this.handleTableChange}
             dealers={this.renderDealer(this.state.dealerListForModal)}
             onSelectChange={this.onSelectChange}
@@ -577,7 +606,8 @@ class Permissions extends Component {
           }}
         >
           <DealerList
-            columns={this.addDealerColsInModal}
+            columns={this.state.addDealerColsInModal}
+            onChangeTableSorting={this.handleTableChange}
             dealers={this.renderDealer(this.state.dealerListForModal, true)}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
@@ -606,7 +636,8 @@ class Permissions extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <DealerList
-            columns={this.addDealerColsInModal}
+            columns={this.state.addDealerColsInModal}
+            onChangeTableSorting={this.handleTableChange}
             dealers={this.renderDealer(this.state.dealerListForModal)}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
