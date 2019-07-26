@@ -12,6 +12,7 @@ import CircularProgress from "components/CircularProgress/index";
 
 import { getApkList, changeAppStatus, deleteApk, editApk, addApk, resetUploadForm } from "../../appRedux/actions/Apk";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
+import { getPolicies } from "../../appRedux/actions/Policy";
 // import {getDeviceList} from 
 
 import AppFilter from "../../components/AppFilter";
@@ -254,6 +255,7 @@ class Apk extends Component {
     componentWillMount() {
         // alert("componentWillMount");
         this.props.getApkList();
+        this.props.getPolicies();
         // this.props.getDevicesList();
         //  console.log('apk did mount', this.props.getDropdown('apk'));
         this.props.getDropdown('apk');
@@ -448,7 +450,7 @@ class Apk extends Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list, auth, settings }) => {
+const mapStateToProps = ({ apk_list, auth, settings, policies }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
@@ -456,7 +458,8 @@ const mapStateToProps = ({ apk_list, auth, settings }) => {
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
         user: auth.authUser,
-        translation: settings.translation
+        translation: settings.translation,
+        policies: policies.policies,
     };
 }
 
@@ -471,7 +474,8 @@ function mapDispatchToProps(dispatch) {
         postPagination: postPagination,
         getPagination: getPagination,
         addApk: addApk,
-        resetUploadForm: resetUploadForm
+        resetUploadForm: resetUploadForm,
+        getPolicies: getPolicies
         //  getDevicesList: getDevicesList
     }, dispatch);
 }

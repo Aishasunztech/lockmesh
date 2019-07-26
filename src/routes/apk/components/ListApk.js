@@ -227,7 +227,8 @@ export default class ListApk extends Component {
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
                             return (
-                                <Fragment>
+                                <Permissions className="exp_row22" record={record} translation={this.props.translation} />
+                                /*<Fragment>
                                     <Tabs
                                         className="exp_tabs_policy"
                                         type="card"
@@ -237,9 +238,9 @@ export default class ListApk extends Component {
                                         </Tabs.TabPane>
                                         <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
 
-                                        </Tabs.TabPane>
+                            </Tabs.TabPane>
                                     </Tabs>
-                                </Fragment>
+                                </Fragment>*/
                             );
                         }}
                         onExpand={this.onExpandRow}
