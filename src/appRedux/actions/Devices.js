@@ -14,7 +14,8 @@ import {
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
     GET_PARENT_PACKAGES,
-    GET_PRODUCT_PRICES
+    GET_PRODUCT_PRICES,
+    USER_CREDITS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -86,6 +87,15 @@ export function deleteUnlinkDevice(action, devices) {
                         formData: devices
                     }
                 });
+                if (action === 'pre-active') {
+                    if (response.data.status) {
+                        dispatch({
+                            type: USER_CREDITS,
+                            response: response.data
+                        });
+                    }
+
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -317,6 +327,7 @@ export function addDevice(device) {
         // alert("hello");
         RestService.addDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
+
                 dispatch({
                     type: EDIT_DEVICE,
                     response: response.data,
@@ -324,6 +335,13 @@ export function addDevice(device) {
                         formData: device,
                     }
                 });
+                if (response.data.status) {
+                    // console.log("object");
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data
+                    });
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -338,7 +356,7 @@ export function preActiveDevice(device) {
     return (dispatch) => {
         RestService.preActiveDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
-                // console.log('action done ', response.data);
+                console.log('action done ', response.data);
                 dispatch({
                     type: PRE_ACTIVATE_DEVICE,
                     response: response.data,
@@ -346,7 +364,13 @@ export function preActiveDevice(device) {
                         formData: device,
                     }
                 });
-
+                if (response.data.status) {
+                    // console.log("object");
+                    dispatch({
+                        type: USER_CREDITS,
+                        response: response.data.data
+                    });
+                }
             } else {
                 dispatch({
                     type: INVALID_TOKEN
@@ -374,6 +398,7 @@ export const getParentPackages = () => {
 
     }
 }
+
 export const getProductPrices = () => {
     return (dispatch) => {
         RestService.getProductPrices().then((response) => {

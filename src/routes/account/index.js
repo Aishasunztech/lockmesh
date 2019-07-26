@@ -1117,9 +1117,9 @@ class Account extends Component {
                             <div>
                                 <div>
                                     <a href="javascript:void(0)"
-                                    // onClick={(e) => {
-                                    //     this.showPurchaseModal(e, true);
-                                    // }}
+                                        onClick={(e) => {
+                                            this.showPurchaseModal(e, true);
+                                        }}
                                     >
                                         <Card style={{ borderRadius: 12 }} className="manage_ac">
                                             <div className="profile_table image_1">

@@ -24,6 +24,7 @@ import {
 
 const confirm = Modal.confirm;
 const TabPane = Tabs.TabPane;
+const error = Modal.error;
 
 
 class ServicesList extends Component {
@@ -115,7 +116,7 @@ class ServicesList extends Component {
                 className: 'row '
             },
             {
-                title: convertToLang(this.props.translation[PACKAGE_PRICE], "PACKAGE PRICE"),
+                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "PACKAGE PRICE (CREDITS)"),
                 align: "center",
                 className: '',
                 dataIndex: 'pkg_price',
@@ -127,21 +128,20 @@ class ServicesList extends Component {
             },
         ];
 
-
         const pricesColumns = [
             {
                 dataIndex: 'price_for',
                 className: '',
                 title: convertToLang(this.props.translation["ITEM"], "ITEM"),
                 align: "center",
-                key: 'price_term',
-                sorter: (a, b) => { return a.price_term.localeCompare(b.price_term) },
+                key: 'price_for',
+                sorter: (a, b) => { return a.price_for.localeCompare(b.price_for) },
 
                 sortDirections: ['ascend', 'descend'],
 
             },
             {
-                title: convertToLang(this.props.translation[UNIT_PRICE], "UNIT PRICE"),
+                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
                 dataIndex: 'unit_price',
                 className: '',
                 align: "center",
@@ -153,7 +153,6 @@ class ServicesList extends Component {
                 sortDirections: ['ascend', 'descend'],
             }
         ];
-
 
         this.state = {
             searchText: '',
@@ -183,6 +182,7 @@ class ServicesList extends Component {
         this.sideScroll = this.sideScroll.bind(this);
     }
 
+
     renderList(type, list) {
         // console.log(list);
         if (type === 'package') {
@@ -197,11 +197,11 @@ class ServicesList extends Component {
                     chat_id: (services.chat_id) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
                     pgp_email: (services.pgp_email) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
                     vpn: (services.vpn) ? <span style={{ color: "#008000" }}> YES</span > : <span style={{ color: "Red" }}>NO</span >,
-                    pkg_price: `$${item.pkg_price}`,
+                    pkg_price: item.pkg_price,
                     pkg_features: services,
                 }
             });
-        } else {
+        } else if (type === 'product') {
             return list.map((item, index) => {
                 let price_for = ''
                 switch (item.price_for) {
@@ -226,10 +226,34 @@ class ServicesList extends Component {
                     id: item.id,
                     rowKey: item.id,
                     price_for: `${price_for}`,
-                    unit_price: `$${item.unit_price}`,
+                    unit_price: item.unit_price,
                     item: item.price_for
                 }
             });
+        } else {
+            let trialList = [
+                {
+                    price_for: 'SIM ID',
+                    unit_price: 0,
+                    item: "sim_id"
+                },
+                {
+                    price_for: 'CHAT ID',
+                    unit_price: 0,
+                    item: "chat_id"
+                },
+                {
+                    price_for: 'PGP EMAIL',
+                    unit_price: 0,
+                    item: "pgp_email"
+                },
+                {
+                    price_for: 'VPN',
+                    unit_price: 0,
+                    item: "vpn"
+                },
+            ];
+            return trialList
         }
     }
 
@@ -258,7 +282,7 @@ class ServicesList extends Component {
     }
 
     scrollNext = () => {
-        console.log('hi scroll next')
+        // console.log('hi scroll next')
         var element = this.refs.tablelist; // document.getElementsByClassName("scrolltablelist");  // ant-table-body   scrolltablelist  ant-table-scroll
         this.sideScroll(element, 'right', 25, 100, 10);
     }
@@ -293,9 +317,7 @@ class ServicesList extends Component {
 
     }
     handleProSelect = (selectedRowKeys, selectedRows) => {
-
         this.setState({ proSelectedRows: selectedRows, proSelectedRowKeys: selectedRowKeys })
-
     }
     handleCancel = () => {
         this.resetSeletedRows();
@@ -308,13 +330,44 @@ class ServicesList extends Component {
     }
     handleSubmit = () => {
         if (this.state.proSelectedRowKeys.length || this.state.pkgSelectedRowKeys.length) {
-            showConfirm(this)
+            let total_price = 0
+            // console.log(products, packages);
+            if (this.state.proSelectedRows.length) {
+                this.state.proSelectedRows.map((item) => {
+                    total_price = total_price + Number(item.unit_price)
+                })
+            }
+            if (this.state.PkgSelectedRows.length) {
+                this.state.PkgSelectedRows.map((item) => {
+                    total_price = total_price + Number(item.pkg_price)
+                })
+            }
+            // console.log(total_price, this.props.user_credit);
+            if (total_price < this.props.user_credit || this.props.tabselect === '0') {
+                this.props.handleServicesSubmit(this.state.proSelectedRows, this.state.PkgSelectedRows, this.props.serviceTerm);
+                this.handleCancel()
+            }
+            else {
+                let _this = this;
+                confirm({
+                    title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
+                    okText: "PURCHASE CREDITS",
+                    onOk() {
+                        _this.props.history.push('/account')
+                    },
+                    onCancel() {
+
+                    },
+
+                })
+
+            }
         }
     }
 
 
     render() {
-
+        // console.log(this.props.history);
         let packageRowSelection = {
             // hideDefaultSelections: false,
             onSelectAll: this.selectAll,
@@ -387,47 +440,81 @@ class ServicesList extends Component {
             },
             //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
         };
+        let trialRowSelection = {
+            selectedRowKeys: this.state.proSelectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.handleProSelect(selectedRowKeys, selectedRows)
+
+                // console.log(`selectedRowKeys 5: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            },
+            getCheckboxProps: record => {
+                let disabled = false
+                return ({
+                    disabled: disabled, // Column configuration not to be checked
+                    name: record.name,
+                })
+            },
+            //  columnTitle: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>
+        };
 
         return (
             <Fragment>
-                <div style={{ marginTop: 20 }}>
-                    <h1 style={{ textAlign: "center" }}>PACKAGES</h1>
-                    <Table
-                        id='packages'
-                        className={"devices"}
-                        rowSelection={packageRowSelection}
-                        size="middle"
-                        bordered
-                        columns={this.state.packagesColumns}
-                        dataSource={this.renderList("package", this.props.parent_packages)}
-                        pagination={
-                            false
-                        }
-                    />
-                </div >
+                {(this.props.tabselect === '0') ?
+                    <div style={{ marginTop: 20 }} >
+                        <h1 style={{ textAlign: "center" }}>PRODUCTS</h1>
+                        <Table
+                            id='products'
+                            className={"devices"}
+                            rowSelection={trialRowSelection}
+                            size="middle"
+                            bordered
+                            columns={this.state.pricesColumns}
+                            dataSource={this.renderList("trial")}
+                            pagination={
+                                false
+                            }
+                        />
+                    </div >
+                    :
+                    <Fragment>
+                        <div style={{ marginTop: 20 }}>
+                            <h1 style={{ textAlign: "center" }}>PACKAGES</h1>
+                            <Table
+                                id='packages'
+                                className={"devices"}
+                                rowSelection={packageRowSelection}
+                                size="middle"
+                                bordered
+                                columns={this.state.packagesColumns}
+                                dataSource={this.renderList("package", this.props.parent_packages)}
+                                pagination={
+                                    false
+                                }
+                            />
+                        </div >
 
 
-                <div style={{ marginTop: 20 }} >
-                    <h1 style={{ textAlign: "center" }}>PRODUCTS</h1>
-                    <Table
-                        id='products'
-                        className={"devices"}
-                        rowSelection={productRowSelection}
-                        size="middle"
-                        bordered
-                        columns={this.state.pricesColumns}
-                        dataSource={this.renderList("product", this.props.product_prices)}
-                        pagination={
-                            false
-                        }
-                    />
+                        <div style={{ marginTop: 20 }} >
+                            <h1 style={{ textAlign: "center" }}>PRODUCTS</h1>
+                            <Table
+                                id='products'
+                                className={"devices"}
+                                rowSelection={productRowSelection}
+                                size="middle"
+                                bordered
+                                columns={this.state.pricesColumns}
+                                dataSource={this.renderList("product", this.props.product_prices)}
+                                pagination={
+                                    false
+                                }
+                            />
 
-                </div >
+                        </div >
+                    </Fragment>}
                 <div className="edit_ftr_btn">
                     <Button key="back" type="button" onClick={this.handleCancel}>{convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
                     <Button type="primary" onClick={this.handleSubmit} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT")}</Button>
                 </div>
-
             </Fragment>
 
         )
@@ -539,7 +626,7 @@ class Services extends Component {
             if (error) {
                 let _this = this
                 confirm({
-                    title: "All Services are not found. Please Contact your ADMIN or click CONTINUE ANYWAYS to add later.",
+                    title: "All Seleced Services are not found. Please Contact your ADMIN or click CONTINUE ANYWAYS to add later.",
                     okText: 'CONTINUE ANYWAYS',
                     onOk() {
                         _this.setState({
@@ -616,6 +703,8 @@ class Services extends Component {
             <Fragment>
                 <div>
                     <Tabs type="card" className="dev_tabs" activeKey={this.props.tabselect} onChange={this.callback}>
+                        <TabPane tab={<span className="green">TRIAL</span>} key="0" >
+                        </TabPane>
                         <TabPane tab={<span className="green">1 MONTH</span>} key="1" >
                         </TabPane>
                         <TabPane tab={<span className="green">3 MONTH</span>} key="3" >
@@ -637,6 +726,8 @@ class Services extends Component {
                         handleCancel={this.props.handleCancel}
                         handleServicesSubmit={this.props.handleServicesSubmit}
                         serviceTerm={this.props.tabselect}
+                        user_credit={this.props.user_credit}
+                        history={this.props.history}
                     />
                 </div>
             </Fragment>
@@ -648,15 +739,3 @@ class Services extends Component {
 const WrappedAddDeviceForm = Form.create({ name: 'register' })(Services);
 
 export default WrappedAddDeviceForm;
-function showConfirm(_this, values) {
-    confirm({
-        title: "Do You Really want to apply selected services on device ? ",
-        onOk() {
-            _this.props.handleServicesSubmit(_this.state.proSelectedRows, _this.state.PkgSelectedRows, _this.props.serviceTerm);
-            _this.handleCancel()
-        },
-        onCancel() {
-
-        },
-    });
-}

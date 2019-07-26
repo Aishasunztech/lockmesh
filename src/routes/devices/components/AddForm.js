@@ -7,7 +7,7 @@ import Services from './Services'
 
 import AddSimPermission from './AddSimPermission'
 import { Markup } from 'interweave';
-import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin } from 'antd';
+import { Modal, Button, Form, Input, Select, Radio, InputNumber, Popover, Icon, Row, Col, Spin, Table } from 'antd';
 import { withRouter, Redirect, Link } from 'react-router-dom';
 
 import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices } from "../../../appRedux/actions/Devices";
@@ -30,6 +30,92 @@ class AddDevice extends Component {
 
     constructor(props) {
         super(props);
+
+        const invoiceColumns = [
+            {
+                dataIndex: 'counter',
+                className: '',
+                title: '#',
+                align: "center",
+                key: 'counter',
+                sorter: (a, b) => { return a.counter - b.counter },
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                dataIndex: 'item',
+                className: '',
+                title: convertToLang(this.props.translation["ITEM"], "ITEM"),
+                align: "center",
+                key: 'item',
+                sorter: (a, b) => { return a.item.localeCompare(b.item) },
+
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "DESCRPTION"),
+                dataIndex: 'description',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'description',
+                // ...this.getColumnSearchProps('status'),
+                sorter: (a, b) => { return a.description.localeCompare(b.description) },
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "SERVICE TERM"),
+                dataIndex: 'term',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'term',
+                // ...this.getColumnSearchProps('status'),
+                sorter: (a, b) => { return a.term.localeCompare(b.term) },
+                sortDirections: ['ascend', 'descend'],
+
+            },
+            {
+                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "UNIT PRICE (CREDITS)"),
+                dataIndex: 'unit_price',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'unit_price',
+                // ...this.getColumnSearchProps('status'),
+                sorter: (a, b) => { return a.unit_price - b.unit_price },
+
+                sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "QUANTITY"),
+                dataIndex: 'quantity',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'quantity',
+                // ...this.getColumnSearchProps('status'),
+                sorter: (a, b) => { return a.quantity - b.quantity },
+
+                sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: convertToLang(this.props.translation[DUMY_TRANS_ID], "LINE TOTAL"),
+                dataIndex: 'line_total',
+                className: '',
+                align: "center",
+                className: '',
+                key: 'line_total',
+                // ...this.getColumnSearchProps('status'),
+                sorter: (a, b) => { return a.line_total - b.line_total },
+                sortDirections: ['ascend', 'descend'],
+
+            },
+        ];
+
+
         this.state = {
             visible: false,
             type: 0,
@@ -49,9 +135,9 @@ class AddDevice extends Component {
             disablePgp: true,
             disableVpn: true,
             servicesModal: false,
-            tabselect: '1',
-            parent_packages: this.filterList('1 month', this.props.parent_packages, 'pkg'),
-            product_prices: this.filterList('1 month', this.props.product_prices, 'product'),
+            tabselect: '0',
+            parent_packages: [],
+            product_prices: [],
             products: [],
             packages: [],
             expiry_date: '',
@@ -59,7 +145,11 @@ class AddDevice extends Component {
             checkServices: {
                 display: 'none',
             },
-            term: ''
+            term: '',
+            total_price: 0,
+            invoiceColumns: invoiceColumns,
+            PkgSelectedRows: [],
+            proSelectedRows: []
         }
     }
 
@@ -69,18 +159,33 @@ class AddDevice extends Component {
             // console.log('form', values);
             if (this.state.services) {
                 if (!err) {
-                    // console.log(this.state.products);
-                    // console.log(this.state.packages);
-                    values.products = this.state.products;
-                    values.packages = this.state.packages;
-                    values.term = this.state.term;
-                    if (this.state.type == 1) {
-                        showConfirm(this, values);
+                    if (this.state.total_price < this.props.user_credit) {
+                        values.products = this.state.products;
+                        values.packages = this.state.packages;
+                        values.term = this.state.term;
+                        values.total_price = this.state.total_price
+                        // if (this.state.type == 1) {
+                        showConfirmCredit(this, values);
+                        // } else {
+                        //     this.props.AddDeviceHandler(values);
+                        //     this.props.hideModal();
+                        //     this.handleReset();
+                        // }
                     } else {
-                        this.props.AddDeviceHandler(values);
-                        this.props.hideModal();
-                        this.handleReset();
+                        let _this = this;
+                        confirm({
+                            title: "Your Credits are not enough to apply these services. Please select other services OR Purchase Credits.",
+                            okText: "PURCHASE CREDITS",
+                            onOk() {
+                                _this.props.history.push('/account')
+                            },
+                            onCancel() {
+
+                            },
+
+                        })
                     }
+                    // console.log(this.state.products);
                 }
                 // console.log('Received values of form: ', values);
             }
@@ -109,20 +214,6 @@ class AddDevice extends Component {
             this.setState({ addNewUserModal: true })
         }
         this.setState({ isloading: nextProps.isloading })
-
-        if (this.props.parent_packages !== nextProps.parent_packages) {
-            this.setState({
-                parent_packages: this.filterList('1 month', nextProps.parent_packages, 'pkg'),
-            })
-
-        }
-
-        if (this.props.product_prices !== nextProps.product_prices) {
-            this.setState({
-                product_prices: this.filterList('1 month', nextProps.product_prices, 'product'),
-            })
-
-        }
     }
 
     handleReset = () => {
@@ -134,6 +225,41 @@ class AddDevice extends Component {
         this.props.form.resetFields();
     }
 
+    confirmRenderList(packages, products) {
+        // let list = [...packages, ...products];
+        let counter = 0
+        let packagesList = packages.map((item, index) => {
+            // let services = JSON.parse(item.pkg_features)
+            counter++
+            return {
+                counter: counter,
+                id: item.id,
+                rowKey: item.rowKey,
+                item: `Package`,
+                description: item.pkg_name,
+                term: this.state.term + " Month",
+                unit_price: item.pkg_price,
+                quantity: 1,
+                line_total: item.pkg_price
+            }
+        });
+        let productList = products.map((item, index) => {
+            // let services = JSON.parse(item.pkg_features)
+            counter++
+            return {
+                counter: counter,
+                id: item.id,
+                rowKey: item.rowKey,
+                item: `Product`,
+                description: item.price_for,
+                term: (this.state.term === '0') ? "TRIAL" : this.state.term + " Month",
+                unit_price: item.unit_price,
+                quantity: 1,
+                line_total: item.unit_price
+            }
+        });
+        return [...packagesList, ...productList]
+    }
 
     handleCancel = () => {
         this.setState({
@@ -173,6 +299,7 @@ class AddDevice extends Component {
         let vpn = '';
         let packagesData = []
         let productData = []
+        let total_price = 0
         // console.log(products, packages);
         if (packages && packages.length) {
             packages.map((item) => {
@@ -181,6 +308,7 @@ class AddDevice extends Component {
                     pkg_features: item.pkg_features,
                     pkg_price: item.pkg_price
                 }
+                total_price = total_price + Number(item.pkg_price)
                 packagesData.push(data)
                 let services = item.pkg_features;
                 if (services.chat_id) {
@@ -205,7 +333,7 @@ class AddDevice extends Component {
                     item: item.item,
                     price: item.unit_price
                 }
-
+                total_price = total_price + Number(item.unit_price)
                 productData.push(data)
                 if (item.item == 'chat_id') {
                     disableChat = false
@@ -221,8 +349,13 @@ class AddDevice extends Component {
                 }
             })
         }
-        let currentDate = moment().format("YYYY/MM/DD")
-        let expiry_date = moment(currentDate).add(term, 'M').format("YYYY/MM/DD");
+
+        let expiry_date = ''
+        if (term === '0') {
+            expiry_date = "7 Days";
+        } else {
+            expiry_date = term + " Months";
+        }
         let services = (packages.length > 0 || products.length > 0) ? true : false;
         this.setState({
             pgp_email: (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
@@ -237,7 +370,11 @@ class AddDevice extends Component {
             expiry_date: expiry_date,
             services: services,
             checkServices: (services) ? { display: 'none' } : { display: 'inline', color: "Red", margin: 0 },
-            term: term
+            term: term,
+            total_price: total_price,
+            PkgSelectedRows: packages,
+            proSelectedRows: products
+
         })
     }
 
@@ -389,6 +526,13 @@ class AddDevice extends Component {
 
     handleChangetab = (value) => {
         switch (value) {
+            case '0':
+                this.setState({
+                    parent_packages: [],
+                    product_prices: [],
+                    tabselect: '0',
+                })
+                break;
             case '1':
                 this.setState({
                     parent_packages: this.filterList('1 month', this.props.parent_packages, 'pkg'),
@@ -420,16 +564,25 @@ class AddDevice extends Component {
 
             default:
                 this.setState({
-                    parent_packages: this.filterList('1 month', this.state.parent_packages, 'pkg'),
-                    product_prices: this.filterList('1 month', this.props.product_prices, 'product'),
-                    tabselect: '1',
+                    parent_packages: [],
+                    product_prices: [],
+                    tabselect: '0',
                 })
                 break;
         }
     }
+    handleDuplicate = (e) => {
+        // console.log(e);
+        let duplicates = e;
+        let total_price = this.state.total_price * duplicates
+        this.setState({
+            total_price: total_price
+        })
+    }
 
 
     render() {
+        // console.log(this.props);
         // console.log('id is', this.state.products, this.state.packages);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
@@ -790,8 +943,7 @@ class AddDevice extends Component {
                             </Select>,
                         )}
                     </Form.Item>
-
-                    <Form.Item
+                    {/* <Form.Item
                         label={convertToLang(this.props.translation[Start_Date], "Start Date ")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
@@ -802,7 +954,7 @@ class AddDevice extends Component {
 
                             <Input disabled />
                         )}
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item
                         label={convertToLang(this.props.translation[Expire_Date], "Expiry Date ")}
                         labelCol={{ span: 8 }}
@@ -859,7 +1011,7 @@ class AddDevice extends Component {
                                     required: true, message: convertToLang(this.props.translation[DUPLICATE_DEVICES_REQUIRED], 'Number of Duplicate devices required'),
                                 }],
                             })(
-                                <InputNumber min={2} />
+                                <InputNumber min={2} onChange={this.handleDuplicate} />
                             )}
                         </Form.Item> : null
                     }
@@ -928,7 +1080,7 @@ class AddDevice extends Component {
                 <AddUser ref="add_user" translation={this.props.translation} />
                 {/* <AddSimPermission ref="add_sim_permission" /> */}
                 <Modal
-                    width={700}
+                    width={750}
                     visible={this.state.servicesModal}
                     title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SEVCIES")}
                     maskClosable={false}
@@ -936,7 +1088,6 @@ class AddDevice extends Component {
                     // onCancel={this.handleCancel}
                     footer={null}
                     className="edit_form"
-
                 >
                     <Services
                         handleCancel={this.handleCancel}
@@ -946,7 +1097,8 @@ class AddDevice extends Component {
                         handleChangetab={this.handleChangetab}
                         translation={this.props.translation}
                         handleServicesSubmit={this.handleServicesSubmit}
-
+                        user_credit={this.props.user_credit}
+                        history={this.props.history}
                     />
                 </Modal>
             </div>
@@ -974,7 +1126,7 @@ function mapDispatchToProps(dispatch) {
         addSimPermission: null
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, device_details, users, settings }) => {
+var mapStateToProps = ({ routing, devices, device_details, users, settings, sidebar }) => {
     // console.log("sdfsaf", users.users_list);
     return {
         routing: routing,
@@ -987,6 +1139,7 @@ var mapStateToProps = ({ routing, devices, device_details, users, settings }) =>
         translation: settings.translation,
         parent_packages: devices.parent_packages,
         product_prices: devices.product_prices,
+        user_credit: sidebar.user_credit,
     };
 }
 
@@ -1000,5 +1153,43 @@ function showConfirm(_this, values) {
             _this.handleReset();
         },
         onCancel() { },
+    });
+}
+
+function showConfirmCredit(_this, values) {
+    confirm({
+        width: 900,
+        title: <span style={{ fontWeight: "bold" }}>Do You Really want to apply selected services on device ? </span>,
+        content:
+            <Fragment>
+                <div style={{ marginTop: 20 }}>
+                    <Table
+                        id='packages'
+                        className={"devices mb-20"}
+                        // rowSelection={packageRowSelection}
+                        size="middle"
+                        bordered
+                        columns={_this.state.invoiceColumns}
+                        dataSource={_this.confirmRenderList(_this.state.PkgSelectedRows, _this.state.proSelectedRows)}
+                        pagination={
+                            false
+                        }
+                    />
+                </div >
+                {(_this.state.term !== '0') ?
+                    <div>
+                        <h5 style={{ textAlign: "right" }}><b>Sub Total :  {values.total_price} Credits</b></h5>
+                        <h4 style={{ textAlign: "center" }}><b>There will be a charge of {values.total_price} Credits</b></h4>
+                    </div>
+                    : null}
+            </Fragment>,
+        onOk() {
+            _this.props.AddDeviceHandler(values);
+            _this.props.hideModal();
+            _this.handleReset();
+        },
+        onCancel() {
+
+        },
     });
 }
