@@ -17,6 +17,7 @@ import PasswordForm from './PasswordForm';
 import DeviceSettings from './DeviceSettings';
 import Activity from './Activity';
 import SimSettings from './SimSettings/index';
+import PullApps from './PullApps';
 
 
 
@@ -102,65 +103,104 @@ class PasswordModal extends Component {
     }
 }
 
-class DealerAppModal extends Component {
-    // const PullAppModal = (props) => {
-
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        // const DealerAppModal = (props) => {
-        return (
-            <Modal
-                maskClosable={false}
-                destroyOnClose={true}
-                style={{ top: 20 }}
-                width="780px"
-                title={
-                    <div className="pp_popup">{convertToLang(this.props.translation[SELECT_APPS], "Select Apps ")}
-                        <Input.Search
-                            name="push_apps"
-                            key="push_apps"
-                            id="push_apps"
-                            className="search_heading1"
-                            onKeyUp={
-                                (e) => {
-                                    this.props.handleComponentSearch(e.target.value, 'push_apps')
-                                }
+const PushAppsModal = (props) => {
+    return (
+        <Modal
+            maskClosable={false}
+            destroyOnClose={true}
+            style={{ top: 20 }}
+            width="780px"
+            title={
+                <div className="pp_popup">{convertToLang(props.translation[SELECT_APPS], "Select Apps ")}
+                    <Input.Search
+                        name="push_apps"
+                        key="push_apps"
+                        id="push_apps"
+                        className="search_heading1"
+                        onKeyUp={
+                            (e) => {
+                                props.handleComponentSearch(e.target.value, 'push_apps')
                             }
-                            autoComplete="new-password"
-                            placeholder={convertToLang(this.props.translation[SEARCH_APPS], "Search Apps")}
-                        />
-                        <br />{`${convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID")}:`}  {this.props.device.device_id}
-                    </div>}
-                visible={this.props.pushAppsModal}
-                onOk={() => {
-                    if (this.props.selectedAppKeys.length) {
-                        // this.props.showPushAppsModal(false);
-                        this.props.showSelectedAppsModal(true);
-                    }
-                }}
-                onCancel={() => { this.props.showPushAppsModal(false); this.props.resetSeletedRows() }}
-                okText={convertToLang(this.props.translation[PUSH_APP_TEXT], "PUSH APP")}
-                cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
-            >
-                <DealerApps
-                    apk_list={this.props.apk_list}
-                    onSelectChange={this.props.onSelectChange}
-                    isSwitchable={true}
-                    selectedApps={this.props.selectedApps}
-                    selectedAppKeys={this.props.selectedAppKeys}
-                    handleChecked={this.props.handleChecked}
-                    translation={this.props.translation}
-                />
-            </Modal>
-        )
-    }
+                        }
+                        autoComplete="new-password"
+                        placeholder={convertToLang(props.translation[SEARCH_APPS], "Search Apps")}
+                    />
+                    <br />{`${convertToLang(props.translation[DEVICE_ID], "DEVICE ID")}:`}  {props.device.device_id}
+                </div>}
+            visible={props.pushAppsModal}
+            onOk={() => {
+                if (props.selectedPushAppKeys.length) {
+                    props.showPushAppsModal(false);
+                    props.showSelectedPushAppsModal(true);
+                }
+            }}
+            onCancel={() => { props.showPushAppsModal(false); props.resetSeletedRows() }}
+            okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
+            cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
+        >
+            <DealerApps
+                apk_list={props.apk_list}
+                onPushAppsSelection={props.onPushAppsSelection}
+                isSwitchable={true}
+                selectedApps={props.selectedPushApps}
+                selectedAppKeys={props.selectedPushAppKeys}
+                handleChecked={props.handleChecked}
+                translation={props.translation}
+            // disabledSwitch = {false}
+            />
+        </Modal>
+    )
 }
 
-const PullAppModal = (props) => {
-    console.log("Pull apps: ", props)
+const SelectedPushApps = (props) => {
+
+    return (
+        <Modal
+            maskClosable={false}
+            style={{ top: 20 }}
+            width="650px"
+            title={
+                <div>
+                    {convertToLang(props.translation[SELECTED_APPS], "Selected Apps ")}
+                    <br />
+                    {convertToLang(props.translation[DEVICE_ID], "DEVICE ID: ")}
+                    {props.device.device_id}
+                </div>
+            }
+            visible={props.selectedAppsModal}
+            onOk={() => {
+                props.applyPushApps(props.apk_list);
+                props.showSelectedPushAppsModal(false);
+                props.showPushAppsModal(false)
+                props.showPullAppsModal(false)
+                props.resetSeletedRows()
+            }}
+            // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
+            onCancel={() => {
+                props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
+                props.showSelectedPushAppsModal(false);
+            }}
+            // cancelText='Back'
+            cancelText={convertToLang(props.translation[Button_Back], "Back")}
+            okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
+            destroyOnClose={true}
+        >
+            <DealerApps
+                apk_list={props.apk_list}
+                isSwitchable={false}
+                selectedApps={props.selectedPushApps}
+                type='push'
+                // buttonText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
+                disabledSwitch={true}
+                translation={props.translation}
+            />
+        </Modal>
+    )
+}
+
+const PullAppsModal = (props) => {
+    // onPullAppsSelection
+
     return (
         <Modal
             maskClosable={false}
@@ -176,20 +216,21 @@ const PullAppModal = (props) => {
                         className="search_heading1"
                         onKeyUp={
                             (e) => {
-                                props.handleComponentSearch(e.target.value, 'pull_apps')
+                                // props.handleComponentSearch(e.target.value, 'pull_apps')
                             }
                         }
                         autoComplete="new-password"
                         placeholder={convertToLang(props.translation[SEARCH_APPS], "Search Apps")}
                     />
-                    <br /> {`${convertToLang(props.translation[DEVICE_ID], "DEVICE ID")}:`} {props.device.device_id} </div>}
+                    <br />
+                    {`${convertToLang(props.translation[DEVICE_ID], "DEVICE ID")}:`} {props.device.device_id}
+                </div>
+            }
             visible={props.pullAppsModal}
             onOk={() => {
-                if (props.selectedAppKeys) {
-                    if (props.selectedAppKeys.length) {
-                        props.showPullAppsModal(false);
-                        props.showSelectedAppsModal(true);
-                    }
+                if (props.selectedPullAppKeys && props.selectedPullAppKeys.length) {
+                    props.showPullAppsModal(false);
+                    props.showSelectedPullAppsModal(true);
                 }
             }}
             onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
@@ -197,15 +238,14 @@ const PullAppModal = (props) => {
             okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APP")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
-            <DealerApps
-                apk_list={props.apk_list}
-                onSelectChange={props.onSelectChange}
+            <PullApps
+                app_list={props.app_list}
+                onPullAppsSelection={props.onPullAppsSelection}
                 isSwitchable={true}
-                selectedApps={props.selectedApps}
-                selectedAppKeys={props.selectedAppKeys}
-                handleChecked={props.handleChecked}
-                type={props.actionType === PUSH_APPS ? "push" : 'pull'}
+                selectedPullApps={props.selectedPullApps}
+                selectedPullAppKeys={props.selectedPullAppKeys}
                 translation={props.translation}
+                
             />
         </Modal>
     )
@@ -213,48 +253,43 @@ const PullAppModal = (props) => {
 }
 
 
-const SelectedApps = (props) => {
-    // console.log('selected app are', props.selectedApps, props.actionType)
+const SelectedPullApps = (props) => {
+    console.log("selected pull apps modal", props);
     return (
         <Modal
-            // closable={false}
             maskClosable={false}
             style={{ top: 20 }}
             width="650px"
             title={<div>{convertToLang(props.translation[SELECTED_APPS], "Selected Apps ")} <br /> {convertToLang(props.translation[DEVICE_ID], "DEVICE ID: ")} {props.device.device_id} </div>}
-            visible={props.selectedAppsModal}
+            visible={props.selectedPullAppsModal}
             onOk={() => {
-                props.actionType == PUSH_APPS ? props.applyPushApps(props.apk_list) : props.applyPullApps(props.apk_list);
-                props.showSelectedAppsModal(false);
+                props.applyPullApps(props.app_list);
+                props.showSelectedPullAppsModal(false);
                 props.showPushAppsModal(false)
                 props.showPullAppsModal(false)
                 props.resetSeletedRows()
             }}
-            // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
             onCancel={() => {
-                props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
-                props.showSelectedAppsModal(false);
+                props.showPushAppsModal(true);
+                props.showSelectedPullAppsModal(false);
             }}
             // cancelText='Back'
             cancelText={convertToLang(props.translation[Button_Back], "Back")}
-            okText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP") : convertToLang(props.translation[PULL_APPS_TEXT], "PULL APPS")}
+            okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APPS")}
             destroyOnClose={true}
         >
-            <DealerApps
-                apk_list={props.apk_list}
+            <PullApps
+                app_list={props.app_list}
+                
                 isSwitchable={false}
-                selectedApps={props.selectedApps}
-                type={props.actionType == PUSH_APPS ? 'push' : 'pull'}
-                // buttonText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
-                disabledSwitch={true}
+                selectedPullApps={props.selectedPullApps}
+                type='pull'
                 translation={props.translation}
+               
             />
         </Modal>
     )
 }
-
-
-
 
 class SideActions extends Component {
 
@@ -268,17 +303,27 @@ class SideActions extends Component {
             historyModal: false,
             saveProfileModal: false,
             pwdConfirmModal: false,
-            selectedAppsModal: false,
             historyType: "history",
             saveProfileType: '',
             profileName: '',
             policyName: '',
             disabled: false,
             actionType: PUSH_APPS,
-            selectedApps: [],
-            selectedApps2: [],
-            activities: [],
+
             apk_list: [],
+
+            selectedPushAppsModal: false,
+            selectedPushAppKeys: [],
+            pushApps: [],
+            selectedPushApps: [],
+
+            selectedPullAppsModal: false,
+            selectedPullAppKeys: [],
+            pullApps: [],
+            selectedPullApps: [],
+
+            activities: [],
+
             policyId: '',
             showChangesModal: false,
             applyPolicyConfirm: false,
@@ -352,20 +397,36 @@ class SideActions extends Component {
         })
     }
 
-    showSelectedAppsModal = (visible) => {
+    showSelectedPushAppsModal = (visible) => {
         let dumyList = [];
-        if (this.state.selectedAppKeys.length && this.state.selectedApps.length) {
+        if (this.state.selectedPushAppKeys.length && this.state.selectedPushApps.length) {
 
-            for (let app of this.state.selectedApps) {
-                // console.log(this.state.selectedAppKeys.includes(app.apk_id), 'checking')
-                if (this.state.selectedAppKeys.includes(app.apk_id)) {
+            for (let app of this.state.selectedPushApps) {
+                if (this.state.selectedPushAppKeys.includes(app.apk_id)) {
                     dumyList.push(app)
                 }
             }
         }
         this.setState({
-            selectedAppsModal: visible,
-            selectedApps2: dumyList
+            selectedPushAppsModal: visible,
+            pushApps: dumyList
+        })
+    }
+
+    showSelectedPullAppsModal = (visible) => {
+        
+        let dumyList = [];
+        if (this.state.selectedPullAppKeys.length && this.state.selectedPullApps.length) {
+            for (let app of this.state.selectedPullApps) {
+                console.log(app)
+                if (this.state.selectedPullAppKeys.includes(app.app_id)) {
+                    dumyList.push(app)
+                }
+            }
+        }
+        this.setState({
+            selectedPullAppsModal: visible,
+            pullApps: dumyList
         })
     }
 
@@ -379,6 +440,7 @@ class SideActions extends Component {
         })
 
     }
+
     saveProfile = () => {
 
         if (this.state.saveProfileType === "profile" && this.state.profileName !== '') {
@@ -441,8 +503,6 @@ class SideActions extends Component {
     }
 
     handleComponentSearch = (value) => {
-        // alert('its working', value)
-        //    console.log('values sr', value)   
         try {
             // console.log(value, 'value')
             if (value.length) {
@@ -472,13 +532,13 @@ class SideActions extends Component {
                 })
             }
         } catch (error) {
-            console.log(error, 'error')
         }
     }
 
 
     showPushAppsModal = (visible) => {
-        // console.log('is callrd')
+        console.log(this.state.apk_list)
+
         if (visible) {
             this.setState({
                 pushAppsModal: visible,
@@ -499,54 +559,36 @@ class SideActions extends Component {
 
     onCancelModel = () => {
         this.setState({
-            selectedApps: []
+            selectedPushAppKeys: [],
+            selectedPullAppKeys: [],
+            pushApps: [],
+            pullApps: []
         })
     }
 
 
-    pushApps = () => {
+    onPushAppsSelection = (selectedRowKeys, selectedRows) => {
+        this.setState({
+            selectedPushApps: selectedRows,
+            selectedPushAppKeys: selectedRowKeys
+        })
 
-        if (this.state.selectedApps.length) {
-            // console.log("save pushed apps", this.state.selectedApps);
-        } else {
-        }
     }
 
-
-    onSelectChange = (selectedRowKeys, selectedRows) => {
-        let selectedApps = selectedRows;
-
-
-        // selectedApps.map(el => {
-        //     if (typeof (el.guest) !== Boolean) {
-        //         el.guest = false
-        //     }
-
-        //     if (typeof (el.encrypted) !== Boolean) {
-        //         el.encrypted = false
-        //     }
-
-        //     if (typeof (el.enable) !== Boolean) {
-        //         el.enable = false
-        //     }
-        // });
+    onPullAppsSelection = (selectedRowKeys, selectedRows) => {
 
         this.setState({
-            // selectedApps: selectedApps,
-            selectedAppKeys: selectedRowKeys
+            selectedPullApps: selectedRows,
+            selectedPullAppKeys: selectedRowKeys
         })
-
     }
 
     handleChecked = (e, key, app_id) => {
-        // console.log("handlechecked", e, key, app_id);
-        this.state.selectedApps.map((el) => {
+        this.state.selectedPushApps.map((el) => {
             if (el.apk_id === app_id) {
                 el[key] = e;
             }
         })
-
-        // console.log('sate of selected app ', this.state.selectedApps)
     }
 
     handleFlag(flagged) {
@@ -576,15 +618,15 @@ class SideActions extends Component {
     }
 
 
-    applyPushApps = () => {
-        this.props.applyPushApps(this.state.selectedApps2, this.props.device_id, this.props.usr_acc_id);
+    applyPushApps = (apps) => {
+        this.props.applyPushApps(this.state.pushApps, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
         this.props.getActivities(this.props.device_id)
     }
 
 
     applyPullApps = () => {
-        this.props.applyPullApps(this.state.selectedApps2, this.props.device_id, this.props.usr_acc_id);
+        this.props.applyPullApps(this.state.pullApps, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
         this.props.getActivities(this.props.device_id)
     }
@@ -592,14 +634,16 @@ class SideActions extends Component {
     resetSeletedRows = () => {
         // console.log('table ref')
         this.setState({
-            selectedAppKeys: [],
-            selectedApps: [],
+            selectedPushAppKeys: [],
+            selectedPullAppKeys: [],
+            selectedPushApps: [],
+            selectedPullApps: [],
             apk_list: this.props.apk_list
         })
     }
 
     render() {
-        
+
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG") : convertToLang(this.props.translation[Button_Flag], "Flag");
@@ -900,39 +944,6 @@ class SideActions extends Component {
                 </Modal>
 
 
-
-                <DealerAppModal
-                    pushAppsModal={this.props.pushAppsModal}
-                    showPushAppsModal={this.props.showPushAppsModal}
-                    handleComponentSearch={this.handleComponentSearch}
-                    apk_list={this.state.apk_list}
-                    onSelectChange={this.onSelectChange}
-                    selectedAppKeys={this.state.selectedAppKeys}
-                    showSelectedAppsModal={this.showSelectedAppsModal}
-                    resetSeletedRows={this.resetSeletedRows}
-                    selectedApps={this.state.selectedApps}
-                    handleChecked={this.handleChecked}
-                    device={this.props.device}
-                    translation={this.props.translation}
-                />
-
-                <PullAppModal
-                    pullAppsModal={this.state.pullAppsModal}
-                    showPullAppsModal={this.props.showPullAppsModal}
-                    handleComponentSearch={this.handleComponentSearch}
-                    // apk_list={this.state.apk_list}
-                    apk_list={this.state.apk_list}
-                    onSelectChange={this.onSelectChange}
-                    showSelectedAppsModal={this.showSelectedAppsModal}
-                    selectedApps={this.state.selectedApps}
-                    selectedAppKeys={this.state.selectedAppKeys}
-                    resetSeletedRows={this.resetSeletedRows}
-                    handleChecked={this.handleChecked}
-                    onCancelModel={this.onCancelModel}
-                    device={this.props.device}
-                    translation={this.props.translation}
-                />
-
                 <PasswordModal
                     pwdConfirmModal={this.state.pwdConfirmModal}
                     showPwdConfirmModal={this.showPwdConfirmModal}
@@ -941,12 +952,58 @@ class SideActions extends Component {
                     translation={this.props.translation}
                 />
 
-                <SelectedApps
-                    selectedAppsModal={this.state.selectedAppsModal}
-                    showSelectedAppsModal={this.showSelectedAppsModal}
+
+                <PushAppsModal
+                    pushAppsModal={this.props.pushAppsModal}
+                    showPushAppsModal={this.props.showPushAppsModal}
+                    handleComponentSearch={this.handleComponentSearch}
+                    apk_list={this.state.apk_list}
+                    onPushAppsSelection={this.onPushAppsSelection}
+                    selectedPushAppKeys={this.state.selectedPushAppKeys}
+                    showSelectedPushAppsModal={this.showSelectedPushAppsModal}
+                    resetSeletedRows={this.resetSeletedRows}
+                    selectedPushApps={this.state.selectedPushApps}
+                    handleChecked={this.handleChecked}
+                    device={this.props.device}
+                    translation={this.props.translation}
+                />
+
+                <PullAppsModal
+                    pullAppsModal={this.state.pullAppsModal}
+                    showPullAppsModal={this.props.showPullAppsModal}
+                    handleComponentSearch={this.handleComponentSearch}
+                    app_list={this.props.app_list}
+                    onPullAppsSelection={this.onPullAppsSelection}
+                    showSelectedPullAppsModal={this.showSelectedPullAppsModal}
+                    selectedPullApps={this.state.selectedPullApps}
+                    selectedPullAppKeys={this.state.selectedPullAppKeys}
+                    resetSeletedRows={this.resetSeletedRows}
+                    onCancelModel={this.onCancelModel}
+                    device={this.props.device}
+                    translation={this.props.translation}
+                />
+
+
+
+                <SelectedPushApps
+                    selectedAppsModal={this.state.selectedPushAppsModal}
+                    showSelectedPushAppsModal={this.showSelectedPushAppsModal}
+                    apk_list={this.state.pushApps}
+                    selectedPushApps={this.state.selectedPushApps}
+                    resetSeletedRows={this.resetSeletedRows}
                     applyPushApps={this.applyPushApps}
-                    apk_list={this.state.selectedApps2}
-                    selectedApps={this.state.selectedApps}
+                    actionType={this.state.actionType}
+                    showPushAppsModal={this.props.showPushAppsModal}
+                    showPullAppsModal={this.props.showPullAppsModal}
+                    device={this.props.device}
+                    translation={this.props.translation}
+                />
+
+                <SelectedPullApps
+                    selectedPullAppsModal={this.state.selectedPullAppsModal}
+                    showSelectedPullAppsModal={this.showSelectedPullAppsModal}
+                    app_list={this.state.pullApps}
+                    selectedPullApps={this.state.selectedPullApps}
                     resetSeletedRows={this.resetSeletedRows}
                     applyPullApps={this.applyPullApps}
                     actionType={this.state.actionType}
@@ -955,7 +1012,6 @@ class SideActions extends Component {
                     device={this.props.device}
                     translation={this.props.translation}
                 />
-
                 <ActivateDevcie
                     ref="activate"
                     activateDevice={this.props.activateDevice}
@@ -966,8 +1022,7 @@ class SideActions extends Component {
                     ref="suspend"
                     suspendDevice={this.props.suspendDevice}
                     translation={this.props.translation}
-                // go_back={this.props.history.goBack}
-                // getDevice={this.props.getDevicesList}
+
                 />
 
                 <EditDevice
