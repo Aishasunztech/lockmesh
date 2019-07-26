@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar } from "antd";
@@ -12,6 +12,7 @@ import CircularProgress from "components/CircularProgress/index";
 
 import { getApkList, changeAppStatus, deleteApk, editApk, addApk, resetUploadForm } from "../../appRedux/actions/Apk";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
+import { getPolicies } from "../../appRedux/actions/Policy";
 // import {getDeviceList} from 
 
 import AppFilter from "../../components/AppFilter";
@@ -47,7 +48,7 @@ import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants"
 var status = true;
 var coppyApks = [];
 
-class Apk extends React.Component {
+class Apk extends Component {
 
     constructor(props) {
         super(props);
@@ -71,10 +72,13 @@ class Apk extends React.Component {
     }
 
     // delete
-    handleConfirmDelete = (appId) => {
+    handleConfirmDelete = (appId, appObject) => {
         this.confirm({
             title: convertToLang(this.props.translation[Alert_Delete_APK], "Are you sure, you want to delete the Apk ?"),
-            content: '',
+            content: <Fragment>
+                <Avatar size="small" src={BASE_URL + "users/getFile/" + appObject.logo} />
+                {` ${appObject.apk_name} - ${appObject.size}`}
+            </Fragment>,
             okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
             cancelText: convertToLang(this.props.translation[Button_No], "No"),
             onOk: () => {
@@ -114,9 +118,9 @@ class Apk extends React.Component {
                 }
 
                 values.map((value) => {
-                    
+
                     if ((value.key === APK_PERMISSION && column.dataIndex === 'permission') || (value.key === APK_SHOW_ON_DEVICE && column.dataIndex === 'apk_status')) {
-                        
+
                         if (column.title.props.children[0] === convertToLang(this.props.translation[value.key], value.key)) {
                             dumydata[index].className = '';
                         }
@@ -242,7 +246,7 @@ class Apk extends React.Component {
             this.handleCheckChange(this.props.selectedOptions)
         }
 
-        if(this.props.translation != prevProps.translation) {
+        if (this.props.translation != prevProps.translation) {
             this.setState({
                 columns: apkColumns(this.props.translation)
             })
@@ -251,6 +255,7 @@ class Apk extends React.Component {
     componentWillMount() {
         // alert("componentWillMount");
         this.props.getApkList();
+        this.props.getPolicies();
         // this.props.getDevicesList();
         //  console.log('apk did mount', this.props.getDropdown('apk'));
         this.props.getDropdown('apk');
@@ -301,7 +306,7 @@ class Apk extends React.Component {
         } else {
             this.state.columns[1].className = 'row m-0';
         }
-        
+
         return (
             <div>
                 {
@@ -445,7 +450,7 @@ class Apk extends React.Component {
 // );
 
 // export default Apk;
-const mapStateToProps = ({ apk_list, auth, settings }) => {
+const mapStateToProps = ({ apk_list, auth, settings, policies }) => {
     return {
         isloading: apk_list.isloading,
         apk_list: apk_list.apk_list,
@@ -453,7 +458,8 @@ const mapStateToProps = ({ apk_list, auth, settings }) => {
         selectedOptions: apk_list.selectedOptions,
         DisplayPages: apk_list.DisplayPages,
         user: auth.authUser,
-        translation: settings.translation
+        translation: settings.translation,
+        policies: policies.policies,
     };
 }
 
@@ -468,7 +474,8 @@ function mapDispatchToProps(dispatch) {
         postPagination: postPagination,
         getPagination: getPagination,
         addApk: addApk,
-        resetUploadForm: resetUploadForm
+        resetUploadForm: resetUploadForm,
+        getPolicies: getPolicies
         //  getDevicesList: getDevicesList
     }, dispatch);
 }
