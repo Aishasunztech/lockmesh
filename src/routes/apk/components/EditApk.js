@@ -115,7 +115,8 @@ class EditApkForm extends Component {
                     'versionName': versionName,
                     'versionCode': versionCode,
                     'packageName': packageName,
-                    'details': details
+                    'details': details,
+                    'size': size
                 }
                 this.props.editApk(form_data);
                 this.props.getApkList();
