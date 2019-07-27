@@ -6,7 +6,7 @@ import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
 } from '../../../../constants/Constants';
 import { Button_Cancel, Button_submit, Button_Add } from '../../../../constants/ButtonConstants';
-import { Required_Fields, DEVICE_SIM_ID, DEVICE_Select_SIM_ID, ONLY_NUMBER_ARE_ALLOWED } from '../../../../constants/DeviceConstants';
+import { Required_Fields, DEVICE_SIM_ID, DEVICE_Select_SIM_ID, ONLY_NUMBER_ARE_ALLOWED, ICC_ID_20_LONG, ICC_ID, ICC_ID_IS_REQUIRED, NOTE } from '../../../../constants/DeviceConstants';
 import { Guest, ENCRYPT } from '../../../../constants/TabConstants';
 
 
@@ -62,10 +62,10 @@ class RegisterSimForm extends Component {
     handleICCIDValidation = (rule, value, callback) => {
         if ((value !== undefined) && value.length > 0) {
             if (Number(value)) {
-                if (value.length != 20) callback("ICC ID should be 20 number long");
+                if (value.length != 20) callback(convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 number long"));
 
             } else {
-                callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
+                callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED],"Only Number are allowed"));
             }
         }
         callback();
@@ -87,14 +87,14 @@ class RegisterSimForm extends Component {
         if (deviceSimIds[0] === undefined || deviceSimIds[0] === 'undefined' || deviceSimIds[0] === "N/A" || deviceSimIds[0] === '' || deviceSimIds[0] === null) {
             deviceSimIds = []
         }
-        console.log(deviceSimIds);
+        // console.log(deviceSimIds);
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
                     <Form.Item
-                        label="ICC-ID" // {convertToLang(this.props.translation[Name], "Name")}
+                        label={convertToLang(this.props.translation[ICC_ID], "ICC-ID")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
@@ -103,7 +103,7 @@ class RegisterSimForm extends Component {
                             rules: [
                                 {
                                     required: true,
-                                    message: "ICC-ID is Required",
+                                    message: convertToLang(this.props.translation[ICC_ID_IS_REQUIRED], "ICC-ID is Required"),
                                 },
                                 {
                                     validator: this.handleICCIDValidation,
@@ -115,7 +115,7 @@ class RegisterSimForm extends Component {
                     </Form.Item>
 
                     <Form.Item
-                        label="Name" // {convertToLang(this.props.translation[Name], "Name")}
+                        label={convertToLang(this.props.translation[Name], "Name")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
@@ -152,7 +152,7 @@ class RegisterSimForm extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Note"
+                        label={convertToLang(this.props.translation[NOTE], "Note")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >

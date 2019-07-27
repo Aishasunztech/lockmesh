@@ -100,6 +100,7 @@ export const Days = "days.id";
 
 export const User_Name_require = "user.name.require"; // Name is Required
 export const Only_alpha_numeric = "only.alpha.numeric.id"; // Please insert only alphabets and numbers
+export const ONLY_NUMBER_ARE_ALLOWED = "ONLY_NUMBER_ARE_ALLOWED.id"; // Only Number are allowed
 export const Not_valid_Email = "not.valid.email.id"; // The input is not a valid E-mail!
 export const PLZ_INPUT_Email = "please.input.your.email.id"; // Please input your E-mail!
 export const Required_Email = "require.email.id"; // Email is Required !

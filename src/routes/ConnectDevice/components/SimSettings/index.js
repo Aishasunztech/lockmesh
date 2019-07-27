@@ -11,9 +11,11 @@ import {
 } from "../../../../appRedux/actions/ConnectDevice";
 import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../../constants/TabConstants';
 import { convertToLang } from '../../../utils/commonUtils';
-import { Button_Add, Button_Cancel } from '../../../../constants/ButtonConstants';
+import { Button_Add, Button_Cancel, Button_Edit, Button_Yes, Button_No, Button_Delete } from '../../../../constants/ButtonConstants';
 import AddRegistrationModal from './AddRegistrationModal';
 import EditRegistrationModal from './EditRegistrationModal';
+import { ACTION, Enable_ALL } from '../../../../constants/Constants';
+import { ICC_ID, SIM_NAME, NOTE, DATA_LIMIT, DELETE_REGISTERED_SIM, UNREGISTERED, REGISTERED, REGISTERED_SIM_CARDS, STATUS } from '../../../../constants/DeviceConstants';
 
 
 let status = true;
@@ -30,37 +32,37 @@ class SimSettings extends Component {
                 render: (text, record, index) => ++index,
             },
             {
-                title: "Actions",
+                title: convertToLang(props.translation[ACTION], "Actions"),
                 dataIndex: 'actions',
                 key: 'actions',
                 // render: (text, record, index) => ++index,
             },
             {
-                title: "ICC-ID",
+                title: convertToLang(props.translation[ICC_ID], "ICC-ID"),
                 dataIndex: 'iccid',
                 key: 'iccid',
             },
             // {
-            //     title: "Sim Slot",
+            //     title: convertToLang(props.translation[SEARCH], "Sim ")"Sim Slot",
             //     dataIndex: 'slot',
             //     key: 'slot',
             // },
             {
-                title: "Sim Name",
+                title: convertToLang(props.translation[SIM_NAME], "Sim Name"),
                 dataIndex: 'name',
                 key: 'name',
             },
             {
-                title: "Status",
+                title: convertToLang(props.translation[STATUS], "Status"),
                 dataIndex: 'status',
                 key: 'status',
             },
             {
-                title: "Note",
+                title: convertToLang(props.translation[NOTE], "Note"),
                 dataIndex: 'note',
                 key: 'note',
             }, {
-                title: "Guest",//  convertToLang(props.translation[Guest], "Guest"),
+                title: convertToLang(props.translation[Guest], "Guest"),
                 dataIndex: 'guest',
                 key: 'guest',
             }, {
@@ -68,7 +70,7 @@ class SimSettings extends Component {
                 dataIndex: 'encrypt',
                 key: 'encrypt',
             }, {
-                title: "Data Limit",
+                title: convertToLang(props.translation[DATA_LIMIT], "Data Limit"),
                 dataIndex: 'dataLimit',
                 key: 'dataLimit',
             }
@@ -122,10 +124,10 @@ class SimSettings extends Component {
     }
     handleDeleteSim = (sim) => {
         this.confirm({
-            title: "Are you sure to delete Registered Sim?",
+            title: convertToLang(this.props.translation[DELETE_REGISTERED_SIM], "Are you sure to delete Registered Sim?"),
             content: '',
-            // okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
-            // cancelText: convertToLang(this.props.translation[Button_No], "No"),
+            okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
+            cancelText: convertToLang(this.props.translation[Button_No], "No"),
             onOk: () => {
                 this.props.deleteSim(sim);
             },
@@ -143,8 +145,8 @@ class SimSettings extends Component {
         if (sims !== undefined && sims !== null && sims.length > 0) {
 
             return sims.map((sim, index) => {
-                let EditBtn = <Button type="default" size="small" onClick={() => this.handleEditSim(sim)}> Edit </Button>;
-                let DeleteBtn = <Button type="danger" size="small" onClick={() => this.handleDeleteSim(sim)}> Delete </Button>;
+                let EditBtn = <Button type="default" size="small" onClick={() => this.handleEditSim(sim)}> {convertToLang(this.props.translation[Button_Edit], "EDIT")}  </Button>;
+                let DeleteBtn = <Button type="danger" size="small" onClick={() => this.handleDeleteSim(sim)}> {convertToLang(this.props.translation[Button_Delete], "DELETE")} </Button>;
 
                 return {
                     key: index,
@@ -185,7 +187,7 @@ class SimSettings extends Component {
 
                         {/* <Row className="sec_head"> */}
                         <Col span={4} />
-                        <Col span={6}><h4>Enable All <small>(Unregistered)</small></h4></Col>
+                        <Col span={6}><h4>{convertToLang(this.props.translation[Enable_ALL], "Enable All")} <small>({convertToLang(this.props.translation[UNREGISTERED], "Unregistered")})</small></h4></Col>
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                                 this.handleChecked(e, {
@@ -215,7 +217,7 @@ class SimSettings extends Component {
                     <Row className="">
                         {/* <Row className="sec_head"> */}
                         <Col span={4} />
-                        <Col span={6}><h4>Enable All <small>(Registered)</small></h4></Col>
+                        <Col span={6}><h4>{convertToLang(this.props.translation[Enable_ALL], "Enable All")} <small>({convertToLang(this.props.translation[REGISTERED], "Registered")})</small></h4></Col>
                         <Col span={4}>
                             <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                                 this.handleChecked(e, {
@@ -245,7 +247,7 @@ class SimSettings extends Component {
 
                     <Row>
                         <Col span={20}>
-                            <h2>Registered Sim Cards</h2>
+                            <h2>{convertToLang(this.props.translation[REGISTERED_SIM_CARDS], "Registered Sim Cards")}</h2>
                         </Col>
                         <Col span={4}>
                             <Button
@@ -305,7 +307,7 @@ function mapDispatchToProps(dispatch) {
 
 
 var mapStateToProps = ({ device_details }) => {
-    console.log('device_details  unrGuest ', device_details.unrGuest)
+    // console.log('device_details  unrGuest ', device_details.unrGuest)
     return {
         encryptSimAll: device_details.encryptSimAll,
         guestSimAll: device_details.guestSimAll,

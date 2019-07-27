@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Modal, message } from 'antd';
 import AddRegistrationForm from './AddRegistrationForm';
+import { ADD_SIM_REGISTRATION } from '../../../../constants/DeviceConstants';
+import { convertToLang } from '../../../utils/commonUtils';
 
 
 
-export default class RegisterSim extends Component {
+export default class RegisterSimModal extends Component {
 
     constructor(props) {
         super(props);
@@ -15,7 +17,6 @@ export default class RegisterSim extends Component {
             preActive: false
         }
     }
-
 
     showModal = () => {
         this.setState({
@@ -33,13 +34,12 @@ export default class RegisterSim extends Component {
     }
 
     render() {
-        // console.log('done: ', this.state.handleSubmit)
-        const { visible, loading } = this.state;
+        const { visible } = this.state;
         return (
             <div>
                 <Modal
                     maskClosable={false}
-                    title="Add Sim Registration" // {convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
+                    title={convertToLang(this.props.translation[ADD_SIM_REGISTRATION], "Add Sim Registration")}
                     visible={visible}
                     footer={null}
                     onCancel={this.handleCancel}

@@ -62,6 +62,8 @@ import {
     ENTER,
     DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE,
     ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE,
+    SIM_SETTINGS,
+    SIM_HISTORY,
 } from "../../../constants/DeviceConstants";
 
 const confirm = Modal.confirm;
@@ -881,19 +883,21 @@ class SideActions extends Component {
                 <Modal
                     width='850px'
                     maskClosable={false}
-                    title={<div>Sim Settings {<Fragment>
+                    title={<div>{convertToLang(this.props.translation[SIM_SETTINGS], "Sim Settings")} {<Fragment>
                         <Button
                             type="primary"
                             size="small"
                             onClick={this.handleSimHistory}
                         >
-                            History
-                        {/* {convertToLang(this.props.translation[Button_Add], "Add")} */}
+                            {convertToLang(this.props.translation[SIM_HISTORY], "History")}
                         </Button></Fragment>}
                     </div>}
-                    // {convertToLang(this.props.translation[SETTINGS_TO_BE_SENT_TO_DEVICE], "Confirm new Settings to be sent to Device ")}
                     visible={this.state.showSimModal}
+                    onOk={() => this.setState({ showSimModal: false })}
                     onCancel={() => this.setState({ showSimModal: false })}
+                    // footer={null}
+                    okText={convertToLang(this.props.translation[Button_Ok], "OK")}
+                    cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                 >
                     <SimSettings
                         deviceID={this.props.device_id}

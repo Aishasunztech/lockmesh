@@ -294,7 +294,7 @@ export function devicesColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'type',
                     key: 'type',
-                    sorter: (a, b) => { return a.type.props.children[1].localeCompare(b.type.props.children[1]) },
+                    sorter: (a, b) => { return a.type.localeCompare(b.type) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -318,7 +318,7 @@ export function devicesColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'version',
                     key: 'version',
-                    sorter: (a, b) => { return a.version.props.children[1].localeCompare(b.version.props.children[1]) },
+                    sorter: (a, b) => { return a.version.localeCompare(b.version)  },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -1634,7 +1634,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             title: convertToLang(translation[DEALER_NAME], "DEALER NAME"),
             dataIndex: 'dealer_name',
             key: 'dealer_name',
-            sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
+            sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },// return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children)
             sortDirections: ['ascend', 'descend'],
             className: '',
         },
@@ -1642,7 +1642,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             title: convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL"),
             dataIndex: 'dealer_email',
             key: 'dealer_email',
-            sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+            sorter: (a, b) => { return a.dealer_email.props.children.localeCompare(b.dealer_email.props.children) },
             sortDirections: ['ascend', 'descend'],
             className: '',
         },

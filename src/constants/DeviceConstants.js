@@ -134,3 +134,22 @@ export const PROFILE = "PROFILE.id"; // PROFILE
 export const DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE = "Do.you.really.want.to.Wipe.the.device.id"; // Do you really want to Wipe the device
 
 export const FLAG_DEVICE = "FlagDevice.id"; // Flag Device
+
+
+// Sim Module
+export const PREVIOUSLY_USED_SIMS = "Previously.Used.Sims.id"; // Previously Used Sims
+export const ICC_ID = "ICC-ID.id"; // ICC-ID
+export const SIM_NAME = "Sim.Name.id"; // Sim Name
+export const STATUS = "Status.id"; // Status
+export const NOTE = "Note.id"; // Note
+export const DATA_LIMIT = "Data.Limit.id"; // Data Limit
+export const DELETE_REGISTERED_SIM = "delete.Registered.Sim.id"; // Are you sure to delete Registered Sim?
+export const UNREGISTERED = "Unregistered.id"; // Unregistered
+export const REGISTERED = "Registered.id"; // Registered
+export const REGISTERED_SIM_CARDS = "Registered Sim Cards.id"; // Registered Sim Cards
+export const EDIT_REGISTERED_SIM = "Edit.Registered.Sim.id"; // Edit Registered Sim
+export const ADD_SIM_REGISTRATION = "Add.Sim.Registration.id"; // Add Sim Registration
+export const ICC_ID_20_LONG = "ICC_ID_20_LONG.id"; // ICC ID should be 20 number long
+export const ICC_ID_IS_REQUIRED = "ICC_ID_IS_REQUIRED.id"; // ICC-ID is Required
+export const SIM_SETTINGS = "SIM_SETTINGS.id"; // Sim Settings
+export const SIM_HISTORY = "History.id"; // History

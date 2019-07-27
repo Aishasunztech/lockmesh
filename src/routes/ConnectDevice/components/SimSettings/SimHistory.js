@@ -2,12 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
 import { componentSearch, getFormattedDate, convertToLang } from '../../../utils/commonUtils';
 import Moment from 'react-moment';
-import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../../constants/Constants';
+import { SECURE_SETTING, DATE, PROFILE_NAME, SEARCH } from '../../../../constants/Constants';
 import { BASE_URL } from '../../../../constants/Application';
+import { PREVIOUSLY_USED_SIMS, ICC_ID } from '../../../../constants/DeviceConstants';
 
 var coppySims = [];
 var status = true;
-export default class Activity extends Component {
+export default class SimHistory extends Component {
 
     constructor(props) {
         super(props);
@@ -139,7 +140,7 @@ export default class Activity extends Component {
                 <Modal
                     maskClosable={false}
                     visible={visible}
-                    title="Previously Used Sims"
+                    title={convertToLang(this.props.translation[PREVIOUSLY_USED_SIMS], "Previously Used Sims")}
                     onCancel={this.handleCancel}
                     footer={null}
                 >
@@ -152,13 +153,13 @@ export default class Activity extends Component {
                                 this.handleComponentSearch(e)
                             }
                         }
-                        placeholder="Search"
+                        placeholder={convertToLang(this.props.translation[SEARCH], "Search")}
                     />
 
                     <Table
                         columns={[
                             {
-                                title: "ICC-ID", // convertToLang(this.props.translation[ACTIVITY], "ACTIVITY"),
+                                title: convertToLang(this.props.translation[ICC_ID], "ICC-ID"),
                                 align: "center",
                                 dataIndex: 'iccid',
                                 key: "iccid",
