@@ -62,10 +62,10 @@ class RegisterSimForm extends Component {
     handleICCIDValidation = (rule, value, callback) => {
         if ((value !== undefined) && value.length > 0) {
             if (Number(value)) {
-                if (value.length != 20) callback(convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 number long"));
+                if (value.length != 20) callback(convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 digits long"));
 
             } else {
-                callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED],"Only Number are allowed"));
+                callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED],"Only Numbers are allowed"));
             }
         }
         callback();

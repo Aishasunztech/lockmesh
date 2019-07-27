@@ -15,7 +15,7 @@ import { Button_Add, Button_Cancel, Button_Edit, Button_Yes, Button_No, Button_D
 import AddRegistrationModal from './AddRegistrationModal';
 import EditRegistrationModal from './EditRegistrationModal';
 import { ACTION, Enable_ALL } from '../../../../constants/Constants';
-import { ICC_ID, SIM_NAME, NOTE, DATA_LIMIT, DELETE_REGISTERED_SIM, UNREGISTERED, REGISTERED, REGISTERED_SIM_CARDS, STATUS } from '../../../../constants/DeviceConstants';
+import { ICC_ID, SIM_NAME, NOTE, DATA_LIMIT, ALERT_DELETE_REGISTERED_SIM, UNREGISTERED, REGISTERED, REGISTERED_SIM_CARDS, STATUS } from '../../../../constants/DeviceConstants';
 
 
 let status = true;
@@ -124,7 +124,7 @@ class SimSettings extends Component {
     }
     handleDeleteSim = (sim) => {
         this.confirm({
-            title: convertToLang(this.props.translation[DELETE_REGISTERED_SIM], "Are you sure to delete Registered Sim?"),
+            title: convertToLang(this.props.translation[ALERT_DELETE_REGISTERED_SIM], "Are you sure you want to delete Registered Sim?"),
             content: '',
             okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
             cancelText: convertToLang(this.props.translation[Button_No], "No"),
