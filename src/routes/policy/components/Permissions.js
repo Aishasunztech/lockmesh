@@ -52,9 +52,9 @@ class Permissions extends Component {
 
 
   handleTableChange = (pagination, query, sorter) => {
-    console.log('check sorter func: ', sorter)
+    // console.log('check sorter func: ', sorter)
     let columns = this.state.addDealerColsInModal;
-    console.log('columns are: ', columns);
+    // console.log('columns are: ', columns);
 
     columns.forEach(column => {
       if (column.children) {
@@ -76,6 +76,34 @@ class Permissions extends Component {
     })
     this.setState({
       addDealerColsInModal: columns
+    });
+  }
+
+  handleDealerTableChange = (pagination, query, sorter) => {
+    // console.log('check sorter func: ', sorter)
+    let columns = this.state.listDealerCols;
+    // console.log('columns are: ', columns);
+
+    columns.forEach(column => {
+      // if (column.children) {
+        if (Object.keys(sorter).length > 0) {
+          if (column.dataIndex == sorter.field) {
+            if (this.state.sorterKey == sorter.field) {
+              column['sortOrder'] = sorter.order;
+            } else {
+              column['sortOrder'] = "ascend";
+            }
+          } else {
+            column['sortOrder'] = "";
+          }
+          this.setState({ sorterKey: sorter.field });
+        } else {
+          if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+        }
+      // }
+    })
+    this.setState({
+      listDealerCols: columns
     });
   }
 
@@ -438,7 +466,7 @@ class Permissions extends Component {
     let data = [];
     // console.log(list);
     list.map((dealer) => {
-      console.log('object recrd', dealer);
+      // console.log('object recrd', dealer);
       let is_included = this.state.permissions.includes(dealer.dealer_id);
       let common = {
         key: dealer.dealer_id,
@@ -540,8 +568,8 @@ class Permissions extends Component {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={20}>
                 <Table
-                  columns={this.listDealerCols}
-                  onChange={this.handleTableChange}
+                  columns={this.state.listDealerCols}
+                  onChange={this.handleDealerTableChange}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
                   pagination={false}
                 />

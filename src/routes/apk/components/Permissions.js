@@ -55,9 +55,9 @@ class Permissions extends Component {
 
 
   handleTableChange = (pagination, query, sorter) => {
-    console.log('check sorter func: ', sorter)
+    // console.log('check sorter func: ', sorter)
     let columns = this.state.addDealerColsInModal;
-    console.log('columns are: ', columns);
+    // console.log('columns are: ', columns);
 
     columns.forEach(column => {
       if (column.children) {
@@ -79,6 +79,34 @@ class Permissions extends Component {
     })
     this.setState({
       addDealerColsInModal: columns
+    });
+  }
+
+  handleDealerTableChange = (pagination, query, sorter) => {
+    // console.log('check sorter func: ', sorter)
+    let columns = this.state.listDealerCols;
+    // console.log('columns are: ', columns);
+
+    columns.forEach(column => {
+      // if (column.children) {
+        if (Object.keys(sorter).length > 0) {
+          if (column.dataIndex == sorter.field) {
+            if (this.state.sorterKey == sorter.field) {
+              column['sortOrder'] = sorter.order;
+            } else {
+              column['sortOrder'] = "ascend";
+            }
+          } else {
+            column['sortOrder'] = "";
+          }
+          this.setState({ sorterKey: sorter.field });
+        } else {
+          if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+        }
+      // }
+    })
+    this.setState({
+      listDealerCols: columns
     });
   }
 
@@ -553,7 +581,7 @@ class Permissions extends Component {
                 <Table
                   className="mb-24 expand_rows"
                   columns={this.state.listDealerCols}
-                  onChange={this.handleTableChange}
+                  onChange={this.handleDealerTableChange}
                   dataSource={this.renderDealer(this.state.dealerList, true)}
                   pagination={false}
                   translation={this.props.translation}
