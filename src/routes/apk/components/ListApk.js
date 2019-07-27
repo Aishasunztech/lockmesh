@@ -233,7 +233,12 @@ export default class ListApk extends Component {
                         expandedRowRender={(record) => {
                             // console.log("table row", record);
                             return (
-                                <Permissions className="exp_row22" record={record} translation={this.props.translation} />
+                                <Permissions
+                                    className="exp_row22"
+                                    record={record}
+                                    // onChangeTableSorting={this.props.handleTableChange}
+                                    translation={this.props.translation}
+                                />
                             );
                         }}
                         onExpand={this.onExpandRow}
@@ -243,6 +248,7 @@ export default class ListApk extends Component {
                         bordered
                         columns={this.state.columns}
                         dataSource={this.renderList(this.props.apk_list)}
+                        onChange={this.props.onChangeTableSorting}
                         pagination={false
                             //{ pageSize: Number(this.state.pagination) }
                         }

@@ -61,8 +61,11 @@ class Dealers extends Component {
 
     constructor(props) {
         super(props);
-        const columns = dealerColumns(props.translation, this.handleSearch);
+        var columns = dealerColumns(props.translation, this.handleSearch);
+        
         this.state = {
+            sorterKey: '',
+            sortOrder: 'ascend',
             dealers: [],
             loading: false,
             visible: false,
@@ -80,6 +83,42 @@ class Dealers extends Component {
             expandedRowsKey: [],
         };
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    // handleTableChange = (pagination, query, sorter) => {
+    //     // console.log('check sorter func: ', sorter)
+    //     const sortOrder = sorter.order || "ascend";
+    //     this.setState({
+    //         sortOrder,
+    //         columns: dealerColumns(sortOrder, this.props.translation, this.handleSearch)
+    //     })
+    // };
+
+    handleTableChange = (pagination, query, sorter) => {
+        console.log('check sorter func: ', sorter)
+        let { columns } = this.state;
+
+        columns.forEach(column => {
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+                }
+            }
+        })
+        this.setState({
+            columns: columns
+        });
     }
 
     showAddDealer = () => {
@@ -501,6 +540,7 @@ class Dealers extends Component {
 
                             />
                             <DealerList
+                                onChangeTableSorting={this.handleTableChange}
                                 columns={this.state.columns}
                                 dealersList={this.state.dealers}
                                 allDealers={this.state.allDealers.length}

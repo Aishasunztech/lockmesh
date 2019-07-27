@@ -46,7 +46,7 @@ import {
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
-import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged, getAppJobQueue, ackSinglePushApp, ackSinglePullApp, ackFinishedPolicyStep } from "../../appRedux/actions/Socket";
+import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged, getAppJobQueue, ackSinglePushApp, ackSinglePullApp, ackFinishedPolicyStep, receiveSim } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
@@ -149,10 +149,11 @@ class ConnectDevice extends Component {
       this.props.ackSinglePushApp(this.props.socket, device_id);
       this.props.ackSinglePullApp(this.props.socket, device_id);
       this.props.ackFinishedPolicyStep(this.props.socket, device_id);
+      this.props.receiveSim(this.props.socket, device_id);
 
       this.props.getActivities(device_id)
 
-      // console.log('ack_finished_push_apps_' + device_id);
+      // console.log('receiveSim_ '  + device_id);
     }
 
     // this.props.endLoading();
@@ -672,6 +673,7 @@ function mapDispatchToProps(dispatch) {
     ackSinglePushApp: ackSinglePushApp,
     ackSinglePullApp: ackSinglePullApp,
     ackFinishedPolicyStep: ackFinishedPolicyStep,
+    receiveSim: receiveSim,
     clearState: clearState,
     clearResyncFlag: clearResyncFlag
   }, dispatch);

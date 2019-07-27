@@ -62,13 +62,16 @@ class Policy extends Component {
     constructor(props) {
         super(props);
 
-        this.columns = policyColumns(props.translation, this.handleSearch);
+        var columns = policyColumns(props.translation, this.handleSearch);
 
 
         this.state = {
+            sorterKey: '',
+            sortOrder: 'ascend',
             policyModal: false,
             policies: (props.policies) ? props.policies : [],
             formRefresh: false,
+            columns: columns,
             current: 0,
             goToLastTab: false,
             editPolicyModal: false,
@@ -85,6 +88,38 @@ class Policy extends Component {
 
 
     }
+
+    // handleTableChange = (pagination, query, sorter) => {
+    //     const sortOrder = sorter.order || "ascend";
+    //     this.columns = policyColumns(sortOrder, this.props.translation, this.handleSearch);
+    // };
+
+    handleTableChange = (pagination, query, sorter) => {
+        let { columns } = this.state;
+
+        columns.forEach(column => {
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+                }
+            }
+        })
+        this.setState({ 
+            columns: columns
+         });
+    }
+
     componentDidMount() {
         // console.log(this.props, 'his')
         this.props.getPolicies();
@@ -103,7 +138,7 @@ class Policy extends Component {
             appsGotted: this.props.appsGotted
         })
         if (this.props.user.type === ADMIN) {
-            this.columns.pop()
+            this.state.columns.pop()
         }
         // this.props.getApkList();
         // this.props.getDefaultApps();
@@ -128,7 +163,9 @@ class Policy extends Component {
             })
         }
         if (this.props.translation != prevProps.translation) {
-            this.columns = policyColumns(this.props.translation, this.handleSearch);
+            this.setState({ 
+                columns: policyColumns(this.props.translation, this.handleSearch)
+             });
         }
     }
 
@@ -320,8 +357,9 @@ class Policy extends Component {
                     translation={this.props.translation}
                 />
                 <PolicyList
+                    onChangeTableSorting={this.handleTableChange}
                     user={this.props.user}
-                    columns={this.columns}
+                    columns={this.state.columns}
                     policies={this.state.policies}
                     checktogglebuttons={this.props.checktogglebuttons}
                     defaultPolicyChange={this.props.defaultPolicyChange}

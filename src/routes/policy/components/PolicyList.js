@@ -294,6 +294,7 @@ class PolicyList extends Component {
                             expandedRowKeys={this.state.expandedRowKeys}
                             expandIconAsCell={false}
                             columns={this.props.columns}
+                            onChange={this.props.onChangeTableSorting}
                             dataSource={this.renderList(this.props.policies)}
                             pagination={false
                                 // { pageSize: this.state.pagination, size: "midddle" }

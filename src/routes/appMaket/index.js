@@ -177,7 +177,7 @@ class ApkMarket extends React.Component {
                                                 <b>{convertToLang(this.props.translation[SPA_TITLE_SECURE_MARKET], "Secure Market")}</b>
                                             </h4>
                                             <span>
-                                                <Popover placement="topRight" content={UNINSTALL_HELPING_TEXT}>
+                                                <Popover placement="topRight" content={<Markup content={convertToLang(this.props.translation[SPA_UNINSTALL_HELPING_TEXT_FUN], "<span>Turn toggle OFF to restrict app <br /> from being uninstalled by user</span>")} />}>
                                                     <span className="helping_txt"><Icon type="info-circle" /></span>
                                                 </Popover>
                                             </span>

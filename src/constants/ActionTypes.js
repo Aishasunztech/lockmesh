@@ -226,3 +226,8 @@ export const RESET_PRICE = 'RESET_PRICE';
 export const ADD_SIM_REGISTER = "ADD_SIM_REGISTER";
 export const GET_SIMS = "GET_SIMS";
 export const UPDATE_SIM = "UPDATE_SIM";
+export const DELETE_SIM = "DELETE_SIM";
+export const SIM_HISTORY = "SIM_HISTORY";
+
+
+export const RECEIVE_SIM_DATA = "RECEIVE_SIM_DATA";

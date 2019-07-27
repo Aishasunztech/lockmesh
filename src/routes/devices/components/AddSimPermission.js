@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Modal, message, Switch, Table, Input, Button, Form } from 'antd';
+import { Required_Fields } from '../../../constants/DeviceConstants';
+import { convertToLang } from '../../utils/commonUtils';
 // import AddUserForm from './AdduserForm';
 
 export default class AddSimPermission extends Component {
@@ -137,7 +139,7 @@ class SimPermissionForm extends Component {
         // console.log(this.state.type);
         return (
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
-                <p>(*)- Required Fields</p>
+                <p>(*)- {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
                 {(this.props.user) ? <Form.Item>
                     {this.props.form.getFieldDecorator('user_id', {
                         initialValue: this.props.user.user_id,

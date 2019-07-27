@@ -115,10 +115,17 @@ import {
 // ******* sDealerColumns
 // ******* dealerColsWithSearch
 // ******* mobileMainMenu
+// ******* mobileManagePasswords
+// ******* appsColumns
+// ******* extensionColumns
+// ******* controlColumns
+// ******* policyColumns
+// ******* apkColumns
 // **************************************
 /////////////////////////////////////////
 
 export function devicesColumns(translation, handleSearch) {
+
     return ([
         {
             title: "#",
@@ -213,7 +220,7 @@ export function devicesColumns(translation, handleSearch) {
                     dataIndex: 'user_id',
                     key: "user_id",
                     sorter: (a, b) => {
-                        console.log(a); return a.user_id.props.children.localeCompare(b.user_id.props.children)
+                        return a.user_id.props.children.localeCompare(b.user_id.props.children)
                     },
                     sortDirections: ['ascend', 'descend'],
                 }
@@ -277,17 +284,17 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_TYPE], DEVICE_TYPE)}
+                    placeholder={convertToLang(translation[DEVICE_TYPE], "TYPE")}
                 />
             ),
             dataIndex: 'type',
             children: [
                 {
-                    title: convertToLang(translation[DEVICE_TYPE], DEVICE_TYPE),
+                    title: convertToLang(translation[DEVICE_TYPE], "TYPE"),
                     align: "center",
                     dataIndex: 'type',
                     key: 'type',
-                    sorter: (a, b) => { return a.type.props.children[1].localeCompare(b.type.props.children[1]) },
+                    sorter: (a, b) => { return a.type.localeCompare(b.type) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -301,17 +308,17 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_VERSION], DEVICE_VERSION)}
+                    placeholder={convertToLang(translation[DEVICE_VERSION], "VERSION")}
                 />
             ),
             dataIndex: 'version',
             children: [
                 {
-                    title: convertToLang(translation[DEVICE_VERSION], DEVICE_VERSION),
+                    title: convertToLang(translation[DEVICE_VERSION], "VERSION"),
                     align: "center",
                     dataIndex: 'version',
                     key: 'version',
-                    sorter: (a, b) => { return a.version.props.children[1].localeCompare(b.version.props.children[1]) },
+                    sorter: (a, b) => { return a.version.localeCompare(b.version) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -557,6 +564,8 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'dealer_name',
                     sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
                     sortDirections: ['ascend', 'descend'],
+
+
                 }
             ]
         },
@@ -1116,7 +1125,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'status',
                     key: 'status',
-                    sorter: (a, b) => { console.log('done', a.status); return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                    sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
 
                     sortDirections: ['ascend', 'descend'],
                 }
@@ -1298,13 +1307,7 @@ export function dealerColumns(translation, handleSearch) {
                 title: convertToLang(translation[DEALER_DEVICES], "DEVICES"),
                 dataIndex: 'connected_devices',
                 key: 'connected_devices',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.connected_devices.length;
-                // },
                 sorter: (a, b) => { return a.connected_devices - b.connected_devices },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
                 className: '',
@@ -1357,13 +1360,7 @@ export function dealerColumns(translation, handleSearch) {
                 title: convertToLang(translation[DEALER_PIN], "DEALER PIN"),
                 dataIndex: 'link_code',
                 key: 'link_code',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.link_code.length;
-                // },
                 sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
                 className: '',
@@ -1390,13 +1387,7 @@ export function dealerColumns(translation, handleSearch) {
                 title: convertToLang(translation[DEALER_NAME], "DEALER NAME"),
                 dataIndex: 'dealer_name',
                 key: 'dealer_name',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.dealer_name.length;
-                // },
                 sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
                 className: '',
@@ -1635,7 +1626,13 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             title: convertToLang(translation[DEALER_PIN], "DEALER PIN"),
             dataIndex: 'link_code',
             key: 'link_code',
-            sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+            sorter: (a, b) => {
+                if (a.link_code.props) {
+                    return a.link_code.props.children.localeCompare(b.link_code.props.children)
+                } else {
+                    return a.link_code.localeCompare(b.link_code)
+                }
+            },
             sortDirections: ['ascend', 'descend'],
             className: '',
         },
@@ -1651,7 +1648,13 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             title: convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL"),
             dataIndex: 'dealer_email',
             key: 'dealer_email',
-            sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+            sorter: (a, b) => {
+                if (a.dealer_email.props) {
+                    return a.dealer_email.props.children.localeCompare(b.dealer_email.props.children)
+                } else {
+                    return a.dealer_email.localeCompare(b.dealer_email)
+                }
+            },
             sortDirections: ['ascend', 'descend'],
             className: '',
         },

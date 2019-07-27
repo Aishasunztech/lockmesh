@@ -68,9 +68,11 @@ class Apk extends React.Component {
 
     constructor(props) {
         super(props);
-        let self = this;
-        let columns = apkColumns(props.translation);
+        var columns = apkColumns(props.translation);
+
         this.state = {
+            sorterKey: '',
+            sortOrder: 'ascend',
             apk_list: [],
             uploadApkModal: false,
             showUploadModal: false,
@@ -87,6 +89,41 @@ class Apk extends React.Component {
 
 
     }
+
+    // handleTableChange = (pagination, query, sorter) => {
+    //     const sortOrder = sorter.order || "ascend";
+    //     this.setState({
+    //         columns: apkColumns(sortOrder, this.props.translation)
+    //     })
+    // };
+
+    handleTableChange = (pagination, query, sorter) => {
+        console.log('sorter func', sorter)
+        let { columns } = this.state;
+
+        columns.forEach(column => {
+            // if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column['sortOrder'] = sorter.order;
+                        } else {
+                            column['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+                }
+            // }
+        })
+        this.setState({
+            columns: columns
+        });
+    }
+
     // delete
     handleConfirmDelete = (appId) => {
         this.confirm({
@@ -360,6 +397,7 @@ class Apk extends React.Component {
                                     </div> : false
                             }
                             <ListApk
+                                onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
                                 apk_list={this.state.apk_list}
                                 // tableChangeHandler={this.tableChangeHandler}

@@ -222,7 +222,7 @@ export function undoDealer(id) {
                     response:response.data,
                     payload: {
                         id: id,
-                        msg: "Dealer Undo Successfully"
+                        msg: "Dealer Undelete Successfully"
                     }
                 });
 
