@@ -112,6 +112,8 @@ export default (state = initialState, action) => {
 					state.apk_list[objIndex1].apk_name = action.payload.name
 					state.apk_list[objIndex1].apk = action.payload.apk
 					state.apk_list[objIndex1].logo = action.payload.logo
+					state.apk_list[objIndex1].size = action.payload.size
+
 				}
 				success({
 					title: action.response.msg,
