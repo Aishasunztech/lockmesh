@@ -30,7 +30,7 @@ class AddDevice extends Component {
 
     constructor(props) {
         super(props);
-
+        this.sim_id2_added = false;
         const invoiceColumns = [
             {
                 dataIndex: 'counter',
@@ -146,10 +146,12 @@ class AddDevice extends Component {
                 display: 'none',
             },
             term: '',
+            unit_servcies_price: 0,
             total_price: 0,
             invoiceColumns: invoiceColumns,
             PkgSelectedRows: [],
-            proSelectedRows: []
+            proSelectedRows: [],
+            duplicate: 0
         }
     }
 
@@ -159,7 +161,38 @@ class AddDevice extends Component {
             // console.log('form', values);
             if (this.state.services) {
                 if (!err) {
+                    let product_prices = this.filterList(this.state.term + ' month', this.props.product_prices, 'product');
+                    let sim_id_price = product_prices.filter((item) => {
+                        if (item.price_for === 'sim_id') {
+                            return item
+                        }
+                    })
+                    if (this.state.sim_id2 && !this.sim_id2_added) {
+                        if (sim_id_price.length) {
+                            let data = {
+                                id: sim_id_price[0].id,
+                                rowKey: sim_id_price[0].id,
+                                unit_price: sim_id_price[0].unit_price,
+                                rowKey: sim_id_price[0].id,
+                                price_for: "SIM ID 2"
+
+                            }
+
+                            this.state.proSelectedRows.push(data);
+                            this.state.products.push(data);
+                            this.state.total_price = this.state.total_price + Number(sim_id_price[0].unit_price)
+                        }
+                        this.sim_id2_added = true
+                    } else if (this.state.sim_id2 === '' && this.sim_id2_added) {
+                        this.state.proSelectedRows.pop()
+                        this.state.products.pop()
+                        this.state.total_price = this.state.total_price - Number(sim_id_price[0].unit_price)
+                        this.sim_id2_added = false
+                    }
+
+
                     if (this.state.total_price < this.props.user_credit) {
+                        // console.log(this.state.products);
                         values.products = this.state.products;
                         values.packages = this.state.packages;
                         values.term = this.state.term;
@@ -226,7 +259,7 @@ class AddDevice extends Component {
     }
 
     confirmRenderList(packages, products) {
-        // let list = [...packages, ...products];
+
         let counter = 0
         let packagesList = packages.map((item, index) => {
             // let services = JSON.parse(item.pkg_features)
@@ -239,8 +272,8 @@ class AddDevice extends Component {
                 description: item.pkg_name,
                 term: this.state.term + " Month",
                 unit_price: item.pkg_price,
-                quantity: 1,
-                line_total: item.pkg_price
+                quantity: (this.state.duplicate > 0) ? 1 * this.state.duplicate : 1,
+                line_total: (this.state.duplicate > 0) ? item.pkg_price * this.state.duplicate : item.pkg_price
             }
         });
         let productList = products.map((item, index) => {
@@ -254,8 +287,8 @@ class AddDevice extends Component {
                 description: item.price_for,
                 term: (this.state.term === '0') ? "TRIAL" : this.state.term + " Month",
                 unit_price: item.unit_price,
-                quantity: 1,
-                line_total: item.unit_price
+                quantity: (this.state.duplicate > 0) ? 1 * this.state.duplicate : 1,
+                line_total: (this.state.duplicate > 0) ? item.unit_price * this.state.duplicate : item.unit_price
             }
         });
         return [...packagesList, ...productList]
@@ -371,7 +404,8 @@ class AddDevice extends Component {
             services: services,
             checkServices: (services) ? { display: 'none' } : { display: 'inline', color: "Red", margin: 0 },
             term: term,
-            total_price: total_price,
+            unit_servcies_price: total_price,
+            total_price: this.state.duplicate > 0 ? total_price * this.state.duplicate : total_price,
             PkgSelectedRows: packages,
             proSelectedRows: products
 
@@ -574,9 +608,11 @@ class AddDevice extends Component {
     handleDuplicate = (e) => {
         // console.log(e);
         let duplicates = e;
-        let total_price = this.state.total_price * duplicates
+        // console.log(this.state.total_price);
+        let total_price = this.state.unit_servcies_price * duplicates
         this.setState({
-            total_price: total_price
+            total_price: total_price,
+            duplicate: e
         })
     }
 
@@ -737,20 +773,6 @@ class AddDevice extends Component {
                                 )}
                             </Form.Item>
 
-                            {/* <Form.Item
-                                style={{ textAlign: "center", marginLeft: '30%' }}
-                                wrapperCol={{ span: 14 }}
-                            >
-                                {this.props.form.getFieldDecorator('is_service', {
-                                    initialValue: this.state.services,
-                                    rules: [{
-                                        required: true, message: convertToLang(this.props.translation[DUMY_TRANS_ID], 'You need to select a service.'),
-                                    }]
-                                })(
-
-                                    <Input type='hidden' />
-                                )}
-                            </Form.Item> */}
                             <Form.Item
                                 label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
                                 labelCol={{ span: 8 }}
@@ -777,8 +799,7 @@ class AddDevice extends Component {
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         disabled={this.state.disablePgp}
                                     >
-                                        <Select.Option value="">{convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}</Select.Option>
-                                        {this.props.pgp_emails.map((pgp_email) => {
+                                       {this.props.pgp_emails.map((pgp_email) => {
                                             return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                                         })}
                                     </Select>
@@ -805,7 +826,6 @@ class AddDevice extends Component {
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         disabled={this.state.disableChat}
                                     >
-                                        <Select.Option value="">{convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select Chat ID")}</Select.Option>
                                         {this.props.chat_ids.map((chat_id, index) => {
                                             return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
                                         })}
@@ -832,7 +852,6 @@ class AddDevice extends Component {
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         disabled={this.state.disableSim}
                                     >
-                                        <Select.Option value="">{convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}</Select.Option>
                                         {this.props.sim_ids.map((sim_id, index) => {
                                             return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
                                         })}
