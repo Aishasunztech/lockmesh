@@ -5,7 +5,7 @@ import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
-import EditPolicy from "./components/EditPolicy1";
+import EditPolicy from "./components/EditPolicy";
 
 import {
     getPolicies, handlePolicyStatus,
