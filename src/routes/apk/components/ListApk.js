@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Avatar, Switch, Button, Icon, Card, Modal, Row, Col, Input } from "antd";
+import { Table, Avatar, Switch, Button, Icon, Card, Tabs } from "antd";
 import { BASE_URL } from '../../../constants/Application';
 import Permissions from './Permissions';
 import styles from './app.css';
@@ -123,7 +123,7 @@ export default class ListApk extends Component {
                                 <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
                                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
                                 <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                    this.props.handleConfirmDelete(app.apk_id);
+                                    this.props.handleConfirmDelete(app.apk_id, app);
                                 }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                             </Fragment>
                         </div>
@@ -215,9 +215,6 @@ export default class ListApk extends Component {
     }
 
     render() {
-        // const rowSelection = {
-        //     onChange: this.onSelectChange,
-        // };
 
         return (
             <Card className="fix_card apk_fix_card">
@@ -225,24 +222,29 @@ export default class ListApk extends Component {
                 <CustomScrollbars className="gx-popover-scroll">
                     <Table
                         className="gx-table-responsive apklist_table"
-                        // rowSelection={rowSelection}
-                        // expandableRowIcon={<Icon type="right" />}
-                        // collapsedRowIcon={<Icon type="down" />}
+
                         rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                         expandIcon={(props) => this.customExpandIcon(props)}
                         expandedRowRender={(record) => {
-                            // console.log("table row", record);
                             return (
-                                <Permissions
-                                    className="exp_row22"
-                                    record={record}
-                                    // onChangeTableSorting={this.props.handleTableChange}
-                                    translation={this.props.translation}
-                                />
+                                <Permissions className="exp_row22" record={record} translation={this.props.translation} />
+                                /*<Fragment>
+                                    <Tabs
+                                        className="exp_tabs_policy"
+                                        type="card"
+                                    >
+                                        <Tabs.TabPane tab={convertToLang(this.props.translation['PERMISSIONS'], "PERMISSIONS")} key="1">
+                                            <Permissions className="exp_row22" record={record} translation={this.props.translation} />
+                                        </Tabs.TabPane>
+                                        <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
+
+                            </Tabs.TabPane>
+                                    </Tabs>
+                                </Fragment>*/
                             );
                         }}
                         onExpand={this.onExpandRow}
-                        expandIconColumnIndex={1}
+                        expandIconColumnIndex={2}
                         expandIconAsCell={false}
                         size="midddle"
                         bordered
