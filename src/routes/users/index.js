@@ -59,8 +59,11 @@ class Users extends Component {
         // this.state = {
         //     users: []
         // }
-        this.columns = usersColumns(props.translation, this.handleSearch);
+        var columns = usersColumns(props.translation, this.handleSearch);
         this.state = {
+            sorterKey: '',
+            sortOrder: 'ascend',
+            columns: columns,
             users: [],
             originalUsers: [],
             expandedRowsKeys: [],
@@ -68,11 +71,44 @@ class Users extends Component {
 
     }
 
+    // handleTableChange = (pagination, query, sorter) => {
+    //     // console.log('check sorter func: ', sorter)
+    //     const sortOrder = sorter.order || "ascend";
+    //     this.state.columns = usersColumns(sortOrder, this.props.translation, this.handleSearch);
+    // };
+
+    handleTableChange = (pagination, query, sorter) => {
+        console.log('check sorter func: ', sorter)
+        let { columns } = this.state;
+
+        columns.forEach(column => {
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+                }
+            }
+        })
+        this.setState({ 
+            columns: columns
+         });
+    }
+
     componentDidMount() {
         this.props.getUserList();
         this.props.getPagination('users');
         // console.log(this.props.location.state);
-        this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
+        this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
         this.setState({
             users: this.props.users_list,
             originalUsers: this.props.users_list,
@@ -83,7 +119,7 @@ class Users extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.users_list !== this.props.users_list) {
-            this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + nextProps.users_list.length + ')'
+            this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + nextProps.users_list.length + ')'
             // console.log('will recice props is called', nextProps.users_list)
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
@@ -98,14 +134,16 @@ class Users extends Component {
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
             // console.log('this.props ', this.props.DisplayPages);
-            this.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
+            this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
                 expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
             })
         }
         if (this.props.translation !== prevProps.translation) {
-            this.columns = usersColumns(this.props.translation, this.handleSearch);
+            this.setState({ 
+                columns: usersColumns(this.props.translation, this.handleSearch)
+             });
         }
     }
 
@@ -287,11 +325,12 @@ class Users extends Component {
                 />
                 <AddUser ref="add_user" translation={this.props.translation} />
                 <UserList
+                    onChangeTableSorting={this.handleTableChange}
                     editUser={this.props.editUser}
                     deleteUser={this.props.deleteUser}
                     undoDeleteUser={this.props.undoDeleteUser}
                     location={this.props.location}
-                    columns={this.columns}
+                    columns={this.state.columns}
                     users={this.state.users}
                     expandedRowsKey={this.state.expandedRowsKeys}
                     pagination={this.props.DisplayPages}

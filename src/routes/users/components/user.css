@@ -21,7 +21,8 @@
     min-width: 100px;
 }
 
-.users_list table th {
+.users_list table th,
+.users_list table td {
     white-space: nowrap !important;
 }
 

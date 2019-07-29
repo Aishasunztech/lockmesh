@@ -21,6 +21,7 @@ const DealerList = (props) => {
                 rowSelection={rowSelection}
                 dataSource={props.dealers}
                 columns={props.columns}
+                onChange={props.onChangeTableSorting}
                 hideDefaultSelections={props.hideDefaultSelections}
                 pagination={false}
             />
