@@ -10,7 +10,7 @@ import {
     deleteSim,
 } from "../../../../appRedux/actions/ConnectDevice";
 import { ENABLE, ENCRYPT, Guest, ENCRYPTED, IN_APP_MENU_DISPLAY } from '../../../../constants/TabConstants';
-import { convertToLang } from '../../../utils/commonUtils';
+import { checkValue, convertToLang } from '../../../utils/commonUtils';
 import { Button_Add, Button_Cancel, Button_Edit, Button_Yes, Button_No, Button_Delete } from '../../../../constants/ButtonConstants';
 import AddRegistrationModal from './AddRegistrationModal';
 import EditRegistrationModal from './EditRegistrationModal';
@@ -152,10 +152,10 @@ class SimSettings extends Component {
                     key: index,
                     counter: ++index,
                     actions: (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{DeleteBtn}</Fragment></Fragment>),
-                    iccid: (sim.iccid != undefined) ? sim.iccid : "N/A",
-                    name: (sim.name != undefined) ? sim.name : "N/A",
-                    status: (sim.status != undefined) ? sim.status : "N/A",
-                    note: (sim.note != undefined) ? sim.note : "N/A",
+                    iccid: checkValue(sim.iccid),
+                    name: checkValue(sim.name),
+                    status: checkValue(sim.status),
+                    note: checkValue(sim.note),
                     guest: <Switch
                         checked={(sim.guest) ? true : false}
                         size="small"
