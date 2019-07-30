@@ -251,7 +251,7 @@ class PolicyList extends Component {
     }
 
     render() {
-        console.log(this.props.columns, 'keys are')
+        // console.log(this.props.columns, 'keys are')
         if (this.props.user.type === ADMIN) {
             let index = this.props.columns.findIndex(k => k.dataIndex === 'default_policy');
             this.props.columns[index].className = 'hide';
