@@ -119,7 +119,7 @@ class UpdateFeatureApkForm extends Component {
                     'details': details,
                     'size': size
                 }
-                this.props.editApk(form_data);
+                this.props.action(form_data);
                 this.props.getApkList();
                 this.props.handleCancel();
                 //  console.log(form_data);
@@ -263,7 +263,7 @@ class UpdateFeatureApkForm extends Component {
             name: 'apk',
             multiple: false,
             action: BASE_URL + 'users/upload',
-            headers: { 'authorization': token, "id": this.props.app },
+            headers: { 'authorization': token, "id": this.props.app, "featured": this.props.type },
             accept: '.apk',
             disabled: this.state.disableApk,
             className: 'upload-list-inline',
@@ -324,7 +324,7 @@ class UpdateFeatureApkForm extends Component {
             <Form onSubmit={this.handleSubmit}>
                 <Form.Item {...formItemLayout} label="Apk name" className="upload_file">
                     {getFieldDecorator('name', {
-                        initialValue: this.props.app.apk_name,
+                        initialValue: this.props.type,
                         rules: [{
                             required: true, message: 'Name is required',
                         },
@@ -333,7 +333,7 @@ class UpdateFeatureApkForm extends Component {
                         },
                         ],
                     })(
-                        <Input />
+                        <Input disabled />
                     )}
                 </Form.Item>
                 <Form.Item label="Apk Icon" {...formItemLayout} className="upload_file">
@@ -341,7 +341,7 @@ class UpdateFeatureApkForm extends Component {
                         {getFieldDecorator('icon', {
                             rules: [
                                 {
-                                    required: this.props.required, message: '',
+                                    required: this.props.required, message: ' ',
                                 },
                                 {
                                     validator: this.validatelogoFile,
@@ -369,7 +369,7 @@ class UpdateFeatureApkForm extends Component {
                         {getFieldDecorator('apk', {
 
                             rules: [{
-                                required: this.props.required, message: '',
+                                required: this.props.required, message: ' ',
                             },
                             {
                                 validator: this.validateAkpFile,
@@ -382,11 +382,6 @@ class UpdateFeatureApkForm extends Component {
                                     <Button className="width_100 upload_btn" type="default" >
                                         <Icon type="folder-open" /> UPLOAD APK FILE
                                                 </Button>
-                                    {/* <p className="ant-upload-drag-icon">
-                                            <Icon type="file" />
-                                        </p>
-                                        <h2 className="ant-upload-hint">UPLOAD APK FILE</h2>
-                                        <p className="ant-upload-text">Upload Apk file (.apk)</p> */}
                                 </Upload>
                             )
                         }

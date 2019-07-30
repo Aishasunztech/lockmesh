@@ -11,6 +11,7 @@ import {
 import EditApk from './EditApk';
 import UpdateFeatureApk from './UpdateFeatureApk';
 import { Button_Edit, Button_Delete } from '../../../constants/ButtonConstants';
+import { ADMIN } from '../../../constants/Constants';
 
 export default class ListApk extends Component {
     state = { visible: false }
@@ -198,7 +199,7 @@ export default class ListApk extends Component {
                     'apk_id': app.apk_id,
                     'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
                     "permissions": app.permissions,
-                    'apk_name': 'UEM',
+                    'apk_name': app.apk_name,
                     'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
                     'apk_version': app.version,
                     'apk_size': app.size ? app.size : "N/A",
@@ -212,6 +213,7 @@ export default class ListApk extends Component {
     }
 
     updateFeaturedApk = (type) => {
+        // console.log(type);
         let appDetails = {};
         switch (type) {
             case "PGP":
@@ -284,77 +286,77 @@ export default class ListApk extends Component {
 
         return (
             <Fragment>
-                {/* <Card className="fix_card apk_fix_card"> */}
-                <Row style={{ textAlign: "center", marginBottom: 20 }}>
-                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-                        <Button
-                            type="primary"
-                            style={{ width: '100%' }}
-                            onClick={() => { this.updateFeaturedApk('UEM') }}
-                        >
-                            UPDATE UEM APP
-                            </Button>
-                    </Col>
-                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-                        <Button
-                            type="primary"
-                            style={{ width: '100%' }}
-                            onClick={() => { this.updateFeaturedApk('CHAT') }}
-                        >
-                            UPDATE CHAT APP
-                            </Button>
-                    </Col>
-                    <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-                        <Button
-                            type="primary"
-                            style={{ width: '100%' }}
-                            onClick={() => { this.updateFeaturedApk('PGP') }}
-                        >
-                            UPDATE PGP APP
-                            </Button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={24} sm={24} md={8} lg={24} xl={24}>
-                        <h1 style={{ textAlign: "center" }}>
-                            FEATURED APPS
+                <Card >
+                    <Row >
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                            <h1>
+                                FEATURED APPS
                             </h1>
-                    </Col>
-                </Row>
-                <Card style={{ height: 150 }} >
-                    <hr className="fix_header_border" style={{ top: "15px" }} />
-                    <CustomScrollbars className="gx-popover-scroll">
-                        <Table
-                            className="gx-table-responsive apklist_table"
-                            rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
-                            expandIcon={(props) => this.customExpandIcon(props)}
-                            expandedRowRender={(record) => {
-                                // console.log("table row", record);
-                                return (
-                                    <Permissions
-                                        className="exp_row22"
-                                        record={record}
-                                        // onChangeTableSorting={this.props.handleTableChange}
-                                        translation={this.props.translation}
-                                    />
-                                );
-                            }}
-                            onExpand={this.onExpandRow}
-                            expandIconColumnIndex={0}
-                            expandIconAsCell={false}
-                            size="midddle"
-                            bordered
-                            columns={this.props.featureApkcolumns}
-                            dataSource={this.renderFeaturedList(this.props.apk_list)}
-                            onChange={this.props.onChangeTableSorting}
-                            pagination={false
-                                //{ pageSize: Number(this.state.pagination) }
-                            }
-                            // scroll={{ x: 10 }}
-                            rowKey="apk_id"
-                        />
-                        <UpdateFeatureApk ref='updateFeatureApk' getApkList={this.props.getApkList} />
-                    </CustomScrollbars>
+                        </Col>
+                        {(this.props.user.type === ADMIN) ?
+                            <Fragment>
+
+                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                    <Button
+                                        type="primary"
+                                        style={{ width: '100%' }}
+                                        onClick={() => { this.updateFeaturedApk('UEM') }}
+                                    >
+                                        UPDATE UEM APP
+                            </Button>
+                                </Col>
+                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                    <Button
+                                        type="primary"
+                                        style={{ width: '100%' }}
+                                        onClick={() => { this.updateFeaturedApk('CHAT') }}
+                                    >
+                                        UPDATE CHAT APP
+                            </Button>
+                                </Col>
+                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                    <Button
+                                        type="primary"
+                                        style={{ width: '100%' }}
+                                        onClick={() => { this.updateFeaturedApk('PGP') }}
+                                    >
+                                        UPDATE PGP APP
+                            </Button>
+                                </Col>
+                            </Fragment>
+                            : null}
+                    </Row>
+                    <Table
+                        className="gx-table-responsive apklist_table mt-16"
+                        rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
+                        expandIcon={(props) => this.customExpandIcon(props)}
+                        expandedRowRender={(record) => {
+                            // console.log("table row", record);
+                            return (
+                                <Permissions
+                                    className="exp_row22"
+                                    record={record}
+                                    // onChangeTableSorting={this.props.handleTableChange}
+                                    translation={this.props.translation}
+                                />
+                            );
+                        }}
+                        onExpand={this.onExpandRow}
+                        expandIconColumnIndex={0}
+                        expandIconAsCell={false}
+                        size="midddle"
+                        bordered
+                        columns={this.props.featureApkcolumns}
+                        dataSource={this.renderFeaturedList(this.props.apk_list)}
+                        onChange={this.props.onChangeTableSorting}
+                        pagination={false
+                            //{ pageSize: Number(this.state.pagination) }
+                        }
+                        // scroll={{ x: 10 }}
+                        rowKey="apk_id"
+                    />
+                    <UpdateFeatureApk ref='updateFeatureApk' getApkList={this.props.getApkList} />
+                    {/* </CustomScrollbars> */}
                 </Card>
                 <Card style={{ height: 300 }} >
                     <hr className="fix_header_border" style={{ top: "15px" }} />
@@ -392,7 +394,6 @@ export default class ListApk extends Component {
                             rowKey="apk_id"
                         />
                         <EditApk ref='editApk' getApkList={this.props.getApkList} />
-
                     </CustomScrollbars>
                 </Card>
             </Fragment>
