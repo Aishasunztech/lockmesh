@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar } from "antd";
+import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 
@@ -40,7 +40,7 @@ import {
 import { componentSearch, titleCase } from "../utils/commonUtils";
 import { ACTION, Alert_Delete_APK, SEARCH } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
-import { apkColumns } from "../utils/columnsUtils";
+import { apkColumns, featureApkColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 
 const question_txt = (
@@ -69,6 +69,7 @@ class Apk extends React.Component {
     constructor(props) {
         super(props);
         var columns = apkColumns(props.translation);
+        var featureApkcolumns = featureApkColumns(props.translation);
 
         this.state = {
             sorterKey: '',
@@ -78,6 +79,7 @@ class Apk extends React.Component {
             showUploadModal: false,
             showUploadData: {},
             columns: columns,
+            featureApkcolumns: featureApkcolumns
         }
 
         // this.columns = ;
@@ -103,20 +105,20 @@ class Apk extends React.Component {
 
         columns.forEach(column => {
             // if (column.children) {
-                if (Object.keys(sorter).length > 0) {
-                    if (column.dataIndex == sorter.field) {
-                        if (this.state.sorterKey == sorter.field) {
-                            column['sortOrder'] = sorter.order;
-                        } else {
-                            column['sortOrder'] = "ascend";
-                        }
+            if (Object.keys(sorter).length > 0) {
+                if (column.dataIndex == sorter.field) {
+                    if (this.state.sorterKey == sorter.field) {
+                        column['sortOrder'] = sorter.order;
                     } else {
-                        column['sortOrder'] = "";
+                        column['sortOrder'] = "ascend";
                     }
-                    this.setState({ sorterKey: sorter.field });
                 } else {
-                    if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+                    column['sortOrder'] = "";
                 }
+                this.setState({ sorterKey: sorter.field });
+            } else {
+                if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+            }
             // }
         })
         this.setState({
@@ -296,7 +298,7 @@ class Apk extends React.Component {
             this.handleCheckChange(this.props.selectedOptions)
         }
 
-        if(this.props.translation != prevProps.translation) {
+        if (this.props.translation != prevProps.translation) {
             this.setState({
                 columns: apkColumns(this.props.translation)
             })
@@ -396,6 +398,8 @@ class Apk extends React.Component {
                                         </Button> */}
                                     </div> : false
                             }
+
+
                             <ListApk
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
@@ -403,7 +407,9 @@ class Apk extends React.Component {
                                 // tableChangeHandler={this.tableChangeHandler}
                                 handleConfirmDelete={this.handleConfirmDelete}
                                 editApk={this.props.editApk}
+                                addApk={this.props.addApk}
                                 columns={this.state.columns}
+                                featureApkcolumns={this.state.featureApkcolumns}
                                 getApkList={this.props.getApkList}
                                 pagination={this.props.DisplayPages}
                                 user={this.props.user}
