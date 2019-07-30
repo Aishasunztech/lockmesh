@@ -277,17 +277,17 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_TYPE], DEVICE_TYPE)}
+                    placeholder={convertToLang(translation[DEVICE_TYPE], "TYPE")}
                 />
             ),
             dataIndex: 'type',
             children: [
                 {
-                    title: convertToLang(translation[DEVICE_TYPE], DEVICE_TYPE),
+                    title: convertToLang(translation[DEVICE_TYPE], "TYPE"),
                     align: "center",
                     dataIndex: 'type',
                     key: 'type',
-                    sorter: (a, b) => { return a.type.props.children[1].localeCompare(b.type.props.children[1]) },
+                    sorter: (a, b) => { return a.type.localeCompare(b.type) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -301,17 +301,17 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[DEVICE_VERSION], DEVICE_VERSION)}
+                    placeholder={convertToLang(translation[DEVICE_VERSION], "VERSION")}
                 />
             ),
             dataIndex: 'version',
             children: [
                 {
-                    title: convertToLang(translation[DEVICE_VERSION], DEVICE_VERSION),
+                    title: convertToLang(translation[DEVICE_VERSION], "VERSION"),
                     align: "center",
                     dataIndex: 'version',
                     key: 'version',
-                    sorter: (a, b) => { return a.version.props.children[1].localeCompare(b.version.props.children[1]) },
+                    sorter: (a, b) => { return a.version.localeCompare(b.version) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
