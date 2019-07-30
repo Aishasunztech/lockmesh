@@ -55,8 +55,6 @@ class Policy extends Component {
         super(props);
 
         var columns = policyColumns(props.translation, this.handleSearch);
-
-
         this.state = {
             sorterKey: '',
             sortOrder: 'ascend',
@@ -75,7 +73,6 @@ class Policy extends Component {
             enableAllappPermissions: false,
             encryptedAllappPermissions: false,
             appsGotted: false,
-
         }
 
     }
@@ -106,9 +103,9 @@ class Policy extends Component {
                 }
             }
         })
-        this.setState({ 
+        this.setState({
             columns: columns
-         });
+        });
     }
 
     componentDidMount() {
@@ -152,9 +149,9 @@ class Policy extends Component {
             })
         }
         if (this.props.translation != prevProps.translation) {
-            this.setState({ 
+            this.setState({
                 columns: policyColumns(this.props.translation, this.handleSearch)
-             });
+            });
         }
     }
 
@@ -362,7 +359,7 @@ class Policy extends Component {
                         translation={this.props.translation}
                     />
                 </Modal>
-                
+
                 {/* Policy List */}
                 <PolicyList
                     onChangeTableSorting={this.handleTableChange}
@@ -390,7 +387,7 @@ class Policy extends Component {
                     handleAppGotted={this.props.handleAppGotted}
                     appsGotted={this.state.appsGotted}
                     translation={this.props.translation}
-                    push_apps = {this.props.push_apps}
+                    push_apps={this.props.push_apps}
                 />
 
                 {/* Edit Policy */}
@@ -432,7 +429,7 @@ class Policy extends Component {
                         getPolicies={this.props.getPolicies}
                         wrappedComponentRef={(form) => this.form = form}
                         ref='editPolicy'
-                        
+
                         translation={this.props.translation}
                     />
                 </Modal>
@@ -445,15 +442,15 @@ function mapDispatchToProps(dispatch) {
 
     return bindActionCreators({
         getPolicies: getPolicies,
-        
+
         // dropdown actions
         getDropdown: getDropdown,
         postDropdown: postDropdown,
-        
+
         // pagination actions
         postPagination: postPagination,
         getPagination: getPagination,
-        
+
         handlePolicyStatus: handlePolicyStatus,
         handleEditPolicy: handleEditPolicy,
         SavePolicyChanges: SavePolicyChanges,
@@ -471,7 +468,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ policies, auth, settings }) => {
-    
+
     return {
         user: auth.authUser,
         policies: policies.policies,

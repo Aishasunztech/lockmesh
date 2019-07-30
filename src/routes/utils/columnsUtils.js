@@ -1932,9 +1932,7 @@ export function policyColumns(translation, handleSearch) {
                     className: '',
                     dataIndex: 'policy_note',
                     key: 'policy_note',
-                    // ...this.getColumnSearchProps('status'),
                     sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
-
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -1949,7 +1947,90 @@ export function policyColumns(translation, handleSearch) {
             dataIndex: 'default_policy',
             key: 'default_policy',
         },
+        {
+            title: (
+                <Input.Search
+                    name="created_by"
+                    key="created_by"
+                    id="created_by"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREATED BY")}
+                />
+            ),
+            dataIndex: 'created_by',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREATED BY"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'created_by',
+                    key: 'created_by',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.created_by.localeCompare(b.created_by) },
 
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="created_date"
+                    key="created_date"
+                    id="created_date"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREATED DATE")}
+                />
+            ),
+            dataIndex: 'created_date',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREATED DATE"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'created_date',
+                    key: 'created_date',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.created_date.localeCompare(b.created_date) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="last_edited"
+                    key="last_edited"
+                    id="last_edited"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "LAST EDITED DATE")}
+                />
+            ),
+            dataIndex: 'last_edited',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "LAST EDITED DATE"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'last_edited',
+                    key: 'last_edited',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.last_edited.localeCompare(b.last_edited) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
     ]
     )
 };
