@@ -63,7 +63,7 @@ class RegisterSimForm extends Component {
         if ((value !== undefined) && value.length > 0) {
             // if (Number(value)) {
                 if (/^[a-zA-Z0-9]+$/.test(value)) {
-                if (value.length != 20) callback(convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 digits long"));
+                if (value.length != 20) callback(`${convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 digits long")}  :(${value.length})`);
 
             } else {
                 callback(convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers"));
