@@ -181,6 +181,7 @@ class PolicyList extends Component {
         });
 
     }
+
     handleDefaultChange(e, policy_id) {
 
         let _this = this
@@ -195,6 +196,7 @@ class PolicyList extends Component {
 
         });
     }
+    
     customExpandIcon(props) {
 
         if (props.expanded) {
@@ -235,6 +237,7 @@ class PolicyList extends Component {
             this.state.expandedByCustom[index] = false;
         });
     }
+
     componentWillReceiveProps(preProps) {
         if (preProps.policies.length !== this.props.policies.length) {
             this.props.policies.map((policy, index) => {
@@ -243,6 +246,7 @@ class PolicyList extends Component {
             });
         }
     }
+
     render() {
         // console.log(this.state.expandedRowKeys, 'keys are')
         return (
@@ -266,6 +270,7 @@ class PolicyList extends Component {
                                             <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], "Save Changes")} </Button>
                                             : false}
                                         <PolicyInfo
+                                            push_apps = {this.props.push_apps}
                                             selected={this.state.expandTabSelected[record.rowKey]}
                                             policy={record}
                                             isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
@@ -290,7 +295,7 @@ class PolicyList extends Component {
                                 )
                             }}
                             // expandIconColumnIndex={1}         
-                            expandIconColumnIndex={2}
+                            expandIconColumnIndex={3}
                             expandedRowKeys={this.state.expandedRowKeys}
                             expandIconAsCell={false}
                             columns={this.props.columns}
@@ -310,18 +315,4 @@ class PolicyList extends Component {
     }
 }
 
-// function mapDispatchToProps(dispatch) {
-//     return bindActionCreators({
-//         // getPolicies: getPolicies,
-//     }, dispatch);
-// }
-
-// var mapStateToProps = ({ policies }) => {
-//     // console.log("policies", policies);
-//     return {
-//         // routing: routing,
-//     };
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(PolicyList);
 export default PolicyList;

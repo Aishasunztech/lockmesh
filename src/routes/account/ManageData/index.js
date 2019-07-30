@@ -2,11 +2,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-// import { Input, Modal, Select, } from "antd";
+
 import { Card, Button, Row, Col, Select, Input, Checkbox, Icon } from "antd";
-// import {getDevicesList} from '../../appRedux/actions/Devices';
+
 import AppFilter from '../../../components/AppFilter';
-// import EditDealer from './components/editDealer';
+
 import CircularProgress from "components/CircularProgress/index";
 import AccountList from "./components/accountList";
 import styles from './manage_data.css'

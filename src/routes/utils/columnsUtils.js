@@ -1801,6 +1801,13 @@ export function policyColumns(translation, handleSearch) {
         //     width: 800,
         // },
         {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
             title: convertToLang(translation[POLICY_ACTION], "ACTION"),
             align: "center",
             dataIndex: 'action',
@@ -1950,6 +1957,13 @@ export function policyColumns(translation, handleSearch) {
 
 export function apkColumns(translation) {
     return ([
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
         {
             title: convertToLang(translation[ACTION], "ACTION"),
             dataIndex: 'action',

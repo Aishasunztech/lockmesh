@@ -5,7 +5,7 @@ import { message, Input, Modal, Button, Popover, Icon } from "antd";
 import AppFilter from '../../components/AppFilter';
 import PolicyList from "./components/PolicyList";
 import AddPolicy from "./components/AddPolicy";
-import EditPolicy from "./components/editPolicy";
+import EditPolicy from "./components/EditPolicy";
 
 import {
     getPolicies, handlePolicyStatus,
@@ -24,24 +24,16 @@ import {
     getPagination
 } from '../../appRedux/actions/Common';
 import { Markup } from 'interweave';
+
 import {
     getDealerApps,
 } from "../../appRedux/actions/ConnectDevice";
 
 import {
-    POLICY_ACTION,
-    POLICY_NAME,
-    POLICY_PERMISSIONS,
-    POLICY_STATUS,
-    POLICY_COMMAND,
-    POLICY_INFO,
-    POLICY_NOTE,
-    POLICY_DEFAULT,
     POLICY_SAVE_CHANGES,
     POLICY_SEARCH,
     POLICY_ADD,
     POLICY_EDIT,
-    POLICY_PERMISSION_HELPING_TEXT,
 } from "../../constants/PolicyConstants";
 
 import {
@@ -55,7 +47,7 @@ import { componentSearch, titleCase, convertToLang } from '../utils/commonUtils'
 import { ADMIN } from '../../constants/Constants';
 import { policyColumns } from '../utils/columnsUtils';
 
-var coppyPolicy = [];
+var copyPolicy = [];
 var status = true;
 
 class Policy extends Component {
@@ -85,7 +77,6 @@ class Policy extends Component {
             appsGotted: false,
 
         }
-
 
     }
 
@@ -146,8 +137,6 @@ class Policy extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props !== prevProps) {
-            // console.log('this.props ', this.props.policies);
-            // console.log('updated', this.props.guestAlldealerApps, this.props.enableAlldealerApps, this.props.encryptedAlldealerApps)
 
             this.setState({
                 defaultPagingValue: this.props.DisplayPages,
@@ -170,8 +159,6 @@ class Policy extends Component {
     }
 
     handlePagination = (value) => {
-        //   alert(value);
-        //  console.log('pagination value of ', value)
         this.refs.policyList.handlePagination(value);
         this.props.postPagination(value, 'policies');
     }
@@ -185,11 +172,11 @@ class Policy extends Component {
 
                 if (status) {
                     // console.log('status')
-                    coppyPolicy = this.state.policies;
+                    copyPolicy = this.state.policies;
                     status = false;
                 }
                 // console.log(this.state.users,'coppy de', coppyDevices)
-                let foundPolicies = componentSearch(coppyPolicy, value);
+                let foundPolicies = componentSearch(copyPolicy, value);
                 // console.log('found devics', foundPolicies)
                 if (foundPolicies.length) {
                     this.setState({
@@ -204,7 +191,7 @@ class Policy extends Component {
                 status = true;
 
                 this.setState({
-                    policies: coppyPolicy,
+                    policies: copyPolicy,
                 })
             }
         } catch (error) {
@@ -213,31 +200,22 @@ class Policy extends Component {
     }
 
     handleSearch = (e) => {
-        //  console.log('============ check search value ========')
-        //  console.log(e.target.name , e.target.value);
 
         let demoPolicy = [];
         if (status) {
-            coppyPolicy = this.state.policies;
+            copyPolicy = this.state.policies;
             status = false;
         }
-        //   console.log("devices", coppyDevices);
 
         if (e.target.value.length) {
-            // console.log("keyname", e.target.name);
-            // console.log("value", e.target.value);
-            // console.log(this.state.devices);
-            coppyPolicy.forEach((policy) => {
-                //   console.log(policy,"user", policy[e.target.name]);
+            copyPolicy.forEach((policy) => {
 
                 if (policy[e.target.name] !== undefined) {
                     if ((typeof policy[e.target.name]) === 'string') {
-                        //  console.log("string check", policy[e.target.name])
                         if (policy[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoPolicy.push(policy);
                         }
                     } else if (policy[e.target.name] !== null) {
-                        // console.log("else null check", policy[e.target.name])
                         if (policy[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoPolicy.push(policy);
                         }
@@ -254,11 +232,12 @@ class Policy extends Component {
             })
         } else {
             this.setState({
-                policies: coppyPolicy
+                policies: copyPolicy
             })
         }
     }
 
+    // Add Policy Modal (I think)
     handlePolicyModal = (visible) => {
         let _this = this;
         Modal.confirm({
@@ -292,6 +271,7 @@ class Policy extends Component {
         });
     }
 
+    // Edit Policy Methods
     editPolicyModal = (policy) => {
         // console.log('object', policy)
         this.setState({
@@ -336,10 +316,11 @@ class Policy extends Component {
 
 
     render() {
-        // console.log(this.refs.editPolicy, 'dsklfsdlkfjlksd', this.refs)
 
         return (
             <Fragment>
+
+                {/* AppFilter */}
                 <AppFilter
                     handleFilterOptions={this.handleFilterOptions}
                     searchPlaceholder={convertToLang(this.props.translation[POLICY_SEARCH], "Search Policy")}
@@ -356,6 +337,33 @@ class Policy extends Component {
                     handleComponentSearch={this.handleComponentSearch}
                     translation={this.props.translation}
                 />
+
+                {/* Add Policy Modal */}
+                <Modal
+                    maskClosable={false}
+                    width="780px"
+                    className="policy_popup"
+                    visible={this.state.policyModal}
+                    title={convertToLang(this.props.translation[POLICY_ADD], "Add Policy")}
+                    onOk={() => this.handlePolicyModal2(false)}
+                    onCancel={() => this.handlePolicyModal(false)}
+                    destroyOnClose={true}
+                    okText={convertToLang(this.props.translation[Button_Save], "Save")}
+                    footer={null}
+                    ref='modal'
+                >
+                    <AddPolicy
+                        // app_list={this.props.app_list}
+                        handlePolicyModal={this.handlePolicyModal2}
+                        getPolicies={this.props.getPolicies}
+                        goToLastTab={this.state.goToLastTab}
+                        refreshForm={this.state.formRefresh}
+                        ref='addPolicy'
+                        translation={this.props.translation}
+                    />
+                </Modal>
+                
+                {/* Policy List */}
                 <PolicyList
                     onChangeTableSorting={this.handleTableChange}
                     user={this.props.user}
@@ -382,32 +390,10 @@ class Policy extends Component {
                     handleAppGotted={this.props.handleAppGotted}
                     appsGotted={this.state.appsGotted}
                     translation={this.props.translation}
-
+                    push_apps = {this.props.push_apps}
                 />
-                <Modal
-                    maskClosable={false}
-                    width="780px"
-                    className="policy_popup"
-                    visible={this.state.policyModal}
-                    title={convertToLang(this.props.translation[POLICY_ADD], "Add Policy")}
-                    onOk={() => this.handlePolicyModal2(false)}
-                    onCancel={() => this.handlePolicyModal(false)}
-                    destroyOnClose={true}
-                    okText={convertToLang(this.props.translation[Button_Save], "Save")}
-                    footer={null}
-                    ref='modal'
-                >
-                    <AddPolicy
-                        apk_list={this.props.apk_list}
-                        app_list={this.props.app_list}
-                        handlePolicyModal={this.handlePolicyModal2}
-                        getPolicies={this.props.getPolicies}
-                        goToLastTab={this.state.goToLastTab}
-                        refreshForm={this.state.formRefresh}
-                        ref='addPolicy'
-                        translation={this.props.translation}
-                    />
-                </Modal>
+
+                {/* Edit Policy */}
                 <Modal
                     maskClosable={false}
                     width="780px"
@@ -446,6 +432,7 @@ class Policy extends Component {
                         getPolicies={this.props.getPolicies}
                         wrappedComponentRef={(form) => this.form = form}
                         ref='editPolicy'
+                        
                         translation={this.props.translation}
                     />
                 </Modal>
@@ -458,9 +445,15 @@ function mapDispatchToProps(dispatch) {
 
     return bindActionCreators({
         getPolicies: getPolicies,
-        // postDropdown: postDropdown,
+        
+        // dropdown actions
+        getDropdown: getDropdown,
+        postDropdown: postDropdown,
+        
+        // pagination actions
         postPagination: postPagination,
         getPagination: getPagination,
+        
         handlePolicyStatus: handlePolicyStatus,
         handleEditPolicy: handleEditPolicy,
         SavePolicyChanges: SavePolicyChanges,
@@ -474,18 +467,15 @@ function mapDispatchToProps(dispatch) {
         resetPlicies: resetPlicies,
         resetAddPolicyForm: resetAddPolicyForm,
         handleAppGotted: handleAppGotted
-        // getApkList: getApkList,
         // getDefaultApps: getDefaultApps
     }, dispatch);
 }
 var mapStateToProps = ({ policies, auth, settings }) => {
-    // console.log('pages to display', policies.DisplayPages)
-    // console.log("policies", policies);
+    
     return {
         user: auth.authUser,
         policies: policies.policies,
         apk_list: policies.apk_list,
-        app_list: policies.app_list,
         push_apps: policies.dealer_apk_list,
         appPermissions: policies.appPermissions,
         DisplayPages: policies.DisplayPages,
