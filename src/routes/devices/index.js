@@ -553,9 +553,9 @@ class Devices extends Component {
 
                 if (dumydata[index].className !== 'row') {
                     dumydata[index].className = 'hide';
-                    // if(dumydata[index].children) {
+                    if(dumydata[index].children) {
                     dumydata[index].children[0].className = 'hide';
-                    // }
+                    }
                     // dumydata[]
                 }
                 // console.log(this.state.tabselect)

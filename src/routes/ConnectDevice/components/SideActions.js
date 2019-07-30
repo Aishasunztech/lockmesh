@@ -783,12 +783,17 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                <Tooltip title="Coming Soon">
-                                    <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />
+                                {/* <Tooltip title="Coming Soon"> */}
+                                    <Button 
+                                    type="default" 
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} 
+                                    disabled={(this.props.device.flagged === 'Not flagged') ? 'disabled' : ''}
+                                    >
+                                        <Icon type="swap" />
                                         {/* <IntlMessages id="button.Transfer" /> */}
                                         {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button>
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
-                                </Tooltip>
+                                {/* </Tooltip> */}
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}

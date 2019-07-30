@@ -94,7 +94,7 @@ class Customizer extends Component {
         });
       });
   };
- 
+
   toggleCustomizer = () => {
     this.setState(previousState => (
       {
@@ -151,20 +151,24 @@ class Customizer extends Component {
       vars = Object.assign({}, initialValue, JSON.parse(localStorage.getItem('app-theme')));
     } finally {
       this.state = { vars, initialValue, isCustomizerOpened: false };
-      window.less
-        .modifyVars(vars)
-        .then(() => {
-        })
-        .catch(error => {
-          message.error(`Failed to update theme`);
-        });
+      if (window.less.modifyVars) {
+        window.less
+          .modifyVars(vars)
+          .then(() => {
+          })
+          .catch(error => {
+            message.error(`Failed to update theme`);
+          });
+      } else {
+        message.error(`Check Please you internet connection`);
+      }
     }
   }
 
   render() {
 
     return (
-     <div></div>
+      <div></div>
     );
   }
 }

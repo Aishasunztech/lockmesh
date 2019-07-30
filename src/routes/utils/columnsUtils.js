@@ -1985,7 +1985,7 @@ export function apkColumns(translation) {
                 </span>),
             dataIndex: 'permission',
             key: 'permission',
-            className: ''
+            // className: ''
         },
         {
             title:
@@ -2000,11 +2000,13 @@ export function apkColumns(translation) {
             // title: 'SHOW ON DEVICE',
             dataIndex: 'apk_status',
             key: 'apk_status',
+            // className: ''
         },
         {
             title: convertToLang(translation[APK], "APK"),
             dataIndex: 'apk',
             key: 'apk',
+            // className: ''
         },
         {
             title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
@@ -2013,17 +2015,20 @@ export function apkColumns(translation) {
             key: 'apk_name',
             sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
             sortDirections: ['ascend', 'descend'],
-            defaultSortOrder: "ascend"
+            defaultSortOrder: "ascend",
+            // className: ''
         },
         {
             title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
             dataIndex: 'apk_logo',
             key: 'apk_logo',
+            // className: ''
         },
         {
             title: convertToLang(translation[APK_SIZE], "APP SIZE"),
             dataIndex: 'apk_size',
             key: 'apk_size',
+            // className: ''
         },
     ])
 }
