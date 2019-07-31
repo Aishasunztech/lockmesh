@@ -2012,14 +2012,14 @@ export function policyColumns(translation, handleSearch) {
                     className="search_heading"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[""], "EDIT DATE")}
+                    placeholder={convertToLang(translation[""], "LAST EDIT")}
                 />
             ),
             dataIndex: 'last_edited',
             className: '',
             children: [
                 {
-                    title: convertToLang(translation[""], "EDIT DATE"),
+                    title: convertToLang(translation[""], "LAST EDIT"),
                     align: "center",
                     className: '',
                     dataIndex: 'last_edited',

@@ -277,7 +277,7 @@ class EditApkForm extends Component {
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
                             size = info.file.response.size;
-                            console.log(info.file.response.version);
+                            // console.log(info.file.response.version);
                             versionName = info.file.response.version
                         }
                         successMessage({
