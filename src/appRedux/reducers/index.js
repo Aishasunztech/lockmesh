@@ -10,9 +10,9 @@ import Account from "./Account"
 import Policy from "./Policy";
 import Users from "./Users";
 import AppMarket from "./AppMarket";
-import Soccket from "./Socket";
+import socket from "./Socket";
 import SideBar from "./SideBar"
-
+import Agents from './Agent';
 
 const reducers = combineReducers({
   routing: routerReducer,
@@ -26,7 +26,8 @@ const reducers = combineReducers({
   policies: Policy,
   users: Users,
   appMarket: AppMarket,
-  socket: Soccket,
+  agents: Agents,
+  socket: socket,
   sidebar: SideBar
 });
 

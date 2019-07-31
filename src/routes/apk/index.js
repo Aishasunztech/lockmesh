@@ -66,12 +66,7 @@ class Apk extends Component {
 
         // this.columns = ;
         this.confirm = Modal.confirm;
-        // binding methods
-        this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
-        this.handleStatusChange = this.handleStatusChange.bind(this);
-        // this.tableChangeHandler = this.tableChangeHandler.bind(this);
-
-
+        
     }
 
     // handleTableChange = (pagination, query, sorter) => {
@@ -82,7 +77,6 @@ class Apk extends Component {
     // };
 
     handleTableChange = (pagination, query, sorter) => {
-        console.log('sorter func', sorter)
         let { columns } = this.state;
 
         columns.forEach(column => {

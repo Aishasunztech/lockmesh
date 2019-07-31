@@ -743,6 +743,23 @@ const RestService = {
         return axios.get(BASE_URL + 'users/sim-history/' + device_id, RestService.getHeader());
     },
 
+    // Dealer Agents Section
+    getAgentList: () => {
+        return axios.get(BASE_URL + 'users/agents', RestService.getHeader())
+    },
+    addAgent: (agent) => {
+        return axios.post(BASE_URL + 'users/agents', {
+            ...agent
+        }, RestService.getHeader());
+    },
+    updateAgent: (agent) => {
+        return axios.put(BASE_URL + 'users/agents/' + agent.id, {
+            ...agent
+        }, RestService.getHeader());
+    },
+    deleteAgent: (agentId) => {
+        return axios.delete(BASE_URL + 'users/agents' + agentId, RestService.getHeader());
+    }
 
 }
 export default RestService;

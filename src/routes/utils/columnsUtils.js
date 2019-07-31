@@ -1792,6 +1792,7 @@ export function controlColumns(translation) {
         }
     ]);
 }
+
 export function policyColumns(translation, handleSearch) {
     return ([
         //     title: 'ACTIONS',
@@ -1954,7 +1955,6 @@ export function policyColumns(translation, handleSearch) {
     )
 };
 
-
 export function apkColumns(translation) {
     return ([
         {
@@ -2026,4 +2026,188 @@ export function apkColumns(translation) {
             key: 'apk_size',
         },
     ])
+}
+
+export function dealerAgentColumns(translation, handleSearch) {
+    return ([
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        // action
+        {
+            title: convertToLang(translation[ACTION], "ACTION"),
+            align: "center",
+            dataIndex: 'action',
+            key: "action",
+        },
+        // username
+        {
+            title: (
+                <div>
+                    <Input.Search
+                        name="name"
+                        key="name"
+                        id="name"
+                        className="search_heading device_id_w"
+                        autoComplete="new-password"
+                        onKeyUp={handleSearch}
+                        placeholder={convertToLang(translation['USERNAME'], "USERNAME")}
+                    />
+                </div>
+            ),
+            dataIndex: 'name',
+            className: 'row',
+            children: [
+                {
+                    title: convertToLang(translation['USERNAME'], "USERNAME"),
+                    align: "center",
+                    dataIndex: 'name',
+                    key: "name",
+                    className: 'row device_id_w_td',
+                    onFilter: (value, record) => record.devices.indexOf(value) === 0,
+                    sorter: (a, b) => {return a.name.localeCompare(b.name) },
+                    // sortDirections: ['ascend', 'descend'],
+                }
+            ],
+        },
+        // staff_id
+        {
+            title: (
+                <Input.Search
+                    name="staff_id"
+                    key="staff_id"
+                    id="staff_id"
+                    className="search_heading user_id_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation["STAFF ID"], "STAFF ID")}
+                />
+            ),
+            dataIndex: 'staff_id',
+            children: [
+                {
+                    title: convertToLang(translation["STAFF ID"], "STAFF ID"),
+                    align: "center",
+                    dataIndex: 'staff_id',
+                    key: "staff_id",
+                    sorter: (a, b) => {
+                        // console.log(a, 'user is is')
+                        return a.staff_id.localeCompare(b.staff_id)
+                    },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
+        },
+        
+        // permission
+        {
+            title: (
+                <Input.Search
+                    name="type"
+                    key="type"
+                    id="type"
+                    className="search_heading user_name_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation["PERMISSION"], "PERMISSION")}
+                />
+            ),
+            dataIndex: 'type',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation["PERMISSION"], "PERMISSION"),
+                dataIndex: 'type',
+                align: "center",
+                key: 'type',
+                sorter: (a, b) => { return a.type.localeCompare(b.type) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+
+        // status
+        {
+            title: (
+                <Input.Search
+                    name="status"
+                    key="status"
+                    id="status"
+                    className="search_heading email_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation['STATUS'], "STATUS")}
+                />
+            ),
+            dataIndex: 'status',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation['STATUS'], "STATUS"),
+                dataIndex: 'status',
+                align: "center",
+                key: 'status',
+                // sorter: (a, b) => { return a.status.localeCompare(b.status.toString()) },
+                // sortDirections: ['ascend', 'descend'],
+            }]
+        },
+
+        // email
+        {
+            title: (
+                <Input.Search
+                    name="email"
+                    key="email"
+                    id="email"
+                    className="search_heading email_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[USER_EMAIL], "EMAIL")}
+                />
+            ),
+            dataIndex: 'email',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation[USER_EMAIL], "EMAIL"),
+                dataIndex: 'email',
+                align: "center",
+                key: 'email',
+                sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+        
+        {
+            title: (
+                <Input.Search
+                    name="created_at"
+                    key="created_at"
+                    id="created_at"
+                    className="search_heading created_at_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation['DATE.CREATED'], "DATE CREATED")}
+                />
+            ),
+            dataIndex: 'created_at',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation['DATE.CREATED'], "DATE CREATED"),
+                dataIndex: 'created_at',
+                align: "center",
+                key: 'created_at',
+                sorter: (a, b) => { return a.created_at.localeCompare(b.created_at.toString()) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+
+        {
+            title: convertToLang(translation["SUPPORT.CALLS"], "SUPPORT CALLS"),
+            align: "center",
+            dataIndex: 'support_calls',
+            key: "support_calls",
+            className: "token_w",
+        },
+    ]);
 }
