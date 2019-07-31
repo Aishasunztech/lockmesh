@@ -142,7 +142,7 @@ class EditPolicy extends Component {
     }
 
     componentDidMount() {
-        
+
         if (this.props.editAblePolicy.length) {
             let editAblePolicy = this.props.editAblePolicy.find(item => item.id === this.props.editAblePolicyId)
             // console.log("push_apps:", this.props.push_apps)
@@ -150,10 +150,10 @@ class EditPolicy extends Component {
             // showing updated Policy Push Apps
             // this.props.apk_list
 
-            this.props.push_apps.map((apk)=> {
+            this.props.push_apps.map((apk) => {
                 let index = editAblePolicy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
-                if(index && index !== -1){
-                    
+                if (index && index !== -1) {
+
                     editAblePolicy.push_apps[index].apk = apk.apk;
                     editAblePolicy.push_apps[index].apk_name = apk.apk_name;
                     editAblePolicy.push_apps[index].logo = apk.logo;
@@ -212,10 +212,10 @@ class EditPolicy extends Component {
             if (this.props.editAblePolicy.length) {
                 let editAblePolicy = this.props.editAblePolicy.find(item => item.id === this.props.editAblePolicyId)
 
-                this.props.push_apps.map((apk)=> {
+                this.props.push_apps.map((apk) => {
                     let index = editAblePolicy.push_apps.findIndex(app => app.apk_id === apk.apk_id)
-                    if(index && index !== -1){
-                    
+                    if (index && index !== -1) {
+
                         editAblePolicy.push_apps[index].apk = apk.apk;
                         editAblePolicy.push_apps[index].apk_name = apk.apk_name;
                         editAblePolicy.push_apps[index].logo = apk.logo;
@@ -302,7 +302,20 @@ class EditPolicy extends Component {
     renderApp = (data) => {
         // console.log('data is', data)
         if (data.length) {
-            return data.map(app => {
+            let featuredApps = []
+            let apps = []
+            let allApks = []
+            data.map((item, index) => {
+                if (item.package_name === 'com.armorSec.android' || item.package_name === 'ca.unlimitedwireless.mailpgp' || item.package_name === 'com.rim.mobilefusion.client') {
+                    featuredApps.push(item);
+                    // allApks.splice(index, 1)
+                } else {
+                    apps.push(item)
+                }
+            })
+
+            allApks = [...featuredApps, ...apps]
+            return allApks.map(app => {
                 let app_id = (app.apk_id !== undefined) ? app.apk_id : app.id;
                 let label = (app.apk_name !== undefined) ? app.apk_name : app.label;
                 let icon = (app.logo !== undefined) ? app.logo : app.icon;

@@ -156,7 +156,7 @@ class EditDevice extends Component {
                             <Form.Item
                                 label={convertToLang(this.props.translation[USER_ID], "USER ID")}
                                 labelCol={{ span: 8, xs: 24, md: 8, sm: 24 }}
-                                wrapperCol={{ span: 10 }}
+                                wrapperCol={{ span: 14, md: 14, xs: 24 }}
                             >
 
 

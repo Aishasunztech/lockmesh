@@ -1933,9 +1933,7 @@ export function policyColumns(translation, handleSearch) {
                     className: '',
                     dataIndex: 'policy_note',
                     key: 'policy_note',
-                    // ...this.getColumnSearchProps('status'),
                     sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
-
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -1950,7 +1948,90 @@ export function policyColumns(translation, handleSearch) {
             dataIndex: 'default_policy',
             key: 'default_policy',
         },
+        {
+            title: (
+                <Input.Search
+                    name="created_by"
+                    key="created_by"
+                    id="created_by"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREATED BY")}
+                />
+            ),
+            dataIndex: 'created_by',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREATED BY"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'created_by',
+                    key: 'created_by',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.created_by.localeCompare(b.created_by) },
 
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="created_date"
+                    key="created_date"
+                    id="created_date"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREATED DATE")}
+                />
+            ),
+            dataIndex: 'created_date',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREATED DATE"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'created_date',
+                    key: 'created_date',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.created_date.localeCompare(b.created_date) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="last_edited"
+                    key="last_edited"
+                    id="last_edited"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "LAST EDIT")}
+                />
+            ),
+            dataIndex: 'last_edited',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "LAST EDIT"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'last_edited',
+                    key: 'last_edited',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.last_edited.localeCompare(b.last_edited) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
     ]
     )
 };
@@ -2024,6 +2105,71 @@ export function apkColumns(translation) {
             title: convertToLang(translation[APK_SIZE], "APP SIZE"),
             dataIndex: 'apk_size',
             key: 'apk_size',
+        },
+        {
+            title: convertToLang(translation[""], "VERSION"),
+            dataIndex: 'version',
+            key: 'version',
+        },
+        {
+            title: convertToLang(translation[""], "UPLOAD DATE"),
+            dataIndex: 'created_at',
+            key: 'created_at',
+        },
+        {
+            title: convertToLang(translation[""], "LAST EDIT"),
+            dataIndex: 'updated_at',
+            key: 'updated_at',
+        },
+    ])
+}
+export function featureApkColumns(translation) {
+    return ([
+        {
+            title: (
+                <span>
+                    {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
+                    <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
+                        `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+                            <i class="fa fa-caret-right" aria-hidden="true"></i> 
+                            </a> to Add, remove or View
+                            <br/> the Dealers who have permission
+                            <br/>to use this App</p>`)} />)}>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>),
+            dataIndex: 'permission',
+            key: 'permission',
+            className: ''
+        },
+        {
+            title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
+            dataIndex: 'apk_name',
+            width: "100",
+            key: 'apk_name',
+            sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
+            sortDirections: ['ascend', 'descend'],
+            defaultSortOrder: "ascend"
+        },
+        {
+            title: convertToLang(translation["APP VERSION"], "APP VERSION"),
+            dataIndex: 'apk_version',
+            key: 'apk_version',
+        },
+        {
+            title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
+            dataIndex: 'apk_logo',
+            key: 'apk_logo',
+        },
+        {
+            title: convertToLang(translation[APK_SIZE], "APP SIZE"),
+            dataIndex: 'apk_size',
+            key: 'apk_size',
+        },
+        {
+            title: convertToLang(translation["UPDATED DATE"], "LAST UPDATE"),
+            dataIndex: 'updated_date',
+            key: 'updated_date',
         },
     ])
 }
