@@ -250,7 +250,6 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = 'hide';
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
             }
-
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }

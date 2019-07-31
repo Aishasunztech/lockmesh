@@ -170,7 +170,7 @@ class AddApk extends Component {
     }
 
     render() {
-        console.log(this.props.translation)
+        // console.log(this.props.translation)
         const { getFieldDecorator } = this.props.form;
         let fileList = [];
         const formItemLayout = {
