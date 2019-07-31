@@ -79,6 +79,7 @@ class Customizer extends Component {
     const { vars } = this.state;
     if (varname) vars[varname] = color;
     // console.log("vars: ", vars)
+    if (window.less.modifyVars) {
     window.less
       .modifyVars(vars)
       .then(() => {
@@ -93,6 +94,11 @@ class Customizer extends Component {
           title: `Failed to update theme`,
         });
       });
+    } else {
+      error({
+        title: `Internet Problem`,
+      });
+    }
   };
  
   toggleCustomizer = () => {
@@ -151,6 +157,7 @@ class Customizer extends Component {
       vars = Object.assign({}, initialValue, JSON.parse(localStorage.getItem('app-theme')));
     } finally {
       this.state = { vars, initialValue, isCustomizerOpened: false };
+      if (window.less.modifyVars) {
       window.less
         .modifyVars(vars)
         .then(() => {
@@ -158,6 +165,11 @@ class Customizer extends Component {
         .catch(error => {
           message.error(`Failed to update theme`);
         });
+      } else {
+        error({
+          title: `Internet Problem`,
+        });
+      }
     }
   }
 

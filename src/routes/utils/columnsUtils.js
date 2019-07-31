@@ -1718,7 +1718,7 @@ export function mobileManagePasswords(translation) {
 
         {
             pageName: GUEST_PASSWORD,
-            value: convertToLang(translation[SET_GUEST_PASSWORD], "Set Guest Passwordasd")
+            value: convertToLang(translation[SET_GUEST_PASSWORD], "Set Guest Password")
         },
         {
             pageName: ENCRYPTED_PASSWORD,

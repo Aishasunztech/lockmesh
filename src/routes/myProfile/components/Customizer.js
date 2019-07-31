@@ -83,20 +83,26 @@ class Customizer extends Component {
     const { vars } = this.state;
     if (varname) vars[varname] = color;
     // console.log("vars: ", vars)
-    window.less
-      .modifyVars(vars)
-      .then(() => {
-        success({
-          title: `Theme updated successfully`,
+    if (window.less.modifyVars) {
+      window.less
+        .modifyVars(vars)
+        .then(() => {
+          success({
+            title: `Theme updated successfully`,
+          });
+          this.setState({ vars });
+          localStorage.setItem("app-theme", JSON.stringify(vars));
+        })
+        .catch(err => {
+          error({
+            title: `Failed to update theme`,
+          });
         });
-        this.setState({ vars });
-        localStorage.setItem("app-theme", JSON.stringify(vars));
-      })
-      .catch(err => {
-        error({
-          title: `Failed to update theme`,
-        });
+    } else {
+      error({
+        title: `Internet Problem`,
       });
+    }
   };
   getColorPicker = (varName) => (
     <div key={varName} className="gx-media gx-mb-1">
