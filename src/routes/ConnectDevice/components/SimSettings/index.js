@@ -172,14 +172,15 @@ class SimSettings extends Component {
         }
     }
     render() {
-        const {
+        let {
             guestSimAll,
             encryptSimAll,
             unrGuest,
             unrEncrypt,
             sim_list,
         } = this.props;
-        // console.log('sim list is ', sim_list);
+        console.log('sim list is ', sim_list);
+        if (sim_list.length == 0) { unrGuest=0; unrEncrypt=0; guestSimAll=0; encryptSimAll=0; }
         return (
             <div>
                 <Fragment>
