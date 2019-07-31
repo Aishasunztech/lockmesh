@@ -26,6 +26,7 @@ import {
     DEVICE_UNLINKED,
     ADMIN,
     DEVICE_TRIAL,
+    DEVICE_TRANSFER,
 } from '../../constants/Constants'
 
 import {
@@ -114,6 +115,7 @@ class Devices extends Component {
             unlinkedDevices: [],
             filteredDevices: [],
             flaggedDevices: [],
+            transferredDevices: [],
             copy_status: true,
             translation: {},
         }
@@ -270,7 +272,7 @@ class Devices extends Component {
             case DEVICE_ACTIVATED:
                 this.setState({
                     devices: this.state.activeDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '4',
                     copy_status: true
                 })
@@ -279,7 +281,7 @@ class Devices extends Component {
             case DEVICE_TRIAL:
                 this.setState({
                     devices: this.state.trialDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '9',
                     copy_status: true
                 })
@@ -288,15 +290,23 @@ class Devices extends Component {
             case DEVICE_SUSPENDED:
                 this.setState({
                     devices: this.state.suspendDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '7',
+                    copy_status: true
+                })
+                break;
+            case DEVICE_TRANSFER:
+                this.setState({
+                    devices: this.state.transferredDevices,
+                    // column: this.columns,
+                    tabselect: '8',
                     copy_status: true
                 })
                 break;
             case DEVICE_FLAGGED:
                 this.setState({
                     devices: this.state.flaggedDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '10',
                     copy_status: true
                 })
@@ -304,7 +314,7 @@ class Devices extends Component {
             case DEVICE_EXPIRED:
                 this.setState({
                     devices: this.state.expireDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '6',
                     copy_status: true
                 })
@@ -313,7 +323,7 @@ class Devices extends Component {
                 this.setState({
                     devices: this.state.allDevices,
                     filteredDevices: this.props.devices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '1',
                     copy_status: true
                 })
@@ -321,7 +331,7 @@ class Devices extends Component {
             case DEVICE_UNLINKED:
                 this.setState({
                     devices: this.state.unlinkedDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '5'
                     , copy_status: true
                 })
@@ -330,7 +340,7 @@ class Devices extends Component {
                 // alert(value);
                 this.setState({
                     devices: this.state.pendingDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '2',
                     copy_status: true
                 })
@@ -338,7 +348,7 @@ class Devices extends Component {
             case DEVICE_PRE_ACTIVATION:
                 this.setState({
                     devices: this.state.preActiveDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '3',
                     copy_status: true
                 })
@@ -346,7 +356,7 @@ class Devices extends Component {
             default:
                 this.setState({
                     devices: this.state.allDevices,
-                    column: this.columns,
+                    // column: this.columns,
                     tabselect: '1'
                 })
                 break;
@@ -437,7 +447,7 @@ class Devices extends Component {
                 // devices = this.state.activeDevices
                 this.setState({
                     devices: this.filterList(DEVICE_ACTIVATED, this.props.devices), // devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '4',
                     copy_status: true
                 })
@@ -446,7 +456,7 @@ class Devices extends Component {
                 // devices = this.state.trialDevices
                 this.setState({
                     devices: this.filterList(DEVICE_TRIAL, this.props.devices), // devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '9',
                     copy_status: true
                 })
@@ -455,7 +465,7 @@ class Devices extends Component {
                 // devices = this.state.suspendDevices
                 this.setState({
                     devices: this.filterList(DEVICE_SUSPENDED, this.props.devices), // devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '7',
                     copy_status: true
                 })
@@ -464,7 +474,7 @@ class Devices extends Component {
                 // devices = this.state.expireDevices
                 this.setState({
                     devices: this.filterList(DEVICE_EXPIRED, this.props.devices), // devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '6',
                     copy_status: true
                 })
@@ -472,7 +482,7 @@ class Devices extends Component {
             case '1':
                 this.setState({
                     devices: this.props.devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '1',
                     copy_status: true
                 })
@@ -481,7 +491,7 @@ class Devices extends Component {
                 // devices = this.state.unlinkedDevices
                 this.setState({
                     devices: this.filterList(DEVICE_UNLINKED, this.props.devices), // devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '5',
                     copy_status: true
                 })
@@ -490,7 +500,7 @@ class Devices extends Component {
                 // devices = this.state.pendingDevices
                 this.setState({
                     devices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices), // devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '2',
                     copy_status: true
                 })
@@ -499,15 +509,15 @@ class Devices extends Component {
                 // devices = this.state.preActiveDevices
                 this.setState({
                     devices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices), //  devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '3',
                     copy_status: true
                 })
                 break;
             case "8":
                 this.setState({
-                    devices: [],
-                    column: this.state.columns,
+                    devices: this.filterList(DEVICE_TRANSFER, this.props.devices),
+                    // column: this.state.columns,
                     tabselect: '8',
                     copy_status: true
                 })
@@ -515,7 +525,7 @@ class Devices extends Component {
             case "10":
                 this.setState({
                     devices: this.filterList(DEVICE_FLAGGED, this.props.devices), // this.state.flaggedDevices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '10',
                     copy_status: true
                 })
@@ -523,7 +533,7 @@ class Devices extends Component {
             default:
                 this.setState({
                     devices: this.props.devices,
-                    column: this.state.columns,
+                    // column: this.state.columns,
                     tabselect: '1',
                     copy_status: true
                 })
@@ -553,8 +563,8 @@ class Devices extends Component {
 
                 if (dumydata[index].className !== 'row') {
                     dumydata[index].className = 'hide';
-                    if(dumydata[index].children) {
-                    dumydata[index].children[0].className = 'hide';
+                    if (dumydata[index].children) {
+                        dumydata[index].children[0].className = 'hide';
                     }
                     // dumydata[]
                 }
@@ -614,6 +624,7 @@ class Devices extends Component {
                 pendingDevices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
                 unlinkedDevices: this.filterList(DEVICE_UNLINKED, this.props.devices),
                 flaggedDevices: this.filterList(DEVICE_FLAGGED, this.props.devices),
+                transferredDevices: this.filterList(DEVICE_TRANSFER, this.props.devices),
                 // transferDevices: this.filterList(DEVICE_TRANSFER,this.props.devices),
 
 
@@ -717,6 +728,7 @@ class Devices extends Component {
                 <Select.Option value={DEVICE_SUSPENDED}> {convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)} </Select.Option>
                 <Select.Option value={DEVICE_PRE_ACTIVATION}> {convertToLang(this.props.translation[Tab_PreActivated], Tab_PreActivated)}  </Select.Option>
                 <Select.Option value={DEVICE_PENDING_ACTIVATION}> {convertToLang(this.props.translation[Tab_PendingActivation], Tab_PendingActivation)} </Select.Option>
+                <Select.Option value={DEVICE_TRANSFER}> {convertToLang(this.props.translation[Tab_Transfer], Tab_Transfer)} </Select.Option>
                 <Select.Option value={DEVICE_FLAGGED}> {convertToLang(this.props.translation[Tab_Flagged], Tab_Flagged)} </Select.Option>
                 <Select.Option value={DEVICE_UNLINKED}> {convertToLang(this.props.translation[Tab_Unlinked], Tab_Unlinked)} </Select.Option>
 
@@ -786,6 +798,7 @@ class Devices extends Component {
                                 pendingDevices={this.state.pendingDevices.length}
                                 unlinkedDevices={this.state.unlinkedDevices.length}
                                 flaggedDevices={this.state.flaggedDevices.length}
+                                transferredDevices={this.state.transferredDevices.length}
                                 trialDevices={this.state.trialDevices.length}
                                 suspendDevice={this.props.suspendDevice}
                                 activateDevice={this.props.activateDevice}

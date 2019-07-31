@@ -15,6 +15,7 @@ export const DEVICE_TRIAL = "Trial";
 export const DEVICE_SUSPENDED = "Suspended";
 export const DEVICE_EXPIRED = "Expired";
 export const DEVICE_UNLINKED = "Unlinked";
+export const DEVICE_TRANSFER = "Transfer";
 export const DEVICE_PENDING_ACTIVATION = "Pending activation";
 export const DEVICE_PRE_ACTIVATION = "Pre-activated";
 
