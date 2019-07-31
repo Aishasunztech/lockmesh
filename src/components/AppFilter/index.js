@@ -176,10 +176,8 @@ class AppFilter extends Component {
                                                         onKeyPress={toggleSelectAll}
                                                         key={tabIndex}
                                                     >
-                                                        <Checkbox
-                                                            checked={allSelectedOpt} className="slct_all"
-                                                        >
-                                                          <span className="upper_case">  {convertToLang(translation[Appfilter_SelectAll], "Select All")}</span>
+                                                        <Checkbox checked={allSelectedOpt} className="slct_all upper_case">
+                                                            <span className="upper_case">  {convertToLang(translation[Appfilter_SelectAll], "Select All")}</span>
                                                         </Checkbox>
                                                     </li>
                                                 );

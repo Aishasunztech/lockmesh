@@ -3,22 +3,23 @@ import { Col, Row, Switch, Button, Form, Input, Select, InputNumber } from 'antd
 import { checkValue, convertToLang } from '../../../utils/commonUtils'
 
 import {
-    DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
+    User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
 } from '../../../../constants/Constants';
-import { Button_Cancel, Button_submit, Button_Add } from '../../../../constants/ButtonConstants';
+import { Button_Cancel, Button_submit, Button_Add, Button_Update } from '../../../../constants/ButtonConstants';
 import { Required_Fields, DEVICE_SIM_ID, DEVICE_Select_SIM_ID, ONLY_NUMBER_ARE_ALLOWED, ICC_ID_20_LONG, ICC_ID, ICC_ID_IS_REQUIRED, NOTE } from '../../../../constants/DeviceConstants';
 import { Guest, ENCRYPT } from '../../../../constants/TabConstants';
 
 
-class RegisterSimForm extends Component {
+class EditSim extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
             help: '',
             iccidHelp: '',
             visible: false,
-            guest: false,
-            encrypt: false,
+            guest: props.editSim.guest ? true : false,
+            encrypt: props.editSim.encrypt ? true : false,
             validateStatus: ''
         }
     }
@@ -29,7 +30,6 @@ class RegisterSimForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('iccid is: ', values['iccid'])
             // let checkICCID = this.isValidLuhn(values['iccid'])
-
             values['guest'] = this.state.guest ? 1 : 0;
             values['encrypt'] = this.state.encrypt ? 1 : 0;
             values['data_limit'] = "";
@@ -40,6 +40,7 @@ class RegisterSimForm extends Component {
                 this.props.handleCancel();
                 this.handleReset();
             }
+
         });
     }
 
@@ -63,7 +64,7 @@ class RegisterSimForm extends Component {
         if ((value !== undefined) && value.length > 0) {
             // if (Number(value)) {
                 if (/^[a-zA-Z0-9]+$/.test(value)) {
-                if (value.length != 20) callback(`${convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 digits long")}  :(${value.length})`);
+                if (value.length != 20) callback(convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 digits long"));
 
             } else {
                 callback(convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers"));
@@ -72,23 +73,32 @@ class RegisterSimForm extends Component {
         callback();
     }
 
+
+    componentDidMount() {
+    }
     handleReset = () => {
         this.props.form.resetFields();
     }
+
 
     handleCancel = () => {
         this.handleReset();
         this.props.handleCancel();
     }
+    handleChange = (e) => {
+        this.setState({ type: e.target.value });
+    }
 
     render() {
-        var deviceSimIds = [];
-        deviceSimIds[0] = this.props.device.sim_id;
-        // console.log(deviceSimIds)
+        // console.log('props of editSim', this.props.editSim);
+        const { editSim } = this.props;
+
+        let deviceSimIds = [];
+        deviceSimIds[0] = editSim.sim_id;
+        console.log(deviceSimIds)
         if (deviceSimIds[0] === undefined || deviceSimIds[0] === 'undefined' || deviceSimIds[0] === "N/A" || deviceSimIds[0] === '' || deviceSimIds[0] === null) {
             deviceSimIds = []
         }
-        // console.log(deviceSimIds);
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
@@ -100,7 +110,7 @@ class RegisterSimForm extends Component {
                         wrapperCol={{ span: 14 }}
                     >
                         {this.props.form.getFieldDecorator('iccid', {
-                            initialValue: '',
+                            initialValue: editSim.iccid ? editSim.iccid : '',
                             rules: [
                                 {
                                     required: true,
@@ -111,7 +121,7 @@ class RegisterSimForm extends Component {
                                 }
                             ],
                         })(
-                            <Input />
+                            <Input disabled />
                         )}
                     </Form.Item>
 
@@ -121,7 +131,7 @@ class RegisterSimForm extends Component {
                         wrapperCol={{ span: 14 }}
                     >
                         {this.props.form.getFieldDecorator('name', {
-                            initialValue: '',
+                            initialValue: editSim.name ? editSim.name : '',
                             rules: [
                                 {
                                     required: true,
@@ -138,7 +148,7 @@ class RegisterSimForm extends Component {
                         wrapperCol={{ span: 14 }}
                     >
                         {this.props.form.getFieldDecorator('sim_id', {
-                            initialValue: '',
+                            initialValue: editSim.sim_id ? editSim.sim_id : '',
                         })(
                             <Select
                                 placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "SIM ID")}
@@ -158,7 +168,7 @@ class RegisterSimForm extends Component {
                         wrapperCol={{ span: 14 }}
                     >
                         {this.props.form.getFieldDecorator('note', {
-                            initialValue: this.props.user ? this.props.user.email : '',
+                            initialValue: editSim.note ? editSim.note : '',
                         })(
                             <Input onChange={(e) => this.check} />
                         )}
@@ -174,6 +184,7 @@ class RegisterSimForm extends Component {
                                     guest: !this.state.guest
                                 })
                             }}
+                                checked={this.state.guest ? true : false}
                                 size="small"
                             />
                         </Col>
@@ -183,6 +194,7 @@ class RegisterSimForm extends Component {
                                     encrypt: !this.state.encrypt
                                 })
                             }}
+                                checked={this.state.encrypt ? true : false}
                                 size="small"
                             />
                         </Col>
@@ -195,8 +207,8 @@ class RegisterSimForm extends Component {
                             sm: { span: 24, offset: 0 },
                         }}
                     >
-                        <Button key="back" type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
-                        <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_Add], "Add")} </Button>
+                        <Button type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
+                        <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_Update], "UPDATE")} </Button>
                     </Form.Item>
                 </Form>
 
@@ -205,5 +217,5 @@ class RegisterSimForm extends Component {
     }
 }
 
-const WrappedRegisterSimForm = Form.create()(RegisterSimForm);
-export default WrappedRegisterSimForm;
+const WrappedEditSim = Form.create()(EditSim);
+export default WrappedEditSim;

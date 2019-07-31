@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Modal, message } from 'antd';
-import AddRegistrationForm from './AddRegistrationForm';
-import { ADD_SIM_REGISTRATION } from '../../../../constants/DeviceConstants';
+import EditRegistrationForm from './EditRegistrationForm';
+import { EDIT_REGISTERED_SIM } from '../../../../constants/DeviceConstants';
 import { convertToLang } from '../../../utils/commonUtils';
 
 
 
-export default class RegisterSimModal extends Component {
+export default class EditModal extends Component {
 
     constructor(props) {
         super(props);
@@ -14,23 +14,28 @@ export default class RegisterSimModal extends Component {
             visible: false,
             expiry_date: 1,
             device: null,
-            preActive: false
+            preActive: false,
+            editSim: ''
         }
     }
 
-    showModal = () => {
+
+    showModal = (sim) => {
         this.setState({
             visible: true,
+            editSim: sim
         });
+
     }
 
     handleCancel = () => {
-        this.refs.add_sim_reg_form.resetFields();
+        this.refs.edit_sim_reg_form.resetFields();
         this.setState({ visible: false });
     }
 
     handleSubmitReg = (values) => {
-        this.props.simRegister(values);
+        // console.log('update data is: ', values)
+        this.props.handleSimUpdate({ obj: values });
     }
 
     render() {
@@ -39,22 +44,23 @@ export default class RegisterSimModal extends Component {
             <div>
                 <Modal
                     maskClosable={false}
-                    title={convertToLang(this.props.translation[ADD_SIM_REGISTRATION], "Add Sim Registration")}
+                    title={convertToLang(this.props.translation[EDIT_REGISTERED_SIM], "Edit Registered Sim")}
                     visible={visible}
                     footer={null}
                     onCancel={this.handleCancel}
                 >
-                    <AddRegistrationForm
+                    <EditRegistrationForm
                         AddSimHandler={this.handleSubmitReg}
                         handleCancel={this.handleCancel}
+                        editSim={this.state.editSim}
                         translation={this.props.translation}
                         deviceID={this.props.deviceID}
                         device={this.props.device}
                         total_dvc={this.props.total_dvc}
-                        ref="add_sim_reg_form"
+                        ref="edit_sim_reg_form"
                     />
                 </Modal >
-            </div>
+            </div >
         )
     }
 }

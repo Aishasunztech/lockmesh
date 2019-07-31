@@ -172,7 +172,7 @@ class AddDealer extends Component {
                     >
                         {getFieldDecorator('email', {
                             rules: [{
-                                type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], "The input is not valid E-mail!"),
+                                type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], "The input is not a valid E-mail!"),
                             }, {
                                 required: true, message: convertToLang(this.props.translation[PLZ_INPUT_Email], "Please input your E-mail!"),
                             }],

@@ -175,6 +175,7 @@ class AppList extends Component {
                             enableAll={this.state.enableAll}
                             encryptedAll={this.state.encryptedAll}
                             guestAll={this.state.guestAll} handleCheckedAll={this.handleCheckedAll}
+                            translation={this.props.translation}
                         />
                     )
                 }

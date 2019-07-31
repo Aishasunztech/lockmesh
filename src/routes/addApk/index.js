@@ -12,11 +12,11 @@ import { addApk, getApkList, checkApkName } from "../../appRedux/actions/Apk";
 import { Row, Icon, Card, Button, Divider, Form, Input, Upload, Col, message, Modal, Avatar } from 'antd';
 import RestService from '../../appRedux/services/RestServices'
 import { Button_Save, Button_Cancel } from "../../constants/ButtonConstants";
-import { APK_UPLOAD, APK_UPLOAD_FILE, APK_UPLOAD_ICON } from "../../constants/ApkConstants";
+import { APK_UPLOAD, APK_UPLOAD_FILE, APK_UPLOAD_ICON, APK_NAME, APK_ICON, APK_FILE, APK_SIZE } from "../../constants/ApkConstants";
 import { User_Name_require } from "../../constants/Constants";
 import { Required_Fields } from "../../constants/DeviceConstants";
 import { convertToLang } from '../utils/commonUtils';
- 
+
 // import asyncComponent from "util/asyncComponent";
 
 // console.log('token', token);
@@ -170,7 +170,7 @@ class AddApk extends Component {
     }
 
     render() {
-        console.log(this.props.translation)
+        // console.log(this.props.translation)
         const { getFieldDecorator } = this.props.form;
         let fileList = [];
         const formItemLayout = {
@@ -311,7 +311,7 @@ class AddApk extends Component {
                 <Card bordered={false}>
                     <p>(*)- {convertToLang(this.props.translation[Required_Fields], "Required Fields")}</p>
                     <Form onSubmit={this.handleSubmit} >
-                        <Form.Item {...formItemLayout} label="Apk name" className="upload_file">
+                        <Form.Item {...formItemLayout} label={convertToLang(this.props.translation[APK_NAME], "Apk name")} className="upload_file">
                             {getFieldDecorator('name', {
                                 rules: [{
                                     required: true, message: convertToLang(this.props.translation[User_Name_require], "Name"),
@@ -321,10 +321,10 @@ class AddApk extends Component {
                                 },
                                 ],
                             })(
-                                <Input />
+                                <Input placeholder={convertToLang(this.props.translation[APK_NAME], "Apk name")} />
                             )}
                         </Form.Item>
-                        <Form.Item label="Apk Icon" {...formItemLayout} className="upload_file">
+                        <Form.Item label={convertToLang(this.props.translation[APK_ICON], "Apk Icon")} {...formItemLayout} className="upload_file">
                             <div className="dropbox">
                                 {getFieldDecorator('icon',
                                     {
@@ -342,7 +342,7 @@ class AddApk extends Component {
                                         <Upload {...props}>
                                             <Button className="width_100 upload_btn" type="default" >
                                                 <Icon type="folder-open" /> {convertToLang(this.props.translation[APK_UPLOAD_ICON], "Upload ICON")}
-                                                </Button>
+                                            </Button>
                                             {/* <p className="ant-upload-drag-icon">
                                                     <Icon type="picture" />
                                                 </p>
@@ -353,7 +353,7 @@ class AddApk extends Component {
                                 }
                             </div>
                         </Form.Item>
-                        <Form.Item label="Apk file" className="upload_file" {...formItemLayout}>
+                        <Form.Item label={convertToLang(this.props.translation[APK_FILE], "Apk file")} className="upload_file" {...formItemLayout}>
                             <div className="dropbox">
                                 {getFieldDecorator('apk', {
 
@@ -369,7 +369,7 @@ class AddApk extends Component {
                                     <Upload  {...props2} >
                                         <Button className="width_100 upload_btn" type="default" >
                                             <Icon type="folder-open" /> {convertToLang(this.props.translation[APK_UPLOAD_FILE], "Upload APK FILE")}
-                                                </Button>
+                                        </Button>
                                         {/* <p className="ant-upload-drag-icon">
                                                     <Icon type="file" />
                                                 </p>
@@ -380,7 +380,7 @@ class AddApk extends Component {
                                 {/* <label>Apk size: </label><span>{size}</span> */}
                             </div>
                         </Form.Item>
-                        <Form.Item label="Apk size:" className="upload_file" {...formItemLayout}>
+                        <Form.Item label={convertToLang(this.props.translation[APK_SIZE], "Apk size")} className="upload_file" {...formItemLayout}>
                             <div>
                                 <h5 className="apk_size">{size}</h5>
                             </div>
@@ -393,7 +393,7 @@ class AddApk extends Component {
                         </Row>
                     </Form>
                 </Card>
-            </div>
+            </div >
         )
     }
 }

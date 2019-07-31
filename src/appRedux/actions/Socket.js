@@ -7,7 +7,8 @@ import {
     FINISHED_IMEI,
     SINGLE_APP_PUSHED,
     GET_APP_JOBS,
-    SINGLE_APP_PULLED
+    SINGLE_APP_PULLED,
+    RECEIVE_SIM_DATA
 } from "../../constants/ActionTypes";
 
 import {
@@ -18,7 +19,8 @@ import {
     FINISH_IMEI,
     ACK_SINGLE_PUSH_APP,
     ACK_SINGLE_PULL_APP,
-    FINISH_POLICY_STEP
+    FINISH_POLICY_STEP,
+    RECV_SIM_DATA
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
@@ -135,4 +137,19 @@ export function getAppJobQueue(deviceId) {
         });
 
     };
+}
+
+
+// sim button
+export const receiveSim = (socket, deviceId) => {
+    // console.log("1: RECEIVE_SIM_DATA fro mobile at client side");
+    return (dispatch) => {
+        socket.on(RECV_SIM_DATA + deviceId, (response) => {
+            // console.log("2: RECEIVE_SIM_DATA fro mobile at client side");
+            dispatch({
+                type: RECEIVE_SIM_DATA,
+                payload: true
+            })
+        })
+    }
 }

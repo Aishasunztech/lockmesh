@@ -6,6 +6,12 @@ export const APK_PERMISSION = 'permission.id'; // PERMISSION
 export const APK_ACTION = 'action.id'; // ACTION
 export const APK_SIZE = "apk.size.id"; // APK SIZE
 export const SHOW_APK = "SHOW.APK.id"; // SHOW APK
+export const APK_NAME = "Apk_name.id"; // Apk name
+export const APK_ICON = "Apk_Icon.id"; // Apk Icon
+export const APK_FILE = "Apk_file.id"; // Apk file 
+
+
+
 
 export const APK_SEARCH = "apk.search.id"; // Search APK
 export const APK_UPLOAD = "apk.upload.id"; // Upload APK

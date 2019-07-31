@@ -115,10 +115,17 @@ import {
 // ******* sDealerColumns
 // ******* dealerColsWithSearch
 // ******* mobileMainMenu
+// ******* mobileManagePasswords
+// ******* appsColumns
+// ******* extensionColumns
+// ******* controlColumns
+// ******* policyColumns
+// ******* apkColumns
 // **************************************
 /////////////////////////////////////////
 
 export function devicesColumns(translation, handleSearch) {
+
     return ([
         {
             title: "#",
@@ -213,7 +220,7 @@ export function devicesColumns(translation, handleSearch) {
                     dataIndex: 'user_id',
                     key: "user_id",
                     sorter: (a, b) => {
-                        console.log(a); return a.user_id.props.children.localeCompare(b.user_id.props.children)
+                        return a.user_id.props.children.localeCompare(b.user_id.props.children)
                     },
                     sortDirections: ['ascend', 'descend'],
                 }
@@ -287,7 +294,7 @@ export function devicesColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'type',
                     key: 'type',
-                    sorter: (a, b) => { return a.type.props.children[1].localeCompare(b.type.props.children[1]) },
+                    sorter: (a, b) => { return a.type.localeCompare(b.type) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -311,7 +318,7 @@ export function devicesColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'version',
                     key: 'version',
-                    sorter: (a, b) => { return a.version.props.children[1].localeCompare(b.version.props.children[1]) },
+                    sorter: (a, b) => { return a.version.localeCompare(b.version) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -557,6 +564,8 @@ export function devicesColumns(translation, handleSearch) {
                     key: 'dealer_name',
                     sorter: (a, b) => { return a.dealer_name.props.children.localeCompare(b.dealer_name.props.children) },
                     sortDirections: ['ascend', 'descend'],
+
+
                 }
             ]
         },
@@ -1116,7 +1125,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     align: "center",
                     dataIndex: 'status',
                     key: 'status',
-                    sorter: (a, b) => { console.log('done', a.status); return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+                    sorter: (a, b) => { return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
 
                     sortDirections: ['ascend', 'descend'],
                 }
@@ -1298,13 +1307,7 @@ export function dealerColumns(translation, handleSearch) {
                 title: convertToLang(translation[DEALER_DEVICES], "DEVICES"),
                 dataIndex: 'connected_devices',
                 key: 'connected_devices',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.connected_devices.length;
-                // },
                 sorter: (a, b) => { return a.connected_devices - b.connected_devices },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
                 className: '',
@@ -1357,13 +1360,7 @@ export function dealerColumns(translation, handleSearch) {
                 title: convertToLang(translation[DEALER_PIN], "DEALER PIN"),
                 dataIndex: 'link_code',
                 key: 'link_code',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.link_code.length;
-                // },
                 sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
                 className: '',
@@ -1390,13 +1387,7 @@ export function dealerColumns(translation, handleSearch) {
                 title: convertToLang(translation[DEALER_NAME], "DEALER NAME"),
                 dataIndex: 'dealer_name',
                 key: 'dealer_name',
-                // sorter: (a, b) => {
-                //     console.log(a);
-                //     // console.log(b);
-                //     return a.dealer_name.length;
-                // },
                 sorter: (a, b) => { return a.dealer_name.localeCompare(b.dealer_name) },
-
                 align: 'center',
                 sortDirections: ['ascend', 'descend'],
                 className: '',
@@ -1635,7 +1626,13 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             title: convertToLang(translation[DEALER_PIN], "DEALER PIN"),
             dataIndex: 'link_code',
             key: 'link_code',
-            sorter: (a, b) => { return a.link_code.localeCompare(b.link_code) },
+            sorter: (a, b) => {
+                if (a.link_code.props) {
+                    return a.link_code.props.children.localeCompare(b.link_code.props.children)
+                } else {
+                    return a.link_code.localeCompare(b.link_code)
+                }
+            },
             sortDirections: ['ascend', 'descend'],
             className: '',
         },
@@ -1651,7 +1648,13 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
             title: convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL"),
             dataIndex: 'dealer_email',
             key: 'dealer_email',
-            sorter: (a, b) => { return a.dealer_email.localeCompare(b.dealer_email) },
+            sorter: (a, b) => {
+                if (a.dealer_email.props) {
+                    return a.dealer_email.props.children.localeCompare(b.dealer_email.props.children)
+                } else {
+                    return a.dealer_email.localeCompare(b.dealer_email)
+                }
+            },
             sortDirections: ['ascend', 'descend'],
             className: '',
         },
@@ -1798,6 +1801,13 @@ export function policyColumns(translation, handleSearch) {
         //     width: 800,
         // },
         {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
             title: convertToLang(translation[POLICY_ACTION], "ACTION"),
             align: "center",
             dataIndex: 'action',
@@ -1922,9 +1932,7 @@ export function policyColumns(translation, handleSearch) {
                     className: '',
                     dataIndex: 'policy_note',
                     key: 'policy_note',
-                    // ...this.getColumnSearchProps('status'),
                     sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
-
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -1939,7 +1947,90 @@ export function policyColumns(translation, handleSearch) {
             dataIndex: 'default_policy',
             key: 'default_policy',
         },
+        {
+            title: (
+                <Input.Search
+                    name="created_by"
+                    key="created_by"
+                    id="created_by"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREATED BY")}
+                />
+            ),
+            dataIndex: 'created_by',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREATED BY"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'created_by',
+                    key: 'created_by',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.created_by.localeCompare(b.created_by) },
 
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="created_date"
+                    key="created_date"
+                    id="created_date"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREATED DATE")}
+                />
+            ),
+            dataIndex: 'created_date',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREATED DATE"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'created_date',
+                    key: 'created_date',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.created_date.localeCompare(b.created_date) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="last_edited"
+                    key="last_edited"
+                    id="last_edited"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "LAST EDIT")}
+                />
+            ),
+            dataIndex: 'last_edited',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "LAST EDIT"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'last_edited',
+                    key: 'last_edited',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.last_edited.localeCompare(b.last_edited) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
     ]
     )
 };
@@ -1947,6 +2038,13 @@ export function policyColumns(translation, handleSearch) {
 
 export function apkColumns(translation) {
     return ([
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
         {
             title: convertToLang(translation[ACTION], "ACTION"),
             dataIndex: 'action',
@@ -2007,6 +2105,71 @@ export function apkColumns(translation) {
             title: convertToLang(translation[APK_SIZE], "APP SIZE"),
             dataIndex: 'apk_size',
             key: 'apk_size',
+        },
+        {
+            title: convertToLang(translation[""], "VERSION"),
+            dataIndex: 'version',
+            key: 'version',
+        },
+        {
+            title: convertToLang(translation[""], "UPLOAD DATE"),
+            dataIndex: 'created_at',
+            key: 'created_at',
+        },
+        {
+            title: convertToLang(translation[""], "LAST EDIT"),
+            dataIndex: 'updated_at',
+            key: 'updated_at',
+        },
+    ])
+}
+export function featureApkColumns(translation) {
+    return ([
+        {
+            title: (
+                <span>
+                    {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
+                    <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
+                        `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+                            <i class="fa fa-caret-right" aria-hidden="true"></i> 
+                            </a> to Add, remove or View
+                            <br/> the Dealers who have permission
+                            <br/>to use this App</p>`)} />)}>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>),
+            dataIndex: 'permission',
+            key: 'permission',
+            className: ''
+        },
+        {
+            title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
+            dataIndex: 'apk_name',
+            width: "100",
+            key: 'apk_name',
+            sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
+            sortDirections: ['ascend', 'descend'],
+            defaultSortOrder: "ascend"
+        },
+        {
+            title: convertToLang(translation["APP VERSION"], "APP VERSION"),
+            dataIndex: 'apk_version',
+            key: 'apk_version',
+        },
+        {
+            title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
+            dataIndex: 'apk_logo',
+            key: 'apk_logo',
+        },
+        {
+            title: convertToLang(translation[APK_SIZE], "APP SIZE"),
+            dataIndex: 'apk_size',
+            key: 'apk_size',
+        },
+        {
+            title: convertToLang(translation["UPDATED DATE"], "LAST UPDATE"),
+            dataIndex: 'updated_date',
+            key: 'updated_date',
         },
     ])
 }

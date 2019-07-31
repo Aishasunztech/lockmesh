@@ -140,7 +140,7 @@ export function editApk(formData) {
                 dispatch({
                     type: EDIT_APK,
                     response: response.data,
-                    payload: formData
+                    payload: response.data.data
                 });
 
 

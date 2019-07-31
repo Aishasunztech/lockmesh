@@ -99,6 +99,7 @@ class SidebarContent extends Component {
 
   componentDidMount() {
     // console.log(this.props.languageData)
+    this.props.switchLanguage({ id: 1 })
     this.setState({
       languageData: this.props.languageData
     })

@@ -83,13 +83,13 @@ export default (state = initialState, action) => {
 
 		case ADD_APK:
 			// console.log(ADD_APK);
-
+			let newApkList = state.apk_list
 			if (action.response.status) {
 				success({
 					title: action.response.msg,
 				});
 				// console.log("INSERTED DATA", state.apk_list);
-				state.apk_list.push(action.payload)
+				newApkList.push(action.payload)
 				// console.log("INSERTED DATA", state.apk_list);
 			}
 			else {
@@ -99,37 +99,33 @@ export default (state = initialState, action) => {
 			}
 			return {
 				...state,
-				apk_list: [...state.apk_list],
+				apk_list: [...newApkList],
 			}
 
 		case EDIT_APK:
 			// console.log('action edit id');
 			// console.log(action.payload);
-			// console.log(EDIT_APK);			
+			// console.log(EDIT_APK);	
+			let apkList = state.apk_list
 			if (action.response.status) {
-				let objIndex1 = state.apk_list.findIndex((obj => obj.apk_id === action.payload.apk_id));
-				if (objIndex1 !== undefined) {
-					state.apk_list[objIndex1].apk_name = action.payload.name
-					state.apk_list[objIndex1].apk = action.payload.apk
-					state.apk_list[objIndex1].logo = action.payload.logo
-					state.apk_list[objIndex1].size = action.payload.size
 
-				}
 				success({
 					title: action.response.msg,
-				});;
+				});
+				let objIndex1 = apkList.findIndex((obj => obj.apk_id === action.payload.apk_id));
+				if (objIndex1 !== undefined) {
+					apkList[objIndex1] = action.payload
+				}
 			}
 			else {
 				error({
 					title: action.response.msg,
 				});;
 			}
-
-
 			return {
 				...state,
 				isloading: false,
-				apk_list: [...state.apk_list],
+				apk_list: [...apkList],
 				options: state.options
 			}
 

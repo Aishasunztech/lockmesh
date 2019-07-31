@@ -56,279 +56,51 @@ const Search = Input.Search;
 class UserDeviceList extends Component {
     constructor(props) {
         super(props);
+        var listdeviceCols = userDevicesListColumns(props.translation, this.handleSearch)
+
         this.state = {
+            sorterKey: '',
+            sortOrder: 'ascend',
+            listdeviceCols: listdeviceCols,
             devicesList: this.props.record.devicesList ? this.props.record.devicesList : [],
             permissions: [],
             pagination: 10
 
         }
-        this.listdeviceCols = userDevicesListColumns(props.translation, this.handleSearch)
-        // this.listdeviceCols = [
-        //     {
-        //         // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
-        //         dataIndex: 'action',
-        //         align: 'center',
-        //         className: 'row',
-        //         width: 800,
-        //         key: "action"
-        //     },
-        //     {
-        //         title: (
-        //             <Input.Search
-        //                 name="activation_code"
-        //                 key="activation_code"
-        //                 id="activation_code"
-        //                 className="search_heading"
-        //                 onKeyUp={this.handleSearch}
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_ACTIVATION_CODE)}
-        //             />
-        //         ),
-        //         dataIndex: 'activation_code',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_ACTIVATION_CODE,
-        //                 align: "center",
-        //                 dataIndex: 'activation_code',
-        //                 className: '',
-        //                 sorter: (a, b) => { return a.activation_code.localeCompare(b.activation_code) },
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         title: (
-        //             <Input.Search
-        //                 name="link_code"
-        //                 key="link_code"
-        //                 id="link_code"
-        //                 className="search_heading"
-        //                 onKeyUp={this.handleSearch}
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_DEALER_PIN)}
-        //             />
-        //         ),
-        //         dataIndex: 'dealer_pin',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_DEALER_PIN,
-        //                 align: "center",
-        //                 dataIndex: 'dealer_pin',
-        //                 key: 'dealer_pin',
-        //                 className: '',
-        //                 sorter: (a, b) => { return a.dealer_pin - b.dealer_pin },
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         title: (
-        //             <Input.Search
-        //                 name="device_id"
-        //                 key="device_id"
-        //                 id="device_id"
-        //                 className="search_heading"
-        //                 onKeyUp={this.handleSearch}
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_ID)}
-        //             />
-        //         ),
-        //         dataIndex: 'device_id',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_ID,
-        //                 align: "center",
-        //                 dataIndex: 'device_id',
-        //                 key: "device_id",
-        //                 className: '',
-        //                 sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ],
-        //     },
-        //     {
-        //         title: (
-        //             <Input.Search
-        //                 name="finalStatus"
-        //                 key="status"
-        //                 id="status"
-        //                 className="search_heading"
-        //                 onKeyUp={this.handleSearch}
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_STATUS)}
-        //             />
-        //         ),
-        //         dataIndex: 'status',
-        //         className: '',
+        
+    }
 
-        //         children: [
-        //             {
-        //                 title: DEVICE_STATUS,
-        //                 align: "center",
-        //                 className: '',
-        //                 dataIndex: 'status',
-        //                 key: 'status',
-        //                 sorter: (a, b) => { console.log('done', a.status); return a.status.props.children[1].localeCompare(b.status.props.children[1]) },
+    // handleTableChange = (pagination, query, sorter) => {
+    //     // console.log('check sorter func: ', sorter)
+    //     const sortOrder = sorter.order || "ascend";
+    //     this.listdeviceCols = userDevicesListColumns(sortOrder, this.props.translation, this.handleSearch)
+    // };
 
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     }, {
-        //         title: (
-        //             <Input.Search
-        //                 name="expiry_date"
-        //                 key="expiry_date"
-        //                 id="expiry_date"
-        //                 className="search_heading"
-        //                 onKeyUp={this.handleSearch}
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_EXPIRY_DATE)}
-        //             />
-        //         ),
-        //         dataIndex: 'expiry_date',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_EXPIRY_DATE,
-        //                 align: "center",
-        //                 className: '',
-        //                 dataIndex: 'expiry_date',
-        //                 key: 'expiry_date',
-        //                 sorter: (a, b) => { return a.expiry_date.localeCompare(b.expiry_date) },
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         title: (
-        //             <Input.Search
-        //                 name="pgp_email"
-        //                 key="pgp_email"
-        //                 id="pgp_email"
-        //                 className="search_heading"
-        //                 onKeyUp={this.handleSearch}
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_PGP_EMAIL)}
-        //             />
-        //         ),
-        //         dataIndex: 'pgp_email',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_PGP_EMAIL,
-        //                 align: "center",
-        //                 dataIndex: 'pgp_email',
-        //                 className: '',
-        //                 sorter: (a, b) => { return a.pgp_email.localeCompare(b.pgp_email) },
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     }, {
-        //         title: (
-        //             <Input.Search
-        //                 name="chat_id"
-        //                 key="chat_id"
-        //                 id="chat_id"
-        //                 className="search_heading"
-        //                 onKeyUp={this.handleSearch}
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_CHAT_ID)}
-        //             />
-        //         ),
-        //         dataIndex: 'chat_id',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_CHAT_ID,
-        //                 align: "center",
-        //                 dataIndex: 'chat_id',
-        //                 key: 'chat_id',
-        //                 className: '',
-        //                 sorter: (a, b) => { return a.chat_id.localeCompare(b.chat_id) },
+    handleTableChange = (pagination, query, sorter) => {
+        console.log('check sorter func: ', sorter)
+        let columns = this.state.listdeviceCols;
 
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     }, {
-        //         title: (
-        //             <Input.Search
-        //                 name="sim_id"
-        //                 key="sim_id"
-        //                 id="sim_id"
-        //                 className="search_heading"
-        //                 onKeyUp={this.handleSearch}
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_SIM_ID)}
-        //             />
-        //         ),
-        //         dataIndex: 'sim_id',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_SIM_ID,
-        //                 align: "center",
-        //                 dataIndex: 'sim_id',
-        //                 key: 'sim_id',
-        //                 className: '',
-        //                 sorter: (a, b) => { return a.sim_id.localeCompare(b.sim_id) },
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     }, {
-        //         title: (
-        //             <Input.Search
-        //                 name="imei"
-        //                 key="imei"
-        //                 id="imei"
-        //                 className="search_heading"
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_IMEI_1)}
-        //                 onKeyUp={this.handleSearch}
-        //             />
-        //         ),
-        //         dataIndex: 'imei_1',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_IMEI_1,
-        //                 align: "center",
-        //                 className: '',
-        //                 dataIndex: 'imei_1',
-        //                 key: 'imei_1',
-        //                 sorter: (a, b) => { return a.imei_1.localeCompare(b.imei_1) },
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     }, {
-        //         title: (
-        //             <Input.Search
-        //                 name="imei2"
-        //                 key="imei2"
-        //                 id="imei2"
-        //                 className="search_heading"
-        //                 autoComplete="new-password"
-        //                 placeholder={titleCase(DEVICE_IMEI_2)}
-        //                 onKeyUp={this.handleSearch}
-        //             />
-        //         ),
-        //         dataIndex: 'imei_2',
-        //         className: '',
-        //         children: [
-        //             {
-        //                 title: DEVICE_IMEI_2,
-        //                 align: "center",
-        //                 dataIndex: 'imei_2',
-        //                 key: 'imei_2',
-        //                 className: '',
-        //                 sorter: (a, b) => { return a.imei_2.localeCompare(b.imei_2) },
-        //                 sortDirections: ['ascend', 'descend'],
-        //             }
-        //         ]
-        //     },
-        // ]
+        columns.forEach(column => {
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+                }
+            }
+        })
+        this.setState({ 
+            listdeviceCols: columns
+         });
     }
 
     componentDidMount() {
@@ -349,7 +121,9 @@ class UserDeviceList extends Component {
         }
 
         if (this.props.translation !== nextProps.translation) {
-            this.listdeviceCols = userDevicesListColumns(nextProps.translation, this.handleSearch);
+            this.setState({
+                listdeviceCols: userDevicesListColumns(nextProps.translation, this.handleSearch)
+            })
         }
     }
     searchField = (originalData, fieldName, value) => {
@@ -578,7 +352,8 @@ class UserDeviceList extends Component {
                     </Row>
                     <div className="expand_row">
                         <Table
-                            columns={this.listdeviceCols}
+                            columns={this.state.listdeviceCols}
+                            onChange={this.handleTableChange}
                             dataSource={this.renderDevices(this.state.devicesList)}
                             pagination={false
                                 //{ pageSize: Number(this.state.pagination), size: "midddle" }
