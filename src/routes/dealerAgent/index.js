@@ -14,9 +14,13 @@ import AgentTabs from './components/AgentTabs';
 import AddAgent from './components/AddAgent';
 
 import {
-    convertToLang
+    convertToLang, componentSearch
 } from '../utils/commonUtils'
 import { dealerAgentColumns } from '../utils/columnsUtils';
+
+var copyDealerAgents = [];
+var status = true;
+var copy_status = true;
 
 class DealerAgent extends Component {
     constructor(props) {
@@ -24,7 +28,8 @@ class DealerAgent extends Component {
         let columns = dealerAgentColumns(props.translation, this.handleColumnSearch);
         this.state = {
             addAgentModal: false,
-            columns: columns
+            columns: columns,
+            dealerAgents: []
         }
     }
 
@@ -33,28 +38,26 @@ class DealerAgent extends Component {
         // this.props.getPagination('agents');
         // console.log(this.props.location.state);
         // this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + this.props.users_list.length + ')'
-        // this.setState({
-        //     users: this.props.users_list,
-        //     originalUsers: this.props.users_list,
-        //     expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
-        // })
+        this.setState({
+            dealerAgents: this.props.dealerAgents,
+            // originalUsers: this.props.users_list,
+            // expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
+        })
         // this.props.getApkList();
         // this.props.getDefaultApps();
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.users_list !== this.props.users_list) {
-    //         this.state.columns[2].children[0].title = convertToLang(this.props.translation[USER_ID], "USER ID") + ' (' + nextProps.users_list.length + ')'
-    //         // console.log('will recice props is called', nextProps.users_list)
-    //         this.setState({
-    //             defaultPagingValue: this.props.DisplayPages,
-    //             users: nextProps.users_list,
-    //             originalUsers: nextProps.users_list,
-    //             expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
-    //         })
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.dealerAgents.length !== this.props.dealerAgents.length) {
+            this.setState({
+                // defaultPagingValue: this.props.DisplayPages,
+                dealerAgents: nextProps.dealerAgents,
+                // originalUsers: nextProps.users_list,
+                // expandedRowsKeys: (this.props.location.state) ? [this.props.location.state.id] : []
+            })
 
-    //     }
-    // }
+        }
+    }
 
     // componentDidUpdate(prevProps) {
     //     if (this.props !== prevProps) {
@@ -71,50 +74,77 @@ class DealerAgent extends Component {
     //          });
     //     }
     // }
+
     handleColumnSearch = (e) => {
-        // console.log('============ check search value ========')
-        // console.log(e.target.name , e.target.value);
 
-        // let demoDevices = [];
-        // if (this.state.copy_status) {
-        //     coppyDevices = this.state.devices;
-        //     this.state.copy_status = false;
-        // }
-        // //   console.log("devices for search", coppyDevices);
+        let demoDealerAgents = [];
+        if (copy_status) {
+            copyDealerAgents = this.state.dealerAgents;
+            copy_status = false;
+        }
+        
 
-        // if (e.target.value.length) {
-        //     // console.log("keyname", e.target.name);
-        //     // console.log("value", e.target.value);
-        //     // console.log(this.state.devices);
-        //     coppyDevices.forEach((device) => {
-        //         //  console.log("device", device[e.target.name] !== undefined);
-        //         if (device[e.target.name] !== undefined) {
-        //             if ((typeof device[e.target.name]) === 'string') {
-        //                 // console.log("string check", device[e.target.name])
-        //                 if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
-        //                     demoDevices.push(device);
-        //                 }
-        //             } else if (device[e.target.name] !== null) {
-        //                 // console.log("else null check", device[e.target.name])
-        //                 if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-        //                     demoDevices.push(device);
-        //                 }
-        //             } else {
-        //                 // demoDevices.push(device);
-        //             }
-        //         } else {
-        //             // demoDevices.push(device);
-        //         }
-        //     });
-        //     //  console.log("searched value", demoDevices);
-        //     this.setState({
-        //         devices: demoDevices
-        //     })
-        // } else {
-        //     this.setState({
-        //         devices: coppyDevices
-        //     })
-        // }
+        if (e.target.value.length) {
+            
+            copyDealerAgents.forEach((agent) => {
+                
+                if (agent[e.target.name] !== undefined) {
+                    if ((typeof agent[e.target.name]) === 'string') {
+                        
+                        if (agent[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+                            demoDealerAgents.push(agent);
+                        }
+                    } else if (agent[e.target.name] !== null) {
+                        
+                        if (agent[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+                            demoDealerAgents.push(agent);
+                        }
+                    } else {
+                        
+                    }
+                } else {
+                }
+            });
+            this.setState({
+                dealerAgents: demoDealerAgents
+            })
+        } else {
+            this.setState({
+                dealerAgents: copyDealerAgents
+            })
+        }
+    }
+
+    handleComponentSearch = (value) => {
+        
+        if (value.length) {
+
+            // console.log('length')
+
+            if (status) {
+                copyDealerAgents = this.state.dealerAgents;
+                status = false;
+            }
+
+            let foundDealerAgents = componentSearch(copyDealerAgents, value);
+            // console.log('found devics', foundUsers)
+            if (foundDealerAgents.length) {
+                this.setState({
+                    dealerAgents: foundDealerAgents,
+                })
+            } else {
+                this.setState({
+                    dealerAgents: []
+                })
+            }
+        } else {
+            // status = true;
+
+            this.setState({
+                dealerAgents: copyDealerAgents,
+            })
+        }
+
     }
 
     handleTableChange = (pagination, query, sorter) => {
@@ -141,42 +171,6 @@ class DealerAgent extends Component {
         this.setState({
             columns: columns
         });
-    }
-
-    handleComponentSearch = (value) => {
-        //    console.log('values sr', value)   
-        // try {
-        //     if (value.length) {
-
-        //         // console.log('length')
-
-        //         if (status) {
-        //             // console.log('status')
-        //             coppyUsers = this.state.users;
-        //             status = false;
-        //         }
-        //         // console.log(this.state.users,'coppy de', coppyDevices)
-        //         let foundUsers = componentSearch(coppyUsers, value);
-        //         // console.log('found devics', foundUsers)
-        //         if (foundUsers.length) {
-        //             this.setState({
-        //                 users: foundUsers,
-        //             })
-        //         } else {
-        //             this.setState({
-        //                 users: []
-        //             })
-        //         }
-        //     } else {
-        //         status = true;
-
-        //         this.setState({
-        //             users: coppyUsers,
-        //         })
-        //     }
-        // } catch (error) {
-        //     // alert("hello");
-        // }
     }
 
     handleAddUserModal = (visible) => {
@@ -229,16 +223,16 @@ class DealerAgent extends Component {
                 />
                 <AgentTabs
                     columns={this.state.columns}
-                    translation={this.props.translation}
-                    dealerAgents={this.props.dealerAgents}
+                    dealerAgents={this.state.dealerAgents}
                     onChangeTableSorting={this.handleTableChange}
+                    translation={this.props.translation}
                 />
                 <AddAgent
                     addAgentModal={this.state.addAgentModal}
                     handleAddUserModal={this.handleAddUserModal}
-                    
+
                     addAgentHandler={this.addAgentHandler}
-                    
+
                     translation={this.props.translation}
                 />
             </Fragment>

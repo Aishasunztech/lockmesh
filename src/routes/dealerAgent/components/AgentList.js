@@ -27,19 +27,6 @@ export default class DevicesList extends Component {
         
     }
 
-    customExpandIcon = (props) => {
-        if (props.expanded) {
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-down" /></a>
-        } else {
-
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-right" /></a>
-        }
-    }
-
     // renderList
     renderList() {
         
