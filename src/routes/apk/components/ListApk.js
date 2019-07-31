@@ -159,6 +159,9 @@ export default class ListApk extends Component {
                                 {app.size ? app.size : 'N/A'}
                             </div>
                         ),
+                        'version': app.version,
+                        'created_at': app.created_at,
+                        'updated_at': app.updated_at
                     }
                     apkList.push(data)
 
@@ -184,6 +187,9 @@ export default class ListApk extends Component {
                         'apk_name': app.apk_name ? app.apk_name : 'N/A',
                         'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
                         'apk_size': app.size ? app.size : "N/A",
+                        'version': app.version,
+                        'created_at': app.created_at,
+                        'updated_at': app.updated_at
                     }
                     apkList.push(data)
 

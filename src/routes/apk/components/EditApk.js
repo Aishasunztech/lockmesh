@@ -39,6 +39,7 @@ export default class EditApk extends Component {
         logo = app.logo;
         apk = app.apk;
         size = app.size
+        versionName = app.version
         this.setState({
             visible: true,
             apk_name: app.apk_name,
@@ -275,7 +276,9 @@ class EditApkForm extends Component {
                     if (info.file.response.status !== false) {
                         if (info.file.response.fileName !== '') {
                             apk = info.file.response.fileName;
-                            size = info.file.response.size
+                            size = info.file.response.size;
+                            console.log(info.file.response.version);
+                            versionName = info.file.response.version
                         }
                         successMessage({
                             title: info.file.response.msg
@@ -362,6 +365,11 @@ class EditApkForm extends Component {
                 <Form.Item label="Apk size:" className="upload_file" {...formItemLayout}>
                     <div>
                         <h5 className="apk_size">{size}</h5>
+                    </div>
+                </Form.Item>
+                <Form.Item label="Apk version:" className="upload_file" {...formItemLayout}>
+                    <div>
+                        <h5 className="apk_size">{versionName}</h5>
                     </div>
                 </Form.Item>
                 <Row className='modal_footer'>

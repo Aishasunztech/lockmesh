@@ -2012,14 +2012,14 @@ export function policyColumns(translation, handleSearch) {
                     className="search_heading"
                     onKeyUp={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[""], "LAST EDITED DATE")}
+                    placeholder={convertToLang(translation[""], "EDIT DATE")}
                 />
             ),
             dataIndex: 'last_edited',
             className: '',
             children: [
                 {
-                    title: convertToLang(translation[""], "LAST EDITED DATE"),
+                    title: convertToLang(translation[""], "EDIT DATE"),
                     align: "center",
                     className: '',
                     dataIndex: 'last_edited',
@@ -2106,6 +2106,21 @@ export function apkColumns(translation) {
             dataIndex: 'apk_size',
             key: 'apk_size',
         },
+        {
+            title: convertToLang(translation[""], "VERSION"),
+            dataIndex: 'version',
+            key: 'version',
+        },
+        {
+            title: convertToLang(translation[""], "UPLOAD DATE"),
+            dataIndex: 'created_at',
+            key: 'created_at',
+        },
+        {
+            title: convertToLang(translation[""], "LAST EDIT"),
+            dataIndex: 'updated_at',
+            key: 'updated_at',
+        },
     ])
 }
 export function featureApkColumns(translation) {
@@ -2152,7 +2167,7 @@ export function featureApkColumns(translation) {
             key: 'apk_size',
         },
         {
-            title: convertToLang(translation["UPDATED AT"], "UPDATED DATE"),
+            title: convertToLang(translation["UPDATED DATE"], "LAST UPDATE"),
             dataIndex: 'updated_date',
             key: 'updated_date',
         },
