@@ -43,7 +43,6 @@ import {
   ARE_YOU_SURE_YOU_WANT_TO_LOGOUT,
 } from '../../constants/SidebarConstants'
 
-// import languageData from "./languageData";
 
 import { logout } from "appRedux/actions/Auth";
 
@@ -98,7 +97,7 @@ class SidebarContent extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.props.languageData)
+    
     this.props.switchLanguage({ id: 1 })
     this.setState({
       languageData: this.props.languageData

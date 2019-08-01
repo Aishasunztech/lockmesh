@@ -231,3 +231,11 @@ export const SIM_HISTORY = "SIM_HISTORY";
 
 
 export const RECEIVE_SIM_DATA = "RECEIVE_SIM_DATA";
+
+
+// Agent constants (Dealer Agents)
+export const AGENT_LIST = 'AGENT_LIST';
+export const SAVE_AGENT = 'SAVE_AGENT';
+export const DELETE_AGENT = 'DELETE_AGENT';
+export const EDIT_AGENT = 'EDIT_AGENT';
+export const UPDATE_AGENT = 'UPDATE_AGENT';

@@ -3,7 +3,7 @@ import {Layout, Menu, message, Popover, Select} from 'antd';
 import {connect} from "react-redux";
 import CustomScrollbars from "util/CustomScrollbars";
 
-import languageData from "../languageData";
+// import languageData from "../languageData";
 import UserInfo from "components/UserInfo";
 import AppNotification from "components/AppNotification";
 
@@ -14,7 +14,6 @@ import {Link} from "react-router-dom";
 
 const {Header} = Layout;
 
-const Option = Select.Option;
 const menu = (
   <Menu onClick={handleMenuClick}>
     <Menu.Item key="1">Products</Menu.Item>
@@ -40,14 +39,14 @@ class BelowHeader extends Component {
   languageMenu = () => (
     <CustomScrollbars className="gx-popover-lang-scroll">
       <ul className="gx-sub-popover">
-        {languageData.map(language =>
+        {/* {languageData.map(language =>
           <li className="gx-media gx-pointer" key={JSON.stringify(language)} onClick={(e) =>
             this.props.switchLanguage(language)
           }>
             <i className={`flag flag-24 gx-mr-2 flag-${language.icon}`}/>
             <span className="gx-language-text">{language.name}</span>
           </li>
-        )}
+        )} */}
       </ul>
     </CustomScrollbars>);
 
@@ -63,21 +62,7 @@ class BelowHeader extends Component {
 
     return (
       <div className="gx-header-horizontal gx-header-horizontal-dark gx-below-header-horizontal">
-        {/* <div className="gx-header-horizontal-top">
-          <div className="gx-container">
-            <div className="gx-header-horizontal-top-flex">
-              <div className="gx-header-horizontal-top-left">
-                <i className="icon icon-alert gx-mr-3"/>
-                <p className="gx-mb-0 gx-text-truncate"><IntlMessages id="app.announced"/></p>
-              </div>
-              <ul className="gx-login-list">
-                <li>Login</li>
-              </ul>
-            </div>
-          </div>
-        </div> */}
-
-
+    
         <Header
           className="gx-header-horizontal-main">
           <div className="gx-container">
@@ -96,12 +81,6 @@ class BelowHeader extends Component {
               {null}</Link>
               <div className="gx-header-search gx-d-none gx-d-lg-flex">
                
-
-                {/* <Select defaultValue="lucy" style={{width: 120}} onChange={handleChange}>
-                  <Option value="jack">Products</Option>
-                  <Option value="lucy">Apps</Option>
-                  <Option value="Yiminghe">Blogs</Option>
-                </Select> */}
               </div>
 
               <ul className="gx-header-notifications gx-ml-auto">
@@ -141,11 +120,7 @@ class BelowHeader extends Component {
           <div className="gx-container">
             <div className="gx-header-horizontal-nav-flex">
               <HorizontalNav/>
-              {/* <ul className="gx-header-notifications gx-ml-auto">
-                <li><span className="gx-pointer gx-d-block"><i className="icon icon-menu-lines"/></span></li>
-                <li><span className="gx-pointer gx-d-block"><i className="icon icon-setting"/></span></li>
-                <li><span className="gx-pointer gx-d-block"><i className="icon icon-apps-new"/></span></li>
-              </ul> */}
+              
             </div>
           </div>
         </div>
