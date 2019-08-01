@@ -22,11 +22,11 @@ const confirm = Modal.confirm;
 
 export default class DevicesList extends Component {
 
-    constructor(props) {
-        super(props);
-        
-    }
+ 
+    // componentDidUpdate(prevProps) {
 
+    // }
+    
     // renderList
     renderList() {
         
@@ -35,12 +35,47 @@ export default class DevicesList extends Component {
             return {
                 rowKey: index,
                 key: agent.id,
-                action: "Actions",
+                action: (<Fragment>
+                    <Button
+                        size="small"
+                        className="mb-0"
+                        // disabled
+                        type="primary"
+                        onClick= {(e)=> this.props.showEditModal(true, agent)}
+                    >
+                        {convertToLang(this.props.translation['EDIT'], "EDIT")}
+                    </Button>
+                    <Button
+                        size="small"
+                        className="mb-0"
+                        type="danger"
+                        disabled
+                    >
+                        {convertToLang(this.props.translation['DELETE'], "DELETE")}
+                    </Button>
+                    <Button
+                        size="small"
+                        className="mb-0"
+                        type="dashed"
+                        disabled
+                    >
+                        {convertToLang(this.props.translation['LOGS'], "LOGS")}
+                    </Button>
+                    <Button
+                        size="small"
+                        className="mb-0"
+                        type="ghost"
+                        disabled
+                    >
+                        {convertToLang(this.props.translation['RESET PASS'], "RESET PASS")}
+                    </Button>
+                </Fragment>),
                 name: checkValue(agent.name),
                 staff_id: checkValue(agent.staff_id),
                 type: checkValue(agent.type),
                 status: (
                     <Switch 
+                        disabled
                         defaultChecked={(agent.status ===1)? true: false}
                         size={'small'}
                     />
@@ -51,9 +86,6 @@ export default class DevicesList extends Component {
         });
     }
 
-    componentDidUpdate(prevProps) {
-
-    }
 
     confirmDelete = (action, devices, title) => {
 
@@ -113,15 +145,6 @@ export default class DevicesList extends Component {
         }
     }
 
-    // componentWillReceiveProps() {
-    //     this.setState({
-    //         devices: this.props.devices,
-    //         columns: this.props.columns
-    //     })
-
-    // }
-
-
     render() {
 
         return (
@@ -139,7 +162,7 @@ export default class DevicesList extends Component {
                             
                             id='scrolltablelist'
                             ref='tablelist'
-                            className={"devices "}
+                            className={"devices"}
                             // rowSelection={rowSelection}
                             // rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
                             
@@ -165,22 +188,4 @@ export default class DevicesList extends Component {
 
         )
     }
-
-    handleSuspendDevice = (device) => {
-        this.refs.suspend.handleSuspendDevice(device);
-    }
-
-    handleActivateDevice = (device) => {
-        this.refs.activate.handleActivateDevice(device);
-    }
-
-    handleRejectDevice = (device) => {
-
-        this.props.rejectDevice(device)
-    }
-    addDevice = (device) => {
-        // console.log(device);
-        // this.props.addDevice(device);
-    }
-
 }

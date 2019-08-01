@@ -753,7 +753,9 @@ const RestService = {
         }, RestService.getHeader());
     },
     updateAgent: (agent) => {
-        return axios.put(BASE_URL + 'users/agents/' + agent.id, {
+        console.log(agent);
+
+        return axios.put(BASE_URL + 'users/agents/' + agent.agent_id, {
             ...agent
         }, RestService.getHeader());
     },

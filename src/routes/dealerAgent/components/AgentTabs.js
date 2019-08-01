@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Table, Button, Card, Tabs, Modal, Icon, Tag, Form, Input, Popconfirm, Empty } from "antd";
 
 import AgentList from './AgentList';
+import EditAgent from './EditAgent'
 
 const confirm = Modal.confirm;
 
@@ -12,8 +13,8 @@ export default class AgentTabs extends Component {
         super(props)
         this.state = {
             dealerAgents: [],
-            // tabselect: this.props.tabselect,
-            // selectedOptions: this.props.selectedOptions
+            editAgentModal: false,
+            agent: null
         }
     }
 
@@ -21,7 +22,18 @@ export default class AgentTabs extends Component {
         // this.refs.devciesList.handlePagination(value);
     }
 
-
+    showEditModal = (visible, agent = null) => {
+        if (agent) {
+            this.setState({
+                editAgentModal: visible,
+                agent: agent
+            })
+        } else {
+            this.setState({
+                editAgentModal: visible
+            })
+        }
+    }
 
     componentDidUpdate(prevProps) {
 
@@ -41,8 +53,7 @@ export default class AgentTabs extends Component {
 
         return (
             <Fragment>
-                <div>
-                    {/* <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
+                {/* <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
                         <Tabs.TabPane tab={<span className="green">{convertToLang(translation[Tab_All], Tab_All)} ({this.props.allDevices})</span>} key="1" >
                         </Tabs.TabPane>
                         <Tabs.TabPane tab={<span className="green">{convertToLang(translation[Tab_Active], Tab_Active)} ({this.props.activeDevices})</span>} key="4" forceRender={true}>
@@ -66,13 +77,20 @@ export default class AgentTabs extends Component {
                         </Tabs.TabPane>
 
                     </Tabs> */}
-                    <AgentList
-                        columns={this.props.columns}
-                        onChangeTableSorting={this.props.onChangeTableSorting}
-                        translation={this.props.translation}
-                        dealerAgents = {this.props.dealerAgents}
-                    />
-                </div>
+                <AgentList
+                    showEditModal={this.showEditModal}
+                    columns={this.props.columns}
+                    onChangeTableSorting={this.props.onChangeTableSorting}
+                    translation={this.props.translation}
+                    dealerAgents={this.props.dealerAgents}
+                />
+                <EditAgent
+                    showEditModal = {this.showEditModal}
+                    editAgentModal = {this.state.editAgentModal}
+                    agent={this.state.agent}
+                    updateAgent = {this.props.updateAgent}
+                    translation={this.props.translation}
+                />
             </Fragment>
         )
     }

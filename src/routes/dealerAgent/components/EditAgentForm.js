@@ -9,12 +9,11 @@ import { Button_Cancel, Button_submit } from '../../../constants/ButtonConstants
 import { Required_Fields } from '../../../constants/DeviceConstants';
 
 
-class AddAgentForm extends Component {
+class EditAgentForm extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            visible: false,
         }
     }
 
@@ -38,9 +37,9 @@ class AddAgentForm extends Component {
                     })
                 } else {
 
-                    this.props.addAgentHandler(values);
+                    this.props.updateAgent(values);
                     // this.props.handleCancel();
-                    this.props.handleAddUserModal(false);
+                    this.props.showEditModal(false);
                     // this.handleReset();
 
                 }
@@ -72,28 +71,20 @@ class AddAgentForm extends Component {
         }
     }
 
-
-    componentDidMount() {
-    }
-    handleReset = () => {
-        this.props.form.resetFields();
-    }
-
-
-    handleCancel = () => {
-        this.handleReset();
-        this.props.handleCancel();
-    }
-    handleChange = (e) => {
-        this.setState({ type: e.target.value });
-    }
-
+    
     render() {
-   
+  
         return (
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                 <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
+                {(this.props.agent) ? <Form.Item>
+                    {this.props.form.getFieldDecorator('agent_id', {
+                        initialValue: this.props.agent.id,
+                    })(
+                        <Input type='hidden' />
+                    )}
+                </Form.Item> : null}
 
                 <Form.Item
 
@@ -104,6 +95,7 @@ class AddAgentForm extends Component {
                     help={this.state.help}
                 >
                     {this.props.form.getFieldDecorator('name', {
+                        initialValue: this.props.agent ? this.props.agent.name : '',
                         rules: [
                             {
                                 required: true,
@@ -115,13 +107,12 @@ class AddAgentForm extends Component {
                     )}
                 </Form.Item>
                 <Form.Item
-
                     label={convertToLang(this.props.translation[Email], "Email")}
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('email', {
-
+                        initialValue: this.props.agent ? this.props.agent.email : '',
                         rules: [{
                             type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], "The input is not valid E-mail!"),
                         },
@@ -138,11 +129,12 @@ class AddAgentForm extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('type', {
-
+                        initialValue: (this.props.agent.type==="admin")?true:false
                     })(
                         <Switch
                         // defaultChecked 
-                        // onChange={onChange} 
+                        // onChange={onChange}
+                        defaultChecked={(this.props.agent.type==="admin")?true:false}
                         />
                     )}
                 </Form.Item>
@@ -155,12 +147,11 @@ class AddAgentForm extends Component {
                     <Button key="back" type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
                     <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_submit], "Submit")} </Button>
                 </Form.Item>
-
             </Form>
         )
 
     }
 }
 
-const wrappedAddAgentForm = Form.create()(AddAgentForm);
-export default wrappedAddAgentForm;
+const wrappedEditAgentForm = Form.create()(EditAgentForm);
+export default wrappedEditAgentForm;

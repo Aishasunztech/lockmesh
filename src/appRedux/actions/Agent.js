@@ -43,10 +43,7 @@ export function addAgent(agent) {
                 
                 dispatch({
                     type: SAVE_AGENT,
-                    // payload: {
-                    //     userData: user,
-                    //     msg: response.data.msg
-                    // }
+                    payload: response.data
                 });
 
             } else {
@@ -58,26 +55,26 @@ export function addAgent(agent) {
     }
 }
 
-export function updateAgent(user) {
-    // return (dispatch) => {
-    //     RestService.editUser(user).then((response) => {
-    //         if (RestService.checkAuth(response.data)) {
-    //             // console.log('action done ', response.data);
-    //             dispatch({
-    //                 type: EDIT_USERS,
-    //                 response: response.data,
-    //                 payload: {
-    //                     userData: user,
-    //                 }
-    //             });
+export function updateAgent(agent) {
+    return (dispatch) => {
+        RestService.updateAgent(agent).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: UPDATE_AGENT,
+                    payload: {
+                        status: response.data.status,
+                        agent: agent,
+                        msg: response.data.msg
+                    },
+                });
 
-    //         } else {
-    //             dispatch({
-    //                 type: INVALID_TOKEN
-    //             })
-    //         }
-    //     })
-    // }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
 }
 
 export function deleteAgent(userId) {

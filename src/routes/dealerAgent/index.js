@@ -5,7 +5,8 @@ import { bindActionCreators } from "redux";
 import {
     getAgentList,
     getPagination,
-    addAgent
+    addAgent,
+    updateAgent
 } from '../../appRedux/actions'
 
 
@@ -17,6 +18,7 @@ import {
     convertToLang, componentSearch
 } from '../utils/commonUtils'
 import { dealerAgentColumns } from '../utils/columnsUtils';
+import { ADMIN } from '../../constants/Constants';
 
 var copyDealerAgents = [];
 var status = true;
@@ -211,11 +213,11 @@ class DealerAgent extends Component {
                     // if we dont want link on button then we will use toLink prop
                     // if we want to disable button use disableAddButton
 
+                    isAddButton={this.props.user.type !== ADMIN}
+                    disableAddButton={this.props.user.type === ADMIN}
                     addButtonText={convertToLang(this.props.translation['button.add.agent'], "Add Agent")}
-                    isAddButton={true}
                     handleAppFilterAddButton={this.handleAddUserModal}
 
-                    // disableAddButton={this.props.user.type === ADMIN}
                     // toLink="add-device"
 
                     // language translation
@@ -226,6 +228,7 @@ class DealerAgent extends Component {
                     dealerAgents={this.state.dealerAgents}
                     onChangeTableSorting={this.handleTableChange}
                     translation={this.props.translation}
+                    updateAgent = {this.props.updateAgent}
                 />
                 <AddAgent
                     addAgentModal={this.state.addAgentModal}
@@ -245,12 +248,14 @@ const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
         getAgentList: getAgentList,
         getPagination: getPagination,
-        addAgent: addAgent
+        addAgent: addAgent,
+        updateAgent: updateAgent
     }, dispatch);
 }
 
 const mapStateToProps = ({ routing, auth, socket, settings, agents }) => {
     return {
+        user: auth.authUser,
         routing: routing,
         dealerAgents: agents.dealerAgents,
         translation: settings.translation,

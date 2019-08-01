@@ -10,14 +10,14 @@ import {
 
 export default class AddAgent extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            handleSubmit: null,
-            user: null,
-            titleText: ''
-        }
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         handleSubmit: null,
+    //         user: null,
+    //         titleText: ''
+    //     }
+    // }
 
     componentDidMount() {
 
@@ -33,21 +33,6 @@ export default class AddAgent extends Component {
         // }
     }
 
-    showModal = (handleSubmit, user = null, titleText = convertToLang(this.props.translation[Button_Add_User], "Add User")) => {
-        // console.log(user);
-        this.setState({
-            visible: true,
-            handleSubmit: handleSubmit,
-            user: user,
-            titleText: titleText,
-        });
-
-    }
-
-    handleCancel = () => {
-        // this.refs.add_user_form.resetFields();
-        // this.setState({ visible: false });
-    }
     render() {
         return (
             <div>
@@ -56,6 +41,7 @@ export default class AddAgent extends Component {
                     title={"Add Agent"}
                     maskClosable={false}
                     // onOk={this.handleOk}
+                    destroyOnClose={true}
                     onCancel={() => this.props.handleAddUserModal(false)}
                     footer={null}
                     className="edit_form"
@@ -65,7 +51,7 @@ export default class AddAgent extends Component {
                     <AddAgentForm
                         addAgentHandler={this.props.addAgentHandler}
                         // handleCancel={this.handleCancel}
-                        handleAddUserModal = {this.props.handleAddUserModal}
+                        handleAddUserModal={this.props.handleAddUserModal}
                         // user={this.state.user}
                         ref='add_user_form'
                         translation={this.props.translation}

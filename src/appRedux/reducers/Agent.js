@@ -36,52 +36,48 @@ export default (state = initialState, action) => {
             }
         }
 
-        case SAVE_AGENT:
+        case SAVE_AGENT: {
             // console.log('item added is:', action.response.user)
             let result = []
-            // if (action.response.status) {
-            //     success({
-            //         title: action.response.msg,
-            //     });
-            //     result = [...action.response.user, ...state.users_list]
-            // }
-            // else {
-            //     error({
-            //         title: action.response.msg,
-            //     });
-            //     result = state.users_list
-            // }
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+                result = [...action.payload.agent, ...state.dealerAgents]
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+                result = state.dealerAgents
+            }
             // console.log(result);
             return {
                 ...state,
                 isloading: false,
                 addUserFlag: false,
-                users_list: result,
+                dealerAgents: result,
+            }
+        }
+        case UPDATE_AGENT: {
+            // console.log('item added is:', action.response)
+            if (action.payload.status) {
+                let objIndex = state.dealerAgents.findIndex((obj => obj.id === action.payload.agent.id));
+                state.dealerAgents[objIndex] = action.payload.agent;
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
             }
 
-        // case EDIT_USERS:
-        //     // console.log('item added is:', action.response)
-        //     if (action.response.status) {
-        //         let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.userData.user_id));
-        //         state.users_list[objIndex4] = action.response.user[0];
-
-        //         success({
-        //             title: action.response.msg,
-        //         });
-        //     }
-        //     else {
-        //         error({
-        //             title: action.response.msg,
-        //         });
-        //     }
-
-        //     return {
-        //         ...state,
-        //         isloading: false,
-        //         addUserFlag: false,
-        //         users_list: [...state.users_list]
-        //     }
-
+            return {
+                ...state,
+                dealerAgents: [...state.dealerAgents]
+            }
+        }
+        
         // case LOAD_USER:
         //     return {
         //         ...state,
