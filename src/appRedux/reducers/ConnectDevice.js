@@ -1177,7 +1177,8 @@ export default (state = initialState, action) => {
                 });
                 return {
                     ...state,
-                    sim_list: [...state.sim_list, action.payload]
+                    simUpdated: new Date(),
+                    // sim_list: [...state.sim_list, action.payload]
                 }
             } else {
                 error({
@@ -1198,9 +1199,15 @@ export default (state = initialState, action) => {
         }
 
         case GET_SIMS: {
+            // console.log('reducer call')
             let sims = action.payload.data;
             let checkEnc = sims.filter(e => e.encrypt != true);
             let checkGst = sims.filter(e => e.guest != true);
+            
+            let guestSimAll;
+            let encryptSimAll;
+            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
+            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
 
             let checkunrEncrypt = sims.filter(e => e.unrEncrypt != true);
             let checkunrGuest = sims.filter(e => e.unrGuest != true);
@@ -1210,10 +1217,6 @@ export default (state = initialState, action) => {
             if (checkunrGuest.length > 0) unrGuest = 0; else unrGuest = 1;
             if (checkunrEncrypt.length > 0) unrEncrypt = 0; else unrEncrypt = 1;
 
-            let guestSimAll;
-            let encryptSimAll;
-            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
-            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
 
             return {
                 ...state,
@@ -1256,12 +1259,6 @@ export default (state = initialState, action) => {
         }
 
         case UPDATE_SIM: {
-            if (action.delete) {
-                return {
-                    ...state,
-                    simDeleted: new Date(),
-                }
-            }
             if (action.response.status) {
                 success({
                     title: action.response.msg,

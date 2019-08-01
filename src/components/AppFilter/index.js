@@ -194,7 +194,7 @@ class AppFilter extends Component {
                                             valueKey,
                                             multiple
                                         }) => {
-
+                                            let extraText = (item.value == "tableHeadings.REMAININGDAYS") ? `(${convertToLang(this.props.translation["pre.activated.tab.extra.id"], "PRE-ACTIVATED TAB)")})` : "";
                                             return (
                                                 <li
                                                     style={style} // required
@@ -202,8 +202,7 @@ class AppFilter extends Component {
                                                     key={item.key} // required
                                                     onClick={() => selectValue({ "key": item.key, "value": convertToLang(this.props.translation[item.value], item.value) })}
                                                 >
-                                                    <Checkbox checked={isSelected}>{convertToLang(this.props.translation[item.value], item.value)}</Checkbox>
-
+                                                    <Checkbox checked={isSelected}>{`${convertToLang(this.props.translation[item.value], item.value)}  ${extraText}`}</Checkbox>
                                                 </li>
                                             );
                                         }

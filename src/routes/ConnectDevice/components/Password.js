@@ -56,7 +56,7 @@ class Password extends Component {
     
     validateToNextPassword = (rule, value, callback) => {
         const form = this.props.form;
-        if((value!==undefined) && value.length>0 && !Number(value)){
+        if((value!==undefined) && value.length>0 && !(/^[0-9]*$/.test(value))) { // !Number(value)){
             // form.validateFields(['pwd'], {force:true});
             callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
         }
@@ -69,7 +69,7 @@ class Password extends Component {
     }
     compareToFirstPassword = (rule, value, callback) => {
         const form = this.props.form;
-        if((value!==undefined) && value.length>0 && !Number(value)){
+        if((value!==undefined) && value.length>0 && !(/^[0-9]*$/.test(value))) {
             // form.validateFields(['pwd'], {force:true});
             callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
         }
@@ -98,7 +98,7 @@ class Password extends Component {
                             ],
                         })(
 
-                            <Input.Password placeholder={convertToLang(this.props.translation[Password_TEXT], "Password")} type="password" style={{ width: '100%' }} />
+                            <Input.Password placeholder={convertToLang(this.props.translation[Password_TEXT], "Password")} type="password" pattern="^[0-9]*$" style={{ width: '100%' }} />
                         )
                     }
                 </Form.Item>
@@ -114,7 +114,7 @@ class Password extends Component {
                                 }
                             ],
                         })(
-                            <Input.Password type="password" placeholder={convertToLang(this.props.translation[PASSWORD_AGAIN], "Password Again")} onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
+                            <Input.Password type="password" pattern="^[0-9]*$" placeholder={convertToLang(this.props.translation[PASSWORD_AGAIN], "Password Again")} onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
                         )
                     }
                 </Form.Item>
