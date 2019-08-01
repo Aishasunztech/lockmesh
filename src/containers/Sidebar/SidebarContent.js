@@ -47,7 +47,7 @@ import {
 
 import { logout } from "appRedux/actions/Auth";
 
-import { rejectDevice, addDevice } from '../../appRedux/actions/Devices';
+import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
 
 import { switchLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 
@@ -59,7 +59,8 @@ class SidebarContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      languageData: []
+      languageData: [],
+      flaggedDevices: props.flaggedDevices,
     }
   }
 
@@ -89,10 +90,12 @@ class SidebarContent extends Component {
   };
 
   showNotification = () => {
+
     this.props.getNewCashRequests();
     this.props.getNewDevicesList()
     this.props.getUserCredit()
     this.refs.new_device.showModal();
+    this.props.getDevicesList();
 
     // alert('its working');
   }
@@ -180,6 +183,7 @@ class SidebarContent extends Component {
               acceptRequest={this.props.acceptRequest}
               rejectRequest={this.props.rejectRequest}
               translation={this.props.translation}
+              flaggedDevices={this.props.flaggedDevices}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -320,12 +324,13 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
 
   // console.log('lng id is: ', translation["lng_id"])
-
+  console.log('test: =====================================================>  ' , devices.devices)
   return {
     navStyle,
     themeType,
     locale,
     pathname,
+    flaggedDevices: devices.devices,
     devices: devices.newDevices,
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
@@ -334,5 +339,5 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     lng_id: translation["lng_id"],
   }
 };
-export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest })(SidebarContent);
+export default connect(mapStateToProps, { getDevicesList, rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest })(SidebarContent);
 

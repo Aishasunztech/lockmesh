@@ -787,10 +787,10 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
 
 }
 
-export const transferDeviceProfile = (device_id) => {
-    // alert(device_id);
+export const transferDeviceProfile = (data) => {
+    // alert(data);
     return (dispatch) => {
-        RestService.transferDeviceProfile(device_id).then((response) => {
+        RestService.transferDeviceProfile(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: SHOW_MESSAGE,

@@ -15,7 +15,8 @@ export const DEVICE_TRIAL = "Trial";
 export const DEVICE_SUSPENDED = "Suspended";
 export const DEVICE_EXPIRED = "Expired";
 export const DEVICE_UNLINKED = "Unlinked";
-export const DEVICE_TRANSFER = "Transfer";
+export const DEVICE_TRANSFERED = "Transfered";
+// export const DEVICE_FLAGGED = "Flagged";
 export const DEVICE_PENDING_ACTIVATION = "Pending activation";
 export const DEVICE_PRE_ACTIVATION = "Pre-activated";
 
@@ -162,7 +163,7 @@ export const SIGN_IN = "app.userAuth.signIn";
 export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME
 export const SELECT = "select.id"; // Select
 export const ALERT_TO_SURE_DELETE_ALL_DEVICES = "ALERT_TO_SURE_DELETE_ALL_DEVICES.id"; // Are you sure, you want to delete All these devices
-export const WARNING = "WARNING.id"; 
+export const WARNING = "WARNING.id";
 export const PROCEED_WITH_WIPING_THE_DEVICE = "PROCEED.WITH.WIPING.THE.DEVICE.id";
 
 export const CREDITS = "CREDITS.id";

@@ -19,6 +19,7 @@ import Activity from './Activity';
 import SimSettings from './SimSettings/index';
 import PullApps from './PullApps';
 import SimHistory from './SimSettings/SimHistory';
+import NewDevice from '../../../components/NewDevices';
 
 
 import {
@@ -43,6 +44,16 @@ import {
     wipe,
     simHistory
 } from "../../../appRedux/actions/ConnectDevice";
+
+import { getNewDevicesList } from "../../../appRedux/actions/Common";
+import { rejectDevice, addDevice } from '../../../appRedux/actions/Devices';
+import {
+    getNewCashRequests,
+    getUserCredit,
+    rejectRequest,
+    acceptRequest
+} from "../../../appRedux/actions/SideBar";
+
 
 import {
     ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT, PUSH_APPS_TEXT, SELECTED_APPS, SELECT_APPS, PROCEED_WITH_WIPING_THE_DEVICE, Name, SEARCH_APPS, WARNING
@@ -336,6 +347,7 @@ class SideActions extends Component {
 
     componentDidMount() {
         this.props.simHistory(this.props.device_id);
+        this.props.getNewDevicesList();
 
         this.setState({
             historyModal: this.props.historyModal,
@@ -370,6 +382,12 @@ class SideActions extends Component {
                 apk_list: nextProps.apk_list,
                 // selectedApps: nextProps.apk_list
             })
+        }
+
+        if (this.props.pathname !== nextProps.pathname) {
+            this.props.getNewDevicesList();
+            this.props.getNewCashRequests();
+            this.props.getUserCredit()
         }
 
         if (this.props.simDeleted != nextProps.simDeleted) {
@@ -482,17 +500,14 @@ class SideActions extends Component {
         this.showSaveProfileModal(false);
         this.props.getProfiles(this.props.device.device_id)
     }
-    transferDeviceProfile = (device_id) => {
+    transferDeviceProfile = (device) => {
+        console.log('at transferDeviceProfile')
         let _this = this;
         confirm({
-            content: (
-                <h2>
-                    {convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device")}
-                </h2>
-            ),
+            content: convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
                 // console.log('OK');
-                _this.props.transferDeviceProfile(device_id);
+                _this.props.transferDeviceProfile({ device, flagged_device_id: _this.props.device_id });
             },
             onCancel() {
                 // console.log('Cancel');
@@ -504,7 +519,7 @@ class SideActions extends Component {
 
     handleSimModule = (e) => {
         e.preventDefault();
-        console.log('test sim module');
+        // console.log('test sim module');
 
         this.setState({
             showSimModal: true
@@ -613,6 +628,9 @@ class SideActions extends Component {
 
     handleTransfer = () => {
         console.log('hi');
+
+        this.props.getNewDevicesList();
+        this.refs.new_device.showModal(false);
     }
 
 
@@ -659,7 +677,7 @@ class SideActions extends Component {
     }
 
     render() {
-// console.log('device is: ', this.props.device.transfer_status)
+        // console.log('device is: ', this.props.device.transfer_status)
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG") : convertToLang(this.props.translation[Button_Flag], "Flag");
@@ -788,16 +806,16 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
                                 {/* <Tooltip title="Coming Soon"> */}
-                                <Button
+                                {/* <Button
                                     type="default"
                                     onClick={() => this.handleTransfer()}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
-                                    disabled={(this.props.device.flagged === 'Not flagged' || this.props.device.transfer_status === 1) ? 'disabled' : ''}
+                                    disabled={(this.props.device.flagged === 'Not flagged') ? 'disabled' : ''}
                                 >
                                     <Icon type="swap" />
-                                    {/* <IntlMessages id="button.Transfer" /> */}
-                                    {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button>
-                                {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
+                                    {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
+
+                                <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
                                 {/* </Tooltip> */}
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
@@ -812,6 +830,19 @@ class SideActions extends Component {
                                     {/* <IntlMessages id="button.WipeDevice" /> */}
                                     {convertToLang(this.props.translation[Button_WipeDevice], "WipeDevice")}
                                 </Button>
+
+                                <NewDevice
+                                    ref='new_device'
+                                    devices={this.props.devices}
+                                    addDevice={this.props.addDevice}
+                                    transferDeviceProfile={this.transferDeviceProfile}
+                                    rejectDevice={this.props.rejectDevice}
+                                    authUser={this.props.authUser}
+                                    requests={this.props.requests}
+                                    acceptRequest={this.props.acceptRequest}
+                                    rejectRequest={this.props.rejectRequest}
+                                    translation={this.props.translation}
+                                />
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button
@@ -1107,6 +1138,11 @@ class SideActions extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        rejectDevice: rejectDevice,
+        addDevice: addDevice,
+        acceptRequest: acceptRequest,
+        rejectRequest: rejectRequest,
+        getNewDevicesList: getNewDevicesList,
         simHistory: simHistory,
         showHistoryModal: showHistoryModal,
         showSaveProfileModal: showSaveProfileModal,
@@ -1127,12 +1163,15 @@ function mapDispatchToProps(dispatch) {
         getProfiles: getProfiles
     }, dispatch);
 }
-var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
-    // console.log('test: ' , device_details.wipeDeviceID)
+var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
+    
     return {
+        requests: sidebar.newRequests,
+        devices: devices.newDevices,
         simDeleted: device_details.simDeleted,
         simHistoryList: device_details.simHistoryList,
         translation: settings.translation,
+        pathname: settings.pathname,
         authUser: auth.authUser,
         historyModal: device_details.historyModal,
         applyPolicyConfirm: device_details.applyPolicyConfirm,

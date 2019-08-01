@@ -26,7 +26,7 @@ import {
     DEVICE_UNLINKED,
     ADMIN,
     DEVICE_TRIAL,
-    DEVICE_TRANSFER,
+    DEVICE_TRANSFERED,
 } from '../../constants/Constants'
 
 import {
@@ -295,7 +295,7 @@ class Devices extends Component {
                     copy_status: true
                 })
                 break;
-            case DEVICE_TRANSFER:
+            case DEVICE_TRANSFERED:
                 this.setState({
                     devices: this.state.transferredDevices,
                     // column: this.columns,
@@ -516,7 +516,7 @@ class Devices extends Component {
                 break;
             case "8":
                 this.setState({
-                    devices: this.filterList(DEVICE_TRANSFER, this.props.devices),
+                    devices: this.filterList(DEVICE_TRANSFERED, this.props.devices),
                     // column: this.state.columns,
                     tabselect: '8',
                     copy_status: true
@@ -624,8 +624,8 @@ class Devices extends Component {
                 pendingDevices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices),
                 unlinkedDevices: this.filterList(DEVICE_UNLINKED, this.props.devices),
                 flaggedDevices: this.filterList(DEVICE_FLAGGED, this.props.devices),
-                transferredDevices: this.filterList(DEVICE_TRANSFER, this.props.devices),
-                // transferDevices: this.filterList(DEVICE_TRANSFER,this.props.devices),
+                transferredDevices: this.filterList(DEVICE_TRANSFERED, this.props.devices),
+                // transferDevices: this.filterList(DEVICE_TRANSFERED,this.props.devices),
 
 
             })
@@ -728,7 +728,7 @@ class Devices extends Component {
                 <Select.Option value={DEVICE_SUSPENDED}> {convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)} </Select.Option>
                 <Select.Option value={DEVICE_PRE_ACTIVATION}> {convertToLang(this.props.translation[Tab_PreActivated], Tab_PreActivated)}  </Select.Option>
                 <Select.Option value={DEVICE_PENDING_ACTIVATION}> {convertToLang(this.props.translation[Tab_PendingActivation], Tab_PendingActivation)} </Select.Option>
-                <Select.Option value={DEVICE_TRANSFER}> {convertToLang(this.props.translation[Tab_Transfer], Tab_Transfer)} </Select.Option>
+                <Select.Option value={DEVICE_TRANSFERED}> {convertToLang(this.props.translation[Tab_Transfer], Tab_Transfer)} </Select.Option>
                 <Select.Option value={DEVICE_FLAGGED}> {convertToLang(this.props.translation[Tab_Flagged], Tab_Flagged)} </Select.Option>
                 <Select.Option value={DEVICE_UNLINKED}> {convertToLang(this.props.translation[Tab_Unlinked], Tab_Unlinked)} </Select.Option>
 

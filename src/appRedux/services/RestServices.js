@@ -117,8 +117,8 @@ const RestService = {
 
     },
 
-    transferDeviceProfile: (device_id) => {
-        return axios.post(BASE_URL + 'users/transfer/device_profile', { device_id: device_id }, RestService.getHeader());
+    transferDeviceProfile: (data) => {
+        return axios.post(BASE_URL + 'users/transfer/device_profile', data, RestService.getHeader());
     },
 
 
@@ -441,7 +441,6 @@ const RestService = {
     },
     addDevice: (device) => {
         return axios.put(BASE_URL + 'users/new/device', device, RestService.getHeader());
-
     },
     preActiveDevice: (device) => {
         return axios.post(BASE_URL + 'users/create/device_profile', device, RestService.getHeader());

@@ -79,20 +79,24 @@ class Customizer extends Component {
     const { vars } = this.state;
     if (varname) vars[varname] = color;
     // console.log("vars: ", vars)
-    window.less
-      .modifyVars(vars)
-      .then(() => {
-        success({
-          title: `Theme updated successfully`,
+    if (window.less.modifyVars) {
+      window.less
+        .modifyVars(vars)
+        .then(() => {
+          success({
+            title: `Theme updated successfully`,
+          });
+          this.setState({ vars });
+          localStorage.setItem("app-theme", JSON.stringify(vars));
+        })
+        .catch(err => {
+          error({
+            title: `Failed to update theme`,
+          });
         });
-        this.setState({ vars });
-        localStorage.setItem("app-theme", JSON.stringify(vars));
-      })
-      .catch(err => {
-        error({
-          title: `Failed to update theme`,
-        });
-      });
+    } else {
+      message.error(`Check Please your internet connection is poor`);
+    }
   };
 
   toggleCustomizer = () => {
@@ -160,7 +164,7 @@ class Customizer extends Component {
             message.error(`Failed to update theme`);
           });
       } else {
-        message.error(`Check Please you internet connection`);
+        message.error(`Check Please your internet connection is poor`);
       }
     }
   }

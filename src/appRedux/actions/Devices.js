@@ -13,7 +13,8 @@ import {
     REJECT_DEVICE,
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
-    GET_PARENT_PACKAGES
+    GET_PARENT_PACKAGES,
+    TRANSFER_DEVICE
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
