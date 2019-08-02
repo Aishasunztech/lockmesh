@@ -6,7 +6,9 @@ import {
     getAgentList,
     getPagination,
     addAgent,
-    updateAgent
+    updateAgent,
+    changeAgentStatus,
+    deleteAgent
 } from '../../appRedux/actions'
 
 
@@ -84,25 +86,25 @@ class DealerAgent extends Component {
             copyDealerAgents = this.state.dealerAgents;
             copy_status = false;
         }
-        
+
 
         if (e.target.value.length) {
-            
+
             copyDealerAgents.forEach((agent) => {
-                
+
                 if (agent[e.target.name] !== undefined) {
                     if ((typeof agent[e.target.name]) === 'string') {
-                        
+
                         if (agent[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDealerAgents.push(agent);
                         }
                     } else if (agent[e.target.name] !== null) {
-                        
+
                         if (agent[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
                             demoDealerAgents.push(agent);
                         }
                     } else {
-                        
+
                     }
                 } else {
                 }
@@ -118,7 +120,7 @@ class DealerAgent extends Component {
     }
 
     handleComponentSearch = (value) => {
-        
+
         if (value.length) {
 
             // console.log('length')
@@ -183,6 +185,12 @@ class DealerAgent extends Component {
     addAgentHandler = (values) => {
         this.props.addAgent(values);
     }
+    agentStatusHandler = (e, agent) => {
+        this.props.changeAgentStatus(agent, e);
+    }
+    handleDeleteAgent = (agentID) => {
+        this.props.deleteAgent(agentID);
+    }
     render() {
         return (
             <Fragment>
@@ -228,7 +236,9 @@ class DealerAgent extends Component {
                     dealerAgents={this.state.dealerAgents}
                     onChangeTableSorting={this.handleTableChange}
                     translation={this.props.translation}
-                    updateAgent = {this.props.updateAgent}
+                    updateAgent={this.props.updateAgent}
+                    agentStatusHandler={this.agentStatusHandler}
+                    handleDeleteAgent={this.handleDeleteAgent}
                 />
                 <AddAgent
                     addAgentModal={this.state.addAgentModal}
@@ -249,7 +259,9 @@ const mapDispatchToProps = (dispatch) => {
         getAgentList: getAgentList,
         getPagination: getPagination,
         addAgent: addAgent,
-        updateAgent: updateAgent
+        updateAgent: updateAgent,
+        changeAgentStatus: changeAgentStatus,
+        deleteAgent: deleteAgent
     }, dispatch);
 }
 
