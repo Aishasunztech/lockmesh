@@ -6,7 +6,8 @@ import {
     LOADING,
     UPDATE_AGENT,
     DELETE_AGENT,
-    CHANGE_AGENT_STATUS
+    CHANGE_AGENT_STATUS,
+    RESET_AGENT_PWD
     // UNDO_DELETE_USER
 } from "../../constants/ActionTypes";
 
@@ -122,6 +123,29 @@ export function deleteAgent(agentID) {
     }
 }
 
+export function resetAgentPwd (agentID){
+    return (dispatch) => {
+
+        RestService.resetAgentPwd(agentID).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('action done ', response.data);
+                dispatch({
+                    type: RESET_AGENT_PWD,
+                    payload: {
+                        status: response.data.status,
+                        msg: response.data.msg,
+                        agentID: agentID
+                    }
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
 // export function undoDeleteUser(userId) {
 //     return (dispatch) => {
 

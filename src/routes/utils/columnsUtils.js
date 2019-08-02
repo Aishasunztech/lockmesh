@@ -2276,27 +2276,11 @@ export function dealerAgentColumns(translation, handleSearch) {
 
         // status
         {
-            title: (
-                <Input.Search
-                    name="status"
-                    key="status"
-                    id="status"
-                    className="search_heading email_w"
-                    onKeyUp={handleSearch}
-                    autoComplete="new-password"
-                    placeholder={convertToLang(translation['STATUS'], "STATUS")}
-                />
-            ),
+            title: convertToLang(translation['STATUS'], "STATUS"),
             dataIndex: 'status',
             className: 'row',
-            children: [{
-                title: convertToLang(translation['STATUS'], "STATUS"),
-                dataIndex: 'status',
-                align: "center",
-                key: 'status',
-                // sorter: (a, b) => { return a.status.localeCompare(b.status.toString()) },
-                // sortDirections: ['ascend', 'descend'],
-            }]
+            key: 'status',
+            // align: "center",
         },
 
         // email

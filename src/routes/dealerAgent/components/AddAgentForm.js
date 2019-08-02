@@ -75,14 +75,9 @@ class AddAgentForm extends Component {
 
     componentDidMount() {
     }
-    handleReset = () => {
-        this.props.form.resetFields();
-    }
-
-
+   
     handleCancel = () => {
-        this.handleReset();
-        this.props.handleCancel();
+        this.props.handleAddUserModal(false);
     }
     handleChange = (e) => {
         this.setState({ type: e.target.value });
@@ -152,7 +147,8 @@ class AddAgentForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <Button key="back" type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
+                    <Button key="back" type="button" onClick={this.handleCancel}
+                    > {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
                     <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_submit], "Submit")} </Button>
                 </Form.Item>
 

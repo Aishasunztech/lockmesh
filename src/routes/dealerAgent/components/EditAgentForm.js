@@ -71,9 +71,12 @@ class EditAgentForm extends Component {
         }
     }
 
-    
+    handleCancel = () => {
+        this.props.showEditModal(false);
+    }
+
     render() {
-  
+
         return (
             <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                 <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
@@ -129,12 +132,12 @@ class EditAgentForm extends Component {
                     wrapperCol={{ span: 14 }}
                 >
                     {this.props.form.getFieldDecorator('type', {
-                        initialValue: (this.props.agent.type==="admin")?true:false
+                        initialValue: (this.props.agent.type === "admin") ? true : false
                     })(
                         <Switch
-                        // defaultChecked 
-                        // onChange={onChange}
-                        defaultChecked={(this.props.agent.type==="admin")?true:false}
+                            // defaultChecked 
+                            // onChange={onChange}
+                            defaultChecked={(this.props.agent.type === "admin") ? true : false}
                         />
                     )}
                 </Form.Item>
@@ -144,7 +147,13 @@ class EditAgentForm extends Component {
                         sm: { span: 24, offset: 0 },
                     }}
                 >
-                    <Button key="back" type="button" onClick={this.handleCancel}> {convertToLang(this.props.translation[Button_Cancel], "Cancel")} </Button>
+                    <Button
+                        key="back"
+                        type="button"
+                        onClick={this.handleCancel}
+                    >
+                        {convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                    </Button>
                     <Button type="primary" htmlType="submit"> {convertToLang(this.props.translation[Button_submit], "Submit")} </Button>
                 </Form.Item>
             </Form>

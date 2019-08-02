@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { Modal } from 'antd';
 
 import {
     getAgentList,
@@ -8,9 +9,13 @@ import {
     addAgent,
     updateAgent,
     changeAgentStatus,
-    deleteAgent
+    deleteAgent,
+    resetAgentPwd
 } from '../../appRedux/actions'
 
+import {
+    WARNING
+} from '../../constants/Constants';
 
 import AppFilter from '../../components/AppFilter';
 import AgentTabs from './components/AgentTabs';
@@ -21,11 +26,12 @@ import {
 } from '../utils/commonUtils'
 import { dealerAgentColumns } from '../utils/columnsUtils';
 import { ADMIN } from '../../constants/Constants';
+import { Button_Confirm, Button_Cancel } from '../../constants/ButtonConstants';
 
 var copyDealerAgents = [];
 var status = true;
 var copy_status = true;
-
+const confirm = Modal.confirm;
 class DealerAgent extends Component {
     constructor(props) {
         super(props);
@@ -189,7 +195,35 @@ class DealerAgent extends Component {
         this.props.changeAgentStatus(agent, e);
     }
     handleDeleteAgent = (agentID) => {
-        this.props.deleteAgent(agentID);
+        let _this = this;
+        confirm({
+            title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
+            content: convertToLang(_this.props.translation[WARNING], "Are you sure, you want to delete Agent?"),
+            okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+            onOk() {
+                _this.props.deleteAgent(agentID);
+            },
+            onCancel() { 
+
+            },
+        });
+
+    }
+    handleResetPwd = (agentID) => {
+        let _this = this;
+        confirm({
+            title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
+            content: convertToLang(_this.props.translation[WARNING], "Are you sure, you want to change password?"),
+            okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+            onOk() {
+                _this.props.resetAgentPwd(agentID);
+            },
+            onCancel() { 
+
+            },
+        });
     }
     render() {
         return (
@@ -239,6 +273,7 @@ class DealerAgent extends Component {
                     updateAgent={this.props.updateAgent}
                     agentStatusHandler={this.agentStatusHandler}
                     handleDeleteAgent={this.handleDeleteAgent}
+                    handleResetPwd={this.handleResetPwd}
                 />
                 <AddAgent
                     addAgentModal={this.state.addAgentModal}
@@ -261,7 +296,8 @@ const mapDispatchToProps = (dispatch) => {
         addAgent: addAgent,
         updateAgent: updateAgent,
         changeAgentStatus: changeAgentStatus,
-        deleteAgent: deleteAgent
+        deleteAgent: deleteAgent,
+        resetAgentPwd: resetAgentPwd
     }, dispatch);
 }
 

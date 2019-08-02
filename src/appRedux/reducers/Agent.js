@@ -6,6 +6,7 @@ import {
     UPDATE_AGENT,
     DELETE_AGENT,
     CHANGE_AGENT_STATUS,
+    RESET_AGENT_PWD
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -110,6 +111,21 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 dealerAgents: [...state.dealerAgents]
+            }
+        }
+
+        case RESET_AGENT_PWD: {
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
             }
         }
 
