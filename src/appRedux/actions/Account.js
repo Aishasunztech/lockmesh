@@ -22,7 +22,8 @@ import {
     RESET_PRICE,
     GET_PACKAGES,
     PURCHASE_CREDITS,
-    GET_PARENT_PACKAGES
+    GET_PARENT_PACKAGES,
+    PACKAGE_PERMSSION_SAVED
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -404,4 +405,29 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
             }
         });
     }
+}
+
+export function savePermission(package_id, dealers, action) {
+    // alert(package_id);
+
+    return (dispatch) => {
+        RestService.savePackagePermissions(package_id, dealers, action).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: PACKAGE_PERMSSION_SAVED,
+                    payload: response.data.msg,
+                    permission_count: response.data.permission_count,
+                    package_id: package_id,
+                    dealers: dealers
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+
 }

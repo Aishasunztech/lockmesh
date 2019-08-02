@@ -28,7 +28,7 @@ import {
     Button_UNSET
 } from '../../../../constants/ButtonConstants'
 
-import { one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn } from '../../../../constants/Constants';
+import { one_month, three_month, six_month, twelve_month, sim, chat, pgp, vpn, sim2 } from '../../../../constants/Constants';
 
 class PackagePricingForm extends Component {
     constructor(props) {
@@ -36,6 +36,7 @@ class PackagePricingForm extends Component {
         this.state = {
             pkgPrice: 0,
             sim: false,
+            sim2: false,
             chat: false,
             pgp: false,
             vpn: false
@@ -205,6 +206,17 @@ class PackagePricingForm extends Component {
                     </Col>
                     <Col span={7}>
                         <span className='priceText' >{convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "SIM ID")}: </span><span style={{ fontWeight: 'bold' }}>{this.state[sim] ? 'Yes' : 'No'}</span>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={13}>
+                        <h4 className="labelTypeText">{convertToLang(this.props.translation[""], "SIM ID 2")}:</h4>
+                    </Col>
+                    <Col span={4}>
+                        <Button type="primary" onClick={() => this.setPrice(sim2, true, !this.state[sim2])} >{this.state[sim2] ? convertToLang(this.props.translation[Button_UNSET], "UNSET") : convertToLang(this.props.translation[Button_SET], "SET")}</Button>
+                    </Col>
+                    <Col span={7}>
+                        <span className='priceText' >{convertToLang(this.props.translation[""], "SIM ID 2")}: </span><span style={{ fontWeight: 'bold' }}>{this.state[sim2] ? 'Yes' : 'No'}</span>
                     </Col>
                 </Row>
 

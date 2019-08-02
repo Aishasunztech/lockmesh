@@ -70,6 +70,7 @@ export const SC = "com.secure.systemcontrol";
 // Prices Constants
 
 export const sim = 'sim_id';
+export const sim2 = 'sim_id2';
 export const chat = 'chat_id';
 export const pgp = 'pgp_email';
 export const vpn = 'vpn';
@@ -77,6 +78,7 @@ export const vpn = 'vpn';
 export const pkg_features = {
     chat_id: false,
     sim_id: false,
+    sim_id2: false,
     pgp_email: false,
     vpn: false
 }
@@ -161,7 +163,7 @@ export const SIGN_IN = "app.userAuth.signIn";
 export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME
 export const SELECT = "select.id"; // Select
 export const ALERT_TO_SURE_DELETE_ALL_DEVICES = "ALERT_TO_SURE_DELETE_ALL_DEVICES.id"; // Are you sure, you want to delete All these devices
-export const WARNING = "WARNING.id"; 
+export const WARNING = "WARNING.id";
 export const PROCEED_WITH_WIPING_THE_DEVICE = "PROCEED.WITH.WIPING.THE.DEVICE.id";
 
 export const CREDITS = "CREDITS.id";

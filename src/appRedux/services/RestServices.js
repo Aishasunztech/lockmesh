@@ -174,6 +174,9 @@ const RestService = {
     getAllDealers: () => {
         return axios.get(BASE_URL + 'users/dealers', RestService.getHeader());
     },
+    getUserDealers: () => {
+        return axios.get(BASE_URL + 'users/user_dealers', RestService.getHeader());
+    },
     ApkList: () => {
         return axios.get(BASE_URL + 'users/apklist', RestService.getHeader());
     },
@@ -285,6 +288,15 @@ const RestService = {
     savePolicyPermissions: (policyId, dealers, action) => {
         return axios.post(BASE_URL + 'users/save_policy_permissions', {
             policyId: policyId,
+            dealers: dealers,
+            action: action
+        },
+            RestService.getHeader()
+        );
+    },
+    savePackagePermissions: (package_id, dealers, action) => {
+        return axios.post(BASE_URL + 'users/save_package_permissions', {
+            package_id: package_id,
             dealers: dealers,
             action: action
         },

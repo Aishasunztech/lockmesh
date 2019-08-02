@@ -660,6 +660,7 @@ export default (state = initialState, action) => {
                 policies: [...state.policies]
             }
         }
+        
         case DEFAULT_POLICY_CHANGE: {
 
             // success({

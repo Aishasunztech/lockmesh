@@ -7,7 +7,7 @@ import {
 import ItemsTab from "../../../components/ItemsTab/index";
 
 import PackagePricingForm from './components/PackagePricingForm';
-import { sim, chat, pgp, vpn, pkg_features } from '../../../constants/Constants';
+import { sim, chat, pgp, vpn, pkg_features, sim2 } from '../../../constants/Constants';
 import {
     Tab_SET_ID_PRICES,
     Tab_SET_PACKAGES_PRICES,
@@ -26,6 +26,7 @@ export default class PricingModal extends Component {
         this.state = {
             innerTab: sim,
             [sim]: {},
+            [sim2]: {},
             [chat]: {},
             [pgp]: {},
             [vpn]: {},

@@ -55,8 +55,6 @@ class PolicyList extends Component {
 
             const newItems = [...this.state.expandTabSelected];
             newItems[rowId] = (btnof === 'info' || btnof === 'edit') ? '1' : '6';
-            // this.setState({ items:newItems });
-            // console.log("new Items", newItems);
             if (btnof === 'edit') {
                 this.setState({
                     expandedRowKeys: this.state.expandedRowKeys,
@@ -156,7 +154,7 @@ class PolicyList extends Component {
                     </Fragment>
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}</span>,
-                permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
+                permissions: (policy.dealer_permission !== undefined && policy.dealer_permission !== null) ? policy.dealer_permission : [],
                 policy_status: (<Switch size='small' checked={policy.status === 1 || policy.status === true ? true : false}
                     onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id, this.props.translation) }
                     } disabled={(policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ? false : true
@@ -201,7 +199,7 @@ class PolicyList extends Component {
     }
 
     customExpandIcon(props) {
-
+        // console.log(props);
         if (props.expanded) {
             if (this.state.expandedByCustom[props.record.rowKey]) {
                 return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
@@ -251,7 +249,7 @@ class PolicyList extends Component {
     }
 
     render() {
-        // console.log(this.props.columns, 'keys are')
+        // console.log(this.state.expandedRowKeys, 'keys are')
         if (this.props.user.type === ADMIN) {
             let index = this.props.columns.findIndex(k => k.dataIndex === 'default_policy');
             this.props.columns[index].className = 'hide';
@@ -270,7 +268,7 @@ class PolicyList extends Component {
                             expandIcon={(props) => this.customExpandIcon(props)}
                             // onExpand={this.onExpandRow}
                             expandedRowRender={(record) => {
-                                // console.log("expandTabSelected", record);
+                                console.log("expandTabSelected", record);
                                 // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                                 return (
                                     <div>{

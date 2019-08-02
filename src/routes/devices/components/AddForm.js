@@ -31,6 +31,7 @@ class AddDevice extends Component {
     constructor(props) {
         super(props);
         this.sim_id2_added = false;
+        this.sim_id2_included = false;
         const invoiceColumns = [
             {
                 dataIndex: 'counter',
@@ -126,7 +127,7 @@ class AddDevice extends Component {
             pgp_email: '',
             chat_id: '',
             sim_id: '',
-            sim_id2: '',
+            sim_id2: undefined,
             selectedPackage: null,
             vpn: '',
             packageId: '',
@@ -167,7 +168,7 @@ class AddDevice extends Component {
                             return item
                         }
                     })
-                    if (this.state.sim_id2 && !this.sim_id2_added) {
+                    if (this.state.sim_id2 && !this.sim_id2_added && !this.sim_id2_included) {
                         if (sim_id_price.length) {
                             let data = {
                                 id: sim_id_price[0].id,
@@ -175,7 +176,6 @@ class AddDevice extends Component {
                                 unit_price: sim_id_price[0].unit_price,
                                 rowKey: sim_id_price[0].id,
                                 price_for: "SIM ID 2"
-
                             }
 
                             this.state.proSelectedRows.push(data);
@@ -330,6 +330,7 @@ class AddDevice extends Component {
         let disablePgp = true;
         let disableSim = true;
         let vpn = '';
+
         let packagesData = []
         let productData = []
         let total_price = 0
@@ -349,6 +350,11 @@ class AddDevice extends Component {
                 }
                 if (services.sim_id) {
                     disableSim = false
+                }
+                if (services.sim_id2) {
+                    this.sim_id2_included = true
+                } else {
+                    this.sim_id2_included = false
                 }
                 if (services.pgp_email) {
                     disablePgp = false
@@ -394,6 +400,7 @@ class AddDevice extends Component {
             pgp_email: (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
             chat_id: (this.props.chat_ids.length && !disableChat) ? this.props.chat_ids[0].chat_id : '',
             sim_id: (this.props.sim_ids.length && !disableSim) ? this.props.sim_ids[0].sim_id : '',
+            sim_id2: (this.sim_id2_included) ? (this.props.sim_ids.length) ? this.props.sim_ids[1].sim_id : undefined : undefined,
             vpn: vpn,
             disableSim: disableSim,
             disableChat: disableChat,
@@ -799,7 +806,7 @@ class AddDevice extends Component {
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         disabled={this.state.disablePgp}
                                     >
-                                       {this.props.pgp_emails.map((pgp_email) => {
+                                        {this.props.pgp_emails.map((pgp_email) => {
                                             return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
                                         })}
                                     </Select>
@@ -877,7 +884,6 @@ class AddDevice extends Component {
                                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         disabled={this.state.disableSim}
                                     >
-                                        <Select.Option value="">{convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}</Select.Option>
                                         {this.props.sim_ids.map((sim_id, index) => {
                                             if (index > 0) {
 

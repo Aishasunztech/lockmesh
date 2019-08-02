@@ -7,10 +7,12 @@ import {
     getPrices, resetPrice, setPackage,
     saveIDPrices, setPrice, getPackages
 } from "../../../appRedux/actions/Account";
+import PackagesInfo from './components/PackagesInfo';
 import { sim, chat, pgp, vpn } from '../../../constants/Constants';
 import AppFilter from '../../../components/AppFilter/index';
 import PricesList from './components/pricesList';
 import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../../utils/commonUtils';
+import { Tab_All } from '../../../constants/TabConstants';
 import {
     TAB_SIM_ID,
     TAB_CHAT_ID,
@@ -79,6 +81,7 @@ class Prices extends Component {
                     }
                 ]
             },
+
             {
                 title: (
                     <Input.Search
@@ -106,20 +109,31 @@ class Prices extends Component {
                         sortDirections: ['ascend', 'descend'],
                     }
                 ]
-            }, {
+            },
+            {
                 title: (
                     <span>
                         {convertToLang(props.translation[PACKAGE_SERVICES], "PACKAGE SERVICES")}
-                        {/* <Popover placement="top" >
-                            <span className="helping_txt"><Icon type="info-circle" /></span>
-                        </Popover> */}
                     </span>
                 ),
                 align: 'center',
-                dataIndex: 'permission',
-                key: 'permission',
+                dataIndex: 'services',
+                key: 'services',
                 className: 'row '
             },
+            {
+                title: (
+                    <span>
+                        {convertToLang(props.translation[""], "PERMISSIONS")}
+                        {/* <Popover placement="top" content='dumy'>
+                                <span className="helping_txt"><Icon type="info-circle" /></span>
+                            </Popover> */}
+                    </span>),
+                dataIndex: 'permission',
+                key: 'permission',
+                className: 'row'
+            },
+
             {
                 title: (
                     <Input.Search
@@ -182,10 +196,46 @@ class Prices extends Component {
             innerTabData: this.props.prices ? this.props.prices[sim] : {},
             tabSelected: sim,
             packages: [],
-            copyStatus: true
+            copyStatus: true,
+            expandedRowKeys: [],
+            expandTabSelected: [],
+            expandedByCustom: [],
         }
     }
 
+
+    expandRow = (rowId, btnof, expandedByCustom = false) => {
+        console.log(rowId, btnof, expandedByCustom);
+        const expandedCustomArray = [...this.state.expandedByCustom];
+        expandedCustomArray[rowId] = expandedByCustom;
+        this.setState({
+            expandedByCustom: expandedCustomArray
+        });
+
+        if (this.state.expandedRowKeys.includes(rowId)) {
+            var index = this.state.expandedRowKeys.indexOf(rowId);
+            if (index !== -1) this.state.expandedRowKeys.splice(index, 1);
+            // console.log('tab is ', btnof)
+            this.setState({
+                expandedRowKeys: this.state.expandedRowKeys,
+
+            })
+        }
+        else {
+            this.state.expandedRowKeys.push(rowId);
+
+            const newItems = [...this.state.expandTabSelected];
+            newItems[rowId] = (btnof === 'services') ? '1' : '2';
+            this.setState({
+                expandedRowKeys: this.state.expandedRowKeys,
+                expandTabSelected: newItems,
+                [rowId]: null,
+                // isSwitch: btnof === 'edit' ? true : false,
+                savePolicyButton: false
+
+            })
+        }
+    }
     handleSearch = (e) => {
 
         let dumyPackages = [];
@@ -255,11 +305,16 @@ class Prices extends Component {
 
     componentWillReceiveProps(nextProps) {
         // console.log(nextProps.prices, 'next props of prices ')
-        if (this.props !== nextProps) {
-            // console.log(nextProps.prices, 'next props of prices ')
-
+        // console.log(nextProps.prices, 'next props of prices ')
+        if (this.props.prices !== nextProps.prices && this.state.prices !== nextProps.prices) {
+            // console.log("props");
             this.setState({
                 prices: nextProps.prices,
+                copyStatus: true
+            })
+        }
+        if (this.props.packages.length !== nextProps.packages.length) {
+            this.setState({
                 packages: nextProps.packages,
                 copyStatus: true
             })
@@ -276,31 +331,76 @@ class Prices extends Component {
     renderList = () => {
         if (this.state.packages) {
             // console.log(this.state.packages)
+            let i = 0
             return this.state.packages.map((item, index) => {
                 return {
+                    id: item.id,
                     key: item.id,
-                    sr: ++index,
+                    rowKey: index,
+                    sr: ++i,
                     pkg_name: item.pkg_name,
+                    services:
+                        <Fragment>
+                            <a onClick={() => {
+                                console.log(index)
+                                this.expandRow(index, 'services', true)
+                                // console.log('table cosn', this.refs.policy_table)
+                                // this.refs.policy_table.props.onExpand()
+                            }}>
+                                <Icon type="arrow-down" style={{ fontSize: 15 }} />
+                            </a>
+                            <span className="exp_txt">{convertToLang(this.props.translation[""], "Expand")}</span>
+                        </Fragment>
+                    ,
+                    permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(item.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : item.permission_count > 0 ? item.permission_count : 0}</span>,
                     pkg_price: "$" + item.pkg_price,
                     pkg_term: item.pkg_term,
                     pkg_expiry: item.pkg_expiry,
                     pkg_features: item.pkg_features ? JSON.parse(item.pkg_features) : {},
+                    permissions: (item.dealer_permission !== undefined && item.dealer_permission !== null) ? item.dealer_permission : [],
+
                 }
             })
         }
         // console.log(this.props.packages, 'packages are')
     }
 
-    customExpandIcon(props) {
-        if (props.expanded) {
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-down" /></a>
-        } else {
+    // customExpandIcon(props) {
+    //     if (props.expanded) {
+    //         return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+    //             props.onExpand(props.record, e);
+    //         }}><Icon type="caret-down" /></a>
+    //     } else {
 
-            return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
-                props.onExpand(props.record, e);
-            }}><Icon type="caret-right" /></a>
+    //         return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+    //             props.onExpand(props.record, e);
+    //         }}><Icon type="caret-right" /></a>
+    //     }
+    // }
+
+    customExpandIcon(props) {
+        // console.log(props);
+        if (props.expanded) {
+            if (this.state.expandedByCustom[props.record.rowKey]) {
+                return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                    this.expandRow(props.record.rowKey, 'permission', false)
+                }}><Icon type="caret-right" /></a>
+            } else {
+                return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                    this.expandRow(props.record.rowKey, 'permission', false)
+                }}><Icon type="caret-down" /></a>
+            }
+        } else {
+            if (this.state.expandedByCustom[props.record.rowKey]) {
+                return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                    this.expandRow(props.record.rowKey, 'permission', false)
+                }}><Icon type="caret-right" /></a>
+            } else {
+                return <a style={{ fontSize: 22, verticalAlign: 'sub' }} onClick={e => {
+                    this.expandRow(props.record.rowKey, 'permission', false)
+                }}><Icon type="caret-right" /></a>
+
+            }
         }
     }
 
@@ -310,7 +410,7 @@ class Prices extends Component {
 
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                    console.log(key + " -> " + data[key]);
+                    // console.log(key + " -> " + data[key]);
                     let name = key;
                     name = name.charAt(0).toUpperCase() + name.slice(1);
                     let dump = {
@@ -365,7 +465,7 @@ class Prices extends Component {
         })
     }
     render() {
-        // console.log(this.state.prices, 'prices are coming')
+        // console.log(this.state.expandedRowKeys, 'prices are coming')
         return (
             <div>
                 <div>
@@ -427,36 +527,61 @@ class Prices extends Component {
                             </Tabs.TabPane>
                             <Tabs.TabPane tab={convertToLang(this.props.translation[Tab_PACKAGES], "PACKAGES")} key="2">
                                 <Table
-                                    columns={this.columns}
-                                    dataSource={this.renderList()}
+                                    className="devices policy_expand"
+                                    rowClassName={(record, index) => this.state.expandedRowKeys.includes(index) ? 'exp_row' : ''}
+                                    size="default"
                                     bordered
-                                    pagination={false}
-                                    expandIconAsCell={false}
                                     expandIcon={(props) => this.customExpandIcon(props)}
-                                    expandIconColumnIndex={3}
-                                    expandedRowRender={record => {
+                                    // onExpand={this.onExpandRow}
+                                    expandedRowRender={(record) => {
+                                        // console.log("expandTabSelected", record);
+                                        // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                                         if (Object.keys(record.pkg_features).length !== 0 && record.pkg_features.constructor === Object) {
                                             return (
                                                 <div>
-                                                    <Table
-                                                        columns={[
-                                                            { title: convertToLang(this.props.translation[PACKAGE_SERVICE_NAME], "SERVICE NAME"), dataIndex: 'name', key: 'name', align: 'center' },
-                                                            { title: convertToLang(this.props.translation[PACKAGE_INCLUDED], "INCLUDED"), key: 'f_value', dataIndex: 'f_value', align: 'center' }]}
-                                                        dataSource={this.renderFeatures(record.pkg_features)}
-                                                        pagination={false}
+                                                    <PackagesInfo
+                                                        selected={this.state.expandTabSelected[record.rowKey]}
+                                                        package={record}
+                                                        translation={this.props.translation}
+
                                                     />
+                                                    {/* 
+
+                                                    <Tabs activeKey={this.state.expandTabSelected[record.rowKey]} >
+                                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "SERVICES")} key="1" >
+                                                            <Table
+                                                                columns={[
+                                                                    { title: convertToLang(this.props.translation[PACKAGE_SERVICE_NAME], "SERVICE NAME"), dataIndex: 'name', key: 'name', align: 'center' },
+                                                                    { title: convertToLang(this.props.translation[PACKAGE_INCLUDED], "INCLUDED"), key: 'f_value', dataIndex: 'f_value', align: 'center' }]}
+                                                                dataSource={this.renderFeatures(record.pkg_features)}
+                                                                pagination={false}
+                                                            />
+                                                        </Tabs.TabPane>
+                                                        <Tabs.TabPane tab={convertToLang(this.props.translation[TAB_SIM_ID], "PERMISSIONS")} key="2" >
+
+                                                        </Tabs.TabPane>
+                                                    </Tabs> */}
+
                                                 </div>)
                                         } else {
                                             return (
                                                 <div>
-
                                                 </div>
                                             )
                                         }
-
-
                                     }}
-
+                                    // expandIconColumnIndex={1}         
+                                    expandIconColumnIndex={4}
+                                    expandedRowKeys={this.state.expandedRowKeys}
+                                    expandIconAsCell={false}
+                                    columns={this.columns}
+                                    onChange={this.props.onChangeTableSorting}
+                                    dataSource={this.renderList()}
+                                    pagination={false
+                                        // { pageSize: this.state.pagination, size: "midddle" }
+                                    }
+                                    rowKey="policy_list"
+                                    ref='policy_table'
                                 />
                             </Tabs.TabPane>
                         </Tabs>

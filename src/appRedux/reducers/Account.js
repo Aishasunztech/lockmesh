@@ -16,7 +16,8 @@ import {
     RESET_PRICE,
     GET_PACKAGES,
     PURCHASE_CREDITS,
-    GET_PARENT_PACKAGES
+    GET_PARENT_PACKAGES,
+    PACKAGE_PERMSSION_SAVED
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -265,7 +266,7 @@ export default (state = initialState, action) => {
                 backUpModal: action.payload,
             }
 
-       
+
 
         case PURCHASE_CREDITS:
             // console.log(action.response);
@@ -284,6 +285,21 @@ export default (state = initialState, action) => {
             return {
                 ...state,
             }
+
+        case PACKAGE_PERMSSION_SAVED: {
+            // console.log("dasdasdad");
+            success({
+                title: action.payload
+            });
+
+            let objIndex = state.packages.findIndex((obj => obj.id === action.package_id));
+            state.packages[objIndex].permission_count = action.permission_count;
+
+            return {
+                ...state,
+                packages: [...state.packages]
+            }
+        }
 
         default:
             return state;
