@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { Modal } from 'antd';
 
 import {
     getAgentList,
@@ -11,6 +12,9 @@ import {
     deleteAgent
 } from '../../appRedux/actions'
 
+import {
+    WARNING
+} from '../../constants/Constants';
 
 import AppFilter from '../../components/AppFilter';
 import AgentTabs from './components/AgentTabs';
@@ -21,11 +25,12 @@ import {
 } from '../utils/commonUtils'
 import { dealerAgentColumns } from '../utils/columnsUtils';
 import { ADMIN } from '../../constants/Constants';
+import { Button_Confirm, Button_Cancel } from '../../constants/ButtonConstants';
 
 var copyDealerAgents = [];
 var status = true;
 var copy_status = true;
-
+const confirm = Modal.confirm;
 class DealerAgent extends Component {
     constructor(props) {
         super(props);
@@ -189,7 +194,20 @@ class DealerAgent extends Component {
         this.props.changeAgentStatus(agent, e);
     }
     handleDeleteAgent = (agentID) => {
-        this.props.deleteAgent(agentID);
+        let _this = this;
+        confirm({
+            title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
+            content: convertToLang(_this.props.translation[WARNING], "Are you sure, you want to delete Agent?"),
+            okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+            onOk() {
+                _this.props.deleteAgent(agentID);
+            },
+            onCancel() { 
+
+            },
+        });
+
     }
     render() {
         return (
