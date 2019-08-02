@@ -65,9 +65,9 @@ export default class DevicesList extends Component {
                         size="small"
                         className="mb-0"
                         type="ghost"
-                        disabled
+                        onClick = {(e) => this.props.handleResetPwd(agent.id)}
                     >
-                        {convertToLang(this.props.translation['RESET PASS'], "RESET PASS")}
+                        {convertToLang(this.props.translation['PASSWORD RESET'], "PASSWORD RESET")}
                     </Button>
                 </Fragment>),
                 name: checkValue(agent.name),

@@ -9,7 +9,8 @@ import {
     addAgent,
     updateAgent,
     changeAgentStatus,
-    deleteAgent
+    deleteAgent,
+    resetAgentPwd
 } from '../../appRedux/actions'
 
 import {
@@ -209,6 +210,21 @@ class DealerAgent extends Component {
         });
 
     }
+    handleResetPwd = (agentID) => {
+        let _this = this;
+        confirm({
+            title: convertToLang(_this.props.translation[WARNING], "WARNING!"),
+            content: convertToLang(_this.props.translation[WARNING], "Are you sure, you want to change password?"),
+            okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+            cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+            onOk() {
+                _this.props.resetAgentPwd(agentID);
+            },
+            onCancel() { 
+
+            },
+        });
+    }
     render() {
         return (
             <Fragment>
@@ -257,6 +273,7 @@ class DealerAgent extends Component {
                     updateAgent={this.props.updateAgent}
                     agentStatusHandler={this.agentStatusHandler}
                     handleDeleteAgent={this.handleDeleteAgent}
+                    handleResetPwd={this.handleResetPwd}
                 />
                 <AddAgent
                     addAgentModal={this.state.addAgentModal}
@@ -279,7 +296,8 @@ const mapDispatchToProps = (dispatch) => {
         addAgent: addAgent,
         updateAgent: updateAgent,
         changeAgentStatus: changeAgentStatus,
-        deleteAgent: deleteAgent
+        deleteAgent: deleteAgent,
+        resetAgentPwd: resetAgentPwd
     }, dispatch);
 }
 
