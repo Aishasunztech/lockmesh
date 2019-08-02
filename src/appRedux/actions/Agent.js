@@ -63,7 +63,7 @@ export function updateAgent(agent) {
                     type: UPDATE_AGENT,
                     payload: {
                         status: response.data.status,
-                        agent: agent,
+                        agent: response.data.agent,
                         msg: response.data.msg
                     },
                 });

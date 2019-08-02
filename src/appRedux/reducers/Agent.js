@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
             }
         }
         case UPDATE_AGENT: {
-            // console.log('item added is:', action.response)
+            
             if (action.payload.status) {
                 let objIndex = state.dealerAgents.findIndex((obj => obj.id === action.payload.agent.id));
                 state.dealerAgents[objIndex] = action.payload.agent;
@@ -77,7 +77,7 @@ export default (state = initialState, action) => {
                 dealerAgents: [...state.dealerAgents]
             }
         }
-        
+
         // case LOAD_USER:
         //     return {
         //         ...state,
