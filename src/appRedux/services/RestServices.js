@@ -753,14 +753,17 @@ const RestService = {
         }, RestService.getHeader());
     },
     updateAgent: (agent) => {
-        console.log(agent);
-
         return axios.put(BASE_URL + 'users/agents/' + agent.agent_id, {
             ...agent
         }, RestService.getHeader());
     },
-    deleteAgent: (agentId) => {
-        return axios.delete(BASE_URL + 'users/agents' + agentId, RestService.getHeader());
+    changeAgentStatus(agent, status){
+        return axios.put(BASE_URL + 'users/agents/' + agent.id + '/status', {
+            status: status
+        }, RestService.getHeader());
+    },
+    deleteAgent: (agentID) => {
+        return axios.delete(BASE_URL + 'users/agents/' + agentID, RestService.getHeader());
     }
 
 }

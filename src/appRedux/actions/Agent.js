@@ -5,8 +5,9 @@ import {
     INVALID_TOKEN,
     LOADING,
     UPDATE_AGENT,
-    DELETE_USER,
-    UNDO_DELETE_USER
+    DELETE_AGENT,
+    CHANGE_AGENT_STATUS
+    // UNDO_DELETE_USER
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -63,7 +64,7 @@ export function updateAgent(agent) {
                     type: UPDATE_AGENT,
                     payload: {
                         status: response.data.status,
-                        agent: agent,
+                        agent: response.data.agent,
                         msg: response.data.msg
                     },
                 });
@@ -77,28 +78,48 @@ export function updateAgent(agent) {
     }
 }
 
-export function deleteAgent(userId) {
-    // return (dispatch) => {
+export function changeAgentStatus(agent, status){
+    return (dispatch) => {
 
-    //     RestService.deleteUser(userId).then((response) => {
-    //         if (RestService.checkAuth(response.data)) {
-    //             // console.log('action done ', response.data);
-    //             dispatch({
-    //                 type: DELETE_USER,
-    //                 payload: {
-    //                     status: response.data.status,
-    //                     msg: response.data.msg,
-    //                     user_id: userId
-    //                 }
-    //             });
+        RestService.changeAgentStatus(agent, status).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                
+                dispatch({
+                    type: CHANGE_AGENT_STATUS,
+                    payload: response.data
+                });
 
-    //         } else {
-    //             dispatch({
-    //                 type: INVALID_TOKEN
-    //             })
-    //         }
-    //     })
-    // }
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export function deleteAgent(agentID) {
+    return (dispatch) => {
+
+        RestService.deleteAgent(agentID).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('action done ', response.data);
+                dispatch({
+                    type: DELETE_AGENT,
+                    payload: {
+                        status: response.data.status,
+                        msg: response.data.msg,
+                        agentID: agentID
+                    }
+                });
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
 }
 
 // export function undoDeleteUser(userId) {

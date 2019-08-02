@@ -5,6 +5,7 @@ import {
     LOADING,
     UPDATE_AGENT,
     DELETE_AGENT,
+    CHANGE_AGENT_STATUS,
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
@@ -59,7 +60,7 @@ export default (state = initialState, action) => {
             }
         }
         case UPDATE_AGENT: {
-            // console.log('item added is:', action.response)
+
             if (action.payload.status) {
                 let objIndex = state.dealerAgents.findIndex((obj => obj.id === action.payload.agent.id));
                 state.dealerAgents[objIndex] = action.payload.agent;
@@ -77,30 +78,41 @@ export default (state = initialState, action) => {
                 dealerAgents: [...state.dealerAgents]
             }
         }
-        
-        // case LOAD_USER:
-        //     return {
-        //         ...state,
-        //         addUserFlag: true,
-        //     }
+
+        case CHANGE_AGENT_STATUS: {
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state
+            }
+        }
 
 
-        // case DELETE_USER:
-        //     if (action.payload.status) {
-        //         let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.user_id));
-        //         state.users_list.splice(objIndex4, 1)
-        //         success({
-        //             title: action.payload.msg,
-        //         });
-        //     } else {
-        //         error({
-        //             title: action.payload.msg,
-        //         });
-        //     }
-        //     return {
-        //         ...state,
-        //         users_list: [...state.users_list]
-        //     }
+        case DELETE_AGENT: {
+            if (action.payload.status) {
+                let objIndex4 = state.dealerAgents.findIndex((obj => obj.id === action.payload.agentID));
+                state.dealerAgents.splice(objIndex4, 1)
+                success({
+                    title: action.payload.msg,
+                });
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                dealerAgents: [...state.dealerAgents]
+            }
+        }
+
         // case UNDO_DELETE_USER:
         //     if (action.payload.status) {
         //         let objIndex4 = state.users_list.findIndex((obj => obj.user_id === action.payload.user_id));

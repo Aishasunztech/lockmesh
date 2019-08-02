@@ -83,12 +83,14 @@ export default class AgentTabs extends Component {
                     onChangeTableSorting={this.props.onChangeTableSorting}
                     translation={this.props.translation}
                     dealerAgents={this.props.dealerAgents}
+                    agentStatusHandler={this.props.agentStatusHandler}
+                    handleDeleteAgent={this.props.handleDeleteAgent}
                 />
                 <EditAgent
-                    showEditModal = {this.showEditModal}
-                    editAgentModal = {this.state.editAgentModal}
+                    showEditModal={this.showEditModal}
+                    editAgentModal={this.state.editAgentModal}
                     agent={this.state.agent}
-                    updateAgent = {this.props.updateAgent}
+                    updateAgent={this.props.updateAgent}
                     translation={this.props.translation}
                 />
             </Fragment>

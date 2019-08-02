@@ -49,7 +49,7 @@ export default class DevicesList extends Component {
                         size="small"
                         className="mb-0"
                         type="danger"
-                        disabled
+                        onClick= {(e)=> this.props.handleDeleteAgent(agent.id)}
                     >
                         {convertToLang(this.props.translation['DELETE'], "DELETE")}
                     </Button>
@@ -75,7 +75,7 @@ export default class DevicesList extends Component {
                 type: checkValue(agent.type),
                 status: (
                     <Switch 
-                        disabled
+                        onChange = {(e) => this.props.agentStatusHandler(e, agent)}
                         defaultChecked={(agent.status ===1)? true: false}
                         size={'small'}
                     />
