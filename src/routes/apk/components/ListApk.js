@@ -118,50 +118,52 @@ export default class ListApk extends Component {
                 // console.log('app is: ', app)
                 if (app.deleteable) {
                     data = {
-                        'rowKey': app.apk_id,
-                        'apk_id': app.apk_id,
-                        'action': (
+                        rowKey: app.apk_id,
+                        apk_id: app.apk_id,
+                        action: (
                             <div data-column="ACTION" style={{ display: "inline-flex" }}>
                                 <Fragment>
                                     <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
                                         onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
                                     <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
-                                        this.props.handleConfirmDelete(app.apk_id);
+                                        this.props.handleConfirmDelete(app.apk_id, app);
                                     }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                                 </Fragment>
                             </div>
                         ),
-                        'permission': (
+                        permission: (
                             <div data-column="PERMISSION" style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>
                                 {app.permission_count}
                             </div>
                         ),
-                        "permissions": app.permissions,
-                        'apk_status': (
+                        permissions: app.permissions,
+                        apk_status: (
                             <div data-column="SHOW ON DEVICE">
                                 <Switch size="small" defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                                     this.props.handleStatusChange(e, app.apk_id);
                                 }} />
                             </div>
                         ),
-                        'apk': (
+                        apk: (
                             <div data-column="SHOW ON DEVICE">
                                 {app.apk ? app.apk : 'N/A'}
                             </div>
                         ),
-                        'apk_name': app.apk_name ? app.apk_name : 'N/A',
-                        'apk_logo': (
+                        apk_name: app.apk_name ? app.apk_name : 'N/A',
+                        apk_logo: (
                             <div data-column="APK LOGO">
                                 <Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />
                             </div>),
-                        'apk_size': (
+                        apk_size: (
                             <div data-column="APP SIZE">
                                 {app.size ? app.size : 'N/A'}
                             </div>
                         ),
-                        'version': app.version,
-                        'created_at': app.created_at,
-                        'updated_at': app.updated_at
+                        label: app.label,
+                        package_name: app.package_name,
+                        version: app.version,
+                        created_at: app.created_at,
+                        updated_at: app.updated_at
                     }
                     apkList.push(data)
 
