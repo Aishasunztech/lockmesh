@@ -1792,6 +1792,7 @@ export function controlColumns(translation) {
         }
     ]);
 }
+
 export function policyColumns(translation, handleSearch) {
     return ([
         //     title: 'ACTIONS',
@@ -1932,9 +1933,7 @@ export function policyColumns(translation, handleSearch) {
                     className: '',
                     dataIndex: 'policy_note',
                     key: 'policy_note',
-                    // ...this.getColumnSearchProps('status'),
                     sorter: (a, b) => { return a.policy_note.localeCompare(b.policy_note) },
-
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -1949,11 +1948,93 @@ export function policyColumns(translation, handleSearch) {
             dataIndex: 'default_policy',
             key: 'default_policy',
         },
+        {
+            title: (
+                <Input.Search
+                    name="created_by"
+                    key="created_by"
+                    id="created_by"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREATED BY")}
+                />
+            ),
+            dataIndex: 'created_by',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREATED BY"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'created_by',
+                    key: 'created_by',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.created_by.localeCompare(b.created_by) },
 
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="created_date"
+                    key="created_date"
+                    id="created_date"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "CREATED DATE")}
+                />
+            ),
+            dataIndex: 'created_date',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "CREATED DATE"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'created_date',
+                    key: 'created_date',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.created_date.localeCompare(b.created_date) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="last_edited"
+                    key="last_edited"
+                    id="last_edited"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "LAST EDIT")}
+                />
+            ),
+            dataIndex: 'last_edited',
+            className: '',
+            children: [
+                {
+                    title: convertToLang(translation[""], "LAST EDIT"),
+                    align: "center",
+                    className: '',
+                    dataIndex: 'last_edited',
+                    key: 'last_edited',
+                    // ...this.getColumnSearchProps('status'),
+                    sorter: (a, b) => { return a.last_edited.localeCompare(b.last_edited) },
+
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
     ]
     )
 };
-
 
 export function apkColumns(translation) {
     return ([
@@ -2030,5 +2111,238 @@ export function apkColumns(translation) {
             key: 'apk_size',
             // className: ''
         },
+        {
+            title: convertToLang(translation[""], "VERSION"),
+            dataIndex: 'version',
+            key: 'version',
+        },
+        {
+            title: convertToLang(translation[""], "UPLOAD DATE"),
+            dataIndex: 'created_at',
+            key: 'created_at',
+        },
+        {
+            title: convertToLang(translation[""], "LAST EDIT"),
+            dataIndex: 'updated_at',
+            key: 'updated_at',
+        },
     ])
+}
+export function featureApkColumns(translation) {
+    return ([
+        {
+            title: (
+                <span>
+                    {convertToLang(translation[APK_PERMISSION], "PERMISSION")}
+                    <Popover placement="top" content={(<Markup content={convertToLang(translation[APK_PERMISSION_HELPING_TEXT],
+                        `   <p>Press <a style="font-size: 20px;vertical-align: sub;margin-left: 4px;">
+                            <i class="fa fa-caret-right" aria-hidden="true"></i> 
+                            </a> to Add, remove or View
+                            <br/> the Dealers who have permission
+                            <br/>to use this App</p>`)} />)}>
+                        <span className="helping_txt"><Icon type="info-circle" /></span>
+                    </Popover>
+                </span>),
+            dataIndex: 'permission',
+            key: 'permission',
+            className: ''
+        },
+        {
+            title: convertToLang(translation[APK_APP_NAME], "APP NAME"),
+            dataIndex: 'apk_name',
+            width: "100",
+            key: 'apk_name',
+            sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
+            sortDirections: ['ascend', 'descend'],
+            defaultSortOrder: "ascend"
+        },
+        {
+            title: convertToLang(translation["APP VERSION"], "APP VERSION"),
+            dataIndex: 'apk_version',
+            key: 'apk_version',
+        },
+        {
+            title: convertToLang(translation[APK_APP_LOGO], "APP LOGO"),
+            dataIndex: 'apk_logo',
+            key: 'apk_logo',
+        },
+        {
+            title: convertToLang(translation[APK_SIZE], "APP SIZE"),
+            dataIndex: 'apk_size',
+            key: 'apk_size',
+        },
+        {
+            title: convertToLang(translation["UPDATED DATE"], "LAST UPDATE"),
+            dataIndex: 'updated_date',
+            key: 'updated_date',
+        },
+    ])
+}
+
+export function dealerAgentColumns(translation, handleSearch) {
+    return ([
+        {
+            title: "#",
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        // action
+        {
+            title: convertToLang(translation[ACTION], "ACTION"),
+            align: "center",
+            dataIndex: 'action',
+            key: "action",
+        },
+        // username
+        {
+            title: (
+                <div>
+                    <Input.Search
+                        name="name"
+                        key="name"
+                        id="name"
+                        className="search_heading device_id_w"
+                        autoComplete="new-password"
+                        onKeyUp={handleSearch}
+                        placeholder={convertToLang(translation['USERNAME'], "USERNAME")}
+                    />
+                </div>
+            ),
+            dataIndex: 'name',
+            className: 'row',
+            children: [
+                {
+                    title: convertToLang(translation['USERNAME'], "USERNAME"),
+                    align: "center",
+                    dataIndex: 'name',
+                    key: "name",
+                    className: 'row device_id_w_td',
+                    onFilter: (value, record) => record.devices.indexOf(value) === 0,
+                    sorter: (a, b) => {return a.name.localeCompare(b.name) },
+                    // sortDirections: ['ascend', 'descend'],
+                }
+            ],
+        },
+        // staff_id
+        {
+            title: (
+                <Input.Search
+                    name="staff_id"
+                    key="staff_id"
+                    id="staff_id"
+                    className="search_heading user_id_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation["STAFF ID"], "STAFF ID")}
+                />
+            ),
+            dataIndex: 'staff_id',
+            children: [
+                {
+                    title: convertToLang(translation["STAFF ID"], "STAFF ID"),
+                    align: "center",
+                    dataIndex: 'staff_id',
+                    key: "staff_id",
+                    sorter: (a, b) => {
+                        // console.log(a, 'user is is')
+                        return a.staff_id.localeCompare(b.staff_id)
+                    },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
+        },
+        
+        // permission
+        {
+            title: (
+                <Input.Search
+                    name="type"
+                    key="type"
+                    id="type"
+                    className="search_heading user_name_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation["PERMISSION"], "PERMISSION")}
+                />
+            ),
+            dataIndex: 'type',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation["PERMISSION"], "PERMISSION"),
+                dataIndex: 'type',
+                align: "center",
+                key: 'type',
+                sorter: (a, b) => { return a.type.localeCompare(b.type) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+
+        // status
+        {
+            title: convertToLang(translation['STATUS'], "STATUS"),
+            dataIndex: 'status',
+            className: 'row',
+            key: 'status',
+            // align: "center",
+        },
+
+        // email
+        {
+            title: (
+                <Input.Search
+                    name="email"
+                    key="email"
+                    id="email"
+                    className="search_heading email_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[USER_EMAIL], "EMAIL")}
+                />
+            ),
+            dataIndex: 'email',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation[USER_EMAIL], "EMAIL"),
+                dataIndex: 'email',
+                align: "center",
+                key: 'email',
+                sorter: (a, b) => { return a.email.localeCompare(b.email.toString()) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+        
+        {
+            title: (
+                <Input.Search
+                    name="created_at"
+                    key="created_at"
+                    id="created_at"
+                    className="search_heading created_at_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation['DATE.CREATED'], "DATE CREATED")}
+                />
+            ),
+            dataIndex: 'created_at',
+            className: 'row',
+            children: [{
+                title: convertToLang(translation['DATE.CREATED'], "DATE CREATED"),
+                dataIndex: 'created_at',
+                align: "center",
+                key: 'created_at',
+                sorter: (a, b) => { return a.created_at.localeCompare(b.created_at.toString()) },
+                sortDirections: ['ascend', 'descend'],
+            }]
+        },
+
+        {
+            title: convertToLang(translation["SUPPORT.CALLS"], "SUPPORT CALLS"),
+            align: "center",
+            dataIndex: 'support_calls',
+            key: "support_calls",
+            className: "token_w",
+        },
+    ]);
 }

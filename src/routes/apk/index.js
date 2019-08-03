@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar } from "antd";
+import { Input, Icon, Modal, Select, Button, Tooltip, Popover, Avatar, Row, Col } from "antd";
 import { Link } from 'react-router-dom';
 import Highlighter from 'react-highlight-words';
 
@@ -41,7 +41,7 @@ import {
 import { componentSearch, titleCase } from "../utils/commonUtils";
 import { ACTION, Alert_Delete_APK, SEARCH } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
-import { apkColumns } from "../utils/columnsUtils";
+import { apkColumns, featureApkColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 
 
@@ -53,6 +53,7 @@ class Apk extends Component {
     constructor(props) {
         super(props);
         var columns = apkColumns(props.translation);
+        var featureApkcolumns = featureApkColumns(props.translation);
 
         this.state = {
             sorterKey: '',
@@ -62,16 +63,12 @@ class Apk extends Component {
             showUploadModal: false,
             showUploadData: {},
             columns: columns,
+            featureApkcolumns: featureApkcolumns
         }
 
         // this.columns = ;
         this.confirm = Modal.confirm;
-        // binding methods
-        this.handleConfirmDelete = this.handleConfirmDelete.bind(this);
-        this.handleStatusChange = this.handleStatusChange.bind(this);
-        // this.tableChangeHandler = this.tableChangeHandler.bind(this);
-
-
+        
     }
 
     // handleTableChange = (pagination, query, sorter) => {
@@ -82,7 +79,6 @@ class Apk extends Component {
     // };
 
     handleTableChange = (pagination, query, sorter) => {
-        console.log('sorter func', sorter)
         let { columns } = this.state;
 
         columns.forEach(column => {
@@ -385,6 +381,8 @@ class Apk extends Component {
                                         </Button> */}
                                     </div> : false
                             }
+
+
                             <ListApk
                                 onChangeTableSorting={this.handleTableChange}
                                 handleStatusChange={this.handleStatusChange}
@@ -392,7 +390,9 @@ class Apk extends Component {
                                 // tableChangeHandler={this.tableChangeHandler}
                                 handleConfirmDelete={this.handleConfirmDelete}
                                 editApk={this.props.editApk}
+                                addApk={this.props.addApk}
                                 columns={this.state.columns}
+                                featureApkcolumns={this.state.featureApkcolumns}
                                 getApkList={this.props.getApkList}
                                 pagination={this.props.DisplayPages}
                                 user={this.props.user}

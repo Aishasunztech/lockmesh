@@ -84,8 +84,6 @@ import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToL
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
-import Item from "antd/lib/list/Item";
-import { STATUS_CODES } from "http";
 
 
 var coppyDevices = [];
@@ -95,7 +93,6 @@ class Devices extends Component {
     constructor(props) {
         super(props);
         var columns = devicesColumns(props.translation, this.handleSearch);
-
 
         this.state = {
             sorterKey: '',
@@ -250,7 +247,6 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = 'hide';
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
             }
-
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
@@ -632,8 +628,6 @@ class Devices extends Component {
         }
 
         if (this.props.translation !== prevProps.translation) {
-            // console.log(this.columns)
-            console.log('this.state.sortOrder is ', this.state.sortOrder)
             this.setState({
                 columns: devicesColumns(this.props.translation, this.handleSearch)
 

@@ -324,7 +324,21 @@ class AppList extends Component {
         // console.log('props is', this.state.apk_list)
         if (this.props.apk_list) {
             if (this.props.apk_list.length) {
-                return this.props.apk_list.map(app => {
+                let featuredApps = []
+                let apps = []
+                let allApks = []
+                this.props.apk_list.map((item, index) => {
+                    if (item.package_name === 'com.armorSec.android' || item.package_name === 'ca.unlimitedwireless.mailpgp' || item.package_name === 'com.rim.mobilefusion.client') {
+                        featuredApps.push(item);
+                        // allApks.splice(index, 1)
+                    } else {
+                        apps.push(item)
+                    }
+                })
+
+                allApks = [...featuredApps, ...apps]
+
+                return allApks.map(app => {
                     return this.renderSingleApp(app)
                 })
             }
@@ -408,7 +422,7 @@ class AppList extends Component {
                                 <Col span={6} className="">
                                 </Col>
                                 <Col span={3} className="">
-                                <Avatar src={`${BASE_URL}users/getFile/${this.state.mainExtension.icon}`} style={{ width: "30px", height: "30px" }} />
+                                    <Avatar src={`${BASE_URL}users/getFile/${this.state.mainExtension.icon}`} style={{ width: "30px", height: "30px" }} />
                                     {/* <img src={require("assets/images/setting.png")} /> */}
                                 </Col>
                                 <Col span={15} className="pl-0">
