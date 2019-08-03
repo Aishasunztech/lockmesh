@@ -27,6 +27,7 @@ import {
     ADMIN,
     DEVICE_TRIAL,
     DEVICE_TRANSFERED,
+    DEVICE_FLAGGED,
 } from '../../constants/Constants'
 
 import {
@@ -60,8 +61,6 @@ import {
 
 import {
     DEVICE_REMAINING_DAYS,
-    DEVICE_FLAGGED,
-
 } from '../../constants/DeviceConstants';
 
 import {
@@ -167,8 +166,7 @@ class Devices extends Component {
                     // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
                     let deviceStatus = device.flagged;
                     // console.log('22222 flagged', device.flagged)
-                    if (deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') {
-                        // console.log('3333333 flagged', device.flagged)
+                    if ((deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') && (device.finalStatus === "Flagged")) {
                         dumyDevices.push(device);
                     }
                 }

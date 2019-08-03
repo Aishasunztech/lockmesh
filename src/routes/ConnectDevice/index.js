@@ -515,6 +515,7 @@ class ConnectDevice extends Component {
                     refreshDevice={this.refreshDevice}
                     startLoading={this.props.startLoading}
                     endLoading={this.props.endLoading}
+                    auth={this.props.auth}
                     translation={this.props.translation}
                   />
                 </Col>

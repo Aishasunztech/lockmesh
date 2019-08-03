@@ -324,7 +324,7 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
 
   // console.log('lng id is: ', translation["lng_id"])
-  console.log('test: =====================================================>  ' , devices.devices)
+  // console.log('test: =====================================================>  ' , devices.devices)
   return {
     navStyle,
     themeType,

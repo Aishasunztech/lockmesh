@@ -501,13 +501,17 @@ class SideActions extends Component {
         this.props.getProfiles(this.props.device.device_id)
     }
     transferDeviceProfile = (device) => {
-        console.log('at transferDeviceProfile')
+        // console.log('at transferDeviceProfile')
         let _this = this;
         confirm({
             content: convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
                 // console.log('OK');
-                _this.props.transferDeviceProfile({ device, flagged_device_id: _this.props.device_id });
+                _this.props.transferDeviceProfile(
+                    {
+                        reqDevice: device,
+                        flagged_device: _this.props.device_details,
+                    });
             },
             onCancel() {
                 // console.log('Cancel');
@@ -1164,7 +1168,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
-    
+
     return {
         requests: sidebar.newRequests,
         devices: devices.newDevices,
@@ -1192,6 +1196,7 @@ var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, oth
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         device_id: device_details.device.device_id,
+        device_details: device_details.device,
         usr_acc_id: device_details.device.id,
         apk_list: otherProps.apk_list,
         controls: device_details.controls,

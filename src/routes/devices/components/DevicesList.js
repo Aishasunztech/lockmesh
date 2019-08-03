@@ -143,9 +143,9 @@ class DevicesList extends Component {
     renderList(list) {
         // console.log('list of dec', list)
         return list.map((device, index) => {
-            console.log('device is: ', device)
-            console.log('device transfer_status is: ', device.transfer_status)
-            console.log('tab Select is: ', this.props.tabselect)
+            // console.log('device is: ', device)
+            // console.log('device transfer_status is: ', device.transfer_status)
+            // console.log('tab Select is: ', this.props.tabselect)
 
             // var remainDays = checkRemainDays(device.created_at, device.validity)
             // console.log('Remain Days are: ', remainDays);   
@@ -198,23 +198,25 @@ class DevicesList extends Component {
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
-                        : (device.flagged !== 'Not flagged') ?
+                        : (device.flagged !== 'Not flagged' && device.transfer_status == 0 && device.finalStatus == "Flagged") ?
                             (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            : (status === DEVICE_SUSPENDED) ?
-                                (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                : (status === DEVICE_EXPIRED) ?
-                                    (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                    : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
-                                        (<Fragment>{DeleteBtn}</Fragment>)
-                                        : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN) ?
-                                            (<Fragment>
-                                                <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment>
-                                            </Fragment>)
-                                            : (device.status === DEVICE_PRE_ACTIVATION) ?
-                                                false
-                                                : (status === DEVICE_EXPIRED) ?
-                                                    (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
-                                                    : false
+                            : (device.flagged !== 'Not flagged' && device.transfer_status == 1) ?
+                                (<Fragment>{Unflagbtn}</Fragment>)
+                                : (status === DEVICE_SUSPENDED) ?
+                                    (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                    : (status === DEVICE_EXPIRED) ?
+                                        (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                        : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
+                                            (<Fragment>{DeleteBtn}</Fragment>)
+                                            : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN) ?
+                                                (<Fragment>
+                                                    <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment>
+                                                </Fragment>)
+                                                : (device.status === DEVICE_PRE_ACTIVATION) ?
+                                                    false
+                                                    : (status === DEVICE_EXPIRED) ?
+                                                        (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
+                                                        : false
 
 
                 ),

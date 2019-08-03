@@ -61,7 +61,8 @@ import {
     UPDATE_SIM,
     RECEIVE_SIM_DATA,
     DELETE_SIM,
-    SIM_HISTORY
+    SIM_HISTORY,
+    TRANSFER_DEVICE
 } from "../../constants/ActionTypes";
 
 import {
@@ -529,6 +530,22 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false
+            }
+        }
+
+        case TRANSFER_DEVICE: {
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                })
+            } else {
+                error({
+                    title: action.payload.msg,
+                })
+            }
+
+            return {
+                ...state,
             }
         }
 

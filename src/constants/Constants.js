@@ -16,7 +16,7 @@ export const DEVICE_SUSPENDED = "Suspended";
 export const DEVICE_EXPIRED = "Expired";
 export const DEVICE_UNLINKED = "Unlinked";
 export const DEVICE_TRANSFERED = "Transfered";
-// export const DEVICE_FLAGGED = "Flagged";
+export const DEVICE_FLAGGED = "Flagged";
 export const DEVICE_PENDING_ACTIVATION = "Pending activation";
 export const DEVICE_PRE_ACTIVATION = "Pre-activated";
 

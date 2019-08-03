@@ -81,15 +81,15 @@ export default class NewDevices extends Component {
     }
 
     flaggedDevices = () => {
-        console.log('flaggedDevices ');
+        // console.log('flaggedDevices ');
         this.setState({
             flaggedDevicesModal: true
         })
     }
 
     transferDevice(device) {
-        console.log('transferDevice ')
-        // this.props.transferDeviceProfile(device);
+        // console.log('transferDevice ')
+        this.props.transferDeviceProfile(device);
         // this.setState({ visible: false })
     }
     rejectRequest(request) {
@@ -157,24 +157,25 @@ export default class NewDevices extends Component {
 
             let actionButns;
             if (this.state.sectionVisible) {
-                actionButns = ((this.props.flaggedDevices !== undefined) ?
-                    <Fragment>
-                        <Fragment>{declineButton}</Fragment>
-                        <Fragment>{acceptButton}</Fragment>
-                        <Fragment>{transferButton}</Fragment>
-                    </Fragment>
-                    :
-                    <Fragment>
+                if (this.props.flaggedDevices !== undefined) {
+                    if (flagged) {
+                        actionButns = (<Fragment>{transferButton}</Fragment>);
+                    } else {
+                        actionButns = (<Fragment>
+                            <Fragment>{declineButton}</Fragment>
+                            <Fragment>{acceptButton}</Fragment>
+                            <Fragment>{transferButton}</Fragment>
+                        </Fragment>);
+                    }
+                } else {
+                    actionButns = (<Fragment>
                         <Fragment>{declineButton}</Fragment>
                         <Fragment>{acceptButton}</Fragment>
                     </Fragment>);
+                }
 
             } else {
-                actionButns = (<Fragment>
-                    {/* <Fragment>{declineButton}</Fragment>
-                    <Fragment>{acceptButton}</Fragment> */}
-                    <Fragment>{transferButton}</Fragment>
-                </Fragment>);
+                actionButns = (<Fragment>{transferButton}</Fragment>);
             }
 
             return {
@@ -194,14 +195,14 @@ export default class NewDevices extends Component {
 
     filterList = (devices) => {
         let dumyDevices = [];
-        console.log('check Devices at filterList ', devices)
+        // console.log('check Devices at filterList ', devices)
         if (devices !== undefined) {
             devices.filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {
                     // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
                     let deviceStatus = device.flagged;
                     // console.log('22222 flagged', device.flagged)
-                    if (deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') {
+                    if ((deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') && (device.finalStatus === "Flagged")) {
                         dumyDevices.push(device);
                     }
                 }
@@ -212,7 +213,7 @@ export default class NewDevices extends Component {
 
     render() {
         let flaggedDevices = this.filterList(this.props.flaggedDevices)
-        console.log('check flaggedDevices ', flaggedDevices)
+        // console.log('check flaggedDevices ', flaggedDevices)
         return (
             <div>
                 <Modal

@@ -52,7 +52,8 @@ import {
     GET_SIMS,
     UPDATE_SIM,
     DELETE_SIM,
-    SIM_HISTORY
+    SIM_HISTORY,
+    TRANSFER_DEVICE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -793,20 +794,8 @@ export const transferDeviceProfile = (data) => {
         RestService.transferDeviceProfile(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: SHOW_MESSAGE,
-                    payload: {
-                        showMessage: true,
-                        messageType: response.data.status ? 'success' : 'error',
-                        messageText: response.data.data.msg
-                    }
-                })
-                dispatch({
-                    type: SHOW_MESSAGE,
-                    payload: {
-                        showMessage: false,
-                        messageType: response.data.status ? 'success' : 'error',
-                        messageText: response.data.data.msg
-                    }
+                    type: TRANSFER_DEVICE,
+                    payload: response.data
                 })
             } else {
                 dispatch({
@@ -1017,9 +1006,9 @@ export const showPullAppsModal = (visible) => {
 
 export const applyPushApps = (apps, deviceId, usrAccId) => {
     apps.forEach((el) => {
-        el.enable = (typeof(el.enable)===Boolean || typeof(el.enable)==='Boolean' || typeof(el.enable)==='boolean')? el.enable: false;
-        el.guest = (typeof(el.guest)===Boolean || typeof(el.guest)==='Boolean' || typeof(el.guest)==='boolean')? el.guest: false;
-        el.encrypted = (typeof(el.encrypted)===Boolean || typeof(el.encrypted)==='Boolean' || typeof(el.encrypted)==='boolean' )? el.encrypted: false;
+        el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
+        el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
+        el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
         delete el.apk_logo;
         delete el.apk_status;
     })
@@ -1077,12 +1066,12 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
     apps.forEach((el) => {
         delete el.icon;
         el.apk_id = el.key;
-        el.version_name="";
-        el.apk ="";
-        el.apk_name ="";
-        el.guest =false;
-        el.encrypted=false;
-        el.enable=false;
+        el.version_name = "";
+        el.apk = "";
+        el.apk_name = "";
+        el.guest = false;
+        el.encrypted = false;
+        el.enable = false;
     })
     return (dispatch) => {
         RestService.applyPullApps(apps, deviceId, usrAccId).then((response) => {
