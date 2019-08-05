@@ -115,7 +115,7 @@ export default class ListApk extends Component {
         let data
         list.map((app) => {
             if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client') {
-                // console.log('app is: ', app)
+                console.log('app is: ', app)
                 if (app.deleteable) {
                     data = {
                         rowKey: app.apk_id,
@@ -125,9 +125,10 @@ export default class ListApk extends Component {
                                 <Fragment>
                                     <Button type="primary" size="small" style={{ margin: '0px 8px 0 0px', textTransform: "uppercase" }}
                                         onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
-                                    <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
+                                    {(app.policies === undefined || app.policies === null || app.policies.length === 0) ? <Button type="danger" className="mob_m_t" size="small" style={{ textTransform: "uppercase" }} onClick={(e) => {
                                         this.props.handleConfirmDelete(app.apk_id, app);
-                                    }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
+                                    }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button> : null}
+
                                 </Fragment>
                             </div>
                         ),
@@ -162,6 +163,7 @@ export default class ListApk extends Component {
                         label: app.label,
                         package_name: app.package_name,
                         version: app.version,
+                        policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
                         created_at: app.created_at,
                         updated_at: app.updated_at
                     }
@@ -169,9 +171,9 @@ export default class ListApk extends Component {
 
                 } else {
                     data = {
-                        'rowKey': app.apk_id,
-                        'apk_id': app.apk_id,
-                        'action': (
+                        rowKey: app.apk_id,
+                        apk_id: app.apk_id,
+                        action: (
                             <Fragment>
                                 <Button type="primary" size="small" style={{ margin: '0px', marginRight: "8px", textTransform: "uppercase" }}
                                     onClick={(e) => { this.refs.editApk.showModal(app, this.props.editApk) }} > {convertToLang(this.props.translation[Button_Edit], "EDIT")}</Button>
@@ -180,18 +182,19 @@ export default class ListApk extends Component {
                                 }}>{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                             </Fragment>
                         ),
-                        'permission': <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
-                        "permissions": app.permissions,
-                        'apk_status': (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
+                        permission: <span style={{ fontSize: 15, fontWeight: 400, display: "inline-block" }}>{app.permission_count}</span>,
+                        permissions: app.permissions,
+                        apk_status: (<Switch size="small" disabled defaultChecked={(app.apk_status === "On") ? true : false} onChange={(e) => {
                             this.props.handleStatusChange(e, app.apk_id);
                         }} />),
-                        'apk': app.apk ? app.apk : 'N/A',
-                        'apk_name': app.apk_name ? app.apk_name : 'N/A',
-                        'apk_logo': (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
-                        'apk_size': app.size ? app.size : "N/A",
-                        'version': app.version,
-                        'created_at': app.created_at,
-                        'updated_at': app.updated_at
+                        apk: app.apk ? app.apk : 'N/A',
+                        apk_name: app.apk_name ? app.apk_name : 'N/A',
+                        apk_logo: (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.logo} />),
+                        apk_size: app.size ? app.size : "N/A",
+                        version: app.version,
+                        policies: (app.policies === undefined || app.policies === null) ? [] : app.policies,
+                        created_at: app.created_at,
+                        updated_at: app.updated_at
                     }
                     apkList.push(data)
 
@@ -290,6 +293,23 @@ export default class ListApk extends Component {
         }
     }
 
+    renderPolicies = (record) => {
+        console.log(record.policies);
+
+        if (record.policies !== undefined && record.policies !== null) {
+            return record.policies.map((policy, index) => {
+                return {
+                    key: index,
+                    id: policy.id,
+                    policy_name: policy.policy_name,
+                    policy_command: policy.command_name
+
+                }
+            })
+        } else {
+            return [];
+        }
+    }
     render() {
 
         return (
@@ -384,15 +404,48 @@ export default class ListApk extends Component {
                             rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.rowKey) ? 'exp_row' : ''}
                             expandIcon={(props) => this.customExpandIcon(props)}
                             expandedRowRender={(record) => {
-                                // console.log("table row", record);
                                 return (
-                                    <Permissions
-                                        className="exp_row22"
-                                        record={record}
-                                        // onChangeTableSorting={this.props.handleTableChange}
-                                        translation={this.props.translation}
-                                    />
+
+                                    <Fragment>
+                                        <Tabs
+                                            className="exp_tabs_policy"
+                                            type="card"
+                                        >
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation['PERMISSIONS'], "PERMISSIONS")} key="1">
+                                                <Permissions
+                                                    className="exp_row22"
+                                                    record={record}
+                                                    translation={this.props.translation}
+                                                />
+                                            </Tabs.TabPane>
+                                            <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
+                                                <Table
+                                                    columns={[
+                                                        {
+                                                            title: "#",
+                                                            dataIndex: 'counter',
+                                                            align: 'center',
+                                                            className: 'row',
+                                                            render: (text, record, index) => ++index,
+                                                        },
+                                                        {
+                                                            key: "policy_name",
+                                                            dataIndex: "policy_name",
+                                                            title: 'Policy Name'
+                                                        },
+                                                        {
+                                                            key: "policy_command",
+                                                            dataIndex: "policy_command",
+                                                            title: 'Policy Command'
+                                                        }
+                                                    ]}
+                                                    dataSource={this.renderPolicies(record)}
+                                                />
+                                            </Tabs.TabPane>
+                                        </Tabs>
+                                    </Fragment>
                                 );
+
                             }}
                             onExpand={this.onExpandRow}
                             expandIconColumnIndex={2}
