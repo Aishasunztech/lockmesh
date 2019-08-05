@@ -234,6 +234,7 @@ class DevicesList extends Component {
                 dealer_pin: checkValue(device.link_code),
                 mac_address: checkValue(device.mac_address),
                 sim_id: checkValue(device.sim_id),
+                sim_id2: checkValue(device.sim_id2),
                 imei_1: checkValue(device.imei),
                 sim_1: checkValue(device.simno),
                 imei_2: checkValue(device.imei2),

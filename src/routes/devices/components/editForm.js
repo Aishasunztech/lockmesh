@@ -29,7 +29,7 @@ import {
     SELECT_PGP_EMAILS
 } from '../../../constants/DeviceConstants';
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
-import { LABEL_DATA_PGP_EMAIL } from '../../../constants/LabelConstants';
+import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
 
 class EditDevice extends Component {
 
@@ -235,6 +235,26 @@ class EditDevice extends Component {
                         })(
 
                             <Input type='hidden' disabled />
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        label={convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('service', {
+                            initialValue: '',
+                        })(
+                            <Fragment>
+                                <Button
+                                    type="primary"
+                                    onClick={() => this.handleServicesModal()}
+                                    style={{ width: '100%' }}
+                                >
+                                    {convertToLang(this.props.translation[DUMY_TRANS_ID], "CHANGE SERVICES")}
+                                </Button>
+                                <span style={this.state.checkServices}>YOUR SERVICES CHANGED.</span>
+                            </Fragment>
                         )}
                     </Form.Item>
                     <Form.Item

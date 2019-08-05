@@ -154,6 +154,11 @@ export default class DeviceSidebar extends Component {
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID))}:</a>),
                 value: checkValue(device_details.sim_id)
             },
+            {
+                key: 1222,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[""], "SIM ID 2"))}:</a>),
+                value: checkValue(device_details.sim_id2)
+            },
 
             {
                 key: 13,

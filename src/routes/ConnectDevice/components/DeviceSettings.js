@@ -263,19 +263,19 @@ export default class TableHistory extends Component {
                 }
                 {
                     this.state.applist.length > 0 ?
-                    <div>
-                        <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISION")} </Divider>
-                        <Table
-                            style={{ margin: 0, padding: 0 }}
-                            size='default'
-                            bordered={false}
-                            columns={this.appsColumns}
-                            align='center'
-                            dataSource={this.renderData(this.state.applist)}
-                            pagination={false}
+                        <div>
+                            <Divider > {convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISION")} </Divider>
+                            <Table
+                                style={{ margin: 0, padding: 0 }}
+                                size='default'
+                                bordered={false}
+                                columns={this.appsColumns}
+                                align='center'
+                                dataSource={this.renderData(this.state.applist)}
+                                pagination={false}
 
-                        />
-                    </div> : false
+                            />
+                        </div> : false
                 }
                 {
                     this.state.extensions.length ?

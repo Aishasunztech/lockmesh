@@ -415,7 +415,6 @@ class AddDevice extends Component {
             total_price: this.state.duplicate > 0 ? total_price * this.state.duplicate : total_price,
             PkgSelectedRows: packages,
             proSelectedRows: products
-
         })
     }
 
@@ -735,7 +734,7 @@ class AddDevice extends Component {
                                     onClick={() => this.handleServicesModal()}
                                     style={{ width: '100%' }}
                                 >
-                                    {convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Services")}
+                                    {convertToLang(this.props.translation[DUMY_TRANS_ID], "SELECT SERVICES")}
                                 </Button>
                                 <span style={this.state.checkServices}>You need to selet a service before submit form.</span>
                             </Fragment>

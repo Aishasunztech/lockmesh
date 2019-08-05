@@ -497,6 +497,30 @@ export function devicesColumns(translation, handleSearch) {
         {
             title: (
                 <Input.Search
+                    name="sim_id2"
+                    key="sim_id2"
+                    id="sim_id2"
+                    className="search_heading sim_id_w"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "SIM ID 2")}
+                />
+            ),
+            dataIndex: 'sim_id2',
+            children: [
+                {
+                    title: convertToLang(translation[""], "SIM ID 2"),
+                    align: "center",
+                    dataIndex: 'sim_id2',
+                    key: 'sim_id2',
+                    sorter: (a, b) => { return a.sim_id2.localeCompare(b.sim_id2) },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
                     name="chat_id"
                     key="chat_id"
                     id="chat_id"
