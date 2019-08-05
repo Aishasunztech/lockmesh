@@ -2107,6 +2107,16 @@ export function apkColumns(translation) {
             key: 'apk_size',
         },
         {
+            title: convertToLang(translation[""], "LABEL"),
+            dataIndex: 'label',
+            key: 'label',
+        },
+        {
+            title: convertToLang(translation[""], "PACKAGE NAME"),
+            dataIndex: 'package_name',
+            key: 'package_name',
+        },
+        {
             title: convertToLang(translation[""], "VERSION"),
             dataIndex: 'version',
             key: 'version',
