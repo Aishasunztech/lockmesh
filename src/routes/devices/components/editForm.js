@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { Button, Form, Input, Select, InputNumber, Spin } from 'antd';
+import { Button, Form, Input, Select, InputNumber, Spin, Modal } from 'antd';
 import { checkValue, convertToLang } from '../../utils/commonUtils'
 
-import { getSimIDs, getChatIDs, getPGPEmails } from "../../../appRedux/actions/Devices";
+import { getSimIDs, getChatIDs, getPGPEmails, getParentPackages, getProductPrices } from "../../../appRedux/actions/Devices";
 import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, ADMIN, Model_text, Expire_Date, one_month, three_month, six_month, twelve_month, Days, Start_Date, Expire_Date_Require, Not_valid_Email
 } from '../../../constants/Constants';
@@ -14,6 +14,7 @@ import {
     addUser,
     getUserList
 } from "../../../appRedux/actions/Users";
+import Services from './Services'
 import {
     Required_Fields,
     DEVICE_ID, USER_ID,
@@ -29,7 +30,7 @@ import {
     SELECT_PGP_EMAILS
 } from '../../../constants/DeviceConstants';
 import { Button_Add_User, Button_submit, Button_Cancel } from '../../../constants/ButtonConstants';
-import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID } from '../../../constants/LabelConstants';
+import { LABEL_DATA_PGP_EMAIL, DUMY_TRANS_ID, LABEL_DATA_CHAT_ID, LABEL_DATA_SIM_ID } from '../../../constants/LabelConstants';
 
 class EditDevice extends Component {
 
@@ -40,6 +41,35 @@ class EditDevice extends Component {
             addNewUserModal: false,
             isloading: false,
             addNewUserValue: "",
+            servicesModal: false,
+            client_id: '',
+            pgp_email: '',
+            chat_id: '',
+            sim_id: '',
+            sim_id2: undefined,
+            selectedPackage: null,
+            vpn: '',
+            packageId: '',
+            disableSim: true,
+            disableChat: true,
+            disablePgp: true,
+            disableVpn: true,
+            tabselect: '0',
+            parent_packages: [],
+            product_prices: [],
+            products: [],
+            packages: [],
+            expiry_date: '',
+            services: false,
+            checkServices: {
+                display: 'none',
+            },
+            term: '',
+            unit_servcies_price: 0,
+            total_price: 0,
+            // invoiceColumns: invoiceColumns,
+            PkgSelectedRows: [],
+            proSelectedRows: [],
         }
     }
     handleUserChange = (e) => {
@@ -74,6 +104,8 @@ class EditDevice extends Component {
         // })
 
     }
+
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.isloading) {
             this.setState({ addNewUserModal: true })
@@ -87,6 +119,14 @@ class EditDevice extends Component {
         let handleSubmit = this.props.addUser;
         this.refs.add_user.showModal(handleSubmit);
     }
+
+    handleServicesModal = () => {
+        this.setState({
+            servicesModal: true
+        })
+    }
+
+
     handleReset = () => {
         this.props.form.resetFields();
     }
@@ -121,6 +161,175 @@ class EditDevice extends Component {
     createdDate = () => {
         return new Date().toJSON().slice(0, 10).replace(/-/g, '/')
     }
+
+    filterList = (type, list, listType) => {
+        let dumyPackages = [];
+        if (list.length) {
+            list.filter(function (item) {
+                let packageTerm;
+                if (listType === 'pkg') {
+                    packageTerm = item.pkg_term
+                } else {
+                    packageTerm = item.price_term
+                }
+                if (packageTerm == type) {
+                    dumyPackages.push(item);
+                }
+            });
+        }
+        return dumyPackages;
+    }
+
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+            servicesModal: false,
+
+        });
+    }
+
+
+    handleChangetab = (value) => {
+        switch (value) {
+            case '0':
+                this.setState({
+                    parent_packages: [],
+                    product_prices: [],
+                    tabselect: '0',
+                })
+                break;
+            case '1':
+                this.setState({
+                    parent_packages: this.filterList('1 month', this.props.parent_packages, 'pkg'),
+                    product_prices: this.filterList('1 month', this.props.product_prices, 'product'),
+                    tabselect: '1',
+                })
+                break;
+            case '3':
+                this.setState({
+                    parent_packages: this.filterList('3 month', this.props.parent_packages, 'pkg'),
+                    product_prices: this.filterList('3 month', this.props.product_prices, 'product'),
+                    tabselect: '3',
+                })
+                break;
+            case '6':
+                this.setState({
+                    parent_packages: this.filterList('6 month', this.props.parent_packages, 'pkg'),
+                    product_prices: this.filterList('6 month', this.props.product_prices, 'product'),
+                    tabselect: '6',
+                })
+                break;
+            case '12':
+                this.setState({
+                    parent_packages: this.filterList('12 month', this.props.parent_packages, 'pkg'),
+                    product_prices: this.filterList('12 month', this.props.product_prices, 'product'),
+                    tabselect: '12',
+                })
+                break;
+
+            default:
+                this.setState({
+                    parent_packages: [],
+                    product_prices: [],
+                    tabselect: '0',
+                })
+                break;
+        }
+    }
+
+    handleServicesSubmit = (products, packages, term) => {
+        let disableChat = true;
+        let disablePgp = true;
+        let disableSim = true;
+        let vpn = '';
+
+        let packagesData = []
+        let productData = []
+        let total_price = 0
+        // console.log(products, packages);
+        if (packages && packages.length) {
+            packages.map((item) => {
+                let data = {
+                    id: item.id,
+                    pkg_features: item.pkg_features,
+                    pkg_price: item.pkg_price
+                }
+                total_price = total_price + Number(item.pkg_price)
+                packagesData.push(data)
+                let services = item.pkg_features;
+                if (services.chat_id) {
+                    disableChat = false
+                }
+                if (services.sim_id) {
+                    disableSim = false
+                }
+                if (services.sim_id2) {
+                    this.sim_id2_included = true
+                } else {
+                    this.sim_id2_included = false
+                }
+                if (services.pgp_email) {
+                    disablePgp = false
+                }
+                if (services.vpn) {
+                    vpn = "1"
+                }
+                // console.log(item.pkg_features);
+            })
+        }
+        if (products && products.length) {
+            products.map((item) => {
+                let data = {
+                    id: item.id,
+                    item: item.item,
+                    price: item.unit_price
+                }
+                total_price = total_price + Number(item.unit_price)
+                productData.push(data)
+                if (item.item == 'chat_id') {
+                    disableChat = false
+                }
+                else if (item.item == 'sim_id') {
+                    disableSim = false
+                }
+                else if (item.item == 'pgp_email') {
+                    disablePgp = false
+                }
+                else if (item.item == 'vpn') {
+                    vpn = "1"
+                }
+            })
+        }
+
+        let expiry_date = ''
+        if (term === '0') {
+            expiry_date = "7 Days";
+        } else {
+            expiry_date = term + " Months";
+        }
+        let services = (packages.length > 0 || products.length > 0) ? true : false;
+        this.setState({
+            pgp_email: (this.props.pgp_emails.length && !disablePgp) ? this.props.pgp_emails[0].pgp_email : '',
+            chat_id: (this.props.chat_ids.length && !disableChat) ? this.props.chat_ids[0].chat_id : '',
+            sim_id: (this.props.sim_ids.length && !disableSim) ? this.props.sim_ids[0].sim_id : '',
+            sim_id2: (this.sim_id2_included) ? (this.props.sim_ids.length) ? this.props.sim_ids[1].sim_id : undefined : undefined,
+            vpn: vpn,
+            disableSim: disableSim,
+            disableChat: disableChat,
+            disablePgp: disablePgp,
+            packages: packagesData,
+            products: productData,
+            expiry_date: expiry_date,
+            services: services,
+            checkServices: (services) ? { display: 'none' } : { display: 'inline', color: "Red", margin: 0 },
+            term: term,
+            unit_servcies_price: total_price,
+            total_price: this.state.duplicate > 0 ? total_price * this.state.duplicate : total_price,
+            PkgSelectedRows: packages,
+            proSelectedRows: products
+        })
+    }
+
 
     render() {
         // console.log('props of coming', this.props.device);
@@ -180,6 +389,7 @@ class EditDevice extends Component {
                                                 return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
                                             }
                                         }
+                                        disabled={true}
                                     >
                                         <Select.Option value="">{convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}</Select.Option>
                                         {users_list.map((item, index) => {
@@ -196,7 +406,7 @@ class EditDevice extends Component {
                                     //     Add User
                                     // </Button> */}
                                 )}
-                                {(this.props.user.type === ADMIN) ? null :
+                                {/* {(this.props.user.type === ADMIN) ? null :
                                     <Button
                                         className="add_user_btn"
                                         type="primary"
@@ -204,7 +414,7 @@ class EditDevice extends Component {
                                     >
                                         {convertToLang(this.props.translation[Button_Add_User], "Add User")}
                                     </Button>
-                                }
+                                } */}
 
                             </Form.Item>
 
@@ -258,6 +468,162 @@ class EditDevice extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
+                        label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('pgp_email', {
+                            initialValue: this.props.device.pgp_email,
+                            rules: [
+
+                                {
+                                    type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], 'The input is not valid E-mail!'),
+                                }
+                            ],
+                        })(
+                            <Select
+                                showSearch
+                                placeholder={convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}
+                                optionFilterProp="children"
+                                onChange={(e) => this.setState({ pgp_email: e })}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                // defaultValue={this.state.pgp_email}
+                                autoComplete="new-password"
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                disabled={this.state.disablePgp}
+                            >
+                                {this.props.pgp_emails.map((pgp_email) => {
+                                    return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
+                                })}
+                            </Select>
+                            // <Input />
+                        )}
+                    </Form.Item>
+
+                    <Form.Item
+                        label={convertToLang(this.props.translation[LABEL_DATA_CHAT_ID], "Chat ID ")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('chat_id', {
+                            initialValue: this.props.device.chat_id,
+                        })(
+                            // <Input />
+                            <Select
+                                showSearch
+                                placeholder={convertToLang(this.props.translation[DEVICE_Select_CHAT_ID], "Select Chat ID")}
+                                optionFilterProp="children"
+                                onChange={(value) => this.setState({ chat_id: value })}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                disabled={this.state.disableChat}
+                            >
+                                {this.props.chat_ids.map((chat_id, index) => {
+                                    return (<Select.Option key={index} value={chat_id.chat_id}>{chat_id.chat_id}</Select.Option>)
+                                })}
+                            </Select>
+                        )}
+                    </Form.Item>
+
+                    <Form.Item
+                        label={convertToLang(this.props.translation[LABEL_DATA_SIM_ID], "Sim ID ")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('sim_id', {
+                            initialValue: this.props.device.sim_id
+                        })(
+                            <Select
+                                // className="pos_rel"
+                                showSearch
+                                placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "Select Sim ID ")}
+                                optionFilterProp="children"
+                                onChange={(value) => this.setState({ sim_id: value })}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                disabled={this.state.disableSim}
+                            >
+                                {this.props.sim_ids.map((sim_id, index) => {
+                                    return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                })}
+                            </Select>,
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Sim ID 2 ")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('sim_id2', {
+                            initialValue: this.props.device.sim_id2
+                        })(
+                            <Select
+                                // className="pos_rel"
+                                showSearch
+                                placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select Sim ID 2")}
+                                optionFilterProp="children"
+                                onChange={(value) => this.setState({ sim_id2: value })}
+                                // onFocus={handleFocus}
+                                // onBlur={handleBlur}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                disabled={this.state.disableSim}
+                            >
+                                {this.props.sim_ids.map((sim_id, index) => {
+                                    if (index > 0) {
+
+                                        return (<Select.Option key={index} value={sim_id.sim_id}>{sim_id.sim_id}</Select.Option>)
+                                    }
+                                })}
+                            </Select>,
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        label={convertToLang(this.props.translation[DUMY_TRANS_ID], "VPN")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('vpn', {
+                            initialValue: this.props.device.vpn
+                        })(
+                            <Select
+                                showSearch
+                                placeholder={convertToLang(this.props.translation[DUMY_TRANS_ID], "Select VPN")}
+                                optionFilterProp="children"
+                                onChange={(value) => this.setState({ vpn: value })}
+
+                                disabled={this.state.disableVpn}
+                            >
+                                <Select.Option value="">{convertToLang(this.props.translation[DUMY_TRANS_ID], "Select VPN ")}</Select.Option>
+                                <Select.Option value="1">{convertToLang(this.props.translation[DUMY_TRANS_ID], "YES")}</Select.Option>
+                                <Select.Option value="0">{convertToLang(this.props.translation[DUMY_TRANS_ID], "NO")}</Select.Option>
+                            </Select>,
+                        )}
+                    </Form.Item>
+                    <Form.Item
+                        label={convertToLang(this.props.translation[DUMY_TRANS_ID], "Client ID ")}
+                        labelCol={{ span: 8 }}
+                        wrapperCol={{ span: 14 }}
+                    >
+                        {this.props.form.getFieldDecorator('client_id', {
+                            // initialValue: this.state.client_id,
+
+                        })(
+                            <Input
+                                onChange={e => {
+                                    this.setState({ client_id: e.target.value });
+                                }} />
+                        )}
+                    </Form.Item>
+
+
+
+
+
+
+                    {/* <Form.Item
                         label={convertToLang(this.props.translation[LABEL_DATA_PGP_EMAIL], "PGP Email ")}
                         // label="PGP Email "
                         labelCol={{ span: 8, xs: 24, sm: 8 }}
@@ -339,7 +705,7 @@ class EditDevice extends Component {
                                 })}
                             </Select>
                         )}
-                    </Form.Item>
+                    </Form.Item> */}
 
 
                     {(this.props.device.finalStatus === DEVICE_PRE_ACTIVATION) ? null :
@@ -484,6 +850,28 @@ class EditDevice extends Component {
 
                 </Form>
                 <AddUser ref="add_user" translation={this.props.translation} />
+                <Modal
+                    width={750}
+                    visible={this.state.servicesModal}
+                    title={convertToLang(this.props.translation[DUMY_TRANS_ID], "SEVCIES")}
+                    maskClosable={false}
+                    onOk={this.handleOk}
+                    // onCancel={this.handleCancel}
+                    footer={null}
+                    className="edit_form"
+                >
+                    <Services
+                        handleCancel={this.handleCancel}
+                        parent_packages={this.state.parent_packages}
+                        product_prices={this.state.product_prices}
+                        tabselect={this.state.tabselect}
+                        handleChangetab={this.handleChangetab}
+                        translation={this.props.translation}
+                        handleServicesSubmit={this.handleServicesSubmit}
+                        user_credit={this.props.user_credit}
+                        history={this.props.history}
+                    />
+                </Modal>
             </div >
 
         )
@@ -503,9 +891,11 @@ function mapDispatchToProps(dispatch) {
         getPGPEmails: getPGPEmails,
         getUserList: getUserList,
         addUser: addUser,
+        getParentPackages: getParentPackages,
+        getProductPrices: getProductPrices,
     }, dispatch);
 }
-var mapStateToProps = ({ routing, devices, users, auth, settings }) => {
+var mapStateToProps = ({ routing, devices, users, auth, settings, sidebar }) => {
     // console.log("sdfsaf", devices);
 
     return {
@@ -516,7 +906,10 @@ var mapStateToProps = ({ routing, devices, users, auth, settings }) => {
         pgp_emails: devices.pgp_emails,
         users_list: users.users_list,
         isloading: users.addUserFlag,
-        translation: settings.translation
+        translation: settings.translation,
+        parent_packages: devices.parent_packages,
+        product_prices: devices.product_prices,
+        user_credit: sidebar.user_credit,
     };
 }
 
