@@ -198,25 +198,27 @@ class DevicesList extends Component {
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
-                        : (device.flagged !== 'Not flagged' && device.transfer_status == 0 && device.finalStatus == "Flagged") ?
+                        : (device.flagged !== 'Not flagged') ?
                             (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            : (device.flagged !== 'Not flagged' && device.transfer_status == 1) ?
-                                (<Fragment>{Unflagbtn}</Fragment>)
-                                : (status === DEVICE_SUSPENDED) ?
-                                    (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                    : (status === DEVICE_EXPIRED) ?
-                                        (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                        : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
-                                            (<Fragment>{DeleteBtn}</Fragment>)
-                                            : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN) ?
-                                                (<Fragment>
-                                                    <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment>
-                                                </Fragment>)
-                                                : (device.status === DEVICE_PRE_ACTIVATION) ?
-                                                    false
-                                                    : (status === DEVICE_EXPIRED) ?
-                                                        (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
-                                                        : false
+                            // : (device.flagged !== 'Not flagged' && device.transfer_status == 0 && device.finalStatus == "Flagged") ?
+                            //     (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                            //     : (device.flagged !== 'Not flagged' && device.transfer_status == 1) ?
+                            //         (<Fragment>{Unflagbtn}</Fragment>)
+                            : (status === DEVICE_SUSPENDED) ?
+                                (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                : (status === DEVICE_EXPIRED) ?
+                                    (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                    : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
+                                        (<Fragment>{DeleteBtn}</Fragment>)
+                                        : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN) ?
+                                            (<Fragment>
+                                                <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment>
+                                            </Fragment>)
+                                            : (device.status === DEVICE_PRE_ACTIVATION) ?
+                                                false
+                                                : (status === DEVICE_EXPIRED) ?
+                                                    (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
+                                                    : false
 
 
                 ),

@@ -77,6 +77,8 @@ import {
     SIM_HISTORY,
 } from "../../../constants/DeviceConstants";
 
+import TransferHistory from './TransferModule/TransferHistory'
+
 const confirm = Modal.confirm;
 var coppyList = [];
 var status = true;
@@ -341,8 +343,11 @@ class SideActions extends Component {
             policyId: '',
             showChangesModal: false,
             applyPolicyConfirm: false,
-            isSaveProfileBtn: false
+            isSaveProfileBtn: false,
+            transferHistoryModal: false,
+
         }
+        this.otpModalRef = React.createRef();
     }
 
     componentDidMount() {
@@ -680,6 +685,20 @@ class SideActions extends Component {
         })
     }
 
+    handleTransferHistoryModal = (visible) => {
+        this.setState({
+            transferHistoryModal: visible,
+        })
+    }
+
+    // transferHistoryModal = (flagged, device_id) => {
+    //     console.log('hi', this.otpModalRef)
+    //     // this.otpModalRef.showModal(flagged, device_id);
+    //     this.setState({
+    //         transferHistoryModal: true,
+    //     })
+    // }
+
     render() {
         // console.log('device is: ', this.props.device.transfer_status)
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
@@ -819,7 +838,8 @@ class SideActions extends Component {
                                     <Icon type="swap" />
                                     {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
 
-                                <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
+                                {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
+                                <Button type="default" onClick={() => this.handleTransferHistoryModal(true)} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
                                 {/* </Tooltip> */}
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
@@ -834,6 +854,18 @@ class SideActions extends Component {
                                     {/* <IntlMessages id="button.WipeDevice" /> */}
                                     {convertToLang(this.props.translation[Button_WipeDevice], "WipeDevice")}
                                 </Button>
+
+                                <TransferHistory
+                                    // ref={this.otpModalRef}
+                                    translation={this.props.translation}
+                                    transferHistoryList={this.props.transferHistoryList}
+                                    handleTransfer={this.handleTransfer}
+                                    user={this.props.authUser}
+                                    handleTransferHistoryModal={this.handleTransferHistoryModal}
+                                    visible={this.state.transferHistoryModal}
+                                    device={this.props.device_details}
+                                    flagged={flagged}
+                                />
 
                                 <NewDevice
                                     ref='new_device'
