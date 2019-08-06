@@ -114,7 +114,7 @@ export default class ListApk extends Component {
         let apkList = [];
         let data
         list.map((app) => {
-            if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client') {
+            if (app.package_name !== 'com.armorSec.android' && app.package_name !== 'ca.unlimitedwireless.mailpgp' && app.package_name !== 'com.rim.mobilefusion.client' && app.package_name !== 'com.secure.vpn') {
                 console.log('app is: ', app)
                 if (app.deleteable) {
                     data = {
@@ -207,7 +207,7 @@ export default class ListApk extends Component {
         let featureApk = []
         list.map((app) => {
             // console.log(app);
-            if (app.package_name === 'com.armorSec.android' || app.package_name === 'ca.unlimitedwireless.mailpgp' || app.package_name === 'com.rim.mobilefusion.client') {
+            if (app.package_name === 'com.armorSec.android' || app.package_name === 'ca.unlimitedwireless.mailpgp' || app.package_name === 'com.rim.mobilefusion.client' || app.package_name === 'com.secure.vpn') {
                 let data = {
                     'rowKey': app.apk_id,
                     'apk_id': app.apk_id,
@@ -247,6 +247,13 @@ export default class ListApk extends Component {
             case "UEM":
                 this.props.apk_list.map((app) => {
                     if (app.package_name === 'com.rim.mobilefusion.client') {
+                        appDetails = app
+                    }
+                });
+                break;
+            case "VPN":
+                this.props.apk_list.map((app) => {
+                    if (app.package_name === 'com.secure.vpn') {
                         appDetails = app
                     }
                 });
@@ -316,7 +323,7 @@ export default class ListApk extends Component {
             <Fragment>
                 <Card >
                     <Row >
-                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                             <h1>
                                 FEATURED APPS
                             </h1>
@@ -349,6 +356,15 @@ export default class ListApk extends Component {
                                         onClick={() => { this.updateFeaturedApk('PGP') }}
                                     >
                                         UPDATE PGP APP
+                            </Button>
+                                </Col>
+                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                    <Button
+                                        type="primary"
+                                        style={{ width: '100%' }}
+                                        onClick={() => { this.updateFeaturedApk('VPN') }}
+                                    >
+                                        UPDATE VPN APP
                             </Button>
                                 </Col>
                             </Fragment>
