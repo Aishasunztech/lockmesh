@@ -331,15 +331,7 @@ export default class ListApk extends Component {
                         {(this.props.user.type === ADMIN) ?
                             <Fragment>
 
-                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
-                                    <Button
-                                        type="primary"
-                                        style={{ width: '100%' }}
-                                        onClick={() => { this.updateFeaturedApk('UEM') }}
-                                    >
-                                        UPDATE UEM APP
-                            </Button>
-                                </Col>
+
                                 <Col xs={24} sm={24} md={4} lg={4} xl={4}>
                                     <Button
                                         type="primary"
@@ -356,6 +348,15 @@ export default class ListApk extends Component {
                                         onClick={() => { this.updateFeaturedApk('PGP') }}
                                     >
                                         UPDATE PGP APP
+                            </Button>
+                                </Col>
+                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                    <Button
+                                        type="primary"
+                                        style={{ width: '100%' }}
+                                        onClick={() => { this.updateFeaturedApk('UEM') }}
+                                    >
+                                        UPDATE UEM APP
                             </Button>
                                 </Col>
                                 <Col xs={24} sm={24} md={4} lg={4} xl={4}>
