@@ -156,7 +156,7 @@ const PushAppsModal = (props) => {
 }
 
 const SelectedPushApps = (props) => {
-
+    
     return (
         <Modal
             maskClosable={false}
@@ -257,7 +257,6 @@ const PullAppsModal = (props) => {
 
 
 const SelectedPullApps = (props) => {
-    console.log("selected pull apps modal", props);
     return (
         <Modal
             maskClosable={false}

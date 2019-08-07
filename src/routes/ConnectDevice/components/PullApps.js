@@ -8,16 +8,22 @@ import { convertToLang } from '../../utils/commonUtils';
 
 
 const renderApps = (apk_list) => {
+    let app_list = []
+     apk_list.map((app) => {
+        if (app.system_app !== 1) {
+            app_list.push( {
+                key: (app.app_id) ? app.app_id : 'N/A',
+                app_id: (app.app_id) ? app.app_id : 'N/A',
+                package_name: app.package_name,
+                label: (app.label) ? app.label : 'N/A',
+                icon: (typeof (app.icon) === String || typeof (app.icon) === 'string') ? (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.icon} />) : app.icon,
+            });
 
-    return apk_list.map((app) => {
-        return {
-            key: (app.app_id) ? app.app_id : 'N/A',
-            app_id: (app.app_id) ? app.app_id : 'N/A',
-            package_name: app.package_name,
-            label: (app.label) ? app.label : 'N/A',
-            icon: (typeof(app.icon)===String || typeof(app.icon)==='string')? (<Avatar size="small" src={BASE_URL + "users/getFile/" + app.icon} />):app.icon,
         }
+
     });
+
+    return app_list
 }
 
 const PullApps = (props) => {

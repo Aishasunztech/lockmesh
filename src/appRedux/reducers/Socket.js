@@ -2,7 +2,11 @@ import React, { Fragment } from 'react'
 import {
     FINISHED_PUSH_APPS, FINISHED_PULL_APPS, IN_PROCESS, FINISHED_POLICY, FINISHED_IMEI, SINGLE_APP_PUSHED, GET_APP_JOBS, SINGLE_APP_PULLED, FINISHED_POLICY_STEP
 } from "../../constants/ActionTypes";
+
 import { message, Modal } from 'antd';
+import { CONNECT_SOCKET, DISCONNECT_SOCKET } from '../../constants/SocketConstants';
+
+// import io from 'socket.io-client';
 
 const success = Modal.success
 const error = Modal.error
@@ -14,12 +18,28 @@ const initialState = {
     is_push_apps: 0,
     complete_policy_step: 0,
     is_policy_process: 0,
-    is_policy_finish: false
+    is_policy_finish: false,
+    socket: null,
 };
 
 export default (state = initialState, action) => {
 
     switch (action.type) {
+        case CONNECT_SOCKET: {
+            console.log("socket connected");
+            return {
+                ...state,
+                socket: action.payload
+            }
+        }
+        case DISCONNECT_SOCKET: {
+            console.log('socket disconnected');
+
+            return {
+                ...state,
+                socket: action.payload
+            }
+        }
         case FINISHED_PUSH_APPS: {
             // console.log("works");
             success({
