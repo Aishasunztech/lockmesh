@@ -65,6 +65,7 @@ export default class PackagesInfo extends Component {
                     let name = key;
                     name = name.charAt(0).toUpperCase() + name.slice(1);
                     let dump = {
+                        key: key.id,
                         name: name.replace(/_/g, ' '),
                         f_value: data[key] ? "yes" : 'No',
                         rowKey: key

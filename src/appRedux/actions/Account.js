@@ -23,7 +23,8 @@ import {
     GET_PACKAGES,
     PURCHASE_CREDITS,
     GET_PARENT_PACKAGES,
-    PACKAGE_PERMSSION_SAVED
+    PACKAGE_PERMSSION_SAVED,
+    DELETE_PACKAGE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -430,4 +431,46 @@ export function savePermission(package_id, dealers, action) {
         })
     }
 
+}
+export function deletePackage(id) {
+    // alert(package_id);
+
+    return (dispatch) => {
+        RestService.deletePackage(id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: DELETE_PACKAGE,
+                    payload: response.data,
+                    package_id: id
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
+}
+export function modifyPackage(id) {
+    // alert(package_id);
+
+    return (dispatch) => {
+        RestService.deletePackage(id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+
+                dispatch({
+                    type: DELETE_PACKAGE,
+                    payload: response.data,
+                    package_id: id
+                })
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        })
+    }
 }

@@ -17,7 +17,8 @@ import {
     GET_PACKAGES,
     PURCHASE_CREDITS,
     GET_PARENT_PACKAGES,
-    PACKAGE_PERMSSION_SAVED
+    PACKAGE_PERMSSION_SAVED,
+    DELETE_PACKAGE
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -74,12 +75,13 @@ export default (state = initialState, action) => {
         }
         case SAVE_PACKAGE: {
             // console.log(action.response, 'response form save id prices')
+            let packages = state.packages;
             if (action.response.status) {
                 success({
                     title: action.response.msg
                 })
                 if (action.response.data.length) {
-                    state.packages.push(action.response.data[0])
+                    packages.push(action.response.data[0])
                 }
             } else {
                 error({
@@ -87,7 +89,8 @@ export default (state = initialState, action) => {
                 })
             }
             return {
-                ...state
+                ...state,
+                packages: packages
             }
         }
 
@@ -298,6 +301,28 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 packages: [...state.packages]
+            }
+        }
+        case DELETE_PACKAGE: {
+            let packages = state.packages
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+                let objIndex = packages.findIndex((obj => obj.id === action.package_id));
+                // console.log(objIndex, "INDEX");
+                if (objIndex > -1) {
+                    packages.splice(objIndex, 1)
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
+
+            return {
+                ...state,
+                packages: [...packages]
             }
         }
 

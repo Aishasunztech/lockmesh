@@ -773,17 +773,23 @@ const RestService = {
             ...agent
         }, RestService.getHeader());
     },
-    changeAgentStatus(agent, status){
+    changeAgentStatus(agent, status) {
         return axios.put(BASE_URL + 'users/agents/' + agent.id + '/status', {
             status: status
         }, RestService.getHeader());
     },
-    resetAgentPwd: (agentID) =>{
+    resetAgentPwd: (agentID) => {
         return axios.put(BASE_URL + 'users/agents/' + agentID + '/reset-pwd', {
         }, RestService.getHeader());
     },
     deleteAgent: (agentID) => {
         return axios.delete(BASE_URL + 'users/agents/' + agentID, RestService.getHeader());
+    },
+    deletePackage: (id) => {
+        return axios.delete(BASE_URL + 'users/delete_package/' + id, RestService.getHeader());
+    },
+    editPackage: (id) => {
+        return axios.put(BASE_URL + 'users/edit_package/' + id, RestService.getHeader());
     }
 
 }
