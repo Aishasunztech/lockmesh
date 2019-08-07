@@ -11,6 +11,11 @@ import {
     addUser,
     getUserList
 } from "../../../../appRedux/actions/Users";
+
+import {
+    transferUser,
+    transferHistory
+} from "../../../../appRedux/actions/ConnectDevice";
 import AddUser from '../../../users/components/AddUser';
 
 
@@ -27,6 +32,12 @@ class TransferHistory extends Component {
                 align: 'center',
                 className: 'row',
                 render: (text, record, index) => ++index,
+            },
+            {
+                title: "ACTION",
+                dataIndex: 'action',
+                align: 'center',
+                className: 'row',
             },
             {
                 title: "DEVICE ID",
@@ -86,6 +97,7 @@ class TransferHistory extends Component {
             // device_id: null,
             addNewUserModal: false,
             addNewUserValue: "",
+            user_id: props.device.user_id,
         }
         // this.showModal = this.showModal.bind(this);
     }
@@ -107,6 +119,10 @@ class TransferHistory extends Component {
 
     componentDidMount() {
         this.props.getUserList();
+        this.props.transferHistory();
+        this.setState({
+            user_id: this.props.device.user_id
+        })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -119,6 +135,12 @@ class TransferHistory extends Component {
         }
         if (this.props.visible != nextProps.visible) {
             this.setState({ visible: nextProps.visible })
+        }
+
+        if (this.props.transferHistoryList != nextProps.transferHistoryList) {
+            this.setState({
+                HistoryList: nextProps.transferHistoryList
+            })
         }
     }
 
@@ -166,15 +188,19 @@ class TransferHistory extends Component {
     }
 
     renderList = () => {
-        let data = []; // this.state.HistoryList;
+        let data = this.state.HistoryList;
         if (data.length) {
             return data.map((row, index) => {
                 // console.log(row);
                 return {
                     key: index,
-                    iccid: row.iccid,
+                    action: row.action,
+                    device_id: row.device_id,
+                    user_id: row.user_acc_id,
+                    transfered_from: row.transfered_from,
+                    transfered_to: row.transfered_to,
                     created_at: getFormattedDate(row.created_at),
-                    data: row
+                    // data: row
                 }
             })
         }
@@ -190,10 +216,17 @@ class TransferHistory extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 // console.log("User detail", values)
-                // console.log('this.props.device.user_id is: ', this.props.device.user_id)
-                if (values.user_id !== this.props.device.user_id) {
-                    console.log('done')
-                    // this.props.transferUser(values);
+                // console.log('this.props.device.user_id is: ', this.state.user_id)
+                if (values.user_id !== this.state.user_id) {
+                    // console.log('done')
+                    this.props.transferUser({
+                        NewUser: values.user_id,
+                        OldUsr_device_id: this.props.device.usr_device_id,
+                        OldUser: this.state.user_id
+                    });
+                    this.setState({
+                        user_id: values.user_id
+                    })
                 }
                 this.handleCancelUser();
                 // this.handleReset();
@@ -342,13 +375,15 @@ class TransferHistory extends Component {
 
 const WrappedUserList = Form.create({ name: 'transfer-user' })(TransferHistory);
 
-var mapStateToProps = ({ users, settings }) => {
+var mapStateToProps = ({ users, settings, device_details }) => {
+    console.log('transferHistoryList ', device_details.transferHistoryList)
 
     return {
+        transferHistoryList: device_details.transferHistoryList,
         users_list: users.users_list,
         isloading: users.addUserFlag,
         translation: settings.translation
     };
 }
 
-export default connect(mapStateToProps, { getUserList, addUser }, null, { withRef: true })(WrappedUserList);
+export default connect(mapStateToProps, { getUserList, addUser, transferUser, transferHistory }, null, { withRef: true })(WrappedUserList);

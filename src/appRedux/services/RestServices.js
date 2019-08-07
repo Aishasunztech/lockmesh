@@ -120,6 +120,13 @@ const RestService = {
     transferDeviceProfile: (data) => {
         return axios.post(BASE_URL + 'users/transfer/device_profile', data, RestService.getHeader());
     },
+    transferUser: (data) => {
+        return axios.post(BASE_URL + 'users/transfer/user', data, RestService.getHeader());
+    },
+
+    transferHistory: () => {
+        return axios.get(BASE_URL + 'users/transfer/history', RestService.getHeader());
+    },
 
 
     // getDevices

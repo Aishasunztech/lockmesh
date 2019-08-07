@@ -509,7 +509,7 @@ class SideActions extends Component {
         // console.log('at transferDeviceProfile')
         let _this = this;
         confirm({
-            content: convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+            content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
                 // console.log('OK');
                 _this.props.transferDeviceProfile(

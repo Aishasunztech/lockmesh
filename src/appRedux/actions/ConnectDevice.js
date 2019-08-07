@@ -53,7 +53,8 @@ import {
     UPDATE_SIM,
     DELETE_SIM,
     SIM_HISTORY,
-    TRANSFER_DEVICE
+    MESSAGE_HANDLER,
+    TRANSFER_HISTORY
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -794,7 +795,45 @@ export const transferDeviceProfile = (data) => {
         RestService.transferDeviceProfile(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: TRANSFER_DEVICE,
+                    type: MESSAGE_HANDLER,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+
+
+export const transferUser = (data) => {
+    // alert(data);
+    return (dispatch) => {
+        RestService.transferUser(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: MESSAGE_HANDLER,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+
+export const transferHistory = () => {
+    return (dispatch) => {
+        RestService.transferHistory().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: TRANSFER_HISTORY,
                     payload: response.data
                 })
             } else {

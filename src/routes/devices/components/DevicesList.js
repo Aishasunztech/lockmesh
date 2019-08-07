@@ -143,8 +143,8 @@ class DevicesList extends Component {
     renderList(list) {
         // console.log('list of dec', list)
         return list.map((device, index) => {
+            // console.log('device finalStatus is: ', device.finalStatus)
             // console.log('device is: ', device)
-            // console.log('device transfer_status is: ', device.transfer_status)
             // console.log('tab Select is: ', this.props.tabselect)
 
             // var remainDays = checkRemainDays(device.created_at, device.validity)

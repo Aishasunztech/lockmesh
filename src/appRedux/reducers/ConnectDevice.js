@@ -62,7 +62,8 @@ import {
     RECEIVE_SIM_DATA,
     DELETE_SIM,
     SIM_HISTORY,
-    TRANSFER_DEVICE
+    MESSAGE_HANDLER,
+    TRANSFER_HISTORY
 } from "../../constants/ActionTypes";
 
 import {
@@ -184,6 +185,8 @@ const initialState = {
     simDeleted: false,
     simHistoryList: [],
 
+    // Transfer
+    transferHistoryList: [],
 };
 
 export default (state = initialState, action) => {
@@ -533,7 +536,9 @@ export default (state = initialState, action) => {
             }
         }
 
-        case TRANSFER_DEVICE: {
+
+        // Common Reducer: to display the message from server
+        case MESSAGE_HANDLER: {
             if (action.payload.status) {
                 success({
                     title: action.payload.msg,
@@ -548,6 +553,15 @@ export default (state = initialState, action) => {
                 ...state,
             }
         }
+
+        case TRANSFER_HISTORY: {
+
+            return {
+                ...state,
+                transferHistoryList: action.payload.data
+            }
+        }
+
 
         case SHOW_MESSAGE: {
 
@@ -1220,7 +1234,7 @@ export default (state = initialState, action) => {
             let sims = action.payload.data;
             let checkEnc = sims.filter(e => e.encrypt != true);
             let checkGst = sims.filter(e => e.guest != true);
-            
+
             let guestSimAll;
             let encryptSimAll;
             if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;

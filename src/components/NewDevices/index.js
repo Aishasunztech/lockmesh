@@ -34,7 +34,8 @@ export default class NewDevices extends Component {
             NewDevices: [],
             NewRequests: [],
             sectionVisible: true,
-            flaggedDevicesModal: false
+            flaggedDevicesModal: false,
+            reqDevice: ""
         }
     }
 
@@ -80,16 +81,18 @@ export default class NewDevices extends Component {
         this.props.rejectDevice(device);
     }
 
-    flaggedDevices = () => {
-        // console.log('flaggedDevices ');
+    flaggedDevices = (reqDevice) => {
+        // console.log('reqDevice ', reqDevice);
         this.setState({
-            flaggedDevicesModal: true
+            flaggedDevicesModal: true,
+            reqDevice,
         })
     }
 
-    transferDevice(device) {
-        // console.log('transferDevice ')
-        this.props.transferDeviceProfile(device);
+    transferDevice = (device) => {
+        console.log('flagged_device ', device)
+        // console.log('reqDevice ', device)
+        this.props.transferDeviceProfile({ flagged_device: device, reqDevice: this.state.reqDevice });
         // this.setState({ visible: false })
     }
     rejectRequest(request) {
@@ -147,7 +150,7 @@ export default class NewDevices extends Component {
 
             let transferButton;
             if (this.state.sectionVisible) {
-                transferButton = transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px' }} onClick={this.flaggedDevices}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
+                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px' }} onClick={(flagged) ? () => this.transferDevice(device) : () => this.flaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
             } else {
                 transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.transferDevice(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
             }

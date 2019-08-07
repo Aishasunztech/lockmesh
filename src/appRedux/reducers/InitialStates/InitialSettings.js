@@ -1,4 +1,3 @@
-import enLang from "../../../lngProvider/locales/en_US";
 import {
   LAYOUT_TYPE,
   LAYOUT_TYPE_FULL,
@@ -75,7 +74,7 @@ export var initialSettings = {
   width: window.innerWidth,
   isDirectionRTL: false,
   languages: [],
-  translation: enLang,
+  translation: {},
   isSwitched: 'abc',
   deviceOptions: [
     { "key": "device_id", "value": DEVICE_ID },
