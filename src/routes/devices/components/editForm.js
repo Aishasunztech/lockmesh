@@ -245,7 +245,7 @@ class EditDevice extends Component {
                         showSearch
                     >
                         {this.props.form.getFieldDecorator('pgp_email', {
-                            initialValue: this.props.device.pgp_email,
+                            initialValue: (this.props.device.pgp_email === 'N/A') ? "" : this.props.device.pgp_email,
                             rules: [{
                                 type: 'email', message: convertToLang(this.props.translation[Not_valid_Email], 'The input is not valid E-mail!'),
                             }],
@@ -274,7 +274,7 @@ class EditDevice extends Component {
                         showSearch
                     >
                         {this.props.form.getFieldDecorator('sim_id', {
-                            initialValue: this.props.device.sim_id,
+                            initialValue: (this.props.device.sim_id === 'N/A') ? "" : this.props.device.sim_id,
                         })(
                             <Select
                                 showSearch
@@ -299,7 +299,7 @@ class EditDevice extends Component {
                         showSearch
                     >
                         {this.props.form.getFieldDecorator('chat_id', {
-                            initialValue: this.props.device.chat_id,
+                            initialValue: (this.props.device.chat_id === 'N/A') ? "" : this.props.device.chat_id,
                         })(
                             // <Input />
                             <Select
