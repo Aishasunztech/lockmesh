@@ -324,14 +324,12 @@ export default class ListApk extends Component {
                 <Card >
                     <Row >
                         <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <h1>
+                            <h1 className="mb-0">
                                 FEATURED APPS
                             </h1>
                         </Col>
                         {(this.props.user.type === ADMIN) ?
                             <Fragment>
-
-
                                 <Col xs={24} sm={24} md={4} lg={4} xl={4}>
                                     <Button
                                         type="primary"
