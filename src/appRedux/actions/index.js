@@ -7,3 +7,5 @@ export * from './ConnectDevice';
 export * from './Account';
 export * from './Policy';
 export * from './Socket';
+export * from './Agent';
+export * from './Common';

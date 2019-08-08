@@ -9,6 +9,7 @@ import { authenticateUpdateUser, resetAuthUpdate } from "../../../appRedux/actio
 import { Markup } from 'interweave';
 import { Redirect } from 'react-router-dom';
 import { BASE_URL } from '../../../constants/Application.js';
+
 import {
     APP_MANAGE_APKs,
     APP_MANAGE_POLICY,
@@ -90,10 +91,7 @@ class Apk extends Component {
                     state: { id: this.props.user.id }
                 }} />
             )
-
-
-        }
-        else {
+        } else {
 
             return (
                 <div>
@@ -221,7 +219,7 @@ class Apk extends Component {
                             </Col> */}
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
-                                    <Link to="#" onClick={() => this.showToolsModal()}>
+                                    <a href="javascript:void(0);" onClick={() => this.showToolsModal()}>
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
                                                 <h2 style={{ textAlign: "center" }}> {convertToLang(this.props.translation[APP_DOWNLOAD_TOOLS], "Download Tools")} </h2>
@@ -240,7 +238,7 @@ class Apk extends Component {
                                             </div>
                                         </Card>
                                         <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
-                                    </Link>
+                                    </a>
                                 </div>
                                 <Modal
                                     title={convertToLang(this.props.translation[DT_MODAL_HEADING], "Download Tools")} //"Download Tools"
@@ -269,10 +267,13 @@ class Apk extends Component {
                                         </a>
                                     </Row>
                                 </Modal>
+
                             </Col>
                             <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                                 <div>
-                                    <Link to="#">
+                                    <Link
+                                        to="/dealer-agents"
+                                    >
                                         <Card className="manage_sec" style={{ borderRadius: 12 }}>
                                             <div>
                                                 <h2 className="text-center">{convertToLang(this.props.translation[APP_SECURE_PANEL_APK], "Secure Panel APK")} </h2>
@@ -296,32 +297,11 @@ class Apk extends Component {
                                         <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     </Link>
                                 </div>
+                              
                             </Col>
                         </Row>
                     </div>
-                    {/* never ever delete this commented code :P */}
-                    {/* <Modal
-                        maskClosable={false}
-                        style={{ top: 20 }}
-                        className="push_app"
-                        title="AUTO UPDATE USER CREDENTIALS"
-                        visible={this.state.pwdConfirmModal}
-                        footer={false}
-                        onOk={() => {
-                        }}
-                        onCancel={() => {
-                            this.showPwdConfirmModal(false)
-                            // this.refs.pswdForm.resetFields()
-                        }
-                        }
-                        okText="Confirm"
-                    >
-                        <ConfirmAutoUpdate
-                            hideModel={this.showPwdConfirmModal}
-                            checkCredentials={this.props.authenticateUpdateUser}
-                        />
-
-                    </Modal > */}
+                   
                 </div>
             )
         }

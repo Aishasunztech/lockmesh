@@ -34,3 +34,8 @@ export const FINISH_IMEI = 'finish_imei';
 
 
 export const ACTION_IN_PROCESS = 'action_in_process';
+
+
+// sim button
+
+export const RECV_SIM_DATA = 'receiveSimData_';

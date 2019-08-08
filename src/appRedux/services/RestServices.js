@@ -721,27 +721,54 @@ const RestService = {
         )
     },
     rejectRequest: (request) => {
-        // console.log(device);
         return axios.put(BASE_URL + 'users/delete_request/' + request.id, request, RestService.getHeader());
     },
     acceptRequest: (request) => {
-        // console.log(device);
         return axios.put(BASE_URL + 'users/accept_request/' + request.id, request, RestService.getHeader());
     },
 
-    simRegister: (total, data) => {
-        console.log('at sev', data);
-        return axios.post(BASE_URL + 'users/sim-register' , { data, total_dvc: total }, RestService.getHeader());
+    simRegister: (data) => {
+        return axios.post(BASE_URL + 'users/sim-register', { data }, RestService.getHeader());
     },
     getSims: (device_id) => {
-        // console.log('at sev', data);
         return axios.get(BASE_URL + 'users/get-sims/' + device_id, RestService.getHeader());
     },
+    deleteSim: (data) => {
+        return axios.post(BASE_URL + 'users/sim-delete', data, RestService.getHeader());
+    },
     handleSimUpdate: (data) => {
-        console.log('at sev', data);
-        return axios.put(BASE_URL + 'users/sim-update' , data, RestService.getHeader());
+        return axios.put(BASE_URL + 'users/sim-update', data, RestService.getHeader());
+    },
+    simHistory: (device_id) => {
+        return axios.get(BASE_URL + 'users/sim-history/' + device_id, RestService.getHeader());
     },
 
+    // Dealer Agents Section
+    getAgentList: () => {
+        return axios.get(BASE_URL + 'users/agents', RestService.getHeader())
+    },
+    addAgent: (agent) => {
+        return axios.post(BASE_URL + 'users/agents', {
+            ...agent
+        }, RestService.getHeader());
+    },
+    updateAgent: (agent) => {
+        return axios.put(BASE_URL + 'users/agents/' + agent.agent_id, {
+            ...agent
+        }, RestService.getHeader());
+    },
+    changeAgentStatus(agent, status){
+        return axios.put(BASE_URL + 'users/agents/' + agent.id + '/status', {
+            status: status
+        }, RestService.getHeader());
+    },
+    resetAgentPwd: (agentID) =>{
+        return axios.put(BASE_URL + 'users/agents/' + agentID + '/reset-pwd', {
+        }, RestService.getHeader());
+    },
+    deleteAgent: (agentID) => {
+        return axios.delete(BASE_URL + 'users/agents/' + agentID, RestService.getHeader());
+    }
 
 }
 export default RestService;

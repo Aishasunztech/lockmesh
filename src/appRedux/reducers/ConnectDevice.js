@@ -58,7 +58,10 @@ import {
     DEVICE_SYNCED,
     ADD_SIM_REGISTER,
     GET_SIMS,
-    UPDATE_SIM
+    UPDATE_SIM,
+    RECEIVE_SIM_DATA,
+    DELETE_SIM,
+    SIM_HISTORY
 } from "../../constants/ActionTypes";
 
 import {
@@ -169,12 +172,16 @@ const initialState = {
     is_push_apps: 0,
     is_policy_process: 0,
     reSync: false,
-    
+
     // sim module
     sim_list: [],
     guestSimAll: 0,
     encryptSimAll: 0,
+    unrGuest: 0,
+    unrEncrypt: 0,
     simUpdated: false,
+    simDeleted: false,
+    simHistoryList: [],
 
 };
 
@@ -1170,7 +1177,8 @@ export default (state = initialState, action) => {
                 });
                 return {
                     ...state,
-                    sim_list: [...state.sim_list, action.payload]
+                    simUpdated: new Date(),
+                    // sim_list: [...state.sim_list, action.payload]
                 }
             } else {
                 error({
@@ -1182,27 +1190,71 @@ export default (state = initialState, action) => {
             }
         }
 
+        case SIM_HISTORY: {
+
+            return {
+                ...state,
+                simHistoryList: action.payload.data
+            }
+        }
+
         case GET_SIMS: {
-            // console.log('abaid at red:', action.payload.data)
-            // console.log(state.sim_list);
+            // console.log('reducer call')
             let sims = action.payload.data;
-            let checkEnc = sims.filter(e => e.encrypt != 1);
-            let checkGst = sims.filter(e => e.guest != 1);
+            let checkEnc = sims.filter(e => e.encrypt != true);
+            let checkGst = sims.filter(e => e.guest != true);
+            
             let guestSimAll;
             let encryptSimAll;
-            // console.log('guestSimAll ', guestSimAll);
-            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1
-            if (checkEnc.length > 0) { encryptSimAll = 0; } else { encryptSimAll = 1; }
-            // console.log('guestSimAll ', guestSimAll);
-            // console.log('checkEnc ', checkEnc);
-            // console.log('checkGst ', checkGst);
-            // // console.log('sims ', sims);
-            // console.log('sims ', sims);
+            if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
+            if (checkEnc.length > 0) encryptSimAll = 0; else encryptSimAll = 1;
+
+            let checkunrEncrypt = sims.filter(e => e.unrEncrypt != true);
+            let checkunrGuest = sims.filter(e => e.unrGuest != true);
+
+            let unrGuest;
+            let unrEncrypt;
+            if (checkunrGuest.length > 0) unrGuest = 0; else unrGuest = 1;
+            if (checkunrEncrypt.length > 0) unrEncrypt = 0; else unrEncrypt = 1;
+
+
             return {
                 ...state,
                 sim_list: sims,
                 guestSimAll,
-                encryptSimAll
+                encryptSimAll,
+                unrEncrypt,
+                unrGuest,
+            }
+        }
+        case RECEIVE_SIM_DATA: {
+            if (action.payload) {
+                return {
+                    ...state,
+                    simUpdated: new Date()
+                }
+            }
+        }
+
+        case DELETE_SIM: {
+            if (action.response.status) {
+                success({
+                    title: action.response.msg,
+                });
+
+                let sims = state.sim_list.filter(e => e.id != action.payload.id)
+                return {
+                    ...state,
+                    sim_list: sims,
+                    simDeleted: new Date()
+                }
+            } else {
+                error({
+                    title: action.response.msg,
+                });
+                return {
+                    ...state
+                }
             }
         }
 
@@ -1223,20 +1275,6 @@ export default (state = initialState, action) => {
                     ...state
                 }
             }
-            // console.log('abaid at red UPDATE_SIMS:', action.payload)
-            // let copySims = state.sim_list;
-            // let arr = copySims.filter(e => e.id == action.payload.id);
-            // let obj = arr[0];
-
-            // console.log('obj is ',obj);
-            // // obj[""]
-            // console.log('state is: ', state.sim_list)
-            // let sims = action.payload.data;
-            // console.log('sims ',sims);
-            // return {
-            //     ...state,
-            //     // sim_list: sims
-            // }
         }
 
         case WRITE_IMEI: {

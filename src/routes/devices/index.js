@@ -84,8 +84,6 @@ import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToL
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
-import Item from "antd/lib/list/Item";
-import { STATUS_CODES } from "http";
 
 
 var coppyDevices = [];
@@ -96,8 +94,9 @@ class Devices extends Component {
         super(props);
         var columns = devicesColumns(props.translation, this.handleSearch);
 
-
         this.state = {
+            sorterKey: '',
+            sortOrder: 'ascend',
             columns: columns,
             searchText: '',
             devices: [],
@@ -113,7 +112,7 @@ class Devices extends Component {
             filteredDevices: [],
             flaggedDevices: [],
             copy_status: true,
-            translation: {}
+            translation: {},
         }
         this.copyDevices = [];
 
@@ -121,6 +120,32 @@ class Devices extends Component {
         // this.filterDevices = this.filterDevices.bind(this);
         this.handleChange = this.handleChange.bind(this);
 
+    }
+
+    handleTableChange = (pagination, query, sorter) => {
+        let { columns } = this.state;
+
+        columns.forEach(column => {
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+                }
+            }
+        })
+        this.setState({
+            columns: columns
+        });
     }
 
     deleteAllUnlinked = () => {
@@ -222,7 +247,6 @@ class Devices extends Component {
                 this.state.columns[indxRemainingDays].className = 'hide';
                 this.state.columns[indxRemainingDays].children[0].className = 'hide';
             }
-
             if (activationCodeIndex >= 0) {
                 this.state.columns.splice(11, 0, this.state.columns.splice(activationCodeIndex, 1)[0]);
             }
@@ -595,7 +619,6 @@ class Devices extends Component {
         }
 
         if (this.props.translation !== prevProps.translation) {
-            // console.log(this.columns)
             this.setState({
                 columns: devicesColumns(this.props.translation, this.handleSearch)
 
@@ -747,6 +770,7 @@ class Devices extends Component {
                             />
 
                             <DevicesList
+                                onChangeTableSorting={this.handleTableChange}
                                 devices={this.state.devices}
                                 allDevices={this.state.allDevices.length}
                                 activeDevices={this.state.activeDevices.length}

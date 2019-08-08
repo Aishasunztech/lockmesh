@@ -14,7 +14,6 @@ import RestService from '../../../appRedux/services/RestServices'
 import { NAME, COMMAND, POLICY_NOTE, POLICY_COMMAND, PLEASE_INPUT_POLICY_NAME } from '../../../constants/PolicyConstants';
 import { Tab_SECURE_SETTING } from '../../../constants/TabConstants';
 
-const TextArea = Input;
 const TabPane = Tabs.TabPane;
 const columns = [{
     title: 'Name',
@@ -123,7 +122,7 @@ class AddPolicy extends Component {
                 let secure_apps = [];
 
                 let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName === SECURE_SETTING)));
-                // console.log(main_extension)
+                
                 if (main_extension) {
                     secure_apps = main_extension.subExtension
                 }
@@ -133,7 +132,7 @@ class AddPolicy extends Component {
                 }
 
                 delete main_extension.subExtension;
-                // console.log(this.state.main_system_control, 'main setting controls is')
+                
                 if (main_extension) {
                     appPermissions.push(JSON.parse(JSON.stringify(main_extension)));
                 }
@@ -152,6 +151,7 @@ class AddPolicy extends Component {
                 this.props.getDealerApps();
                 this.props.getAppPermissions();
                 this.props.getPolicies();
+                
                 this.setState({
                     current: 0,
                     pushApps: [],
@@ -226,7 +226,6 @@ class AddPolicy extends Component {
                 }
             }
 
-            // console.log('updated called')
             this.setState({
                 dealerApps: this.props.dealerApps,
                 appPermissions: this.props.appPermissions,
@@ -363,27 +362,44 @@ class AddPolicy extends Component {
 
         return (
             <Fragment>
-                <div className="policy_steps card-container">
-                    <Tabs size="small" tabPosition='left' type="card" activeKey={this.state.tabSelected} onChange={this.callback}>
-                        <TabPane tab={convertToLang(this.props.translation[APPS], "APPS")} key="1">
+                <div
+                    className="policy_steps card-container"
+                >
+                    <Tabs
+                        size="small"
+                        tabPosition='left'
+                        type="card"
+                        activeKey={this.state.tabSelected}
+                        onChange={this.callback}
+                    >
+                        <TabPane
+                            tab={convertToLang(this.props.translation[APPS], "APPS")}
+                            key="1"
+                        >
                             <AppList
                                 apk_list={this.state.dealerApps}
                                 dataLength={this.state.dealerApps.length}
-                                handleCheckApp={this.handleCheckApp}
                                 handleCheckAllAppPolicy={this.handleCheckAllAppPolicy}
+                                handleCheckApp={this.handleCheckApp}
                                 guestAll={this.state.guestAlldealerApps}
                                 encryptedAll={this.state.encryptedAlldealerApps}
                                 enableAll={this.state.enableAlldealerApps}
                                 onSelectChange={this.onSelectChange}
                                 isCheckAllButtons={true}
-                                apps='dealerApps'
                                 isSwitch={true}
+
                                 isCheckbox={true}
+
+                                apps='dealerApps'
                                 pageType={'dealerApps'}
+
                                 translation={this.props.translation}
                             />
                         </TabPane>
-                        <TabPane tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISSION")} key="2">
+                        <TabPane
+                            tab={convertToLang(this.props.translation[APPLICATION_PERMISION], "APPLICATION PERMISSION")}
+                            key="2"
+                        >
                             <AppList
                                 apk_list={this.state.appPermissions}
                                 dataLength={this.state.appPermissions.length}
@@ -394,10 +410,10 @@ class AddPolicy extends Component {
                                 enableAll={this.state.enableAllappPermissions}
                                 onSelectChange={this.onSelectChange}
                                 isCheckAllButtons={true}
-                                pageType={'appPermissions'}
-                                appPermissions='appPermissions'
                                 isSwitch={true}
-                                // isCheckbox={true}
+                                appPermissions='appPermissions'
+                                pageType={'appPermissions'}
+
                                 translation={this.props.translation}
                             />
                         </TabPane>
@@ -411,10 +427,11 @@ class AddPolicy extends Component {
                                 encryptedAll={this.state.encryptedAllallExtensions}
                                 enableAll={this.state.enableAllallExtensions}
                                 isCheckAllButtons={true}
-                                pageType={'allExtensions'}
-                                secureSettings='allExtensions'
                                 isSwitch={true}
                                 AddPolicy={true}
+                                secureSettings='allExtensions'
+                                pageType={'allExtensions'}
+                                
                                 translation={this.props.translation}
                             />
                         </TabPane>
@@ -432,8 +449,6 @@ class AddPolicy extends Component {
                         <TabPane tab={convertToLang(this.props.translation[POLICY_DETAILS], "POLICY DETAILS")} key="5">
                             <Form className="login-form">
                                 <Form.Item
-                                    // validateStatus={this.state.isPolicy_name}
-                                    // help={this.state.policy_name_error}
                                     style={{ width: '220px' }}
                                 >
                                     <span className="h3">{convertToLang(this.props.translation[NAME], "Name")}</span>
@@ -464,7 +479,7 @@ class AddPolicy extends Component {
                                         }],
 
                                     })(
-                                        <textarea placeholder={convertToLang(this.props.translation[POLICY_NOTE], "Policy Note")} onChange={(e) => this.onNoteChange(e)} className="ant-input"></textarea>
+                                        <Input.TextArea placeholder={convertToLang(this.props.translation[POLICY_NOTE], "Policy Note")} onChange={(e) => this.onNoteChange(e)} className="ant-input"></Input.TextArea>
                                     )}
 
                                 </Form.Item>
@@ -478,35 +493,12 @@ class AddPolicy extends Component {
                         {this.state.tabSelected === '5' ? <Button type="primary" onClick={() => this.savePolicy()}>Save</Button> : false}
                     </div>
 
-                    {/* <Steps current={current} labelPlacement="vertical">
-                        {this.steps.map(item => <Steps.Step icon={item.Icon} key={item.title} title={item.title} />)}
-                    </Steps> */}
-                    {/* <div className="steps-content">{this.steps[current].content}</div>
-                    <div className="steps-action">
-                        {
-                            current > 0
-                            && (
-                                <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                                    Previous
-                            </Button>
-                            )
-                        }
-                        {
-                            current === this.steps.length - 1
-                            && <Button type="primary" onClick={() => this.savePolicy()}>Save</Button>
-                        }
-                        {
-                            current < this.steps.length - 1
-                            && <Button type="primary" onClick={() => this.next()}>Next</Button>
-
-                        }
-                    </div> */}
                 </div>
             </Fragment>
         );
     }
 }
-const WrappedNormalApkForm = Form.create('name', 'add_apk')(AddPolicy);
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getDealerApps: getDealerApps,
@@ -518,8 +510,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-var mapStateToProps = ({ device_details, policies }) => {
-    //   console.log('DEALER APPS LIST ', policies.appPermissions)
+var mapStateToProps = ({ policies }) => {
     return {
         dealerApps: policies.dealer_apk_list,
         appPermissions: policies.appPermissions,
@@ -540,7 +531,7 @@ var mapStateToProps = ({ device_details, policies }) => {
 
     }
 }
-// const WrappedNormalApkForm = Form.create('name', 'add_policy')(AddPolicy);
 
-// export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalApkForm);
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalApkForm);
+const WrappedAddPolicyForm = Form.create({ name: 'Add Policy' })(AddPolicy);
+
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedAddPolicyForm);

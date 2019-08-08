@@ -125,6 +125,11 @@ export var initialSettings = {
     { "key": "apk_name", "value": APK_APP_NAME },
     { "key": "apk_logo", "value": APK_APP_LOGO },
     { "key": "apk_size", "value": APK_SIZE },
+    { "key": "label", "value": "LABEL" },
+    { "key": "package_name", "value": "PACKAGE NAME" },
+    { "key": "version", "value": "VERSION" },
+    { "key": "created_at", "value": "UPLOAD DATE" },
+    { "key": "updated_at", "value": "EDIT DATE" },
   ],
   //  locale: {
   //   languageId: 'english',

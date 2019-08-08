@@ -31,6 +31,9 @@ export const IP_ADDRESS = "tableHeadings.IPAddress";
 export const DEVICE_START_DATE = "tableHeadings.STARTDATE";
 export const DEVICE_EXPIRY_DATE = "tableHeadings.EXPIRYDATE";
 
+export const ACTIVITIES = "ACTIVITIES.id"; // Required Fields
+
+
 export const Required_Fields = "required.fields.id"; // Required Fields
 export const DEVICE_Select_SIM_ID = "tableHeadings.Select.SIMID"; // "Select Sim ID"
 export const DEVICE_Select_CHAT_ID = "tableHeadings.Select.CHATID"; // Select Chat ID
@@ -61,7 +64,7 @@ export const USER_ID_IS_REQUIRED = "User.ID.is.Required.id"; // User ID is Requi
 export const SELECT_PGP_EMAILS = "Select.PGP.Emails.id"; // Select PGP Emails
 
 export const DUPLICATE_DEVICES_REQUIRED = "Duplicate.devices.required.id" // Number of Duplicate devices required
-export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id";
+export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id"; //DEVICE REQUESTS
 
 
 
@@ -74,14 +77,26 @@ export const PLEASE_INPUT_YOUR_PASSWORD = "Please.input.your.password.id"; // Pl
 export const Password_TEXT = "Password.id"; //Password
 export const ENTER_PASSWORD = "enter.Password.id"; //Enter Password
 export const PLEASE_CONFIRM_YOUR_PASSWORD = "Please.confirm.your.password.id";
-export const PASSWORD_AGAIN = "Password.Again.id";
+export const PASSWORD_AGAIN = "Password.Again.id"; //Password Again
 
+
+export const BATTERY = "Battery.id";
 export const WIFI = "Wifi.id";
 export const BLUETOOTH = "Bluetooth.id";
+export const SIM_Cards = "SIMCards.id";
+export const Data_Roaming = "DataRoaming.id";
+export const Mobile_Data = "MobileData.id";
 export const HOTSPOT = "Hotspot.id";
 export const SCREENSHOTS = "Screenshots.id";
+export const BRIGHTNESS = "Brightness.id";
+export const SLEEP = "Sleep.id";
+export const SOUND = "Sound.id";
+export const DATE_AND_TIME = "Date_and_Time.id";
+export const LANGUAGES_AND_INPUT = "Languages_and_Input.id";
+export const IN_APP_MENU_DISPLAY = "In-App_Menu_Display.id"; //In-App Menu Display
 export const BLOCK_CALLS = "BLOCK.CALLS.id";
-export const NOT_AVAILABLE = "Not Available.id"
+export const NOT_AVAILABLE = "Not.Available.id"
+export const Finger_Print_Lock = "Finger_Print_Lock.id" //Finger Print + Lock 
 export const WIPE_DEVICE_DESCRIPTION = "WIPE_DEVICE_DESCRIPTION.id"; // This will permanently wipe the Device. You cannot undo this action. All data will be deleted from target device without any confirmation. There is no way to reverse this action.
 export const DEVICE_NOT_SYNCED = "Device_not_Synced.id"; // Device is not Synced
 export const DEVICE_IS = "Device.is.id"; // Device is
@@ -119,3 +134,22 @@ export const PROFILE = "PROFILE.id"; // PROFILE
 export const DO_YOU_REALLY_WANT_TO_WIPE_THE_DEVICE = "Do.you.really.want.to.Wipe.the.device.id"; // Do you really want to Wipe the device
 
 export const FLAG_DEVICE = "FlagDevice.id"; // Flag Device
+
+
+// Sim Module
+export const PREVIOUSLY_USED_SIMS = "Previously.Used.Sims.id"; // Previously Used Sims
+export const ICC_ID = "ICC-ID.id"; // ICC-ID
+export const SIM_NAME = "Sim.Name.id"; // Sim Name
+export const STATUS = "Status.id"; // Status
+export const NOTE = "Note.id"; // Note
+export const DATA_LIMIT = "Data.Limit.id"; // Data Limit
+export const ALERT_DELETE_REGISTERED_SIM = "alert.delete.Registered.Sim.id"; // Are you sure you want to delete Registered Sim?
+export const UNREGISTERED = "Unregistered.id"; // Unregistered
+export const REGISTERED = "Registered.id"; // Registered
+export const REGISTERED_SIM_CARDS = "Registered Sim Cards.id"; // Registered Sim Cards
+export const EDIT_REGISTERED_SIM = "Edit.Registered.Sim.id"; // Edit Registered Sim
+export const ADD_SIM_REGISTRATION = "Add.Sim.Registration.id"; // Add Sim Registration
+export const ICC_ID_20_LONG = "ICC_ID_20_LONG.id"; // ICC ID should be 20 number long
+export const ICC_ID_IS_REQUIRED = "ICC_ID_IS_REQUIRED.id"; // ICC-ID is Required
+export const SIM_SETTINGS = "SIM_SETTINGS.id"; // Sim Settings
+export const SIM_HISTORY = "History.id"; // History

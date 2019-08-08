@@ -17,6 +17,7 @@ import FourOFour from "./404/";
 import AppMarket from "./appMaket/index";
 import ManageData from './account/ManageData/index'
 import SetPrice from './account/PricesPakages/index'
+import DealerAgent from './dealerAgent/index'
 // import Documents from "./documents/index";
 
 const App = ({ match }) => {
@@ -104,6 +105,11 @@ const App = ({ match }) => {
           exact
           path={`${match.url}set-prices`}
           component={SetPrice}
+        />
+        <Route
+          exact
+          path={`${match.url}dealer-agents`}
+          component={DealerAgent}
         />
         <Route
           exact

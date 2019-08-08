@@ -133,6 +133,7 @@
      color: #545454;
      font-size: 13px;
      font-weight: 400;
+     text-transform: uppercase;
  }
 
  .display_ .slct_all {
@@ -144,11 +145,13 @@
      border-top: 1px solid #bfbfbf;
      top: 36px;
      border-radius: 6px;
+
  }
 
  .picky__dropdown .option,
  .picky__dropdown li {
      border-bottom: 1px solid rgba(255, 254, 254, 0);
+
  }
 
  .picky__dropdown .option:focus,
