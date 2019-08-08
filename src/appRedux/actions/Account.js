@@ -24,7 +24,8 @@ import {
     PURCHASE_CREDITS,
     GET_PARENT_PACKAGES,
     PACKAGE_PERMSSION_SAVED,
-    DELETE_PACKAGE
+    DELETE_PACKAGE,
+    EDIT_PACKAGE
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -453,17 +454,18 @@ export function deletePackage(id) {
         })
     }
 }
-export function modifyPackage(id) {
+export function modifyPackage(id, price, isModify = false) {
     // alert(package_id);
 
     return (dispatch) => {
-        RestService.deletePackage(id).then((response) => {
+        RestService.editPackage(id, price, isModify).then((response) => {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
-                    type: DELETE_PACKAGE,
+                    type: EDIT_PACKAGE,
                     payload: response.data,
-                    package_id: id
+                    package_id: id,
+                    price: price
                 })
 
             } else {

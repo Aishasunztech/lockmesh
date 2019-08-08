@@ -209,7 +209,8 @@ class Prices extends Component {
             expandTabSelected: [],
             expandedByCustom: [],
             modifyPackageModal: false,
-            modify_package_id: null
+            modify_package_id: null,
+            isModify: false,
         }
     }
 
@@ -362,12 +363,13 @@ class Prices extends Component {
         });
         // this.props.deletePackage(id)
     }
-    modifyPackage = (id, name) => {
+    modifyPackage = (id, isModify) => {
 
 
         this.setState({
             modifyPackageModal: true,
-            modify_package_id: id
+            modify_package_id: id,
+            isModify: isModify
         })
     }
 
@@ -380,7 +382,7 @@ class Prices extends Component {
             return this.state.packages.map((item, index) => {
                 let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => { this.deletePackage(item.id, item.pkg_name) }} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
                 // let EditBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "EDIT")}</Button>
-                let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyPackage(item.id) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
+                let ModifyBtn = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px', textTransform: 'uppercase' }} onClick={() => { this.modifyPackage(item.id, true) }} >{convertToLang(this.props.translation[DUMY_TRANS_ID], "MODIFY PRICE")}</Button>
                 return {
                     id: item.id,
                     key: item.id,
@@ -638,9 +640,11 @@ class Prices extends Component {
                 >
                     <ModifyPrice
                         package_id={this.state.modify_package_id}
+                        isModify={this.state.isModify}
                         translation={this.props.translation}
                         handleCancel={this.handleCancel}
                         modifyPackage={this.props.modifyPackage}
+
                     />
                 </Modal>
 

@@ -18,7 +18,8 @@ import {
     PURCHASE_CREDITS,
     GET_PARENT_PACKAGES,
     PACKAGE_PERMSSION_SAVED,
-    DELETE_PACKAGE
+    DELETE_PACKAGE,
+    EDIT_PACKAGE
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -323,6 +324,27 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 packages: [...packages]
+            }
+        }
+        case EDIT_PACKAGE: {
+            let packages = state.packages
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg
+                });
+                let objIndex = packages.findIndex((obj => obj.id === action.package_id));
+                if (objIndex > -1) {
+                    state.packages[objIndex].pkg_price = action.price;
+                }
+            } else {
+                error({
+                    title: action.payload.msg
+                });
+            }
+
+            return {
+                ...state,
+                packages: [...state.packages]
             }
         }
 

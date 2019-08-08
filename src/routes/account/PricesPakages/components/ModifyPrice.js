@@ -20,8 +20,10 @@ class PackagePricingForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
+            console.log(this.props.package_id);
             if (this.props.package_id) {
-                // this.props.modifyPackage(this.props.package_id);
+                this.props.modifyPackage(this.props.package_id, values.pkgPrice, this.props.isModify);
+                this.props.handleCancel()
             }
 
         })

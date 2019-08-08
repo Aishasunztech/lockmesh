@@ -788,8 +788,9 @@ const RestService = {
     deletePackage: (id) => {
         return axios.delete(BASE_URL + 'users/delete_package/' + id, RestService.getHeader());
     },
-    editPackage: (id) => {
-        return axios.put(BASE_URL + 'users/edit_package/' + id, RestService.getHeader());
+    editPackage: (id, price, isModify) => {
+        // console.log(isModify);
+        return axios.put(BASE_URL + 'users/edit_package/' + id, { price, isModify }, RestService.getHeader());
     }
 
 }
