@@ -198,7 +198,7 @@ export const receiveSim = (socket, deviceId) => {
 }
 
 export const hello_web = (socket) => {
-    console.log('hello web connection', socket);
+
     
     return (dispatch) => {
         if(socket){
@@ -237,6 +237,7 @@ export const closeSocketEvents = (socket, deviceId) => {
 
             // test
             socket.off('hello_web');
+            socket.disconnect();
         } else {
 
         }
