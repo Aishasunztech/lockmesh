@@ -453,26 +453,33 @@ class EditPolicy extends Component {
             callback("Please insert only alphabets and numbers.")
         }
         else {
-            response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
-                if (RestService.checkAuth(response.data)) {
-                    if (response.data.status) {
-                        return true
-                    }
-                    else {
-                        return false
-                    }
-                }
-            });
-            if (response) {
-                callback()
-                this.props.form.setFieldsValue({
-                    // policy_name: value,
-                    // isPolicy_name: 'success',
-                    command_name: '#' + value.replace(/ /g, '_'),
-                    // policy_name_error: ''
-                })
+            let substring = value.substring(0, 1);
+
+            if (substring === ' ') {
+                callback("Policy name cannot start with blank space.")
             } else {
-                callback("Policy name already taken please use another name.")
+
+                response = await RestService.checkPolicyName(value, this.props.editAblePolicyId).then((response) => {
+                    if (RestService.checkAuth(response.data)) {
+                        if (response.data.status) {
+                            return true
+                        }
+                        else {
+                            return false
+                        }
+                    }
+                });
+                if (response) {
+                    callback()
+                    this.props.form.setFieldsValue({
+                        // policy_name: value,
+                        // isPolicy_name: 'success',
+                        command_name: '#' + value.replace(/ /g, '_'),
+                        // policy_name_error: ''
+                    })
+                } else {
+                    callback("Policy name already taken please use another name.")
+                }
             }
         }
 

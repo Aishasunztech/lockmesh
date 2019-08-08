@@ -291,26 +291,33 @@ class AddPolicy extends Component {
             callback("Please insert only alphabets and numbers.")
         }
         else {
-            response = await RestService.checkPolicyName(value).then((response) => {
-                if (RestService.checkAuth(response.data)) {
-                    if (response.data.status) {
-                        return true
-                    }
-                    else {
-                        return false
-                    }
-                }
-            });
-            if (response) {
-                callback()
-                this.setState({
-                    policy_name: value,
-                    // isPolicy_name: 'success',
-                    disabledCommand: '#' + value.replace(/ /g, '_'),
-                    // policy_name_error: ''
-                })
+            let substring = value.substring(0, 1);
+
+            if (substring === ' ') {
+                callback("Policy name cannot start with blank space.")
             } else {
-                callback("Policy name already taken please use another name.")
+                response = await RestService.checkPolicyName(value).then((response) => {
+                    if (RestService.checkAuth(response.data)) {
+                        if (response.data.status) {
+                            return true
+                        }
+                        else {
+                            return false
+                        }
+                    }
+                });
+                if (response) {
+                    callback()
+                    this.setState({
+                        policy_name: value,
+                        // isPolicy_name: 'success',
+                        disabledCommand: '#' + value.replace(/ /g, '_'),
+                        // policy_name_error: ''
+                    })
+                } else {
+                    callback("Policy name already taken please use another name.")
+                }
+
             }
         }
 
@@ -322,22 +329,6 @@ class AddPolicy extends Component {
         this.props.form.setFieldsValue({
             command: e.target.value
         })
-
-        // if (e.target.value === '') {
-        //     this.setState({
-        //         command: e.target.value,
-        //         isCommand: 'error',
-        //         command_error: "Please Input Policy Note"
-        //     })
-        // } else {
-        //     this.setState({
-
-        //         command: e.target.value,
-        //         isCommand: 'success',
-        //         command_error: ''
-        //     })
-        // }
-
     }
 
     handleChecked = (value, key) => {
@@ -365,6 +356,7 @@ class AddPolicy extends Component {
         tabSelected++;
         this.setState({ tabSelected: String(tabSelected) })
     }
+
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -468,7 +460,7 @@ class AddPolicy extends Component {
                                     {getFieldDecorator('command', {
 
                                         rules: [{
-                                            required: true, message:  convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Name"),
+                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Name"),
                                         }],
 
                                     })(
