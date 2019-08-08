@@ -46,6 +46,7 @@ import {
 import { componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
 import { ADMIN } from '../../constants/Constants';
 import { policyColumns } from '../utils/columnsUtils';
+import { POLICY_PAGE_HEADING } from '../../constants/AppFilterConstants';
 
 var copyPolicy = [];
 var status = true;
@@ -333,6 +334,7 @@ class Policy extends Component {
                     handlePagination={this.handlePagination}
                     handleComponentSearch={this.handleComponentSearch}
                     translation={this.props.translation}
+                    pageHeading={convertToLang(this.props.translation[POLICY_PAGE_HEADING], "Policy")}
                 />
 
                 {/* Add Policy Modal */}

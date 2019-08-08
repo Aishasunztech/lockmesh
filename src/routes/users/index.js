@@ -25,7 +25,7 @@ import {
 } from '../../constants/UserConstants';
 
 import {
-    Appfilter_SearchUser
+    Appfilter_SearchUser, USERS_PAGE_HEADING
 } from '../../constants/AppFilterConstants';
 
 
@@ -322,6 +322,7 @@ class Users extends Component {
                     handlePagination={this.handlePagination}
                     handleComponentSearch={this.handleComponentSearch}
                     translation={this.props.translation}
+                    pageHeading={convertToLang(this.props.translation[USERS_PAGE_HEADING], "Users")}
                 />
                 <AddUser ref="add_user" translation={this.props.translation} />
                 <UserList

@@ -36,6 +36,7 @@ import {
     Dealer_Top_Bar,
     Appfilter_ShowDealer,
     Appfilter_SearchDealer,
+    DEVICE_PAGE_HEADING,
 } from '../../constants/AppFilterConstants';
 
 import {
@@ -767,6 +768,7 @@ class Devices extends Component {
                                 handleComponentSearch={this.handleComponentSearch}
                                 locale={this.props.locale}
                                 translation={this.state.translation}
+                                pageHeading={convertToLang(this.props.translation[DEVICE_PAGE_HEADING], "Devices")}
                             />
 
                             <DevicesList

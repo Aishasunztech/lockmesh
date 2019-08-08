@@ -115,13 +115,16 @@ class AppFilter extends Component {
 
         let fullScreenClass1 = "";
         let fullScreenClass2 = "";
+        let fullScreenClass3 = "";
 
         if (this.props.isAddButton === false) {
-            fullScreenClass1 = "col-md-4";
-            fullScreenClass2 = "col-md-4";
-        } else {
             fullScreenClass1 = "col-md-3";
             fullScreenClass2 = "col-md-3";
+            fullScreenClass3 = "col-md-3";
+        } else {
+            fullScreenClass1 = "col-md-3";
+            fullScreenClass2 = "col-md-2";
+            fullScreenClass3 = "col-md-2";
         }
 
         //  console.log('render props selectedOptions ...', this.props.selectedOptions);
@@ -138,7 +141,12 @@ class AppFilter extends Component {
         return (
             // className="gutter-example"
             <Card className="sticky_top_bar">
-                <Row gutter={16} className="filter_top">
+                <Row gutter={24} className="filter_top">
+                    <Col className={`${fullScreenClass3} col-sm-6 col-xs-6 vertical_center`}>
+                        <span className="font_26">
+                            {(this.props.pageHeading) ? this.props.pageHeading : ""}
+                        </span>
+                    </Col>
                     <Col className={`${fullScreenClass1} col-sm-6 col-xs-6`}>
                         <div className="gutter-box">
                             {(this.props.options !== undefined && this.props.options !== null) ?
