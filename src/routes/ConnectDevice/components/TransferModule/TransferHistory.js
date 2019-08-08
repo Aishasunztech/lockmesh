@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { Modal, message, Input, Table, Switch, Avatar, Button, Card, Row, Col, Select, Spin, Form } from 'antd';
-import { componentSearch, getFormattedDate, convertToLang } from '../../../utils/commonUtils';
+import { componentSearch, getFormattedDate, convertToLang, checkValue } from '../../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME, SEARCH, ADMIN } from '../../../../constants/Constants';
 import { BASE_URL } from '../../../../constants/Application';
@@ -40,34 +40,16 @@ class TransferHistory extends Component {
                 className: 'row',
             },
             {
-                title: "DEVICE ID",
+                title: <div>TRANSFERED FROM <br />(<small>DEVICE ID</small>)</div>,
                 align: "center",
-                dataIndex: 'device_id',
-                key: "device_id",
+                dataIndex: 'transfered_from',
+                key: "transfered_from",
                 className: '',
                 // sorter: (a, b) => { return a.device_id.localeCompare(b.device_id) },
                 // sortDirections: ['ascend', 'descend'],
             },
             {
-                title: "USER ID",
-                align: "center",
-                dataIndex: 'user_id',
-                key: "user_id",
-                className: '',
-                // sorter: (a, b) => { return a.user_id.localeCompare(b.user_id) },
-                // sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: "TRANSFERED FROM",
-                align: "center",
-                dataIndex: 'transfered_from',
-                key: "transfered_from",
-                className: '',
-                // sorter: (a, b) => { return a.transfered_from.localeCompare(b.transfered_from) },
-                // sortDirections: ['ascend', 'descend'],
-            },
-            {
-                title: "TRANSFERED TO",
+                title: <div>TRANSFERED TO <br />(<small>DEVICE ID</small>)</div>,
                 align: "center",
                 dataIndex: 'transfered_to',
                 key: "transfered_to",
@@ -75,6 +57,25 @@ class TransferHistory extends Component {
                 // sorter: (a, b) => { return a.transfered_to.localeCompare(b.transfered_to) },
                 // sortDirections: ['ascend', 'descend'],
             },
+            {
+                title: <div>TRANSFERED FROM <br />(<small>USER ID</small>)</div>,
+                align: "center",
+                dataIndex: 'user_transfered_from',
+                key: "user_transfered_from",
+                className: '',
+                // sorter: (a, b) => { return a.user_transfered_from.localeCompare(b.user_transfered_from) },
+                // sortDirections: ['ascend', 'descend'],
+            },
+            {
+                title: <div>TRANSFERED TO <br />(<small>USER ID</small>)</div>,
+                align: "center",
+                dataIndex: 'user_transfered_to',
+                key: "user_transfered_to",
+                className: '',
+                // sorter: (a, b) => { return a.user_id.localeCompare(b.user_id) },
+                // sortDirections: ['ascend', 'descend'],
+            },
+
             {
                 title: convertToLang(this.props.translation[DATE], "DATE"),
                 align: "center",
@@ -119,7 +120,9 @@ class TransferHistory extends Component {
 
     componentDidMount() {
         this.props.getUserList();
-        this.props.transferHistory();
+        if (this.props.device.device_id) {
+            this.props.transferHistory(this.props.device.device_id);
+        }
         this.setState({
             user_id: this.props.device.user_id
         })
@@ -135,6 +138,10 @@ class TransferHistory extends Component {
         }
         if (this.props.visible != nextProps.visible) {
             this.setState({ visible: nextProps.visible })
+        }
+
+        if (this.props.getHistory != nextProps.getHistory) {
+            this.props.transferHistory(this.props.device.device_id);
         }
 
         if (this.props.transferHistoryList != nextProps.transferHistoryList) {
@@ -195,11 +202,11 @@ class TransferHistory extends Component {
                 return {
                     key: index,
                     action: row.action,
-                    device_id: row.device_id,
-                    user_id: row.user_acc_id,
-                    transfered_from: row.transfered_from,
-                    transfered_to: row.transfered_to,
-                    created_at: getFormattedDate(row.created_at),
+                    transfered_from: checkValue(row.transfered_from),
+                    transfered_to: checkValue(row.transfered_to),
+                    user_transfered_from: checkValue(row.user_transfered_from),
+                    user_transfered_to: checkValue(row.user_transfered_to),
+                    created_at: checkValue(getFormattedDate(row.created_at)),
                     // data: row
                 }
             })
@@ -235,10 +242,23 @@ class TransferHistory extends Component {
 
     }
 
+    checkDeviceStatus = () => {
+        let filtered = this.props.transferHistoryList.filter(e => e.action == "Device Transfered")
+        let THIS_DEVICE_TRANSFERED_TO = filtered[filtered.length - 1].transfered_to;
+
+        if (this.props.device.finalStatus == "Transfered") {
+            Modal.error({ title: `This device account was transfered to Device ID ${THIS_DEVICE_TRANSFERED_TO}` });
+        } else
+            if (this.props.flagged === "Unflag") {
+                this.props.handleTransfer(this.props.device.device_id)
+            } else {
+                Modal.error({ title: 'Plaese Flag the device first to Transfer' });
+            }
+    }
+
     render() {
         const { visible, visibleUser, addNewUserModal, addNewUserValue } = this.state;
         const { isloading, users_list, device, flagged } = this.props;
-        // console.log('users_list ', flagged)
         var lastObject = users_list[0];
         return (
             <div>
@@ -246,7 +266,7 @@ class TransferHistory extends Component {
                     width='850px'
                     maskClosable={false}
                     visible={visible}
-                    title="What you want to transfer, User or Device?"
+                    title="What you want to Transfer Device or User?" // "What you want to transfer, User or Device?"
                     onCancel={this.handleCancel}
                     footer={null}
                 >
@@ -254,11 +274,13 @@ class TransferHistory extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={8} className="gutter-row" justify="center" >
-                                <Button onClick={() => { if (flagged === "Unflag") { this.props.handleTransfer(device.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }}>DEVICE TRANSFER</Button>
+                                <Button onClick={this.checkDeviceStatus}
+                                // disabled={(this.props.device.finalStatus == "Transfered") ? true : false}
+                                >DEVICE TRANSFER</Button>
                             </Col>
                             <Col span={8} className="gutter-row" style={{ textAlign: 'center', marginTop: '5px' }}><h3>-OR-</h3></Col>
                             <Col span={8} className="gutter-row" justify="center" >
-                                <Button onClick={() => this.setState({ visibleUser: true })}>USER TRANSFER</Button>
+                                <Button onClick={() => this.setState({ visibleUser: true })} style={{ float: 'right' }} >USER TRANSFER</Button>
                             </Col>
                         </Row>
                     </Card>
@@ -376,10 +398,11 @@ class TransferHistory extends Component {
 const WrappedUserList = Form.create({ name: 'transfer-user' })(TransferHistory);
 
 var mapStateToProps = ({ users, settings, device_details }) => {
-    console.log('transferHistoryList ', device_details.transferHistoryList)
+    // console.log('transferHistoryList ', device_details.transferHistoryList)
 
     return {
         transferHistoryList: device_details.transferHistoryList,
+        getHistory: device_details.getHistory,
         users_list: users.users_list,
         isloading: users.addUserFlag,
         translation: settings.translation

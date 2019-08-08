@@ -351,7 +351,9 @@ class SideActions extends Component {
     }
 
     componentDidMount() {
-        this.props.simHistory(this.props.device_id);
+        if (this.props.device_id) {
+            this.props.simHistory(this.props.device_id);
+        }
         this.props.getNewDevicesList();
 
         this.setState({
@@ -505,18 +507,20 @@ class SideActions extends Component {
         this.showSaveProfileModal(false);
         this.props.getProfiles(this.props.device.device_id)
     }
-    transferDeviceProfile = (device) => {
+    transferDeviceProfile = (obj) => {
         // console.log('at transferDeviceProfile')
         let _this = this;
         confirm({
             content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
                 // console.log('OK');
-                _this.props.transferDeviceProfile(
-                    {
-                        reqDevice: device,
-                        flagged_device: _this.props.device_details,
-                    });
+                _this.props.transferDeviceProfile(obj
+                    // {
+                    //     reqDevice: device,
+                    //     flagged_device: _this.props.device_details,
+                    // }
+                );
+
             },
             onCancel() {
                 // console.log('Cancel');
@@ -628,10 +632,18 @@ class SideActions extends Component {
     }
 
     handleFlag(flagged) {
-        if (flagged === 'Unflag') {
-            showConfirm(this.props.device, this.props.unflagged, this, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device '), 'flagged')
+
+        // console.log('-----', this.props.device_details)
+        // console.log('-----', this.props.device_details.finalStatus == "Transfered")
+        // transfer_user_status
+        if (this.props.device_details.finalStatus == "Transfered") {
+            showConfirm(this.props.device, this.props.unlinkDevice, this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE], "Do you really want to unlink the device "), 'unlink')
         } else {
-            this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
+            if (flagged === 'Unflag') {
+                showConfirm(this.props.device, this.props.unflagged, this, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device '), 'flagged')
+            } else {
+                this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
+            }
         }
     }
 
@@ -720,7 +732,7 @@ class SideActions extends Component {
                                     placement="bottom"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
-                                    disabled={(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? false : true}
+                                    disabled={((this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) && this.props.device_details.finalStatus !== "Transfered") ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
@@ -733,6 +745,7 @@ class SideActions extends Component {
                                     type="primary"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showHistoryModal(true, "profile")}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                 >
                                     <Icon type="select" />
 
@@ -743,6 +756,7 @@ class SideActions extends Component {
                                     type="default"
                                     className="btn_break_line"
                                     onClick={() => this.showHistoryModal(true, "policy")}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#009700', color: '#fff' }}
                                 >
                                     <Icon type="lock" className="lock_icon" />
@@ -754,6 +768,7 @@ class SideActions extends Component {
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16, background: "#eed9c4", color: "#555", border: "1px solid #eab886" }}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                 >
                                     {/* <Icon type="number" /> */}
 
@@ -771,7 +786,7 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
-                                    disabled={this.props.authUser.type === ADMIN ? false : true}
+                                    disabled={(this.props.authUser.type === ADMIN && this.props.device_details.finalStatus !== "Transfered") ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
@@ -782,7 +797,10 @@ class SideActions extends Component {
                                 {/* </Tooltip> */}
 
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
-                                    <Button type="primary " style={{ width: "100%", marginBottom: 15 }}
+                                    <Button
+                                        type="primary "
+                                        style={{ width: "100%", marginBottom: 15 }}
+                                        disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                         // disabled={this.state.isSaveProfileBtn ? false : true}
                                         onClick={() => {
                                             // if (this.state.isSaveProfileBtn) {
@@ -815,6 +833,7 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                     onClick={this.handleSimModule}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                 >
                                     <Icon type="file" />
 
@@ -878,6 +897,7 @@ class SideActions extends Component {
                                     acceptRequest={this.props.acceptRequest}
                                     rejectRequest={this.props.rejectRequest}
                                     translation={this.props.translation}
+                                    device_details={this.props.device_details}
                                 />
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
@@ -896,6 +916,7 @@ class SideActions extends Component {
                                 <Button
                                     onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered" || this.props.device_details.transfer_user_status == '1') ? true : false}
                                 >
                                     <Icon type='edit' />
 

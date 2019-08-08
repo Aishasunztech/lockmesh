@@ -35,7 +35,7 @@ export default class NewDevices extends Component {
             NewRequests: [],
             sectionVisible: true,
             flaggedDevicesModal: false,
-            reqDevice: ""
+            reqDevice: ''
         }
     }
 
@@ -89,11 +89,14 @@ export default class NewDevices extends Component {
         })
     }
 
-    transferDevice = (device) => {
-        console.log('flagged_device ', device)
-        // console.log('reqDevice ', device)
-        this.props.transferDeviceProfile({ flagged_device: device, reqDevice: this.state.reqDevice });
-        // this.setState({ visible: false })
+    transferDevice = (device, requestedDevice = false) => {
+        // console.log('flagged_device ', device)
+        // console.log('reqDevice ', (requestedDevice) ? requestedDevice : this.state.reqDevice)
+
+        let DEVICE_REQUEST_IS = (requestedDevice) ? requestedDevice : this.state.reqDevice;
+        // console.log('requestedDevice ', requestedDevice)
+        this.props.transferDeviceProfile({ flagged_device: device, reqDevice: DEVICE_REQUEST_IS });
+        this.setState({ flaggedDevicesModal: false, visible: false })
     }
     rejectRequest(request) {
         showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST], "Are you sure you want to decline this request ?"), this.props.rejectRequest, request)
@@ -152,7 +155,12 @@ export default class NewDevices extends Component {
             if (this.state.sectionVisible) {
                 transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px' }} onClick={(flagged) ? () => this.transferDevice(device) : () => this.flaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
             } else {
-                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.transferDevice(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
+                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() =>
+                    this.transferDevice(this.props.device_details, device)
+                    // this.setState({
+                    //     reqDevice: device
+                    // })
+                }>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
             }
 
             let declineButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;

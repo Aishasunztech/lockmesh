@@ -187,6 +187,7 @@ const initialState = {
 
     // Transfer
     transferHistoryList: [],
+    getHistory: ''
 };
 
 export default (state = initialState, action) => {
@@ -543,22 +544,32 @@ export default (state = initialState, action) => {
                 success({
                     title: action.payload.msg,
                 })
+                return {
+                    ...state,
+                    getHistory: new Date()
+                }
             } else {
                 error({
                     title: action.payload.msg,
                 })
+                return {
+                    ...state,
+                }
             }
 
-            return {
-                ...state,
-            }
         }
 
         case TRANSFER_HISTORY: {
-
-            return {
-                ...state,
-                transferHistoryList: action.payload.data
+            if (action.payload.status) {
+                return {
+                    ...state,
+                    transferHistoryList: action.payload.data,
+                    // getHistory: new Date()
+                }
+            } else {
+                return {
+                    ...state,
+                }
             }
         }
 

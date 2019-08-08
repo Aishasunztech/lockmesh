@@ -229,6 +229,33 @@ export function devicesColumns(translation, handleSearch) {
         {
             title: (
                 <Input.Search
+                    name="transfered_to"
+                    key="transfered_to"
+                    id="transfered_to"
+                    className="search_heading"
+                    onKeyUp={handleSearch}
+                    autoComplete="new-password"
+                    placeholder="TRANSFERED TO" //{convertToLang(translation[USER_ID], "USER ID")}
+                // onBlur={(e) => { e.target.value = '' }}
+                />
+            ),
+            dataIndex: 'transfered_to',
+            children: [
+                {
+                    title: "TRANSFERED TO", //convertToLang(translation[USER_ID], "USER ID"),
+                    align: "center",
+                    dataIndex: 'transfered_to',
+                    key: "transfered_to",
+                    sorter: (a, b) => {
+                        return a.transfered_to.props.children.localeCompare(b.transfered_to.props.children)
+                    },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ],
+        },
+        {
+            title: (
+                <Input.Search
                     name="finalStatus"
                     key="status"
                     id="status"

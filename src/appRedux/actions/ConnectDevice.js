@@ -828,9 +828,9 @@ export const transferUser = (data) => {
 }
 
 
-export const transferHistory = () => {
+export const transferHistory = (device_id) => {
     return (dispatch) => {
-        RestService.transferHistory().then((response) => {
+        RestService.transferHistory(device_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: TRANSFER_HISTORY,

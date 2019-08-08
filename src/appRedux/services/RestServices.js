@@ -118,14 +118,15 @@ const RestService = {
     },
 
     transferDeviceProfile: (data) => {
+        console.log('data is: ', data)
         return axios.post(BASE_URL + 'users/transfer/device_profile', data, RestService.getHeader());
     },
     transferUser: (data) => {
         return axios.post(BASE_URL + 'users/transfer/user', data, RestService.getHeader());
     },
 
-    transferHistory: () => {
-        return axios.get(BASE_URL + 'users/transfer/history', RestService.getHeader());
+    transferHistory: (device_id) => {
+        return axios.get(BASE_URL + 'users/transfer/history/' + device_id, RestService.getHeader());
     },
 
 

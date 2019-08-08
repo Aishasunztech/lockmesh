@@ -4,6 +4,7 @@ export const ADD_DEVICE = "tableHeadings.ADDDEVICE";
 export const USER_ID = "tableHeadings.USERID";
 export const DEVICE_REMAINING_DAYS = "tableHeadings.REMAININGDAYS";
 export const DEVICE_FLAGGED = "tableHeadings.FLAGGED";
+export const DEVICE_TRANSFERED = "tableHeadings.TRANSFERED";
 export const DEVICE_STATUS = "tableHeadings.STATUS";
 export const DEVICE_MODE = "tableHeadings.MODE";
 export const DEVICE_TYPE = "tableHeadings.TYPE";
