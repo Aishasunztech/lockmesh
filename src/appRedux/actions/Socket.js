@@ -52,22 +52,6 @@ export const getNotification = (socket) => {
     }
 }
 
-export const ackFinishedPushApps = (socket, deviceId) => {
-    return (dispatch) => {
-        if (socket) {
-            socket.on(ACK_FINISHED_PUSH_APPS + deviceId, (response) => {
-                // console.log("jkshdksa");
-                dispatch({
-                    type: FINISHED_PUSH_APPS,
-                    payload: true
-                })
-            })
-        } else {
-
-        }
-    }
-}
-
 export const ackSinglePushApp = (socket, deviceId) => {
     return (dispatch) => {
         if (socket) {
@@ -76,6 +60,22 @@ export const ackSinglePushApp = (socket, deviceId) => {
                 dispatch({
                     type: SINGLE_APP_PUSHED,
                     payload: response
+                })
+            })
+        } else {
+
+        }
+    }
+}
+
+export const ackFinishedPushApps = (socket, deviceId) => {
+    return (dispatch) => {
+        if (socket) {
+            socket.on(ACK_FINISHED_PUSH_APPS + deviceId, (response) => {
+                // console.log("jkshdksa");
+                dispatch({
+                    type: FINISHED_PUSH_APPS,
+                    payload: true
                 })
             })
         } else {

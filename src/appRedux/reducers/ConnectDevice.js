@@ -61,7 +61,9 @@ import {
     UPDATE_SIM,
     RECEIVE_SIM_DATA,
     DELETE_SIM,
-    SIM_HISTORY
+    SIM_HISTORY,
+    SINGLE_APP_PULLED,
+    SINGLE_APP_PUSHED
 } from "../../constants/ActionTypes";
 
 import {
@@ -1311,6 +1313,12 @@ export default (state = initialState, action) => {
                 ...state,
                 reSync: action.payload
             }
+        }
+        case SINGLE_APP_PULLED: {
+            console.log("remove app from app_list")
+        }
+        case SINGLE_APP_PUSHED: {
+            console.log("add app in app_list")
         }
         default:
             return state;
