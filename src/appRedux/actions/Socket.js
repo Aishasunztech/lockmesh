@@ -22,7 +22,10 @@ import {
     FINISH_POLICY_STEP,
     RECV_SIM_DATA,
     CONNECT_SOCKET,
-    DISCONNECT_SOCKET
+    DISCONNECT_SOCKET,
+    ACK_SETTING_APPLIED,
+    ACK_INSTALLED_APPS,
+    ACK_UNINSTALLED_APPS
 } from "../../constants/SocketConstants";
 
 import RestService from '../services/RestServices'
@@ -52,6 +55,17 @@ export const getNotification = (socket) => {
     }
 }
 
+export const ackSettingApplied = (socket, deviceId) => {
+    return (dispatch) => {
+        socket.on(ACK_SETTING_APPLIED + deviceId, (response) => {
+            dispatch({
+                type: ACK_SETTING_APPLIED,
+                payload: response
+            })
+        })
+    }
+}
+
 export const ackSinglePushApp = (socket, deviceId) => {
     return (dispatch) => {
         if (socket) {
@@ -59,6 +73,38 @@ export const ackSinglePushApp = (socket, deviceId) => {
                 // console.log("SOCKET WEB SINGLE");
                 dispatch({
                     type: SINGLE_APP_PUSHED,
+                    payload: response
+                })
+            })
+        } else {
+
+        }
+    }
+}
+
+export const ackInstalledApps = (socket, deviceId) => {
+    return (dispatch) => {
+        if (socket) {
+            socket.on(ACK_INSTALLED_APPS + deviceId, (response) => {
+                console.log("ackInstalledApps", response);
+                dispatch({
+                    type: ACK_INSTALLED_APPS,
+                    payload: response
+                })
+            })
+        } else {
+
+        }
+    }
+}
+
+export const ackUninstalledApps = (socket, deviceId) => {
+    return (dispatch) => {
+        if (socket) {
+            socket.on(ACK_UNINSTALLED_APPS + deviceId, (response) => {
+                console.log("ackUninstalledApps", response);
+                dispatch({
+                    type: ACK_UNINSTALLED_APPS,
                     payload: response
                 })
             })

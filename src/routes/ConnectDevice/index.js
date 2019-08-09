@@ -59,7 +59,9 @@ import {
   ackFinishedPolicyStep,
   receiveSim,
   hello_web,
-  closeSocketEvents
+  closeSocketEvents,
+  ackInstalledApps,
+  ackUninstalledApps
 } from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
@@ -243,6 +245,8 @@ class ConnectDevice extends Component {
           nextProps.ackSinglePushApp(nextProps.socket, device_id);
           nextProps.ackSinglePullApp(nextProps.socket, device_id);
           nextProps.ackFinishedPolicyStep(nextProps.socket, device_id);
+          nextProps.ackInstalledApps(nextProps.socket, device_id);
+          nextProps.ackUninstalledApps(nextProps.socket, device_id);
           nextProps.receiveSim(nextProps.socket, device_id);
   
           nextProps.hello_web(nextProps.socket);
@@ -736,6 +740,8 @@ function mapDispatchToProps(dispatch) {
     clearResyncFlag: clearResyncFlag,
     closeSocketEvents: closeSocketEvents,
     connectSocket: connectSocket,
+    ackInstalledApps: ackInstalledApps,
+    ackUninstalledApps: ackUninstalledApps,
     hello_web: hello_web,
   }, dispatch);
 }

@@ -4,7 +4,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import { message, Modal } from 'antd';
-import { CONNECT_SOCKET, DISCONNECT_SOCKET } from '../../constants/SocketConstants';
+import { CONNECT_SOCKET, DISCONNECT_SOCKET, ACK_SETTING_APPLIED, ACK_INSTALLED_APPS, ACK_UNINSTALLED_APPS } from '../../constants/SocketConstants';
 
 // import io from 'socket.io-client';
 
@@ -40,18 +40,7 @@ export default (state = initialState, action) => {
                 socket: action.payload
             }
         }
-        case FINISHED_PUSH_APPS: {
-            // console.log("works");
-            success({
-                title: "Apps Pushed Successfully.",
-            });
-            return {
-                ...state,
-                is_in_process: false,
-                noOfApp_pushed_pulled: state.noOfApp_push_pull,
-                is_policy_process: 0
-            }
-        }
+        
         case GET_APP_JOBS: {
             if (action.payload.id) {
                 if (action.data_type === 'policy') {
@@ -77,11 +66,43 @@ export default (state = initialState, action) => {
                 }
             }
         }
+
+        case ACK_SETTING_APPLIED:{
+            return {
+                ...state
+            }
+        }
+
+        case ACK_INSTALLED_APPS: {
+            return {
+                ...state
+            }
+        }
+
         case SINGLE_APP_PUSHED: {
             // console.log(action.payload.completePushApps);
             return {
                 ...state,
                 noOfApp_pushed_pulled: state.noOfApp_pushed_pulled + 1
+            }
+        }
+
+        case FINISHED_PUSH_APPS: {
+            // console.log("works");
+            success({
+                title: "Apps Pushed Successfully.",
+            });
+            return {
+                ...state,
+                is_in_process: false,
+                noOfApp_pushed_pulled: state.noOfApp_push_pull,
+                is_policy_process: 0
+            }
+        }
+
+        case ACK_UNINSTALLED_APPS: {
+            return {
+                ...state
             }
         }
         case SINGLE_APP_PULLED: {
@@ -103,6 +124,14 @@ export default (state = initialState, action) => {
                 is_policy_process: 0
             }
         }
+
+        case FINISHED_POLICY_STEP: {
+            return {
+                ...state,
+                complete_policy_step: state.complete_policy_step + 1
+            }
+        }
+
         case FINISHED_POLICY: {
             // console.log("works");
             success({
@@ -116,12 +145,7 @@ export default (state = initialState, action) => {
                 complete_policy_step: 0
             }
         }
-        case FINISHED_POLICY_STEP: {
-            return {
-                ...state,
-                complete_policy_step: state.complete_policy_step + 1
-            }
-        }
+        
         case IN_PROCESS: {
             // console.log("works");
             return {
