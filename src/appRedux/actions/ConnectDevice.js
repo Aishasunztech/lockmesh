@@ -1103,14 +1103,16 @@ export const getActivities = (device_id) => {
 
 export const applyPullApps = (apps, deviceId, usrAccId) => {
     apps.forEach((el) => {
+
         delete el.icon;
         el.apk_id = el.key;
-        el.version_name = "";
-        el.apk = "";
-        el.apk_name = "";
-        el.guest = false;
-        el.encrypted = false;
-        el.enable = false;
+        el.apk_name = el.label;
+        el.version_name="";
+        el.apk ="";
+        el.apk_name ="";
+        el.guest =false;
+        el.encrypted=false;
+        el.enable=false;
     })
     return (dispatch) => {
         RestService.applyPullApps(apps, deviceId, usrAccId).then((response) => {

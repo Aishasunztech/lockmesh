@@ -513,19 +513,15 @@ class ManageData extends Component {
                         <div>
                             <Card >
                                 <Row gutter={16} className="filter_top">
-                                    <Col className="col-md-4 col-sm-6 col-xs-6">
-                                        <div className="gutter-box">
-                                            <h1 style={{ lineHeight: "35px", marginBottom: 0 }}> {convertToLang(this.props.translation[MANAGE_DATA], "MANAGE DATA")} </h1>
-                                        </div>
+                                    <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
+                                        <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "MANAGE DATA")} </span>
                                     </Col>
-                                    <Col className="col-md-6 col-sm-6 col-xs-6">
-                                        <div className="gutter-box">
-                                            <Search
-                                                placeholder={convertToLang(this.props.translation[Appfilter_SearchManageData], "Search")}
-                                                onChange={e => this.handleComponentSearch(e.target.value)}
-                                                style={{ width: '100%' }}
-                                            />
-                                        </div>
+                                    <Col className="col-md-4 col-sm-6 col-xs-6">
+                                        <Search
+                                            placeholder={convertToLang(this.props.translation[Appfilter_SearchManageData], "Search")}
+                                            onChange={e => this.handleComponentSearch(e.target.value)}
+                                            style={{ width: '100%' }}
+                                        />
                                     </Col>
                                     {/* <Col className="col-md-2 col-sm-6 col-xs-12">
                             <div className="gutter-box">

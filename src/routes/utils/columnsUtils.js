@@ -2139,6 +2139,16 @@ export function apkColumns(translation) {
             // className: ''
         },
         {
+            title: convertToLang(translation[""], "LABEL"),
+            dataIndex: 'label',
+            key: 'label',
+        },
+        {
+            title: convertToLang(translation[""], "PACKAGE NAME"),
+            dataIndex: 'package_name',
+            key: 'package_name',
+        },
+        {
             title: convertToLang(translation[""], "VERSION"),
             dataIndex: 'version',
             key: 'version',

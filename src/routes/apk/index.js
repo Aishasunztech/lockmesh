@@ -43,6 +43,7 @@ import { ACTION, Alert_Delete_APK, SEARCH } from "../../constants/Constants";
 import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConstants";
 import { apkColumns, featureApkColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
+import { APPS_PAGE_HEADING } from '../../constants/AppFilterConstants';
 
 
 var status = true;
@@ -68,7 +69,7 @@ class Apk extends Component {
 
         // this.columns = ;
         this.confirm = Modal.confirm;
-        
+
     }
 
     // handleTableChange = (pagination, query, sorter) => {
@@ -367,6 +368,7 @@ class Apk extends Component {
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
+                                pageHeading={convertToLang(this.props.translation[APPS_PAGE_HEADING], "Apps")}
                             />
 
                             {
