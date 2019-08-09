@@ -71,7 +71,7 @@ import {
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
-import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS } from '../../constants/SocketConstants';
+import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED } from '../../constants/SocketConstants';
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
@@ -1342,7 +1342,7 @@ export default (state = initialState, action) => {
                             index = i;
                         }
                     });
-                    
+
                     console.log("pull app index", index);
                     if (index !== 0) {
                         app_list.splice(index,1);
@@ -1359,7 +1359,9 @@ export default (state = initialState, action) => {
                 app_list: [...app_list]
             }
         }
-
+        case ACK_SETTING_APPLIED: {
+            
+        }
         default:
             return state;
 

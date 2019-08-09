@@ -68,8 +68,10 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED:{
+            console.log("setting payload: ", action.payload)
             return {
-                ...state
+                ...state,
+                app_list: JSON.parse(JSON.stringify(action.payload.app_list)),
             }
         }
 
