@@ -260,7 +260,7 @@ class AppFilter extends Component {
                         :
                         <Col />
                     } */}
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-6`}>
+                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
                         <div className="gutter-box">
                             {
                                 (this.props.isAddButton === true) ?
