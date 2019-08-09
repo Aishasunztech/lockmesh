@@ -22,6 +22,7 @@
 
 .height_auto .ant-card-body {
     height: auto;
+    overflow: overlay;
 }
 
 .manage_sec_pro img {

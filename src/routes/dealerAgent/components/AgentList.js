@@ -6,15 +6,16 @@ import { Table, Button, Card, Tabs, Modal, Icon, Tag, Form, Input, Popconfirm, E
 
 import CustomScrollbars from "../../../util/CustomScrollbars";
 
-import { 
+import {
     // getStatus, 
-    getColor, 
-    checkValue, 
-    getSortOrder, 
+    getColor,
+    checkValue,
+    getSortOrder,
     // checkRemainDays, 
-    convertToLang 
+    convertToLang
 } from '../../utils/commonUtils'
 import { Button_Yes, Button_No } from '../../../constants/ButtonConstants';
+import { DEALER, ADMIN } from '../../../constants/Constants';
 
 
 
@@ -22,16 +23,16 @@ const confirm = Modal.confirm;
 
 export default class DevicesList extends Component {
 
- 
+
     // componentDidUpdate(prevProps) {
 
     // }
-    
+
     // renderList
     renderList() {
-        
+
         return this.props.dealerAgents.map((agent, index) => {
-            
+
             return {
                 rowKey: index,
                 key: agent.id,
@@ -41,7 +42,7 @@ export default class DevicesList extends Component {
                         className="mb-0"
                         // disabled
                         type="primary"
-                        onClick= {(e)=> this.props.showEditModal(true, agent)}
+                        onClick={(e) => this.props.showEditModal(true, agent)}
                     >
                         {convertToLang(this.props.translation['EDIT'], "EDIT")}
                     </Button>
@@ -49,7 +50,7 @@ export default class DevicesList extends Component {
                         size="small"
                         className="mb-0"
                         type="danger"
-                        onClick= {(e)=> this.props.handleDeleteAgent(agent.id)}
+                        onClick={(e) => this.props.handleDeleteAgent(agent.id)}
                     >
                         {convertToLang(this.props.translation['DELETE'], "DELETE")}
                     </Button>
@@ -65,7 +66,7 @@ export default class DevicesList extends Component {
                         size="small"
                         className="mb-0"
                         type="ghost"
-                        onClick = {(e) => this.props.handleResetPwd(agent.id)}
+                        onClick={(e) => this.props.handleResetPwd(agent.id)}
                     >
                         {convertToLang(this.props.translation['PASSWORD RESET'], "PASSWORD RESET")}
                     </Button>
@@ -74,9 +75,9 @@ export default class DevicesList extends Component {
                 staff_id: checkValue(agent.staff_id),
                 type: checkValue(agent.type),
                 status: (
-                    <Switch 
-                        onChange = {(e) => this.props.agentStatusHandler(e, agent)}
-                        defaultChecked={(agent.status ===1)? true: false}
+                    <Switch
+                        onChange={(e) => this.props.agentStatusHandler(e, agent)}
+                        defaultChecked={(agent.status === 1) ? true : false}
                         size={'small'}
                     />
                 ),
@@ -102,7 +103,7 @@ export default class DevicesList extends Component {
                 //    this.props.resetTabSelected()
                 // this.props.refreshComponent();
                 // console.log('this.refs.tablelist.props.rowSelection', this.refs.tablelist.props.rowSelection)
-                
+
                 // this.resetSeletedRows();
                 // if (this.refs.tablelist.props.rowSelection !== null) {
                 //     this.refs.tablelist.props.rowSelection.selectedRowKeys = []
@@ -146,11 +147,16 @@ export default class DevicesList extends Component {
     }
 
     render() {
-
+        let type = this.props.user.type
+        let styleType = "";
+        if (type === ADMIN) {
+            styleType = "agents_fix_card_admin"
+        } else {
+            styleType = "agents_fix_card_dealer"
+        }
         return (
-            <div className="dev_table">
-               
-                <Card className="fix_card devices_fix_card">
+            <div className="">
+                <Card className={`fix_card agents_fix_card ${styleType}`}>
                     <hr className="fix_header_border" style={{ top: "56px" }} />
                     <CustomScrollbars className="gx-popover-scroll ">
                         <Table
@@ -159,13 +165,13 @@ export default class DevicesList extends Component {
                                 // scrollMargin:"100px"
                                 // scrollMarginLeft: "1000px"
                             }}
-                            
+
                             id='scrolltablelist'
                             ref='tablelist'
                             className={"devices"}
                             // rowSelection={rowSelection}
                             // rowClassName={(record, index) => this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''}
-                            
+
                             size="middle"
                             bordered
                             columns={this.props.columns}
@@ -176,15 +182,15 @@ export default class DevicesList extends Component {
                                 // pageSize: Number(this.state.pagination),
                                 //size: "midddle",
                             }
-                            // useFixedHeader={true}
-                            // onExpand={this.onExpandRow}
-                            // expandIcon={(props) => this.customExpandIcon(props)}
+                        // useFixedHeader={true}
+                        // onExpand={this.onExpandRow}
+                        // expandIcon={(props) => this.customExpandIcon(props)}
                         />
-                        
+
                     </CustomScrollbars>
                 </Card>
 
-            </div >
+            </div>
 
         )
     }

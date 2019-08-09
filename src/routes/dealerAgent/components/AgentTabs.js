@@ -86,6 +86,7 @@ export default class AgentTabs extends Component {
                     agentStatusHandler={this.props.agentStatusHandler}
                     handleDeleteAgent={this.props.handleDeleteAgent}
                     handleResetPwd={this.props.handleResetPwd}
+                    user={this.props.user}
                 />
                 <EditAgent
                     showEditModal={this.showEditModal}

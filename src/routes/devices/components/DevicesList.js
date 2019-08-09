@@ -463,16 +463,11 @@ class DevicesList extends Component {
                     suspendDevice={suspendDevice}
                     translation={this.props.translation}
                 />
-                <Card className="fix_card devices_fix_card">
+                <Card className={`fix_card ${this.props.styleType}`}>
                     <hr className="fix_header_border" style={{ top: "56px" }} />
                     <CustomScrollbars className="gx-popover-scroll ">
                         <Table
                             // id="test"
-                            style={{
-                                // whiteSpace: 'nowrap'
-                                // scrollMargin:"100px"
-                                // scrollMarginLeft: "1000px"
-                            }}
                             id='scrolltablelist'
                             ref='tablelist'
                             className={"devices "}
@@ -816,6 +811,7 @@ export default class Tab extends Component {
 
                     </Tabs>
                     <DevicesList
+                        styleType={this.props.styleType}
                         devices={this.state.devices}
                         suspendDevice={this.props.suspendDevice}
                         activateDevice={this.props.activateDevice}

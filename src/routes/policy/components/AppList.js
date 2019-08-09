@@ -468,10 +468,8 @@ class AppList extends Component {
                             </Row>
                         </div> : false
                 }
-
                 {
                     this.props.isCheckAllButtons ?
-
                         <div className="applist_menu">
                             <Row>
                                 <Col className="text-center" span={7}>
@@ -483,10 +481,9 @@ class AppList extends Component {
                                                     <Button size="small" type="primary" style={{ marginTop: 12 }} onClick={() => this.props.addApps('app_list')} >{convertToLang(this.props.translation[ADD_PERMISSIONS], "Add Permissions")}</Button>
                                                     : false
                                             : false
-
                                     }</Col>
-                                <Col className="text-center pr-2 pl-2" span={4}></Col>
-                                <Col className="text-center pr-2 pl-2" span={4}>
+                                <Col className="text-center pr-2 pl-2" span={5}></Col>
+                                <Col className="text-center pr-2 pl-2" span={3}>
                                     <span className="policy_s_txt">{convertToLang(this.props.translation[GUEST_ALL], "Guest All")}</span>
                                     <Switch checked={this.state.guestAll ? true : false}
                                         size='small'
@@ -509,7 +506,6 @@ class AppList extends Component {
                                 </Col>
                                 <Col className="text-center pr-2 pl-2" span={4}>
                                     {
-
                                         this.props.apps || this.props.appPermissions ?
                                             <div>
                                                 <span className="policy_s_txt">{convertToLang(this.props.translation[Enable_ALL], "Enable All")}</span>
@@ -523,9 +519,7 @@ class AppList extends Component {
                                             </div>
                                             : false}
                                 </Col>
-
                             </Row>
-
                         </div> : false
                 }
                 <Table

@@ -323,14 +323,14 @@ export default class ListApk extends Component {
             <Fragment>
                 <Card >
                     <Row >
-                        <Col xs={24} sm={12} md={8} lg={8} xl={8} className="vertical_center">
-                            <h1 className="mb-0">
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8} className="vertical_center">
+                            <h2 className="mb-0">
                                 FEATURED APPS
-                            </h1>
+                            </h2>
                         </Col>
                         {(this.props.user.type === ADMIN) ?
                             <Fragment>
-                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16">
+                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                     <Button
                                         type="primary"
                                         style={{ width: '100%', padding: "0" }}
@@ -339,7 +339,7 @@ export default class ListApk extends Component {
                                         UPDATE CHAT APP
                             </Button>
                                 </Col>
-                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16">
+                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                     <Button
                                         type="primary"
                                         style={{ width: '100%', padding: "0" }}
@@ -348,7 +348,7 @@ export default class ListApk extends Component {
                                         UPDATE PGP APP
                             </Button>
                                 </Col>
-                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16">
+                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                     <Button
                                         type="primary"
                                         style={{ width: '100%', padding: "0" }}
@@ -357,7 +357,7 @@ export default class ListApk extends Component {
                                         UPDATE UEM APP
                             </Button>
                                 </Col>
-                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16">
+                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                     <Button
                                         type="primary"
                                         style={{ width: '100%', padding: "0" }}
