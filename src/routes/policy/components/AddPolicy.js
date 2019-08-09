@@ -122,7 +122,7 @@ class AddPolicy extends Component {
                 let secure_apps = [];
 
                 let main_extension = JSON.parse(JSON.stringify(this.state.allExtensions.find(item => item.uniqueName === SECURE_SETTING)));
-                
+
                 if (main_extension) {
                     secure_apps = main_extension.subExtension
                 }
@@ -132,7 +132,7 @@ class AddPolicy extends Component {
                 }
 
                 delete main_extension.subExtension;
-                
+
                 if (main_extension) {
                     appPermissions.push(JSON.parse(JSON.stringify(main_extension)));
                 }
@@ -151,7 +151,7 @@ class AddPolicy extends Component {
                 this.props.getDealerApps();
                 this.props.getAppPermissions();
                 this.props.getPolicies();
-                
+
                 this.setState({
                     current: 0,
                     pushApps: [],
@@ -290,26 +290,35 @@ class AddPolicy extends Component {
             callback("Please insert only alphabets and numbers.")
         }
         else {
-            response = await RestService.checkPolicyName(value).then((response) => {
-                if (RestService.checkAuth(response.data)) {
-                    if (response.data.status) {
-                        return true
-                    }
-                    else {
-                        return false
+            if (value) {
+                console.log(value);
+                let substring = value.substring(0, 1);
+
+                if (substring === ' ') {
+                    callback("Policy name cannot start with blank space.")
+                } else {
+                    response = await RestService.checkPolicyName(value).then((response) => {
+                        if (RestService.checkAuth(response.data)) {
+                            if (response.data.status) {
+                                return true
+                            }
+                            else {
+                                return false
+                            }
+                        }
+                    });
+                    if (response) {
+                        callback()
+                        this.setState({
+                            policy_name: value,
+                            // isPolicy_name: 'success',
+                            disabledCommand: '#' + value.replace(/ /g, '_'),
+                            // policy_name_error: ''
+                        })
+                    } else {
+                        callback("Policy name already taken please use another name.")
                     }
                 }
-            });
-            if (response) {
-                callback()
-                this.setState({
-                    policy_name: value,
-                    // isPolicy_name: 'success',
-                    disabledCommand: '#' + value.replace(/ /g, '_'),
-                    // policy_name_error: ''
-                })
-            } else {
-                callback("Policy name already taken please use another name.")
             }
         }
 
@@ -321,7 +330,6 @@ class AddPolicy extends Component {
         this.props.form.setFieldsValue({
             command: e.target.value
         })
-
     }
 
     handleChecked = (value, key) => {
@@ -349,6 +357,7 @@ class AddPolicy extends Component {
         tabSelected++;
         this.setState({ tabSelected: String(tabSelected) })
     }
+
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -424,7 +433,7 @@ class AddPolicy extends Component {
                                 AddPolicy={true}
                                 secureSettings='allExtensions'
                                 pageType={'allExtensions'}
-                                
+
                                 translation={this.props.translation}
                             />
                         </TabPane>
@@ -468,7 +477,7 @@ class AddPolicy extends Component {
                                     {getFieldDecorator('command', {
 
                                         rules: [{
-                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Name"),
+                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_POLICY_NAME], "Please Input Policy Note"),
                                         }],
 
                                     })(

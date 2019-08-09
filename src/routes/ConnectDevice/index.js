@@ -71,7 +71,8 @@ import {
   DEVICE_ACTIVATED, GUEST_PASSWORD, ENCRYPTED_PASSWORD, DURESS_PASSWORD, ADMIN_PASSWORD,
   SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
   // APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS,
-  Main_SETTINGS
+  Main_SETTINGS,
+  DEVICE_TRIAL
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -126,12 +127,12 @@ class ConnectDevice extends Component {
   }
 
   changePage = (pageName) => {
-    if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
+    if (this.props.device_details.finalStatus === DEVICE_ACTIVATED || this.props.device_details.finalStatus === DEVICE_TRIAL) {
       this.props.changePage(pageName);
     }
   }
   onBackHandler = () => {
-    if (this.props.device_details.finalStatus === DEVICE_ACTIVATED) {
+    if (this.props.device_details.finalStatus === DEVICE_ACTIVATED || this.props.device_details.finalStatus === DEVICE_TRIAL) {
       if (this.props.pageName === GUEST_PASSWORD || this.props.pageName === ENCRYPTED_PASSWORD || this.props.pageName === DURESS_PASSWORD || this.props.pageName === ADMIN_PASSWORD) {
         this.props.changePage(MANAGE_PASSWORD);
       } else if (this.props.pageName === MANAGE_PASSWORD) {

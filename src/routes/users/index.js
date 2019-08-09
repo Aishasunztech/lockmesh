@@ -25,7 +25,7 @@ import {
 } from '../../constants/UserConstants';
 
 import {
-    Appfilter_SearchUser
+    Appfilter_SearchUser, USERS_PAGE_HEADING
 } from '../../constants/AppFilterConstants';
 
 
@@ -99,9 +99,9 @@ class Users extends Component {
                 }
             }
         })
-        this.setState({ 
+        this.setState({
             columns: columns
-         });
+        });
     }
 
     componentDidMount() {
@@ -141,9 +141,9 @@ class Users extends Component {
             })
         }
         if (this.props.translation !== prevProps.translation) {
-            this.setState({ 
+            this.setState({
                 columns: usersColumns(this.props.translation, this.handleSearch)
-             });
+            });
         }
     }
 
@@ -316,12 +316,14 @@ class Users extends Component {
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
                     isAddButton={this.props.user.type !== ADMIN}
+                    isAddUserButton={true}
                     // AddPolicyModel={true}
                     handleUserModal={this.handleUserModal}
                     handleCheckChange={this.handleCheckChange}
                     handlePagination={this.handlePagination}
                     handleComponentSearch={this.handleComponentSearch}
                     translation={this.props.translation}
+                    pageHeading={convertToLang(this.props.translation[USERS_PAGE_HEADING], "Users")}
                 />
                 <AddUser ref="add_user" translation={this.props.translation} />
                 <UserList
@@ -337,6 +339,7 @@ class Users extends Component {
                     ref="userList"
                     consoled={this.consoled}
                     translation={this.props.translation}
+                    user={this.props.user}
                 />
                 {/* <UserList/> */}
             </Fragment>

@@ -78,8 +78,17 @@
     padding: 16px 16px !important;
 }
 
+.vertical_center {
+    display: flex;
+    align-items: center;
+}
+
 .font_14 {
     font-size: 14px !important;
+}
+
+.font_26 {
+    font-size: 26px !important;
 }
 
 .fix_card .ant-table-bordered .ant-table-header>table,
@@ -99,32 +108,21 @@
 
 .fix_card {
     position: absolute;
-    top: 143px;
+    top: 142px;
     bottom: 25px;
     left: 16px;
     right: 16px;
-}
-
-.devices_fix_card {
-    position: absolute;
-    top: 143px;
-    bottom: 25px;
-    left: 16px;
-    right: 16px;
-}
-
-.dev_fix_card {
-    top: 143px;
 }
 
 .dealer_fix_card {
     top: 140px;
 }
 
-.users_fix_card,
+.users_fix_card_admin,
+.users_fix_card_dealer,
 .apk_fix_card,
 .policy_fix_card {
-    top: 105px;
+    top: 102px;
 }
 
 .sm_fix_card {
@@ -182,12 +180,44 @@
     width: 100%
 }
 
+.agents_fix_card {
+    top: 102px;
+}
+
+.b_p-8 {
+    padding: 0 8px;
+}
+
 @media (max-width: 992px) {
 
-    .devices_fix_card,
-    .dealer_fix_card,
+    .devices_fix_card_admin {
+        top: 293px;
+    }
+
+    .devices_fix_card_dealer {
+        top: 345px;
+    }
+
+    .users_fix_card_admin,
+    .agents_fix_card_admin {
+        top: 217px;
+    }
+
+    .users_fix_card_dealer,
+    .agents_fix_card_dealer {
+        top: 268px;
+    }
+
+    .dealer_fix_card {
+        top: 310px;
+    }
+
     .m_d_fix_table {
         top: 260px;
+    }
+
+    .dealer_fix_card {
+        top: 344px;
     }
 
     .apk_fix_card {
@@ -196,9 +226,28 @@
 
     .policy_fix_card,
     .users_fix_card {
-        top: 176px;
+        top: 268px;
+    }
+
+    .m_mt-16 {
+        margin-top: 16px !important;
     }
 }
+
+@media (max-width: 768px) {
+
+    .m_mt-16 {
+        margin-top: 16px !important;
+    }
+
+    .b_p-8 {
+        padding: 0 16px;
+    }
+}
+
+
+
+
 
 .p-0 {
     padding: 0;

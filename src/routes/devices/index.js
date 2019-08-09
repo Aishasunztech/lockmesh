@@ -26,6 +26,7 @@ import {
     DEVICE_UNLINKED,
     ADMIN,
     DEVICE_TRIAL,
+    DEALER,
 } from '../../constants/Constants'
 
 import {
@@ -36,6 +37,7 @@ import {
     Dealer_Top_Bar,
     Appfilter_ShowDealer,
     Appfilter_SearchDealer,
+    DEVICE_PAGE_HEADING,
 } from '../../constants/AppFilterConstants';
 
 import {
@@ -742,6 +744,13 @@ class Devices extends Component {
 
 
     render() {
+        let type = this.props.user.type
+        let styleType = {};
+        if (type === ADMIN) {
+            styleType = "devices_fix_card_admin"
+        } else {
+            styleType = "devices_fix_card_dealer"
+        }
         // console.log(this.props.selectedOptions, 'props are the ')
         return (
             <Fragment>
@@ -767,6 +776,7 @@ class Devices extends Component {
                                 handleComponentSearch={this.handleComponentSearch}
                                 locale={this.props.locale}
                                 translation={this.state.translation}
+                                pageHeading={convertToLang(this.props.translation[DEVICE_PAGE_HEADING], "Devices")}
                             />
 
                             <DevicesList
@@ -800,6 +810,7 @@ class Devices extends Component {
                                 history={this.props.history}
                                 unflagged={this.props.unflagged}
                                 translation={this.state.translation}
+                                styleType={styleType}
                             />
                             <ShowMsg
                                 msg={this.props.msg}

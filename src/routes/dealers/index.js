@@ -17,7 +17,7 @@ import styles from './dealers.css'
 
 
 import {
-    Appfilter_SearchDealer, Appfilter_ShowDealer
+    Appfilter_SearchDealer, Appfilter_ShowDealer, DEALER_PAGE_HEADING, S_Dealer_PAGE_HEADING
 } from '../../constants/AppFilterConstants';
 import {
     // ADMIN,
@@ -62,7 +62,7 @@ class Dealers extends Component {
     constructor(props) {
         super(props);
         var columns = dealerColumns(props.translation, this.handleSearch);
-        
+
         this.state = {
             sorterKey: '',
             sortOrder: 'ascend',
@@ -478,13 +478,16 @@ class Dealers extends Component {
         // ADMIN,DEALER,SDEALER
         // console.log(this.props.location, 'location is the ')
         let dealerType;
+        let dealerHeadingType;
         const type = this.state.dealer_type;
         // if (type === ADMIN) {
         // dealerType = convertToLang(this.props.translation[Button_Add_Admin], Button_Add_Admin)}
         if (type === DEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_Dealer], "Add Dealer")
+            dealerHeadingType = convertToLang(this.props.translation[DEALER_PAGE_HEADING], "Dealers")
         } else if (type === SDEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_S_dealer], "Add S-dealer")
+            dealerHeadingType = convertToLang(this.props.translation[S_Dealer_PAGE_HEADING], "S-Dealers")
         }
         return (
 
@@ -536,7 +539,8 @@ class Dealers extends Component {
                                 testfunc={this.testfunc}
                                 addDealer={this.showAddDealer}
                                 translation={this.props.translation}
-                            //  toLink={"/create-dealer/" + this.state.dealer_type}
+                                //  toLink={"/create-dealer/" + this.state.dealer_type}
+                                pageHeading={dealerHeadingType}
 
                             />
                             <DealerList

@@ -39,6 +39,7 @@ import {
 
 import { isArray } from "util";
 import PricingModal from './PricingModal';
+import { SET_PRICE_PAGE_HEADING } from '../../../constants/AppFilterConstants';
 let packagesCopy = [];
 
 class Prices extends Component {
@@ -50,7 +51,7 @@ class Prices extends Component {
                 dataIndex: 'sr',
                 key: 'sr',
                 align: "center",
-                render : (text, record, index) => ++index,
+                render: (text, record, index) => ++index,
             },
             {
                 title: (
@@ -385,7 +386,7 @@ class Prices extends Component {
                         // handleCheckChange={this.handleCheckChange}
                         // handlePagination={this.handlePagination}
                         handleComponentSearch={this.handleComponentSearch}
-
+                        pageHeading={convertToLang(this.props.translation[SET_PRICE_PAGE_HEADING], "Set Price")}
                     />
 
                     <Card>
