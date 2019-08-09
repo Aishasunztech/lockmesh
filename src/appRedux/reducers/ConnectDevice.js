@@ -1319,16 +1319,17 @@ export default (state = initialState, action) => {
         case ACK_INSTALLED_APPS: {
             console.log("add app in app_list")
             let app_list = state.app_list;
-            if(action.payload.status){
+            if (action.payload.status) {
                 action.payload.app_list.forEach((app) => {
                     app_list.push(app)
                 });
-            }else {
+            } else {
 
             }
             return {
                 ...state,
-                app_list: app_list
+                app_list: app_list,
+                pageName: MAIN_MENU
             }
         }
         case ACK_UNINSTALLED_APPS: {
@@ -1336,16 +1337,16 @@ export default (state = initialState, action) => {
             if (action.payload.status) {
                 action.payload.app_list.forEach((app) => {
                     console.log("app package name", app.packageName);
-                    let index=0;
-                    app_list.forEach((apk, i)=>{
-                        if(apk.package_name === app.packageName){
+                    let index = 0;
+                    app_list.forEach((apk, i) => {
+                        if (apk.package_name === app.packageName) {
                             index = i;
                         }
                     });
 
                     console.log("pull app index", index);
                     if (index !== 0) {
-                        app_list.splice(index,1);
+                        app_list.splice(index, 1);
                     }
 
                 })
@@ -1356,11 +1357,12 @@ export default (state = initialState, action) => {
             console.log("remove app in app_list")
             return {
                 ...state,
-                app_list: [...app_list]
+                app_list: [...app_list],
+                pageName: MAIN_MENU
             }
         }
         case ACK_SETTING_APPLIED: {
-            
+
         }
         default:
             return state;
