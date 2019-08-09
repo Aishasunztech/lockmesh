@@ -143,6 +143,7 @@ const PushAppsModal = (props) => {
         >
             <DealerApps
                 apk_list={props.apk_list}
+                app_list={props.app_list}
                 onPushAppsSelection={props.onPushAppsSelection}
                 isSwitchable={true}
                 selectedApps={props.selectedPushApps}
@@ -248,7 +249,7 @@ const PullAppsModal = (props) => {
                 selectedPullApps={props.selectedPullApps}
                 selectedPullAppKeys={props.selectedPullAppKeys}
                 translation={props.translation}
-                
+
             />
         </Modal>
     )
@@ -257,7 +258,6 @@ const PullAppsModal = (props) => {
 
 
 const SelectedPullApps = (props) => {
-    console.log("selected pull apps modal", props);
     return (
         <Modal
             maskClosable={false}
@@ -283,12 +283,12 @@ const SelectedPullApps = (props) => {
         >
             <PullApps
                 app_list={props.app_list}
-                
+
                 isSwitchable={false}
                 selectedPullApps={props.selectedPullApps}
                 type='pull'
                 translation={props.translation}
-               
+
             />
         </Modal>
     )
@@ -423,7 +423,7 @@ class SideActions extends Component {
     }
 
     showSelectedPullAppsModal = (visible) => {
-        
+
         let dumyList = [];
         if (this.state.selectedPullAppKeys.length && this.state.selectedPullApps.length) {
             for (let app of this.state.selectedPullApps) {
@@ -983,6 +983,8 @@ class SideActions extends Component {
                     showPushAppsModal={this.props.showPushAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
                     apk_list={this.state.apk_list}
+                    // app list props is added because push apps will not show installed apps again to push
+                    app_list={this.props.app_list}
                     onPushAppsSelection={this.onPushAppsSelection}
                     selectedPushAppKeys={this.state.selectedPushAppKeys}
                     showSelectedPushAppsModal={this.showSelectedPushAppsModal}

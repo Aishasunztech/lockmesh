@@ -1081,7 +1081,6 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
         el.apk_name = el.label;
         el.version_name="";
         el.apk ="";
-        el.apk_name ="";
         el.guest =false;
         el.encrypted=false;
         el.enable=false;

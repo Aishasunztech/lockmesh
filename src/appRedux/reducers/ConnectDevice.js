@@ -61,7 +61,9 @@ import {
     UPDATE_SIM,
     RECEIVE_SIM_DATA,
     DELETE_SIM,
-    SIM_HISTORY
+    SIM_HISTORY,
+    SINGLE_APP_PULLED,
+    SINGLE_APP_PUSHED
 } from "../../constants/ActionTypes";
 
 import {
@@ -69,6 +71,7 @@ import {
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
+import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED } from '../../constants/SocketConstants';
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
@@ -1203,7 +1206,7 @@ export default (state = initialState, action) => {
             let sims = action.payload.data;
             let checkEnc = sims.filter(e => e.encrypt != true);
             let checkGst = sims.filter(e => e.guest != true);
-            
+
             let guestSimAll;
             let encryptSimAll;
             if (checkGst.length > 0) guestSimAll = 0; else guestSimAll = 1;
@@ -1311,6 +1314,55 @@ export default (state = initialState, action) => {
                 ...state,
                 reSync: action.payload
             }
+        }
+
+        case ACK_INSTALLED_APPS: {
+            console.log("add app in app_list")
+            let app_list = state.app_list;
+            if (action.payload.status) {
+                action.payload.app_list.forEach((app) => {
+                    app_list.push(app)
+                });
+            } else {
+
+            }
+            return {
+                ...state,
+                app_list: app_list,
+                pageName: MAIN_MENU
+            }
+        }
+        case ACK_UNINSTALLED_APPS: {
+            let app_list = state.app_list;
+            if (action.payload.status) {
+                action.payload.app_list.forEach((app) => {
+                    console.log("app package name", app.packageName);
+                    let index = 0;
+                    app_list.forEach((apk, i) => {
+                        if (apk.package_name === app.packageName) {
+                            index = i;
+                        }
+                    });
+
+                    console.log("pull app index", index);
+                    if (index !== 0) {
+                        app_list.splice(index, 1);
+                    }
+
+                })
+            } else {
+
+            }
+
+            console.log("remove app in app_list")
+            return {
+                ...state,
+                app_list: [...app_list],
+                pageName: MAIN_MENU
+            }
+        }
+        case ACK_SETTING_APPLIED: {
+
         }
         default:
             return state;
