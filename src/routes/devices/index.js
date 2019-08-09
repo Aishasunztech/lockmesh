@@ -527,10 +527,14 @@ class Devices extends Component {
             }
 
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
-
             if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                this.state.columns[indexTransfered].className = 'hide';
-                this.state.columns[indexTransfered].children[0].className = 'hide';
+                if (value === '1') {
+                    this.state.columns[indexTransfered].className = '';
+                    this.state.columns[indexTransfered].children[0].className = '';
+                } else {
+                    this.state.columns[indexTransfered].className = 'hide';
+                    this.state.columns[indexTransfered].children[0].className = 'hide';
+                }
             }
 
             if (activationCodeIndex >= 0) {

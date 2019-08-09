@@ -62,7 +62,7 @@ import {
 
 import { isNull } from 'util';
 import { unlink } from 'fs';
-import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE } from '../../../constants/DeviceConstants';
+import { ARE_YOU_SURE_YOU_WANT_DELETE_THE_DEVICE, DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE, ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE } from '../../../constants/DeviceConstants';
 
 const TabPane = Tabs.TabPane;
 class DevicesList extends Component {
@@ -185,8 +185,8 @@ class DevicesList extends Component {
                 type="defualt"
                 size="small"
                 style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }}
-                onClick={() => { (device.finalStatus == "Transfered") ?  this.props.unlinkDevice(device)  : this.props.unflagConfirm(device) }}
-                // disabled={(device.finalStatus == "Transfered") ? true : false}
+                onClick={() => { (device.finalStatus == "Transfered") ? this.props.unlinkConfirm(device) : this.props.unflagConfirm(device) }}
+            // disabled={(device.finalStatus == "Transfered") ? true : false}
             >{convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG")} </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
@@ -204,27 +204,27 @@ class DevicesList extends Component {
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
                     : (status === DEVICE_PRE_ACTIVATION) ?
                         (<Fragment><Fragment>{DeleteBtnPreActive}</Fragment><Fragment>{EditBtnPreActive}</Fragment></Fragment>)
-                        : (device.flagged !== 'Not flagged') ?
+                        // : (device.flagged !== 'Not flagged') ?
+                        //     (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                        : (device.flagged !== 'Not flagged' && device.transfer_status == 0 && device.finalStatus == "Flagged") ?
                             (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            // : (device.flagged !== 'Not flagged' && device.transfer_status == 0 && device.finalStatus == "Flagged") ?
-                            //     (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                            //     : (device.flagged !== 'Not flagged' && device.transfer_status == 1) ?
-                            //         (<Fragment>{Unflagbtn}</Fragment>)
-                            : (status === DEVICE_SUSPENDED) ?
-                                (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                : (status === DEVICE_EXPIRED) ?
-                                    (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
-                                    : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
-                                        (<Fragment>{DeleteBtn}</Fragment>)
-                                        : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN) ?
-                                            (<Fragment>
-                                                <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment>
-                                            </Fragment>)
-                                            : (device.status === DEVICE_PRE_ACTIVATION) ?
-                                                false
-                                                : (status === DEVICE_EXPIRED) ?
-                                                    (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
-                                                    : false
+                            : (device.flagged !== 'Not flagged' && device.transfer_status == 1 && device.finalStatus == "Transfered") ?
+                                (<Fragment><Fragment>{Unflagbtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                : (status === DEVICE_SUSPENDED) ?
+                                    (<Fragment><Fragment>{ActiveBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                    : (status === DEVICE_EXPIRED) ?
+                                        (<Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
+                                        : (status === DEVICE_UNLINKED && this.props.user.type !== ADMIN) ?
+                                            (<Fragment>{DeleteBtn}</Fragment>)
+                                            : (status === DEVICE_PENDING_ACTIVATION && this.props.user.type !== ADMIN) ?
+                                                (<Fragment>
+                                                    <Fragment>{DeclineBtn}</Fragment><Fragment>{AcceptBtn}</Fragment>
+                                                </Fragment>)
+                                                : (device.status === DEVICE_PRE_ACTIVATION) ?
+                                                    false
+                                                    : (status === DEVICE_EXPIRED) ?
+                                                        (<Fragment><Fragment>{(status === DEVICE_ACTIVATED) ? SuspendBtn : ActiveBtn}</Fragment><Fragment>{ConnectBtn}</Fragment><Fragment>{EditBtn}</Fragment></Fragment>)
+                                                        : false
 
 
                 ),
@@ -236,7 +236,7 @@ class DevicesList extends Component {
                 // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
                 validity: checkValue(device.validity),
-                transfered_to: checkValue(device.transfered_to),
+                transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
                 name: checkValue(device.name),
                 activation_code: checkValue(device.activation_code),
                 account_email: checkValue(device.account_email),
@@ -784,6 +784,22 @@ export default class Tab extends Component {
         });
     }
 
+    unlinkConfirm = (device) => {
+        let _this = this;
+        confirm({
+            title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE], "Do you really want to unlink the device ") + device.device_id,
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+            onOk() {
+                _this.props.unlinkDevice(device)
+                // console.log('OK');
+            },
+            onCancel() {
+                // console.log('Cancel');
+            },
+        });
+    }
+
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
@@ -844,6 +860,7 @@ export default class Tab extends Component {
                         resetTabSelected={this.resetTabSelected}
                         user={this.props.user}
                         unflagConfirm={this.unflagConfirm}
+                        unlinkConfirm={this.unlinkConfirm}
                         history={this.props.history}
                         translation={this.props.translation}
                         onChangeTableSorting={this.props.onChangeTableSorting}

@@ -199,6 +199,13 @@ class TransferHistory extends Component {
         if (data.length) {
             return data.map((row, index) => {
                 // console.log(row);
+                if (row.action === "Device Transfered") {
+                    row.user_transfered_from = null;
+                    row.user_transfered_to = null;
+                } else if (row.action === "User Transfered") {
+                    row.transfered_from = null;
+                    row.transfered_to = null;
+                }
                 return {
                     key: index,
                     action: row.action,
@@ -207,7 +214,6 @@ class TransferHistory extends Component {
                     user_transfered_from: checkValue(row.user_transfered_from),
                     user_transfered_to: checkValue(row.user_transfered_to),
                     created_at: checkValue(getFormattedDate(row.created_at)),
-                    // data: row
                 }
             })
         }
@@ -242,24 +248,32 @@ class TransferHistory extends Component {
 
     }
 
-    checkDeviceStatus = () => {
-        let filtered = this.props.transferHistoryList.filter(e => e.action == "Device Transfered")
-        let THIS_DEVICE_TRANSFERED_TO = filtered[filtered.length - 1].transfered_to;
+    checkDeviceStatus = (transfer = 'Device') => {
+        let filtered = this.props.transferHistoryList.filter(e => e.action == "Device Transfered");
+        let THIS_DEVICE_TRANSFERED_TO = (filtered[filtered.length - 1]) ? filtered[filtered.length - 1].transfered_to : "";
 
         if (this.props.device.finalStatus == "Transfered") {
             Modal.error({ title: `This device account was transfered to Device ID ${THIS_DEVICE_TRANSFERED_TO}` });
-        } else
-            if (this.props.flagged === "Unflag") {
-                this.props.handleTransfer(this.props.device.device_id)
-            } else {
-                Modal.error({ title: 'Plaese Flag the device first to Transfer' });
-            }
+        } else if (transfer === "User") {
+            this.setState({ visibleUser: true });
+        } else if (this.props.flagged === "Unflag") {
+            this.props.handleTransfer(this.props.device.device_id);
+        } else {
+            Modal.error({ title: 'Plaese Flag the device first to Transfer' });
+        }
     }
 
     render() {
         const { visible, visibleUser, addNewUserModal, addNewUserValue } = this.state;
-        const { isloading, users_list, device, flagged } = this.props;
+        let { isloading, users_list, device, flagged } = this.props;
         var lastObject = users_list[0];
+
+        // console.log('users_list ', users_list[0]);
+        // console.log('this.props.device.user_id ', this.props.device)
+        if (this.props.user.type === ADMIN) {
+            users_list = users_list.filter(e => e.dealer_id === this.props.device.dealer_id)
+        }
+
         return (
             <div>
                 <Modal
@@ -274,13 +288,13 @@ class TransferHistory extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={8} className="gutter-row" justify="center" >
-                                <Button onClick={this.checkDeviceStatus}
+                                <Button onClick={() => this.checkDeviceStatus("Device")}
                                 // disabled={(this.props.device.finalStatus == "Transfered") ? true : false}
                                 >DEVICE TRANSFER</Button>
                             </Col>
                             <Col span={8} className="gutter-row" style={{ textAlign: 'center', marginTop: '5px' }}><h3>-OR-</h3></Col>
                             <Col span={8} className="gutter-row" justify="center" >
-                                <Button onClick={() => this.setState({ visibleUser: true })} style={{ float: 'right' }} >USER TRANSFER</Button>
+                                <Button onClick={() => this.checkDeviceStatus("User")} style={{ float: 'right' }} >USER TRANSFER</Button>
                             </Col>
                         </Row>
                     </Card>

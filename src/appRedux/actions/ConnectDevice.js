@@ -296,6 +296,7 @@ export function wipe(device) {
 }
 
 export function unlinkDevice(device) {
+    console.log('you are at action file of unlinkDevice', device)
     return (dispatch) => {
         RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);

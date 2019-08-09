@@ -345,6 +345,7 @@ class SideActions extends Component {
             applyPolicyConfirm: false,
             isSaveProfileBtn: false,
             transferHistoryModal: false,
+            DEVICE_TRANSFERED_DONE: 'not transfer',
 
         }
         this.otpModalRef = React.createRef();
@@ -514,12 +515,12 @@ class SideActions extends Component {
             content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
                 // console.log('OK');
-                _this.props.transferDeviceProfile(obj
+                _this.props.transferDeviceProfile(obj);
                     // {
                     //     reqDevice: device,
                     //     flagged_device: _this.props.device_details,
                     // }
-                );
+                _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
 
             },
             onCancel() {
@@ -1276,6 +1277,7 @@ function showConfirm(device, action, _this, msg, type) {
                 if (type === 'wipe') {
                     action(device)
                 } else if (type === 'unlink') {
+                    // console.log('unlink check =========> ', device)
                     action(device);
                 }
                 if (type === 'flagged') {

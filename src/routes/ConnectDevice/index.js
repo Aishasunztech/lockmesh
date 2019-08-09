@@ -190,6 +190,11 @@ class ConnectDevice extends Component {
       this.mainMenu = mobileMainMenu(this.props.translation);
       this.subMenu = mobileManagePasswords(this.props.translation);
     }
+
+    if (this.props.getHistory != prevProps.getHistory) {
+      const device_id = isBase64(this.props.match.params.device_id);
+      this.props.getDeviceDetails(device_id);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -683,6 +688,7 @@ function mapDispatchToProps(dispatch) {
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
   // console.log(device_details.changedCtrls)
   return {
+    getHistory: device_details.getHistory,
     translation: settings.translation,
     auth: auth,
     socket: auth.socket,

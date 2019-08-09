@@ -386,7 +386,7 @@ const RestService = {
 
     // unlink Device
     unlinkDevice: (device) => {
-
+console.log('unlinkDevice ', device)
         return axios.post(BASE_URL + 'users/unlink/' + device.usr_device_id, { device }, RestService.getHeader());
 
     },
