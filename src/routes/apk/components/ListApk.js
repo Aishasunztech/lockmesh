@@ -323,44 +323,44 @@ export default class ListApk extends Component {
             <Fragment>
                 <Card >
                     <Row >
-                        <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                            <h1 className="mb-0">
+                        <Col xs={24} sm={24} md={8} lg={8} xl={8} className="vertical_center">
+                            <h2 className="mb-0">
                                 FEATURED APPS
-                            </h1>
+                            </h2>
                         </Col>
                         {(this.props.user.type === ADMIN) ?
                             <Fragment>
-                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                     <Button
                                         type="primary"
-                                        style={{ width: '100%' }}
+                                        style={{ width: '100%', padding: "0" }}
                                         onClick={() => { this.updateFeaturedApk('CHAT') }}
                                     >
                                         UPDATE CHAT APP
                             </Button>
                                 </Col>
-                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                     <Button
                                         type="primary"
-                                        style={{ width: '100%' }}
+                                        style={{ width: '100%', padding: "0" }}
                                         onClick={() => { this.updateFeaturedApk('PGP') }}
                                     >
                                         UPDATE PGP APP
                             </Button>
                                 </Col>
-                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                     <Button
                                         type="primary"
-                                        style={{ width: '100%' }}
+                                        style={{ width: '100%', padding: "0" }}
                                         onClick={() => { this.updateFeaturedApk('UEM') }}
                                     >
                                         UPDATE UEM APP
                             </Button>
                                 </Col>
-                                <Col xs={24} sm={24} md={4} lg={4} xl={4}>
+                                <Col xs={24} sm={12} md={4} lg={4} xl={4} className="m_mt-16 b_p-8">
                                     <Button
                                         type="primary"
-                                        style={{ width: '100%' }}
+                                        style={{ width: '100%', padding: "0" }}
                                         onClick={() => { this.updateFeaturedApk('VPN') }}
                                     >
                                         UPDATE VPN APP
@@ -396,6 +396,7 @@ export default class ListApk extends Component {
                         expandIconAsCell={false}
                         size="midddle"
                         bordered
+                        scroll={{ x: true }}
                         columns={this.props.featureApkcolumns}
                         dataSource={this.renderFeaturedList(this.props.apk_list)}
                         onChange={this.props.onChangeTableSorting}
