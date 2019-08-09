@@ -50,12 +50,12 @@ import { logout } from "appRedux/actions/Auth";
 
 import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
 
-import { switchLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
+import { switchLanguage, getLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 
-
+let status = true;
 class SidebarContent extends Component {
   constructor(props) {
     super(props);
@@ -102,8 +102,7 @@ class SidebarContent extends Component {
   }
 
   componentDidMount() {
-
-    this.props.switchLanguage({ id: 1 })
+    this.props.getLanguage();
     this.setState({
       languageData: this.props.languageData
     })
@@ -111,7 +110,7 @@ class SidebarContent extends Component {
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
-    this.props.getUserCredit()
+    this.props.getUserCredit();
 
   }
 
@@ -356,5 +355,5 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     lng_id: translation["lng_id"],
   }
 };
-export default connect(mapStateToProps, { getDevicesList, rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest, transferDeviceProfile })(SidebarContent);
+export default connect(mapStateToProps, { getDevicesList, rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest, transferDeviceProfile })(SidebarContent);
 
