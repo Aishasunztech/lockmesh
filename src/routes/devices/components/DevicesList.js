@@ -152,7 +152,7 @@ class DevicesList extends Component {
 
             //  console.log(this.props.user.type, 'lkslkdflk');
             // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
-            // const device_status =  "SUSPEND";
+            // const device_status =  "SUSPEND"; 
 
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
