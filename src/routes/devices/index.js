@@ -204,7 +204,7 @@ class Devices extends Component {
         } else {
             if (indxAction < 0) {
                 this.state.columns.splice(1, 0, {
-                    title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
+                    title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>,
                     dataIndex: 'action',
                     align: 'center',
                     className: 'row',
@@ -224,7 +224,7 @@ class Devices extends Component {
         let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
         if (value === DEVICE_UNLINKED && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
-            this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
+            this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>;
 
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
             if (indexTransfered >= 0 && indexTransfered !== undefined) {
@@ -236,7 +236,7 @@ class Devices extends Component {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
-                // this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+                // this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >DELETE SELECTED</Button>
             }
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
                 this.state.columns[indxRemainingDays].className = '';
@@ -259,7 +259,7 @@ class Devices extends Component {
         }
         else if (value === DEVICE_FLAGGED) {
             let indexFlagged = this.state.columns.findIndex(k => k.dataIndex === 'flagged');
-            this.state.columns[1]['title'] = '';
+            this.state.columns[1]['title'] = 'ACTION';
 
             if (indexFlagged > -1) {
                 this.state.columns.splice(2, 0, this.state.columns.splice(indexFlagged, 1)[0]);
@@ -427,7 +427,7 @@ class Devices extends Component {
         } else {
             if (indxAction < 0) {
                 this.state.columns.splice(1, 0, {
-                    title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>,
+                    title: <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>,
                     dataIndex: 'action',
                     align: 'center',
                     className: 'row',
@@ -440,7 +440,7 @@ class Devices extends Component {
 
         if (value === '5' && (this.props.user.type !== ADMIN)) {
             // console.log('tab 5', this.state.columns);
-            this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >Delete Selected</Button>;
+            this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllUnlinkedDevice('unlink')} >DELETE SELECTED</Button>;
 
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
 
@@ -464,7 +464,7 @@ class Devices extends Component {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
             // console.log('index of 3 tab', indxRemainingDays)
             if (indxAction >= 0) {
-                this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >Delete Selected</Button>
+                this.state.columns[indxAction]['title'] = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.refs.devcieList.deleteAllPreActivedDevice('pre-active')} >DELETE SELECTED</Button>
             }
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
                 this.state.columns[indxRemainingDays].className = '';
@@ -519,7 +519,7 @@ class Devices extends Component {
         }
         else {
             let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex === 'validity');
-            this.state.columns[1]['title'] = 'ACTION';
+            this.state.columns[1]['title'] = '';
 
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
                 this.state.columns[indxRemainingDays].className = 'hide';
