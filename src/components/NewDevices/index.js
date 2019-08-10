@@ -2,9 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { Modal, Table, Button, } from 'antd';
 import { Link } from "react-router-dom";
 import AddDeviceModal from '../../routes/devices/components/AddDevice';
-import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING } from '../../constants/Constants';
+import { ADMIN, ACTION, CREDITS, CREDITS_CASH_REQUESTS, ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST, ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST, WARNING, DEVICE_UNLINKED } from '../../constants/Constants';
 import { convertToLang } from '../../routes/utils/commonUtils';
-import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT } from '../../constants/ButtonConstants';
+import { Button_Ok, Button_Cancel, Button_Confirm, Button_Decline, Button_ACCEPT, Button_Transfer } from '../../constants/ButtonConstants';
 import { DEVICE_ID, DEVICE_SERIAL_NUMBER, DEVICE_IMEI_1, DEVICE_SIM_2, DEVICE_IMEI_2, DEVICE_REQUESTS, DEVICE_SIM_1 } from '../../constants/DeviceConstants';
 import { DEALER_NAME } from '../../constants/DealerConstants';
 const confirm = Modal.confirm;
@@ -26,21 +26,25 @@ export default class NewDevices extends Component {
             { title: convertToLang(props.translation[DEALER_NAME], "DEALER NAME"), dataIndex: 'dealer_name', key: 'dealer_name', align: "center" },
             { title: convertToLang(props.translation[CREDITS], "CREDITS"), dataIndex: 'credits', key: 'credits', align: "center" },
         ];
-        
+
         this.state = {
             columns: columns,
             columns1: columns1,
             visible: false,
             NewDevices: [],
-            NewRequests: []
+            NewRequests: [],
+            sectionVisible: true,
+            flaggedDevicesModal: false,
+            reqDevice: ''
         }
     }
 
-    
 
-    showModal = () => {
+
+    showModal = (sectionVisible = true) => {
         this.setState({
             visible: true,
+            sectionVisible
         });
     }
 
@@ -76,6 +80,24 @@ export default class NewDevices extends Component {
 
         this.props.rejectDevice(device);
     }
+
+    flaggedDevices = (reqDevice) => {
+        // console.log('reqDevice ', reqDevice);
+        this.setState({
+            flaggedDevicesModal: true,
+            reqDevice,
+        })
+    }
+
+    transferDevice = (device, requestedDevice = false) => {
+        // console.log('flagged_device ', device)
+        // console.log('reqDevice ', (requestedDevice) ? requestedDevice : this.state.reqDevice)
+
+        let DEVICE_REQUEST_IS = (requestedDevice) ? requestedDevice : this.state.reqDevice;
+        // console.log('requestedDevice ', requestedDevice)
+        this.props.transferDeviceProfile({ flagged_device: device, reqDevice: DEVICE_REQUEST_IS });
+        this.setState({ flaggedDevicesModal: false, visible: false })
+    }
     rejectRequest(request) {
         showConfirm(this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST], "Are you sure you want to decline this request ?"), this.props.rejectRequest, request)
 
@@ -93,7 +115,7 @@ export default class NewDevices extends Component {
         return list.map((request) => {
             return {
                 key: request.id ? `${request.id}` : "N/A",
-                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectRequest(request); }}>DECLINE</Button>
+                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectRequest(request); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
                     <Button
                         type="primary"
                         size="small"
@@ -109,7 +131,7 @@ export default class NewDevices extends Component {
         });
 
     }
-    renderList(list) {
+    renderList(list, flagged = false) {
 
         return list.map((device) => {
             const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
@@ -129,16 +151,47 @@ export default class NewDevices extends Component {
                 // icon = 'add'
             }
 
+            let transferButton;
+            if (this.state.sectionVisible) {
+                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px' }} onClick={(flagged) ? () => this.transferDevice(device) : () => this.flaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
+            } else {
+                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() =>
+                    this.transferDevice(this.props.device_details, device)
+                    // this.setState({
+                    //     reqDevice: device
+                    // })
+                }>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
+            }
+
+            let declineButton = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>;
+            let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
+
+            let actionButns;
+            if (this.state.sectionVisible) {
+                if (this.props.flaggedDevices !== undefined) {
+                    if (flagged) {
+                        actionButns = (<Fragment>{transferButton}</Fragment>);
+                    } else {
+                        actionButns = (<Fragment>
+                            <Fragment>{declineButton}</Fragment>
+                            <Fragment>{acceptButton}</Fragment>
+                            <Fragment>{transferButton}</Fragment>
+                        </Fragment>);
+                    }
+                } else {
+                    actionButns = (<Fragment>
+                        <Fragment>{declineButton}</Fragment>
+                        <Fragment>{acceptButton}</Fragment>
+                    </Fragment>);
+                }
+
+            } else {
+                actionButns = (<Fragment>{transferButton}</Fragment>);
+            }
+
             return {
                 key: device.device_id ? `${device.device_id}` : "N/A",
-                action: <div>  <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.rejectDevice(device); }}>{convertToLang(this.props.translation[Button_Decline], "DECLINE")}</Button>
-                    <Button
-                        type="primary"
-                        size="small"
-                        style={{ margin: '0 8px 0 8px' }}
-                        onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}>
-                        {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}
-                    </Button></div>,
+                action: actionButns,
                 device_id: device.device_id ? `${device.device_id}` : "N/A",
                 imei_1: device.imei ? `${device.imei}` : "N/A",
                 sim_1: device.simno ? `${device.simno}` : "N/A",
@@ -151,8 +204,27 @@ export default class NewDevices extends Component {
 
     }
 
-    render() {
+    filterList = (devices) => {
+        let dumyDevices = [];
+        // console.log('check Devices at filterList ', devices)
+        if (devices !== undefined) {
+            devices.filter(function (device) {
+                if (device.finalStatus !== DEVICE_UNLINKED) {
+                    // let deviceStatus = getStatus(device.status, device.account_status, device.unlink_status, device.device_status, device.activation_status);
+                    let deviceStatus = device.flagged;
+                    // console.log('22222 flagged', device.flagged)
+                    if ((deviceStatus === 'Defective' || deviceStatus === 'Lost' || deviceStatus === 'Stolen' || deviceStatus === 'Other') && (device.finalStatus === "Flagged")) {
+                        dumyDevices.push(device);
+                    }
+                }
+            });
+        }
+        return dumyDevices;
+    }
 
+    render() {
+        let flaggedDevices = this.filterList(this.props.flaggedDevices)
+        // console.log('check flaggedDevices ', flaggedDevices)
         return (
             <div>
                 <Modal
@@ -177,17 +249,46 @@ export default class NewDevices extends Component {
                             />
                         </Fragment>
                     }
-                    <h1>{convertToLang(this.props.translation[CREDITS_CASH_REQUESTS], "CREDITS CASH REQUESTS")}</h1>
-                    <Table
-                        bordered
-                        columns={this.state.columns1}
-                        style={{ marginTop: 20 }}
-                        dataSource={this.renderList1(this.state.NewRequests)}
-                        pagination={false}
+                    {(this.state.sectionVisible) ?
+                        <Fragment>
+                            <h1>{convertToLang(this.props.translation[CREDITS_CASH_REQUESTS], "CREDITS CASH REQUESTS")}</h1>
+                            <Table
+                                bordered
+                                columns={this.state.columns1}
+                                style={{ marginTop: 20 }}
+                                dataSource={this.renderList1(this.state.NewRequests)}
+                                pagination={false}
 
-                    />
+                            />
+                        </Fragment>
+                        : null}
                 </Modal>
                 <AddDeviceModal ref='add_device_modal' translation={this.props.translation} />
+
+                {(this.state.sectionVisible) ?
+                    <Modal
+                        width={1000}
+                        maskClosable={false}
+                        visible={this.state.flaggedDevicesModal}
+                        onOk={this.handleOk}
+                        onCancel={() => this.setState({ flaggedDevicesModal: false })}
+                        okText={convertToLang(this.props.translation[Button_Ok], "Ok")}
+                        cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
+                    >
+                        <Fragment>
+                            <h1>{convertToLang(this.props.translation["FLAGGED DEVICES"], "FLAGGED DEVICES")}</h1>
+                            <Table
+                                bordered
+                                columns={this.state.columns}
+                                style={{ marginTop: 20 }}
+                                dataSource={this.renderList(flaggedDevices, true)}
+                                pagination={false}
+
+                            />
+                        </Fragment>
+
+                    </Modal>
+                    : null}
             </div>
         )
     }
@@ -198,7 +299,7 @@ function showConfirm(_this, msg, action, request) {
     confirm({
         title: convertToLang(this.props.translation[WARNING], "WARNING!"),
         content: msg,
-        okText:  convertToLang(this.props.translation[Button_Confirm], "Confirm"),
+        okText: convertToLang(this.props.translation[Button_Confirm], "Confirm"),
         cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
         onOk() {
             action(request);

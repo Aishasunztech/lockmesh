@@ -19,6 +19,7 @@ import Activity from './Activity';
 import SimSettings from './SimSettings/index';
 import PullApps from './PullApps';
 import SimHistory from './SimSettings/SimHistory';
+import NewDevice from '../../../components/NewDevices';
 
 
 import {
@@ -44,6 +45,16 @@ import {
     simHistory
 } from "../../../appRedux/actions/ConnectDevice";
 
+import { getNewDevicesList } from "../../../appRedux/actions/Common";
+import { rejectDevice, addDevice } from '../../../appRedux/actions/Devices';
+import {
+    getNewCashRequests,
+    getUserCredit,
+    rejectRequest,
+    acceptRequest
+} from "../../../appRedux/actions/SideBar";
+
+
 import {
     ADMIN, DEALER, SDEALER, SECURE_SETTING, PUSH_APP, PUSH_APP_TEXT, PULL_APPS_TEXT, PUSH, PULL, Profile_Info, SAVE_PROFILE_TEXT, PUSH_APPS_TEXT, SELECTED_APPS, SELECT_APPS, PROCEED_WITH_WIPING_THE_DEVICE, Name, SEARCH_APPS, WARNING
 } from "../../../constants/Constants";
@@ -65,6 +76,8 @@ import {
     SIM_SETTINGS,
     SIM_HISTORY,
 } from "../../../constants/DeviceConstants";
+
+import TransferHistory from './TransferModule/TransferHistory'
 
 const confirm = Modal.confirm;
 var coppyList = [];
@@ -330,12 +343,19 @@ class SideActions extends Component {
             policyId: '',
             showChangesModal: false,
             applyPolicyConfirm: false,
-            isSaveProfileBtn: false
+            isSaveProfileBtn: false,
+            transferHistoryModal: false,
+            DEVICE_TRANSFERED_DONE: 'not transfer',
+
         }
+        this.otpModalRef = React.createRef();
     }
 
     componentDidMount() {
-        this.props.simHistory(this.props.device_id);
+        if (this.props.device_id) {
+            this.props.simHistory(this.props.device_id);
+        }
+        this.props.getNewDevicesList();
 
         this.setState({
             historyModal: this.props.historyModal,
@@ -370,6 +390,12 @@ class SideActions extends Component {
                 apk_list: nextProps.apk_list,
                 // selectedApps: nextProps.apk_list
             })
+        }
+
+        if (this.props.pathname !== nextProps.pathname) {
+            this.props.getNewDevicesList();
+            this.props.getNewCashRequests();
+            this.props.getUserCredit()
         }
 
         if (this.props.simDeleted != nextProps.simDeleted) {
@@ -482,17 +508,20 @@ class SideActions extends Component {
         this.showSaveProfileModal(false);
         this.props.getProfiles(this.props.device.device_id)
     }
-    transferDeviceProfile = (device_id) => {
+    transferDeviceProfile = (obj) => {
+        // console.log('at transferDeviceProfile')
         let _this = this;
         confirm({
-            content: (
-                <h2>
-                    {convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device")}
-                </h2>
-            ),
+            content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
                 // console.log('OK');
-                _this.props.transferDeviceProfile(device_id);
+                _this.props.transferDeviceProfile(obj);
+                // {
+                //     reqDevice: device,
+                //     flagged_device: _this.props.device_details,
+                // }
+                _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
+
             },
             onCancel() {
                 // console.log('Cancel');
@@ -504,7 +533,7 @@ class SideActions extends Component {
 
     handleSimModule = (e) => {
         e.preventDefault();
-        console.log('test sim module');
+        // console.log('test sim module');
 
         this.setState({
             showSimModal: true
@@ -604,11 +633,26 @@ class SideActions extends Component {
     }
 
     handleFlag(flagged) {
-        if (flagged === 'Unflag') {
-            showConfirm(this.props.device, this.props.unflagged, this, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device '), 'flagged')
+
+        // console.log('-----', this.props.device_details)
+        // console.log('-----', this.props.device_details.finalStatus == "Transfered")
+        // transfer_user_status
+        if (this.props.device_details.finalStatus == "Transfered") {
+            showConfirm(this.props.device, this.props.unlinkDevice, this, convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_UNLINK_THE_DEVICE], "Do you really want to unlink the device "), 'unlink')
         } else {
-            this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
+            if (flagged === 'Unflag') {
+                showConfirm(this.props.device, this.props.unflagged, this, convertToLang(this.props.translation[DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE], 'Do you really want to unflag the device '), 'flagged')
+            } else {
+                this.refs.flag_device.showModel(this.props.device, this.props.flagged, this.props.refreshDevice)
+            }
         }
+    }
+
+    handleTransfer = () => {
+        console.log('hi');
+
+        this.props.getNewDevicesList();
+        this.refs.new_device.showModal(false);
     }
 
 
@@ -654,8 +698,22 @@ class SideActions extends Component {
         })
     }
 
-    render() {
+    handleTransferHistoryModal = (visible) => {
+        this.setState({
+            transferHistoryModal: visible,
+        })
+    }
 
+    // transferHistoryModal = (flagged, device_id) => {
+    //     console.log('hi', this.otpModalRef)
+    //     // this.otpModalRef.showModal(flagged, device_id);
+    //     this.setState({
+    //         transferHistoryModal: true,
+    //     })
+    // }
+
+    render() {
+        // console.log('device is: ', this.props.device.transfer_status)
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG") : convertToLang(this.props.translation[Button_Flag], "Flag");
@@ -675,7 +733,7 @@ class SideActions extends Component {
                                     placement="bottom"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PUSH_APPS)}
-                                    disabled={(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ? false : true}
+                                    disabled={((this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) && this.props.device_details.finalStatus !== "Transfered") ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='upload' />
@@ -688,6 +746,7 @@ class SideActions extends Component {
                                     type="primary"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showHistoryModal(true, "profile")}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                 >
                                     <Icon type="select" />
 
@@ -698,6 +757,7 @@ class SideActions extends Component {
                                     type="default"
                                     className="btn_break_line"
                                     onClick={() => this.showHistoryModal(true, "policy")}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#009700', color: '#fff' }}
                                 >
                                     <Icon type="lock" className="lock_icon" />
@@ -709,6 +769,7 @@ class SideActions extends Component {
                                     onClick={() => this.refs.imeiView.showModal(this.props.device)}
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16, background: "#eed9c4", color: "#555", border: "1px solid #eab886" }}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                 >
                                     {/* <Icon type="number" /> */}
 
@@ -726,7 +787,7 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16 }}
                                     onClick={() => this.showPwdConfirmModal(true, PULL_APPS)}
-                                    disabled={this.props.authUser.type === ADMIN ? false : true}
+                                    disabled={(this.props.authUser.type === ADMIN && this.props.device_details.finalStatus !== "Transfered") ? false : true}
                                 >
                                     <Icon type="lock" className="lock_icon" />
                                     <Icon type='download' />
@@ -737,7 +798,10 @@ class SideActions extends Component {
                                 {/* </Tooltip> */}
 
                                 {(this.props.authUser.type === ADMIN || this.props.authUser.type === DEALER) ?
-                                    <Button type="primary " style={{ width: "100%", marginBottom: 15 }}
+                                    <Button
+                                        type="primary "
+                                        style={{ width: "100%", marginBottom: 15 }}
+                                        disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                         // disabled={this.state.isSaveProfileBtn ? false : true}
                                         onClick={() => {
                                             // if (this.state.isSaveProfileBtn) {
@@ -770,6 +834,7 @@ class SideActions extends Component {
                                     type="default"
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
                                     onClick={this.handleSimModule}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false}
                                 >
                                     <Icon type="file" />
 
@@ -784,10 +849,19 @@ class SideActions extends Component {
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
                                 <Tooltip title="Coming Soon">
-                                    <Button type="default" style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />
-                                        {/* <IntlMessages id="button.Transfer" /> */}
-                                        {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button>
-                                    {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.transferDeviceProfile(this.props.device_id) } else { message.error('Plaese Flag the device first to Transfer'); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" /> Transfer</Button> */}
+                                    {/* <Button
+                                    type="default"
+                                    onClick={() => this.handleTransfer()}
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
+                                    disabled={(this.props.device.flagged === 'Not flagged') ? 'disabled' : ''}
+                                >
+                                    <Icon type="swap" />
+                                    {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
+
+                                    {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
+                                    <Button type="default"  
+                                    // onClick={() => this.handleTransferHistoryModal(true)} 
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
                                 </Tooltip>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
@@ -802,6 +876,32 @@ class SideActions extends Component {
                                     {/* <IntlMessages id="button.WipeDevice" /> */}
                                     {convertToLang(this.props.translation[Button_WipeDevice], "WipeDevice")}
                                 </Button>
+
+                                <TransferHistory
+                                    // ref={this.otpModalRef}
+                                    translation={this.props.translation}
+                                    transferHistoryList={this.props.transferHistoryList}
+                                    handleTransfer={this.handleTransfer}
+                                    user={this.props.authUser}
+                                    handleTransferHistoryModal={this.handleTransferHistoryModal}
+                                    visible={this.state.transferHistoryModal}
+                                    device={this.props.device_details}
+                                    flagged={flagged}
+                                />
+
+                                <NewDevice
+                                    ref='new_device'
+                                    devices={this.props.devices}
+                                    addDevice={this.props.addDevice}
+                                    transferDeviceProfile={this.transferDeviceProfile}
+                                    rejectDevice={this.props.rejectDevice}
+                                    authUser={this.props.authUser}
+                                    requests={this.props.requests}
+                                    acceptRequest={this.props.acceptRequest}
+                                    rejectRequest={this.props.rejectRequest}
+                                    translation={this.props.translation}
+                                    device_details={this.props.device_details}
+                                />
                             </Col>
                             <Col className="gutter-row" justify="center" span={12} >
                                 <Button
@@ -819,6 +919,7 @@ class SideActions extends Component {
                                 <Button
                                     onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered" || this.props.device_details.transfer_user_status == '1') ? true : false}
                                 >
                                     <Icon type='edit' />
 
@@ -1099,6 +1200,11 @@ class SideActions extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        rejectDevice: rejectDevice,
+        addDevice: addDevice,
+        acceptRequest: acceptRequest,
+        rejectRequest: rejectRequest,
+        getNewDevicesList: getNewDevicesList,
         simHistory: simHistory,
         showHistoryModal: showHistoryModal,
         showSaveProfileModal: showSaveProfileModal,
@@ -1119,12 +1225,15 @@ function mapDispatchToProps(dispatch) {
         getProfiles: getProfiles
     }, dispatch);
 }
-var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
-    // console.log('test: ' , device_details.wipeDeviceID)
+var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {
+
     return {
+        requests: sidebar.newRequests,
+        devices: devices.newDevices,
         simDeleted: device_details.simDeleted,
         simHistoryList: device_details.simHistoryList,
         translation: settings.translation,
+        pathname: settings.pathname,
         authUser: auth.authUser,
         historyModal: device_details.historyModal,
         applyPolicyConfirm: device_details.applyPolicyConfirm,
@@ -1145,6 +1254,7 @@ var mapStateToProps = ({ device_details, auth, settings }, otherProps) => {
         adminPwd: device_details.adminPwd,
         adminCPwd: device_details.adminCPwd,
         device_id: device_details.device.device_id,
+        device_details: device_details.device,
         usr_acc_id: device_details.device.id,
         apk_list: otherProps.apk_list,
         controls: device_details.controls,
@@ -1171,6 +1281,7 @@ function showConfirm(device, action, _this, msg, type) {
                 if (type === 'wipe') {
                     action(device)
                 } else if (type === 'unlink') {
+                    // console.log('unlink check =========> ', device)
                     action(device);
                 }
                 if (type === 'flagged') {

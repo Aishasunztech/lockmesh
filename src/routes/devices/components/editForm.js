@@ -161,7 +161,7 @@ class EditDevice extends Component {
 
 
                                 {this.props.form.getFieldDecorator('user_id', {
-                                    initialValue: this.props.new ? "" : this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
+                                    initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
                                     rules: [{
                                         required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
                                     }]

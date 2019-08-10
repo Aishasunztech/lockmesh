@@ -22,6 +22,8 @@ import {
   acceptRequest
 } from "../../appRedux/actions/SideBar";
 
+import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
+
 import { convertToLang } from '../../routes/utils/commonUtils';
 
 import {
@@ -46,19 +48,20 @@ import {
 
 import { logout } from "appRedux/actions/Auth";
 
-import { rejectDevice, addDevice } from '../../appRedux/actions/Devices';
+import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
 
-import { switchLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
+import { switchLanguage, getLanguage, toggleCollapsedSideNav } from "../../appRedux/actions/Setting";
 
 import { ADMIN, DEALER, SDEALER, AUTO_UPDATE_ADMIN } from "../../constants/Constants";
 import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 
-
+let status = true;
 class SidebarContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      languageData: []
+      languageData: [],
+      flaggedDevices: props.flaggedDevices,
     }
   }
 
@@ -88,17 +91,18 @@ class SidebarContent extends Component {
   };
 
   showNotification = () => {
+
     this.props.getNewCashRequests();
     this.props.getNewDevicesList()
     this.props.getUserCredit()
     this.refs.new_device.showModal();
+    this.props.getDevicesList();
 
     // alert('its working');
   }
 
   componentDidMount() {
-    
-    this.props.switchLanguage({ id: 1 })
+    this.props.getLanguage();
     this.setState({
       languageData: this.props.languageData
     })
@@ -106,7 +110,7 @@ class SidebarContent extends Component {
     // console.log('get new device', this.props.getNewDevicesList())
     this.props.getNewDevicesList();
     this.props.getNewCashRequests();
-    this.props.getUserCredit()
+    this.props.getUserCredit();
 
   }
 
@@ -156,6 +160,21 @@ class SidebarContent extends Component {
     })
   }
 
+  transferDeviceProfile = (obj) => {
+    console.log('at req transferDeviceProfile')
+    let _this = this;
+    Modal.confirm({
+      content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+      onOk() {
+        // console.log('OK');
+        _this.props.transferDeviceProfile(obj);
+      },
+      onCancel() { },
+      okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+      cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+    });
+  }
+
   render() {
     // console.log(addDevice)
     const { themeType, navStyle, pathname, authUser, translation } = this.props;
@@ -179,6 +198,8 @@ class SidebarContent extends Component {
               acceptRequest={this.props.acceptRequest}
               rejectRequest={this.props.rejectRequest}
               translation={this.props.translation}
+              flaggedDevices={this.props.flaggedDevices}
+              transferDeviceProfile={this.transferDeviceProfile}
             />
             <span className="font_14">
               {(localStorage.getItem('type') !== ADMIN && localStorage.getItem('type') !== AUTO_UPDATE_ADMIN) ? 'PIN :' : null}
@@ -319,12 +340,13 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
   const { navStyle, themeType, locale, pathname, languages, translation } = settings;
 
   // console.log('lng id is: ', translation["lng_id"])
-
+  // console.log('test: =====================================================>  ' , devices.devices)
   return {
     navStyle,
     themeType,
     locale,
     pathname,
+    flaggedDevices: devices.devices,
     devices: devices.newDevices,
     requests: sidebar.newRequests,
     user_credit: sidebar.user_credit,
@@ -333,5 +355,5 @@ const mapStateToProps = ({ settings, devices, sidebar }) => {
     lng_id: translation["lng_id"],
   }
 };
-export default connect(mapStateToProps, { rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest })(SidebarContent);
+export default connect(mapStateToProps, { getDevicesList, rejectDevice, addDevice, logout, getNewDevicesList, toggleCollapsedSideNav, switchLanguage, getLanguage, getNewCashRequests, getUserCredit, acceptRequest, rejectRequest, transferDeviceProfile })(SidebarContent);
 

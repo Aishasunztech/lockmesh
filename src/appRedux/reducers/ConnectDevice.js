@@ -62,6 +62,8 @@ import {
     RECEIVE_SIM_DATA,
     DELETE_SIM,
     SIM_HISTORY,
+    MESSAGE_HANDLER,
+    TRANSFER_HISTORY,
     SINGLE_APP_PULLED,
     SINGLE_APP_PUSHED
 } from "../../constants/ActionTypes";
@@ -186,6 +188,9 @@ const initialState = {
     simDeleted: false,
     simHistoryList: [],
 
+    // Transfer
+    transferHistoryList: [],
+    getHistory: ''
 };
 
 export default (state = initialState, action) => {
@@ -534,6 +539,43 @@ export default (state = initialState, action) => {
                 isLoading: false
             }
         }
+
+
+        // Common Reducer: to display the message from server
+        case MESSAGE_HANDLER: {
+            if (action.payload.status) {
+                success({
+                    title: action.payload.msg,
+                })
+                return {
+                    ...state,
+                    getHistory: new Date()
+                }
+            } else {
+                error({
+                    title: action.payload.msg,
+                })
+                return {
+                    ...state,
+                }
+            }
+
+        }
+
+        case TRANSFER_HISTORY: {
+            if (action.payload.status) {
+                return {
+                    ...state,
+                    transferHistoryList: action.payload.data,
+                    // getHistory: new Date()
+                }
+            } else {
+                return {
+                    ...state,
+                }
+            }
+        }
+
 
         case SHOW_MESSAGE: {
 

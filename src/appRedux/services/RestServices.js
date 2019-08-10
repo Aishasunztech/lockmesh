@@ -125,8 +125,16 @@ const RestService = {
 
     },
 
-    transferDeviceProfile: (device_id) => {
-        return axios.post(BASE_URL + 'users/transfer/device_profile', { device_id: device_id }, RestService.getHeader());
+    transferDeviceProfile: (data) => {
+        console.log('data is: ', data)
+        return axios.post(BASE_URL + 'users/transfer/device_profile', data, RestService.getHeader());
+    },
+    transferUser: (data) => {
+        return axios.post(BASE_URL + 'users/transfer/user', data, RestService.getHeader());
+    },
+
+    transferHistory: (device_id) => {
+        return axios.get(BASE_URL + 'users/transfer/history/' + device_id, RestService.getHeader());
     },
 
 
@@ -386,7 +394,7 @@ const RestService = {
 
     // unlink Device
     unlinkDevice: (device) => {
-
+console.log('unlinkDevice ', device)
         return axios.post(BASE_URL + 'users/unlink/' + device.usr_device_id, { device }, RestService.getHeader());
 
     },
@@ -449,7 +457,6 @@ const RestService = {
     },
     addDevice: (device) => {
         return axios.put(BASE_URL + 'users/new/device', device, RestService.getHeader());
-
     },
     preActiveDevice: (device) => {
         return axios.post(BASE_URL + 'users/create/device_profile', device, RestService.getHeader());

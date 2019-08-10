@@ -52,7 +52,9 @@ import {
     GET_SIMS,
     UPDATE_SIM,
     DELETE_SIM,
-    SIM_HISTORY
+    SIM_HISTORY,
+    MESSAGE_HANDLER,
+    TRANSFER_HISTORY
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -294,6 +296,7 @@ export function wipe(device) {
 }
 
 export function unlinkDevice(device) {
+    console.log('you are at action file of unlinkDevice', device)
     return (dispatch) => {
         RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);
@@ -787,26 +790,52 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
 
 }
 
-export const transferDeviceProfile = (device_id) => {
-    // alert(device_id);
+export const transferDeviceProfile = (data) => {
+    // alert(data);
     return (dispatch) => {
-        RestService.transferDeviceProfile(device_id).then((response) => {
+        RestService.transferDeviceProfile(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: SHOW_MESSAGE,
-                    payload: {
-                        showMessage: true,
-                        messageType: response.data.status ? 'success' : 'error',
-                        messageText: response.data.data.msg
-                    }
+                    type: MESSAGE_HANDLER,
+                    payload: response.data
                 })
+            } else {
                 dispatch({
-                    type: SHOW_MESSAGE,
-                    payload: {
-                        showMessage: false,
-                        messageType: response.data.status ? 'success' : 'error',
-                        messageText: response.data.data.msg
-                    }
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+
+
+export const transferUser = (data) => {
+    // alert(data);
+    return (dispatch) => {
+        RestService.transferUser(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: MESSAGE_HANDLER,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+
+export const transferHistory = (device_id) => {
+    return (dispatch) => {
+        RestService.transferHistory(device_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: TRANSFER_HISTORY,
+                    payload: response.data
                 })
             } else {
                 dispatch({
@@ -1017,9 +1046,9 @@ export const showPullAppsModal = (visible) => {
 
 export const applyPushApps = (apps, deviceId, usrAccId) => {
     apps.forEach((el) => {
-        el.enable = (typeof(el.enable)===Boolean || typeof(el.enable)==='Boolean' || typeof(el.enable)==='boolean')? el.enable: false;
-        el.guest = (typeof(el.guest)===Boolean || typeof(el.guest)==='Boolean' || typeof(el.guest)==='boolean')? el.guest: false;
-        el.encrypted = (typeof(el.encrypted)===Boolean || typeof(el.encrypted)==='Boolean' || typeof(el.encrypted)==='boolean' )? el.encrypted: false;
+        el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
+        el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
+        el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
         delete el.apk_logo;
         delete el.apk_status;
     })
