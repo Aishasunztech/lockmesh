@@ -15,6 +15,8 @@ export const DEVICE_TRIAL = "Trial";
 export const DEVICE_SUSPENDED = "Suspended";
 export const DEVICE_EXPIRED = "Expired";
 export const DEVICE_UNLINKED = "Unlinked";
+export const DEVICE_TRANSFERED = "Transfered";
+export const DEVICE_FLAGGED = "Flagged";
 export const DEVICE_PENDING_ACTIVATION = "Pending activation";
 export const DEVICE_PRE_ACTIVATION = "Pre-activated";
 
@@ -51,10 +53,10 @@ export const PUSH_APPS_TEXT = "push.apps.id"; // PUSH APPS
 export const PULL_APPS_TEXT = "pull.apps.id"; // PULL APPS
 export const PUSH = "push.id"; // PUSH
 export const PULL = "pull.id"; // PULL
-export const Alert_Allow_Permission_Delaer = "alert.allow.permission.dealer.id"; // Do you realy Want to allow Permission for all Dealers?
-export const Alert_Remove_Permission_Delaer = "alert.remove.permission.dealer.id"; // Do you realy Want to Remove Permission for all Dealers?
-export const Alert_Delete_APK = "alert.delete.apk.id"; // Are you sure, you want to delete the Apk ?
-export const POLICY = 'sidebar.policy';
+export const Alert_Allow_Permission_Delaer = "alert.allow.permission.dealer.id"; // Do you really Want to allow Permission for all Dealers?
+export const Alert_Remove_Permission_Delaer = "alert.remove.permission.dealer.id"; // Do you really Want to Remove Permission for all Dealers?
+export const Alert_Delete_APK = "ALERT.DELETE.APK.ID"; // Are you sure, you want to delete the Apk ?
+export const POLICY = 'policy';
 export const SELECT_POLICY = "Select.Policy.id"; // Select Policy
 
 // Constant Package Names
@@ -100,8 +102,9 @@ export const Days = "days.id";
 
 export const User_Name_require = "user.name.require"; // Name is Required
 export const Only_alpha_numeric = "only.alpha.numeric.id"; // Please insert only alphabets and numbers
-export const Not_valid_Email = "not.valid.email.id"; // The input is not valid E-mail!
-export const PLZ_INPUT_Email = "not.valid.email.id"; // Please input your E-mail!
+export const ONLY_NUMBER_ARE_ALLOWED = "ONLY_NUMBER_ARE_ALLOWED.id"; // Only Number are allowed
+export const Not_valid_Email = "not.valid.email.id"; // The input is not a valid E-mail!
+export const PLZ_INPUT_Email = "please.input.your.email.id"; // Please input your E-mail!
 export const Required_Email = "require.email.id"; // Email is Required !
 export const Insert_Valid_Dealer_Name = "insert.valid.dealer.name.id"; // Please Insert Dealer Name
 export const Email = "email.id"; // Email
@@ -160,11 +163,11 @@ export const SIGN_IN = "app.userAuth.signIn";
 export const PERMISSION_NAME = 'permission.name.id'; // PERMISSION NAME
 export const SELECT = "select.id"; // Select
 export const ALERT_TO_SURE_DELETE_ALL_DEVICES = "ALERT_TO_SURE_DELETE_ALL_DEVICES.id"; // Are you sure, you want to delete All these devices
-export const WARNING = "WARNING.id"; 
+export const WARNING = "WARNING.id";
 export const PROCEED_WITH_WIPING_THE_DEVICE = "PROCEED.WITH.WIPING.THE.DEVICE.id";
 
 export const CREDITS = "CREDITS.id";
-export const CREDITS_CASH_REQUESTS = "CREDITS.CASH.REQUESTS.id";
+export const CREDITS_CASH_REQUESTS = "CREDITS.CASH.REQUESTS.id"; //CREDITS CASH REQUESTS
 export const DEVICE_REQUESTS = "DEVICE.REQUESTS.id";
 export const ARE_YOU_SURE_YOU_WANT_TO_DECLINE_THIS_REQUEST = "Are.you.sure.you.want.to.decline.this.request.id"; // Are you sure you want to decline this request ?
 export const ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST = "Are.you.sure.you.want.to.accept.this.request.id"; // Are you sure you want to accept this request ?

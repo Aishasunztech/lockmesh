@@ -184,14 +184,14 @@ export default class SystemControls extends Component {
             </div>
           </Fragment> :
           <Fragment>
-            <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
+            <h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
           </Fragment>
       )
     }
     else {
       return (
         <Fragment>
-          <h1 className="not_syn_txt"><a>{SYSTEM_PERMISSION} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
+          <h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
         </Fragment>
       )
     }

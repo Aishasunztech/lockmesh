@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Icon, Popover, Checkbox } from 'antd';
+import { GUEST_ALL, Encrypted_ALL, Enable_ALL } from '../../../constants/Constants';
+import { convertToLang } from "../../utils/commonUtils";
 // import Styles from "./Applist.css";
 
 
@@ -44,13 +46,13 @@ export default class AppDropdown extends Component {
             <div className="applist_menu">
                 <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "guestAll");
-                }}>Guests All</Checkbox><br></br>
+                }}>{convertToLang(this.props.translation[GUEST_ALL], "Guests All")}</Checkbox><br></br>
                 <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "encryptedAll");
-                }}>Encrypted All</Checkbox><br></br>
+                }}>{convertToLang(this.props.translation[Encrypted_ALL], "Encrypted All")}</Checkbox><br></br>
                 <Checkbox checked={this.state.enableAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "enableAll");
-                }}>Enable All</Checkbox>
+                }}>{convertToLang(this.props.translation[Enable_ALL], "Enable All")}</Checkbox>
             </div>
         );
     }

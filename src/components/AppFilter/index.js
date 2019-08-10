@@ -41,13 +41,14 @@ import {
 } from '../../constants/AppFilterConstants';
 
 import { convertToLang } from '../../routes/utils/commonUtils';
+import { ADMIN } from '../../constants/Constants';
 // Picky.prototype={
 //     value: new PropTypes.object(),
 // }
 class AppFilter extends Component {
     constructor(props) {
         super(props);
-        // console.log('appfilter constructor', this.props.selectedOptions);
+
         this.state = {
             selectedDisplayValues: [],
             DisplayPages: this.props.defaultPagingValue,
@@ -111,20 +112,28 @@ class AppFilter extends Component {
     }
 
     render() {
-        const { translation } = this.props;
-        // console.log(" Current State options are ", this.props.options)
-        let fullScreenClass1 = "";
-        let fullScreenClass2 = "";
-
-        if (this.props.isAddButton === false) {
-            fullScreenClass1 = "col-md-4";
-            fullScreenClass2 = "col-md-4";
-        } else {
-            fullScreenClass1 = "col-md-3";
-            fullScreenClass2 = "col-md-3";
+        let type = this.props.user.type
+        let buttonType = false;
+        if (type === ADMIN) {
+            if (this.props.AddDeviceModal || this.props.isAddUserButton || this.props.isAddAgentButton) { buttonType = { display: "none" } }
         }
 
-        const Search = Input.Search;
+        const { translation } = this.props;
+
+        let fullScreenClass1 = "";
+        let fullScreenClass2 = "";
+        let fullScreenClass3 = "";
+
+        if (this.props.isAddButton === false) {
+            fullScreenClass1 = "col-md-3";
+            fullScreenClass2 = "col-md-3";
+            fullScreenClass3 = "col-md-3";
+        } else {
+            fullScreenClass1 = "col-md-3";
+            fullScreenClass2 = "col-md-2";
+            fullScreenClass3 = "col-md-2";
+        }
+
         //  console.log('render props selectedOptions ...', this.props.selectedOptions);
         //  console.log('allSelected val this.props.selectedOptions are: ', this.props.selectedOptions)
         //  console.log('render state selectedDisplayValues ...', this.state.selectedDisplayValues);
@@ -139,9 +148,14 @@ class AppFilter extends Component {
         return (
             // className="gutter-example"
             <Card className="sticky_top_bar">
-                <Row gutter={16} className="filter_top">
+                <Row gutter={24} className="filter_top">
+                    <Col className={`${fullScreenClass3} col-sm-12 col-xs-12 vertical_center`}>
+                        <span className="font_26">
+                            {(this.props.pageHeading) ? this.props.pageHeading : ""}
+                        </span>
+                    </Col>
                     <Col className={`${fullScreenClass1} col-sm-6 col-xs-6`}>
-                        <div className="gutter-box">
+                        <div className="m_mt-16">
                             {(this.props.options !== undefined && this.props.options !== null) ?
                                 <Fragment>
                                     <Icon type="down" className="down_icon" />
@@ -176,10 +190,8 @@ class AppFilter extends Component {
                                                         onKeyPress={toggleSelectAll}
                                                         key={tabIndex}
                                                     >
-                                                        <Checkbox
-                                                            checked={allSelectedOpt} className="slct_all"
-                                                        >
-                                                          <span className="upper_case">  {convertToLang(translation[Appfilter_SelectAll], "Select All")}</span>
+                                                        <Checkbox checked={allSelectedOpt} className="slct_all upper_case">
+                                                            <span className="upper_case">  {convertToLang(translation[Appfilter_SelectAll], "Select All")}</span>
                                                         </Checkbox>
                                                     </li>
                                                 );
@@ -196,7 +208,7 @@ class AppFilter extends Component {
                                             valueKey,
                                             multiple
                                         }) => {
-
+                                            let extraText = (item.value == "tableHeadings.REMAININGDAYS") ? `(${convertToLang(this.props.translation["pre.activated.tab.extra.id"], "PRE-ACTIVATED TAB)")})` : "";
                                             return (
                                                 <li
                                                     style={style} // required
@@ -204,8 +216,7 @@ class AppFilter extends Component {
                                                     key={item.key} // required
                                                     onClick={() => selectValue({ "key": item.key, "value": convertToLang(this.props.translation[item.value], item.value) })}
                                                 >
-                                                    <Checkbox checked={isSelected}>{convertToLang(this.props.translation[item.value], item.value)}</Checkbox>
-
+                                                    <Checkbox checked={isSelected}>{`${convertToLang(this.props.translation[item.value], item.value)}  ${extraText}`}</Checkbox>
                                                 </li>
                                             );
                                         }
@@ -219,53 +230,36 @@ class AppFilter extends Component {
                         </div>
                     </Col>
                     <Col className={`${fullScreenClass1} col-sm-6 col-xs-6`}>
-                        <div className="gutter-box">
+                        <div className="m_mt-16">
                             {(this.props.handleFilterOptions !== undefined && this.props.handleFilterOptions !== null) ? this.props.handleFilterOptions() : null}
                         </div>
                     </Col>
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-6`}>
-                        <div className="gutter-box">
-                            <Search
+                    <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`}>
+                        <div className="m_mt-16">
+                            {(this.props.handleComponentSearch) ? (
+                                <Input.Search
+                                    placeholder={this.props.searchPlaceholder}
+                                    onChange={e => this.handleComponentSearch(e.target.value)}
+                                    style={{ width: '100%' }}
+                                />
+                            ) : null}
 
-                                placeholder={this.props.searchPlaceholder}
-                                onChange={e => this.handleComponentSearch(e.target.value)}
-                                style={{ width: '100%' }}
-                            />
                         </div>
                     </Col>
-                    {/* {(false) ?//!this.props.setPrice
-                        <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
-                            <div className="gutter-box">
-                                <Select
-                                    value={this.state.DisplayPages}
-                                    //  defaultValue={this.state.DisplayPages}
-                                    style={{ width: '100%' }}
-                                    // onSelect={value => this.setState({DisplayPages:value})}
-                                    onChange={value => this.handlePagination(value)}
-                                >
-                                    <Select.Option value="10" >10</Select.Option>
-                                    <Select.Option value="20">20</Select.Option>
-                                    <Select.Option value="30">30</Select.Option>
-                                    <Select.Option value="50">50</Select.Option>
-                                    <Select.Option value="100">100</Select.Option>
-                                </Select>
-                            </div>
-                        </Col>
-                        :
-                        <Col />
-                    } */}
-                    <Col className={`${fullScreenClass2} col-sm-6 col-xs-6`}>
-                        <div className="gutter-box">
+                    <Col className={`${fullScreenClass2} col-sm-12 col-xs-12`} style={(buttonType) ? buttonType : { display: "block" }}>
+                        <div className="m_mt-16">
                             {
                                 (this.props.isAddButton === true) ?
                                     (this.props.toLink !== undefined && this.props.toLink !== '' && this.props.toLink !== null) ?
-                                        <Button
-                                            type="primary"
-                                            disabled={(this.props.disableAddButton === true) ? true : false}
-                                            style={{ width: '100%' }}
-                                        >
-                                            <Link to={this.props.toLink}>{this.props.addButtonText}</Link>
-                                        </Button>
+                                        <Link to={this.props.toLink}>
+                                            <Button
+                                                type="primary"
+                                                disabled={(this.props.disableAddButton === true) ? true : false}
+                                                style={{ width: '100%' }}
+                                            >
+                                                {this.props.addButtonText}
+                                            </Button>
+                                        </Link>
                                         : (this.props.addDealer) ?
                                             <Button
                                                 type="primary"
@@ -314,22 +308,51 @@ class AppFilter extends Component {
                                                                 {this.props.addButtonText}
                                                             </Button>
                                                             :
-                                                            <Button
-                                                                type="primary"
-                                                                disabled={(this.props.disableAddButton === true) ? true : false}
-                                                                style={{ width: '100%' }}
-                                                                onClick={() => this.props.handleUserModal()}
-                                                            >
-                                                                {this.props.addButtonText}
-                                                            </Button>
-
+                                                            (this.props.handleUserModal) ?
+                                                                <Button
+                                                                    type="primary"
+                                                                    disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                    style={{ width: '100%' }}
+                                                                    onClick={() => this.props.handleUserModal()}
+                                                                >
+                                                                    {this.props.addButtonText}
+                                                                </Button> :
+                                                                <Button
+                                                                    type="primary"
+                                                                    disabled={(this.props.disableAddButton === true) ? true : false}
+                                                                    style={{ width: '100%' }}
+                                                                    onClick={() => this.props.handleAppFilterAddButton(true)}
+                                                                >
+                                                                    {this.props.addButtonText}
+                                                                </Button>
 
                                     : null
                             }
                         </div>
                     </Col>
+                    {/* {(false) ?//!this.props.setPrice
+                        <Col className={`${fullScreenClass2} col-sm-6 col-xs-12`}>
+                            <div className="m_mt-16">
+                                <Select
+                                    value={this.state.DisplayPages}
+                                    //  defaultValue={this.state.DisplayPages}
+                                    style={{ width: '100%' }}
+                                    // onSelect={value => this.setState({DisplayPages:value})}
+                                    onChange={value => this.handlePagination(value)}
+                                >
+                                    <Select.Option value="10" >10</Select.Option>
+                                    <Select.Option value="20">20</Select.Option>
+                                    <Select.Option value="30">30</Select.Option>
+                                    <Select.Option value="50">50</Select.Option>
+                                    <Select.Option value="100">100</Select.Option>
+                                </Select>
+                            </div>
+                        </Col>
+                        :
+                        <Col />
+                    } */}
                 </Row>
-            </Card>
+            </Card >
         )
     }
 }
@@ -345,6 +368,7 @@ var mapStateToProps = ({ routing, auth }, otherProps) => {
     // console.log("restricted auth", auth);
     // console.log("restricted other", otherProps);
     return {
+        user: auth.authUser,
         // routing: routing,
         pathname: routing.location.pathname,
         // authUser: auth.authUser,

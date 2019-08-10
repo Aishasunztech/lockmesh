@@ -50,7 +50,11 @@ import {
     DEVICE_SYNCED,
     ADD_SIM_REGISTER,
     GET_SIMS,
-    UPDATE_SIM
+    UPDATE_SIM,
+    DELETE_SIM,
+    SIM_HISTORY,
+    MESSAGE_HANDLER,
+    TRANSFER_HISTORY
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -292,6 +296,7 @@ export function wipe(device) {
 }
 
 export function unlinkDevice(device) {
+    console.log('you are at action file of unlinkDevice', device)
     return (dispatch) => {
         RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);
@@ -785,26 +790,52 @@ export function savePolicy(app_list, passwords = null, profileType, profileName,
 
 }
 
-export const transferDeviceProfile = (device_id) => {
-    // alert(device_id);
+export const transferDeviceProfile = (data) => {
+    // alert(data);
     return (dispatch) => {
-        RestService.transferDeviceProfile(device_id).then((response) => {
+        RestService.transferDeviceProfile(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
-                    type: SHOW_MESSAGE,
-                    payload: {
-                        showMessage: true,
-                        messageType: response.data.status ? 'success' : 'error',
-                        messageText: response.data.data.msg
-                    }
+                    type: MESSAGE_HANDLER,
+                    payload: response.data
                 })
+            } else {
                 dispatch({
-                    type: SHOW_MESSAGE,
-                    payload: {
-                        showMessage: false,
-                        messageType: response.data.status ? 'success' : 'error',
-                        messageText: response.data.data.msg
-                    }
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+
+
+export const transferUser = (data) => {
+    // alert(data);
+    return (dispatch) => {
+        RestService.transferUser(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: MESSAGE_HANDLER,
+                    payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+
+export const transferHistory = (device_id) => {
+    return (dispatch) => {
+        RestService.transferHistory(device_id).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: TRANSFER_HISTORY,
+                    payload: response.data
                 })
             } else {
                 dispatch({
@@ -1015,6 +1046,9 @@ export const showPullAppsModal = (visible) => {
 
 export const applyPushApps = (apps, deviceId, usrAccId) => {
     apps.forEach((el) => {
+        el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
+        el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
+        el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
         delete el.apk_logo;
         delete el.apk_status;
     })
@@ -1070,8 +1104,15 @@ export const getActivities = (device_id) => {
 
 export const applyPullApps = (apps, deviceId, usrAccId) => {
     apps.forEach((el) => {
-        delete el.apk_logo;
-        delete el.apk_status;
+
+        delete el.icon;
+        el.apk_id = el.key;
+        el.apk_name = el.label;
+        el.version_name="";
+        el.apk ="";
+        el.guest =false;
+        el.encrypted=false;
+        el.enable=false;
     })
     return (dispatch) => {
         RestService.applyPullApps(apps, deviceId, usrAccId).then((response) => {
@@ -1092,20 +1133,38 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
 }
 
 // ********* Sim Module
-export const simRegister = (total, data) => {
-    console.log('data is: ', data)
+export const simRegister = (data) => {
+    // console.log('data is: ', data)
     return (dispatch) => {
-        RestService.simRegister(total, data).then((response) => {
-            console.log('response is: ', response);
+        RestService.simRegister(data).then((response) => {
+            // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
-                // data['id'] = 122;
+                // console.log(response.data);
 
                 dispatch({
                     type: ADD_SIM_REGISTER,
                     response: response.data,
                     payload: data
-                    // payload: response.data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
+export const simHistory = (device_id) => {
+    console.log('device_id is: ', device_id)
+    return (dispatch) => {
+        RestService.simHistory(device_id).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: SIM_HISTORY,
+                    payload: response.data
                 })
             } else {
                 dispatch({
@@ -1139,6 +1198,27 @@ export const getSims = (device_id) => {
     }
 }
 
+export const deleteSim = (data) => {
+    console.log('data is: ', data)
+    return (dispatch) => {
+        RestService.deleteSim(data).then((response) => {
+            console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: DELETE_SIM,
+                    response: response.data,
+                    payload: data,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
+}
+
 export const handleSimUpdate = (data) => {
     console.log('data is: ', data)
     return (dispatch) => {
@@ -1161,3 +1241,10 @@ export const handleSimUpdate = (data) => {
         })
     }
 }
+
+
+
+// socket.on(Constants.RECV_SIM + device_id, (response) => {
+//     // console.log('ack ===== RECV_SIM =========> ', response)
+//     sockets.updateSimRecord(device_id, response);
+// })

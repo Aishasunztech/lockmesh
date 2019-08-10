@@ -46,7 +46,24 @@ import {
 } from "../../appRedux/actions/ConnectDevice";
 
 import { getDevicesList, editDevice } from '../../appRedux/actions/Devices';
-import { ackFinishedPushApps, ackFinishedPullApps, ackFinishedPolicy, actionInProcess, ackImeiChanged, getAppJobQueue, ackSinglePushApp, ackSinglePullApp, ackFinishedPolicyStep } from "../../appRedux/actions/Socket";
+import {
+  connectSocket,
+  ackFinishedPushApps,
+  ackFinishedPullApps,
+  ackFinishedPolicy,
+  actionInProcess,
+  ackImeiChanged,
+  getAppJobQueue,
+  ackSinglePushApp,
+  ackSinglePullApp,
+  ackFinishedPolicyStep,
+  receiveSim,
+  hello_web,
+  closeSocketEvents,
+  ackInstalledApps,
+  ackUninstalledApps,
+  ackSettingApplied
+} from "../../appRedux/actions/Socket";
 
 import imgUrl from '../../assets/images/mobile.png';
 // import { BASE_URL } from '../../constants/Application';
@@ -88,10 +105,17 @@ class ConnectDevice extends Component {
     super(props);
     this.state = {
       device_id: '',
-      pageName: MAIN_MENU,
+
+      // removed these states from component did mount so I wrote in constructor
+      // pageName: MAIN_MENU,
+      pageName: props.pageName,
+      device_id: isBase64(props.match.params.device_id),
+      controls: props.controls,
+      changedCtrls: props.changedCtrls,
+      // changedCtrls: {},
+
       showChangesModal: false,
       controls: [],
-      changedCtrls: {},
       imei_list: [],
       showMessage: false,
       messageText: '',
@@ -120,21 +144,24 @@ class ConnectDevice extends Component {
   }
 
   componentDidMount() {
-    this.props.startLoading();
-
-    this.setState({
-      pageName: this.props.pageName,
-      device_id: isBase64(this.props.match.params.device_id),
-      controls: this.props.controls,
-      changedCtrls: this.props.changedCtrls
-    });
 
     const device_id = isBase64(this.props.match.params.device_id);
 
-
     if (device_id !== '') {
 
-      this.props.actionInProcess(this.props.socket, device_id);
+
+      // this.setState({
+      //   pageName: this.props.pageName,
+      //   device_id: isBase64(this.props.match.params.device_id),
+      //   controls: this.props.controls,
+      //   changedCtrls: this.props.changedCtrls
+      // });
+
+      this.props.startLoading();
+
+  
+      this.props.connectSocket()
+
       this.props.getDeviceDetails(device_id);
       this.props.getAppJobQueue(device_id);
       this.props.getDeviceApps(device_id);
@@ -143,17 +170,21 @@ class ConnectDevice extends Component {
       this.props.getDeviceHistories(device_id);
       this.props.getImeiHistory(device_id);
       this.props.getDealerApps();
-      this.props.ackFinishedPushApps(this.props.socket, device_id);
-      this.props.ackFinishedPullApps(this.props.socket, device_id);
-      this.props.ackFinishedPolicy(this.props.socket, device_id);
-      this.props.ackImeiChanged(this.props.socket, device_id);
-      this.props.ackSinglePushApp(this.props.socket, device_id);
-      this.props.ackSinglePullApp(this.props.socket, device_id);
-      this.props.ackFinishedPolicyStep(this.props.socket, device_id);
-
       this.props.getActivities(device_id)
 
-      // console.log('ack_finished_push_apps_' + device_id);
+      // this.props.actionInProcess(this.props.socket, device_id);
+      // this.props.ackFinishedPushApps(this.props.socket, device_id);
+      // this.props.ackFinishedPullApps(this.props.socket, device_id);
+      // this.props.ackFinishedPolicy(this.props.socket, device_id);
+      // this.props.ackImeiChanged(this.props.socket, device_id);
+      // this.props.ackSinglePushApp(this.props.socket, device_id);
+      // this.props.ackSinglePullApp(this.props.socket, device_id);
+      // this.props.ackFinishedPolicyStep(this.props.socket, device_id);
+      // this.props.receiveSim(this.props.socket, device_id);
+
+
+      // this.props.hello_web(this.props.socket);
+      // console.log('receiveSim_ '  + device_id);
     }
 
     // this.props.endLoading();
@@ -174,28 +205,63 @@ class ConnectDevice extends Component {
   // }
 
   componentDidUpdate(prevProps) {
-    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
-      // console.log('show message sate', this.props.showMessage)
-      this.setState({
-        controls: this.props.controls,
-        changedCtrls: this.props.changedCtrls,
-        imei_list: this.props.imei_list,
-        showMessage: this.props.showMessage,
-        messageText: this.props.messageText,
-        messageType: this.props.messageType
-      })
-    }
-    if (this.props.translation != prevProps.translation) {
-      this.mainMenu = mobileMainMenu(this.props.translation);
-      this.subMenu = mobileManagePasswords(this.props.translation);
-    }
+    const device_id = isBase64(this.props.match.params.device_id);
+      if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
+        // console.log('show message sate', this.props.showMessage)
+        this.setState({
+          controls: this.props.controls,
+          changedCtrls: this.props.changedCtrls,
+          imei_list: this.props.imei_list,
+          showMessage: this.props.showMessage,
+          messageText: this.props.messageText,
+          messageType: this.props.messageType
+        })
+      }
+
+      if (this.props.translation != prevProps.translation) {
+        this.mainMenu = mobileMainMenu(this.props.translation);
+        this.subMenu = mobileManagePasswords(this.props.translation);
+      }
+
+      if (this.props.getHistory != prevProps.getHistory) {
+        const device_id = isBase64(this.props.match.params.device_id);
+        this.props.getDeviceDetails(device_id);
+      }
+  
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.translation != nextProps.translation) {
-      this.mainMenu = mobileMainMenu(nextProps.translation);
-      this.subMenu = mobileManagePasswords(nextProps.translation);
+    const device_id = isBase64(nextProps.match.params.device_id);
+    if (device_id) {
+      if (this.props.translation != nextProps.translation) {
+        this.mainMenu = mobileMainMenu(nextProps.translation);
+        this.subMenu = mobileManagePasswords(nextProps.translation);
+      }
+      
+      // there is no use of pathname under device id section
+      // if(this.props.history.location.pathname !== nextProps.history.location.pathname){
+      // if(this.props.pathName !== nextProps.pathName){
+        if (this.props.socket === null && nextProps.socket !== null) {
+          console.log('path changed');
+          // console.log("socket connected component")
+          nextProps.actionInProcess(nextProps.socket, device_id);
+          nextProps.ackFinishedPushApps(nextProps.socket, device_id);
+          nextProps.ackFinishedPullApps(nextProps.socket, device_id);
+          nextProps.ackFinishedPolicy(nextProps.socket, device_id);
+          nextProps.ackImeiChanged(nextProps.socket, device_id);
+          nextProps.ackSinglePushApp(nextProps.socket, device_id);
+          nextProps.ackSinglePullApp(nextProps.socket, device_id);
+          nextProps.ackFinishedPolicyStep(nextProps.socket, device_id);
+          nextProps.ackInstalledApps(nextProps.socket, device_id);
+          nextProps.ackUninstalledApps(nextProps.socket, device_id);
+          nextProps.ackSettingApplied(nextProps.socket, device_id);
+          nextProps.receiveSim(nextProps.socket, device_id);
+  
+          nextProps.hello_web(nextProps.socket);
+        }
+      // }
     }
+
     if (this.props !== nextProps) {
       // console.log('object, ', nextProps.showMessage)
       if (nextProps.reSync) {
@@ -215,6 +281,8 @@ class ConnectDevice extends Component {
         // this.props.endLoading();
       }
     }
+
+
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -402,6 +470,8 @@ class ConnectDevice extends Component {
     // console.log('app after push ', app_list)
   }
   componentWillUnmount() {
+    const device_id = isBase64(this.props.match.params.device_id);
+    this.props.closeSocketEvents(this.props.socket, device_id);
     this.onBackHandler();
   }
 
@@ -515,6 +585,7 @@ class ConnectDevice extends Component {
                     refreshDevice={this.refreshDevice}
                     startLoading={this.props.startLoading}
                     endLoading={this.props.endLoading}
+                    auth={this.props.auth}
                     translation={this.props.translation}
                   />
                 </Col>
@@ -673,16 +744,24 @@ function mapDispatchToProps(dispatch) {
     ackSinglePushApp: ackSinglePushApp,
     ackSinglePullApp: ackSinglePullApp,
     ackFinishedPolicyStep: ackFinishedPolicyStep,
+    receiveSim: receiveSim,
     clearState: clearState,
-    clearResyncFlag: clearResyncFlag
+    clearResyncFlag: clearResyncFlag,
+    closeSocketEvents: closeSocketEvents,
+    connectSocket: connectSocket,
+    ackInstalledApps: ackInstalledApps,
+    ackUninstalledApps: ackUninstalledApps,
+    ackSettingApplied: ackSettingApplied,
+    hello_web: hello_web,
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
-  // console.log(device_details.changedCtrls)
+
   return {
+    getHistory: device_details.getHistory,
     translation: settings.translation,
     auth: auth,
-    socket: auth.socket,
+    socket: socket.socket,
     routing: routing,
     pathName: routing.location.pathname,
     device_details: device_details.device,

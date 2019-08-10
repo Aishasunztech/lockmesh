@@ -1,4 +1,3 @@
-import enLang from "../../../lngProvider/locales/en_US";
 import {
   LAYOUT_TYPE,
   LAYOUT_TYPE_FULL,
@@ -42,6 +41,7 @@ import {
   DEVICE_S_DEALER_NAME,
   DEVICE_TYPE,
   DEVICE_VERSION,
+  DEVICE_TRANSFERED,
 } from '../../../constants/DeviceConstants';
 
 import {
@@ -75,12 +75,13 @@ export var initialSettings = {
   width: window.innerWidth,
   isDirectionRTL: false,
   languages: [],
-  translation: enLang,
+  translation: {},
   isSwitched: 'abc',
   deviceOptions: [
     { "key": "device_id", "value": DEVICE_ID },
     { "key": "user_id", "value": USER_ID },
     { "key": "validity", "value": DEVICE_REMAINING_DAYS },
+    { "key": "transfered_to", "value": DEVICE_TRANSFERED },
     { "key": "status", "value": DEVICE_STATUS },
     { "key": "online", "value": DEVICE_MODE },
     { "key": "type", "value": DEVICE_TYPE },
@@ -125,6 +126,11 @@ export var initialSettings = {
     { "key": "apk_name", "value": APK_APP_NAME },
     { "key": "apk_logo", "value": APK_APP_LOGO },
     { "key": "apk_size", "value": APK_SIZE },
+    { "key": "label", "value": "LABEL" },
+    { "key": "package_name", "value": "PACKAGE NAME" },
+    { "key": "version", "value": "VERSION" },
+    { "key": "created_at", "value": "UPLOAD DATE" },
+    { "key": "updated_at", "value": "EDIT DATE" },
   ],
   //  locale: {
   //   languageId: 'english',

@@ -34,6 +34,7 @@ import {
     IP_ADDRESS
 } from '../../../constants/DeviceConstants';
 import { Button_Refresh } from '../../../constants/ButtonConstants';
+import { ADMIN } from '../../../constants/Constants';
 
 let make_red = 'captilize';
 
@@ -137,7 +138,8 @@ export default class DeviceSidebar extends Component {
             {
                 key: 7,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME))}:</a>),
-                value: (<span className="captilize"><a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a></span>)
+                value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN) ? <a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
+                // value: (<span className="captilize"><a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a></span>)
             },
             {
                 key: 8,

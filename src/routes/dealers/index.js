@@ -17,7 +17,7 @@ import styles from './dealers.css'
 
 
 import {
-    Appfilter_SearchDealer, Appfilter_ShowDealer
+    Appfilter_SearchDealer, Appfilter_ShowDealer, DEALER_PAGE_HEADING, S_Dealer_PAGE_HEADING
 } from '../../constants/AppFilterConstants';
 import {
     // ADMIN,
@@ -61,8 +61,11 @@ class Dealers extends Component {
 
     constructor(props) {
         super(props);
-        const columns = dealerColumns(props.translation, this.handleSearch);
+        var columns = dealerColumns(props.translation, this.handleSearch);
+
         this.state = {
+            sorterKey: '',
+            sortOrder: 'ascend',
             dealers: [],
             loading: false,
             visible: false,
@@ -80,6 +83,42 @@ class Dealers extends Component {
             expandedRowsKey: [],
         };
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    // handleTableChange = (pagination, query, sorter) => {
+    //     // console.log('check sorter func: ', sorter)
+    //     const sortOrder = sorter.order || "ascend";
+    //     this.setState({
+    //         sortOrder,
+    //         columns: dealerColumns(sortOrder, this.props.translation, this.handleSearch)
+    //     })
+    // };
+
+    handleTableChange = (pagination, query, sorter) => {
+        console.log('check sorter func: ', sorter)
+        let { columns } = this.state;
+
+        columns.forEach(column => {
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+                }
+            }
+        })
+        this.setState({
+            columns: columns
+        });
     }
 
     showAddDealer = () => {
@@ -439,13 +478,16 @@ class Dealers extends Component {
         // ADMIN,DEALER,SDEALER
         // console.log(this.props.location, 'location is the ')
         let dealerType;
+        let dealerHeadingType;
         const type = this.state.dealer_type;
         // if (type === ADMIN) {
         // dealerType = convertToLang(this.props.translation[Button_Add_Admin], Button_Add_Admin)}
         if (type === DEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_Dealer], "Add Dealer")
+            dealerHeadingType = convertToLang(this.props.translation[DEALER_PAGE_HEADING], "Dealers")
         } else if (type === SDEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_S_dealer], "Add S-dealer")
+            dealerHeadingType = convertToLang(this.props.translation[S_Dealer_PAGE_HEADING], "S-Dealers")
         }
         return (
 
@@ -497,10 +539,12 @@ class Dealers extends Component {
                                 testfunc={this.testfunc}
                                 addDealer={this.showAddDealer}
                                 translation={this.props.translation}
-                            //  toLink={"/create-dealer/" + this.state.dealer_type}
+                                //  toLink={"/create-dealer/" + this.state.dealer_type}
+                                pageHeading={dealerHeadingType}
 
                             />
                             <DealerList
+                                onChangeTableSorting={this.handleTableChange}
                                 columns={this.state.columns}
                                 dealersList={this.state.dealers}
                                 allDealers={this.state.allDealers.length}

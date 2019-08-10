@@ -8,7 +8,7 @@ import { BASE_URL } from '../../../constants/Application';
 import styles from './Applist.css';
 import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/PolicyConstants';
 import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
-import { DEVICE_IMEI_1, DEVICE_IMEI_2 } from '../../../constants/DeviceConstants';
+import { DEVICE_IMEI_1, DEVICE_IMEI_2, ACTIVITIES, DEVICE_ID } from '../../../constants/DeviceConstants';
 
 var coppyActivities = [];
 var status = true;
@@ -213,7 +213,7 @@ export default class Activity extends Component {
                 <Modal
                     maskClosable={false}
                     visible={visible}
-                    title={<div>Activities <br /> <span>Device ID: {(this.props.device.id) ? this.props.device.device_id : ''}</span></div>}
+                    title={<div>{convertToLang(this.props.translation[ACTIVITIES], "Activities")} <br /> <span>{convertToLang(this.props.translation[DEVICE_ID], "DEVICE ID: ")} {(this.props.device.id) ? this.props.device.device_id : ''}</span></div>}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     footer={null}

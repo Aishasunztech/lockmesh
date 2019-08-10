@@ -21,7 +21,7 @@ import {
 // import { stat } from "fs";
 import RestService from '../services/RestServices';
 import { message, Modal } from "antd";
-import io from 'socket.io-client';
+
 const success = Modal.success
 const error = Modal.error
 
@@ -31,7 +31,6 @@ const INIT_STATE = {
   loginFailedStatus: false,
   showMessage: false,
   initURL: '',
-  socket: io,
   isAllowed: false,
   isRequested: false,
   two_factor_auth: (localStorage.getItem('is_twoFactorAuth') === null) ? false : localStorage.getItem('is_twoFactorAuth'),
@@ -218,13 +217,12 @@ export default (state = INIT_STATE, action) => {
       }
     }
     case COMPONENT_ALLOWED: {
-      let socket = RestService.connectSocket(state.authUser.token);
 
       return {
         ...state,
         isAllowed: action.payload.ComponentAllowed,
         isRequested: true,
-        socket: socket,
+
         authUser: {
           id: action.payload.id,
           connected_dealer: action.payload.connected_dealer,

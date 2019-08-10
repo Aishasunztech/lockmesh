@@ -6,12 +6,11 @@ import {
     DEVICE_TRIAL, DEVICE_PRE_ACTIVATION, User_Name_require, Only_alpha_numeric, Not_valid_Email, Email, Name, Required_Email
 } from '../../../../constants/Constants';
 import { Button_Cancel, Button_submit, Button_Add } from '../../../../constants/ButtonConstants';
-import { Required_Fields, DEVICE_SIM_ID, DEVICE_Select_SIM_ID, ONLY_NUMBER_ARE_ALLOWED } from '../../../../constants/DeviceConstants';
+import { Required_Fields, DEVICE_SIM_ID, DEVICE_Select_SIM_ID, ONLY_NUMBER_ARE_ALLOWED, ICC_ID_20_LONG, ICC_ID, ICC_ID_IS_REQUIRED, NOTE } from '../../../../constants/DeviceConstants';
 import { Guest, ENCRYPT } from '../../../../constants/TabConstants';
 
 
-class AddUserForm extends Component {
-
+class RegisterSimForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,18 +29,17 @@ class AddUserForm extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log('iccid is: ', values['iccid'])
             // let checkICCID = this.isValidLuhn(values['iccid'])
-            values['guest'] = (this.state.guest) ? 1 : 0;
-            values['encrypt'] = (this.state.encrypt) ? 1 : 0;
+
+            values['guest'] = this.state.guest ? 1 : 0;
+            values['encrypt'] = this.state.encrypt ? 1 : 0;
             values['data_limit'] = "";
             values['device_id'] = this.props.deviceID;
-            // console.log('total dvc: ', this.props.total_dvc.length);
 
             if (!err) {
-                this.props.AddSimHandler(this.props.total_dvc.length, values);
+                this.props.AddSimHandler(values);
                 this.props.handleCancel();
                 this.handleReset();
             }
-
         });
     }
 
@@ -63,68 +61,50 @@ class AddUserForm extends Component {
 
     handleICCIDValidation = (rule, value, callback) => {
         if ((value !== undefined) && value.length > 0) {
-            if (Number(value)) {
-                if (value.length != 20) callback("ICC ID should be 20 number long");
+            // if (Number(value)) {
+                if (/^[a-zA-Z0-9]+$/.test(value)) {
+                if (value.length != 20) callback(`${convertToLang(this.props.translation[ICC_ID_20_LONG], "ICC ID should be 20 digits long")}  :(${value.length})`);
 
             } else {
-                callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
+                callback(convertToLang(this.props.translation[Only_alpha_numeric], "Please insert only alphabets and numbers"));
             }
         }
         callback();
     }
 
-
-    componentDidMount() {
-    }
     handleReset = () => {
         this.props.form.resetFields();
     }
-
-    // handleChecked = (e, name) => {
-    //     e.preventDefault();
-    //     this.setState({
-    //         name: !this.state.name
-    //     })
-    // }
-
 
     handleCancel = () => {
         this.handleReset();
         this.props.handleCancel();
     }
-    handleChange = (e) => {
-        this.setState({ type: e.target.value });
-    }
 
     render() {
-        console.log('props of coming', this.props.device);
-        //  alert(this.props.device.device_id);
-        const { visible, loading } = this.state;
         var deviceSimIds = [];
-        deviceSimIds[0] = this.props.device.sim_id // this.state.sim_ids;
-        console.log(deviceSimIds)
+        deviceSimIds[0] = this.props.device.sim_id;
+        // console.log(deviceSimIds)
         if (deviceSimIds[0] === undefined || deviceSimIds[0] === 'undefined' || deviceSimIds[0] === "N/A" || deviceSimIds[0] === '' || deviceSimIds[0] === null) {
             deviceSimIds = []
         }
-        console.log(deviceSimIds);
+        // console.log(deviceSimIds);
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} autoComplete="new-password">
                     <p>(*)-  {convertToLang(this.props.translation[Required_Fields], "Required Fields")} </p>
 
                     <Form.Item
-                        label="ICC-ID" // {convertToLang(this.props.translation[Name], "Name")}
+                        label={convertToLang(this.props.translation[ICC_ID], "ICC-ID")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
-                    // validateStatus={this.state.validateStatus}
-                    // help={this.state.iccidHelp}
                     >
                         {this.props.form.getFieldDecorator('iccid', {
                             initialValue: '',
                             rules: [
                                 {
                                     required: true,
-                                    message: "ICC-ID is Required",
+                                    message: convertToLang(this.props.translation[ICC_ID_IS_REQUIRED], "ICC-ID is Required"),
                                 },
                                 {
                                     validator: this.handleICCIDValidation,
@@ -136,11 +116,9 @@ class AddUserForm extends Component {
                     </Form.Item>
 
                     <Form.Item
-                        label="Name" // {convertToLang(this.props.translation[Name], "Name")}
+                        label={convertToLang(this.props.translation[Name], "Name")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
-                    // validateStatus={this.state.validateStatus}
-                    // help={this.state.help}
                     >
                         {this.props.form.getFieldDecorator('name', {
                             initialValue: '',
@@ -158,13 +136,11 @@ class AddUserForm extends Component {
                         label={convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
-                    // showSearch
                     >
                         {this.props.form.getFieldDecorator('sim_id', {
                             initialValue: '',
                         })(
                             <Select
-                                // showSearch
                                 placeholder={convertToLang(this.props.translation[DEVICE_Select_SIM_ID], "SIM ID")}
                                 optionFilterProp="children"
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -177,7 +153,7 @@ class AddUserForm extends Component {
                         )}
                     </Form.Item>
                     <Form.Item
-                        label="Note"
+                        label={convertToLang(this.props.translation[NOTE], "Note")}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 14 }}
                     >
@@ -198,7 +174,6 @@ class AddUserForm extends Component {
                                     guest: !this.state.guest
                                 })
                             }}
-                                //  checked={guest === 1 ? true : false} 
                                 size="small"
                             />
                         </Col>
@@ -208,7 +183,6 @@ class AddUserForm extends Component {
                                     encrypt: !this.state.encrypt
                                 })
                             }}
-                                // checked={encrypted === 1 ? true : false} 
                                 size="small"
                             />
                         </Col>
@@ -231,5 +205,5 @@ class AddUserForm extends Component {
     }
 }
 
-const WrappedAddDeviceForm = Form.create()(AddUserForm);
-export default WrappedAddDeviceForm;
+const WrappedRegisterSimForm = Form.create()(RegisterSimForm);
+export default WrappedRegisterSimForm;

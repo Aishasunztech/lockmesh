@@ -7,12 +7,13 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import PolicyInfo from './PolicyInfo';
 import { flagged } from '../../../appRedux/actions/ConnectDevice';
 import { ADMIN } from '../../../constants/Constants';
-import { convertToLang } from '../../utils/commonUtils';
+import { convertToLang, getFormattedDate } from '../../utils/commonUtils';
 import styles from './policy.css';
 import { Button_Save, Button_Yes, Button_No, Button_Edit, Button_Delete, Button_Save_Changes, Button_Cancel } from '../../../constants/ButtonConstants';
 import { POLICY } from '../../../constants/ActionTypes';
 import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION, EXPAND, POLICY_EXPAND } from '../../../constants/PolicyConstants';
 import { Tab_All } from '../../../constants/TabConstants';
+import moment from 'moment';
 
 const confirm = Modal.confirm;
 
@@ -176,11 +177,14 @@ class PolicyList extends Component {
                         disabled={(policy.status === 1 || policy.status === true) ? false : true}
                     />
                 ),
-
+                created_by: policy.created_by,
+                created_date: moment(policy.created_date).format("YYYY/MM/DD hh:mm:ss"),
+                last_edited: policy.last_edited ? moment(policy.last_edited).format("YYYY/MM/DD hh:mm:ss") : "N/A",
             }
         });
 
     }
+
     handleDefaultChange(e, policy_id) {
 
         let _this = this
@@ -195,6 +199,7 @@ class PolicyList extends Component {
 
         });
     }
+
     customExpandIcon(props) {
 
         if (props.expanded) {
@@ -235,6 +240,7 @@ class PolicyList extends Component {
             this.state.expandedByCustom[index] = false;
         });
     }
+
     componentWillReceiveProps(preProps) {
         if (preProps.policies.length !== this.props.policies.length) {
             this.props.policies.map((policy, index) => {
@@ -243,8 +249,14 @@ class PolicyList extends Component {
             });
         }
     }
+
     render() {
-        // console.log(this.state.expandedRowKeys, 'keys are')
+        // console.log(this.props.columns, 'keys are')
+        if (this.props.user.type === ADMIN) {
+            let index = this.props.columns.findIndex(k => k.dataIndex === 'default_policy');
+            this.props.columns[index].className = 'hide';
+            // this.props.columns[index].children[0].className = 'hide';
+        }
         return (
             <Fragment>
                 <Card className="fix_card policy_fix_card">
@@ -266,6 +278,7 @@ class PolicyList extends Component {
                                             <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], "Save Changes")} </Button>
                                             : false}
                                         <PolicyInfo
+                                            push_apps={this.props.push_apps}
                                             selected={this.state.expandTabSelected[record.rowKey]}
                                             policy={record}
                                             isSwitch={this.state.isSwitch && this.state[record.rowKey] == record.rowKey ? true : false}
@@ -290,10 +303,11 @@ class PolicyList extends Component {
                                 )
                             }}
                             // expandIconColumnIndex={1}         
-                            expandIconColumnIndex={2}
+                            expandIconColumnIndex={3}
                             expandedRowKeys={this.state.expandedRowKeys}
                             expandIconAsCell={false}
                             columns={this.props.columns}
+                            onChange={this.props.onChangeTableSorting}
                             dataSource={this.renderList(this.props.policies)}
                             pagination={false
                                 // { pageSize: this.state.pagination, size: "midddle" }
@@ -309,18 +323,4 @@ class PolicyList extends Component {
     }
 }
 
-// function mapDispatchToProps(dispatch) {
-//     return bindActionCreators({
-//         // getPolicies: getPolicies,
-//     }, dispatch);
-// }
-
-// var mapStateToProps = ({ policies }) => {
-//     // console.log("policies", policies);
-//     return {
-//         // routing: routing,
-//     };
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(PolicyList);
 export default PolicyList;
