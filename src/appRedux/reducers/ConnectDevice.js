@@ -1359,7 +1359,7 @@ export default (state = initialState, action) => {
         }
 
         case ACK_INSTALLED_APPS: {
-            console.log("add app in app_list")
+            // console.log("add app in app_list")
             let app_list = state.app_list;
             if (action.payload.status) {
                 action.payload.app_list.forEach((app) => {
