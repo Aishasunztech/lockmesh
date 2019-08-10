@@ -8,13 +8,24 @@ import { convertToLang } from '../../utils/commonUtils';
 
 
 const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
-    // console.log(props.selectedAppKeys);
-    return apk_list.map((app) => {
-        
+    let apps = [];
+    if (props.app_list) {
+        apk_list.forEach(apk => {
+            let index =props.app_list.findIndex((app)=> app.package_name === apk.package_name);
+            if(index === -1){
+                apps.push(apk);
+            }
+        });
+    } else {
+        apps = apk_list;
+    }
+
+    return apps.map((app) => {
+
         let isAvailable = selectedAppKeys !== undefined ? (selectedAppKeys.length) ? selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false : false;
         return {
-            key: (app.apk_id)? app.apk_id: 'N/A',
-            apk_id: (app.apk_id)? app.apk_id: 'N/A',
+            key: (app.apk_id) ? app.apk_id : 'N/A',
+            apk_id: (app.apk_id) ? app.apk_id : 'N/A',
             package_name: app.package_name,
             version_name: app.version_name,
             apk: app.apk ? app.apk : 'N/A',
@@ -54,46 +65,46 @@ const renderApps = (props, apk_list, isSwitchable, selectedAppKeys) => {
 
 const DealerApps = (props) => {
     let columns = [
-            {
-                title: convertToLang(props.translation[APK], "APK"),
-                dataIndex: 'apk',
-                key: 'apk',
-            },
-            {
-                title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
-                dataIndex: 'apk_name',
-                width: "100",
-                key: 'apk_name',
-                sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
-    
-                sortDirections: ['ascend', 'descend'],
-                // sortOrder:"ascend",
-                defaultSortOrder: "ascend"
-            },
-            {
-                title: convertToLang(props.translation[Guest], "GUEST"),
-                dataIndex: 'guest',
-                key: 'guest'
-            },
-            {
-                title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
-                dataIndex: 'encrypted',
-                key: 'encrypted'
-            },
-            {
-                title: convertToLang(props.translation[ENABLE], "ENABLE"),
-                dataIndex: 'enable',
-                key: 'enable'
-            },
-        ];
-    
+        {
+            title: convertToLang(props.translation[APK], "APK"),
+            dataIndex: 'apk',
+            key: 'apk',
+        },
+        {
+            title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
+            dataIndex: 'apk_name',
+            width: "100",
+            key: 'apk_name',
+            sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
+
+            sortDirections: ['ascend', 'descend'],
+            // sortOrder:"ascend",
+            defaultSortOrder: "ascend"
+        },
+        {
+            title: convertToLang(props.translation[Guest], "GUEST"),
+            dataIndex: 'guest',
+            key: 'guest'
+        },
+        {
+            title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
+            dataIndex: 'encrypted',
+            key: 'encrypted'
+        },
+        {
+            title: convertToLang(props.translation[ENABLE], "ENABLE"),
+            dataIndex: 'enable',
+            key: 'enable'
+        },
+    ];
+
     const rowSelection = {
         onChange: props.onPushAppsSelection,
         selectionColumnIndex: 1,
         selectedRowKeys: props.selectedAppKeys,
 
     };
-    
+
     return (
         <Fragment>
             <Table

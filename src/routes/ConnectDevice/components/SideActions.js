@@ -156,6 +156,7 @@ const PushAppsModal = (props) => {
         >
             <DealerApps
                 apk_list={props.apk_list}
+                app_list={props.app_list}
                 onPushAppsSelection={props.onPushAppsSelection}
                 isSwitchable={true}
                 selectedApps={props.selectedPushApps}
@@ -270,7 +271,6 @@ const PullAppsModal = (props) => {
 
 
 const SelectedPullApps = (props) => {
-    console.log("selected pull apps modal", props);
     return (
         <Modal
             maskClosable={false}
@@ -516,10 +516,10 @@ class SideActions extends Component {
             onOk() {
                 // console.log('OK');
                 _this.props.transferDeviceProfile(obj);
-                    // {
-                    //     reqDevice: device,
-                    //     flagged_device: _this.props.device_details,
-                    // }
+                // {
+                //     reqDevice: device,
+                //     flagged_device: _this.props.device_details,
+                // }
                 _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
 
             },
@@ -848,8 +848,8 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                {/* <Tooltip title="Coming Soon"> */}
-                                {/* <Button
+                                <Tooltip title="Coming Soon">
+                                    {/* <Button
                                     type="default"
                                     onClick={() => this.handleTransfer()}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
@@ -858,9 +858,11 @@ class SideActions extends Component {
                                     <Icon type="swap" />
                                     {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
 
-                                {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
-                                <Button type="default" onClick={() => this.handleTransferHistoryModal(true)} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
-                                {/* </Tooltip> */}
+                                    {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
+                                    <Button type="default"  
+                                    // onClick={() => this.handleTransferHistoryModal(true)} 
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
+                                </Tooltip>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
@@ -1082,6 +1084,8 @@ class SideActions extends Component {
                     showPushAppsModal={this.props.showPushAppsModal}
                     handleComponentSearch={this.handleComponentSearch}
                     apk_list={this.state.apk_list}
+                    // app list props is added because push apps will not show installed apps again to push
+                    app_list={this.props.app_list}
                     onPushAppsSelection={this.onPushAppsSelection}
                     selectedPushAppKeys={this.state.selectedPushAppKeys}
                     showSelectedPushAppsModal={this.showSelectedPushAppsModal}

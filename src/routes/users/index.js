@@ -99,9 +99,9 @@ class Users extends Component {
                 }
             }
         })
-        this.setState({ 
+        this.setState({
             columns: columns
-         });
+        });
     }
 
     componentDidMount() {
@@ -141,9 +141,9 @@ class Users extends Component {
             })
         }
         if (this.props.translation !== prevProps.translation) {
-            this.setState({ 
+            this.setState({
                 columns: usersColumns(this.props.translation, this.handleSearch)
-             });
+            });
         }
     }
 
@@ -316,6 +316,7 @@ class Users extends Component {
                     // selectedOptions={this.props.selectedOptions}
                     // options={this.state.options}
                     isAddButton={this.props.user.type !== ADMIN}
+                    isAddUserButton={true}
                     // AddPolicyModel={true}
                     handleUserModal={this.handleUserModal}
                     handleCheckChange={this.handleCheckChange}
@@ -338,6 +339,7 @@ class Users extends Component {
                     ref="userList"
                     consoled={this.consoled}
                     translation={this.props.translation}
+                    user={this.props.user}
                 />
                 {/* <UserList/> */}
             </Fragment>

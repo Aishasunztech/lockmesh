@@ -28,6 +28,7 @@ import {
     DEVICE_TRIAL,
     DEVICE_TRANSFERED,
     DEVICE_FLAGGED,
+    DEALER,
 } from '../../constants/Constants'
 
 import {
@@ -864,6 +865,13 @@ class Devices extends Component {
 
 
     render() {
+        let type = this.props.user.type
+        let styleType = {};
+        if (type === ADMIN) {
+            styleType = "devices_fix_card_admin"
+        } else {
+            styleType = "devices_fix_card_dealer"
+        }
         // console.log(this.props.selectedOptions, 'props are the ')
         return (
             <Fragment>
@@ -925,6 +933,7 @@ class Devices extends Component {
                                 unflagged={this.props.unflagged}
                                 translation={this.state.translation}
                                 unlinkDevice={this.props.unlinkDevice}
+                                styleType={styleType}
                             />
                             <ShowMsg
                                 msg={this.props.msg}

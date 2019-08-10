@@ -17,6 +17,7 @@ import {
 
 import styles from './user.css';
 import { EDIT_USER, DELETE_USER, DO_YOU_WANT_TO_DELETE_USER, UNDO, DO_YOU_WANT_TO_UNDO_USER } from '../../../constants/UserConstants';
+import { ADMIN } from '../../../constants/Constants';
 
 const confirm = Modal.confirm
 
@@ -153,10 +154,17 @@ class UserList extends Component {
         }
     }
     render() {
+        let type = this.props.user.type
+        let styleType = "";
+        if (type === ADMIN) {
+            styleType = "users_fix_card_admin"
+        } else {
+            styleType = "users_fix_card_dealer"
+        }
         // console.log(this.state.expandedRowKeys)
         return (
             <Fragment>
-                <Card className="fix_card users_fix_card">
+                <Card className={`fix_card ${styleType}`}>
                     <hr className="fix_header_border" style={{ top: "59px" }} />
                     <CustomScrollbars className="gx-popover-scroll">
                         <Table

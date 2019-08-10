@@ -4,14 +4,22 @@ import io from "socket.io-client";
 
 const RestService = {
     // Login
-    connectSocket: (token) => {
+    connectSocket: () => {
+        let token = localStorage.getItem('token');
         let makeToken = "token=" + token + "&isWeb=true";
         let socket = io.connect(BASE_URL, {
             query: makeToken,
             // reconnectionDelay:1000,
             // reconnection:true,
             // forceNew:true
+            secure: true
         });
+
+        // console.log('check 1', socket.connected);
+        // socket.on('connect', function() {
+        //     console.log('check 2', socket.connected);
+        // });
+        
         return socket;
     },
     login: (user) => {
