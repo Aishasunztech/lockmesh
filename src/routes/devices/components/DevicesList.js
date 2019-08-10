@@ -198,7 +198,7 @@ class DevicesList extends Component {
                 // sortOrder: {order},
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-                key: status == DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.id}` : device.id,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
