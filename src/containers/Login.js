@@ -78,7 +78,16 @@ class Login extends React.Component {
       // }
     }
   }
+  checkCapsLock = (e) => {
+    let isCapsLock = e.getModifierState('CapsLock');
+    let element = document.getElementById("text")
+    if (isCapsLock) {
+      element.style.display = "block"
+    } else {
+      element.style.display = "none"
+    }
 
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { showMessage, loader, alertMessage } = this.props;
@@ -125,16 +134,18 @@ class Login extends React.Component {
                       }
                     ]
                   })(<Input.Password
-                    id="password" type="password" placeholder="Password"
+                    type="password" placeholder="Password"
+                    onKeyUp={(e) => {
+                      this.checkCapsLock(e);
+                    }}
                   />)}
                 </FormItem>
-
+                <p id="text" style={{ display: 'none', color: 'red', margin: 0, padding: 0 }}>NOTE: Your CapsLock key is currently turned on</p>
                 <FormItem>
                   <Button type="primary" className="gx-mb-0" htmlType="submit">
                     {convertToLang(this.props.translation[SIGN_IN], "SIGN IN")}
                     {/* <IntlMessages id="app.userAuth.signIn" /> */}
                   </Button>
-                  <p style={{ display: 'none', color: 'red' }} id="text">WARNING! Caps lock is ON.</p>
                 </FormItem>
               </Form>
             </div>
