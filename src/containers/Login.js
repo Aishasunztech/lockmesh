@@ -10,6 +10,10 @@ import { APP_TITLE } from "../constants/Application";
 
 const FormItem = Form.Item;
 var LoginExp = true;
+var capsLockEnabled = null;
+
+
+
 class Login extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
@@ -21,7 +25,12 @@ class Login extends React.Component {
     });
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+
+
+
+
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.showMessage) {
@@ -75,6 +84,7 @@ class Login extends React.Component {
     const { showMessage, loader, alertMessage } = this.props;
 
     return (
+
       <div className="gx-app-login-wrap">
         <div className="gx-app-login-container">
           <div className="gx-app-login-main-content">
@@ -114,7 +124,9 @@ class Login extends React.Component {
                         message: "You forgot to enter your password"
                       }
                     ]
-                  })(<Input type="password" placeholder="Password" />)}
+                  })(<Input.Password
+                    id="password" type="password" placeholder="Password"
+                  />)}
                 </FormItem>
 
                 <FormItem>
@@ -122,6 +134,7 @@ class Login extends React.Component {
                     {convertToLang(this.props.translation[SIGN_IN], "SIGN IN")}
                     {/* <IntlMessages id="app.userAuth.signIn" /> */}
                   </Button>
+                  <p style={{ display: 'none', color: 'red' }} id="text">WARNING! Caps lock is ON.</p>
                 </FormItem>
               </Form>
             </div>
