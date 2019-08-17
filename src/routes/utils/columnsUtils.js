@@ -150,7 +150,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="validity"
                     id="validity"
                     className="search_heading remaning_days_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_REMAINING_DAYS], "REMAINING DAYS")}
                 // onBlur={(e) => { console.log(e);; e.target.value = ''; }}
@@ -177,7 +177,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="device_id"
                     id="device_id"
                     className="search_heading device_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_ID], "DEVICE ID")}
                 // onBlur={(e) => { e.target.value = '' }}
@@ -206,7 +206,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="user_id"
                     id="user_id"
                     className="search_heading user_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_ID], "USER ID")}
                 // onBlur={(e) => { e.target.value = '' }}
@@ -233,7 +233,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="transfered_to"
                     id="transfered_to"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder="TRANSFERED TO" //{convertToLang(translation[USER_ID], "USER ID")}
                 // onBlur={(e) => { e.target.value = '' }}
@@ -260,7 +260,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="status"
                     id="status"
                     className="search_heading status_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_STATUS], "STATUS")}
                 // onBlur={(e) => { e.target.value = '' }}
@@ -285,7 +285,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="online"
                     id="online"
                     className="search_heading online_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MODE], "MODE")}
                 />
@@ -309,7 +309,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="type"
                     id="type"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_TYPE], "TYPE")}
                 />
@@ -333,7 +333,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="version"
                     id="version"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_VERSION], "VERSION")}
                 />
@@ -357,7 +357,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="flagged"
                     id="flagged"
                     className="search_heading flagged_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_FLAGGED], "FLAGGED")}
                 />
@@ -381,7 +381,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="name"
                     id="name"
                     className="search_heading name_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_NAME], "NAME")}
                 />
@@ -409,7 +409,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="account_email"
                     id="account_email"
                     className="search_heading account_email_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_ACCOUNT_EMAIL], "ACCOUNT EMAIL")}
                 />
@@ -433,7 +433,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="activation_code"
                     id="activation_code"
                     className="search_heading activation_code_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_ACTIVATION_CODE], "ACTIVATION CODE")}
                 />
@@ -457,7 +457,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="client_id"
                     id="client_id"
                     className="search_heading client_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_CLIENT_ID], "CLIENT ID")}
                 />
@@ -481,7 +481,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="pgp_email"
                     id="pgp_email"
                     className="search_heading pgp_email_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_PGP_EMAIL], "PGP EMAIL")}
                 />
@@ -504,7 +504,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="sim_id"
                     id="sim_id"
                     className="search_heading sim_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_ID], "SIM ID")}
                 />
@@ -528,7 +528,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="chat_id"
                     id="chat_id"
                     className="search_heading chat_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_CHAT_ID], "CHAT ID")}
                 />
@@ -553,7 +553,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="dealer_id"
                     id="dealer_id"
                     className="search_heading dealer_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_ID], "DEALER ID")}
                 />
@@ -577,7 +577,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="dealer_name"
                     id="dealer_name"
                     className="search_heading dealer_name_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_NAME], "DEALER NAME")}
                 />
@@ -603,7 +603,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="link_code"
                     id="link_code"
                     className="search_heading dealer_pin_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN")}
                 />
@@ -627,7 +627,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="mac_address"
                     id="mac_address"
                     className="search_heading mac_address_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MAC_ADDRESS], "MAC ADDRESS")}
                 />
@@ -653,7 +653,7 @@ export function devicesColumns(translation, handleSearch) {
                     id="imei"
                     className="search_heading imei_1_w"
                     autoComplete="new-password"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     placeholder={convertToLang(translation[DEVICE_IMEI_1], "IMEI 1")}
                 />
             ),
@@ -676,7 +676,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="simno"
                     id="simno"
                     className="search_heading sim_1_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_1], "SIM 1")}
                 />
@@ -701,7 +701,7 @@ export function devicesColumns(translation, handleSearch) {
                     id="imei2"
                     className="search_heading imei_2_w"
                     autoComplete="new-password"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     placeholder={convertToLang(translation[DEVICE_IMEI_2], "IMEI 2")}
                 />
             ),
@@ -724,7 +724,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="simno2"
                     id="simno2"
                     className="search_heading sim_2_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SIM_2], "SIM 2")}
                 />
@@ -748,7 +748,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="serial_number"
                     id="serial_number"
                     className="search_heading serial_number_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_SERIAL_NUMBER], "SERIAL NUMBER")}
                 />
@@ -773,7 +773,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="model"
                     id="model"
                     className="search_heading model_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_MODEL], "MODEL")}
                 />
@@ -798,7 +798,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="s_dealer"
                     id="s_dealer"
                     className="search_heading s_dealer_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_S_DEALER], "S DEALER")}
                 />
@@ -822,7 +822,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="s_dealer_name"
                     id="s_dealer_name"
                     className="search_heading s_dealer_name_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_S_DEALER_NAME], "S DEALER NAME")}
                 />
@@ -845,7 +845,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="start_date"
                     id="start_date"
                     className="search_heading start_date_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_START_DATE], "START DATE")}
                 />
@@ -868,7 +868,7 @@ export function devicesColumns(translation, handleSearch) {
                     key="expiry_date"
                     id="expiry_date"
                     className="search_heading expiry_date_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE")}
                 />
@@ -911,7 +911,7 @@ export function usersColumns(translation, handleSearch) {
                     key="user_id"
                     id="user_id"
                     className="search_heading user_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_ID], "USER ID")}
                 />
@@ -940,7 +940,7 @@ export function usersColumns(translation, handleSearch) {
                         id="device_id"
                         className="search_heading device_id_w"
                         autoComplete="new-password"
-                        onKeyUp={handleSearch}
+                        onChange={handleSearch}
                         placeholder={convertToLang(translation[DEVICE_ID], "DEVICE ID")}
                     />
                 </div>
@@ -977,7 +977,7 @@ export function usersColumns(translation, handleSearch) {
                     key="user_name"
                     id="user_name"
                     className="search_heading user_name_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_NAME], "NAME")}
                 />
@@ -1000,7 +1000,7 @@ export function usersColumns(translation, handleSearch) {
                     key="email"
                     id="email"
                     className="search_heading email_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_EMAIL], "EMAIL")}
                 />
@@ -1030,7 +1030,7 @@ export function usersColumns(translation, handleSearch) {
                     key="created_at"
                     id="created_at"
                     className="search_heading created_at_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_DATE_REGISTERED], "DATE REGISTERED")}
                 />
@@ -1068,7 +1068,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     key="activation_code"
                     id="activation_code"
                     className="search_heading activation_code_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_ACTIVATION_CODE], "ACTIVATION CODE"))}
                 />
@@ -1091,7 +1091,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     key="link_code"
                     id="link_code"
                     className="search_heading link_code_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_DEALER_PIN], "DEALER PIN"))}
                 />
@@ -1115,7 +1115,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     key="device_id"
                     id="device_id"
                     className="search_heading device_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_ID], "DEVICE ID"))}
                 />
@@ -1139,7 +1139,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     key="status"
                     id="status"
                     className="search_heading status_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_STATUS], "STATUS"))}
                 />
@@ -1164,7 +1164,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     key="expiry_date"
                     id="expiry_date"
                     className="search_heading expiry_date_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"))}
                 />
@@ -1188,7 +1188,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     key="pgp_email"
                     id="pgp_email"
                     className="search_heading pgp_email_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_PGP_EMAIL], "PGP EMAIL"))}
                 />
@@ -1210,7 +1210,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     key="chat_id"
                     id="chat_id"
                     className="search_heading chat_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_CHAT_ID], "CHAT ID"))}
                 />
@@ -1234,7 +1234,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     key="sim_id"
                     id="sim_id"
                     className="search_heading sim_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_SIM_ID], "SIM ID"))}
                 />
@@ -1259,7 +1259,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     className="search_heading imei_w"
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_IMEI_1], "IMEI 1"))}
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                 />
             ),
             dataIndex: 'imei_1',
@@ -1282,7 +1282,7 @@ export function userDevicesListColumns(translation, handleSearch) {
                     className="search_heading imei2_w"
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEVICE_IMEI_2], "IMEI 2"))}
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                 />
             ),
             dataIndex: 'imei_2',
@@ -1322,7 +1322,7 @@ export function dealerColumns(translation, handleSearch) {
                 id="connected_devices"
                 className="search_heading"
                 autoComplete="new-password"
-                onKeyUp={handleSearch}
+                onChange={handleSearch}
                 placeholder={convertToLang(translation[DEALER_DEVICES], "DEVICES")}
 
             />
@@ -1350,7 +1350,7 @@ export function dealerColumns(translation, handleSearch) {
                 className="search_heading"
                 autoComplete="new-password"
                 placeholder={convertToLang(translation[DEALER_ID], "DEALER ID")}
-                onKeyUp={handleSearch}
+                onChange={handleSearch}
 
             />
         ),
@@ -1376,7 +1376,7 @@ export function dealerColumns(translation, handleSearch) {
                 className="search_heading"
                 autoComplete="new-password"
                 placeholder={convertToLang(translation[DEALER_PIN], "DEALER PIN")}
-                onKeyUp={handleSearch}
+                onChange={handleSearch}
 
             />
         ),
@@ -1403,7 +1403,7 @@ export function dealerColumns(translation, handleSearch) {
                 className="search_heading"
                 autoComplete="new-password"
                 placeholder={convertToLang(translation[DEALER_NAME], "DEALER NAME")}
-                onKeyUp={handleSearch}
+                onChange={handleSearch}
 
             />
         ),
@@ -1430,7 +1430,7 @@ export function dealerColumns(translation, handleSearch) {
                 className="search_heading"
                 autoComplete="new-password"
                 placeholder={convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL")}
-                onKeyUp={handleSearch}
+                onChange={handleSearch}
 
             />
         ),
@@ -1465,7 +1465,7 @@ export function dealerColumns(translation, handleSearch) {
                 className="search_heading"
                 autoComplete="new-password"
                 placeholder={convertToLang(translation[DEALER_TOKENS], "TOKENS")}
-                onKeyUp={handleSearch}
+                onChange={handleSearch}
 
             />
         ),
@@ -1500,7 +1500,7 @@ export function sDealerColumns(translation, handleSearch) {
                     className="search_heading"
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[Parent_Dealer], "PARENT DEALER")}
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                 />
             ),
             dataIndex: 'parent_dealer',
@@ -1530,7 +1530,7 @@ export function sDealerColumns(translation, handleSearch) {
                     className="search_heading"
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[Parent_Dealer_ID], "Parent Dealer ID")}
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                 />
             ),
             dataIndex: 'parent_dealer_id',
@@ -1562,7 +1562,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
                     className="search_heading"
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEALER_ID], "DEALER ID"))}
-                    onKeyUp={
+                    onChange={
                         (e) => {
                             callBack(e)
                         }
@@ -1583,7 +1583,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
                     className="search_heading"
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEALER_PIN], "DEALER PIN"))}
-                    onKeyUp={
+                    onChange={
                         (e) => {
                             callBack(e)
                         }
@@ -1604,7 +1604,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
                     className="search_heading"
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEALER_NAME], "DEALER NAME"))}
-                    onKeyUp={
+                    onChange={
                         (e) => {
                             callBack(e)
                         }
@@ -1625,7 +1625,7 @@ export function dealerColsWithSearch(translation, searchBar = false, callBack = 
                     className="search_heading"
                     autoComplete="new-password"
                     placeholder={titleCase(convertToLang(translation[DEALER_EMAIL], "DEALER EMAIL"))}
-                    onKeyUp={
+                    onChange={
                         (e) => {
                             callBack(e)
                         }
@@ -1893,7 +1893,7 @@ export function policyColumns(translation, handleSearch) {
                     key="policy_name"
                     id="policy_name"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[POLICY_NAME], "POLICY NAME")}
                 />
@@ -1919,7 +1919,7 @@ export function policyColumns(translation, handleSearch) {
                     key="command_name"
                     id="command_name"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[POLICY_COMMAND], "POLICY COMMAND")}
                 />
@@ -1946,7 +1946,7 @@ export function policyColumns(translation, handleSearch) {
                     key="policy_note"
                     id="policy_note"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[POLICY_NOTE], "POLICY NOTE")}
                 />
@@ -1982,7 +1982,7 @@ export function policyColumns(translation, handleSearch) {
                     key="created_by"
                     id="created_by"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[""], "CREATED BY")}
                 />
@@ -2010,7 +2010,7 @@ export function policyColumns(translation, handleSearch) {
                     key="created_date"
                     id="created_date"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[""], "CREATED DATE")}
                 />
@@ -2038,7 +2038,7 @@ export function policyColumns(translation, handleSearch) {
                     key="last_edited"
                     id="last_edited"
                     className="search_heading"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[""], "LAST EDIT")}
                 />
@@ -2242,7 +2242,7 @@ export function dealerAgentColumns(translation, handleSearch) {
                         id="name"
                         className="search_heading device_id_w"
                         autoComplete="new-password"
-                        onKeyUp={handleSearch}
+                        onChange={handleSearch}
                         placeholder={convertToLang(translation['USERNAME'], "USERNAME")}
                     />
                 </div>
@@ -2270,7 +2270,7 @@ export function dealerAgentColumns(translation, handleSearch) {
                     key="staff_id"
                     id="staff_id"
                     className="search_heading user_id_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation["STAFF ID"], "STAFF ID")}
                 />
@@ -2299,7 +2299,7 @@ export function dealerAgentColumns(translation, handleSearch) {
                     key="type"
                     id="type"
                     className="search_heading user_name_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation["PERMISSION"], "PERMISSION")}
                 />
@@ -2333,7 +2333,7 @@ export function dealerAgentColumns(translation, handleSearch) {
                     key="email"
                     id="email"
                     className="search_heading email_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation[USER_EMAIL], "EMAIL")}
                 />
@@ -2357,7 +2357,7 @@ export function dealerAgentColumns(translation, handleSearch) {
                     key="created_at"
                     id="created_at"
                     className="search_heading created_at_w"
-                    onKeyUp={handleSearch}
+                    onChange={handleSearch}
                     autoComplete="new-password"
                     placeholder={convertToLang(translation['DATE.CREATED'], "DATE CREATED")}
                 />
