@@ -838,7 +838,32 @@ export function devicesColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
-        }, {
+        },
+        {
+            title: (
+                <Input.Search
+                    name="remainTermDays"
+                    key="remainTermDays"
+                    id="remainTermDays"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "REMAINING TERM DAYS")}
+                />
+            ),
+            dataIndex: 'remainTermDays',
+            children: [
+                {
+                    title: convertToLang(translation[""], "REMAINING TERM DAYS"),
+                    align: "center",
+                    dataIndex: 'remainTermDays',
+                    key: 'remainTermDays',
+                    sorter: (a, b) => { return a.remainTermDays - b.remainTermDays },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
             title: (
                 <Input.Search
                     name="start_date"
@@ -861,7 +886,8 @@ export function devicesColumns(translation, handleSearch) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
-        }, {
+        },
+        {
             title: (
                 <Input.Search
                     name="expiry_date"
@@ -1753,7 +1779,7 @@ export function mobileManagePasswords(translation) {
         },
         {
             pageName: DURESS_PASSWORD,
-            value: convertToLang(translation[SET_DURESS_PASSWORD], "Set Duress Password")
+            value: convertToLang(translation[""], "Reset Duress Password")
         },
 
         {
@@ -2257,7 +2283,7 @@ export function dealerAgentColumns(translation, handleSearch) {
                     key: "name",
                     className: 'row device_id_w_td',
                     onFilter: (value, record) => record.devices.indexOf(value) === 0,
-                    sorter: (a, b) => {return a.name.localeCompare(b.name) },
+                    sorter: (a, b) => { return a.name.localeCompare(b.name) },
                     // sortDirections: ['ascend', 'descend'],
                 }
             ],
@@ -2290,7 +2316,7 @@ export function dealerAgentColumns(translation, handleSearch) {
                 }
             ],
         },
-        
+
         // permission
         {
             title: (
@@ -2349,7 +2375,7 @@ export function dealerAgentColumns(translation, handleSearch) {
                 sortDirections: ['ascend', 'descend'],
             }]
         },
-        
+
         {
             title: (
                 <Input.Search

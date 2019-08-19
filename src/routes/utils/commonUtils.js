@@ -26,6 +26,7 @@ import { Input } from 'antd';
 import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../constants/DeviceConstants';
 
 import { cloneableGenerator } from 'redux-saga/utils';
+import moment from 'moment';
 
 
 export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
@@ -192,6 +193,12 @@ export function checkRemainDays(createDate, validity) {
 
   if (days > 0) return days; else if (days <= 0) return "Expired"; else return "Not Announced";
 }
+export function checkRemainTermDays(createDate, endDate) {
+  let startDate = moment()
+  let lastDate = moment(endDate)
+  console.log(lastDate - startDate);
+  return lastDate.diff(startDate, "days")
+}
 
 export function isBase64(str) {
   if (str === '' || str.trim() === '') { return false; }
@@ -208,7 +215,7 @@ export function convertToLang(lngWord, constant) {
     return lngWord;
   } else if (constant !== undefined && constant !== '' && constant !== null) {
     return constant;
-  } else { 
-    return "N/A"; 
+  } else {
+    return "N/A";
   }
 }

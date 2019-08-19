@@ -31,12 +31,9 @@ import {
     Appfilter_Export
 } from '../../../constants/AppFilterConstants';
 
-import { exportCSV } from '../../../appRedux/actions/Account'
+import { exportCSV, resyncIds } from '../../../appRedux/actions/Account'
 
 import {
-    // getSimIDs,
-    // getChatIDs,
-    // getPGPEmails,
     getAllSimIDs,
     getAllChatIDs,
     getAllPGPEmails,
@@ -351,9 +348,6 @@ class ManageData extends Component {
 
 
     componentDidMount() {
-        // this.props.getSimIDs();
-        // this.props.getPGPEmails();
-        // this.props.getChatIDs();
 
         this.props.getAllSimIDs();
         this.props.getAllPGPEmails();
@@ -498,7 +492,15 @@ class ManageData extends Component {
         // this.handleCheckChange(this.props.selectedOptions)
 
     }
+    resyncIds = () => {
+        this.props.getAllSimIDs();
+        this.props.getAllPGPEmails();
+        this.props.getAllChatIDs();
+        setTimeout(() => {
+            this.props.resyncIds()
+        }, 1000);
 
+    }
 
     render() {
         const Search = Input.Search;
@@ -516,24 +518,6 @@ class ManageData extends Component {
                                     <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
                                         <span className="font_26"> {convertToLang(this.props.translation[MANAGE_DATA], "MANAGE DATA")} </span>
                                     </Col>
-
-                                    {/* <Col className="col-md-2 col-sm-6 col-xs-12">
-                            <div className="m_m-t-16">
-                                <Select
-                                    value="Import"
-                                    //  defaultValue={this.state.DisplayPages}
-                                    style={{ width: '100%' }}
-                                    // onSelect={value => this.setState({DisplayPages:value})}
-                                    // onChange={value => this.handlePagination(value)}
-                                >
-                                    <Select.Option value="10" >10</Select.Option>
-                                    <Select.Option value="20">20</Select.Option>
-                                    <Select.Option value="30">30</Select.Option>
-                                    <Select.Option value="50">50</Select.Option>
-                                    <Select.Option value="100">100</Select.Option>
-                                </Select>
-                            </div>
-                        </Col> */}
                                     <Col className="col-md-2 col-sm-6 col-xs-6">
                                         <div className="m_mt-16">
                                             <Select
@@ -566,34 +550,26 @@ class ManageData extends Component {
                                             </Select>
                                         </div>
                                     </Col>
-                                    <Col className="col-md-4 col-sm-6 col-xs-12 m_mt-16">
+                                    <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
                                         <Search
                                             placeholder={convertToLang(this.props.translation[Appfilter_SearchManageData], "Search")}
                                             onChange={e => this.handleComponentSearch(e.target.value)}
                                             style={{ width: '100%' }}
                                         />
                                     </Col>
+                                    <Col className="col-md-2 col-sm-6 col-xs-6 m_mt-16">
+                                        <div className="">
+                                            <Button
+                                                type="primary"
+                                                style={{ width: '100%' }}
+                                                onClick={() => this.resyncIds()}
+                                            >
+                                                REFRESH ID'S DATA
+                                            </Button>
+                                        </div>
+                                    </Col>
                                 </Row>
                             </Card>
-                            {/* <AppFilter
-                                handleFilterOptions={this.handleFilterOptions}
-                                searchPlaceholder="Search Dealer"
-                                defaultPagingValue={this.props.DisplayPages}
-                                // addButtonText={"Add " + this.state.dealer_type}
-                                // selectedOptions={this.props.selectedOptions}
-                                options={this.state.options}
-                                // isAddButton={true}
-                                // dealer_type={this.state.dealer_type}
-                                displayOptions={
-                                    [
-                                        { label: 'Thing 1', value: 1 },
-                                        { label: 'Thing 2', value: 2 },
-                                    ]
-                                }
-                                handleCheckChange={this.handleCheckChange}
-                                handlePagination={this.handlePagination}
-                                handleComponentSearch={this.handleComponentSearch}
-                            /> */}
                             <AccountList
                                 whiteLables={this.state.whiteLables}
                                 columns={this.state.columns}
@@ -686,13 +662,11 @@ var mapStateToProps = (state) => {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        // getSimIDs: getSimIDs,
-        // getChatIDs: getChatIDs,
-        // getPGPEmails: getPGPEmails,
         getAllSimIDs: getAllSimIDs,
         getAllChatIDs: getAllChatIDs,
         getAllPGPEmails: getAllPGPEmails,
         exportCSV: exportCSV,
+        resyncIds: resyncIds
     }, dispatch);
 }
 
