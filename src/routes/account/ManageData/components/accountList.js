@@ -55,7 +55,7 @@ class AccountList extends Component {
     renderList(list) {
         data = [];
         if (this.props.tabselect !== 'all') {
-            list = list.filter(e => e.used === this.props.tabselect);
+            list = list.filter(e => e.used == this.props.tabselect);
         }
         list.map((item, index) => {
             // let label;
@@ -114,7 +114,7 @@ export default class Tab extends Component {
         this.state = {
             dataList: this.props.dataList,
             tabselect: this.props.tabselect,
-            selectedOptions: this.props.selectedOptions,
+            // selectedOptions: this.props.selectedOptions,
             // innerTabSelect: this.props.innerTabSelect
 
         }
@@ -136,13 +136,13 @@ export default class Tab extends Component {
                 columns: this.props.columns,
                 tabselect: this.props.tabselect,
                 // innerTabSelect: this.props.innerTabSelect,
-                selectedOptions: this.props.selectedOptions
+                // selectedOptions: this.props.selectedOptions
             })
         }
     }
 
     render() {
-        // console.log(this.props.whiteLables);
+        // console.log(this.state.dataList);
         return (
             <Fragment>
                 <Tabs defaultActiveKey="all" type='card' className="dev_tabs dev_tabs1" activeKey={this.state.tabselect} onChange={this.callback}>

@@ -152,7 +152,7 @@ class DevicesList extends Component {
 
             //  console.log(this.props.user.type, 'lkslkdflk');
             // const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
-            // const device_status =  "SUSPEND";
+            // const device_status =  "SUSPEND"; 
 
             var status = device.finalStatus;
             const button_type = (status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ? "danger" : "dashed";
@@ -186,7 +186,7 @@ class DevicesList extends Component {
                 size="small"
                 style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }}
                 onClick={() => { (device.finalStatus == "Transfered") ? this.props.unlinkConfirm(device) : this.props.unflagConfirm(device) }}
-            // disabled={(device.finalStatus == "Transfered") ? true : false}
+                disabled={(device.finalStatus == "Transfered") ? true : false}
             >{convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG")} </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
@@ -198,7 +198,7 @@ class DevicesList extends Component {
                 // sortOrder: {order},
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.id}` : device.id,
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
@@ -786,7 +786,7 @@ export default class Tab extends Component {
             okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
             cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk() {
-                _this.props.unlinkDevice(device)
+                // _this.props.unlinkDevice(device)
                 // console.log('OK');
             },
             onCancel() {

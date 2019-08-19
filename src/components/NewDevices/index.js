@@ -283,7 +283,7 @@ export default class NewDevices extends Component {
                                 style={{ marginTop: 20 }}
                                 dataSource={this.renderList(flaggedDevices, true)}
                                 pagination={false}
-
+                                scroll={{ x: true }}
                             />
                         </Fragment>
 

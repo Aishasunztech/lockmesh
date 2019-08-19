@@ -409,7 +409,7 @@ export default class ListApk extends Component {
                     <UpdateFeatureApk ref='updateFeatureApk' getApkList={this.props.getApkList} />
                     {/* </CustomScrollbars> */}
                 </Card>
-                <Card style={{ height: 300 }} >
+                <Card className="apk_list_card" style={{ height: 300 }} >
                     <hr className="fix_header_border" style={{ top: "15px" }} />
                     <CustomScrollbars className="gx-popover-scroll">
                         <Table

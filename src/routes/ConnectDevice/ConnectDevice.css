@@ -211,6 +211,7 @@ th.device_info {
     margin: 0 auto;
     /* display: inline-block; */
     text-align: center;
+    white-space: normal;
 }
 
 .line_break {
