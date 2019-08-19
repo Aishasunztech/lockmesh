@@ -1,15 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Button, Form, Input } from "antd";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { 
+import {
     submitPassword
 } from "../../../appRedux/actions/ConnectDevice"
 import styles from "./password.css";
 import { convertToLang } from '../../utils/commonUtils';
 import { ONLY_NUMBER_ARE_ALLOWED, PASSWORDS_ARE_INCONSISTENT, PLEASE_INPUT_YOUR_PASSWORD, Password_TEXT, PLEASE_CONFIRM_YOUR_PASSWORD, PASSWORD_AGAIN, SET_PASSWORD } from '../../../constants/DeviceConstants';
+import { DURESS_PASSWORD } from '../../../constants/Constants';
 
 
 class Password extends Component {
@@ -27,8 +28,8 @@ class Password extends Component {
                 xs: { span: 24 },
                 sm: { span: 24 },
             },
-            style:{
-                marginTop:"8px"
+            style: {
+                marginTop: "8px"
             }
         };
     }
@@ -47,29 +48,33 @@ class Password extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-    
+
             if (!err) {
-                this.props.submitPassword(values, this.state.pwdType, this.props.translation);
+                if (this.state.pwdType === DURESS_PASSWORD) {
+                    this.props.submitPassword({ pwd: 'clear', confirm: 'clear' }, this.state.pwdType, this.props.translation);
+                } else {
+                    this.props.submitPassword(values, this.state.pwdType, this.props.translation);
+                }
             }
         });
     }
-    
+
     validateToNextPassword = (rule, value, callback) => {
         const form = this.props.form;
-        if((value!==undefined) && value.length>0 && !(/^[0-9]*$/.test(value))) { // !Number(value)){
+        if ((value !== undefined) && value.length > 0 && !(/^[0-9]*$/.test(value))) { // !Number(value)){
             // form.validateFields(['pwd'], {force:true});
             callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
         }
 
         if (value && this.state.confirmDirty) {
             form.validateFields(['confirm'], { force: true });
-            
+
         }
         callback();
     }
     compareToFirstPassword = (rule, value, callback) => {
         const form = this.props.form;
-        if((value!==undefined) && value.length>0 && !(/^[0-9]*$/.test(value))) {
+        if ((value !== undefined) && value.length > 0 && !(/^[0-9]*$/.test(value))) {
             // form.validateFields(['pwd'], {force:true});
             callback(convertToLang(this.props.translation[ONLY_NUMBER_ARE_ALLOWED], "Only Number are allowed"));
         }
@@ -86,42 +91,51 @@ class Password extends Component {
     render() {
         return (
             <Form onSubmit={this.handleSubmit} className="login-form" autoComplete="new-password">
-                <Form.Item {...this.formItemLayout}>
-                    {
-                        this.props.form.getFieldDecorator('pwd', {
-                            rules: [
-                                {
-                                    required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_YOUR_PASSWORD], "Please input your password!"),
-                                }, {
-                                    validator: this.validateToNextPassword,
-                                }
-                            ],
-                        })(
+                {(this.state.pwdType !== DURESS_PASSWORD) ?
+                    <Fragment>
+                        <Form.Item {...this.formItemLayout}>
+                            {
+                                this.props.form.getFieldDecorator('pwd', {
+                                    rules: [
+                                        {
+                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_YOUR_PASSWORD], "Please input your password!"),
+                                        }, {
+                                            validator: this.validateToNextPassword,
+                                        }
+                                    ],
+                                })(
 
-                            <Input.Password placeholder={convertToLang(this.props.translation[Password_TEXT], "Password")} type="password" pattern="^[0-9]*$" style={{ width: '100%' }} />
-                        )
-                    }
-                </Form.Item>
+                                    <Input.Password placeholder={convertToLang(this.props.translation[Password_TEXT], "Password")} type="password" pattern="^[0-9]*$" style={{ width: '100%' }} />
+                                )
+                            }
+                        </Form.Item>
 
-                <Form.Item {...this.formItemLayout} className="pwdinput" >
-                    {
-                        this.props.form.getFieldDecorator('confirm', {
-                            rules: [
-                                {
-                                    required: true, message: convertToLang(this.props.translation[PLEASE_CONFIRM_YOUR_PASSWORD], "Please confirm your password!"),
-                                }, {
-                                    validator: this.compareToFirstPassword,
-                                }
-                            ],
-                        })(
-                            <Input.Password type="password" pattern="^[0-9]*$" placeholder={convertToLang(this.props.translation[PASSWORD_AGAIN], "Password Again")} onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
-                        )
-                    }
-                </Form.Item>
-
-                <Form.Item {...this.formItemLayout} className="pwdinput">
-                    <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[SET_PASSWORD], "Set Password")}</Button>
-                </Form.Item>
+                        <Form.Item {...this.formItemLayout} className="pwdinput" >
+                            {
+                                this.props.form.getFieldDecorator('confirm', {
+                                    rules: [
+                                        {
+                                            required: true, message: convertToLang(this.props.translation[PLEASE_CONFIRM_YOUR_PASSWORD], "Please confirm your password!"),
+                                        }, {
+                                            validator: this.compareToFirstPassword,
+                                        }
+                                    ],
+                                })(
+                                    <Input.Password type="password" pattern="^[0-9]*$" placeholder={convertToLang(this.props.translation[PASSWORD_AGAIN], "Password Again")} onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
+                                )
+                            }
+                        </Form.Item>
+                        <Form.Item {...this.formItemLayout} className="pwdinput">
+                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[SET_PASSWORD], "Set Password")}</Button>
+                        </Form.Item>
+                    </Fragment>
+                    :
+                    <Fragment>
+                        <Form.Item {...this.formItemLayout} className="pwdinput">
+                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[""], "Reset Password")}</Button>
+                        </Form.Item>
+                    </Fragment>
+                }
             </Form>
         )
     }
