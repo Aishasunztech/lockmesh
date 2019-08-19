@@ -354,7 +354,6 @@ export const resetPrice = () => {
     return (dispatch) => {
         dispatch({
             type: RESET_PRICE,
-
         })
     }
 }
