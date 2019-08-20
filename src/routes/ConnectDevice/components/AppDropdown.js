@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Icon, Popover, Checkbox } from 'antd';
 import Styles from "./Applist.css";
 import { GUEST_ALL, Encrypted_ALL, Enable_ALL } from '../../../constants/Constants';
@@ -44,12 +44,22 @@ export default class AppDropdown extends Component {
     renderDropdown() {
         return (
             <div className="applist_menu">
-                <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
-                    this.handleCheckedAll(e, "guestAll");
-                }}>{convertToLang(this.props.translation[GUEST_ALL], "Guests All")}</Checkbox><br></br>
-                <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
-                    this.handleCheckedAll(e, "encryptedAll");
-                }}>{convertToLang(this.props.translation[Encrypted_ALL], "Encrypted All")}</Checkbox><br></br>
+                {this.props.type === "guest" ?
+                    <Fragment>
+                        <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
+                            this.handleCheckedAll(e, "guestAll");
+                        }}>{convertToLang(this.props.translation[GUEST_ALL], "Guests All")}</Checkbox> <br></br>
+                    </Fragment>
+                    : null}
+                {this.props.type === "encrypted" ?
+                    <Fragment>
+                        <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
+                            this.handleCheckedAll(e, "encryptedAll");
+                        }}>{convertToLang(this.props.translation[Encrypted_ALL], "Encrypted All")}</Checkbox>
+                        <br></br>
+                    </Fragment>
+                    : null
+                }
                 <Checkbox checked={this.state.enableAll ? true : false} onChange={(e) => {
                     this.handleCheckedAll(e, "enableAll");
                 }}>{convertToLang(this.props.translation[Enable_ALL], "Enable All")}</Checkbox>
