@@ -2,7 +2,7 @@
     font-size: 25px;
     position: relative;
     float: right;
-    bottom: 58px;
+    bottom: 0;
     z-index: 100;
     right: 12px;
 }
