@@ -128,7 +128,7 @@ class PackagePricingForm extends Component {
                     <Col span={4}>
                         <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
-                    <Col span={6}>
+                    <Col span={7}>
                         <h4 className='priceText'>{this.state.pkgName}</h4>
                     </Col>
                 </Row>
@@ -146,7 +146,7 @@ class PackagePricingForm extends Component {
                             })(<Select
                                 showSearch
                                 style={{ width: "100%" }}
-                                placeholder={convertToLang(this.props.translation[SELECT_PRICE], "SELECT PRICE")}
+                                placeholder={convertToLang(this.props.translation[SELECT_PRICE], "SELECT TERM")}
                                 optionFilterProp="children"
                                 // onChange={onChange}
                                 // onFocus={onFocus}
