@@ -14,7 +14,7 @@ export const USERS_PAGE_HEADING = "users.pageheading"; // Users
 export const DEALER_PAGE_HEADING = "dealer.pageheading"; // Dealer
 export const S_Dealer_PAGE_HEADING = "sdealer.pageheading"; // S-dealer
 export const APPS_PAGE_HEADING = "apps.pageheading"; // Apps  
-export const POLICY_PAGE_HEADING = "policy.pageheading"; // Policy  SET_PRICE_PAGE_HEADING
+export const POLICY_PAGE_HEADING = "policy.pageheading"; // Policy
 export const SET_PRICE_PAGE_HEADING = "setprice.pageheading"; // Set Price
 export const AGENTS_PAGE_HEADING = "agents.pageheading"; // Agents  
 

@@ -31,7 +31,8 @@ import {
     DEVICE_S_DEALER_NAME,
     USER_ID,
     DEVICE_TYPE,
-    DEVICE_VERSION
+    DEVICE_VERSION,
+    REMAINING_TERM_DAYS
 } from '../../constants/DeviceConstants';
 import {
     // DEVICE_ID,
@@ -68,7 +69,8 @@ import {
     SET_DURESS_PASSWORD,
     CHANGE_ADMIN_PANEL_CODE,
     PERMISSION_NAME,
-    ACTION
+    ACTION,
+    RESET_DURESS_PASSWORD
 } from '../../constants/Constants';
 
 import {
@@ -848,13 +850,13 @@ export function devicesColumns(translation, handleSearch) {
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[""], "REMAINING TERM DAYS")}
+                    placeholder={convertToLang(translation[REMAINING_TERM_DAYS], "REMAINING TERM DAYS")}
                 />
             ),
             dataIndex: 'remainTermDays',
             children: [
                 {
-                    title: convertToLang(translation[""], "REMAINING TERM DAYS"),
+                    title: convertToLang(translation[REMAINING_TERM_DAYS], "REMAINING TERM DAYS"),
                     align: "center",
                     dataIndex: 'remainTermDays',
                     key: 'remainTermDays',
@@ -1779,7 +1781,7 @@ export function mobileManagePasswords(translation) {
         },
         {
             pageName: DURESS_PASSWORD,
-            value: convertToLang(translation[""], "Reset Duress Password")
+            value: convertToLang(translation[RESET_DURESS_PASSWORD], "Reset Duress Password")
         },
 
         {

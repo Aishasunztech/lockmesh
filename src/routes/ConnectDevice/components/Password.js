@@ -11,6 +11,7 @@ import styles from "./password.css";
 import { convertToLang } from '../../utils/commonUtils';
 import { ONLY_NUMBER_ARE_ALLOWED, PASSWORDS_ARE_INCONSISTENT, PLEASE_INPUT_YOUR_PASSWORD, Password_TEXT, PLEASE_CONFIRM_YOUR_PASSWORD, PASSWORD_AGAIN, SET_PASSWORD } from '../../../constants/DeviceConstants';
 import { DURESS_PASSWORD } from '../../../constants/Constants';
+import { Button_passwordreset } from '../../../constants/ButtonConstants';
 
 
 class Password extends Component {
@@ -132,7 +133,7 @@ class Password extends Component {
                     :
                     <Fragment>
                         <Form.Item {...this.formItemLayout} className="pwdinput">
-                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[""], "Reset Password")}</Button>
+                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[Button_passwordreset], "Reset Password")}</Button>
                         </Form.Item>
                     </Fragment>
                 }

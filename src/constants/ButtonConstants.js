@@ -18,6 +18,7 @@ export const Button_Flag = "button.Flag";
 export const Button_UNFLAG = "button.UNFLAG";
 export const Button_SetPassword = "button.SetPassword";
 export const Button_Apply = "button.Apply";
+export const Button_Undelete = "button.Undelete";
 export const Button_Undo = "button.Undo";
 export const Button_Redo = "button.Redo";
 export const Button_Clear = "button.Clear";

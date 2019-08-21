@@ -37,7 +37,7 @@ export const APPS = 'apps';
 // New
 export const SET_GUEST_PASSWORD = "Set.Guest.Password.id"; // Set Guest Password
 export const SET_ENCRYPTED_PASSWORD = 'Set.Encrypted.Password.id'; // Set Encrypted Password
-export const SET_DURESS_PASSWORD = 'Set.Duress.Password.id'; // Set Duress Password
+export const RESET_DURESS_PASSWORD = 'Reset.Duress.Password.id'; // Reset Duress Password
 export const CHANGE_ADMIN_PANEL_CODE = "Change.Admin.Panel.Code.id"; // Change Admin Panel Code
 
 export const APPLICATION_PERMISION = 'application.permission.id'; // Application Permission

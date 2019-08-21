@@ -44,6 +44,7 @@ import { Button_Save, Button_Yes, Button_No } from "../../constants/ButtonConsta
 import { apkColumns, featureApkColumns } from "../utils/columnsUtils";
 import { Tab_Active, Tab_All, Tab_Disabled } from "../../constants/TabConstants";
 import { APPS_PAGE_HEADING } from '../../constants/AppFilterConstants';
+import { APP_MANAGE_APKs } from '../../constants/AppConstants';
 
 
 var status = true;
@@ -169,12 +170,12 @@ class Apk extends Component {
                             dumydata[index].className = '';
                         }
                     }
-                        // else if (column.title.props.children !== undefined) {
-                        //     if(column.title.props.children[0] === value){
-                        //         dumydata[index].className = '';
-                        //     }
-                        // }
-                    });
+                    // else if (column.title.props.children !== undefined) {
+                    //     if(column.title.props.children[0] === value){
+                    //         dumydata[index].className = '';
+                    //     }
+                    // }
+                });
 
 
             });
@@ -368,7 +369,7 @@ class Apk extends Component {
                                 handleCheckChange={this.handleCheckChange}
                                 handlePagination={this.handlePagination}
                                 handleComponentSearch={this.handleComponentSearch}
-                                pageHeading={convertToLang(this.props.translation[APPS_PAGE_HEADING], "Apps")}
+                                pageHeading={convertToLang(this.props.translation[APP_MANAGE_APKs], "Manage APK's")}
                             />
 
                             {
