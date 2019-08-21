@@ -60,7 +60,7 @@ export const Button_Transfer = "button.Transfer";
 export const Button_WipeDevice = "button.WipeDevice";
 export const Button_Unlink = "button.Unlink";
 export const Button_Add_Device = "button.Add.Device";
-export const Button_Uninstall = "button.Uninstall"; // Uninstall
+export const Button_Uninstall = "button.Uninstall"; // Uninstall 
 
 export const Button_BUY = "button.buy.id"; // Buy
 export const Button_SET_PRICE = "button.set.prices.id"; // Set Price
