@@ -174,6 +174,7 @@ export const ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST = "Are.you.sure.you.wa
 export const PROFILE_NAME = "PROFILE.NAME.id"; // PROFILE NAME
 
 export const GUEST_ALL = "Guest.All.id"; // Guest All
+export const SHOW_ALL = "Show.All.id"; // Show All
 export const Encrypted_ALL = "Encrypted.All.id"; // Encrypted All
 export const Enable_ALL = "Enable.All.id"; // Enable All
 // export const GUEST_ALL = "Guest.All.id"; // Guest All

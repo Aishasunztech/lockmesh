@@ -27,7 +27,7 @@ import {
 } from "../../constants/ThemeSetting";
 import RestrictedRoute from "./RestrictedRoute";
 import { APP_TITLE } from "../../constants/Application";
-import SessionTimeOut from "../Sesson_timeout";
+import SessionTimeOut from "../Session_timeout";
 
 class App extends Component {
 
