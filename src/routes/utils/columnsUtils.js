@@ -68,7 +68,8 @@ import {
     SET_DURESS_PASSWORD,
     CHANGE_ADMIN_PANEL_CODE,
     PERMISSION_NAME,
-    ACTION
+    ACTION,
+    RESET_DURESS_PASSWORD
 } from '../../constants/Constants';
 
 import {
@@ -866,7 +867,32 @@ export function devicesColumns(translation, handleSearch, SearchValues = []) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
-        }, {
+        },
+        {
+            title: (
+                <Input.Search
+                    name="remainTermDays"
+                    key="remainTermDays"
+                    id="remainTermDays"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[""], "REMAINING TERM DAYS")}
+                />
+            ),
+            dataIndex: 'remainTermDays',
+            children: [
+                {
+                    title: convertToLang(translation[""], "REMAINING TERM DAYS"),
+                    align: "center",
+                    dataIndex: 'remainTermDays',
+                    key: 'remainTermDays',
+                    sorter: (a, b) => { return a.remainTermDays - b.remainTermDays },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
             title: (
                 <Input.Search
                     name="start_date"
@@ -890,7 +916,8 @@ export function devicesColumns(translation, handleSearch, SearchValues = []) {
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
-        }, {
+        },
+        {
             title: (
                 <Input.Search
                     name="expiry_date"
@@ -1783,7 +1810,7 @@ export function mobileManagePasswords(translation) {
         },
         {
             pageName: DURESS_PASSWORD,
-            value: convertToLang(translation[SET_DURESS_PASSWORD], "Set Duress Password")
+            value: convertToLang(translation[RESET_DURESS_PASSWORD], "Reset Duress Password")
         },
 
         {

@@ -22,7 +22,8 @@ import {
     RESET_PRICE,
     GET_PACKAGES,
     PURCHASE_CREDITS,
-    GET_PARENT_PACKAGES
+    GET_PARENT_PACKAGES,
+    RESYNC_IDS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -354,7 +355,6 @@ export const resetPrice = () => {
     return (dispatch) => {
         dispatch({
             type: RESET_PRICE,
-
         })
     }
 }
@@ -403,5 +403,12 @@ export const purchaseCreditsFromCC = (cardInfo, creditInfo) => {
                 })
             }
         });
+    }
+}
+export const resyncIds = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESYNC_IDS,
+        })
     }
 }

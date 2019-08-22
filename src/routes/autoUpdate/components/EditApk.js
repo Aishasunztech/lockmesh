@@ -246,7 +246,7 @@ class EditApkForm extends Component {
             name: 'apk',
             multiple: false,
             action: BASE_URL + 'users/upload',
-            headers: { 'authorization': token },
+            headers: { 'authorization': token, "id": this.props.app.apk_id },
             accept: '.apk',
             disabled: this.state.disableApk,
             className: 'upload-list-inline',

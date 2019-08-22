@@ -7,7 +7,7 @@ import CustomScrollbars from "../../../util/CustomScrollbars";
 import { Link } from "react-router-dom";
 import SuspendDevice from './SuspendDevice';
 import ActivateDevcie from './ActivateDevice';
-import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang } from '../../utils/commonUtils'
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 import EditDevice from './editDevice';
 import AddDevice from './AddDevice';
 import { Tabs, Modal } from 'antd';
@@ -198,7 +198,7 @@ class DevicesList extends Component {
                 // sortOrder: {order},
                 rowKey: index,
                 // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
-                key: status == DEVICE_UNLINKED ? `${device.user_acc_id}` : device.id,
+                key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
                 counter: ++index,
                 action: ((status === DEVICE_ACTIVATED || status === DEVICE_TRIAL) ?
                     (<Fragment><Fragment>{SuspendBtn}</Fragment><Fragment>{EditBtn}</Fragment><Fragment>{ConnectBtn}</Fragment></Fragment>)
@@ -259,6 +259,7 @@ class DevicesList extends Component {
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
+                remainTermDays: device.remainTermDays,
                 start_date: checkValue(device.start_date),
                 expiry_date: checkValue(device.expiry_date),
             }
@@ -706,6 +707,9 @@ class DevicesList extends Component {
 
                 <EditDevice ref='edit_device'
                     translation={this.props.translation}
+                    getSimIDs={this.props.getSimIDs}
+                    getChatIDs={this.props.getChatIDs}
+                    getPgpEmails={this.props.getPgpEmails}
                 />
                 <AddDevice ref="add_device"
                     translation={this.props.translation}
@@ -861,6 +865,9 @@ export default class Tab extends Component {
                         translation={this.props.translation}
                         onChangeTableSorting={this.props.onChangeTableSorting}
                         unlinkDevice={this.props.unlinkDevice}
+                        getSimIDs={this.props.getSimIDs}
+                        getChatIDs={this.props.getChatIDs}
+                        getPgpEmails={this.props.getPgpEmails}
                     />
                 </div>
             </Fragment>

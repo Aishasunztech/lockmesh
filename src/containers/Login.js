@@ -10,6 +10,10 @@ import { APP_TITLE } from "../constants/Application";
 
 const FormItem = Form.Item;
 var LoginExp = true;
+var capsLockEnabled = null;
+
+
+
 class Login extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
@@ -21,7 +25,12 @@ class Login extends React.Component {
     });
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+
+
+
+
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.showMessage) {
@@ -69,12 +78,22 @@ class Login extends React.Component {
       // }
     }
   }
+  checkCapsLock = (e) => {
+    let isCapsLock = e.getModifierState('CapsLock');
+    let element = document.getElementById("text")
+    if (isCapsLock) {
+      element.style.display = "block"
+    } else {
+      element.style.display = "none"
+    }
 
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { showMessage, loader, alertMessage } = this.props;
 
     return (
+
       <div className="gx-app-login-wrap">
         <div className="gx-app-login-container">
           <div className="gx-app-login-main-content">
@@ -114,9 +133,14 @@ class Login extends React.Component {
                         message: "You forgot to enter your password"
                       }
                     ]
-                  })(<Input type="password" placeholder="Password" />)}
+                  })(<Input.Password
+                    type="password" placeholder="Password"
+                    onKeyUp={(e) => {
+                      this.checkCapsLock(e);
+                    }}
+                  />)}
                 </FormItem>
-
+                <p id="text" style={{ display: 'none', color: 'red', margin: 0, padding: 0 }}>NOTE: Your CapsLock key is currently turned on</p>
                 <FormItem>
                   <Button type="primary" className="gx-mb-0" htmlType="submit">
                     {convertToLang(this.props.translation[SIGN_IN], "SIGN IN")}

@@ -15,6 +15,9 @@ import {
     addDevice,
     preActiveDevice,
     deleteUnlinkDevice,
+    getSimIDs,
+    getChatIDs,
+    getPGPEmails
 } from "../../appRedux/actions/Devices";
 
 import {
@@ -958,6 +961,9 @@ class Devices extends Component {
                                 translation={this.state.translation}
                                 unlinkDevice={this.props.unlinkDevice}
                                 styleType={styleType}
+                                getSimIDs={this.props.getSimIDs}
+                                getChatIDs={this.props.getChatIDs}
+                                getPgpEmails={this.props.getPgpEmails}
                             />
                             <ShowMsg
                                 msg={this.props.msg}
@@ -1073,6 +1079,9 @@ function mapDispatchToProps(dispatch) {
         deleteUnlinkDevice: deleteUnlinkDevice,
         unflagged: unflagged,
         unlinkDevice: unlinkDevice,
+        getSimIDs: getSimIDs,
+        getChatIDs: getChatIDs,
+        getPgpEmails: getPGPEmails
     }, dispatch);
 }
 

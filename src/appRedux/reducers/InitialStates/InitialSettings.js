@@ -106,6 +106,7 @@ export var initialSettings = {
     { "key": "model", "value": DEVICE_MODEL },
     { "key": "s_dealer", "value": DEVICE_S_DEALER },
     { "key": "s_dealer_name", "value": DEVICE_S_DEALER_NAME },
+    { "key": "remainTermDays", "value": "REMAINING TERM DAYS" },
     { "key": "start_date", "value": DEVICE_START_DATE },
     { "key": "expiry_date", "value": DEVICE_EXPIRY_DATE },
   ],

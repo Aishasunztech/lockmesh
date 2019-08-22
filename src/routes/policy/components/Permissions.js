@@ -86,20 +86,20 @@ class Permissions extends Component {
 
     columns.forEach(column => {
       // if (column.children) {
-        if (Object.keys(sorter).length > 0) {
-          if (column.dataIndex == sorter.field) {
-            if (this.state.sorterKey == sorter.field) {
-              column['sortOrder'] = sorter.order;
-            } else {
-              column['sortOrder'] = "ascend";
-            }
+      if (Object.keys(sorter).length > 0) {
+        if (column.dataIndex == sorter.field) {
+          if (this.state.sorterKey == sorter.field) {
+            column['sortOrder'] = sorter.order;
           } else {
-            column['sortOrder'] = "";
+            column['sortOrder'] = "ascend";
           }
-          this.setState({ sorterKey: sorter.field });
         } else {
-          if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+          column['sortOrder'] = "";
         }
+        this.setState({ sorterKey: sorter.field });
+      } else {
+        if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+      }
       // }
     })
     this.setState({
@@ -513,42 +513,42 @@ class Permissions extends Component {
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
-          <Col className="gutter-row" sm={10} xs={15} md={5}>
+          <Col className="gutter-row" sm={3} xs={3} md={3}>
             <div className="gutter-box text-left">
               <h2>{convertToLang(this.props.translation[Permission_List], "Permission List")}</h2>
             </div>
           </Col>
-          <Col className="gutter-row" sm={4} xs={9} md={3}>
+          <Col className="gutter-row" sm={2} xs={2} md={2}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
                 onClick={() => { this.showDealersModal(true) }}>{convertToLang(this.props.translation[Button_Add], "Add")}</Button>
             </div>
           </Col>
-          <Col className="gutter-row" sm={6} xs={12} md={5}>
+          <Col className="gutter-row" sm={3} xs={3} md={3}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
                 onClick={() => { this.addSelectedDealersModal(true) }}>{convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}</Button>
             </div>
           </Col>
-          <Col className="gutter-row" sm={4} xs={12} md={3}>
+          <Col className="gutter-row" sm={2} xs={2} md={2}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="primary"
                 onClick={() => { this.saveAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_AddAll], "Add All")}</Button>
             </div>
           </Col>
-          <Col className="gutter-row" sm={5} xs={12} md={3}>
+          <Col className="gutter-row" sm={2} xs={2} md={2}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
                 onClick={() => { this.removeAllDealersConfirm() }}>{convertToLang(this.props.translation[Button_RemoveAll], "Remove All")}</Button>
             </div>
           </Col>
-          <Col className="gutter-row" sm={7} xs={12} md={4}>
+          <Col className="gutter-row" sm={3} xs={3} md={3}>
             <div className="gutter-box">
               <Button size="small" style={{ width: '100%', marginBottom: 16 }} type="danger"
                 onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
             </div>
           </Col>
-          <Col className="gutter-row" sm={12} xs={24} md={8}>
+          <Col className="gutter-row" sm={15} xs={15} md={15}>
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
