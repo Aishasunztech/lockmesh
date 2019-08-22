@@ -115,7 +115,7 @@ class ListSpaceApps extends Component {
                                             />
                                             <br />
                                             <div className="line_break1" style={{ fontSize: 10 }}>{app.label}</div>
-                                            <div className="line_break1" style={{ fontSize: 10, color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
+                                            <div className="" style={{ fontSize: 10, color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
                                         </Col>
                                     );
                                 }
@@ -130,7 +130,7 @@ class ListSpaceApps extends Component {
                                             />
                                             <br />
                                             <div className="line_break1" style={{ fontSize: 10 }}>{app.label}</div>
-                                            <div className="line_break1" style={{ fontSize: 10, color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
+                                            <div className="" style={{ fontSize: 10, color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
                                         </Col>
                                     );
                                 }
