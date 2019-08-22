@@ -54,6 +54,7 @@ import { isArray } from "util";
 import { Tab_All, Tab_Active, Tab_Suspended, Tab_Archived } from "../../constants/TabConstants";
 // import { ADMIN, DEALER } from "../../constants/Constants";
 import { dealerColumns, sDealerColumns } from '../utils/columnsUtils';
+import { Sidebar_dealers, Sidebar_sdealers } from "../../constants/SidebarConstants";
 
 var coppydealers = [];
 var status = true;
@@ -484,10 +485,10 @@ class Dealers extends Component {
         // dealerType = convertToLang(this.props.translation[Button_Add_Admin], Button_Add_Admin)}
         if (type === DEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_Dealer], "Add Dealer")
-            dealerHeadingType = convertToLang(this.props.translation[DEALER_PAGE_HEADING], "Dealers")
+            dealerHeadingType = convertToLang(this.props.translation[Sidebar_dealers], "Dealers")
         } else if (type === SDEALER) {
             dealerType = convertToLang(this.props.translation[Button_Add_S_dealer], "Add S-dealer")
-            dealerHeadingType = convertToLang(this.props.translation[S_Dealer_PAGE_HEADING], "S-Dealers")
+            dealerHeadingType = convertToLang(this.props.translation[Sidebar_sdealers], "S-Dealers")
         }
         return (
 

@@ -31,7 +31,7 @@ export const DEVICE_S_DEALER_NAME = "tableHeadings.S-DEALERNAME";
 export const IP_ADDRESS = "tableHeadings.IPAddress";
 export const DEVICE_START_DATE = "tableHeadings.STARTDATE";
 export const DEVICE_EXPIRY_DATE = "tableHeadings.EXPIRYDATE";
-
+export const REMAINING_TERM_DAYS = "tableHeadings.REMAININGTERMDAYS";
 export const ACTIVITIES = "ACTIVITIES.id"; // Required Fields
 
 
@@ -126,7 +126,9 @@ export const DO_YOU_REALLY_WANT_TO_UNFLAG_THE_DEVICE = "Do.you.really.want.to.un
 export const DO_YOU_WANT_TO_APPLY = "Do.you.want.to.apply.id"; // Do you want to apply
 export const POLICY_ON_DEVICE = "policy.on.device.id"; // policy on device?
 export const DO_YOU_WANT_TO = "Do.you.want.to.id"; // Do you want to
-export const OF_THIS = "of.this.id"// of this
+export const OF_THIS = "of.this.id"// of this 
+export const GUEST = "Guest.id"// Guest  
+export const ENCRYPTED = "Encrypted.id"// Encrypted  
 
 
 export const PANEL_PASSWORD_MODAL = "PANEL.PASSWORD.modal.id"; // <h4>PANEL PASSWORD <br />REQUIRED FOR<br /> THIS ACTION</h4>
@@ -142,6 +144,8 @@ export const PREVIOUSLY_USED_SIMS = "Previously.Used.Sims.id"; // Previously Use
 export const ICC_ID = "ICC-ID.id"; // ICC-ID
 export const SIM_NAME = "Sim.Name.id"; // Sim Name
 export const STATUS = "Status.id"; // Status
+export const ONLINE = "online.id"; // online
+export const OFFLINE = "offline.id"; // Offline
 export const NOTE = "Note.id"; // Note
 export const DATA_LIMIT = "Data.Limit.id"; // Data Limit
 export const ALERT_DELETE_REGISTERED_SIM = "alert.delete.Registered.Sim.id"; // Are you sure you want to delete Registered Sim?

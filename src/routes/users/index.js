@@ -46,6 +46,7 @@ import { usersColumns } from '../utils/columnsUtils';
 
 import AddUser from './components/AddUser';
 import { Button_Add_User } from '../../constants/ButtonConstants';
+import { Sidebar_users } from '../../constants/SidebarConstants';
 var coppyUsers = [];
 var status = true;
 // const question_txt = (
@@ -323,7 +324,7 @@ class Users extends Component {
                     handlePagination={this.handlePagination}
                     handleComponentSearch={this.handleComponentSearch}
                     translation={this.props.translation}
-                    pageHeading={convertToLang(this.props.translation[USERS_PAGE_HEADING], "Users")}
+                    pageHeading={convertToLang(this.props.translation[Sidebar_users], "Users")}
                 />
                 <AddUser ref="add_user" translation={this.props.translation} />
                 <UserList

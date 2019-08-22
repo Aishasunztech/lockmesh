@@ -97,40 +97,39 @@ class ListSpaceApps extends Component {
         let space_name = this.props.type === "guest" ? "GUEST" : "ENCRYPT"
         return (
             <div>
-                <div style={{ textAlign: "center", margin: 10 }}>
+                <div style={{ textAlign: "center", margin: 12 }}>
                     <Button size="small" onClick={() => { this.showPermissionModal() }}>{convertToLang(this.props.translation[""], `CHANGE ${space_name} PERMISSIONS`)} </Button>
                 </div>
-
-                <div style={{ margin: 10, height: 300, width: 280, overflow: 'overlay' }}>
-                    <Row>
+                <div style={{ height: 335, overflow: 'overlay', borderTop: '1px solid #e8e8e8' }}>
+                    <Row className="m-0">
                         {this.state.app_list.map(app => {
                             if (this.props.type === "guest") {
                                 if (app.guest === true || app.guest === 1) {
                                     return (
-                                        <Col span={6} style={{ marginBottom: 10, textAlign: "center" }}>
+                                        <Col span={6} style={{ padding: 8, textAlign: "center" }}>
                                             <Avatar
                                                 size={"small"}
                                                 src={`${BASE_URL}users/getFile/${app.icon}`}
                                             // style={{ width: "30px", height: "30px" }} 
                                             />
                                             <br />
-                                            <div className="line_break1" style={{ fontSize: 10 }}>{app.label}</div>
-                                            <div className="line_break1" style={{ fontSize: 10 }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
+                                            <div className="line_break2" style={{ fontSize: 10 }}>{app.label}</div>
+                                            <div className="line_break2" style={{ fontSize: 10 }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
                                         </Col>
                                     );
                                 }
                             } else {
                                 if (app.encrypted === true || app.encrypted === 1) {
                                     return (
-                                        <Col span={6} style={{ marginBottom: 10, textAlign: "center" }}>
+                                        <Col span={6} style={{ padding: 8, textAlign: "center" }}>
                                             <Avatar
                                                 size={"small"}
                                                 src={`${BASE_URL}users/getFile/${app.icon}`}
                                             // style={{ width: "30px", height: "30px" }} 
                                             />
                                             <br />
-                                            <div className="line_break1" style={{ fontSize: 10 }}>{app.label}</div>
-                                            <div className="line_break1" style={{ fontSize: 10, color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
+                                            <div className="line_break2" style={{ fontSize: 10 }}>{app.label}</div>
+                                            <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
                                         </Col>
                                     );
                                 }
@@ -139,27 +138,27 @@ class ListSpaceApps extends Component {
 
                         {this.props.type === "encrypted" ?
                             (this.props.extension.encrypted === true || this.props.extension.encrypted === 1) ?
-                                <Col span={6} style={{ marginBottom: 10, textAlign: "center" }}>
+                                <Col span={6} style={{ padding: 8, textAlign: "center" }}>
                                     <Avatar
                                         size={"small"}
                                         src={require("assets/images/setting.png")}
                                     // style={{ width: "30px", height: "30px" }} 
                                     />
                                     <br />
-                                    <div className="line_break1" style={{ fontSize: 10 }}>{this.props.extension.label}</div>
-                                    <div className="line_break1" style={{ fontSize: 10, color: 'red' }}>{(this.props.extension.enable === true || this.props.extension.enable === 1) ? "" : "(Disabled)"}</div>
+                                    <div className="line_break2" style={{ fontSize: 10 }}>{this.props.extension.label}</div>
+                                    <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(this.props.extension.enable === true || this.props.extension.enable === 1) ? "" : "(Disabled)"}</div>
                                 </Col> : null
                             :
                             (this.props.extension.guest === true || this.props.extension.guest === 1) ?
-                                <Col span={6} style={{ marginBottom: 10, textAlign: "center" }}>
+                                <Col span={6} style={{ padding: 8, textAlign: "center" }}>
                                     <Avatar
                                         size={"small"}
                                         src={require("assets/images/setting.png")}
                                     // style={{ width: "30px", height: "30px" }} 
                                     />
                                     <br />
-                                    <div className="line_break1" style={{ fontSize: 10 }}>{this.props.extension.label}</div>
-                                    <div className="line_break1" style={{ fontSize: 10, color: 'red' }}>{(this.props.extension.enable === true || this.props.extension.enable === 1) ? "" : "(Disabled)"}</div>
+                                    <div className="line_break2" style={{ fontSize: 10 }}>{this.props.extension.label}</div>
+                                    <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(this.props.extension.enable === true || this.props.extension.enable === 1) ? "" : "(Disabled)"}</div>
                                 </Col> : null
                         }
                     </Row>
