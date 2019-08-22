@@ -18,6 +18,7 @@ export const Button_Flag = "button.Flag";
 export const Button_UNFLAG = "button.UNFLAG";
 export const Button_SetPassword = "button.SetPassword";
 export const Button_Apply = "button.Apply";
+export const Button_Undelete = "button.Undelete";
 export const Button_Undo = "button.Undo";
 export const Button_Redo = "button.Redo";
 export const Button_Clear = "button.Clear";
@@ -59,7 +60,7 @@ export const Button_Transfer = "button.Transfer";
 export const Button_WipeDevice = "button.WipeDevice";
 export const Button_Unlink = "button.Unlink";
 export const Button_Add_Device = "button.Add.Device";
-export const Button_Uninstall = "button.Uninstall"; // Uninstall
+export const Button_Uninstall = "button.Uninstall"; // Uninstall 
 
 export const Button_BUY = "button.buy.id"; // Buy
 export const Button_SET_PRICE = "button.set.prices.id"; // Set Price

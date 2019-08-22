@@ -150,7 +150,7 @@ class AppFilter extends Component {
             <Card className="sticky_top_bar">
                 <Row gutter={24} className="filter_top">
                     <Col className={`${fullScreenClass3} col-sm-12 col-xs-12 vertical_center`}>
-                        <span className="font_26">
+                        <span className="font_26 white_now">
                             {(this.props.pageHeading) ? this.props.pageHeading : ""}
                         </span>
                     </Col>

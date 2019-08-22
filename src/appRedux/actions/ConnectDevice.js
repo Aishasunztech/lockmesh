@@ -626,6 +626,7 @@ export function handleCheckAllExtension(keyAll, key, value, uniqueName) {
 
 
 export function submitPassword(passwords, pwdType, translation = {}) {
+    // console.log("Passwords: ", passwords);
     return (dispatch) => {
         dispatch({
             type: SHOW_MESSAGE,
@@ -1108,11 +1109,11 @@ export const applyPullApps = (apps, deviceId, usrAccId) => {
         delete el.icon;
         el.apk_id = el.key;
         el.apk_name = el.label;
-        el.version_name="";
-        el.apk ="";
-        el.guest =false;
-        el.encrypted=false;
-        el.enable=false;
+        el.version_name = "";
+        el.apk = "";
+        el.guest = false;
+        el.encrypted = false;
+        el.enable = false;
     })
     return (dispatch) => {
         RestService.applyPullApps(apps, deviceId, usrAccId).then((response) => {

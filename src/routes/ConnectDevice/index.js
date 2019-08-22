@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Card, Row, Col, List, Button, message, Modal, Progress, Icon } from "antd";
+import { Card, Row, Col, List, Button, message, Modal, Progress, Icon, Tabs } from "antd";
 import CircularProgress from "components/CircularProgress/index";
 import DeviceSettings from './components/DeviceSettings';
 import { convertToLang } from '../../routes/utils/commonUtils';
@@ -78,27 +78,29 @@ import {
 import DeviceActions from './components/DeviceActions';
 import DeviceSidebar from './components/DeviceSidebar';
 import SideActions from './components/SideActions';
-import AppList from './components/AppList';
+import ListSpaceApp from './components/ListSpaceApps';
 import Password from "./components/Password"
 import { getColor, isBase64 } from "../utils/commonUtils"
 import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
-import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
+import { Button_Apply, Button_Cancel, Button_Back } from "../../constants/ButtonConstants";
 import {
   DEVICE_NOT_FOUND,
   SETTINGS_TO_BE_SENT_TO_DEVICE,
   DEVICE_NOT_SYNCED,
   DEVICE_IS,
-  Suspended_TEXT
+  Suspended_TEXT,
+  GUEST,
+  ENCRYPTED
 } from "../../constants/DeviceConstants";
 
 import { mobileMainMenu, mobileManagePasswords } from '../utils/columnsUtils';
 
 const success = Modal.success
 const error = Modal.error
-
+const TabPane = Tabs.TabPane;
 class ConnectDevice extends Component {
 
   constructor(props) {
@@ -119,7 +121,8 @@ class ConnectDevice extends Component {
       imei_list: [],
       showMessage: false,
       messageText: '',
-      messageType: ''
+      messageType: '',
+      dynamicBackButton: false,
     }
     // console.log("hello every body", this.props);
     this.mainMenu = mobileMainMenu(props.translation);
@@ -129,6 +132,7 @@ class ConnectDevice extends Component {
   changePage = (pageName) => {
     if (this.props.device_details.finalStatus === DEVICE_ACTIVATED || this.props.device_details.finalStatus === DEVICE_TRIAL) {
       this.props.changePage(pageName);
+      this.setState({ dynamicBackButton: true })
     }
   }
   onBackHandler = () => {
@@ -136,8 +140,10 @@ class ConnectDevice extends Component {
       if (this.props.pageName === GUEST_PASSWORD || this.props.pageName === ENCRYPTED_PASSWORD || this.props.pageName === DURESS_PASSWORD || this.props.pageName === ADMIN_PASSWORD) {
         this.props.changePage(MANAGE_PASSWORD);
       } else if (this.props.pageName === MANAGE_PASSWORD) {
+        this.setState({ dynamicBackButton: false })
         this.props.changePage(MAIN_MENU);
       } else {
+        this.setState({ dynamicBackButton: false })
         this.props.changePage(MAIN_MENU);
       }
     }
@@ -159,7 +165,7 @@ class ConnectDevice extends Component {
 
       this.props.startLoading();
 
-  
+
       this.props.connectSocket()
 
       this.props.getDeviceDetails(device_id);
@@ -171,20 +177,6 @@ class ConnectDevice extends Component {
       this.props.getImeiHistory(device_id);
       this.props.getDealerApps();
       this.props.getActivities(device_id)
-
-      // this.props.actionInProcess(this.props.socket, device_id);
-      // this.props.ackFinishedPushApps(this.props.socket, device_id);
-      // this.props.ackFinishedPullApps(this.props.socket, device_id);
-      // this.props.ackFinishedPolicy(this.props.socket, device_id);
-      // this.props.ackImeiChanged(this.props.socket, device_id);
-      // this.props.ackSinglePushApp(this.props.socket, device_id);
-      // this.props.ackSinglePullApp(this.props.socket, device_id);
-      // this.props.ackFinishedPolicyStep(this.props.socket, device_id);
-      // this.props.receiveSim(this.props.socket, device_id);
-
-
-      // this.props.hello_web(this.props.socket);
-      // console.log('receiveSim_ '  + device_id);
     }
 
     // this.props.endLoading();
@@ -206,28 +198,28 @@ class ConnectDevice extends Component {
 
   componentDidUpdate(prevProps) {
     const device_id = isBase64(this.props.match.params.device_id);
-      if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
-        // console.log('show message sate', this.props.showMessage)
-        this.setState({
-          controls: this.props.controls,
-          changedCtrls: this.props.changedCtrls,
-          imei_list: this.props.imei_list,
-          showMessage: this.props.showMessage,
-          messageText: this.props.messageText,
-          messageType: this.props.messageType
-        })
-      }
+    if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
+      // console.log('show message sate', this.props.showMessage)
+      this.setState({
+        controls: this.props.controls,
+        changedCtrls: this.props.changedCtrls,
+        imei_list: this.props.imei_list,
+        showMessage: this.props.showMessage,
+        messageText: this.props.messageText,
+        messageType: this.props.messageType
+      })
+    }
 
-      if (this.props.translation != prevProps.translation) {
-        this.mainMenu = mobileMainMenu(this.props.translation);
-        this.subMenu = mobileManagePasswords(this.props.translation);
-      }
+    if (this.props.translation != prevProps.translation) {
+      this.mainMenu = mobileMainMenu(this.props.translation);
+      this.subMenu = mobileManagePasswords(this.props.translation);
+    }
 
-      if (this.props.getHistory != prevProps.getHistory) {
-        const device_id = isBase64(this.props.match.params.device_id);
-        this.props.getDeviceDetails(device_id);
-      }
-  
+    if (this.props.getHistory != prevProps.getHistory) {
+      const device_id = isBase64(this.props.match.params.device_id);
+      this.props.getDeviceDetails(device_id);
+    }
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -237,28 +229,28 @@ class ConnectDevice extends Component {
         this.mainMenu = mobileMainMenu(nextProps.translation);
         this.subMenu = mobileManagePasswords(nextProps.translation);
       }
-      
+
       // there is no use of pathname under device id section
       // if(this.props.history.location.pathname !== nextProps.history.location.pathname){
       // if(this.props.pathName !== nextProps.pathName){
-        if (this.props.socket === null && nextProps.socket !== null) {
-          console.log('path changed');
-          // console.log("socket connected component")
-          nextProps.actionInProcess(nextProps.socket, device_id);
-          nextProps.ackFinishedPushApps(nextProps.socket, device_id);
-          nextProps.ackFinishedPullApps(nextProps.socket, device_id);
-          nextProps.ackFinishedPolicy(nextProps.socket, device_id);
-          nextProps.ackImeiChanged(nextProps.socket, device_id);
-          nextProps.ackSinglePushApp(nextProps.socket, device_id);
-          nextProps.ackSinglePullApp(nextProps.socket, device_id);
-          nextProps.ackFinishedPolicyStep(nextProps.socket, device_id);
-          nextProps.ackInstalledApps(nextProps.socket, device_id);
-          nextProps.ackUninstalledApps(nextProps.socket, device_id);
-          nextProps.ackSettingApplied(nextProps.socket, device_id);
-          nextProps.receiveSim(nextProps.socket, device_id);
-  
-          nextProps.hello_web(nextProps.socket);
-        }
+      if (this.props.socket === null && nextProps.socket !== null) {
+        console.log('path changed');
+        // console.log("socket connected component")
+        nextProps.actionInProcess(nextProps.socket, device_id);
+        nextProps.ackFinishedPushApps(nextProps.socket, device_id);
+        nextProps.ackFinishedPullApps(nextProps.socket, device_id);
+        nextProps.ackFinishedPolicy(nextProps.socket, device_id);
+        nextProps.ackImeiChanged(nextProps.socket, device_id);
+        nextProps.ackSinglePushApp(nextProps.socket, device_id);
+        nextProps.ackSinglePullApp(nextProps.socket, device_id);
+        nextProps.ackFinishedPolicyStep(nextProps.socket, device_id);
+        nextProps.ackInstalledApps(nextProps.socket, device_id);
+        nextProps.ackUninstalledApps(nextProps.socket, device_id);
+        nextProps.ackSettingApplied(nextProps.socket, device_id);
+        nextProps.receiveSim(nextProps.socket, device_id);
+
+        nextProps.hello_web(nextProps.socket);
+      }
       // }
     }
 
@@ -331,7 +323,6 @@ class ConnectDevice extends Component {
             renderItem={item => {
               return (<List.Item
                 onClick={() => {
-
                   this.changePage(item.pageName)
                 }}
               ><a>{item.value}</a></List.Item>)
@@ -341,9 +332,20 @@ class ConnectDevice extends Component {
       );
     } else if (this.props.pageName === APPS && isSync) {
       return (
-        <AppList
-          isHistory={false}
-        />
+        <div className="guest_encrypt">
+          <Tabs type="line" className="text-center" size="small">
+            <TabPane tab={<span className="green">{convertToLang(this.props.translation[GUEST], "GUEST")}</span>} key="1" >
+              <ListSpaceApp
+                type="guest"
+              />
+            </TabPane>
+            <TabPane tab={<span className="green">{convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED")}</span>} key="2" forceRender={true}>
+              <ListSpaceApp
+                type="encrypted"
+              />
+            </TabPane>
+          </Tabs>
+        </div>
       );
     } else if (this.props.pageName === GUEST_PASSWORD && isSync) {
       return (<Password pwdType={this.props.pageName} />);
@@ -359,6 +361,7 @@ class ConnectDevice extends Component {
           pageName={this.props.pageName}
           translation={this.props.translation}
         />
+
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
       return (<SystemControls
@@ -569,6 +572,12 @@ class ConnectDevice extends Component {
     // let completeStep = this.props.complete_policy_step;
     // let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
 
+    let BackBtnstyle;
+    if (this.state.dynamicBackButton) {
+      BackBtnstyle = "pt-42 status_bar"
+    } else {
+      BackBtnstyle = "pt-60 status_bar"
+    }
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -592,7 +601,13 @@ class ConnectDevice extends Component {
                 <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
                   <Card>
                     <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
-                      <div className="status_bar">
+                      <a className="dev_back_btn" onClick={() => {
+                        this.onBackHandler();
+                      }}>
+                        {(this.state.dynamicBackButton) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
+
+                      </a>
+                      <div className={BackBtnstyle}>
                         <div className="col-md-6 col-xs-6 col-sm-6 active_st">
                           <h5><span style={color}>{this.capitalizeFirstLetter(finalStatus)}</span></h5>
                         </div>

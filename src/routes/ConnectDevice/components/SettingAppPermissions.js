@@ -128,7 +128,7 @@ class SettingAppPermissions extends Component {
             encryptedAll={this.state.encryptedAllExt}
             guestAll={this.state.guestAllExt}
             handleCheckedAll={this.handleCheckedAll}
-            translation = {this.props.translation}
+            translation={this.props.translation}
           />
           <Row className="first_head">
             <Col span={4} className="pr-0">
@@ -189,7 +189,7 @@ function mapDispatchToProps(dispatch) {
 var mapStateToProps = ({ device_details }, ownProps) => {
   // console.log(device_details, "applist ownprops", ownProps);
   const pageName = ownProps.pageName;
-
+  // console.log(pageName);
   let extension = device_details.extensions.find(o => o.uniqueName === pageName);
   // console.log("extensions_", device_details.secureSettingsMain);
 

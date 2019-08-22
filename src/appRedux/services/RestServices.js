@@ -19,7 +19,7 @@ const RestService = {
         // socket.on('connect', function() {
         //     console.log('check 2', socket.connected);
         // });
-        
+
         return socket;
     },
     login: (user) => {
@@ -394,7 +394,7 @@ const RestService = {
 
     // unlink Device
     unlinkDevice: (device) => {
-console.log('unlinkDevice ', device)
+        console.log('unlinkDevice ', device)
         return axios.post(BASE_URL + 'users/unlink/' + device.usr_device_id, { device }, RestService.getHeader());
 
     },
@@ -772,18 +772,21 @@ console.log('unlinkDevice ', device)
             ...agent
         }, RestService.getHeader());
     },
-    changeAgentStatus(agent, status){
+    changeAgentStatus(agent, status) {
         return axios.put(BASE_URL + 'users/agents/' + agent.id + '/status', {
             status: status
         }, RestService.getHeader());
     },
-    resetAgentPwd: (agentID) =>{
+    resetAgentPwd: (agentID) => {
         return axios.put(BASE_URL + 'users/agents/' + agentID + '/reset-pwd', {
         }, RestService.getHeader());
     },
     deleteAgent: (agentID) => {
         return axios.delete(BASE_URL + 'users/agents/' + agentID, RestService.getHeader());
-    }
+    },
+    // resyncIds: () => {
+    //     return axios.get(BASE_URL + 'users/resync_ids', RestService.getHeader())
+    // },
 
 }
 export default RestService;

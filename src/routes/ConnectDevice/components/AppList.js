@@ -15,6 +15,7 @@ import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_LoadProfile, Button_On, Button_Off } from '../../../constants/ButtonConstants';
 import { appsColumns } from '../../utils/columnsUtils';
+import { APK_APP_NAME } from '../../../constants/ApkConstants';
 
 
 class AppList extends Component {
@@ -31,26 +32,6 @@ class AppList extends Component {
         }
 
         this.appsColumns = appsColumns(props.translation);
-        // [
-        //     {
-        //         title: convertToLang(props.translation[POLICY_APP_NAME], "APP NAME"),
-        //         dataIndex: 'app_name',
-        //         key: '1',
-        //         render: text => <a href="javascript:;">{text}</a>,
-        //     }, {
-        //         title: convertToLang(props.translation[Guest], "GUEST"),
-        //         dataIndex: 'guest',
-        //         key: '2',
-        //     }, {
-        //         title: convertToLang(props.translation[ENCRYPTED], "ENCRYPTED"),
-        //         dataIndex: 'encrypted',
-        //         key: '3',
-        //     }, {
-        //         title: convertToLang(props.translation[ENABLE], "ENABLE"),
-        //         dataIndex: 'enable',
-        //         key: '4',
-        //     }
-        // ];
     }
 
     componentDidMount() {
@@ -74,7 +55,7 @@ class AppList extends Component {
             enableAll: nextProps.enableAll
         })
 
-        if(this.props.translation != nextProps.translation) {
+        if (this.props.translation != nextProps.translation) {
             this.appsColumns = appsColumns(nextProps.translation);
         }
     }
@@ -166,11 +147,47 @@ class AppList extends Component {
     }
 
     render() {
+        if (this.props.type === "guest") {
+            this.appsColumns = [
+                {
+                    title: convertToLang(this.props.translation[APK_APP_NAME], "APP NAME"),
+                    dataIndex: 'app_name',
+                    key: '1',
+                    render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+                }, {
+                    title: convertToLang(this.props.translation[Guest], "Guest"),
+                    dataIndex: 'guest',
+                    key: '2',
+                }, {
+                    title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
+                    dataIndex: 'enable',
+                    key: '4',
+                }
+            ]
+        } else if (this.props.type === "encrypted") {
+            this.appsColumns = [
+                {
+                    title: convertToLang(this.props.translation[APK_APP_NAME], "APP NAME"),
+                    dataIndex: 'app_name',
+                    key: '1',
+                    render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
+                }, {
+                    title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                    dataIndex: 'encrypted',
+                    key: '3',
+                }, {
+                    title: convertToLang(this.props.translation[ENABLE], "ENABLE"),
+                    dataIndex: 'enable',
+                    key: '4',
+                }
+            ]
+        }
         return (
             <div>
                 {
                     this.props.isHistory ? null : (
                         <AppDropdown
+                            type={this.props.type}
                             checked_app_id={this.props.checked_app_id}
                             enableAll={this.state.enableAll}
                             encryptedAll={this.state.encryptedAll}

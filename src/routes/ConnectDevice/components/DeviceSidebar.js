@@ -31,7 +31,12 @@ import {
     DEVICE_S_DEALER,
     DEVICE_S_DEALER_NAME,
     USER_ID,
-    IP_ADDRESS
+    IP_ADDRESS,
+    OFFLINE,
+    REMAINING_TERM_DAYS,
+    ONLINE,
+    DEVICE_TYPE,
+    DEVICE_VERSION
 } from '../../../constants/DeviceConstants';
 import { Button_Refresh } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
@@ -77,140 +82,150 @@ export default class DeviceSidebar extends Component {
         //     device_status = 'Active';
         //     make_red = 'captilize'
         // }
+        // console.log(device_details);
 
         return [
-            // {
-            //     key: 300,
-            //     name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[USER_ID], USER_ID))}:</a>),
-            //     value: checkValue(device_details.user_id)
-            // },
             {
-                key: 10,
-                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_STATUS], DEVICE_STATUS))}:</a>),
+                key: 1,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_STATUS], "STATUS"))}:</a>),
                 value: <span style={color}>{checkValue(device_details.finalStatus)}</span>,
             },
             {
-                key: 171,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODE], DEVICE_MODE))}:</a>),
-                value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A"
-            },
-            {
-                key: 102,
-                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED))}:</a>),
-                value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
-            },
-            {
-                key: 1,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_NAME], DEVICE_NAME))}:</a>),
-                value: (<span className="captilize">{checkValue(device_details.name)}</span>)
+                key: 26,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[REMAINING_TERM_DAYS], 'REMAINING TERM DAYS'))}:</a>),
+                value: device_details.remainTermDays
             },
             {
                 key: 2,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL))}:</a>),
-                value: checkValue(device_details.account_email)
-            },
-
-            {
-                key: 3,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL))}:</a>),
-                value: checkValue(device_details.pgp_email)
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODE], DEVICE_MODE))}:</a>),
+                value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>{titleCase(convertToLang(this.props.translation[ONLINE], "Online"))}</span>) : (<span style={{ color: "red" }}>{titleCase(convertToLang(this.props.translation[OFFLINE], "Offline"))}</span>) : "N/A"
             },
             {
-                key: 812,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE))}:</a>),
-                value: checkValue(device_details.activation_code)
-            },
-            {
-                key: 4,
+                key: 10,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID))}:</a>),
                 value: checkValue(device_details.chat_id)
             },
             {
-                key: 5,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID))}:</a>),
-                value: checkValue(device_details.client_id)
+                key: 8,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL))}:</a>),
+                value: checkValue(device_details.pgp_email)
             },
             {
-                key: 6,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID))}:</a>),
-                value: checkValue(device_details.dealer_id)
+                key: 16,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID))}:</a>),
+                value: checkValue(device_details.sim_id)
             },
             {
-                key: 7,
+                key: 13,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME))}:</a>),
                 value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN) ? <a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
                 // value: (<span className="captilize"><a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a></span>)
             },
             {
-                key: 8,
+                key: 14,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN))}:</a>),
                 value: checkValue(device_details.link_code)
             },
             {
+                key: 7,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL))}:</a>),
+                value: checkValue(device_details.account_email)
+            },
+            {
+                key: 3,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED))}:</a>),
+                value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
+            },
+            {
+                key: 4,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_TYPE], "TYPE"))}:</a>),
+                value: checkValue(device_details.type)
+            },
+            {
+                key: 5,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_VERSION], "VERSION"))}:</a>),
+                value: checkValue(device_details.version)
+            },
+            {
+                key: 6,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_NAME], DEVICE_NAME))}:</a>),
+                value: (<span className="captilize">{checkValue(device_details.name)}</span>)
+            },
+            {
                 key: 9,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE))}:</a>),
+                value: checkValue(device_details.activation_code)
+            },
+
+            {
+                key: 11,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID))}:</a>),
+                value: checkValue(device_details.client_id)
+            },
+            {
+                key: 12,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID))}:</a>),
+                value: checkValue(device_details.dealer_id)
+            },
+            {
+                key: 15,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS))}:</a>),
                 value: checkValue(device_details.mac_address)
             },
             {
-                key: 12,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID))}:</a>),
-                value: checkValue(device_details.sim_id)
-            },
-
-            {
-                key: 13,
+                key: 17,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_1], DEVICE_IMEI_1))}:</a>),
                 value: checkValue(device_details.imei)
             },
             {
-                key: 14,
+                key: 18,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_1], DEVICE_SIM_1))}:</a>),
                 value: checkValue(device_details.simno)
             },
             {
-                key: 15,
+                key: 19,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_2], DEVICE_IMEI_2))}:</a>),
                 value: checkValue(device_details.imei2)
             },
             {
-                key: 16,
+                key: 20,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_2], DEVICE_SIM_2))}:</a>),
                 value: checkValue(device_details.simno2)
             },
 
             {
-                key: 111,
+                key: 21,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER))}:</a>),
                 value: checkValue(device_details.serial_number)
             },
             {
-                key: 11,
+                key: 22,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODEL], DEVICE_MODEL))}:</a>),
                 value: checkValue(device_details.model)
             },
             {
-                key: 17,
+                key: 23,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[IP_ADDRESS], IP_ADDRESS))}:</a>),
                 value: checkValue(device_details.ip_address)
             },
 
             {
-                key: 172,
+                key: 24,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER], DEVICE_S_DEALER))}:</a>),
                 value: checkValue(device_details.s_dealer)
             },
             {
-                key: 173,
+                key: 25,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME))}:</a>),
                 value: checkValue(device_details.s_dealer_name)
             },
             {
-                key: 18,
+                key: 27,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], DEVICE_START_DATE))}:</a>),
                 value: checkValue(device_details.start_date)
             },
             {
-                key: 19,
+                key: 28,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE))}:</a>),
                 value: checkValue(device_details.expiry_date)
             }
