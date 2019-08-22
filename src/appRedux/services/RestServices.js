@@ -47,7 +47,11 @@ const RestService = {
         localStorage.removeItem('lastName');
         localStorage.removeItem('token');
         localStorage.removeItem('dealer_pin');
+        localStorage.removeItem('connected_dealer');
+        localStorage.removeItem('connected_devices');
+        localStorage.removeItem('two_factor_auth');
         // this.router.navigate(['/login']);
+
     },
 
     authLogIn: (data) => {

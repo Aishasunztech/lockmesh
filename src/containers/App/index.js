@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import URLSearchParams from 'url-search-params'
 import { Redirect, Route, Switch } from "react-router-dom";
 import { LocaleProvider } from "antd";
-
 import MainApp from "./MainApp";
 
 import Login from "../Login";
@@ -28,6 +27,7 @@ import {
 } from "../../constants/ThemeSetting";
 import RestrictedRoute from "./RestrictedRoute";
 import { APP_TITLE } from "../../constants/Application";
+import SessionTimeOut from "../Sesson_timeout";
 
 class App extends Component {
 
@@ -67,6 +67,8 @@ class App extends Component {
       document.body.classList.remove('horizontal-layout');
     }
   };
+
+
 
   componentWillMount() {
     // console.log("componentWillMount");
@@ -125,18 +127,24 @@ class App extends Component {
 
 
     return (
-          <Switch>
-            <Route exact path='/login' component={Login} />
-            <Route exact path="/verify-auth" component={VerifyAuthCode} />
-            <RestrictedRoute
-              authUser={authUser}
-              path={`${match.url}`}
-              re_render={this.state.re_render}
-              component={MainApp}
 
-            />
+      <Switch>
+        <Route exact path='/login' component={Login} />
+        <Route exact path="/verify-auth" component={VerifyAuthCode} />
+        <Route
+          exact
+          path="/session_timeout"
+          component={SessionTimeOut}
+        />
+        <RestrictedRoute
+          authUser={authUser}
+          path={`${match.url}`}
+          re_render={this.state.re_render}
+          component={MainApp}
 
-          </Switch>
+        />
+      </Switch>
+
     )
   }
 
