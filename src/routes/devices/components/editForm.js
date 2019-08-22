@@ -259,7 +259,7 @@ class EditDevice extends Component {
                             >
                                 <Select.Option value="">{convertToLang(this.props.translation[SELECT_PGP_EMAILS], "Select PGP Emails")}</Select.Option>
                                 {this.props.pgp_emails.map((pgp_email) => {
-                                    return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email}>{pgp_email.pgp_email}</Select.Option>)
+                                    return (<Select.Option key={pgp_email.id} value={pgp_email.pgp_email.trim()}>{pgp_email.pgp_email.trim()}</Select.Option>)
                                 })}
                             </Select>
                             // <Input disabled />
