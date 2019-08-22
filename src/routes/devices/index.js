@@ -85,7 +85,7 @@ import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang, checkValue } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
@@ -891,7 +891,7 @@ class Devices extends Component {
 
 
     render() {
-        console.log('======================> Device Search ', this.state.SearchValues);
+        // console.log('search data is: ', this.state.SearchValues);
         let type = this.props.user.type
         let styleType = {};
         if (type === ADMIN) {
@@ -991,8 +991,10 @@ class Devices extends Component {
 
         if (targetValue.length || Object.keys(demoSearchValues).length) {
             demoSearchValues[targetName] = { key: targetName, value: targetValue };
+            this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
 
             coppyDevices.forEach((device) => {
+                // console.log('device is: ', device);
                 if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
 
                     let searchColsAre = Object.keys(demoSearchValues).length;
@@ -1000,7 +1002,7 @@ class Devices extends Component {
 
                     if (searchColsAre > 0) {
                         Object.values(demoSearchValues).forEach((data) => {
-
+                            
                             if (data.value == "") {
                                 searchDevices++;
                             } else if (device[data.key].toUpperCase().includes(data.value.toUpperCase())) {
@@ -1033,27 +1035,30 @@ class Devices extends Component {
 
 
     handleSearch12 = (devices) => {
-        let filterdData = [];
+        let searchedDevices = [];
         let searchData = Object.values(this.state.SearchValues);
         let searchColsAre = Object.keys(this.state.SearchValues).length;
 
-        if (searchData.length) {
+        if (searchColsAre) {
             devices.forEach((device) => {
                 let searchDevices = 0;
 
                 for (let search of searchData) {
+                    // console.log('search is: ', search)
+                    // console.log('search key is: ', search.key)
                     if (search.value == "") {
                         searchDevices++;
                     } else if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
                         searchDevices++;
                     }
+
                 }
                 if (searchColsAre === searchDevices) {
-                    filterdData.push(device);
+                    searchedDevices.push(device);
                 }
 
             });
-            return filterdData;
+            return searchedDevices;
         } else {
             return devices;
         }
