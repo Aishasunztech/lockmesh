@@ -302,12 +302,12 @@ class SidebarContent extends Component {
                   {convertToLang(translation[Sidebar_app], "App")}
                 </Link>
               </Menu.Item> : null}
-              {(authUser.type === ADMIN) ? <Menu.Item key="account">
+              <Menu.Item key="account">
                 <Link to="/account"><i className="icon icon-profile2" />
                   {/* <IntlMessages id="sidebar.account" /> */}
                   {convertToLang(translation[Sidebar_account], "Account")}
                 </Link>
-              </Menu.Item> : null}
+              </Menu.Item>
 
 
               <Menu.Item key="settings">

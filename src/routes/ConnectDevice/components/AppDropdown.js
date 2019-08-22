@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Icon, Popover, Checkbox } from 'antd';
 import Styles from "./Applist.css";
-import { GUEST_ALL, Encrypted_ALL, Enable_ALL } from '../../../constants/Constants';
+import { GUEST_ALL, Encrypted_ALL, Enable_ALL, SHOW_ALL } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 
 export default class AppDropdown extends Component {
@@ -48,14 +48,14 @@ export default class AppDropdown extends Component {
                     <Fragment>
                         <Checkbox checked={this.state.guestAll ? true : false} onChange={(e) => {
                             this.handleCheckedAll(e, "guestAll");
-                        }}>{convertToLang(this.props.translation[GUEST_ALL], "Guests All")}</Checkbox> <br></br>
+                        }}>{convertToLang(this.props.translation[SHOW_ALL], "Show All")}</Checkbox> <br></br>
                     </Fragment>
                     : null}
                 {this.props.type === "encrypted" ?
                     <Fragment>
                         <Checkbox checked={this.state.encryptedAll ? true : false} onChange={(e) => {
                             this.handleCheckedAll(e, "encryptedAll");
-                        }}>{convertToLang(this.props.translation[Encrypted_ALL], "Encrypted All")}</Checkbox>
+                        }}>{convertToLang(this.props.translation[SHOW_ALL], "Show All")}</Checkbox>
                         <br></br>
                     </Fragment>
                     : null
