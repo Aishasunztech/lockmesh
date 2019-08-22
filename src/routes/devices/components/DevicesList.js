@@ -161,7 +161,7 @@ class DevicesList extends Component {
             var order = getSortOrder(status)
             let color = getColor(status);
             var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
-            var text = this.props.translation[Button_Edit];
+            var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
             // var icon = "edit";
 
             // if ((status === 'pending activation') || (device.unlink_status === 1)) {
@@ -820,26 +820,26 @@ export default class Tab extends Component {
             <Fragment>
                 <div>
                     <Tabs type="card" className="dev_tabs" activeKey={this.state.tabselect} onChange={this.callback}>
-                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_All], Tab_All)} ({this.props.allDevices})</span>} key="1" >
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_All], "All")} ({this.props.allDevices})</span>} key="1" >
                         </TabPane>
-                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Active], Tab_Active)} ({this.props.activeDevices})</span>} key="4" forceRender={true}>
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Active], "Active")} ({this.props.activeDevices})</span>} key="4" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="red">{convertToLang(translation[Tab_Expired], Tab_Expired)} ({this.props.expireDevices})</span>} key="6" forceRender={true}>
+                        <TabPane tab={<span className="red">{convertToLang(translation[Tab_Expired], "Expired")} ({this.props.expireDevices})</span>} key="6" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Trial], Tab_Trial)} ({this.props.trialDevices})</span>} key="9" forceRender={true}>
+                        <TabPane tab={<span className="green">{convertToLang(translation[Tab_Trial], "Trial")} ({this.props.trialDevices})</span>} key="9" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="yellow">{convertToLang(translation[Tab_Suspended], Tab_Suspended)} ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
+                        <TabPane tab={<span className="yellow">{convertToLang(translation[Tab_Suspended], "Suspended")} ({this.props.suspendDevices})</span>} key="7" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="blue">{convertToLang(translation[Tab_PreActivated], Tab_PreActivated)}  ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
+                        <TabPane tab={<span className="blue">{convertToLang(translation[Tab_PreActivated], "Pre-Activated")}  ({this.props.preActiveDevices})</span>} key="3" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="gray">{convertToLang(translation[Tab_PendingActivation], Tab_PendingActivation)}  ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
+                        <TabPane tab={<span className="gray">{convertToLang(translation[Tab_PendingActivation], "Pending Activation")}  ({this.props.pendingDevices})</span>} key="2" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="purple">{convertToLang(translation[Tab_Transfer], Tab_Transfer)} ({this.props.transferredDevices})</span>} key="8" forceRender={true}>
-                            <h2 className="coming_s">{convertToLang(translation[Tab_ComingSoon], Tab_ComingSoon)}</h2>
+                        <TabPane tab={<span className="purple">{convertToLang(translation[Tab_Transfer], "Transfer")} ({this.props.transferredDevices})</span>} key="8" forceRender={true}>
+                            <h2 className="coming_s">{convertToLang(translation[Tab_ComingSoon], "ComingSoon")}</h2>
                         </TabPane>
-                        <TabPane tab={<span className="orange">{convertToLang(translation[Tab_Unlinked], Tab_Unlinked)} ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
+                        <TabPane tab={<span className="orange">{convertToLang(translation[Tab_Unlinked], "Unlinked")} ({this.props.unlinkedDevices})</span>} key="5" forceRender={true}>
                         </TabPane>
-                        <TabPane tab={<span className="black">{convertToLang(translation[Tab_Flagged], Tab_Flagged)}({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
+                        <TabPane tab={<span className="black">{convertToLang(translation[Tab_Flagged], "Flagged")}({this.props.flaggedDevices})</span>} key="10" forceRender={true}>
                         </TabPane>
 
                     </Tabs>

@@ -53,7 +53,7 @@ export default class ExtensionDropdown extends Component {
     }
     render() {
         return (
-            <Popover className="list_d_down" placement="bottomRight" content={this.renderDropdown()} trigger="click">
+            <Popover className="list_d_down b-60" placement="bottomRight" content={this.renderDropdown()} trigger="click">
                 <a><Icon type="ellipsis" /></a>
             </Popover>
         )

@@ -37,6 +37,10 @@
     box-shadow: 0px 6px 25px #dedede
 }
 
+.b-60 {
+    bottom: 60px;
+}
+
 .clr_red {
     color: #FE4E51 !important;
 }
@@ -228,6 +232,23 @@
 
 .perm_pop ::-webkit-scrollbar {
     width: 8px;
+}
+
+.guest_encrypt .ant-tabs-bar {
+    margin: 0;
+}
+
+.guest_encrypt .ant-tabs .ant-tabs-small-bar .ant-tabs-tab {
+    padding: 8px 8px;
+    width: 50%;
+}
+
+.guest_encrypt .ant-tabs-nav {
+    width: 100%;
+}
+
+.guest_encrypt .ant-tabs-nav .ant-tabs-tab {
+    margin: 0;
 }
 
 @media (max-width:1330px) and (min-width:1200px) {

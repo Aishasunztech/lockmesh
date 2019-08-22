@@ -386,7 +386,7 @@ class Prices extends Component {
                         // handleCheckChange={this.handleCheckChange}
                         // handlePagination={this.handlePagination}
                         handleComponentSearch={this.handleComponentSearch}
-                        pageHeading={convertToLang(this.props.translation[SET_PRICE_PAGE_HEADING], "Set Price")}
+                        pageHeading={convertToLang(this.props.translation[Button_SET_PRICE], "Set Price")}
                     />
 
                     <Card>

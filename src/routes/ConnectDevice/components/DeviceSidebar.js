@@ -31,7 +31,12 @@ import {
     DEVICE_S_DEALER,
     DEVICE_S_DEALER_NAME,
     USER_ID,
-    IP_ADDRESS
+    IP_ADDRESS,
+    OFFLINE,
+    REMAINING_TERM_DAYS,
+    ONLINE,
+    DEVICE_TYPE,
+    DEVICE_VERSION
 } from '../../../constants/DeviceConstants';
 import { Button_Refresh } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
@@ -82,49 +87,18 @@ export default class DeviceSidebar extends Component {
         return [
             {
                 key: 1,
-                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_STATUS], DEVICE_STATUS))}:</a>),
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_STATUS], "STATUS"))}:</a>),
                 value: <span style={color}>{checkValue(device_details.finalStatus)}</span>,
+            },
+            {
+                key: 26,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[REMAINING_TERM_DAYS], 'REMAINING TERM DAYS'))}:</a>),
+                value: device_details.remainTermDays
             },
             {
                 key: 2,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODE], DEVICE_MODE))}:</a>),
-                value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>Online</span>) : (<span style={{ color: "red" }}>Offline</span>) : "N/A"
-            },
-            {
-                key: 3,
-                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED))}:</a>),
-                value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
-            },
-            {
-                key: 4,
-                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[""], "TYPE"))}:</a>),
-                value: checkValue(device_details.type)
-            },
-            {
-                key: 5,
-                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[""], "VERSION"))}:</a>),
-                value: checkValue(device_details.version)
-            },
-            {
-                key: 6,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_NAME], DEVICE_NAME))}:</a>),
-                value: (<span className="captilize">{checkValue(device_details.name)}</span>)
-            },
-            {
-                key: 7,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL))}:</a>),
-                value: checkValue(device_details.account_email)
-            },
-
-            {
-                key: 8,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL))}:</a>),
-                value: checkValue(device_details.pgp_email)
-            },
-            {
-                key: 9,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE))}:</a>),
-                value: checkValue(device_details.activation_code)
+                value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>{titleCase(convertToLang(this.props.translation[ONLINE], "Online"))}</span>) : (<span style={{ color: "red" }}>{titleCase(convertToLang(this.props.translation[OFFLINE], "Offline"))}</span>) : "N/A"
             },
             {
                 key: 10,
@@ -132,14 +106,14 @@ export default class DeviceSidebar extends Component {
                 value: checkValue(device_details.chat_id)
             },
             {
-                key: 11,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID))}:</a>),
-                value: checkValue(device_details.client_id)
+                key: 8,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL))}:</a>),
+                value: checkValue(device_details.pgp_email)
             },
             {
-                key: 12,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID))}:</a>),
-                value: checkValue(device_details.dealer_id)
+                key: 16,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID))}:</a>),
+                value: checkValue(device_details.sim_id)
             },
             {
                 key: 13,
@@ -153,16 +127,51 @@ export default class DeviceSidebar extends Component {
                 value: checkValue(device_details.link_code)
             },
             {
+                key: 7,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL))}:</a>),
+                value: checkValue(device_details.account_email)
+            },
+            {
+                key: 3,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED))}:</a>),
+                value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
+            },
+            {
+                key: 4,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_TYPE], "TYPE"))}:</a>),
+                value: checkValue(device_details.type)
+            },
+            {
+                key: 5,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_VERSION], "VERSION"))}:</a>),
+                value: checkValue(device_details.version)
+            },
+            {
+                key: 6,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_NAME], DEVICE_NAME))}:</a>),
+                value: (<span className="captilize">{checkValue(device_details.name)}</span>)
+            },
+            {
+                key: 9,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE))}:</a>),
+                value: checkValue(device_details.activation_code)
+            },
+
+            {
+                key: 11,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID))}:</a>),
+                value: checkValue(device_details.client_id)
+            },
+            {
+                key: 12,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID))}:</a>),
+                value: checkValue(device_details.dealer_id)
+            },
+            {
                 key: 15,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS))}:</a>),
                 value: checkValue(device_details.mac_address)
             },
-            {
-                key: 16,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID))}:</a>),
-                value: checkValue(device_details.sim_id)
-            },
-
             {
                 key: 17,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_1], DEVICE_IMEI_1))}:</a>),
@@ -209,11 +218,6 @@ export default class DeviceSidebar extends Component {
                 key: 25,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME))}:</a>),
                 value: checkValue(device_details.s_dealer_name)
-            },
-            {
-                key: 26,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[""], 'REMAINING TERM DAYS'))}:</a>),
-                value: device_details.remainTermDays
             },
             {
                 key: 27,
