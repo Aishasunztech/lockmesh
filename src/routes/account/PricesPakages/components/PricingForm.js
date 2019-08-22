@@ -46,7 +46,7 @@ class PricingForm extends Component {
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Row>
-                    <Col span={13}>
+                    <Col span={12}>
                         <Form.Item label= {convertToLang(this.props.translation[one_month], "1 month")}
                             labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
@@ -56,7 +56,7 @@ class PricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={5}>
                         <Button type="primary" onClick={() => this.setPrice('1 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
                     <Col span={7}>
@@ -65,7 +65,7 @@ class PricingForm extends Component {
                 </Row>
 
                 <Row>
-                    <Col span={13}>
+                    <Col span={12}>
                         <Form.Item label={convertToLang(this.props.translation[three_month], "3 month")} labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('3 month', {
@@ -75,7 +75,7 @@ class PricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={5}>
                         <Button type="primary" onClick={() => this.setPrice('3 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
                     <Col span={7}>
@@ -83,7 +83,7 @@ class PricingForm extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={13}>
+                    <Col span={12}>
                         <Form.Item label={convertToLang(this.props.translation[six_month], "6 month")} labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('6 month', {
@@ -93,7 +93,7 @@ class PricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={5}>
                         <Button type="primary" onClick={() => this.setPrice('6 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
                     <Col span={7}>
@@ -101,7 +101,7 @@ class PricingForm extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={13}>
+                    <Col span={12}>
                         <Form.Item label={convertToLang(this.props.translation[twelve_month], "12 month")} labelCol={{ span: 8 }}
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('12 month', {
@@ -110,7 +110,7 @@ class PricingForm extends Component {
 
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={5}>
                         <Button type="primary" onClick={() => this.setPrice('12 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
                     </Col>
                     <Col span={7}>

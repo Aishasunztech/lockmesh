@@ -85,13 +85,15 @@ import SettingAppPermissions from "./components/SettingAppPermissions";
 import SystemControls from "./components/SystemControls";
 import styles from './ConnectDevice.css';
 import ProgressBar from "../../components/ProgressBar";
-import { Button_Apply, Button_Cancel } from "../../constants/ButtonConstants";
+import { Button_Apply, Button_Cancel, Button_Back } from "../../constants/ButtonConstants";
 import {
   DEVICE_NOT_FOUND,
   SETTINGS_TO_BE_SENT_TO_DEVICE,
   DEVICE_NOT_SYNCED,
   DEVICE_IS,
-  Suspended_TEXT
+  Suspended_TEXT,
+  GUEST,
+  ENCRYPTED
 } from "../../constants/DeviceConstants";
 
 import { mobileMainMenu, mobileManagePasswords } from '../utils/columnsUtils';
@@ -119,7 +121,8 @@ class ConnectDevice extends Component {
       imei_list: [],
       showMessage: false,
       messageText: '',
-      messageType: ''
+      messageType: '',
+      dynamicBackButton: false,
     }
     // console.log("hello every body", this.props);
     this.mainMenu = mobileMainMenu(props.translation);
@@ -129,6 +132,7 @@ class ConnectDevice extends Component {
   changePage = (pageName) => {
     if (this.props.device_details.finalStatus === DEVICE_ACTIVATED || this.props.device_details.finalStatus === DEVICE_TRIAL) {
       this.props.changePage(pageName);
+      this.setState({ dynamicBackButton: true })
     }
   }
   onBackHandler = () => {
@@ -136,8 +140,10 @@ class ConnectDevice extends Component {
       if (this.props.pageName === GUEST_PASSWORD || this.props.pageName === ENCRYPTED_PASSWORD || this.props.pageName === DURESS_PASSWORD || this.props.pageName === ADMIN_PASSWORD) {
         this.props.changePage(MANAGE_PASSWORD);
       } else if (this.props.pageName === MANAGE_PASSWORD) {
+        this.setState({ dynamicBackButton: false })
         this.props.changePage(MAIN_MENU);
       } else {
+        this.setState({ dynamicBackButton: false })
         this.props.changePage(MAIN_MENU);
       }
     }
@@ -317,7 +323,6 @@ class ConnectDevice extends Component {
             renderItem={item => {
               return (<List.Item
                 onClick={() => {
-
                   this.changePage(item.pageName)
                 }}
               ><a>{item.value}</a></List.Item>)
@@ -327,18 +332,20 @@ class ConnectDevice extends Component {
       );
     } else if (this.props.pageName === APPS && isSync) {
       return (
-        <Tabs type="line" className="text-center" size="small" >
-          <TabPane tab={<span className="green">{convertToLang(this.props.translation["GUEST"], "GUEST")}</span>} key="1" >
-            <ListSpaceApp
-              type="guest"
-            />
-          </TabPane>
-          <TabPane tab={<span className="green">{convertToLang(this.props.translation["ENCRYPTED"], "ENCRYPTED")}</span>} key="2" forceRender={true}>
-            <ListSpaceApp
-              type="encrypted"
-            />
-          </TabPane>
-        </Tabs>
+        <div className="guest_encrypt">
+          <Tabs type="line" className="text-center" size="small">
+            <TabPane tab={<span className="green">{convertToLang(this.props.translation[GUEST], "GUEST")}</span>} key="1" >
+              <ListSpaceApp
+                type="guest"
+              />
+            </TabPane>
+            <TabPane tab={<span className="green">{convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED")}</span>} key="2" forceRender={true}>
+              <ListSpaceApp
+                type="encrypted"
+              />
+            </TabPane>
+          </Tabs>
+        </div>
       );
     } else if (this.props.pageName === GUEST_PASSWORD && isSync) {
       return (<Password pwdType={this.props.pageName} />);
@@ -565,6 +572,12 @@ class ConnectDevice extends Component {
     // let completeStep = this.props.complete_policy_step;
     // let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
 
+    let BackBtnstyle;
+    if (this.state.dynamicBackButton) {
+      BackBtnstyle = "pt-42 status_bar"
+    } else {
+      BackBtnstyle = "pt-60 status_bar"
+    }
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -588,7 +601,13 @@ class ConnectDevice extends Component {
                 <Col className="gutter-row action_group" span={8} xs={24} sm={24} md={24} lg={24} xl={8}>
                   <Card>
                     <div className="gutter-box bordered deviceImg" alt="Mobile Image" style={{ backgroundImage: 'url(' + imgUrl + ')' }}>
-                      <div className="status_bar">
+                      <a className="dev_back_btn" onClick={() => {
+                        this.onBackHandler();
+                      }}>
+                        {(this.state.dynamicBackButton) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
+
+                      </a>
+                      <div className={BackBtnstyle}>
                         <div className="col-md-6 col-xs-6 col-sm-6 active_st">
                           <h5><span style={color}>{this.capitalizeFirstLetter(finalStatus)}</span></h5>
                         </div>

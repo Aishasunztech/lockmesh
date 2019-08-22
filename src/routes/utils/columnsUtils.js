@@ -31,7 +31,8 @@ import {
     DEVICE_S_DEALER_NAME,
     USER_ID,
     DEVICE_TYPE,
-    DEVICE_VERSION
+    DEVICE_VERSION,
+    REMAINING_TERM_DAYS
 } from '../../constants/DeviceConstants';
 import {
     // DEVICE_ID,
@@ -877,13 +878,13 @@ export function devicesColumns(translation, handleSearch, SearchValues = []) {
                     className="search_heading"
                     onChange={handleSearch}
                     autoComplete="new-password"
-                    placeholder={convertToLang(translation[""], "REMAINING TERM DAYS")}
+                    placeholder={convertToLang(translation[REMAINING_TERM_DAYS], "REMAINING TERM DAYS")}
                 />
             ),
             dataIndex: 'remainTermDays',
             children: [
                 {
-                    title: convertToLang(translation[""], "REMAINING TERM DAYS"),
+                    title: convertToLang(translation[REMAINING_TERM_DAYS], "REMAINING TERM DAYS"),
                     align: "center",
                     dataIndex: 'remainTermDays',
                     key: 'remainTermDays',
