@@ -47,14 +47,14 @@ const initialState = {
     isloading: true,
     copyPolicies: [],
     selectedOptions: [],
-    options: [POLICY_NAME, POLICY_NOTE, ],
+    options: [POLICY_NAME, POLICY_NOTE,],
     allExtensions: [],
     appPermissions: [],
     allExtensionsCopy: [],
     appPermissionsCopy: [],
-    systemPermissions: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
-    systemPermissionsCopy: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
-    systemPermissionsdump: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false },
+    systemPermissions: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
+    systemPermissionsCopy: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
+    systemPermissionsdump: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
 
     guestAlldealerApps: false,
     encryptedAlldealerApps: false,
@@ -385,7 +385,7 @@ export default (state = initialState, action) => {
                     changedState.splice(index, 1);
                     success({
                         // title: 'Policy Deleted Successfully',
-                        title:  convertToLang(action.translation[POLICY_DELETED_SUCCESSFULLY], "Policy Deleted Successfully"),
+                        title: convertToLang(action.translation[POLICY_DELETED_SUCCESSFULLY], "Policy Deleted Successfully"),
                     });
 
                 } else if (action.payload.key === 'status') {

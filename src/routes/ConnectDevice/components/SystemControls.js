@@ -50,7 +50,7 @@ export default class SystemControls extends Component {
       this.setState({
         controls: nextprops.controls.controls,
         settings: nextprops.controls.settings,
- 
+
       })
     }
   }
@@ -78,7 +78,7 @@ export default class SystemControls extends Component {
       return (
         Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object ?
           <Fragment>
-            <div>
+            <div style={{ height: 400, overflow: 'overlay', borderTop: '1px solid #e8e8e8' }} >
               <List>
                 {/* {
                   (this.state.settings !== undefined && this.state.settings && this.state.settings !== [] && objindex>=0) ?
@@ -150,10 +150,28 @@ export default class SystemControls extends Component {
                     </div>
                   </div>
                 </List.Item>
+
                 <List.Item>
                   <div className="row width_100">
                     <div className="col-md-10 col-sm-10 col-xs-10">
-                      <span>{convertToLang(this.props.translation[SCREENSHOTS], "Screenshots")}</span>
+                      <span>{convertToLang(this.props.translation[""], "Location Services")}</span>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-xs-2">
+                      <Switch checked={this.state.controls.location_status === 1 || this.state.controls.location_status === true ? true : false} size="small"
+                        onClick={(e) => {
+                          // console.log("guest", e);
+                          this.handleChecked(e, "location_status");
+                        }}
+                      />
+                    </div>
+                  </div>
+                </List.Item>
+
+
+                <List.Item>
+                  <div className="row width_100">
+                    <div className="col-md-10 col-sm-10 col-xs-10">
+                      <span>{convertToLang(this.props.translation[SCREENSHOTS], "Screen Capture")}</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">
                       <Switch checked={this.state.controls.screenshot_status === 1 || this.state.controls.screenshot_status === true ? true : false} size="small"
@@ -175,6 +193,67 @@ export default class SystemControls extends Component {
                         onClick={(e) => {
                           // console.log("guest", e);
                           this.handleChecked(e, "call_status");
+                        }}
+                      />
+                    </div>
+                  </div>
+                </List.Item>
+                <List.Item>
+                  <div className="row width_100">
+                    <div className="col-md-10 col-sm-10 col-xs-10">
+                      <span>{convertToLang(this.props.translation[""], "NFC")}</span>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-xs-2">
+                      <Switch checked={this.state.controls.nfc_status === 1 || this.state.controls.nfc_status === true ? true : false} size="small"
+                        onClick={(e) => {
+                          // console.log("guest", e);
+                          this.handleChecked(e, "nfc_status");
+                        }}
+                      />
+                    </div>
+                  </div>
+                </List.Item>
+
+                <List.Item>
+                  <div className="row width_100">
+                    <div className="col-md-10 col-sm-10 col-xs-10">
+                      <span>{convertToLang(this.props.translation[""], "Camera")}</span>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-xs-2">
+                      <Switch checked={this.state.controls.camera_status === 1 || this.state.controls.camera_status === true ? true : false} size="small"
+                        onClick={(e) => {
+                          // console.log("guest", e);
+                          this.handleChecked(e, "camera_status");
+                        }}
+                      />
+                    </div>
+                  </div>
+                </List.Item>
+                <List.Item>
+                  <div className="row width_100">
+                    <div className="col-md-10 col-sm-10 col-xs-10">
+                      <span>{convertToLang(this.props.translation[""], "Mic")}</span>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-xs-2">
+                      <Switch checked={this.state.controls.mic_status === 1 || this.state.controls.mic_status === true ? true : false} size="small"
+                        onClick={(e) => {
+                          // console.log("guest", e);
+                          this.handleChecked(e, "mic_status");
+                        }}
+                      />
+                    </div>
+                  </div>
+                </List.Item>
+                <List.Item>
+                  <div className="row width_100">
+                    <div className="col-md-10 col-sm-10 col-xs-10">
+                      <span>{convertToLang(this.props.translation[""], "Speaker")}</span>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-xs-2">
+                      <Switch checked={this.state.controls.speaker_status === 1 || this.state.controls.speaker_status === true ? true : false} size="small"
+                        onClick={(e) => {
+                          // console.log("guest", e);
+                          this.handleChecked(e, "speaker_status");
                         }}
                       />
                     </div>

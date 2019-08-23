@@ -366,7 +366,7 @@ class EditPolicy extends Component {
                 )
             }, {
                 rowKey: 'screenshot_status',
-                name: 'ScreenShot',
+                name: 'Screen Capture',
                 action: (
                     <Switch
                         checked={controls.screenshot_status}
@@ -384,7 +384,8 @@ class EditPolicy extends Component {
                         size="small"
                     />
                 )
-            }, {
+            },
+            {
                 rowKey: 'hotspot_status',
                 name: 'Hotspot',
                 action: (
@@ -395,7 +396,69 @@ class EditPolicy extends Component {
                     />
                 )
 
-            }]
+            },
+            {
+                rowKey: 'call_status',
+                name: 'Block Calls',
+                action: (
+                    <Switch
+                        checked={controls.call_status}
+                        onClick={(e) => this.props.handleEditPolicy(e, 'call_status', '', 'controls', this.state.editAblePolicy.id)}
+                        size="small"
+                    />
+                )
+
+            },
+            {
+                rowKey: 'nfc_status',
+                name: 'NFC',
+                action: (
+                    <Switch
+                        checked={controls.nfc_status}
+                        onClick={(e) => this.props.handleEditPolicy(e, 'nfc_status', '', 'controls', this.state.editAblePolicy.id)}
+                        size="small"
+                    />
+                )
+
+            },
+            {
+                rowKey: 'camera_status',
+                name: 'Camera',
+                action: (
+                    <Switch
+                        checked={controls.camera_status}
+                        onClick={(e) => this.props.handleEditPolicy(e, 'camera_status', '', 'controls', this.state.editAblePolicy.id)}
+                        size="small"
+                    />
+                )
+
+            },
+            {
+                rowKey: 'mic_status',
+                name: 'Mic',
+                action: (
+                    <Switch
+                        checked={controls.mic_status}
+                        onClick={(e) => this.props.handleEditPolicy(e, 'mic_status', '', 'controls', this.state.editAblePolicy.id)}
+                        size="small"
+                    />
+                )
+
+            },
+            {
+                rowKey: 'speaker_status',
+                name: 'Speaker',
+                action: (
+                    <Switch
+                        checked={controls.speaker_status}
+                        onClick={(e) => this.props.handleEditPolicy(e, 'speaker_status', '', 'controls', this.state.editAblePolicy.id)}
+                        size="small"
+                    />
+                )
+
+            },
+
+            ]
         }
     }
 

@@ -1401,7 +1401,7 @@ export default (state = initialState, action) => {
             }
         }
 
-        case ACK_SETTING_APPLIED:{
+        case ACK_SETTING_APPLIED: {
             return {
                 ...state,
                 app_list: action.payload.app_list,
