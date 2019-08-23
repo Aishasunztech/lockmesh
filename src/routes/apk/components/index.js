@@ -10,6 +10,7 @@ import { Markup } from 'interweave';
 import { Redirect } from 'react-router-dom';
 import { BASE_URL } from '../../../constants/Application.js';
 
+
 import {
     APP_MANAGE_APKs,
     APP_MANAGE_POLICY,
@@ -48,6 +49,57 @@ import {
     convertToLang
 } from '../../utils/commonUtils'
 
+import {
+    checkPass,
+} from "../../../appRedux/actions/Apk";
+
+
+
+
+import PasswordForm from '../../ConnectDevice/components/PasswordForm'
+
+class PasswordModal extends Component {
+    // console.log('object,', props.actionType)
+    render() {
+        return (
+            <Modal
+                // closable={false}
+                maskClosable={false}
+                style={{ top: 20 }}
+                width="330px"
+                className="push_app"
+                title=""
+                visible={this.props.pwdConfirmModal}
+                footer={false}
+                onOk={() => {
+                }}
+                onCancel={() => {
+                    this.props.showPwdConfirmModal(false)
+                    this.refs.pswdForm.resetFields()
+                }
+                }
+            >
+                <PasswordForm
+                    checkPass={this.props.checkPass}
+                    actionType='back_up'
+                    handleCancel={this.props.showPwdConfirmModal}
+                    ref='pswdForm'
+                    translation={this.props.translation}
+                />
+            </Modal >
+        )
+    }
+}
+
+
+
+
+
+
+
+
+
+
 class Apk extends Component {
     constructor(props) {
         super(props);
@@ -76,9 +128,9 @@ class Apk extends Component {
     };
 
 
-    showPwdConfirmModal = (value) => {
+    showPwdConfirmModal = (visible) => {
         this.setState({
-            pwdConfirmModal: value
+            pwdConfirmModal: visible,
         })
     }
 
@@ -248,7 +300,7 @@ class Apk extends Component {
                                     cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
                                     onCancel={this.handleCancel}
                                     className="d_tool_pup"
-                                    
+
                                 >
                                     <Row className="d_t_m">
                                         <h4 style={{ lineHeight: '30px', marginBottom: 0 }}><Markup content={convertToLang(this.props.translation[DT_MODAL_BODY], "Neutral Launcher (BYOD) <b>(Android v8+)</b>")} ></Markup></h4>
@@ -297,11 +349,53 @@ class Apk extends Component {
                                         <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
                                     </Link>
                                 </div>
-                              
+
                             </Col>
+                            <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                <div>
+                                    <Link
+                                        to="#" onClick={() => this.showPwdConfirmModal(true)}
+                                    >
+                                        <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                            <div>
+                                                <h2 style={{ textAlign: "center", width: "80%", margin: "0 auto" }}>
+                                                    <Icon type="lock" className="lock_icon2" />
+
+                                                    {convertToLang(this.props.translation[""], "Bulk Device Activities")} </h2>
+                                                <Divider className="mb-0" />
+                                                <Row style={{ padding: '12px 0 0px' }}>
+                                                    <Col span={8} className="text-center">
+                                                        <Icon type="mobile" className="policy_icon" />
+                                                    </Col>
+                                                    <Col span={16} style={{ padding: '0' }}>
+                                                        <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                            <Markup content={convertToLang(this.props.translation[""], "PUSH/PULL Apks To All OR Selected Devices.")} />
+                                                        </h5>
+                                                        <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                            <Markup content={convertToLang(this.props.translation[""], "Make Permission Changes To All OR Selected Devices")} />
+                                                        </h5>
+                                                        <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                            <Markup content={convertToLang(this.props.translation[""], "Push Policy, Suspend, Wipe to ALL OR Selected Devices ")} />
+                                                        </h5>
+                                                        <h5 className="" > {convertToLang(this.props.translation[""], "and more...")} </h5>
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Card>
+                                        <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                    </Link>
+                                </div>
+                            </Col>
+                            <PasswordModal
+                                translation={this.props.translation}
+                                pwdConfirmModal={this.state.pwdConfirmModal}
+                                showPwdConfirmModal={this.showPwdConfirmModal}
+                                checkPass={this.props.checkPass}
+                                translation={this.props.translation}
+                            />
                         </Row>
                     </div>
-                   
+
                 </div>
             )
         }
@@ -325,7 +419,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         // getApkList: getApkList,
         authenticateUpdateUser: authenticateUpdateUser,
-        resetAuthUpdate: resetAuthUpdate
+        resetAuthUpdate: resetAuthUpdate,
+        checkPass: checkPass,
 
     }, dispatch);
 }

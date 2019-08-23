@@ -18,6 +18,7 @@ import AppMarket from "./appMaket/index";
 import ManageData from './account/ManageData/index'
 import SetPrice from './account/PricesPakages/index'
 import DealerAgent from './dealerAgent/index'
+import BulkActivities from './bulkActivities/index'
 // import Documents from "./documents/index";
 
 const App = ({ match }) => {
@@ -110,6 +111,11 @@ const App = ({ match }) => {
           exact
           path={`${match.url}dealer-agents`}
           component={DealerAgent}
+        />
+        <Route
+          exact
+          path="/bulk-activities"
+          component={BulkActivities}
         />
         <Route
           exact

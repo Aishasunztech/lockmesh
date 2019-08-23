@@ -12,7 +12,8 @@ import {
 	RESET_UPLOAD_FORM,
 	CHECK_APK_NAME,
 	AUTHENTICATE_UPDATE_USER,
-	RESET_AUTH_UPDATE
+	RESET_AUTH_UPDATE,
+	CHECK_BULK_PASS
 } from "../../constants/ActionTypes";
 
 import {
@@ -230,6 +231,21 @@ export default (state = initialState, action) => {
 				...state,
 				authenticateUpdateUser: authenticate
 
+			}
+		}
+		case CHECK_BULK_PASS: {
+			if (action.payload.PasswordMatch.password_matched) {
+				return {
+					...state,
+				}
+			}
+			else {
+				error({
+					title: action.payload.msg,
+				});
+				return {
+					...state
+				}
 			}
 		}
 
