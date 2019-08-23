@@ -844,7 +844,7 @@ class Devices extends Component {
         return (
             <Select
                 showSearch
-                placeholder={convertToLang(this.props.translation[Appfilter_ShowDevices], Appfilter_ShowDevices)}
+                placeholder={convertToLang(this.props.translation[Appfilter_ShowDevices], "Show Devices")}
                 optionFilterProp="children"
                 style={{ width: '100%' }}
                 // filterOption={(input, option) => {
@@ -853,16 +853,16 @@ class Devices extends Component {
                 onChange={this.handleChange}
             >
 
-                <Select.Option value="all"> {convertToLang(this.props.translation[Tab_All], Tab_All)} </Select.Option>
-                <Select.Option value={DEVICE_ACTIVATED}> {convertToLang(this.props.translation[Tab_Active], Tab_Active)}  </Select.Option>
-                <Select.Option value={DEVICE_EXPIRED}> {convertToLang(this.props.translation[Tab_Expired], Tab_Expired)} </Select.Option>
-                <Select.Option value={DEVICE_TRIAL}> {convertToLang(this.props.translation[Tab_Trial], Tab_Trial)}  </Select.Option>
-                <Select.Option value={DEVICE_SUSPENDED}> {convertToLang(this.props.translation[Tab_Suspended], Tab_Suspended)} </Select.Option>
-                <Select.Option value={DEVICE_PRE_ACTIVATION}> {convertToLang(this.props.translation[Tab_PreActivated], Tab_PreActivated)}  </Select.Option>
-                <Select.Option value={DEVICE_PENDING_ACTIVATION}> {convertToLang(this.props.translation[Tab_PendingActivation], Tab_PendingActivation)} </Select.Option>
-                <Select.Option value={DEVICE_TRANSFERED}> {convertToLang(this.props.translation[Tab_Transfer], Tab_Transfer)} </Select.Option>
-                <Select.Option value={DEVICE_FLAGGED}> {convertToLang(this.props.translation[Tab_Flagged], Tab_Flagged)} </Select.Option>
-                <Select.Option value={DEVICE_UNLINKED}> {convertToLang(this.props.translation[Tab_Unlinked], Tab_Unlinked)} </Select.Option>
+                <Select.Option value="all"> {convertToLang(this.props.translation[Tab_All], "All")} </Select.Option>
+                <Select.Option value={DEVICE_ACTIVATED}> {convertToLang(this.props.translation[Tab_Active], "Active")}  </Select.Option>
+                <Select.Option value={DEVICE_EXPIRED}> {convertToLang(this.props.translation[Tab_Expired], "Expired")} </Select.Option>
+                <Select.Option value={DEVICE_TRIAL}> {convertToLang(this.props.translation[Tab_Trial], "Trial")}  </Select.Option>
+                <Select.Option value={DEVICE_SUSPENDED}> {convertToLang(this.props.translation[Tab_Suspended], "Suspended")} </Select.Option>
+                <Select.Option value={DEVICE_PRE_ACTIVATION}> {convertToLang(this.props.translation[Tab_PreActivated], "PreActivated")}  </Select.Option>
+                <Select.Option value={DEVICE_PENDING_ACTIVATION}> {convertToLang(this.props.translation[Tab_PendingActivation], "PendingActivation")} </Select.Option>
+                <Select.Option value={DEVICE_TRANSFERED}> {convertToLang(this.props.translation[Tab_Transfer], "Transfer")} </Select.Option>
+                <Select.Option value={DEVICE_FLAGGED}> {convertToLang(this.props.translation[Tab_Flagged], "Flagged")} </Select.Option>
+                <Select.Option value={DEVICE_UNLINKED}> {convertToLang(this.props.translation[Tab_Unlinked], "Unlinked")} </Select.Option>
 
             </Select>
         );
