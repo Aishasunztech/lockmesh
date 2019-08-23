@@ -186,7 +186,7 @@ class DevicesList extends Component {
                 size="small"
                 style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }}
                 onClick={() => { (device.finalStatus == "Transfered") ? this.props.unlinkConfirm(device) : this.props.unflagConfirm(device) }}
-                disabled={(device.finalStatus == "Transfered") ? true : false}
+                // disabled={(device.finalStatus == "Transfered") ? true : false}
             >{convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG")} </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
@@ -790,8 +790,8 @@ export default class Tab extends Component {
             okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
             cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk() {
+                console.log('unlinkConfirm ', device);
                 // _this.props.unlinkDevice(device)
-                // console.log('OK');
             },
             onCancel() {
                 // console.log('Cancel');

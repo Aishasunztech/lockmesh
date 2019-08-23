@@ -121,6 +121,7 @@ class EditDevice extends Component {
     }
 
     render() {
+        // console.log('check edit device: ', this.props.device);
         // console.log('props of coming', this.props.device);
         const { visible, loading, isloading, addNewUserValue } = this.state;
         const { users_list } = this.props;
@@ -150,6 +151,7 @@ class EditDevice extends Component {
                             <Spin />
                         </div>
                         :
+                        // (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? null :
                         <Fragment>
                             <Form.Item
                                 label={convertToLang(this.props.translation[USER_ID], "USER ID")}
@@ -160,14 +162,19 @@ class EditDevice extends Component {
 
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
-                                    rules: [{
-                                        required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
-                                    }]
+
+                                    rules: [
+                                        (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
+                                            {
+                                                required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
+                                            }
+                                    ]
                                 })(
                                     <Select
                                         className="pos_rel"
                                         setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
+                                        disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
                                         placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
                                         optionFilterProp="children"
                                         onChange={this.handleUserChange}
@@ -194,7 +201,7 @@ class EditDevice extends Component {
                                     //     Add User
                                     // </Button> */}
                                 )}
-                                {(this.props.user.type === ADMIN) ? null :
+                                {(this.props.user.type === ADMIN || (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1')) ? null :
                                     <Button
                                         className="add_user_btn"
                                         type="primary"
