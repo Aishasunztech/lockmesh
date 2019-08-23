@@ -15,6 +15,9 @@ import {
     addDevice,
     preActiveDevice,
     deleteUnlinkDevice,
+    getSimIDs,
+    getChatIDs,
+    getPGPEmails
 } from "../../appRedux/actions/Devices";
 
 import {
@@ -82,10 +85,11 @@ import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang, checkValue } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
+import { Sidebar_devices } from "../../constants/SidebarConstants";
 
 
 var coppyDevices = [];
@@ -116,6 +120,7 @@ class Devices extends Component {
             transferredDevices: [],
             copy_status: true,
             translation: {},
+            SearchValues: [],
         }
         this.copyDevices = [];
 
@@ -319,95 +324,106 @@ class Devices extends Component {
             // }
         }
 
+        let devices = [];
         switch (value) {
             case DEVICE_ACTIVATED:
+                devices = this.state.activeDevices;
                 this.setState({
-                    devices: this.state.activeDevices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '4',
                     copy_status: true
                 })
 
                 break;
             case DEVICE_TRIAL:
+                devices = this.state.trialDevices;
                 this.setState({
-                    devices: this.state.trialDevices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '9',
                     copy_status: true
                 })
 
                 break;
             case DEVICE_SUSPENDED:
+                devices = this.state.suspendDevices;
                 this.setState({
-                    devices: this.state.suspendDevices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '7',
                     copy_status: true
                 })
                 break;
             case DEVICE_TRANSFERED:
+                devices = this.state.transferredDevices;
                 this.setState({
-                    devices: this.state.transferredDevices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '8',
                     copy_status: true
                 })
                 break;
             case DEVICE_FLAGGED:
+                devices = this.state.flaggedDevices;
                 this.setState({
-                    devices: this.state.flaggedDevices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '10',
                     copy_status: true
                 })
                 break;
             case DEVICE_EXPIRED:
+                devices = this.state.expireDevices;
                 this.setState({
-                    devices: this.state.expireDevices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '6',
                     copy_status: true
                 })
                 break;
             case 'all':
+                devices = this.state.allDevices;
                 this.setState({
-                    devices: this.state.allDevices,
-                    filteredDevices: this.props.devices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '1',
                     copy_status: true
                 })
                 break;
             case DEVICE_UNLINKED:
+                devices = this.state.unlinkedDevices;
                 this.setState({
-                    devices: this.state.unlinkedDevices,
-                    // column: this.columns,
-                    tabselect: '5'
-                    , copy_status: true
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
+                    tabselect: '5',
+                    copy_status: true
                 })
                 break;
             case DEVICE_PENDING_ACTIVATION:
                 // alert(value);
+                devices = this.state.pendingDevices;
                 this.setState({
-                    devices: this.state.pendingDevices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '2',
                     copy_status: true
                 })
                 break;
             case DEVICE_PRE_ACTIVATION:
+                devices = this.state.preActiveDevices;
                 this.setState({
-                    devices: this.state.preActiveDevices,
-                    // column: this.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '3',
                     copy_status: true
                 })
                 break;
             default:
+                devices = this.state.allDevices;
                 this.setState({
-                    devices: this.state.allDevices,
-                    // column: this.columns,
+                    devices,
+                    filteredDevices: devices,
                     tabselect: '1'
                 })
                 break;
@@ -416,6 +432,8 @@ class Devices extends Component {
     }
 
     handleChangetab = (value) => {
+
+
         // console.log('tab is: ', value)
         // console.log('============= value index is: ', value)
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
@@ -548,104 +566,114 @@ class Devices extends Component {
             }
         }
 
+        // this.setState({
+        //     columns: devicesColumns(this.props.translation, this.handleSearch, this.state.SearchValues)
+        // })
+
         var devices = [];
         switch (value) {
             case '4':
-                // devices = this.state.activeDevices
+                devices = this.filterList(DEVICE_ACTIVATED, this.props.devices);
                 this.setState({
-                    devices: this.filterList(DEVICE_ACTIVATED, this.props.devices), // devices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
                     tabselect: '4',
+                    filteredDevices: devices,
                     copy_status: true
                 })
                 break;
             case '9':
+                devices = this.filterList(DEVICE_TRIAL, this.props.devices);
                 // devices = this.state.trialDevices
                 this.setState({
-                    devices: this.filterList(DEVICE_TRIAL, this.props.devices), // devices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '9',
                     copy_status: true
                 })
                 break;
             case '7':
-                // devices = this.state.suspendDevices
+                devices = this.filterList(DEVICE_SUSPENDED, this.props.devices);
                 this.setState({
-                    devices: this.filterList(DEVICE_SUSPENDED, this.props.devices), // devices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '7',
                     copy_status: true
                 })
                 break;
             case '6':
-                // devices = this.state.expireDevices
+                devices = this.filterList(DEVICE_EXPIRED, this.props.devices);
                 this.setState({
-                    devices: this.filterList(DEVICE_EXPIRED, this.props.devices), // devices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '6',
                     copy_status: true
                 })
                 break;
             case '1':
+                devices = this.props.devices;
                 this.setState({
-                    devices: this.props.devices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '1',
                     copy_status: true
                 })
                 break;
             case "5":
-                // devices = this.state.unlinkedDevices
+                devices = this.filterList(DEVICE_UNLINKED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_UNLINKED, this.props.devices), // devices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '5',
                     copy_status: true
                 })
                 break;
             case "2":
-                // devices = this.state.pendingDevices
+                devices = this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_PENDING_ACTIVATION, this.props.devices), // devices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '2',
                     copy_status: true
                 })
                 break;
             case "3":
-                // devices = this.state.preActiveDevices
+                devices = this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_PRE_ACTIVATION, this.props.devices), //  devices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '3',
                     copy_status: true
                 })
                 break;
             case "8":
+                devices = this.filterList(DEVICE_TRANSFERED, this.props.devices);
                 this.setState({
-                    devices: this.filterList(DEVICE_TRANSFERED, this.props.devices),
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '8',
                     copy_status: true
                 })
                 break;
             case "10":
+                devices = this.filterList(DEVICE_FLAGGED, this.props.devices)
                 this.setState({
-                    devices: this.filterList(DEVICE_FLAGGED, this.props.devices), // this.state.flaggedDevices,
-                    // column: this.state.columns,
+                    devices: this.handleSearch12(devices),
+                    filteredDevices: devices,
                     tabselect: '10',
                     copy_status: true
                 })
                 break;
             default:
+                devices = this.props.devices;
                 this.setState({
-                    devices: this.props.devices,
-                    // column: this.state.columns,
+                    devices: devices,
+                    filteredDevices: devices,
                     tabselect: '1',
                     copy_status: true
                 })
                 break;
         }
+
     }
 
     updateColumn(column, type) {
@@ -742,8 +770,7 @@ class Devices extends Component {
 
         if (this.props.translation !== prevProps.translation) {
             this.setState({
-                columns: devicesColumns(this.props.translation, this.handleSearch)
-
+                columns: devicesColumns(this.props.translation, this.handleSearch, this.state.SearchValues)
             })
         }
 
@@ -865,6 +892,7 @@ class Devices extends Component {
 
 
     render() {
+        // console.log('search data is: ', this.state.SearchValues);
         let type = this.props.user.type
         let styleType = {};
         if (type === ADMIN) {
@@ -897,9 +925,8 @@ class Devices extends Component {
                                 handleComponentSearch={this.handleComponentSearch}
                                 locale={this.props.locale}
                                 translation={this.state.translation}
-                                pageHeading={convertToLang(this.props.translation[DEVICE_PAGE_HEADING], "Devices")}
+                                pageHeading={convertToLang(this.props.translation[Sidebar_devices], "Devices")}
                             />
-
                             <DevicesList
                                 onChangeTableSorting={this.handleTableChange}
                                 devices={this.state.devices}
@@ -934,6 +961,9 @@ class Devices extends Component {
                                 translation={this.state.translation}
                                 unlinkDevice={this.props.unlinkDevice}
                                 styleType={styleType}
+                                getSimIDs={this.props.getSimIDs}
+                                getChatIDs={this.props.getChatIDs}
+                                getPgpEmails={this.props.getPgpEmails}
                             />
                             <ShowMsg
                                 msg={this.props.msg}
@@ -948,57 +978,92 @@ class Devices extends Component {
     }
 
 
-
     handleSearch = (e) => {
-        // console.log('============ check search value ========')
-        // console.log(e.target.name , e.target.value);
-
         let demoDevices = [];
+        let demoSearchValues = this.state.SearchValues;
         if (this.state.copy_status) {
-            coppyDevices = this.state.devices;
+            coppyDevices = this.state.filteredDevices;
             this.state.copy_status = false;
         }
-        //   console.log("devices for search", coppyDevices);
 
-        if (e.target.value.length) {
-            // console.log("keyname", e.target.name);
-            // console.log("value", e.target.value);
-            // console.log(this.state.devices);
+        let targetName = e.target.name;
+        let targetValue = e.target.value;
+
+        if (targetValue.length || Object.keys(demoSearchValues).length) {
+            demoSearchValues[targetName] = { key: targetName, value: targetValue };
+            this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
+
             coppyDevices.forEach((device) => {
-                //  console.log("device", device[e.target.name] !== undefined);
-                if (device[e.target.name] !== undefined) {
-                    if ((typeof device[e.target.name]) === 'string') {
-                        // console.log("string check", device[e.target.name])
-                        if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+                // console.log('device is: ', device);
+                if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
+
+                    let searchColsAre = Object.keys(demoSearchValues).length;
+                    let searchDevices = 0;
+
+                    if (searchColsAre > 0) {
+                        Object.values(demoSearchValues).forEach((data) => {
+                            
+                            if (data.value == "") {
+                                searchDevices++;
+                            } else if (device[data.key].toUpperCase().includes(data.value.toUpperCase())) {
+                                searchDevices++;
+                            }
+                        })
+
+                        if (searchColsAre === searchDevices) {
                             demoDevices.push(device);
                         }
-                    } else if (device[e.target.name] !== null) {
-                        // console.log("else null check", device[e.target.name])
-                        if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-                            demoDevices.push(device);
-                        }
-                    } else {
-                        // demoDevices.push(device);
                     }
-                } else {
-                    // demoDevices.push(device);
+                    else {
+                        if (device[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
+                            demoDevices.push(device);
+                        }
+                    }
                 }
             });
-            //  console.log("searched value", demoDevices);
             this.setState({
-                devices: demoDevices
+                devices: demoDevices,
+                SearchValues: demoSearchValues
             })
         } else {
             this.setState({
-                devices: coppyDevices
+                devices: coppyDevices,
+                SearchValues: demoSearchValues
             })
         }
     }
 
-    // handleReset = (clearFilters) => {
-    //     clearFilters();
-    //     this.setState({ searchText: '' });
-    // }
+
+    handleSearch12 = (devices) => {
+        let searchedDevices = [];
+        let searchData = Object.values(this.state.SearchValues);
+        let searchColsAre = Object.keys(this.state.SearchValues).length;
+
+        if (searchColsAre) {
+            devices.forEach((device) => {
+                let searchDevices = 0;
+
+                for (let search of searchData) {
+                    // console.log('search is: ', search)
+                    // console.log('search key is: ', search.key)
+                    if (search.value == "") {
+                        searchDevices++;
+                    } else if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
+                        searchDevices++;
+                    }
+
+                }
+                if (searchColsAre === searchDevices) {
+                    searchedDevices.push(device);
+                }
+
+            });
+            return searchedDevices;
+        } else {
+            return devices;
+        }
+    }
+
 
 }
 
@@ -1019,6 +1084,9 @@ function mapDispatchToProps(dispatch) {
         deleteUnlinkDevice: deleteUnlinkDevice,
         unflagged: unflagged,
         unlinkDevice: unlinkDevice,
+        getSimIDs: getSimIDs,
+        getChatIDs: getChatIDs,
+        getPgpEmails: getPGPEmails
     }, dispatch);
 }
 

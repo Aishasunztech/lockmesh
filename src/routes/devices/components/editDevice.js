@@ -22,13 +22,13 @@ export default class EditDealer extends Component {
         // alert('its working')
         editDevice = func;
         this.setState({
-
             device: device,
             visible: true,
             func: func,
-
         });
-
+        this.props.getSimIDs();
+        this.props.getChatIDs();
+        this.props.getPgpEmails();
     }
 
 

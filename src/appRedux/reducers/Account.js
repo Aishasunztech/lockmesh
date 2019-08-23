@@ -16,7 +16,8 @@ import {
     RESET_PRICE,
     GET_PACKAGES,
     PURCHASE_CREDITS,
-    GET_PARENT_PACKAGES
+    GET_PARENT_PACKAGES,
+    RESYNC_IDS
 } from "../../constants/ActionTypes";
 import { message, Modal } from "antd";
 
@@ -117,6 +118,14 @@ export default (state = initialState, action) => {
                 ...state,
                 prices: state.pricesCopy,
                 isPriceChanged: false
+            }
+        }
+        case RESYNC_IDS: {
+            success({
+                title: "ID's data Refreshed successfully",
+            });
+            return {
+                ...state
             }
         }
 
@@ -265,7 +274,7 @@ export default (state = initialState, action) => {
                 backUpModal: action.payload,
             }
 
-       
+
 
         case PURCHASE_CREDITS:
             // console.log(action.response);

@@ -49,7 +49,8 @@ export const Tab_POLICY_Dealer_PERMISSIONS = "tab.policy.dealer.permissions.id";
 
 // inner colums
 export const App_Name = "app.name.id"; // APP NAME
-export const Guest = "guest.id"; // GUEST
+export const Show_Hide = "ShowHide.id"; // Show/Hide 
+export const Guest = "guest.id"; // GUEST 
 export const ENCRYPTED = "encrypted.id" // ENCRYPTED
 export const ENCRYPT = "encrypt.id" // ENCRYPT
 export const ENABLE = "enable.id"; // ENABLE

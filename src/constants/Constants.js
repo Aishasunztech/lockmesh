@@ -38,6 +38,7 @@ export const APPS = 'apps';
 export const SET_GUEST_PASSWORD = "Set.Guest.Password.id"; // Set Guest Password
 export const SET_ENCRYPTED_PASSWORD = 'Set.Encrypted.Password.id'; // Set Encrypted Password
 export const SET_DURESS_PASSWORD = 'Set.Duress.Password.id'; // Set Duress Password
+export const RESET_DURESS_PASSWORD = 'Reset.Duress.Password.id'; // Reset Duress Password
 export const CHANGE_ADMIN_PANEL_CODE = "Change.Admin.Panel.Code.id"; // Change Admin Panel Code
 
 export const APPLICATION_PERMISION = 'application.permission.id'; // Application Permission
@@ -174,6 +175,7 @@ export const ARE_YOU_SURE_YOU_WANT_TO_ACCEPT_THIS_REQUEST = "Are.you.sure.you.wa
 export const PROFILE_NAME = "PROFILE.NAME.id"; // PROFILE NAME
 
 export const GUEST_ALL = "Guest.All.id"; // Guest All
+export const SHOW_ALL = "Show.All.id"; // Show All
 export const Encrypted_ALL = "Encrypted.All.id"; // Encrypted All
 export const Enable_ALL = "Enable.All.id"; // Enable All
 // export const GUEST_ALL = "Guest.All.id"; // Guest All
