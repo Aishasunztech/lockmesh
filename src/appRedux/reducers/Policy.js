@@ -52,9 +52,9 @@ const initialState = {
     appPermissions: [],
     allExtensionsCopy: [],
     appPermissionsCopy: [],
-    systemPermissions: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
-    systemPermissionsCopy: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
-    systemPermissionsdump: { "wifi_status": false, "bluetooth_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
+    systemPermissions: { "wifi_status": false, "bluetooth_status": false, "bluetooth_sharing_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
+    systemPermissionsCopy: { "wifi_status": false, "bluetooth_status": false, "bluetooth_sharing_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
+    systemPermissionsdump: { "wifi_status": false, "bluetooth_status": false, "bluetooth_sharing_status": false, "screenshot_status": false, "location_status": false, "hotspot_status": false, "call_status": false, "nfc_status": false, "camera_status": false, "mic_status": false, "speaker_status": false },
 
     guestAlldealerApps: false,
     encryptedAlldealerApps: false,

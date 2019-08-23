@@ -362,6 +362,7 @@ th.device_info {
 
     .status_bar {
         margin: 0px 0px 27px 0px;
+        padding-top: 43px;
     }
 
     .deviceImg .ant-table-scroll {

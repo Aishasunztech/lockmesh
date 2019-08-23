@@ -270,6 +270,11 @@ class AddPolicy extends Component {
                 action: <Switch checked={this.state.systemPermissions.bluetooth_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'bluetooth_status')} size="small" />
             },
             {
+                rowKey: 'bluetooth_sharing_status',
+                name: 'Bluetooth File Sharing ',
+                action: <Switch checked={this.state.systemPermissions.bluetooth_sharing_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'bluetooth_sharing_status')} size="small" />
+            },
+            {
                 rowKey: 'hotspot_status',
                 name: 'Hotspot',
                 action: <Switch checked={this.state.systemPermissions.hotspot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'hotspot_status')} size="small" />

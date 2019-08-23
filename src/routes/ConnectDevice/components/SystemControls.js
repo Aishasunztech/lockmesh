@@ -138,6 +138,21 @@ export default class SystemControls extends Component {
                 <List.Item>
                   <div className="row width_100">
                     <div className="col-md-10 col-sm-10 col-xs-10">
+                      <span>{convertToLang(this.props.translation[""], "Bluetooth File Sharing")}</span>
+                    </div>
+                    <div className="col-md-2 col-sm-2 col-xs-2">
+                      <Switch checked={this.state.controls.bluetooth_sharing_status === 1 || this.state.controls.bluetooth_sharing_status === true ? true : false} size="small"
+                        onClick={(e) => {
+                          // console.log("guest", e);
+                          this.handleChecked(e, "bluetooth_sharing_status");
+                        }}
+                      />
+                    </div>
+                  </div>
+                </List.Item>
+                <List.Item>
+                  <div className="row width_100">
+                    <div className="col-md-10 col-sm-10 col-xs-10">
                       <span>{convertToLang(this.props.translation[HOTSPOT], "Hotspot")}</span>
                     </div>
                     <div className="col-md-2 col-sm-2 col-xs-2">

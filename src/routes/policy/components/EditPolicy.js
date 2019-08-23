@@ -354,7 +354,8 @@ class EditPolicy extends Component {
                         size="small"
                     />
                 )
-            }, {
+            },
+            {
                 rowKey: 'bluetooth_status',
                 name: 'Bluetooth',
                 action: (
@@ -364,7 +365,19 @@ class EditPolicy extends Component {
                         size="small"
                     />
                 )
-            }, {
+            },
+            {
+                rowKey: 'bluetooth_sharing_status',
+                name: 'Bluetooth File Sharing',
+                action: (
+                    <Switch
+                        checked={controls.bluetooth_sharing_status}
+                        onClick={(e) => this.props.handleEditPolicy(e, 'bluetooth_sharing_status', '', 'controls', this.state.editAblePolicy.id)}
+                        size="small"
+                    />
+                )
+            },
+            {
                 rowKey: 'screenshot_status',
                 name: 'Screen Capture',
                 action: (
