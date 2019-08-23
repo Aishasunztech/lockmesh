@@ -541,8 +541,14 @@ class Devices extends Component {
             this.state.columns[1]['title'] = '';
 
             if (indxRemainingDays >= 0 && indxRemainingDays !== undefined) {
-                this.state.columns[indxRemainingDays].className = 'hide';
-                this.state.columns[indxRemainingDays].children[0].className = 'hide';
+                if (value === '1') {
+                    this.state.columns[indxRemainingDays].className = '';
+                    this.state.columns[indxRemainingDays].children[0].className = '';
+                } else {
+                    this.state.columns[indxRemainingDays].className = 'hide';
+                    this.state.columns[indxRemainingDays].children[0].className = 'hide';
+                }
+                
             }
 
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
@@ -707,16 +713,16 @@ class Devices extends Component {
                 values.map((value) => {
                     if (column.className !== 'row') {
                         if (column.dataIndex === value.key) {
-                            if (this.state.tabselect !== '3') {
-                                if (column.dataIndex !== 'validity') {
-                                    dumydata[index].className = '';
-                                    dumydata[index].children[0].className = '';
-                                }
-                            }
-                            else {
+                            // if (this.state.tabselect !== '3') {
+                            //     if (column.dataIndex !== 'validity') {
+                            //         dumydata[index].className = '';
+                            //         dumydata[index].children[0].className = '';
+                            //     }
+                            // }
+                            // else {
                                 dumydata[index].className = '';
                                 dumydata[index].children[0].className = '';
-                            }
+                            // }
                         }
                     }
 
