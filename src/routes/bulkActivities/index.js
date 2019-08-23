@@ -1,15 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Modal } from 'antd';
+import { Modal, Col, Row, Card, Button } from 'antd';
 
+import { Redirect } from 'react-router-dom'
 import {
 
 } from '../../appRedux/actions'
 
-import {
-    WARNING
-} from '../../constants/Constants';
 
 import AppFilter from '../../components/AppFilter';
 
@@ -116,46 +114,41 @@ class BulkActivities extends Component {
     }
 
     render() {
-        return (
-            <Fragment>
-                <AppFilter
-                    // 1) options and selected options
-                    // if options will not be provided, selection will be hidden
-                    // options={this.props.options}
-                    // selectedOptions={this.props.selectedOptions}
-                    // handleCheckChange={this.handleCheckChange}
+        if (this.props.location.state) {
+            return (
+                <Fragment>
+                    <Card >
+                        <Row gutter={16} className="filter_top">
+                            <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
+                                <span className="font_26"> {convertToLang(this.props.translation[""], "BULK ACTIVITIES")} </span>
+                            </Col>
+                        </Row>
+                        <div>
+                            <h2>
+                                {convertToLang(this.props.translation[""], ` Please select from fields bellow to perform a task on ALL or Selected Devices. You can Track your activities in the "HISTORY" button bellow.`)}
+                            </h2>
+                        </div>
+                        <div>
+                            <Button type="primary">
+                                {convertToLang(this.props.translation[""], "History")}
+                            </Button>
+                        </div>
 
-                    // 2) Filteration 
-                    // if handleFilterOptions will not be provided, filteration will not show in appfilter
-                    // handleFilterOptions={this.handleFilterOptions}
+                    </Card>
+                    <Card >
 
-                    // 3) searching
-                    // if handleComponentSearch will not be provided, search will be hidden
-                    handleComponentSearch={this.handleComponentSearch}
-                    // searchPlaceholder={convertToLang(this.props.translation[Appfilter_SearchDevices], "Search Devices")}
+                    </Card>
 
-                    // 4) Pagination
-                    // if handlePagination will not be provided, pagination will be hidden
-                    // defaultPagingValue={this.state.defaultPagingValue}
-                    // handlePagination={this.handlePagination}
+                </Fragment>
 
-                    // 5) ADD Section
-                    // if isAddButton will not be provided, Add Button will be hidden
-                    //  common prop of button handler is handleAppFilterAddButton
-                    // if we dont want link on button then we will use toLink prop
-                    // if we want to disable button use disableAddButton
-
-                    isAddButton={false}
-                    pageHeading={convertToLang(this.props.translation[""], "BULK ACTIVITIES")}
-                    // toLink="add-device"
-
-                    // language translation
-                    translation={this.props.translation}
-                />
-
-            </Fragment>
-
-        )
+            )
+        } else {
+            return (
+                <Redirect to={{
+                    pathname: '/app',
+                }} />
+            )
+        }
     }
 }
 

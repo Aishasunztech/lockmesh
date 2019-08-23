@@ -11,11 +11,13 @@ import {
     AUTHENTICATE_UPDATE_USER,
     RESET_AUTH_UPDATE,
     CHECKPASS,
-    CHECK_BULK_PASS
+    CHECK_BULK_PASS,
+    RESET_BULK_FLAG
 } from "../../constants/ActionTypes"
 // import AuthFailed from './Auth';
 
 import RestService from '../services/RestServices';
+import { history } from '../store/index'
 
 export function getApkList() {
     return (dispatch) => {
@@ -223,6 +225,9 @@ export const checkPass = (user) => {
     return (dispatch) => {
         RestService.checkPass(user).then((response) => {
             if (RestService.checkAuth(response.data)) {
+                // if (response.data.password_matched) {
+                //     history.push('/bulk-activities')
+                // }
                 dispatch({
                     type: CHECK_BULK_PASS,
                     payload: {
@@ -236,6 +241,13 @@ export const checkPass = (user) => {
                     type: INVALID_TOKEN
                 })
             }
+        })
+    }
+}
+export const resetBulkFlag = () => {
+    return (dispatch) => {
+        dispatch({
+            type: RESET_BULK_FLAG
         })
     }
 }

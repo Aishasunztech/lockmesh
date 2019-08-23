@@ -13,7 +13,8 @@ import {
 	CHECK_APK_NAME,
 	AUTHENTICATE_UPDATE_USER,
 	RESET_AUTH_UPDATE,
-	CHECK_BULK_PASS
+	CHECK_BULK_PASS,
+	RESET_BULK_FLAG
 } from "../../constants/ActionTypes";
 
 import {
@@ -41,7 +42,8 @@ const initialState = {
 	// 	APK_APP_LOGO,
 	// ],
 	resetUploadForm: false,
-	authenticateUpdateUser: false
+	authenticateUpdateUser: false,
+	isBulkActivity: false
 };
 
 export default (state = initialState, action) => {
@@ -235,8 +237,10 @@ export default (state = initialState, action) => {
 		}
 		case CHECK_BULK_PASS: {
 			if (action.payload.PasswordMatch.password_matched) {
+
 				return {
 					...state,
+					isBulkActivity: true
 				}
 			}
 			else {
@@ -246,6 +250,12 @@ export default (state = initialState, action) => {
 				return {
 					...state
 				}
+			}
+		}
+		case RESET_BULK_FLAG: {
+			return {
+				...state,
+				isBulkActivity: false
 			}
 		}
 
