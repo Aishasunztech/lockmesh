@@ -81,11 +81,7 @@ const App = ({ match }) => {
           path={`${match.url}app`}
           component={ApkMain}
         />
-        <Route
-          exact
-          path={`${match.url}upload-apk`}
-          component={AddApk}
-        />
+        
         <Route
           exact
           path={`${match.url}invalid_page`}
