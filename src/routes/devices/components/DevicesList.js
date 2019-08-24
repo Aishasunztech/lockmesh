@@ -790,8 +790,8 @@ export default class Tab extends Component {
             okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
             cancelText: convertToLang(this.props.translation[Button_No], 'No'),
             onOk() {
-                console.log('unlinkConfirm ', device);
-                // _this.props.unlinkDevice(device)
+                // console.log('unlinkConfirm ', device);
+                _this.props.unlinkDevice(device)
             },
             onCancel() {
                 // console.log('Cancel');
