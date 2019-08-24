@@ -199,7 +199,7 @@ export class MainApp extends Component {
           onIdle={this.onIdle}
           onAction={this.onAction}
           debounce={250}
-          timeout={300000} />
+          timeout={3600000} />
         <Layout className="gx-app-layout">
           {this.getSidebar(navStyle, width)}
           <Layout>
