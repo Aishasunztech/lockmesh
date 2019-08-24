@@ -434,7 +434,7 @@ class Devices extends Component {
     handleChangetab = (value) => {
 
 
-        console.log('tab is: ', value)
+        // console.log('tab is: ', value)
         // console.log('============= value index is: ', value)
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
