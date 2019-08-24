@@ -26,10 +26,6 @@ class Login extends React.Component {
   };
 
   componentDidMount() {
-
-
-
-
   }
 
   componentDidUpdate(prevProps) {
