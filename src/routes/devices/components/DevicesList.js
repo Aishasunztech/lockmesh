@@ -229,6 +229,7 @@ class DevicesList extends Component {
 
                 ),
                 status: (<span style={color} > {status}</span>),
+                lastOnline: checkValue(device.lastOnline),
                 flagged: device.flagged,
                 type: checkValue(device.type),
                 version: checkValue(device.version),

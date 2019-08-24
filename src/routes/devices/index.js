@@ -434,7 +434,7 @@ class Devices extends Component {
     handleChangetab = (value) => {
 
 
-        // console.log('tab is: ', value)
+        console.log('tab is: ', value)
         // console.log('============= value index is: ', value)
         let indxRemainingDays = this.state.columns.findIndex(k => k.dataIndex == 'validity');
         let indxAction = this.state.columns.findIndex(k => k.dataIndex == 'action');
@@ -553,13 +553,13 @@ class Devices extends Component {
 
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
             if (indexTransfered >= 0 && indexTransfered !== undefined) {
-                if (value === '1') {
-                    this.state.columns[indexTransfered].className = '';
-                    this.state.columns[indexTransfered].children[0].className = '';
-                } else {
+                // if (value === '1') {
+                //     this.state.columns[indexTransfered].className = '';
+                //     this.state.columns[indexTransfered].children[0].className = '';
+                // } else {
                     this.state.columns[indexTransfered].className = 'hide';
                     this.state.columns[indexTransfered].children[0].className = 'hide';
-                }
+                // }
             }
 
             if (activationCodeIndex >= 0) {
@@ -713,16 +713,16 @@ class Devices extends Component {
                 values.map((value) => {
                     if (column.className !== 'row') {
                         if (column.dataIndex === value.key) {
-                            // if (this.state.tabselect !== '3') {
-                            //     if (column.dataIndex !== 'validity') {
-                            //         dumydata[index].className = '';
-                            //         dumydata[index].children[0].className = '';
-                            //     }
-                            // }
-                            // else {
+                            if (this.state.tabselect !== '3') {
+                                if (column.dataIndex !== 'validity') {
+                                    dumydata[index].className = '';
+                                    dumydata[index].children[0].className = '';
+                                }
+                            }
+                            else {
                                 dumydata[index].className = '';
                                 dumydata[index].children[0].className = '';
-                            // }
+                            }
                         }
                     }
 
