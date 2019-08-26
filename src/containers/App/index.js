@@ -111,7 +111,7 @@ class App extends Component {
       if (authUser.id === null || authUser.email === null || authUser.token === null || authUser.type === null) {
         return (<Redirect to={'/login'} />);
       } else if ((initURL === '' || initURL === '/' || initURL === '/login')) {
-        return (<Redirect to={'/devices'} />);
+        return (<Redirect to={'/dashboard'} />);
 
       } else {
         return (<Redirect to={initURL} />);

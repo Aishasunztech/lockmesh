@@ -266,6 +266,15 @@ class SidebarContent extends Component {
             </Menu>
             :
             <Menu defaultOpenKeys={[defaultOpenKeys]} selectedKeys={[selectedKeys]} theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'} mode="inline">
+              <Menu.Item key="dashboard">
+                <Link to="/dashboard">
+                  <i className="icon icon-dasbhoard" >
+                    <i className="fa fa-dasbhoard" aria-hidden="true"></i>
+                  </i>
+                  {/* <IntlMessages id="sidebar.devices" /> */}
+                  {convertToLang(translation[''], "Dashboard")}
+                </Link>
+              </Menu.Item>
               <Menu.Item key="devices">
                 <Link to="/devices">
                   <i className="icon icon-mobile" >
