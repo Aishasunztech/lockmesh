@@ -90,7 +90,7 @@ class Dashboard extends Component {
                             this.props.authUser.type == DEALER || this.props.authUser.type == SDEALER ?
 
                                 <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div>
+                                    <div className='dashboard-item-div'>
                                         <Link to='devices'>
                                             <Card className='dashboard-card'>
                                                 <i className="fa fa-mobile dashboard-icon " aria-hidden="true" />
@@ -108,18 +108,19 @@ class Dashboard extends Component {
                         }
 
                         <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                            <div className='dashboard-item-div'><Link to='users'>
-                                <Card className='dashboard-card'>
-                                    {/* <i className="icon icon-user dashboard-icon " aria-hidden="true" /> */}
-                                    <Avatar
-                                        src={require("../../assets/images/users.png")}
-                                        // className="gx-size-40 gx-pointer gx-mr-3"
-                                        alt=""
-                                    />
-                                </Card>
-                                <span className='db-span-qnty'>{this.props.items.users}</span>
-                                <span className='db-span-text'> Users</span>
-                            </Link>
+                            <div className='dashboard-item-div'>
+                                <Link to='users'>
+                                    <Card className='dashboard-card'>
+                                        {/* <i className="icon icon-user dashboard-icon " aria-hidden="true" /> */}
+                                        <Avatar
+                                            src={require("../../assets/images/users.png")}
+                                            // className="gx-size-40 gx-pointer gx-mr-3"
+                                            alt=""
+                                        />
+                                    </Card>
+                                    <span className='db-span-qnty'>{this.props.items.users}</span>
+                                    <span className='db-span-text'> Users</span>
+                                </Link>
                             </div>
                         </Col>
 
@@ -149,32 +150,32 @@ class Dashboard extends Component {
                             this.props.authUser.type == ADMIN || this.props.authUser.type == DEALER ?
                                 <Fragment>
                                     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div className='dashboard-item-div'>
-                                        <Link to='dealer/sdealer'>
-                                            <Card className='dashboard-card'>
-                                                {/* <i className="icon icon-avatar dashboard-icon " aria-hidden="true" /> */}
-                                                <Avatar
-                                                    src={require("../../assets/images/sdealers.jpg")}
-                                                    // className="gx-size-40 gx-pointer gx-mr-3"
-                                                    alt=""
-                                                />
-                                            </Card>
-                                            <span className='db-span-qnty'>{this.props.items.sdealers}</span>
-                                            <span className='db-span-text'> S-dealers</span>
-                                        </Link>
+                                        <div className='dashboard-item-div'>
+                                            <Link to='dealer/sdealer'>
+                                                <Card className='dashboard-card'>
+                                                    {/* <i className="icon icon-avatar dashboard-icon " aria-hidden="true" /> */}
+                                                    <Avatar
+                                                        src={require("../../assets/images/sdealers.jpg")}
+                                                        // className="gx-size-40 gx-pointer gx-mr-3"
+                                                        alt=""
+                                                    />
+                                                </Card>
+                                                <span className='db-span-qnty'>{this.props.items.sdealers}</span>
+                                                <span className='db-span-text'> S-dealers</span>
+                                            </Link>
                                         </div>
                                     </Col>
 
                                     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div className='dashboard-item-div'>
+                                        <div className='dashboard-item-div'>
                                             <Link to='policy'>
                                                 <Card className='dashboard-card'>
                                                     {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
                                                     <Avatar
-                                                    src={require("../../assets/images/policy.png")}
-                                                    // className="gx-size-40 gx-pointer gx-mr-3"
-                                                    alt=""
-                                                />
+                                                        src={require("../../assets/images/policy.png")}
+                                                        // className="gx-size-40 gx-pointer gx-mr-3"
+                                                        alt=""
+                                                    />
                                                 </Card>
                                                 <span className='db-span-qnty'>{this.props.items.policies}</span>
                                                 <span className='db-span-text'>  Policies</span>
@@ -182,32 +183,32 @@ class Dashboard extends Component {
                                         </div>
                                     </Col>
                                     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div className='dashboard-item-div'>
-                                        <Link to='apk-list'>
-                                            <Card className='dashboard-card'>
-                                                {/* <i className="icon icon-apps dashboard-icon " aria-hidden="true" /> */}
+                                        <div className='dashboard-item-div'>
+                                            <Link to='apk-list'>
+                                                <Card className='dashboard-card'>
+                                                    {/* <i className="icon icon-apps dashboard-icon " aria-hidden="true" /> */}
 
-                                                <Avatar
-                                                    src={require("../../assets/images/manageApks.png")}
-                                                    // className="gx-size-40 gx-pointer gx-mr-3"
-                                                    alt=""
-                                                />
-                                            </Card>
-                                            <span className='db-span-qnty'>{this.props.items.apks}</span>
-                                            <span className='db-span-text'>  Apk's</span>
-                                        </Link>
+                                                    <Avatar
+                                                        src={require("../../assets/images/manageApks.png")}
+                                                        // className="gx-size-40 gx-pointer gx-mr-3"
+                                                        alt=""
+                                                    />
+                                                </Card>
+                                                <span className='db-span-qnty'>{this.props.items.apks}</span>
+                                                <span className='db-span-text'>  Apk's</span>
+                                            </Link>
                                         </div>
                                     </Col>
                                     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div className='dashboard-item-div'>
+                                        <div className='dashboard-item-div'>
                                             <Link to='app-market'>
                                                 <Card className='dashboard-card'>
                                                     {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
                                                     <Avatar
-                                                    src={require("../../assets/images/secure_market.png")}
-                                                    // className="gx-size-40 gx-pointer gx-mr-3"
-                                                    alt=""
-                                                />
+                                                        src={require("../../assets/images/secure_market.png")}
+                                                        // className="gx-size-40 gx-pointer gx-mr-3"
+                                                        alt=""
+                                                    />
                                                 </Card>
                                                 {/* <span className='db-span-qnty'>12</span> */}
                                                 <span className='db-span-text'> Secure Market</span>
@@ -221,35 +222,35 @@ class Dashboard extends Component {
                             this.props.authUser.type == ADMIN ?
                                 <Fragment>
                                     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div className='dashboard-item-div'>
-                                        <Link to='set-prices'>
-                                            <Card className='dashboard-card'>
-                                                {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
-                                                <Icon type="dollar" style={{ fontSize: '32px' }} />
-                                            </Card>
-                                            {/* <span className='db-span-qnty'>12</span> */}
-                                            <span className='db-span-text'> Packages & ID</span>
-                                        </Link>
+                                        <div className='dashboard-item-div'>
+                                            <Link to='set-prices'>
+                                                <Card className='dashboard-card'>
+                                                    {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
+                                                    <Icon type="dollar" style={{ fontSize: '32px' }} />
+                                                </Card>
+                                                {/* <span className='db-span-qnty'>12</span> */}
+                                                <span className='db-span-text'> Packages & ID</span>
+                                            </Link>
                                         </div>
                                     </Col>
                                     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div className='dashboard-item-div'>
-                                        <Link to='account/managedata'>
-                                            <Card className='dashboard-card'>
-                                                {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
-                                                <Avatar
-                                                    src={require("../../assets/images/management.png")}
-                                                    // className="gx-size-40 gx-pointer gx-mr-3"
-                                                    alt=""
-                                                />
-                                            </Card>
-                                            {/* <span className='db-span-qnty'>12</span> */}
-                                            <span className='db-span-text'> Manage Data</span>
-                                        </Link>
+                                        <div className='dashboard-item-div'>
+                                            <Link to='account/managedata'>
+                                                <Card className='dashboard-card'>
+                                                    {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
+                                                    <Avatar
+                                                        src={require("../../assets/images/management.png")}
+                                                        // className="gx-size-40 gx-pointer gx-mr-3"
+                                                        alt=""
+                                                    />
+                                                </Card>
+                                                {/* <span className='db-span-qnty'>12</span> */}
+                                                <span className='db-span-text'> Manage Data</span>
+                                            </Link>
                                         </div>
                                     </Col>
                                     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div className='dashboard-item-div'>
+                                        <div className='dashboard-item-div'>
                                             {/* <Link to='devices'> */}
                                             <Card className='dashboard-card'>
                                                 {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
