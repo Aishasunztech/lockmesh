@@ -792,5 +792,9 @@ const RestService = {
     //     return axios.get(BASE_URL + 'users/resync_ids', RestService.getHeader())
     // },
 
+    getDashboardData: () => {
+        return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());       
+    }
+
 }
 export default RestService;
