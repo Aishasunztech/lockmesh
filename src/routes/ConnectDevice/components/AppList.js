@@ -11,7 +11,7 @@ import { BASE_URL } from '../../../constants/Application';
 import { Table, Switch, Avatar } from "antd";
 import AppDropdown from "./AppDropdown";
 import { POLICY_APP_NAME } from '../../../constants/PolicyConstants';
-import { Guest, ENCRYPTED, ENABLE } from '../../../constants/TabConstants';
+import { Guest, ENCRYPTED, ENABLE, Show_Hide } from '../../../constants/TabConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Button_LoadProfile, Button_On, Button_Off } from '../../../constants/ButtonConstants';
 import { appsColumns } from '../../utils/columnsUtils';
@@ -94,7 +94,7 @@ class AppList extends Component {
                         // style={{ width: "30px", height: "30px" }} 
                         />
                         <br />
-                        <div className="line_break1">{app.label}</div>
+                        <div className="line_break2">{app.label}</div>
                     </Fragment>,
                 guest: (this.props.isHistory === true) ?
                     (app.guest === 1 || app.guest === true) ?
@@ -155,7 +155,7 @@ class AppList extends Component {
                     key: '1',
                     render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
                 }, {
-                    title: convertToLang(this.props.translation[Guest], "Guest"),
+                    title: convertToLang(this.props.translation[Show_Hide], "SHOW/HIDE"),
                     dataIndex: 'guest',
                     key: '2',
                 }, {
@@ -172,7 +172,7 @@ class AppList extends Component {
                     key: '1',
                     render: text => <a href="javascript:;" style={{ fontSize: 12 }}>{text}</a>,
                 }, {
-                    title: convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED"),
+                    title: convertToLang(this.props.translation[Show_Hide], "SHOW/HIDE"),
                     dataIndex: 'encrypted',
                     key: '3',
                 }, {
@@ -199,9 +199,10 @@ class AppList extends Component {
                 <Table
                     style={{ margin: 0, padding: 0 }}
                     size='small'
-                    scroll={this.props.isHistory ? {} : { y: 370 }}
+                    // scroll={this.props.isHistory ? {} : { y: 370 }}
                     bordered={false}
                     columns={this.appsColumns}
+                    bodyStyle={{ height: 400, overflow: "overlay" }}
                     align='center'
                     dataSource={
                         this.renderApps()

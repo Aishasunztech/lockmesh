@@ -15,7 +15,7 @@ export default class ActivateDevice extends Component {
     handleActivateDevice = (device, refresh) => {
 
         this.confirm({
-            title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE], "Are you sure, you want to activate the device "),
+            title: convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_ACTIVATE_THE_DEVICE], "Would you like to unsuspend this Device "),
             content: '',
             okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
             cancelText:  convertToLang(this.props.translation[Button_Cancel], "Cancel"),

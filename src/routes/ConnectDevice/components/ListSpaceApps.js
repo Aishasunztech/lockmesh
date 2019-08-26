@@ -94,7 +94,7 @@ class ListSpaceApps extends Component {
 
 
     render() {
-        let space_name = this.props.type === "guest" ? "GUEST" : "ENCRYPT"
+        let space_name = this.props.type === "guest" ? "Guest" : "Encrypt"
         return (
             <div>
                 <div style={{ textAlign: "center", margin: 12 }}>
@@ -113,8 +113,8 @@ class ListSpaceApps extends Component {
                                             // style={{ width: "30px", height: "30px" }} 
                                             />
                                             <br />
-                                            <div className="line_break2" style={{ fontSize: 10 }}>{app.label}</div>
-                                            <div className="line_break2" style={{ fontSize: 10 }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
+                                            <div className="line_break2 font_10">{app.label}</div>
+                                            <div className="font_10" style={{ color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
                                         </Col>
                                     );
                                 }
@@ -128,8 +128,8 @@ class ListSpaceApps extends Component {
                                             // style={{ width: "30px", height: "30px" }} 
                                             />
                                             <br />
-                                            <div className="line_break2" style={{ fontSize: 10 }}>{app.label}</div>
-                                            <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
+                                            <div className="line_break2 font_10">{app.label}</div>
+                                            <div className="font_10" style={{ color: 'red' }}>{(app.enable === true || app.enable === 1) ? "" : "(Disabled)"}</div>
                                         </Col>
                                     );
                                 }
@@ -165,10 +165,11 @@ class ListSpaceApps extends Component {
                 </div>
                 <Modal
                     maskClosable={false}
-                    title={convertToLang(this.props.translation[""], `CHANGE ${space_name} PERMISSIONS`)}
+                    title={convertToLang(this.props.translation[""], `Change ${space_name} Space Permissions`)}
                     visible={this.state.permissionModal}
                     onCancel={this.onCancel}
                     onOk={this.onCancel}
+                    className="perm_pop"
                 >
                     <AppList
                         type={this.props.type}
