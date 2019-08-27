@@ -78,7 +78,7 @@ export default class SystemControls extends Component {
       return (
         Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object ?
           <Fragment>
-            <div style={{ height: 400, overflow: 'overlay', borderTop: '1px solid #e8e8e8' }} >
+            <div style={{ height: 415, overflow: 'overlay' }} >
               <List>
                 {/* {
                   (this.state.settings !== undefined && this.state.settings && this.state.settings !== [] && objindex>=0) ?
