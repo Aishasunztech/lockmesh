@@ -97,43 +97,43 @@ export default class DeviceSidebar extends Component {
             },
             {
                 key: 2,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODE], DEVICE_MODE))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODE], "MODE"))}:</a>),
                 value: device_details.online ? (device_details.online === "online") ? (<span style={{ color: "green" }}>{titleCase(convertToLang(this.props.translation[ONLINE], "Online"))}</span>) : (<span style={{ color: "red" }}>{titleCase(convertToLang(this.props.translation[OFFLINE], "Offline"))}</span>) : "N/A"
             },
             {
                 key: 10,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], DEVICE_CHAT_ID))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CHAT_ID], "CHAT ID"))}:</a>),
                 value: checkValue(device_details.chat_id)
             },
             {
                 key: 8,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], DEVICE_PGP_EMAIL))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_PGP_EMAIL], "PGP EMAIL"))}:</a>),
                 value: checkValue(device_details.pgp_email)
             },
             {
                 key: 16,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], DEVICE_SIM_ID))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_ID], "SIM ID"))}:</a>),
                 value: checkValue(device_details.sim_id)
             },
             {
                 key: 13,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_NAME], DEVICE_DEALER_NAME))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_NAME], "DEALER NAME"))}:</a>),
                 value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN) ? <a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
                 // value: (<span className="captilize"><a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a></span>)
             },
             {
                 key: 14,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_PIN], DEVICE_DEALER_PIN))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_PIN], "DEALER PIN"))}:</a>),
                 value: checkValue(device_details.link_code)
             },
             {
                 key: 7,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], DEVICE_ACCOUNT_EMAIL))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACCOUNT_EMAIL], "ACCOUNT EMAIL"))}:</a>),
                 value: checkValue(device_details.account_email)
             },
             {
                 key: 3,
-                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], DEVICE_FLAGGED))}:</a>),
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_FLAGGED], "FLAGGED"))}:</a>),
                 value: (device_details.flagged === '') ? "Not Flagged" : device_details.flagged
             },
             {
@@ -148,86 +148,91 @@ export default class DeviceSidebar extends Component {
             },
             {
                 key: 6,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_NAME], DEVICE_NAME))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_NAME], "DEVICE NAME"))}:</a>),
                 value: (<span className="captilize">{checkValue(device_details.name)}</span>)
             },
             {
                 key: 9,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], DEVICE_ACTIVATION_CODE))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_ACTIVATION_CODE], "ACTIVATION-CODE"))}:</a>),
                 value: checkValue(device_details.activation_code)
             },
 
             {
                 key: 11,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], DEVICE_CLIENT_ID))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_CLIENT_ID], "CLIENT-ID"))}:</a>),
                 value: checkValue(device_details.client_id)
             },
             {
                 key: 12,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], DEVICE_DEALER_ID))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_ID], "DEALER-ID"))}:</a>),
                 value: checkValue(device_details.dealer_id)
             },
             {
                 key: 15,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MAC_ADDRESS], DEVICE_MAC_ADDRESS))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MAC_ADDRESS], "MAC-ADDRESS"))}:</a>),
                 value: checkValue(device_details.mac_address)
             },
             {
                 key: 17,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_1], DEVICE_IMEI_1))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_1], "IMEI-1"))}:</a>),
                 value: checkValue(device_details.imei)
             },
             {
                 key: 18,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_1], DEVICE_SIM_1))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_1], "SIM-1"))}:</a>),
                 value: checkValue(device_details.simno)
             },
             {
                 key: 19,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_2], DEVICE_IMEI_2))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_IMEI_2], "IMEI-2"))}:</a>),
                 value: checkValue(device_details.imei2)
             },
             {
                 key: 20,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_2], DEVICE_SIM_2))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SIM_2], "SIM-2"))}:</a>),
                 value: checkValue(device_details.simno2)
             },
 
             {
                 key: 21,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SERIAL_NUMBER], DEVICE_SERIAL_NUMBER))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_SERIAL_NUMBER], "SERIAL-NUMBER"))}:</a>),
                 value: checkValue(device_details.serial_number)
             },
             {
                 key: 22,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODEL], DEVICE_MODEL))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_MODEL], "MODEL"))}:</a>),
                 value: checkValue(device_details.model)
             },
             {
                 key: 23,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[IP_ADDRESS], IP_ADDRESS))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[IP_ADDRESS], "IP-ADDRESS"))}:</a>),
                 value: checkValue(device_details.ip_address)
             },
 
             {
                 key: 24,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER], DEVICE_S_DEALER))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER], "S-DEALER"))}:</a>),
                 value: checkValue(device_details.s_dealer)
             },
             {
                 key: 25,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER_NAME], DEVICE_S_DEALER_NAME))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_S_DEALER_NAME], "S-DEALER NAME"))}:</a>),
                 value: checkValue(device_details.s_dealer_name)
             },
             {
                 key: 27,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], DEVICE_START_DATE))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_START_DATE], "START DATE"))}:</a>),
                 value: checkValue(device_details.start_date)
             },
             {
                 key: 28,
-                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], DEVICE_EXPIRY_DATE))}:</a>),
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_EXPIRY_DATE], "EXPIRY DATE"))}:</a>),
                 value: checkValue(device_details.expiry_date)
+            },
+            {
+                key: 29,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
+                value: checkValue(device_details.lastOnline)
             }
         ]
     }
@@ -263,7 +268,7 @@ export default class DeviceSidebar extends Component {
         return [
             {
                 title: <div>
-                    <p style={{ margin: "8px 0" }}>{convertToLang(this.props.translation[DEVICE_ID], DEVICE_ID)}:</p>
+                    <p style={{ margin: "8px 0" }}>{convertToLang(this.props.translation[DEVICE_ID], "ID")}:</p>
                     <p style={{ margin: "8px 0" }}>{convertToLang(this.props.translation[USER_ID], USER_ID)}:</p>
                 </div>,
                 dataIndex: 'name',
@@ -278,7 +283,7 @@ export default class DeviceSidebar extends Component {
                         }}>
                             <Icon type="sync" spin className="loading_icon" />
                             <Icon type="reload" />
-                            {convertToLang(this.props.translation[Button_Refresh], Button_Refresh)}
+                            {convertToLang(this.props.translation[Button_Refresh], "Refresh")}
                         </a>
                         <div>
                             <p style={{ margin: "8px 0" }}>{device_details.device_id}</p>
@@ -308,7 +313,7 @@ export default class DeviceSidebar extends Component {
                 state: { id: this.state.dealer_id }
             }} />
         }
-        // console.log('device detail', this.props.device_details)
+        console.log('device detail', this.props.device_details)
         return (
             <Card>
                 <Table

@@ -6,6 +6,7 @@ export const DEVICE_REMAINING_DAYS = "tableHeadings.REMAININGDAYS";
 export const DEVICE_FLAGGED = "tableHeadings.FLAGGED";
 export const DEVICE_TRANSFERED = "tableHeadings.TRANSFERED";
 export const DEVICE_STATUS = "tableHeadings.STATUS";
+export const DEVICE_LASTONLINE = "tableHeadings.lastOnline";
 export const DEVICE_MODE = "tableHeadings.MODE";
 export const DEVICE_TYPE = "tableHeadings.TYPE";
 export const DEVICE_VERSION = "tableHeadings.VERSION";

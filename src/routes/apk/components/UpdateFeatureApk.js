@@ -206,11 +206,13 @@ class UpdateFeatureApkForm extends Component {
         };
         const Dragger = Upload.Dragger;
         let token = localStorage.getItem('token');
-        let _this = this
-        const props = {
+        let _this = this;
+
+        // props into logoProps
+        const logoProps = {
             name: 'logo',
             multiple: false,
-            action: BASE_URL + 'users/upload',
+            action: `${BASE_URL}users/upload?fieldName=logo`,
             headers: { 'authorization': token },
             accept: '.png, .jpg',
             disabled: this.state.disableLogo,
@@ -259,10 +261,10 @@ class UpdateFeatureApkForm extends Component {
             },
         };
 
-        const props2 = {
+        const apkProps = {
             name: 'apk',
             multiple: false,
-            action: BASE_URL + 'users/upload',
+            action: `${BASE_URL}users/upload?fieldName=apk`,
             headers: { 'authorization': token, "id": this.props.app, "featured": this.props.type },
             accept: '.apk',
             disabled: this.state.disableApk,
@@ -350,15 +352,11 @@ class UpdateFeatureApkForm extends Component {
                         }
                         )
                             (
-                                <Upload {...props} >
+                                <Upload {...logoProps} >
                                     <Button className="width_100 upload_btn" type="default" >
                                         <Icon type="folder-open" />UPLOAD ICON
                                     </Button>
-                                    {/* <p className="ant-upload-drag-icon">
-                                            <Icon type="picture" />
-                                        </p>
-                                        <h2 className="ant-upload-hint">UPLOAD LOGO </h2>
-                                        <p className="ant-upload-text">Upload file (.jpg,.png)</p> */}
+                                  
                                 </Upload>
                             )}
 
@@ -378,7 +376,7 @@ class UpdateFeatureApkForm extends Component {
 
                         })
                             (
-                                <Upload  {...props2}>
+                                <Upload  {...apkProps}>
                                     <Button className="width_100 upload_btn" type="default" >
                                         <Icon type="folder-open" /> UPLOAD APK FILE
                                                 </Button>

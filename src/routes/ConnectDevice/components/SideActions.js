@@ -46,7 +46,13 @@ import {
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { getNewDevicesList } from "../../../appRedux/actions/Common";
-import { rejectDevice, addDevice } from '../../../appRedux/actions/Devices';
+import {
+    rejectDevice,
+    addDevice,
+    getSimIDs,
+    getChatIDs,
+    getPGPEmails
+} from '../../../appRedux/actions/Devices';
 import {
     getNewCashRequests,
     getUserCredit,
@@ -859,9 +865,9 @@ class SideActions extends Component {
                                     {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
 
                                     {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
-                                    <Button type="default" 
-                                    // onClick={() => this.handleTransferHistoryModal(true)} 
-                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
+                                    <Button type="default"
+                                        // onClick={() => this.handleTransferHistoryModal(true)} 
+                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
                                 </Tooltip>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
@@ -1156,6 +1162,9 @@ class SideActions extends Component {
                 <EditDevice
                     ref='edit_device'
                     translation={this.props.translation}
+                    getSimIDs={this.props.getSimIDs}
+                    getChatIDs={this.props.getChatIDs}
+                    getPgpEmails={this.props.getPgpEmails}
                 />
                 <WipeDevice
                     ref='wipe_device'
@@ -1222,7 +1231,10 @@ function mapDispatchToProps(dispatch) {
         hidePolicyConfirm: hidePolicyConfirm,
         applyPolicy: applyPolicy,
         applySetting: applySetting,
-        getProfiles: getProfiles
+        getProfiles: getProfiles,
+        getSimIDs: getSimIDs,
+        getChatIDs: getChatIDs,
+        getPgpEmails: getPGPEmails
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {

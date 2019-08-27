@@ -263,23 +263,58 @@ class AddPolicy extends Component {
                 rowKey: 'wifi_status',
                 name: 'Wifi',
                 action: <Switch checked={this.state.systemPermissions.wifi_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'wifi_status')} size="small" />
-            }, {
+            },
+            {
                 rowKey: 'bluetooth_status',
                 name: 'Bluetooth',
                 action: <Switch checked={this.state.systemPermissions.bluetooth_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'bluetooth_status')} size="small" />
-            }, {
-                rowKey: 'screenshot_status',
-                name: 'ScreenShot',
-                action: <Switch checked={this.state.systemPermissions.screenshot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'screenshot_status')} size="small" />
-            }, {
-                rowKey: 'location_status',
-                name: 'Location',
-                action: <Switch checked={this.state.systemPermissions.location_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'location_status')} size="small" />
-            }, {
+            },
+            {
+                rowKey: 'bluetooth_sharing_status',
+                name: 'Bluetooth File Sharing ',
+                action: <Switch checked={this.state.systemPermissions.bluetooth_sharing_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'bluetooth_sharing_status')} size="small" />
+            },
+            {
                 rowKey: 'hotspot_status',
                 name: 'Hotspot',
                 action: <Switch checked={this.state.systemPermissions.hotspot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'hotspot_status')} size="small" />
-            }]
+            },
+            {
+                rowKey: 'location_status',
+                name: 'Location',
+                action: <Switch checked={this.state.systemPermissions.location_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'location_status')} size="small" />
+            },
+            {
+                rowKey: 'screenshot_status',
+                name: 'Screen Capture',
+                action: <Switch checked={this.state.systemPermissions.screenshot_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'screenshot_status')} size="small" />
+            },
+            {
+                rowKey: 'call_status',
+                name: 'Block Calls',
+                action: <Switch checked={this.state.systemPermissions.call_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'call_status')} size="small" />
+            },
+            {
+                rowKey: 'nfc_status',
+                name: 'NFC',
+                action: <Switch checked={this.state.systemPermissions.nfc_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'nfc_status')} size="small" />
+            },
+            {
+                rowKey: 'camera_status',
+                name: 'Camera',
+                action: <Switch checked={this.state.systemPermissions.camera_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'camera_status')} size="small" />
+            },
+            {
+                rowKey: 'mic_status',
+                name: 'Mic',
+                action: <Switch checked={this.state.systemPermissions.mic_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'mic_status')} size="small" />
+            },
+            {
+                rowKey: 'speaker_status',
+                name: 'Speaker',
+                action: <Switch checked={this.state.systemPermissions.speaker_status} onClick={(e) => this.props.handleChekSystemPermission(e, 'speaker_status')} size="small" />
+            },
+            ]
         }
 
     }
