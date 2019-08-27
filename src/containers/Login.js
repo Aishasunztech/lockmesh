@@ -15,18 +15,29 @@ var capsLockEnabled = null;
 
 
 class Login extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			demail: '',
+			pwd: ''
+		}
+
+	}
+
+	demailHandler = event => {
+		this.setState({ demail: event.target.value });
+	};
+
+	pwdlHandler = event => {
+		this.setState({ pwd: event.target.value });
+	};
+
 	handleSubmit = e => {
 		e.preventDefault();
 		this.props.form.validateFields((err, user) => {
 			if (!err) {
-				console.log('props:', this.props);
-
 				this.props.showAuthLoader();
-
-				console.log('user:', user);
 				this.props.loginUser(user);
-
-				console.log('end');
 			}
 		});
 	};
@@ -113,10 +124,13 @@ class Login extends React.Component {
 							<Form
 								onSubmit={this.handleSubmit}
 								className="gx-signin-form gx-form-row0"
+								autoComplete="off"
 							>
+								{/* <input autoComplete="off" name="hidden" type="text" style={{ display: 'none' }}></input> */}
 								<FormItem>
 									{getFieldDecorator("demail", {
 										initialValue: "",
+										setFieldsValue: this.state.demail,
 										rules: [
 											{
 												required: true,
@@ -124,11 +138,13 @@ class Login extends React.Component {
 												message: "Doesn't seem to be a valid Email ID"
 											}
 										]
-									})(<Input type="email" placeholder="Email" />)}
+									})(<Input type="email" placeholder="Email" autoComplete="new-password"
+										onChange={this.demailHandler} />)}
 								</FormItem>
 								<FormItem>
 									{getFieldDecorator("pwd", {
 										initialValue: "",
+										setFieldsValue: this.state.pwd,
 										rules: [
 											{
 												required: true,
@@ -136,10 +152,9 @@ class Login extends React.Component {
 											}
 										]
 									})(<Input.Password
-										type="password" placeholder="Password" autoComplete="off"
-										onKeyUp={(e) => {
-											this.checkCapsLock(e);
-										}}
+										type="password" placeholder="Password" autoComplete="new-password"
+										onKeyUp={(e) => { this.checkCapsLock(e) }}
+										onChange={this.pwdHandler}
 									/>)}
 								</FormItem>
 								<p id="text" style={{ display: 'none', color: 'red', margin: 0, padding: 0 }}>NOTE: Your CapsLock key is currently turned on</p>
