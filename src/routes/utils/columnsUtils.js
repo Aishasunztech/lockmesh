@@ -2278,6 +2278,15 @@ export function featureApkColumns(translation) {
             defaultSortOrder: "ascend"
         },
         {
+            title: convertToLang(translation[''], "PACKAGE NAME"),
+            dataIndex: 'package_name',
+            width: "100",
+            key: 'package_name',
+            sorter: (a, b) => { return a.package_name.localeCompare(b.package_name) },
+            sortDirections: ['ascend', 'descend'],
+            defaultSortOrder: "ascend"
+        },
+        {
             title: convertToLang(translation["APP VERSION"], "APP VERSION"),
             dataIndex: 'apk_version',
             key: 'apk_version',
