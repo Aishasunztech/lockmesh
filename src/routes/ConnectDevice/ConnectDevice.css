@@ -304,8 +304,9 @@ th.device_info {
 
 .ref-btn {
     display: inline-flex;
-    float: right;
     margin: 12px 0;
+    position: absolute;
+    right: 15px;
 }
 
 .ref-btn .anticon {
@@ -362,7 +363,7 @@ th.device_info {
 
     .status_bar {
         margin: 0px 0px 27px 0px;
-        padding-top: 43px;
+        padding-top: 61px;
     }
 
     .deviceImg .ant-table-scroll {

@@ -604,7 +604,7 @@ class ConnectDevice extends Component {
                       <a className="dev_back_btn" onClick={() => {
                         this.onBackHandler();
                       }}>
-                        {(this.state.dynamicBackButton) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
+                        {(this.state.dynamicBackButton && this.props.pageName !== MAIN_MENU) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
 
                       </a>
                       <div className={BackBtnstyle}>
