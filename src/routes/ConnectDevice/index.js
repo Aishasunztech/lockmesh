@@ -364,18 +364,20 @@ class ConnectDevice extends Component {
 
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
-      return (<SystemControls
-
-        controls={this.state.controls}
-        handleCheckAllExtension={this.props.handleCheckAllExtension}
-        handleControlCheck={this.props.handleControlCheck}
-        handleMainSettingCheck={this.props.handleMainSettingCheck}
-        guestAllExt={this.props.guestAllExt}
-        encryptedAllExt={this.props.encryptedAllExt}
-        checked_app_id={this.props.checked_app_id}
-        secureSettingsMain={this.props.secureSettingsMain}
-        translation={this.props.translation}
-      />);
+      return (
+        <SystemControls
+          auth={this.props.auth}
+          controls={this.state.controls}
+          handleCheckAllExtension={this.props.handleCheckAllExtension}
+          handleControlCheck={this.props.handleControlCheck}
+          handleMainSettingCheck={this.props.handleMainSettingCheck}
+          guestAllExt={this.props.guestAllExt}
+          encryptedAllExt={this.props.encryptedAllExt}
+          checked_app_id={this.props.checked_app_id}
+          secureSettingsMain={this.props.secureSettingsMain}
+          translation={this.props.translation}
+        />
+      );
     } else if (this.props.pageName === MANAGE_PASSWORD) {
       return (
         <List
