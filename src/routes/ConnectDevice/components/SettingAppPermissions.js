@@ -132,7 +132,7 @@ class SettingAppPermissions extends Component {
           />
           <Row className="first_head">
             <Col span={4} className="pr-0">
-              <img src={require("assets/images/setting.png")} />
+              <img src={require("assets/images/secure_setting.png")} />
             </Col>
             <Col span={20} className="pl-4 pr-0">
               <h5>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>

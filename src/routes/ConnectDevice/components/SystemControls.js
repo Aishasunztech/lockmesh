@@ -2,7 +2,7 @@ import React, { Component, Fragment, Typography } from 'react';
 import { List, Switch, Col, Row } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { SYSTEM_PERMISSION, NOT_AVAILABLE, ADMIN } from '../../../constants/Constants';
+import { SYSTEM_PERMISSION, NOT_AVAILABLE, ADMIN, ANDROID_SETTING_PERMISSION } from '../../../constants/Constants';
 import {
   handleControlCheck,
   handleCheckAllExtension,
@@ -78,9 +78,17 @@ export default class SystemControls extends Component {
       return (
         Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object ?
           <Fragment>
-            <div style={{ height: 400, overflow: 'overlay', borderTop: '1px solid #e8e8e8' }} >
-              { (this.props.auth.authUser.type === ADMIN)?
-                (this.state.settings !== undefined && this.state.settings && this.state.settings !== [] && objindex>=0) ?
+            <div style={{ height: 415, overflow: 'overlay' }} >
+              <Row className="first_head">
+                <Col span={4} className="pr-0">
+                  <img src={require("assets/images/setting.png")} />
+                </Col>
+                <Col span={20} className="pl-4 pr-0">
+                  <h5>{convertToLang(this.props.translation[ANDROID_SETTING_PERMISSION], "Android Settings Permission")}</h5>
+                </Col>
+              </Row>
+              {(this.props.auth.authUser.type === ADMIN) ?
+                (this.state.settings !== undefined && this.state.settings && this.state.settings !== [] && objindex >= 0) ?
                   <div className="row width_100 m-0 sec_head1">
                     <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
                       <span>Guest</span>
@@ -102,7 +110,7 @@ export default class SystemControls extends Component {
                     </div>
                   </div>
                   : null
-                  : null
+                : null
               }
               <List>
 

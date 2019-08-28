@@ -423,7 +423,7 @@ class AppList extends Component {
                                 </Col>
                                 <Col span={3} className="">
                                     <Avatar src={`${BASE_URL}users/getFile/${this.state.mainExtension.icon}`} style={{ width: "30px", height: "30px" }} />
-                                    {/* <img src={require("assets/images/setting.png")} /> */}
+                                    {/* <img src={require("assets/images/secure_setting.png")} /> */}
                                 </Col>
                                 <Col span={15} className="pl-0">
                                     <h5 style={{ marginTop: '9px' }}>{convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")}</h5>

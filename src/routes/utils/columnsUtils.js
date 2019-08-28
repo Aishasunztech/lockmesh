@@ -2082,7 +2082,6 @@ export function policyColumns(translation, handleSearch) {
                     key: 'created_by',
                     // ...this.getColumnSearchProps('status'),
                     sorter: (a, b) => { return a.created_by.localeCompare(b.created_by) },
-
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
