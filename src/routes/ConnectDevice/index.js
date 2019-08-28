@@ -574,12 +574,12 @@ class ConnectDevice extends Component {
     // let completeStep = this.props.complete_policy_step;
     // let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
 
-    let BackBtnstyle;
-    if (this.state.dynamicBackButton) {
-      BackBtnstyle = "pt-42 status_bar"
-    } else {
-      BackBtnstyle = "pt-60 status_bar"
-    }
+    // let BackBtnstyle;
+    // if (this.state.dynamicBackButton) {
+    //   BackBtnstyle = "pt-42 status_bar"
+    // } else {
+    //   BackBtnstyle = "pt-60 status_bar"
+    // }
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -609,7 +609,7 @@ class ConnectDevice extends Component {
                         {(this.state.dynamicBackButton && this.props.pageName !== MAIN_MENU) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
 
                       </a>
-                      <div className={BackBtnstyle}>
+                      <div className="pt-60 status_bar">
                         <div className="col-md-6 col-xs-6 col-sm-6 active_st">
                           <h5><span style={color}>{this.capitalizeFirstLetter(finalStatus)}</span></h5>
                         </div>
