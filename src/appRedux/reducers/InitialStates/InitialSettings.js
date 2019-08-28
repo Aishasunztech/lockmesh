@@ -42,6 +42,7 @@ import {
   DEVICE_TYPE,
   DEVICE_VERSION,
   DEVICE_TRANSFERED,
+  DEVICE_LASTONLINE,
 } from '../../../constants/DeviceConstants';
 
 import {
@@ -83,6 +84,7 @@ export var initialSettings = {
     { "key": "validity", "value": DEVICE_REMAINING_DAYS },
     { "key": "transfered_to", "value": DEVICE_TRANSFERED },
     { "key": "status", "value": DEVICE_STATUS },
+    { "key": "lastOnline", "value": DEVICE_LASTONLINE },
     { "key": "online", "value": DEVICE_MODE },
     { "key": "type", "value": DEVICE_TYPE },
     { "key": "version", "value": DEVICE_VERSION },

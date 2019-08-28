@@ -288,6 +288,32 @@ export function devicesColumns(translation, handleSearch, SearchValues = []) {
         {
             title: (
                 <Input.Search
+                    name="lastOnline"
+                    key="lastOnline"
+                    id="lastOnline"
+                    className="search_heading status_w"
+                    onChange={handleSearch}
+                    // onFocus={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation["Last Online"], "Last Online")}
+                // onBlur={(e) => { e.target.value = '' }}
+                />
+            ),
+            dataIndex: 'lastOnline',
+            children: [
+                {
+                    title: convertToLang(translation["Last Online"], "Last Online"),
+                    align: "center",
+                    dataIndex: 'lastOnline',
+                    key: 'lastOnline',
+                    sorter: (a, b) => { return a.lastOnline.props.children[1].localeCompare(b.lastOnline.props.children[1]) },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
                     name="online"
                     key="online"
                     id="online"
@@ -2248,6 +2274,15 @@ export function featureApkColumns(translation) {
             width: "100",
             key: 'apk_name',
             sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
+            sortDirections: ['ascend', 'descend'],
+            defaultSortOrder: "ascend"
+        },
+        {
+            title: convertToLang(translation[''], "PACKAGE NAME"),
+            dataIndex: 'package_name',
+            width: "100",
+            key: 'package_name',
+            sorter: (a, b) => { return a.package_name.localeCompare(b.package_name) },
             sortDirections: ['ascend', 'descend'],
             defaultSortOrder: "ascend"
         },

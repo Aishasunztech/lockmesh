@@ -364,18 +364,20 @@ class ConnectDevice extends Component {
 
       );
     } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
-      return (<SystemControls
-
-        controls={this.state.controls}
-        handleCheckAllExtension={this.props.handleCheckAllExtension}
-        handleControlCheck={this.props.handleControlCheck}
-        handleMainSettingCheck={this.props.handleMainSettingCheck}
-        guestAllExt={this.props.guestAllExt}
-        encryptedAllExt={this.props.encryptedAllExt}
-        checked_app_id={this.props.checked_app_id}
-        secureSettingsMain={this.props.secureSettingsMain}
-        translation={this.props.translation}
-      />);
+      return (
+        <SystemControls
+          auth={this.props.auth}
+          controls={this.state.controls}
+          handleCheckAllExtension={this.props.handleCheckAllExtension}
+          handleControlCheck={this.props.handleControlCheck}
+          handleMainSettingCheck={this.props.handleMainSettingCheck}
+          guestAllExt={this.props.guestAllExt}
+          encryptedAllExt={this.props.encryptedAllExt}
+          checked_app_id={this.props.checked_app_id}
+          secureSettingsMain={this.props.secureSettingsMain}
+          translation={this.props.translation}
+        />
+      );
     } else if (this.props.pageName === MANAGE_PASSWORD) {
       return (
         <List
@@ -604,7 +606,7 @@ class ConnectDevice extends Component {
                       <a className="dev_back_btn" onClick={() => {
                         this.onBackHandler();
                       }}>
-                        {(this.state.dynamicBackButton) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
+                        {(this.state.dynamicBackButton && this.props.pageName !== MAIN_MENU) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
 
                       </a>
                       <div className={BackBtnstyle}>

@@ -1160,7 +1160,7 @@ export const simHistory = (device_id) => {
     console.log('device_id is: ', device_id)
     return (dispatch) => {
         RestService.simHistory(device_id).then((response) => {
-            console.log('response is: ', response);
+            // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data);
                 dispatch({
@@ -1180,7 +1180,7 @@ export const getSims = (device_id) => {
     // console.log('data is: ', data)
     return (dispatch) => {
         RestService.getSims(device_id).then((response) => {
-            console.log('response is: ', response);
+            // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data);
                 dispatch({
@@ -1203,7 +1203,7 @@ export const deleteSim = (data) => {
     console.log('data is: ', data)
     return (dispatch) => {
         RestService.deleteSim(data).then((response) => {
-            console.log('response is: ', response);
+            // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data);
                 dispatch({
@@ -1224,7 +1224,7 @@ export const handleSimUpdate = (data) => {
     console.log('data is: ', data)
     return (dispatch) => {
         RestService.handleSimUpdate(data).then((response) => {
-            console.log('response is: ', response);
+            // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
                 console.log(response.data);
                 dispatch({

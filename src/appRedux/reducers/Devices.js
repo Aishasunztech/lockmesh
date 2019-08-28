@@ -370,9 +370,9 @@ export default (state = initialState, action) => {
                 });
             }
 
-            var devices = state.devices;
+            var alldevices = state.devices;
             var device_id = action.device_id;
-            var filteredDevices = devices.filter(device => device.device_id !== device_id);
+            var filteredDevices = alldevices.filter(device => device.device_id !== device_id);
 
             return {
                 ...state,
