@@ -14,6 +14,7 @@ import { POLICY } from '../../../constants/ActionTypes';
 import { POLICY_SAVE_CONFIRMATION, POLICY_DELETE_CONFIRMATION, POLICY_CHANGE_DEFAULT_CONFIRMATION, EXPAND, POLICY_EXPAND } from '../../../constants/PolicyConstants';
 import { Tab_All } from '../../../constants/TabConstants';
 import moment from 'moment';
+import scrollIntoView from 'scroll-into-view';
 
 const confirm = Modal.confirm;
 
@@ -79,6 +80,15 @@ class PolicyList extends Component {
         }
 
     }
+
+    handleScroll = () => {
+        scrollIntoView(document.querySelector('.exp_row'), {
+          align: {
+            top: 0,
+            left: 0
+          },
+        });
+      }
 
 
     SavePolicyChanges = (record) => {
@@ -259,6 +269,7 @@ class PolicyList extends Component {
 
     render() {
         // console.log(this.props.columns, 'keys are')
+        this.handleScroll()
         if (this.props.user.type === ADMIN) {
             let index = this.props.columns.findIndex(k => k.dataIndex === 'default_policy');
             this.props.columns[index].className = 'hide';
