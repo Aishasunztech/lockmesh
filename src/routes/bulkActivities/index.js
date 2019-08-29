@@ -39,7 +39,8 @@ class BulkActivities extends Component {
             { key: 'PULL APPS', value: "Pull Apps" },
             { key: 'PUSH POLICY', value: "Push Policy" },
             { key: 'SET PERMISSIONS', value: "Set Permissions" },
-            { key: 'SUSPEND AND UNLINK', value: "Suspend/Unlink" },
+            { key: 'SUSPEND DEVICES', value: "Suspend Devices" },
+            { key: 'UNLINK DEVICES', value: "Unlink Devices" },
             { key: 'WIPE DEVICES', value: "Wipe Devices" }
         ];
 
@@ -67,9 +68,9 @@ class BulkActivities extends Component {
 
     componentWillReceiveProps(nextProps) {
         // if (this.props.devices != nextProps.devices) {
-            this.setState({
-                filteredDevices: nextProps.devices
-            })
+        this.setState({
+            filteredDevices: nextProps.devices
+        })
         // }
     }
 
@@ -182,6 +183,10 @@ class BulkActivities extends Component {
         console.log('action apply')
     }
 
+    handleCancel = (value) => {
+        this.handleMultipleSelect();
+    }
+
     render() {
         // let actionList = [];
         // console.log('this.state.selectedDealers ', this.state.selectedDealers)
@@ -226,9 +231,9 @@ class BulkActivities extends Component {
                                     })}
                                 </Select>
                             </Col>
-                            <Col className="col-md-2 col-sm-2 col-xs-2">
+                            {/* <Col className="col-md-2 col-sm-2 col-xs-2">
                                 <Button type="primary" onClick={this.applyAction} >Apply Action</Button>
-                            </Col>
+                            </Col> */}
                         </Row>
                         <p>Selected: <span className="font_26">{this.state.selectedAction.toUpperCase()}</span></p>
 
@@ -243,8 +248,8 @@ class BulkActivities extends Component {
                                     labelInValue
                                     maxTagCount="2"
                                     style={{ width: '100%' }}
-                                    // onChange={(e) => this.handleMultipleSelect(e, "dealer")}
                                     onBlur={this.handleMultipleSelect}
+                                    onDeselect={this.handleCancel}
                                     placeholder={convertToLang(this.props.translation[""], "Select Dealers")}
                                     onChange={(e) => this.setState({ selectedDealers: e })}
                                 >
@@ -267,8 +272,8 @@ class BulkActivities extends Component {
                                     labelInValue
                                     maxTagCount="2"
                                     style={{ width: '100%' }}
-                                    // onChange={(e) => this.handleMultipleSelect(e, "user")}
                                     onBlur={this.handleMultipleSelect}
+                                    onDeselect={this.handleCancel}
                                     placeholder={convertToLang(this.props.translation[""], "Select Users")}
                                     onChange={(e) => this.setState({ selectedUsers: e })}
                                 >
@@ -307,7 +312,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const mapStateToProps = ({ routing, auth, settings, dealers, devices, users }) => {
-    console.log('devices.bulkDevices ',devices.bulkDevices)
+    // console.log('devices.bulkDevices ', devices.bulkDevices)
     return {
         devices: devices.bulkDevices,
         users_list: users.users_list,

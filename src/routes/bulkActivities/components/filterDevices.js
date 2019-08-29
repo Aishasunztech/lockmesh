@@ -2,32 +2,29 @@ import React, { Component, Fragment } from 'react'
 import { Table, Button, Modal, Row, Col, Spin, Input } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import styles from './devices.css'
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
-// import { getBulkDevicesList } from "../../../appRedux/actions/Devices";
 import { savePermission } from "../../../appRedux/actions/Apk";
-import FilterDevicesListModal from "./filterDevicesListModal";
-import { Redirect } from 'react-router-dom';
+import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
+import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
-import { titleCase, convertToLang } from '../../utils/commonUtils';
 import { bulkDevicesColumns, devicesColumns } from '../../utils/columnsUtils';
-import {
-  DEALER_ID,
-  DEALER_NAME,
-  DEALER_EMAIL,
-  DEALER_PIN,
-  DEALER_DEVICES,
-  DEALER_TOKENS,
-  DEALER_ACTION
-} from '../../../constants/DealerConstants';
-import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
-import { Permission_List, PERMISSION_Add_Modal_Title, PERMISSION_Remove_Modal_Title, PERMISSION_Add_Except_Selected_Modal_Title } from '../../../constants/ApkConstants';
-import { Alert_Allow_Permission_Delaer, Alert_Remove_Permission_Delaer } from '../../../constants/Constants';
-import FilterDevicesList from './filterDevicesList';
 
+
+
+import {
+  DEVICE_PENDING_ACTIVATION,
+  DEVICE_PRE_ACTIVATION,
+  DEVICE_UNLINKED,
+  ADMIN
+} from '../../../constants/Constants'
+
+import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
 const confirm = Modal.confirm;
-// export default 
-class Permissions extends Component {
+
+
+class FilterDevices extends Component {
   constructor(props) {
     super(props);
     // let columns = bulkDevicesColumns(props.translation, this.handleSearch);
@@ -45,9 +42,9 @@ class Permissions extends Component {
       hideDefaultSelections: false,
       removeSelectedDealersModal: false,
       addSelectedDealersModal: false,
-      redirect: false,
+      // redirect: false,
       dealer_id: '',
-      goToPage: '/dealer/dealer',
+      // goToPage: '/dealer/dealer',
       selectedDevices: []
     }
 
@@ -114,12 +111,6 @@ class Permissions extends Component {
 
   componentDidMount() {
     this.props.getAllDealers()
-    // this.props.getBulkDevicesList()
-    this.setState({
-      dealerList: this.props.dealerList,
-      dealerListForModal: this.props.dealerList,
-      //   permissions: this.props.record.permissions
-    })
   }
 
 
@@ -130,23 +121,6 @@ class Permissions extends Component {
         columns: devicesColumns(nextProps.translation, this.handleSearchInModal),
       })
     }
-
-    // if (this.props.record.apk_id !== nextProps.record.apk_id) {
-    //   this.props.getAllDealers();
-    //   this.setState({
-    //     dealerListForModal: this.props.dealerList,
-    //     dealerList: this.props.dealerList,
-    //     // permissions: this.props.record.permissions
-    //   })
-    // } else if (this.props.dealerList.length !== nextProps.dealerList.length) {
-    //   this.setState({
-    //     dealerListForModal: nextProps.dealerList,
-    //     dealerList: nextProps.dealerList,
-    //     // permissions: this.props.record.permissions
-    //   })
-    // }
-
-
 
   }
 
@@ -176,9 +150,18 @@ class Permissions extends Component {
 
   addSelectedDealers = () => {
     let selectedDevices = this.state.selectedDevices;
-    let selectedRows = this.state.selectedRowKeys;
-    var addUnSelected = this.props.devices.filter(e => !selectedRows.includes(e.id));
-    selectedDevices = [...selectedDevices, ...addUnSelected];
+    let unSelectedDevices = this.getUnSelectedDevices(this.props.devices);
+
+    if (this.state.selectedRowKeys.length) {
+      unSelectedDevices.map((device) => {
+        if (!this.state.selectedRowKeys.includes(device.id)) {
+          selectedDevices.push(device);
+        }
+      })
+
+    } else {
+      selectedDevices = [...selectedDevices, ...unSelectedDevices];
+    }
 
     this.setState({
       selectedDevices,
@@ -208,7 +191,7 @@ class Permissions extends Component {
 
   savePermission = () => {
     // console.log("dealer ids", this.state.device_ids);
-    let selectedDevices = [];
+    let selectedDevices = this.state.selectedDevices;
     if (this.state.selectedRowKeys.length) {
       this.props.devices.map((device) => {
         if (this.state.selectedRowKeys.includes(device.id)) {
@@ -221,12 +204,13 @@ class Permissions extends Component {
       })
 
       this.showDealersModal(false);
+      // this.removeSelectedDealersModal(false);
     }
   }
 
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRowKeys, 'selected', selectedRows);
+    // console.log(selectedRowKeys, 'selected', selectedRows);
     let device_ids = []
     selectedRows.forEach(row => {
       // console.log("selected row", row)
@@ -393,9 +377,11 @@ class Permissions extends Component {
   }
 
   removeSelectedDealers = () => {
+    console.log(this.state.selectedDevices, "this.state.selectedRowKeys ", this.state.selectedRowKeys);
+
     let permittedDevices = this.state.selectedDevices;
     let selectedRows = this.state.selectedRowKeys;
-    var remove_ids = permittedDevices.filter(e => !selectedRows.includes(e.id));
+    var remove_ids = permittedDevices.filter(e => selectedRows.includes(e.id));
 
     this.setState({
       removeSelectedDealersModal: false,
@@ -403,7 +389,6 @@ class Permissions extends Component {
       selectedDevices: remove_ids
     })
 
-    // this.props.savePermission(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
   }
 
   goToDealer = (dealer) => {
@@ -482,15 +467,79 @@ class Permissions extends Component {
     });
     return (data);
   }
+
+
+
+  getUnSelectedDevices = (devices) => {
+    let selectedIDs = this.state.selectedDevices.map((item) => item.id);
+    let fDevices = devices.filter(e => !selectedIDs.includes(e.id));
+    return fDevices;
+  }
+
+
+  renderList(list) {
+    // console.log('list of dec', list)
+    return list.map((device, index) => {
+
+      var status = device.finalStatus;
+
+      let color = getColor(status);
+      var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
+      var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
+
+      if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
+        style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
+        text = "ACTIVATE";
+      }
+
+      return {
+        rowKey: index,
+        // key: device.device_id ? `${device.device_id}` : device.usr_device_id,
+        key: status == DEVICE_UNLINKED ? `${device.user_acc_id} ${device.created_at} ` : device.id,
+        counter: ++index,
+
+        status: (<span style={color} > {status}</span>),
+        lastOnline: checkValue(device.lastOnline),
+        flagged: device.flagged,
+        type: checkValue(device.type),
+        version: checkValue(device.version),
+        device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
+        // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
+        user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
+        validity: checkValue(device.validity),
+        transfered_to: checkValue((device.finalStatus == "Transfered") ? device.transfered_to : null),
+        name: checkValue(device.name),
+        activation_code: checkValue(device.activation_code),
+        account_email: checkValue(device.account_email),
+        pgp_email: checkValue(device.pgp_email),
+        chat_id: checkValue(device.chat_id),
+        client_id: checkValue(device.client_id),
+        dealer_id: checkValue(device.dealer_id),
+        dealer_pin: checkValue(device.link_code),
+        mac_address: checkValue(device.mac_address),
+        sim_id: checkValue(device.sim_id),
+        imei_1: checkValue(device.imei),
+        sim_1: checkValue(device.simno),
+        imei_2: checkValue(device.imei2),
+        sim_2: checkValue(device.simno2),
+        serial_number: checkValue(device.serial_number),
+        model: checkValue(device.model),
+        // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+        // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
+        dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
+        online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
+        s_dealer: checkValue(device.s_dealer),
+        s_dealer_name: checkValue(device.s_dealer_name),
+        remainTermDays: device.remainTermDays,
+        start_date: checkValue(device.start_date),
+        expiry_date: checkValue(device.expiry_date),
+      }
+    });
+  }
+
+
   render() {
-    // const { redirect } = this.state;
-    // if (redirect && this.state.dealer_id !== '') {
-    //   return <Redirect to={{
-    //     pathname: this.state.goToPage,
-    //     state: { id: this.state.dealer_id }
-    //   }} />
-    // }
-    console.log('selectedDevices ', this.state.selectedDevices);
+
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
@@ -548,22 +597,17 @@ class Permissions extends Component {
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
-                {/* <Table
-                  className="mb-24 expand_rows"
+                <Table
+                  id='scrolltablelist'
+                  ref='tablelist'
+                  className={"devices "}
+                  size="middle"
+                  bordered
                   columns={this.state.columns}
-                  // onChange={this.handleDealerTableChange}
-                  dataSource={this.renderDealer(this.props.devices)}
+                  onChange={this.props.onChangeTableSorting}
+                  dataSource={this.renderList(this.state.selectedDevices)}
                   pagination={false}
-                  translation={this.props.translation}
-                /> */}
-
-                <FilterDevicesList
-                  devices={this.state.selectedDevices}
-                  columns={this.state.columns}
-                  user={this.props.user}
-                  history={this.props.history}
-                  translation={this.props.translation}
-                  onChangeTableSorting={this.props.onChangeTableSorting}
+                  scroll={{ x: true }}
                 />
               </Col>
           }
@@ -571,7 +615,6 @@ class Permissions extends Component {
         <Modal
           maskClosable={false}
           width='665px'
-          // className="permiss_tabl"
           title={convertToLang(this.props.translation["Add Device To Filtered Selected Devices"], "Add Device To Filtered Selected Devices")}
           visible={this.state.showDealersModal}
           onOk={() => {
@@ -585,7 +628,7 @@ class Permissions extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.devices}
+            devices={this.renderList(this.getUnSelectedDevices(this.props.devices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -595,7 +638,6 @@ class Permissions extends Component {
             hideDefaultSelections={this.state.hideDefaultSelections}
             selectedRows={this.state.device_ids}
             selectedRowKeys={this.state.selectedRowKeys}
-          // selectedDealers={[]}
           />
         </Modal>
 
@@ -604,7 +646,7 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation["Remove Devices from Filtered devices"], "Remove Devices from Filtered devices")}
+          title={convertToLang(this.props.translation["Remove Devices Except Selected from Filtered devices"], "Remove Devices Except Selected from Filtered devices")}
           visible={this.state.removeSelectedDealersModal}
           okText={convertToLang(this.props.translation[Button_DeleteExceptSelected], "Delete Except Selected")}
           cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
@@ -617,7 +659,7 @@ class Permissions extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.devices}
+            devices={this.renderList(this.state.selectedDevices)}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -627,18 +669,7 @@ class Permissions extends Component {
             hideDefaultSelections={this.state.hideDefaultSelections}
             selectedRows={this.state.device_ids}
             selectedRowKeys={this.state.selectedRowKeys}
-          // selectedDealers={[]}
           />
-          {/* <FilterDevicesListModal
-            columns={this.state.columns}
-            onChangeTableSorting={this.handleTableChange}
-            dealers={[]}
-            onSelectChange={this.onSelectChange}
-            hideDefaultSelections={this.state.hideDefaultSelections}
-            selectedRows={this.state.device_ids}
-            selectedRowKeys={this.state.selectedRowKeys}
-          // selectedDealers={[]}
-          /> */}
         </Modal>
 
         {/*  Add Except selected */}
@@ -653,14 +684,13 @@ class Permissions extends Component {
           onOk={() => {
             this.addSelectedDealers()
           }}
-          // okText="Add Except Selected"
           onCancel={() => {
             this.addSelectedDealersModal(false)
           }}
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            devices={this.props.devices}
+            devices={this.renderList(this.getUnSelectedDevices(this.props.devices))}
             columns={this.state.columns}
             user={this.props.user}
             history={this.props.history}
@@ -670,18 +700,7 @@ class Permissions extends Component {
             hideDefaultSelections={this.state.hideDefaultSelections}
             selectedRows={this.state.device_ids}
             selectedRowKeys={this.state.selectedRowKeys}
-          // selectedDealers={[]}
           />
-          {/* <FilterDevicesListModal
-            columns={this.state.columns}
-            onChangeTableSorting={this.handleTableChange}
-            dealers={[]}
-            onSelectChange={this.onSelectChange}
-            hideDefaultSelections={this.state.hideDefaultSelections}
-            selectedRows={this.state.device_ids}
-            selectedRowKeys={this.state.selectedRowKeys}
-          // selectedDealers={[]}
-          /> */}
         </Modal>
       </Fragment>
     )
@@ -690,20 +709,16 @@ class Permissions extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    // getBulkDevicesList: getBulkDevicesList,
     getAllDealers: getAllDealers,
     savePermission: savePermission
   }, dispatch);
 }
 
 
-// export default Apk;
 const mapStateToProps = ({ dealers, settings, devices, auth }, props) => {
-  // console.log("devices.bulkDevices ", devices.bulkDevices);
-  // console.log("permission", props.record);
+
   return {
     user: auth.authUser,
-    devices: devices.bulkDevices,
     dealerList: dealers.dealers,
     record: props.record,
     spinloading: dealers.spinloading,
@@ -712,4 +727,4 @@ const mapStateToProps = ({ dealers, settings, devices, auth }, props) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Permissions);
+export default connect(mapStateToProps, mapDispatchToProps)(FilterDevices);
