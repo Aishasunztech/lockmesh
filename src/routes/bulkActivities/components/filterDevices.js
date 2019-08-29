@@ -3,13 +3,14 @@ import { Table, Button, Modal, Row, Col, Spin, Input } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getAllDealers } from "../../../appRedux/actions/Dealers";
+// import { getBulkDevicesList } from "../../../appRedux/actions/Devices";
 import { savePermission } from "../../../appRedux/actions/Apk";
-import FilterDevicesList from "./filterDevicesList";
+import FilterDevicesListModal from "./filterDevicesListModal";
 import { Redirect } from 'react-router-dom';
 import CircularProgress from "components/CircularProgress/index";
 
 import { titleCase, convertToLang } from '../../utils/commonUtils';
-import { dealerColsWithSearch } from '../../utils/columnsUtils';
+import { bulkDevicesColumns, devicesColumns } from '../../utils/columnsUtils';
 import {
   DEALER_ID,
   DEALER_NAME,
@@ -22,23 +23,22 @@ import {
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No } from '../../../constants/ButtonConstants';
 import { Permission_List, PERMISSION_Add_Modal_Title, PERMISSION_Remove_Modal_Title, PERMISSION_Add_Except_Selected_Modal_Title } from '../../../constants/ApkConstants';
 import { Alert_Allow_Permission_Delaer, Alert_Remove_Permission_Delaer } from '../../../constants/Constants';
+import FilterDevicesList from './filterDevicesList';
 
 const confirm = Modal.confirm;
 // export default 
 class Permissions extends Component {
   constructor(props) {
     super(props);
-    this.addDealerCols = dealerColsWithSearch(props.translation, true, this.handleSearch);
-    var addDealerColsInModal = dealerColsWithSearch(props.translation, true, this.handleSearchInModal);
-    var listDealerCols = dealerColsWithSearch(props.translation);
+    // let columns = bulkDevicesColumns(props.translation, this.handleSearch);
+    let columns = devicesColumns(props.translation, this.handleSearch);
 
     this.state = {
+      columns: columns,
       sorterKey: '',
       sortOrder: 'ascend',
-      listDealerCols: listDealerCols,
-      addDealerColsInModal: addDealerColsInModal,
       showDealersModal: false,
-      dealer_ids: [],
+      device_ids: [],
       dealerList: [],
       dealerListForModal: [],
       permissions: [],
@@ -47,7 +47,8 @@ class Permissions extends Component {
       addSelectedDealersModal: false,
       redirect: false,
       dealer_id: '',
-      goToPage: '/dealer/dealer'
+      goToPage: '/dealer/dealer',
+      selectedDevices: []
     }
 
 
@@ -56,7 +57,7 @@ class Permissions extends Component {
 
   handleTableChange = (pagination, query, sorter) => {
     // console.log('check sorter func: ', sorter)
-    let columns = this.state.addDealerColsInModal;
+    let columns = this.state.columns;
     // console.log('columns are: ', columns);
 
     columns.forEach(column => {
@@ -78,45 +79,46 @@ class Permissions extends Component {
       }
     })
     this.setState({
-      addDealerColsInModal: columns
+      columns: columns
     });
   }
 
   handleDealerTableChange = (pagination, query, sorter) => {
     // console.log('check sorter func: ', sorter)
-    let columns = this.state.listDealerCols;
+    let columns = this.state.columns;
     // console.log('columns are: ', columns);
 
     columns.forEach(column => {
       // if (column.children) {
-        if (Object.keys(sorter).length > 0) {
-          if (column.dataIndex == sorter.field) {
-            if (this.state.sorterKey == sorter.field) {
-              column['sortOrder'] = sorter.order;
-            } else {
-              column['sortOrder'] = "ascend";
-            }
+      if (Object.keys(sorter).length > 0) {
+        if (column.dataIndex == sorter.field) {
+          if (this.state.sorterKey == sorter.field) {
+            column['sortOrder'] = sorter.order;
           } else {
-            column['sortOrder'] = "";
+            column['sortOrder'] = "ascend";
           }
-          this.setState({ sorterKey: sorter.field });
         } else {
-          if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+          column['sortOrder'] = "";
         }
+        this.setState({ sorterKey: sorter.field });
+      } else {
+        if (this.state.sorterKey == column.dataIndex) column['sortOrder'] = "ascend";
+      }
       // }
     })
     this.setState({
-      listDealerCols: columns
+      columns: columns
     });
   }
 
 
   componentDidMount() {
     this.props.getAllDealers()
+    // this.props.getBulkDevicesList()
     this.setState({
       dealerList: this.props.dealerList,
       dealerListForModal: this.props.dealerList,
-    //   permissions: this.props.record.permissions
+      //   permissions: this.props.record.permissions
     })
   }
 
@@ -124,10 +126,8 @@ class Permissions extends Component {
   componentWillReceiveProps(nextProps) {
 
     if (this.props.translation !== nextProps.translation) {
-      this.addDealerCols = dealerColsWithSearch(nextProps.translation, true, this.handleSearch);
       this.setState({
-        addDealerColsInModal: dealerColsWithSearch(nextProps.translation, true, this.handleSearchInModal),
-        listDealerCols: dealerColsWithSearch(nextProps.translation)
+        columns: devicesColumns(nextProps.translation, this.handleSearchInModal),
       })
     }
 
@@ -153,7 +153,7 @@ class Permissions extends Component {
   showPermissionedDealersModal = (visible) => {
     this.setState({
       removeSelectedDealersModal: visible,
-      dealer_ids: [],
+      device_ids: [],
       selectedRowKeys: []
     })
   }
@@ -161,7 +161,7 @@ class Permissions extends Component {
   showDealersModal = (visible) => {
     this.setState({
       showDealersModal: visible,
-      dealer_ids: [],
+      device_ids: [],
       selectedRowKeys: []
     })
   }
@@ -169,32 +169,28 @@ class Permissions extends Component {
   addSelectedDealersModal = (visible) => {
     this.setState({
       addSelectedDealersModal: visible,
-      dealer_ids: [],
+      device_ids: [],
       selectedRowKeys: []
     })
   }
 
   addSelectedDealers = () => {
-    let permissions = this.state.permissions;
+    let selectedDevices = this.state.selectedDevices;
     let selectedRows = this.state.selectedRowKeys;
-    // var dList = this.state.dealerList; arfan
-    var dList = this.state.dealerListForModal;
-    var add_ids = dList.filter(e => !permissions.includes(e.dealer_id));
-    var addUnSelected = add_ids.filter(e => !selectedRows.includes(e.dealer_id));
-    var addUnSelected_IDs = addUnSelected.map(v => v.dealer_id);
-    permissions = [...permissions, ...addUnSelected_IDs];
+    var addUnSelected = this.props.devices.filter(e => !selectedRows.includes(e.id));
+    selectedDevices = [...selectedDevices, ...addUnSelected];
 
     this.setState({
-      permissions,
-      addSelectedDealersModal: false
+      selectedDevices,
+      addSelectedDealersModal: false,
+      selectedRowKeys: []
     })
-    // this.props.savePermission(this.props.record.apk_id, JSON.stringify(addUnSelected_IDs), 'save');
   }
 
   saveAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Allow_Permission_Delaer], "Do you really Want to allow Permission for all Dealers?"),
+      title: convertToLang(this.props.translation["Do you really Want to add all Devices?"], "Do you really Want to add all Devices?"),
       okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
       cancelText: convertToLang(this.props.translation[Button_No], "No"),
       onOk() {
@@ -207,57 +203,37 @@ class Permissions extends Component {
   }
 
   saveAllDealers = () => {
-    let dealer_ids = []
-    this.props.dealerList.map((dealer) => {
-      dealer_ids.push(dealer.dealer_id);
-    });
-    this.setState({ permissions: dealer_ids })
-
-    // this.props.savePermission(this.props.record.apk_id, JSON.stringify(dealer_ids), 'save');
-
-    // this.setState({
-    //   dealer_ids: dealer_ids
-    // });
+    this.setState({ selectedDevices: this.props.devices })
   }
+
   savePermission = () => {
-    // console.log(this.props.dealerList, "dealer ids", this.state.dealer_ids);
-
-    if (this.state.dealer_ids.length) {
-      this.props.dealerList.map((dealer) => {
-        if (this.state.dealer_ids.includes(dealer.dealer_id)) {
-          this.state.permissions.push(dealer.dealer_id);
-        }
-        else {
-          if (this.state.permissions.includes(dealer.dealer_id)) {
-            this.state.dealer_ids.push(dealer.dealer_id);
-
-          }
+    // console.log("dealer ids", this.state.device_ids);
+    let selectedDevices = [];
+    if (this.state.selectedRowKeys.length) {
+      this.props.devices.map((device) => {
+        if (this.state.selectedRowKeys.includes(device.id)) {
+          selectedDevices.push(device);
         }
       })
       this.setState({
-        dealer_ids: [],
-        permissions: this.state.permissions
+        selectedRowKeys: [],
+        selectedDevices: selectedDevices
       })
 
-      // console.log(this.state.selectedRowKeys);
-    //   this.props.savePermission(this.props.record.apk_id, JSON.stringify(this.state.selectedRowKeys), 'save');
-
       this.showDealersModal(false);
-
-      // this.props.getAllDealers()
-
     }
   }
 
+
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    // console.log(selectedRowKeys, 'selected', selectedRows);
-    let dealer_ids = []
+    console.log(selectedRowKeys, 'selected', selectedRows);
+    let device_ids = []
     selectedRows.forEach(row => {
       // console.log("selected row", row)
-      dealer_ids.push(row.dealer_id);
+      device_ids.push(row.id);
     });
     this.setState({
-      dealer_ids: dealer_ids,
+      device_ids: device_ids,
       selectedRowKeys: selectedRowKeys
     });
     // this.setState({ selectedRowKeys });
@@ -391,7 +367,7 @@ class Permissions extends Component {
   removeAllDealersConfirm = () => {
     let _this = this;
     confirm({
-      title: convertToLang(this.props.translation[Alert_Remove_Permission_Delaer], "Do you really Want to Remove Permission for all Dealers?"),
+      title: convertToLang(this.props.translation["Do you really Want to Remove all filtered devices?"], "Do you really Want to Remove all filtered devices?"),
       okText: convertToLang(this.props.translation[Button_Yes], "Yes"),
       cancelText: convertToLang(this.props.translation[Button_No], "No"),
       onOk() {
@@ -404,16 +380,10 @@ class Permissions extends Component {
   }
 
   removeAllDealers = () => {
-    let permittedDealers = this.state.permissions;
-    // console.log("permitted dealers", permittedDealers);
 
     this.setState({
-      permissions: []
+      selectedDevices: []
     })
-    // this.props.savePermission(this.props.record.apk_id, JSON.stringify(permittedDealers), 'delete');
-    // this.state.dealerList.map((dealer)=>{
-    //   console.log(dealer);
-    // })
   }
 
   removeSelectedDealersModal = (visible) => {
@@ -423,14 +393,14 @@ class Permissions extends Component {
   }
 
   removeSelectedDealers = () => {
-    let permittedDealers = this.state.permissions;
+    let permittedDevices = this.state.selectedDevices;
     let selectedRows = this.state.selectedRowKeys;
-    var remove_ids = permittedDealers.filter(e => !selectedRows.includes(e));
+    var remove_ids = permittedDevices.filter(e => !selectedRows.includes(e.id));
 
     this.setState({
       removeSelectedDealersModal: false,
-      dealer_ids: [],
-      permissions: selectedRows
+      device_ids: [],
+      selectedDevices: remove_ids
     })
 
     // this.props.savePermission(this.props.record.apk_id, JSON.stringify(remove_ids), 'delete');
@@ -513,14 +483,14 @@ class Permissions extends Component {
     return (data);
   }
   render() {
-    const { redirect } = this.state;
-    if (redirect && this.state.dealer_id !== '') {
-      return <Redirect to={{
-        pathname: this.state.goToPage,
-        state: { id: this.state.dealer_id }
-      }} />
-    }
-    // console.log('dealer state', this.state.dealerList);
+    // const { redirect } = this.state;
+    // if (redirect && this.state.dealer_id !== '') {
+    //   return <Redirect to={{
+    //     pathname: this.state.goToPage,
+    //     state: { id: this.state.dealer_id }
+    //   }} />
+    // }
+    console.log('selectedDevices ', this.state.selectedDevices);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
@@ -578,13 +548,22 @@ class Permissions extends Component {
           {
             this.props.spinloading ? <CircularProgress /> :
               <Col className="gutter-row" span={24}>
-                <Table
+                {/* <Table
                   className="mb-24 expand_rows"
-                  columns={this.state.listDealerCols}
-                  onChange={this.handleDealerTableChange}
-                  dataSource={this.renderDealer(this.state.dealerList, true)}
+                  columns={this.state.columns}
+                  // onChange={this.handleDealerTableChange}
+                  dataSource={this.renderDealer(this.props.devices)}
                   pagination={false}
                   translation={this.props.translation}
+                /> */}
+
+                <FilterDevicesList
+                  devices={this.state.selectedDevices}
+                  columns={this.state.columns}
+                  user={this.props.user}
+                  history={this.props.history}
+                  translation={this.props.translation}
+                  onChangeTableSorting={this.props.onChangeTableSorting}
                 />
               </Col>
           }
@@ -592,8 +571,8 @@ class Permissions extends Component {
         <Modal
           maskClosable={false}
           width='665px'
-          className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Add_Modal_Title], "Add Dealer to permissions list for this App")}
+          // className="permiss_tabl"
+          title={convertToLang(this.props.translation["Add Device To Filtered Selected Devices"], "Add Device To Filtered Selected Devices")}
           visible={this.state.showDealersModal}
           onOk={() => {
             this.savePermission()
@@ -606,12 +585,15 @@ class Permissions extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            columns={this.state.addDealerColsInModal}
-            onChangeTableSorting={this.handleTableChange}
-            dealers={this.renderDealer(this.state.dealerListForModal)}
+            devices={this.props.devices}
+            columns={this.state.columns}
+            user={this.props.user}
+            history={this.props.history}
+            translation={this.props.translation}
+            onChangeTableSorting={this.props.onChangeTableSorting}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
-            selectedRows={this.state.dealer_ids}
+            selectedRows={this.state.device_ids}
             selectedRowKeys={this.state.selectedRowKeys}
           // selectedDealers={[]}
           />
@@ -622,7 +604,7 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Remove_Modal_Title], "Remove Dealers from permissions list for this App")}
+          title={convertToLang(this.props.translation["Remove Devices from Filtered devices"], "Remove Devices from Filtered devices")}
           visible={this.state.removeSelectedDealersModal}
           okText={convertToLang(this.props.translation[Button_DeleteExceptSelected], "Delete Except Selected")}
           cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
@@ -632,17 +614,31 @@ class Permissions extends Component {
           onCancel={() => {
             this.removeSelectedDealersModal(false)
           }}
+          bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            columns={this.state.addDealerColsInModal}
-            onChangeTableSorting={this.handleTableChange}
-            dealers={this.renderDealer(this.state.dealerListForModal, true)}
+            devices={this.props.devices}
+            columns={this.state.columns}
+            user={this.props.user}
+            history={this.props.history}
+            translation={this.props.translation}
+            onChangeTableSorting={this.props.onChangeTableSorting}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
-            selectedRows={this.state.dealer_ids}
+            selectedRows={this.state.device_ids}
             selectedRowKeys={this.state.selectedRowKeys}
           // selectedDealers={[]}
           />
+          {/* <FilterDevicesListModal
+            columns={this.state.columns}
+            onChangeTableSorting={this.handleTableChange}
+            dealers={[]}
+            onSelectChange={this.onSelectChange}
+            hideDefaultSelections={this.state.hideDefaultSelections}
+            selectedRows={this.state.device_ids}
+            selectedRowKeys={this.state.selectedRowKeys}
+          // selectedDealers={[]}
+          /> */}
         </Modal>
 
         {/*  Add Except selected */}
@@ -650,7 +646,7 @@ class Permissions extends Component {
           maskClosable={false}
           width='665px'
           className="permiss_tabl"
-          title={convertToLang(this.props.translation[PERMISSION_Add_Except_Selected_Modal_Title], "Add Except Dealers from permissions list for this App")}
+          title={convertToLang(this.props.translation["Add Except Selected Devices"], "Add Except Selected Devices")}
           visible={this.state.addSelectedDealersModal}
           okText={convertToLang(this.props.translation[Button_AddExceptSelected], "Add Except Selected")}
           cancelText={convertToLang(this.props.translation[Button_Cancel], "Cancel")}
@@ -664,26 +660,50 @@ class Permissions extends Component {
           bodyStyle={{ height: 500, overflow: "overlay" }}
         >
           <FilterDevicesList
-            columns={this.state.addDealerColsInModal}
-            onChangeTableSorting={this.handleTableChange}
-            dealers={this.renderDealer(this.state.dealerListForModal)}
+            devices={this.props.devices}
+            columns={this.state.columns}
+            user={this.props.user}
+            history={this.props.history}
+            translation={this.props.translation}
+            onChangeTableSorting={this.props.onChangeTableSorting}
             onSelectChange={this.onSelectChange}
             hideDefaultSelections={this.state.hideDefaultSelections}
-            selectedRows={this.state.dealer_ids}
+            selectedRows={this.state.device_ids}
             selectedRowKeys={this.state.selectedRowKeys}
           // selectedDealers={[]}
           />
+          {/* <FilterDevicesListModal
+            columns={this.state.columns}
+            onChangeTableSorting={this.handleTableChange}
+            dealers={[]}
+            onSelectChange={this.onSelectChange}
+            hideDefaultSelections={this.state.hideDefaultSelections}
+            selectedRows={this.state.device_ids}
+            selectedRowKeys={this.state.selectedRowKeys}
+          // selectedDealers={[]}
+          /> */}
         </Modal>
       </Fragment>
     )
   }
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    // getBulkDevicesList: getBulkDevicesList,
+    getAllDealers: getAllDealers,
+    savePermission: savePermission
+  }, dispatch);
+}
+
+
 // export default Apk;
-const mapStateToProps = ({ dealers, settings }, props) => {
-  // console.log("dealer", dealers);
+const mapStateToProps = ({ dealers, settings, devices, auth }, props) => {
+  // console.log("devices.bulkDevices ", devices.bulkDevices);
   // console.log("permission", props.record);
   return {
+    user: auth.authUser,
+    devices: devices.bulkDevices,
     dealerList: dealers.dealers,
     record: props.record,
     spinloading: dealers.spinloading,
@@ -691,11 +711,5 @@ const mapStateToProps = ({ dealers, settings }, props) => {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    getAllDealers: getAllDealers,
-    savePermission: savePermission
-  }, dispatch);
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Permissions);

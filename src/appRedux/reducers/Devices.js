@@ -20,7 +20,8 @@ import {
     PRE_ACTIVATE_DEVICE,
     DELETE_UNLINK_DEVICE,
     UNFLAG_DEVICE,
-    GET_PARENT_PACKAGES
+    GET_PARENT_PACKAGES,
+    BULK_DEVICES_LIST
 } from "../../constants/ActionTypes";
 
 // import { convertToLang } from '../../routes/utils/commonUtils';
@@ -69,6 +70,9 @@ const error = Modal.error
 
 const initialState = {
     devices: [],
+    bulkDevices: [],
+    // allDealers: [],
+    // allUsers: [],
     msg: "",
     showMsg: false,
     isloading: true,
@@ -133,6 +137,16 @@ export default (state = initialState, action) => {
                 showMsg: "hello",
                 // options: state.options,
                 devices: action.payload,
+            }
+
+        case BULK_DEVICES_LIST:
+            return {
+                ...state,
+                isloading: false,
+                msg: state.msg,
+                showMsg: "hello",
+                // options: state.options,
+                bulkDevices: action.payload,
             }
 
         case UNFLAG_DEVICE: {

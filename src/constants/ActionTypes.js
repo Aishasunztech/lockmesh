@@ -40,6 +40,7 @@ export const LOGIN_HISTORY = 'LOGIN_HISTORY';
 
 //Device const
 export const DEVICES_LIST = 'DEVICES_LIST';
+export const BULK_DEVICES_LIST = 'BULK_DEVICES_LIST';
 export const SUSPEND_DEVICE = 'SUSPEND_DEVICE';
 export const ACTIVATE_DEVICE = 'ACTIVATE_DEVICE';
 export const CONNECT_DEVICE = "CONNECT_DEVICE";

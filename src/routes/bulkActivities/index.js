@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Modal, Col, Row, Card, Button, Input, Select, Table } from 'antd';
-
+import { getAllDealers } from "../../appRedux/actions/Dealers";
+import { getBulkDevicesList } from "../../appRedux/actions/Devices";
 import { Redirect } from 'react-router-dom'
 import {
 
@@ -15,6 +16,8 @@ import AppFilter from '../../components/AppFilter';
 import {
     convertToLang, componentSearch
 } from '../utils/commonUtils'
+
+import { getUserList } from "../../appRedux/actions/Users";
 
 import { ADMIN } from '../../constants/Constants';
 import { Button_Confirm, Button_Cancel } from '../../constants/ButtonConstants';
@@ -30,16 +33,44 @@ const confirm = Modal.confirm;
 class BulkActivities extends Component {
     constructor(props) {
         super(props);
+
+        this.actionList = [
+            { key: 'PUSH APPS', value: "Push Apps" },
+            { key: 'PULL APPS', value: "Pull Apps" },
+            { key: 'PUSH POLICY', value: "Push Policy" },
+            { key: 'SET PERMISSIONS', value: "Set Permissions" },
+            { key: 'SUSPEND AND UNLINK', value: "Suspend/Unlink" },
+            { key: 'WIPE DEVICES', value: "Wipe Devices" }
+        ];
+
         let columns = devicesColumns(props.translation, this.handleColumnSearch);
         this.state = {
             columns: columns,
+            filteredDevices: [],
+            selectedAction: 'Null',
+            selectedDealers: [],
+            selectedUsers: [],
+            dealerList: []
         }
     }
 
     componentDidMount() {
+        this.props.getAllDealers();
+        this.props.getUserList();
+        // this.props.getBulkDevicesList();
+
+        this.setState({
+            filteredDevices: this.props.devices,
+            dealerList: this.props.dealerList
+        })
     }
 
     componentWillReceiveProps(nextProps) {
+        // if (this.props.devices != nextProps.devices) {
+            this.setState({
+                filteredDevices: nextProps.devices
+            })
+        // }
     }
 
 
@@ -115,9 +146,45 @@ class BulkActivities extends Component {
 
     }
 
-    render() {
-        let actionList = [];
+    handleMultipleSelect = () => {
+        // console.log('value is: ', e);
+        let data = {}
 
+
+        // if (field == "action") {
+        //     this.setState({ selectedAction: e })
+        // } else 
+        // if (field == "dealer") {
+        //     this.setState({ selectedDealers: e })
+        //     data = {
+        //         dealers: e,
+        //         users: this.state.selectedUsers
+        //     }
+        // } else if (field == "user") {
+        //     this.setState({ selectedUsers: e });
+        //     data = {
+        //         dealers: this.state.selectedDealers,
+        //         users: e
+        //     }
+        // }
+
+        data = {
+            dealers: this.state.selectedDealers,
+            users: this.state.selectedUsers
+        }
+
+        console.log('handle change data is: ', data)
+        this.props.getBulkDevicesList(data);
+        this.props.getAllDealers();
+    }
+
+    applyAction = () => {
+        console.log('action apply')
+    }
+
+    render() {
+        // let actionList = [];
+        // console.log('this.state.selectedDealers ', this.state.selectedDealers)
         if (this.props.location.state) {
             return (
                 <Fragment>
@@ -149,28 +216,22 @@ class BulkActivities extends Component {
                                 <Select
                                     style={{ width: '100%' }}
                                     className="pos_rel"
-                                    // setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
-                                    showSearch
+                                    // onChange={(e) => this.handleMultipleSelect(e, "action")}
                                     placeholder={convertToLang(this.props.translation[""], "Select any action")}
-                                    optionFilterProp="children"
-                                    onChange={this.handleUserChange}
-                                    filterOption={
-                                        (input, option) => {
-                                            // console.log("searching: ",input," from:", option.props);
-                                            // return null;
-                                            return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
-                                        }
-                                    }
+                                    onChange={(e) => this.setState({ selectedAction: e })}
                                 >
-                                    <Select.Option value="">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
-                                    {actionList.map((item, index) => {
-                                        return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
+                                    <Select.Option value="Null">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
+                                    {this.actionList.map((item, index) => {
+                                        return (<Select.Option key={item.id} value={item.key}>{item.value}</Select.Option>)
                                     })}
                                 </Select>
                             </Col>
+                            <Col className="col-md-2 col-sm-2 col-xs-2">
+                                <Button type="primary" onClick={this.applyAction} >Apply Action</Button>
+                            </Col>
                         </Row>
-                        <p>Selected: <span className="font_26">PUSH APPS</span></p>
-                        {/* <br /> */}
+                        <p>Selected: <span className="font_26">{this.state.selectedAction.toUpperCase()}</span></p>
+
                         <Row gutter={24} className="">
                             <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                                 <span className=""> {convertToLang(this.props.translation[""], "Select Dealers:")} </span>
@@ -178,30 +239,23 @@ class BulkActivities extends Component {
 
                             <Col className="col-md-4 col-sm-4 col-xs-4">
                                 <Select
+                                    mode="multiple"
+                                    labelInValue
+                                    maxTagCount="2"
                                     style={{ width: '100%' }}
-                                    className="pos_rel"
-                                    // setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
-                                    showSearch
-
+                                    // onChange={(e) => this.handleMultipleSelect(e, "dealer")}
+                                    onBlur={this.handleMultipleSelect}
                                     placeholder={convertToLang(this.props.translation[""], "Select Dealers")}
-                                    optionFilterProp="children"
-                                    onChange={this.handleUserChange}
-                                    filterOption={
-                                        (input, option) => {
-                                            // console.log("searching: ",input," from:", option.props);
-                                            // return null;
-                                            return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
-                                        }
-                                    }
+                                    onChange={(e) => this.setState({ selectedDealers: e })}
                                 >
-                                    <Select.Option value="">{convertToLang(this.props.translation[""], "Select Dealers")}</Select.Option>
-                                    {actionList.map((item, index) => {
-                                        return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
+                                    {this.props.dealerList.map((item, index) => {
+                                        return (<Select.Option key={item.id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
                                     })}
                                 </Select>
                             </Col>
                         </Row>
-                        <p>Dealers Selected: <span className="font_26">Hamza, Abaid</span></p>
+                        <br />
+                        <p>Dealers Selected: <span className="font_26">{(this.state.selectedDealers.length) ? this.state.selectedDealers.map((item) => `${item.label}, `) : "NULL"}</span></p>
                         <Row gutter={24} className="">
                             <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                                 <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
@@ -209,53 +263,25 @@ class BulkActivities extends Component {
 
                             <Col className="col-md-4 col-sm-4 col-xs-4">
                                 <Select
+                                    mode="multiple"
+                                    labelInValue
+                                    maxTagCount="2"
                                     style={{ width: '100%' }}
-                                    className="pos_rel"
-                                    // setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
-                                    showSearch
-
+                                    // onChange={(e) => this.handleMultipleSelect(e, "user")}
+                                    onBlur={this.handleMultipleSelect}
                                     placeholder={convertToLang(this.props.translation[""], "Select Users")}
-                                    optionFilterProp="children"
-                                    onChange={this.handleUserChange}
-                                    filterOption={
-                                        (input, option) => {
-                                            // console.log("searching: ",input," from:", option.props);
-                                            // return null;
-                                            return (option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0)
-                                        }
-                                    }
+                                    onChange={(e) => this.setState({ selectedUsers: e })}
                                 >
-                                    <Select.Option value="">{convertToLang(this.props.translation[""], "Select Users")}</Select.Option>
-                                    {actionList.map((item, index) => {
-                                        return (<Select.Option key={index} value={item.user_id}>{`${item.user_id} (${item.user_name})`}</Select.Option>)
+                                    {this.props.users_list.map((item, index) => {
+                                        return (<Select.Option key={item.id} value={item.user_id}>{item.user_name}</Select.Option>)
                                     })}
                                 </Select>
                             </Col>
                         </Row>
-                        <p>Users Selected: <span className="font_26">All</span></p>
-                        {/* <Row gutter={24} className="">
-                            <Col className="col-md-2 col-sm-2 col-xs-2 vertical_center">
-                                <span className=""> {convertToLang(this.props.translation[""], "Select Devices:")} </span>
-                            </Col>
+                        <br />
+                        <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map((item) => `${item.label}, `) : "NULL"}</span></p>
 
-                            <Col className="col-md-1 col-sm-1 col-xs-1">
-                                <Button type="primary" size="small">Add</Button>
-                            </Col>
-                            <Col className="col-md-1 col-sm-1 col-xs-1">
-                                <Button type="primary" size="small">Add All</Button>
-                            </Col>
-                            <Col className="col-md-2 col-sm-2 col-xs-2">
-                                <Button type="primary" size="small">Add Except Selected</Button>
-                            </Col>
-                            <Col className="col-md-1 col-sm-1 col-xs-1">
-                                <Button type="danger" size="small">Remove All</Button>
-                            </Col>
-                            <Col className="col-md-2 col-sm-2 col-xs-2">
-                                <Button type="danger" size="small">Remove Except Selected</Button>
-                            </Col>
-                        </Row> */}
-
-                        <FilterDeives />
+                        <FilterDeives devices={this.state.filteredDevices} />
 
                     </Card>
 
@@ -274,11 +300,18 @@ class BulkActivities extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
+        getBulkDevicesList: getBulkDevicesList,
+        getAllDealers: getAllDealers,
+        getUserList: getUserList,
     }, dispatch);
 }
 
-const mapStateToProps = ({ routing, auth, socket, settings, agents }) => {
+const mapStateToProps = ({ routing, auth, settings, dealers, devices, users }) => {
+    console.log('devices.bulkDevices ',devices.bulkDevices)
     return {
+        devices: devices.bulkDevices,
+        users_list: users.users_list,
+        dealerList: dealers.dealers,
         user: auth.authUser,
         routing: routing,
         translation: settings.translation,

@@ -149,6 +149,18 @@ const RestService = {
         )
     },
 
+    getBulkDevicesList: (data) => {
+        return axios.post(BASE_URL + 'users/filtered-bulkDevices', data, RestService.getHeader())
+    },
+
+    // getBulkDealers: (data) => {
+    //     return axios.get(BASE_URL + 'users/bulk-dealers', data, RestService.getHeader())
+    // },
+
+    // getBulkUsers: (data) => {
+    //     return axios.get(BASE_URL + 'users/bulk-users', data, RestService.getHeader())
+    // },
+
     deleteUnlinkDevice: (action, devices) => {
         return axios.put(BASE_URL + 'users/deleteUnlinkDevice', { action, devices }, RestService.getHeader())
     },
@@ -793,7 +805,7 @@ const RestService = {
     // },
 
     getDashboardData: () => {
-        return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());       
+        return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());
     }
 
 }
