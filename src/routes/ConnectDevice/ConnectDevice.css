@@ -22,12 +22,10 @@
 }
 
 .dev_back_btn {
-    position: relative;
+    position: absolute;
     top: 36px;
     left: 10px;
 }
-
-
 
 .status_bar {
     border-bottom: 1px solid #cccccc;
@@ -304,8 +302,9 @@ th.device_info {
 
 .ref-btn {
     display: inline-flex;
-    float: right;
     margin: 12px 0;
+    position: absolute;
+    right: 15px;
 }
 
 .ref-btn .anticon {
@@ -333,8 +332,7 @@ th.device_info {
 }
 
 .sec_head1 {
-    margin: 25px 0px 0px;
-    border-top: 0;
+    border-top: 1px solid #e8e8e8;
     padding: 12px 0;
     border-bottom: 1px solid #e8e8e8;
 }
@@ -362,7 +360,7 @@ th.device_info {
 
     .status_bar {
         margin: 0px 0px 27px 0px;
-        padding-top: 43px;
+        padding-top: 61px;
     }
 
     .deviceImg .ant-table-scroll {

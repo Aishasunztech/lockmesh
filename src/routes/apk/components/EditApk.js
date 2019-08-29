@@ -191,11 +191,13 @@ class EditApkForm extends Component {
         };
         const Dragger = Upload.Dragger;
         let token = localStorage.getItem('token');
-        let _this = this
-        const props = {
+        let _this = this;
+
+        // props changed into logoProps by Usman
+        const logoProps = {
             name: 'logo',
             multiple: false,
-            action: BASE_URL + 'users/upload',
+            action: `${BASE_URL}users/upload?fieldName=logo`,
             headers: { 'authorization': token },
             accept: '.png, .jpg',
             disabled: this.state.disableLogo,
@@ -244,10 +246,11 @@ class EditApkForm extends Component {
             },
         };
 
-        const props2 = {
+        // props2 changed into apkProps by Usman
+        const apkProps = {
             name: 'apk',
             multiple: false,
-            action: BASE_URL + 'users/upload',
+            action: `${BASE_URL}users/upload?fieldName=apk`,
             headers: { 'authorization': token, "id": this.props.app.apk_id },
             accept: '.apk',
             disabled: this.state.disableApk,
@@ -334,10 +337,10 @@ class EditApkForm extends Component {
                         {
                             getFieldDecorator('icon', {})
                                 (
-                                    <Upload {...props} >
+                                    <Upload {...logoProps} >
                                         <Button className="width_100 upload_btn" type="default" >
                                             <Icon type="folder-open" />UPLOAD ICON
-                                    </Button>
+                                        </Button>
                                     </Upload>
                                 )}
 
@@ -352,7 +355,7 @@ class EditApkForm extends Component {
                         {
                             getFieldDecorator('apk', {})
                                 (
-                                    <Upload  {...props2}>
+                                    <Upload  {...apkProps}>
                                         <Button className="width_100 upload_btn" type="default" >
                                             <Icon type="folder-open" /> UPLOAD APK FILE
                                     </Button>

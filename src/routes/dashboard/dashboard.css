@@ -1,0 +1,28 @@
+.dashboard-card {
+    height: 80px;
+    margin: auto;
+    text-align: center;
+    width: 80px;
+    margin-bottom: 10px;
+    border-radius: 50px !important;
+    /* vertical-align: center; */
+    box-shadow: 12px;
+    box-shadow: 6px 10px 5px 0px rgba(0, 0, 0, 0.19);
+}
+
+.dashboard-icon {
+    font-size: 43px
+}
+
+.dashboard-card .ant-card-body {
+    margin-top: 7px
+}
+
+.dashboard-item-div {
+    margin-bottom: 32px !important;
+    text-align: center !important;
+}
+
+.db-span-qnty {
+    font-size: 20px;
+}

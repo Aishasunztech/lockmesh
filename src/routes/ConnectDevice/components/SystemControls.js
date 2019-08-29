@@ -2,7 +2,7 @@ import React, { Component, Fragment, Typography } from 'react';
 import { List, Switch, Col, Row } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { SYSTEM_PERMISSION, NOT_AVAILABLE } from '../../../constants/Constants';
+import { SYSTEM_PERMISSION, NOT_AVAILABLE, ADMIN, ANDROID_SETTING_PERMISSION } from '../../../constants/Constants';
 import {
   handleControlCheck,
   handleCheckAllExtension,
@@ -65,10 +65,10 @@ export default class SystemControls extends Component {
   }
 
   render() {
-    // console.log('consroslss sdfsd fsd ', this.state.controls);
+    // console.log("auth in secure permission: ", this.props.auth.authUser.type);
+    // console.log("setting app", this.state.settings);
+
     let objindex = -1;
-    // console.log('object settings', this.state.settings)
-    // if(this.state.settings !== undefined && this.state.settings && this.state.controls.length){
     if (this.state.settings !== undefined && this.state.settings && this.state.settings !== []) {
       objindex = this.state.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
     }
@@ -78,32 +78,41 @@ export default class SystemControls extends Component {
       return (
         Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object ?
           <Fragment>
-            <div style={{ height: 400, overflow: 'overlay', borderTop: '1px solid #e8e8e8' }} >
-              <List>
-                {/* {
-                  (this.state.settings !== undefined && this.state.settings && this.state.settings !== [] && objindex>=0) ?
-                    <div className="row width_100 m-0 sec_head1">
-                      <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
-                        <span>Guest</span>
-                        <Switch onClick={(e) => {
-                          this.handleMainSettingCheck(e, "guest");
-                        }} checked={this.state.settings[objindex].guest === 1 || this.state.settings[objindex].guest === true ? true : false} size="small" />
-                      </div>
-                      <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
-                        <span>Encrypt</span>
-                        <Switch onClick={(e) => {
-                          this.handleMainSettingCheck(e, "encrypted");
-                        }} checked={this.state.settings[objindex].encrypted === 1 || this.state.settings[objindex].encrypted === true ? true : false} size="small" />
-                      </div>
-                      <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
-                        <span>Enable</span>
-                        <Switch onClick={(e) => {
-                          this.handleMainSettingCheck(e, "enable");
-                        }} checked={this.state.settings[objindex].enable === 1 || this.state.settings[objindex].enable === true ? true : false} size="small" />
-                      </div>
+            <div style={{ height: 415, overflow: 'overlay' }} >
+              <Row className="first_head">
+                <Col span={4} className="pr-0">
+                  <img src={require("assets/images/setting.png")} />
+                </Col>
+                <Col span={20} className="pl-4 pr-0">
+                  <h5>{convertToLang(this.props.translation[ANDROID_SETTING_PERMISSION], "Android Settings Permission")}</h5>
+                </Col>
+              </Row>
+              {(this.props.auth.authUser.type === ADMIN) ?
+                (this.state.settings !== undefined && this.state.settings && this.state.settings !== [] && objindex >= 0) ?
+                  <div className="row width_100 m-0 sec_head1">
+                    <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                      <span>Guest</span>
+                      <Switch onClick={(e) => {
+                        this.handleMainSettingCheck(e, "guest");
+                      }} checked={this.state.settings[objindex].guest === 1 || this.state.settings[objindex].guest === true ? true : false} size="small" />
                     </div>
-                    : false
-                } */}
+                    <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                      <span>Encrypt</span>
+                      <Switch onClick={(e) => {
+                        this.handleMainSettingCheck(e, "encrypted");
+                      }} checked={this.state.settings[objindex].encrypted === 1 || this.state.settings[objindex].encrypted === true ? true : false} size="small" />
+                    </div>
+                    <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                      <span>Enable</span>
+                      <Switch onClick={(e) => {
+                        this.handleMainSettingCheck(e, "enable");
+                      }} checked={this.state.settings[objindex].enable === 1 || this.state.settings[objindex].enable === true ? true : false} size="small" />
+                    </div>
+                  </div>
+                  : null
+                : null
+              }
+              <List>
 
                 <List.Item>
                   <div className="row width_100">

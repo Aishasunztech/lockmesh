@@ -43,6 +43,7 @@ export const CHANGE_ADMIN_PANEL_CODE = "Change.Admin.Panel.Code.id"; // Change A
 
 export const APPLICATION_PERMISION = 'application.permission.id'; // Application Permission
 export const SECURE_SETTING_PERMISSION = 'secure.settings.permission.id'; // Secure Settings Permission
+export const ANDROID_SETTING_PERMISSION = 'android.settings.permission.id'; // Android Settings Permission
 export const SECURE_SETTINGS = 'secure.settings.id'; // Secure Settings
 export const SYSTEM_PERMISSION = 'system.permission.id';// System Permission
 export const MANAGE_PASSWORDS = 'manage.passwords.id'; // Manage Password
@@ -61,7 +62,7 @@ export const POLICY = 'policy';
 export const SELECT_POLICY = "Select.Policy.id"; // Select Policy
 
 // Constant Package Names
-export const Main_SETTINGS = 'com.android.settingsSettings';
+export const Main_SETTINGS = 'com.android.settings';
 export const SECURE_SETTING = 'com.secureSetting.SecureSettingsMainSecure Settings';
 // export const SYSTEM_CONTROLS_UNIQUE = 'com.secure.systemcontrolSystem Control';
 
