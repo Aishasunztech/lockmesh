@@ -69,7 +69,8 @@ class BulkActivities extends Component {
     componentWillReceiveProps(nextProps) {
         // if (this.props.devices != nextProps.devices) {
         this.setState({
-            filteredDevices: nextProps.devices
+            filteredDevices: nextProps.devices,
+            dealerList: this.props.dealerList
         })
         // }
     }
@@ -150,40 +151,49 @@ class BulkActivities extends Component {
     handleMultipleSelect = () => {
         // console.log('value is: ', e);
         let data = {}
+        console.log(" this.state.selectedDealers ", this.state.selectedDealers)
+        console.log(" this.state.selectedUsers ", this.state.selectedUsers)
 
 
-        // if (field == "action") {
-        //     this.setState({ selectedAction: e })
-        // } else 
-        // if (field == "dealer") {
-        //     this.setState({ selectedDealers: e })
-        //     data = {
-        //         dealers: e,
-        //         users: this.state.selectedUsers
-        //     }
-        // } else if (field == "user") {
-        //     this.setState({ selectedUsers: e });
-        //     data = {
-        //         dealers: this.state.selectedDealers,
-        //         users: e
-        //     }
-        // }
+        if (this.state.selectedDealers.length || this.state.selectedUsers.length) {
+            console.log('hi')
+            data = {
+                dealers: this.state.selectedDealers,
+                users: this.state.selectedUsers
+            }
 
-        data = {
-            dealers: this.state.selectedDealers,
-            users: this.state.selectedUsers
+            // console.log('handle change data is: ', data)
+            this.props.getBulkDevicesList(data);
+            this.props.getAllDealers();
+
+        } else {
+            this.setState({ filteredDevices: [] });
         }
-
-        console.log('handle change data is: ', data)
-        this.props.getBulkDevicesList(data);
-        this.props.getAllDealers();
     }
 
     applyAction = () => {
         console.log('action apply')
     }
 
-    handleCancel = (value) => {
+    handleCancel = (value, lable) => {
+        // // console.log('value ', value)
+        // // console.log('lable ', lable)
+
+
+        // let selectedDealers = this.state.selectedDealers;
+        // let selectedUsers = this.state.selectedUsers;
+
+        // if (lable == "dealer") {
+        //     selectedDealers = selectedDealers.filter(e => e.key !== value.key)
+        // }
+        // else if (lable == "user") {
+        //     selectedUsers = selectedUsers.filter(e => e.key !== value.key)
+        // }
+        // this.setState({
+        //     selectedDealers,
+        //     selectedUsers
+        // })
+
         this.handleMultipleSelect();
     }
 
@@ -248,10 +258,10 @@ class BulkActivities extends Component {
                                     labelInValue
                                     maxTagCount="2"
                                     style={{ width: '100%' }}
-                                    onBlur={this.handleMultipleSelect}
-                                    onDeselect={this.handleCancel}
                                     placeholder={convertToLang(this.props.translation[""], "Select Dealers")}
-                                    onChange={(e) => this.setState({ selectedDealers: e })}
+                                    onChange={(e) => { console.log(e); this.setState({ selectedDealers: e }) }}
+                                    onDeselect={(e) => this.handleCancel(e, "dealer")}
+                                    onBlur={() => { this.handleMultipleSelect() }}
                                 >
                                     {this.props.dealerList.map((item, index) => {
                                         return (<Select.Option key={item.id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
@@ -273,7 +283,7 @@ class BulkActivities extends Component {
                                     maxTagCount="2"
                                     style={{ width: '100%' }}
                                     onBlur={this.handleMultipleSelect}
-                                    onDeselect={this.handleCancel}
+                                    onDeselect={(e) => this.handleCancel(e, "user")}
                                     placeholder={convertToLang(this.props.translation[""], "Select Users")}
                                     onChange={(e) => this.setState({ selectedUsers: e })}
                                 >
@@ -286,7 +296,11 @@ class BulkActivities extends Component {
                         <br />
                         <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map((item) => `${item.label}, `) : "NULL"}</span></p>
 
-                        <FilterDeives devices={this.state.filteredDevices} />
+                        <FilterDeives
+                            devices={this.state.filteredDevices}
+                            selectedDealers={this.state.selectedDealers}
+                            selectedUsers={this.state.selectedUsers}
+                        />
 
                     </Card>
 
@@ -312,7 +326,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const mapStateToProps = ({ routing, auth, settings, dealers, devices, users }) => {
-    // console.log('devices.bulkDevices ', devices.bulkDevices)
+    console.log('devices.bulkDevices ', devices.bulkDevices)
     return {
         devices: devices.bulkDevices,
         users_list: users.users_list,

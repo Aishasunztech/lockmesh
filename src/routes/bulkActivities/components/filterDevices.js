@@ -122,6 +122,12 @@ class FilterDevices extends Component {
       })
     }
 
+    if (nextProps.selectedDealers.length == 0 && nextProps.selectedUsers.length == 0) {
+      this.setState({
+        selectedDevices: []
+      })
+    }
+
   }
 
   showPermissionedDealersModal = (visible) => {
@@ -540,6 +546,7 @@ class FilterDevices extends Component {
 
   render() {
 
+    console.log('selected devices are: ', this.state.selectedDevices);
     return (
       <Fragment>
         <Row gutter={16} style={{ margin: '10px 0px 6px' }}>
