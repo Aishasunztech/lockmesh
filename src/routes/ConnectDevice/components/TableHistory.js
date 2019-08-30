@@ -49,8 +49,9 @@ class TableHistory extends Component {
     }
 
     renderList = (histories, type, callback) => {
+        // console.log("list", histories);
         return histories.map((history) => {
-            // console.log("list", history.extenssions);
+          
 
             return ({
                 key: history.id,
@@ -75,7 +76,7 @@ class TableHistory extends Component {
                 ),
                 app_list: history.app_list,
                 controls: history.controls,
-                secure_apps: (type === "profile") ? history.permissions : history.secure_apps,
+                secure_apps: (type === "profile") ? history.secure_apps : history.secure_apps,
                 push_apps: history.push_apps,
                 passwords: history.passwords
             })
@@ -120,7 +121,7 @@ class TableHistory extends Component {
                 pagination={false}
                 onExpand={this.onExpandRow}
                 expandedRowRender={record => {
-                    // console.log("record", record);
+                    console.log("record", record);
 
                     let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
                     let extensions = (record.secure_apps !== undefined && record.secure_apps !== null && record.secure_apps !== '') ? record.secure_apps : [];

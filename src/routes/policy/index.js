@@ -391,6 +391,7 @@ class Policy extends Component {
                     appsGotted={this.state.appsGotted}
                     translation={this.props.translation}
                     push_apps={this.props.push_apps}
+                    location={this.props.location}
                 />
 
                 {/* Edit Policy */}

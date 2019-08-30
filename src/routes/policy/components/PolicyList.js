@@ -239,6 +239,13 @@ class PolicyList extends Component {
             this.state.expandTabSelected[index] = '1';
             this.state.expandedByCustom[index] = false;
         });
+
+        if(this.props.location.state){
+            let index = this.props.policies.findIndex(item => item.id == this.props.location.state.id);
+            this.setState({
+             expandedRowKeys: index > -1 ? [index] : []
+         })
+         }
     }
 
     componentWillReceiveProps(preProps) {
