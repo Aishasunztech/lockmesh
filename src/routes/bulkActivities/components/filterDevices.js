@@ -7,6 +7,7 @@ import { getAllDealers } from "../../../appRedux/actions/Dealers";
 import { savePermission } from "../../../appRedux/actions/Apk";
 import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
+import SuspendDevice from '../../devices/components/SuspendDevice';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns } from '../../utils/columnsUtils';
@@ -22,7 +23,10 @@ import {
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
 const confirm = Modal.confirm;
+const success = Modal.success
+const error = Modal.error
 
+var status = true;
 
 class FilterDevices extends Component {
   constructor(props) {
@@ -126,6 +130,23 @@ class FilterDevices extends Component {
       this.setState({
         selectedDevices: []
       })
+    }
+
+    let action = nextProps.handleActionValue;
+    if (action !== "NULL") {
+      if (this.state.selectedDevices.length) {
+        if (action === "SUSPEND DEVICES") {
+          this.refs.suspend.handleSuspendDevice(this.state.selectedDevices, "bulk");
+        }
+      }
+      //  else {
+      //   if (status) {
+      //     error({
+      //       title: `Sorry, You have not any device to perform an action`,
+      //     });
+      //     status = false;
+      //   }
+      // }
     }
 
   }
@@ -709,6 +730,13 @@ class FilterDevices extends Component {
             selectedRowKeys={this.state.selectedRowKeys}
           />
         </Modal>
+
+        <SuspendDevice
+          ref="suspend"
+          suspendDevice={this.props.suspendDevice}
+          translation={this.props.translation}
+        />
+
       </Fragment>
     )
   }

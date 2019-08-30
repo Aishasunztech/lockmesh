@@ -13,22 +13,46 @@ export default class SuspendDevice extends Component {
         this.confirm = Modal.confirm;
     }
 
-    handleSuspendDevice = (device, refresh) => {
-        // console.log('device', device)
-        const title = (device.account_status === "suspended") ? convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE], "Are you sure, you want to suspend the device ") + device.device_id + " ?" : convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE], "Are you sure, you want to suspend the device ") + device.device_id + "?";
-        this.confirm({
-            title: title,
-            content: '',
-            okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
-            cancelText:  convertToLang(this.props.translation[Button_Cancel], "Cancel"),
-            onOk: (() => {
-                this.props.suspendDevice(device);
-                if (window.location.pathname.split("/").pop() !== 'devices') {
-                    refresh(device.device_id);
-                }
-            }),
-            onCancel() { },
+    handleSuspendDevice = (devices, refresh) => {
+        console.log(refresh, 'refresh devices', JSON.stringify(devices))
+
+        let device_ids = [];
+        devices.forEach((item) => {
+            device_ids.push(`${item.usr_device_id}`);
         });
+
+        // const title = (device.account_status === "suspended") ? convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE], "Are you sure, you want to suspend the device ") + device.device_id + " ?" : convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE], "Are you sure, you want to suspend the device ") + device.device_id + "?";
+        if (refresh === "bulk") {
+
+            const title = `${convertToLang(this.props.translation["Are you sure, you want to suspend these devices "], "Are you sure, you want to suspend these devices ")}  ${devices.map((item, ) => `${item.device_id}, `)} ?`;
+            this.confirm({
+                title: title,
+                content: '',
+                okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
+                cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+                onOk: (() => {
+                    this.props.suspendDevice(device_ids);
+                }),
+                onCancel() { },
+            });
+
+        } else {
+
+            const title = convertToLang(this.props.translation[ARE_YOU_SURE_YOU_WANT_SUSPEND_THE_DEVICE], "Are you sure, you want to suspend the device ") + devices[0].device_id + " ?";
+            this.confirm({
+                title: title,
+                content: '',
+                okText: convertToLang(this.props.translation[Button_Ok], "Ok"),
+                cancelText: convertToLang(this.props.translation[Button_Cancel], "Cancel"),
+                onOk: (() => {
+                    this.props.suspendDevice(device_ids);
+                    if (window.location.pathname.split("/").pop() !== 'devices') {
+                        refresh(devices[0].device_id);
+                    }
+                }),
+                onCancel() { },
+            });
+        }
     }
 
     render() {

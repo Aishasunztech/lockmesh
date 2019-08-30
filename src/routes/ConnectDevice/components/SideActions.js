@@ -870,7 +870,7 @@ class SideActions extends Component {
                                         style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
                                 </Tooltip>
                                 <Button type={button_type}
-                                    onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
+                                    onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice([this.props.device], this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
                                     disabled={(this.props.device.flagged !== 'Not flagged') ? 'disabled' : ''}
                                 >

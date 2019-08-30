@@ -422,8 +422,9 @@ const RestService = {
     },
 
     // suspend account
-    suspendDevice: (device_id) => {
-        return axios.post(BASE_URL + 'users/suspend/' + device_id, device_id,
+    suspendDevice: (devices) => {
+        console.log('at rest services page ', devices)
+        return axios.post(BASE_URL + 'users/suspend', devices,
             RestService.getHeader()
         )
     },

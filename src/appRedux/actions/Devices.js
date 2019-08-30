@@ -99,10 +99,10 @@ export function deleteUnlinkDevice(action, devices) {
 
 export function suspendDevice(device) {
 
+    console.log("suspendDevice action file =========> ", device);
     return (dispatch) => {
-        // console.log("suspendDevice action");
 
-        RestService.suspendDevice(device.usr_device_id).then((response) => {
+        RestService.suspendDevice(device[0].usr_device_id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
 

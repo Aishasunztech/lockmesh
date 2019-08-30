@@ -3,7 +3,11 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Modal, Col, Row, Card, Button, Input, Select, Table } from 'antd';
 import { getAllDealers } from "../../appRedux/actions/Dealers";
-import { getBulkDevicesList } from "../../appRedux/actions/Devices";
+import {
+    getBulkDevicesList,
+    suspendDevice
+} from "../../appRedux/actions/Devices";
+// import SuspendDevice from '../devices/components/SuspendDevice';
 import { Redirect } from 'react-router-dom'
 import {
 
@@ -197,6 +201,17 @@ class BulkActivities extends Component {
         this.handleMultipleSelect();
     }
 
+    handleAction = (e) => {
+        this.setState({ selectedAction: e });
+        console.log('e is ', e)
+
+        // if (e !== "NULL") {
+        //     if (e === "SUSPEND DEVICES") {
+        //         this.refs.suspend.handleSuspendDevice(this.props.devices, "bulk");
+        //     }
+        // }
+    }
+
     render() {
         // let actionList = [];
         // console.log('this.state.selectedDealers ', this.state.selectedDealers)
@@ -233,7 +248,7 @@ class BulkActivities extends Component {
                                     className="pos_rel"
                                     // onChange={(e) => this.handleMultipleSelect(e, "action")}
                                     placeholder={convertToLang(this.props.translation[""], "Select any action")}
-                                    onChange={(e) => this.setState({ selectedAction: e })}
+                                    onChange={this.handleAction}
                                 >
                                     <Select.Option value="Null">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
                                     {this.actionList.map((item, index) => {
@@ -300,9 +315,17 @@ class BulkActivities extends Component {
                             devices={this.state.filteredDevices}
                             selectedDealers={this.state.selectedDealers}
                             selectedUsers={this.state.selectedUsers}
+                            handleActionValue={this.state.selectedAction}
+                            suspendDevice={this.props.suspendDevice}
                         />
 
                     </Card>
+
+                    {/* <SuspendDevice
+                        ref="suspend"
+                        suspendDevice={this.props.suspendDevice}
+                        translation={this.props.translation}
+                    /> */}
 
                 </Fragment>
 
@@ -322,6 +345,7 @@ const mapDispatchToProps = (dispatch) => {
         getBulkDevicesList: getBulkDevicesList,
         getAllDealers: getAllDealers,
         getUserList: getUserList,
+        suspendDevice: suspendDevice,
     }, dispatch);
 }
 

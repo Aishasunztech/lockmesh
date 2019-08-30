@@ -234,25 +234,25 @@ export function getAccIdFromDvcId(deviceId) {
     }
 }
 
-export function suspendDevice2(device) {
+export function suspendDevice2(devices) {
 
     return (dispatch) => {
-        //  console.log("suspendDevice action");
+         console.log("suspendDevice action" , devices);
 
-        RestService.suspendDevice(device.usr_device_id).then((response) => {
+        RestService.suspendDevice(devices).then((response) => { // usr_device_id
 
 
             if (RestService.checkAuth(response.data)) {
-                // console.log('reslut', response);
+                console.log('reslut response ', response);
                 // console.log('conect device', device);
                 // console.log('done status');
                 dispatch({
                     type: SUSPEND_DEVICE2,
                     response: response.data,
-                    payload: {
-                        device: device,
-                        msg: response.data.msg,
-                    }
+                    // payload: {
+                    //     device: devices,
+                    //     msg: response.data.msg,
+                    // }
                 });
 
 

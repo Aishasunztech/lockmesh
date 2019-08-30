@@ -172,7 +172,7 @@ class DevicesList extends Component {
                 // icon = 'add'
             }
 
-            let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice(device)}> {convertToLang(this.props.translation[Button_Suspend], "SUSPEND")}</Button>;
+            let SuspendBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleSuspendDevice([device])}> {convertToLang(this.props.translation[Button_Suspend], "SUSPEND")}</Button>;
             let ActiveBtn = <Button type={button_type} size="small" style={style} onClick={() => this.handleActivateDevice(device)}> {convertToLang(this.props.translation[Button_Unsuspend], "UN-SUSPEND")}</Button>;
             let DeleteBtn = <Button type="danger" size="small" style={{ margin: '0 8px 0 8px ', textTransform: 'uppercase' }} onClick={() => this.deleteUnlinkedDevice('unlink', device)} >{convertToLang(this.props.translation[Button_Delete], "DELETE")}</Button>
             let ConnectBtn = <Link to={`connect-device/${btoa(device.device_id)}`.trim()}><Button type="default" size="small" style={style}>  {convertToLang(this.props.translation[Button_Connect], "CONNECT")}</Button></Link>
