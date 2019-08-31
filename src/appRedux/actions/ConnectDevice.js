@@ -234,16 +234,16 @@ export function getAccIdFromDvcId(deviceId) {
     }
 }
 
-export function suspendDevice2(devices) {
+export function suspendDevice2(device) {
 
     return (dispatch) => {
-         console.log("suspendDevice action" , devices);
+         console.log("suspendDevice action" , device);
 
-        RestService.suspendDevice(devices).then((response) => { // usr_device_id
+        RestService.suspendDevice(device.usr_device_id).then((response) => { // usr_device_id
 
 
             if (RestService.checkAuth(response.data)) {
-                console.log('reslut response ', response);
+                // console.log('reslut response ', response);
                 // console.log('conect device', device);
                 // console.log('done status');
                 dispatch({

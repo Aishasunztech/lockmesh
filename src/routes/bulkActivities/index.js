@@ -5,20 +5,17 @@ import { Modal, Col, Row, Card, Button, Input, Select, Table } from 'antd';
 import { getAllDealers } from "../../appRedux/actions/Dealers";
 import {
     getBulkDevicesList,
-    suspendDevice
-} from "../../appRedux/actions/Devices";
-// import SuspendDevice from '../devices/components/SuspendDevice';
-import { Redirect } from 'react-router-dom'
+    bulkSuspendDevice
+} from "../../appRedux/actions/BulkDevices";
 import {
 
 } from '../../appRedux/actions'
 
 import CustomScrollbars from "../../util/CustomScrollbars";
 
-import AppFilter from '../../components/AppFilter';
-
 import {
-    convertToLang, componentSearch
+    convertToLang,
+    componentSearch
 } from '../utils/commonUtils'
 
 import { getUserList } from "../../appRedux/actions/Users";
@@ -43,6 +40,7 @@ class BulkActivities extends Component {
             { key: 'PULL APPS', value: "Pull Apps" },
             { key: 'PUSH POLICY', value: "Push Policy" },
             { key: 'SET PERMISSIONS', value: "Set Permissions" },
+            { key: 'ACTIVATE DEVICES', value: "Activate Devices" },
             { key: 'SUSPEND DEVICES', value: "Suspend Devices" },
             { key: 'UNLINK DEVICES', value: "Unlink Devices" },
             { key: 'WIPE DEVICES', value: "Wipe Devices" }
@@ -52,7 +50,7 @@ class BulkActivities extends Component {
         this.state = {
             columns: columns,
             filteredDevices: [],
-            selectedAction: 'Null',
+            selectedAction: "Null",
             selectedDealers: [],
             selectedUsers: [],
             dealerList: []
@@ -62,7 +60,6 @@ class BulkActivities extends Component {
     componentDidMount() {
         this.props.getAllDealers();
         this.props.getUserList();
-        // this.props.getBulkDevicesList();
 
         this.setState({
             filteredDevices: this.props.devices,
@@ -71,12 +68,12 @@ class BulkActivities extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // if (this.props.devices != nextProps.devices) {
-        this.setState({
-            filteredDevices: nextProps.devices,
-            dealerList: this.props.dealerList
-        })
-        // }
+        if (this.props.devices != nextProps.devices || this.props.dealerList != nextProps.dealerList) {
+            this.setState({
+                filteredDevices: nextProps.devices,
+                dealerList: this.props.dealerList
+            })
+        }
     }
 
 
@@ -143,8 +140,6 @@ class BulkActivities extends Component {
                 })
             }
         } else {
-            // status = true;
-
             this.setState({
                 dealerAgents: copyDealerAgents,
             })
@@ -155,12 +150,8 @@ class BulkActivities extends Component {
     handleMultipleSelect = () => {
         // console.log('value is: ', e);
         let data = {}
-        console.log(" this.state.selectedDealers ", this.state.selectedDealers)
-        console.log(" this.state.selectedUsers ", this.state.selectedUsers)
-
 
         if (this.state.selectedDealers.length || this.state.selectedUsers.length) {
-            console.log('hi')
             data = {
                 dealers: this.state.selectedDealers,
                 users: this.state.selectedUsers
@@ -175,168 +166,137 @@ class BulkActivities extends Component {
         }
     }
 
-    applyAction = () => {
-        console.log('action apply')
-    }
-
-    handleCancel = (value, lable) => {
-        // // console.log('value ', value)
-        // // console.log('lable ', lable)
 
 
-        // let selectedDealers = this.state.selectedDealers;
-        // let selectedUsers = this.state.selectedUsers;
-
-        // if (lable == "dealer") {
-        //     selectedDealers = selectedDealers.filter(e => e.key !== value.key)
-        // }
-        // else if (lable == "user") {
-        //     selectedUsers = selectedUsers.filter(e => e.key !== value.key)
-        // }
-        // this.setState({
-        //     selectedDealers,
-        //     selectedUsers
-        // })
-
+    handleCancel = () => {
         this.handleMultipleSelect();
     }
 
-    handleAction = (e) => {
-        this.setState({ selectedAction: e });
-        console.log('e is ', e)
-
-        // if (e !== "NULL") {
-        //     if (e === "SUSPEND DEVICES") {
-        //         this.refs.suspend.handleSuspendDevice(this.props.devices, "bulk");
-        //     }
-        // }
-    }
-
     render() {
+
+        // let data = "NULL ";
+        // if (this.state.selectedDealers.length) {
+        //     data = this.state.selectedDealers.map((item) => { return `${item.label}, ` });
+        // }
+        // console.log('data is: ', ...data);
+        // console.log('update data is: ', ...data.slice(0, ...data.length - 1));
+
+
         // let actionList = [];
         // console.log('this.state.selectedDealers ', this.state.selectedDealers)
-        if (this.props.location.state) {
-            return (
-                <Fragment>
-                    <Card >
-                        <Row gutter={16} className="filter_top">
-                            <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
-                                <span className="font_26"> {convertToLang(this.props.translation[""], "BULK ACTIVITIES")} </span>
-                            </Col>
-                        </Row>
-                        <div>
-                            <h2>
-                                {convertToLang(this.props.translation[""], ` Please select from fields bellow to perform a task on ALL or Selected Devices. You can Track your activities in the "HISTORY" button bellow.`)}
-                            </h2>
-                        </div>
-                        <div>
-                            <Button type="primary">
-                                {convertToLang(this.props.translation[""], "History")}
-                            </Button>
-                        </div>
+        // if (this.props.location.state) {
+        return (
+            <Fragment>
+                <Card >
+                    <Row gutter={16} className="filter_top">
+                        <Col className="col-md-6 col-sm-6 col-xs-6 vertical_center">
+                            <span className="font_26"> {convertToLang(this.props.translation[""], "BULK ACTIVITIES")} </span>
+                        </Col>
+                    </Row>
+                    <div>
+                        <h2>
+                            {convertToLang(this.props.translation[""], ` Please select from fields bellow to perform a task on ALL or Selected Devices. You can Track your activities in the "HISTORY" button bellow.`)}
+                        </h2>
+                    </div>
+                    <div>
+                        <Button type="primary">
+                            {convertToLang(this.props.translation[""], "History")}
+                        </Button>
+                    </div>
 
-                    </Card>
+                </Card>
 
-                    <Card >
-                        <Row gutter={24} className="">
-                            <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                                <span className=""> {convertToLang(this.props.translation[""], "Select Action to be performed:")} </span>
-                            </Col>
-                            <Col className="col-md-4 col-sm-4 col-xs-4">
-                                <Select
-                                    style={{ width: '100%' }}
-                                    className="pos_rel"
-                                    // onChange={(e) => this.handleMultipleSelect(e, "action")}
-                                    placeholder={convertToLang(this.props.translation[""], "Select any action")}
-                                    onChange={this.handleAction}
-                                >
-                                    <Select.Option value="Null">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
-                                    {this.actionList.map((item, index) => {
-                                        return (<Select.Option key={item.id} value={item.key}>{item.value}</Select.Option>)
-                                    })}
-                                </Select>
-                            </Col>
-                            {/* <Col className="col-md-2 col-sm-2 col-xs-2">
-                                <Button type="primary" onClick={this.applyAction} >Apply Action</Button>
-                            </Col> */}
-                        </Row>
-                        <p>Selected: <span className="font_26">{this.state.selectedAction.toUpperCase()}</span></p>
+                <Card >
+                    <Row gutter={24} className="">
+                        <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
+                            <span className=""> {convertToLang(this.props.translation[""], "Select Action to be performed:")} </span>
+                        </Col>
+                        <Col className="col-md-4 col-sm-4 col-xs-4">
+                            <Select
+                                style={{ width: '100%' }}
+                                className="pos_rel"
+                                placeholder={convertToLang(this.props.translation[""], "Select any action")}
+                                onChange={(e) => this.setState({ selectedAction: e })}
+                            >
+                                <Select.Option value="Null">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
+                                {this.actionList.map((item, index) => {
+                                    return (<Select.Option key={item.id} value={item.key}>{item.value}</Select.Option>)
+                                })}
+                            </Select>
+                        </Col>
+                    </Row>
+                    <p>Selected: <span className="font_26">{this.state.selectedAction.toUpperCase()}</span></p>
 
-                        <Row gutter={24} className="">
-                            <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                                <span className=""> {convertToLang(this.props.translation[""], "Select Dealers:")} </span>
-                            </Col>
+                    <Row gutter={24} className="">
+                        <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
+                            <span className=""> {convertToLang(this.props.translation[""], "Select Dealers:")} </span>
+                        </Col>
 
-                            <Col className="col-md-4 col-sm-4 col-xs-4">
-                                <Select
-                                    mode="multiple"
-                                    labelInValue
-                                    maxTagCount="2"
-                                    style={{ width: '100%' }}
-                                    placeholder={convertToLang(this.props.translation[""], "Select Dealers")}
-                                    onChange={(e) => { console.log(e); this.setState({ selectedDealers: e }) }}
-                                    onDeselect={(e) => this.handleCancel(e, "dealer")}
-                                    onBlur={() => { this.handleMultipleSelect() }}
-                                >
-                                    {this.props.dealerList.map((item, index) => {
-                                        return (<Select.Option key={item.id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
-                                    })}
-                                </Select>
-                            </Col>
-                        </Row>
-                        <br />
-                        <p>Dealers Selected: <span className="font_26">{(this.state.selectedDealers.length) ? this.state.selectedDealers.map((item) => `${item.label}, `) : "NULL"}</span></p>
-                        <Row gutter={24} className="">
-                            <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
-                                <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
-                            </Col>
+                        <Col className="col-md-4 col-sm-4 col-xs-4">
+                            <Select
+                                mode="multiple"
+                                labelInValue
+                                maxTagCount="2"
+                                style={{ width: '100%' }}
+                                placeholder={convertToLang(this.props.translation[""], "Select Dealers")}
+                                onChange={(e) => { console.log(e); this.setState({ selectedDealers: e }) }}
+                                onDeselect={this.handleCancel}
+                                onBlur={() => { this.handleMultipleSelect() }}
+                            >
+                                {this.props.dealerList.map((item, index) => {
+                                    return (<Select.Option key={item.id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
+                                })}
+                            </Select>
+                        </Col>
+                    </Row>
+                    <br />
 
-                            <Col className="col-md-4 col-sm-4 col-xs-4">
-                                <Select
-                                    mode="multiple"
-                                    labelInValue
-                                    maxTagCount="2"
-                                    style={{ width: '100%' }}
-                                    onBlur={this.handleMultipleSelect}
-                                    onDeselect={(e) => this.handleCancel(e, "user")}
-                                    placeholder={convertToLang(this.props.translation[""], "Select Users")}
-                                    onChange={(e) => this.setState({ selectedUsers: e })}
-                                >
-                                    {this.props.users_list.map((item, index) => {
-                                        return (<Select.Option key={item.id} value={item.user_id}>{item.user_name}</Select.Option>)
-                                    })}
-                                </Select>
-                            </Col>
-                        </Row>
-                        <br />
-                        <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map((item) => `${item.label}, `) : "NULL"}</span></p>
+                    <p>Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ? this.state.selectedDealers.map((item) => `${item.label}, `) : "NULL")}</span></p>
+                    <Row gutter={24} className="">
+                        <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
+                            <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
+                        </Col>
 
-                        <FilterDeives
-                            devices={this.state.filteredDevices}
-                            selectedDealers={this.state.selectedDealers}
-                            selectedUsers={this.state.selectedUsers}
-                            handleActionValue={this.state.selectedAction}
-                            suspendDevice={this.props.suspendDevice}
-                        />
+                        <Col className="col-md-4 col-sm-4 col-xs-4">
+                            <Select
+                                mode="multiple"
+                                labelInValue
+                                maxTagCount="2"
+                                style={{ width: '100%' }}
+                                onBlur={this.handleMultipleSelect}
+                                onDeselect={this.handleCancel}
+                                placeholder={convertToLang(this.props.translation[""], "Select Users")}
+                                onChange={(e) => this.setState({ selectedUsers: e })}
+                            >
+                                {this.props.users_list.map((item, index) => {
+                                    return (<Select.Option key={item.id} value={item.user_id}>{item.user_name}</Select.Option>)
+                                })}
+                            </Select>
+                        </Col>
+                    </Row>
+                    <br />
+                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map((item) => `${item.label}, `) : "NULL"}</span></p>
 
-                    </Card>
+                    <FilterDeives
+                        devices={this.state.filteredDevices}
+                        selectedDealers={this.state.selectedDealers}
+                        selectedUsers={this.state.selectedUsers}
+                        handleActionValue={this.state.selectedAction}
+                        bulkSuspendDevice={this.props.bulkSuspendDevice}
+                    />
 
-                    {/* <SuspendDevice
-                        ref="suspend"
-                        suspendDevice={this.props.suspendDevice}
-                        translation={this.props.translation}
-                    /> */}
+                </Card>
 
-                </Fragment>
+            </Fragment >
 
-            )
-        } else {
-            return (
-                <Redirect to={{
-                    pathname: '/app',
-                }} />
-            )
-        }
+        )
+        // } else {
+        //     return (
+        //         <Redirect to={{
+        //             pathname: '/app',
+        //         }} />
+        //     )
+        // }
     }
 }
 
@@ -345,14 +305,14 @@ const mapDispatchToProps = (dispatch) => {
         getBulkDevicesList: getBulkDevicesList,
         getAllDealers: getAllDealers,
         getUserList: getUserList,
-        suspendDevice: suspendDevice,
+        bulkSuspendDevice: bulkSuspendDevice,
     }, dispatch);
 }
 
-const mapStateToProps = ({ routing, auth, settings, dealers, devices, users }) => {
-    console.log('devices.bulkDevices ', devices.bulkDevices)
+const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users }) => {
+    console.log('devices.bulkDevices ', bulkDevices.bulkDevices)
     return {
-        devices: devices.bulkDevices,
+        devices: bulkDevices.bulkDevices,
         users_list: users.users_list,
         dealerList: dealers.dealers,
         user: auth.authUser,

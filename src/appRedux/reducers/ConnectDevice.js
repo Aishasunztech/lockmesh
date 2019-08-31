@@ -253,7 +253,7 @@ export default (state = initialState, action) => {
 
         }
         case SUSPEND_DEVICE2: {
-            console.log('check suspended data ', action.response);
+            // console.log('check suspended data ', action.response.data);
             if (action.response.status) {
 
                 state.device = action.response.data;

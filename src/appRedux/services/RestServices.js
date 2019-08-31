@@ -422,12 +422,20 @@ const RestService = {
     },
 
     // suspend account
-    suspendDevice: (devices) => {
+    suspendDevice: (device_id) => {
+        return axios.post(BASE_URL + 'users/suspend/' + device_id, device_id, RestService.getHeader())
+    },
+
+    //******************** */ Bulk Devices
+
+    // suspend accounts
+    bulkSuspendDevice: (devices) => {
         console.log('at rest services page ', devices)
-        return axios.post(BASE_URL + 'users/suspend', devices,
+        return axios.post(BASE_URL + 'users/bulkSuspend', devices,
             RestService.getHeader()
         )
     },
+
 
     // suspend dealer account
     suspendDealer: (dealer_id) => {

@@ -139,15 +139,6 @@ export default (state = initialState, action) => {
                 devices: action.payload,
             }
 
-        case BULK_DEVICES_LIST:
-            return {
-                ...state,
-                isloading: false,
-                msg: state.msg,
-                showMsg: "hello",
-                // options: state.options,
-                bulkDevices: action.payload,
-            }
 
         case UNFLAG_DEVICE: {
             if (action.response.status) {

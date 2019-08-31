@@ -7,7 +7,7 @@ import { getAllDealers } from "../../../appRedux/actions/Dealers";
 import { savePermission } from "../../../appRedux/actions/Apk";
 import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
-import SuspendDevice from '../../devices/components/SuspendDevice';
+import BulkSuspendDevices from './bulkSuspendDevices';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns } from '../../utils/columnsUtils';
@@ -18,7 +18,8 @@ import {
   DEVICE_PENDING_ACTIVATION,
   DEVICE_PRE_ACTIVATION,
   DEVICE_UNLINKED,
-  ADMIN
+  ADMIN,
+  DEVICE_SUSPENDED
 } from '../../../constants/Constants'
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
@@ -49,7 +50,8 @@ class FilterDevices extends Component {
       // redirect: false,
       dealer_id: '',
       // goToPage: '/dealer/dealer',
-      selectedDevices: []
+      selectedDevices: [],
+      copySelectedDevices: []
     }
 
 
@@ -128,25 +130,26 @@ class FilterDevices extends Component {
 
     if (nextProps.selectedDealers.length == 0 && nextProps.selectedUsers.length == 0) {
       this.setState({
-        selectedDevices: []
+        selectedDevices: [],
+        copySelectedDevices: []
       })
     }
 
     let action = nextProps.handleActionValue;
-    if (action !== "NULL") {
-      if (this.state.selectedDevices.length) {
+    if (this.props.handleActionValue != action) {
+
+      let updateSelectedDevices = this.state.selectedDevices;
+      if (action !== "NULL" && updateSelectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
-          this.refs.suspend.handleSuspendDevice(this.state.selectedDevices, "bulk");
+          updateSelectedDevices = this.state.selectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+        } else {
+          updateSelectedDevices = this.state.copySelectedDevices;
         }
+
+        this.setState({
+          selectedDevices: updateSelectedDevices
+        });
       }
-      //  else {
-      //   if (status) {
-      //     error({
-      //       title: `Sorry, You have not any device to perform an action`,
-      //     });
-      //     status = false;
-      //   }
-      // }
     }
 
   }
@@ -213,7 +216,10 @@ class FilterDevices extends Component {
   }
 
   saveAllDealers = () => {
-    this.setState({ selectedDevices: this.props.devices })
+    this.setState({
+      selectedDevices: this.props.devices,
+      copySelectedDevices: this.props.devices,
+    })
   }
 
   savePermission = () => {
@@ -227,7 +233,8 @@ class FilterDevices extends Component {
       })
       this.setState({
         selectedRowKeys: [],
-        selectedDevices: selectedDevices
+        selectedDevices: selectedDevices,
+        copySelectedDevices: selectedDevices
       })
 
       this.showDealersModal(false);
@@ -280,28 +287,26 @@ class FilterDevices extends Component {
     }
   }
 
-  searchAllFields = (originalData, value) => {
+  searchAllFields = (originalData, value, fieldName) => {
     let demoData = [];
 
     if (value.length) {
       originalData.forEach((data) => {
-        if (
-          data['dealer_id'].toString().toUpperCase().includes(value.toUpperCase())
-        ) {
+        if (data['dealer_id'].toString().toUpperCase().includes(value.toUpperCase())) {
           demoData.push(data);
         }
-        else if (data['link_code'].toString().toUpperCase().includes(value.toUpperCase())) {
-          demoData.push(data);
-        }
-        else if (data['dealer_name'].toString().toUpperCase().includes(value.toUpperCase())) {
-          demoData.push(data);
+        // else if (data['link_code'].toString().toUpperCase().includes(value.toUpperCase())) {
+        //   demoData.push(data);
+        // }
+        // else if (data['dealer_name'].toString().toUpperCase().includes(value.toUpperCase())) {
+        //   demoData.push(data);
 
-        }
-        else if (data['dealer_email'].toString().toUpperCase().includes(value.toUpperCase())) {
-          demoData.push(data);
-        } else {
-          // demoData.push(data);
-        }
+        // }
+        // else if (data['dealer_email'].toString().toUpperCase().includes(value.toUpperCase())) {
+        //   demoData.push(data);
+        // } else {
+        //   // demoData.push(data);
+        // }
       });
 
       return demoData;
@@ -317,10 +322,11 @@ class FilterDevices extends Component {
     // console.log("fieldValue", fieldValue);
     // console.log("global", global);
     if (global) {
-      let searchedData = this.searchAllFields(this.props.dealerList, fieldValue)
+      let searchedData = this.searchAllFields(this.state.selectedDevices, fieldValue, fieldName)
       // console.log("searchedData", searchedData);
       this.setState({
-        dealerList: searchedData
+        selectedDevices: searchedData,
+        copySelectedDevices: searchedData
       });
     } else {
 
@@ -393,7 +399,8 @@ class FilterDevices extends Component {
   removeAllDealers = () => {
 
     this.setState({
-      selectedDevices: []
+      selectedDevices: [],
+      copySelectedDevices: []
     })
   }
 
@@ -408,12 +415,13 @@ class FilterDevices extends Component {
 
     let permittedDevices = this.state.selectedDevices;
     let selectedRows = this.state.selectedRowKeys;
-    var remove_ids = permittedDevices.filter(e => selectedRows.includes(e.id));
+    var selectedDevices = permittedDevices.filter(e => selectedRows.includes(e.id));
 
     this.setState({
       removeSelectedDealersModal: false,
       device_ids: [],
-      selectedDevices: remove_ids
+      selectedDevices: selectedDevices,
+      copySelectedDevices: selectedDevices
     })
 
   }
@@ -503,12 +511,34 @@ class FilterDevices extends Component {
     return fDevices;
   }
 
+  applyAction = () => {
+    console.log('action apply', this.props.handleActionValue);
+
+    let action = this.props.handleActionValue;
+    if (action !== "Null") {
+      if (this.state.selectedDevices.length) {
+        if (action === "SUSPEND DEVICES") {
+          this.refs.bulk_suspend.handleSuspendDevice(this.state.selectedDevices);
+        }
+      } else {
+        error({
+          title: `Sorry, You have not any device to perform an action`,
+        });
+      }
+    } else {
+      error({
+        title: `Sorry, You have not selected any action`,
+      });
+    }
+  }
+
 
   renderList(list) {
-    // console.log('list of dec', list)
+    console.log('renderList ', list)
     return list.map((device, index) => {
 
       var status = device.finalStatus;
+      console.log("status ", status)
 
       let color = getColor(status);
       var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
@@ -565,6 +595,17 @@ class FilterDevices extends Component {
   }
 
 
+  actionRelatedDevice = (devices) => {
+    let action = this.props.handleActionValue;
+    let updateSelectedDevices = devices;
+
+    if (action === "SUSPEND DEVICES") {
+      updateSelectedDevices = devices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+    }
+
+    return updateSelectedDevices;
+  }
+
   render() {
 
     console.log('selected devices are: ', this.state.selectedDevices);
@@ -606,17 +647,28 @@ class FilterDevices extends Component {
                 onClick={() => { this.showPermissionedDealersModal(true) }}>{convertToLang(this.props.translation[Button_RemoveExcept], "Remove Except")}</Button>
             </div>
           </Col>
+
           <Col className="gutter-row" sm={15} xs={15} md={15}>
             <div className="gutter-box search_heading">
               <Input.Search
                 placeholder="Search"
                 style={{ marginBottom: 0 }}
-                onKeyUp={
-                  (e) => {
-                    this.handleSearch(e, true)
-                  }
-                }
+              // onKeyUp={
+              //   (e) => {
+              //     this.handleSearch(e, true)
+              //   }
+              // }
               />
+            </div>
+          </Col>
+          <Col className="gutter-row" sm={9} xs={9} md={9}>
+            <div className="gutter-box">
+              <Button
+                style={{ marginBottom: 16, float: 'right' }}
+                onClick={this.applyAction}
+                type="primary"
+              >Apply Action
+              </Button>
             </div>
           </Col>
 
@@ -633,7 +685,7 @@ class FilterDevices extends Component {
                   bordered
                   columns={this.state.columns}
                   onChange={this.props.onChangeTableSorting}
-                  dataSource={this.renderList(this.state.selectedDevices)}
+                  dataSource={this.renderList(this.actionRelatedDevice(this.state.selectedDevices))}
                   pagination={false}
                   scroll={{ x: true }}
                 />
@@ -731,9 +783,9 @@ class FilterDevices extends Component {
           />
         </Modal>
 
-        <SuspendDevice
-          ref="suspend"
-          suspendDevice={this.props.suspendDevice}
+        <BulkSuspendDevices
+          ref="bulk_suspend"
+          suspendDevice={this.props.bulkSuspendDevice}
           translation={this.props.translation}
         />
 

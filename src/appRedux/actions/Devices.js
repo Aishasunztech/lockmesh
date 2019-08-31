@@ -102,7 +102,7 @@ export function suspendDevice(device) {
     console.log("suspendDevice action file =========> ", device);
     return (dispatch) => {
 
-        RestService.suspendDevice(device[0].usr_device_id).then((response) => {
+        RestService.suspendDevice(device.usr_device_id).then((response) => {
 
             if (RestService.checkAuth(response.data)) {
 
@@ -377,34 +377,34 @@ export const getParentPackages = () => {
 }
 
 
-export function getBulkDevicesList(data) {
-    console.log('at action file ', data)
+// export function getBulkDevicesList(data) {
+//     console.log('at action file ', data)
 
-    return (dispatch) => {
-        dispatch({
-            type: LOADING,
-            isloading: true
-        });
-        RestService.getBulkDevicesList(data).then((response) => {
-            if (RestService.checkAuth(response.data)) {
-                if (response.data.status) {
-                    console.log('at action file on response')
-                    dispatch({
-                        type: BULK_DEVICES_LIST,
-                        payload: response.data.data,
-                        response: response.data,
+//     return (dispatch) => {
+//         dispatch({
+//             type: LOADING,
+//             isloading: true
+//         });
+//         RestService.getBulkDevicesList(data).then((response) => {
+//             if (RestService.checkAuth(response.data)) {
+//                 if (response.data.status) {
+//                     console.log('at action file on response')
+//                     dispatch({
+//                         type: BULK_DEVICES_LIST,
+//                         payload: response.data.data,
+//                         response: response.data,
 
-                    });
-                }
-            } else {
-                dispatch({
-                    type: INVALID_TOKEN
-                });
-            }
-        })
+//                     });
+//                 }
+//             } else {
+//                 dispatch({
+//                     type: INVALID_TOKEN
+//                 });
+//             }
+//         })
 
-    };
-}
+//     };
+// }
 
 // export function getBulkDealers(data) {
 
