@@ -311,95 +311,103 @@ class ConnectDevice extends Component {
 
   renderScreen = () => {
     const isSync = (this.props.isSync === 1 || this.props.isSync === true) ? true : false;
+    let finalStatusIs = this.props.device_details.finalStatus;
 
-    if (this.props.pageName === MAIN_MENU && isSync) {
-      return (
-        <div>
-          <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
+    if (finalStatusIs === "Active" || finalStatusIs === "Trial") {
+      if (isSync) {
+        if (this.props.pageName === MAIN_MENU) {
+          return (
+            <div>
+              <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
+              <List
+                className="dev_main_menu"
+                size="small"
+                dataSource={this.mainMenu}
+                renderItem={item => {
+                  return (<List.Item
+                    onClick={() => {
+                      this.changePage(item.pageName)
+                    }}
+                  ><a>{item.value}</a></List.Item>)
+                }}
+              />
+            </div>
+          );
+        } else if (this.props.pageName === APPS) {
+          return (
+            <div className="guest_encrypt">
+              <Tabs type="line" className="text-center" size="small">
+                <TabPane tab={<span className="green">{convertToLang(this.props.translation[GUEST], "GUEST")}</span>} key="1" >
+                  <ListSpaceApp
+                    type="guest"
+                  />
+                </TabPane>
+                <TabPane tab={<span className="green">{convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED")}</span>} key="2" forceRender={true}>
+                  <ListSpaceApp
+                    type="encrypted"
+                  />
+                </TabPane>
+              </Tabs>
+            </div>
+          );
+        } else if (this.props.pageName === GUEST_PASSWORD) {
+          return (<Password pwdType={this.props.pageName} />);
+        } else if (this.props.pageName === ENCRYPTED_PASSWORD) {
+          return (<Password pwdType={this.props.pageName} />);
+        } else if (this.props.pageName === DURESS_PASSWORD) {
+          return (<Password pwdType={this.props.pageName} />);
+        } else if (this.props.pageName === ADMIN_PASSWORD) {
+          return (<Password pwdType={this.props.pageName} />);
+        } else if (this.props.pageName === SECURE_SETTING) {
+          return (
+            <SettingAppPermissions
+              pageName={this.props.pageName}
+              translation={this.props.translation}
+            />
+
+          );
+        } else if (this.props.pageName === SYSTEM_CONTROLS) {
+          return (
+            <SystemControls
+              auth={this.props.auth}
+              controls={this.state.controls}
+              handleCheckAllExtension={this.props.handleCheckAllExtension}
+              handleControlCheck={this.props.handleControlCheck}
+              handleMainSettingCheck={this.props.handleMainSettingCheck}
+              guestAllExt={this.props.guestAllExt}
+              encryptedAllExt={this.props.encryptedAllExt}
+              checked_app_id={this.props.checked_app_id}
+              secureSettingsMain={this.props.secureSettingsMain}
+              translation={this.props.translation}
+            />
+          );
+        }
+      } else {
+        return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
+      }
+
+    } else {
+      if (this.props.pageName === MANAGE_PASSWORD) {
+        return (
           <List
             className="dev_main_menu"
             size="small"
-            dataSource={this.mainMenu}
+            dataSource={this.subMenu}
             renderItem={item => {
               return (<List.Item
                 onClick={() => {
+
                   this.changePage(item.pageName)
                 }}
               ><a>{item.value}</a></List.Item>)
             }}
           />
-        </div>
-      );
-    } else if (this.props.pageName === APPS && isSync) {
-      return (
-        <div className="guest_encrypt">
-          <Tabs type="line" className="text-center" size="small">
-            <TabPane tab={<span className="green">{convertToLang(this.props.translation[GUEST], "GUEST")}</span>} key="1" >
-              <ListSpaceApp
-                type="guest"
-              />
-            </TabPane>
-            <TabPane tab={<span className="green">{convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED")}</span>} key="2" forceRender={true}>
-              <ListSpaceApp
-                type="encrypted"
-              />
-            </TabPane>
-          </Tabs>
-        </div>
-      );
-    } else if (this.props.pageName === GUEST_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === ENCRYPTED_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === DURESS_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === ADMIN_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === SECURE_SETTING && isSync) {
-      return (
-        <SettingAppPermissions
-          pageName={this.props.pageName}
-          translation={this.props.translation}
-        />
+        )
 
-      );
-    } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
-      return (
-        <SystemControls
-          auth={this.props.auth}
-          controls={this.state.controls}
-          handleCheckAllExtension={this.props.handleCheckAllExtension}
-          handleControlCheck={this.props.handleControlCheck}
-          handleMainSettingCheck={this.props.handleMainSettingCheck}
-          guestAllExt={this.props.guestAllExt}
-          encryptedAllExt={this.props.encryptedAllExt}
-          checked_app_id={this.props.checked_app_id}
-          secureSettingsMain={this.props.secureSettingsMain}
-          translation={this.props.translation}
-        />
-      );
-    } else if (this.props.pageName === MANAGE_PASSWORD) {
-      return (
-        <List
-          className="dev_main_menu"
-          size="small"
-          dataSource={this.subMenu}
-          renderItem={item => {
-            return (<List.Item
-              onClick={() => {
-
-                this.changePage(item.pageName)
-              }}
-            ><a>{item.value}</a></List.Item>)
-          }}
-        />
-      )
-
-    } else if (this.props.pageName === NOT_AVAILABLE) {
-      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
-        {(this.props.status == 'Suspended') ? convertToLang(this.props.translation[Suspended_TEXT], "Suspended") : this.props.status}</a></h1></div>);
-    } else {
-      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
+      } else if (this.props.pageName === NOT_AVAILABLE) {
+        return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
+          {(this.props.status == 'Suspended') ? convertToLang(this.props.translation[Suspended_TEXT], "Suspended") : this.props.status}</a></h1></div>);
+      }
     }
   }
 
