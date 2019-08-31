@@ -70,7 +70,7 @@ export function bulkActivateDevice(devices) {
         RestService.bulkActivateDevice(devices).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 // console.log('response', response.data);
-                device.account_status = '';
+                // device.account_status = '';
 
                 if (response.data.status) {
                     dispatch({

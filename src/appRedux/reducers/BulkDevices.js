@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -67,12 +67,14 @@ export default (state = initialState, action) => {
 
 
         case BULK_ACTIVATE_DEVICES:
+
+        console.log('at red BULK_ACTIVATE_DEVICES ', action.response)
             if (action.response.status) {
 
                 action.response.data.map((item) => {
-                    let objIndex1 = state.devices.findIndex((obj => obj.device_id === item.device_id));
-                    if (objIndex1 !== -1) {
-                        state.devices[objIndex1] = item;
+                    let objIndex = state.bulkDevices.findIndex((obj => obj.device_id === item.device_id));
+                    if (objIndex !== -1) {
+                        state.bulkDevices[objIndex] = item;
                     }
                 })
 

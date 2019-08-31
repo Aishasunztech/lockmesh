@@ -5,7 +5,8 @@ import { Modal, Col, Row, Card, Button, Input, Select, Table } from 'antd';
 import { getAllDealers } from "../../appRedux/actions/Dealers";
 import {
     getBulkDevicesList,
-    bulkSuspendDevice
+    bulkSuspendDevice,
+    bulkActivateDevice
 } from "../../appRedux/actions/BulkDevices";
 import {
 
@@ -283,6 +284,7 @@ class BulkActivities extends Component {
                         selectedUsers={this.state.selectedUsers}
                         handleActionValue={this.state.selectedAction}
                         bulkSuspendDevice={this.props.bulkSuspendDevice}
+                        bulkActivateDevice={this.props.bulkActivateDevice}
                     />
 
                 </Card>
@@ -306,6 +308,7 @@ const mapDispatchToProps = (dispatch) => {
         getAllDealers: getAllDealers,
         getUserList: getUserList,
         bulkSuspendDevice: bulkSuspendDevice,
+        bulkActivateDevice: bulkActivateDevice
     }, dispatch);
 }
 

@@ -822,8 +822,8 @@ const RestService = {
 
 
     // activate accounts
-    activateDevice: (device_ids) => {
-        return axios.post(BASE_URL + 'users/activate', device_ids,
+    bulkActivateDevice: (device_ids) => {
+        return axios.post(BASE_URL + 'users/bulkActivate', device_ids,
             RestService.getHeader()
         )
     },

@@ -20,7 +20,8 @@ import {
   DEVICE_PRE_ACTIVATION,
   DEVICE_UNLINKED,
   ADMIN,
-  DEVICE_SUSPENDED
+  DEVICE_SUSPENDED,
+  DEVICE_ACTIVATED
 } from '../../../constants/Constants'
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
@@ -140,11 +141,15 @@ class FilterDevices extends Component {
     if (this.props.handleActionValue != action) {
 
       let updateSelectedDevices = this.state.selectedDevices;
+      let { copySelectedDevices } = this.state;
+
       if (action !== "NULL" && updateSelectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
-          updateSelectedDevices = this.state.selectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+        } else if (action === "ACTIVATE DEVICES") {
+          updateSelectedDevices = copySelectedDevices.filter((device) => device.finalStatus != DEVICE_ACTIVATED)
         } else {
-          updateSelectedDevices = this.state.copySelectedDevices;
+          updateSelectedDevices = copySelectedDevices;
         }
 
         this.setState({
