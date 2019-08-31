@@ -426,15 +426,7 @@ const RestService = {
         return axios.post(BASE_URL + 'users/suspend/' + device_id, device_id, RestService.getHeader())
     },
 
-    //******************** */ Bulk Devices
-
-    // suspend accounts
-    bulkSuspendDevice: (devices) => {
-        console.log('at rest services page ', devices)
-        return axios.post(BASE_URL + 'users/bulkSuspend', devices,
-            RestService.getHeader()
-        )
-    },
+    
 
 
     // suspend dealer account
@@ -815,7 +807,27 @@ const RestService = {
 
     getDashboardData: () => {
         return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());
-    }
+    },
+
+
+    //******************** */ Bulk Devices
+
+    // suspend accounts
+    bulkSuspendDevice: (devices) => {
+        console.log('at rest services page ', devices)
+        return axios.post(BASE_URL + 'users/bulkSuspend', devices,
+            RestService.getHeader()
+        )
+    },
+
+
+    // activate accounts
+    activateDevice: (device_ids) => {
+        return axios.post(BASE_URL + 'users/activate', device_ids,
+            RestService.getHeader()
+        )
+    },
+
 
 }
 export default RestService;

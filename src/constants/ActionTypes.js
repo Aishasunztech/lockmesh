@@ -65,6 +65,8 @@ export const ACCEPT_REQUEST = 'ACCEPT_REQUEST'
 // Bulk Devices
 export const BULK_DEVICES_LIST = 'BULK_DEVICES_LIST';
 export const BULK_SUSPEND_DEVICES = 'BULK_SUSPEND_DEVICES';
+export const BULK_ACTIVATE_DEVICES = 'BULK_ACTIVATE_DEVICES';
+export const BULK_LOADING = 'BULK_LOADING';
 
 
 //Dealer const

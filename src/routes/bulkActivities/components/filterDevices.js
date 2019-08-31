@@ -8,6 +8,7 @@ import { savePermission } from "../../../appRedux/actions/Apk";
 import FilterDevicesList from "./filterDevicesList";
 import CircularProgress from "components/CircularProgress/index";
 import BulkSuspendDevices from './bulkSuspendDevices';
+import BulkActivateDevices from './bulkActivateDevices';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
 import { bulkDevicesColumns, devicesColumns } from '../../utils/columnsUtils';
@@ -519,6 +520,8 @@ class FilterDevices extends Component {
       if (this.state.selectedDevices.length) {
         if (action === "SUSPEND DEVICES") {
           this.refs.bulk_suspend.handleSuspendDevice(this.state.selectedDevices);
+        } else if (action === "ACTIVATE DEVICES") {
+          this.refs.bulk_activate.handleActivateDevice(this.state.selectedDevices);
         }
       } else {
         error({
@@ -786,6 +789,12 @@ class FilterDevices extends Component {
         <BulkSuspendDevices
           ref="bulk_suspend"
           suspendDevice={this.props.bulkSuspendDevice}
+          translation={this.props.translation}
+        />
+
+        <BulkActivateDevices
+          ref="bulk_activate"
+          bulkActivateDevice={this.props.bulkActivateDevice}
           translation={this.props.translation}
         />
 

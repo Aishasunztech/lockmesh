@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
 
     switch (action.type) {
 
-        case LOADING:
+        case BULK_LOADING:
             return {
                 ...state,
                 isloading: true,
@@ -33,12 +33,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
-                bulkDevices: action.payload,
+                bulkDevices: action.payload.data,
             }
 
         case BULK_SUSPEND_DEVICES:
             if (action.response.status) {
 
+                console.log('BULK_SUSPEND_DEVICES ', state.bulkDevices)
                 action.response.data.map((item) => {
                     let bulkObjIndex = state.bulkDevices.findIndex((obj => obj.device_id === item.device_id));
                     if (bulkObjIndex !== -1) {
@@ -55,12 +56,43 @@ export default (state = initialState, action) => {
                 });
             }
 
-
+            console.log('BULK_SUSPEND_DEVICES after', state.bulkDevices)
             return {
                 ...state,
                 bulkDevices: [...state.bulkDevices],
-                showMsg: true
+                msg: action.response.msg,
+                showMsg: true,
             }
+
+
+
+        case BULK_ACTIVATE_DEVICES:
+            if (action.response.status) {
+
+                action.response.data.map((item) => {
+                    let objIndex1 = state.devices.findIndex((obj => obj.device_id === item.device_id));
+                    if (objIndex1 !== -1) {
+                        state.devices[objIndex1] = item;
+                    }
+                })
+
+                success({
+                    title: action.response.msg,
+                });
+            }
+            else {
+                error({
+                    title: action.response.msg,
+                });
+
+            }
+            return {
+                ...state,
+                bulkDevices: [...state.bulkDevices],
+                msg: action.response.msg,
+                showMsg: true,
+            }
+
 
         default:
             return state;

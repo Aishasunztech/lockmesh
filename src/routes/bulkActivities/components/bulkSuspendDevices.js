@@ -20,7 +20,7 @@ export default class BulkSuspendDevices extends Component {
             device_ids.push(`${item.usr_device_id}`);
         });
 
-        const title = `${convertToLang(this.props.translation["Are you sure, you want to suspend these devices "], "Are you sure, you want to suspend these devices ")}  ${devices.map((item, ) => `${item.device_id}, `)} ?`;
+        const title = `${convertToLang(this.props.translation["Are you sure, you want to suspend these devices "], "Are you sure, you want to suspend these devices ")}  ${devices.map((item) => `${item.device_id}, `)} ?`;
         this.confirm({
             title: title,
             content: '',

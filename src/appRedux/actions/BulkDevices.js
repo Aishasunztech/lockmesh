@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -12,7 +12,7 @@ export function getBulkDevicesList(data) {
 
     return (dispatch) => {
         dispatch({
-            type: LOADING,
+            type: BULK_LOADING,
             isloading: true
         });
         RestService.getBulkDevicesList(data).then((response) => {
@@ -21,8 +21,7 @@ export function getBulkDevicesList(data) {
                     console.log('at action file on response')
                     dispatch({
                         type: BULK_DEVICES_LIST,
-                        payload: response.data.data,
-                        response: response.data,
+                        payload: response.data,
 
                     });
                 }
@@ -60,5 +59,32 @@ export function bulkSuspendDevice(devices) {
         });
     }
 
+
+}
+
+
+export function bulkActivateDevice(devices) {
+
+    return (dispatch) => {
+
+        RestService.bulkActivateDevice(devices).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+                device.account_status = '';
+
+                if (response.data.status) {
+                    dispatch({
+                        type: BULK_ACTIVATE_DEVICES,
+                        response: response.data,
+                    });
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
 
 }
