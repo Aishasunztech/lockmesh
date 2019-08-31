@@ -141,7 +141,7 @@ class ListSpaceApps extends Component {
                                 <Col span={6} style={{ padding: 8, textAlign: "center" }}>
                                     <Avatar
                                         size={"small"}
-                                        src={require("assets/images/setting.png")}
+                                        src={require("assets/images/secure_setting.png")}
                                     // style={{ width: "30px", height: "30px" }} 
                                     />
                                     <br />
@@ -153,7 +153,7 @@ class ListSpaceApps extends Component {
                                 <Col span={6} style={{ padding: 8, textAlign: "center" }}>
                                     <Avatar
                                         size={"small"}
-                                        src={require("assets/images/setting.png")}
+                                        src={require("assets/images/secure_setting.png")}
                                     // style={{ width: "30px", height: "30px" }} 
                                     />
                                     <br />

@@ -74,7 +74,6 @@
 }
 
 .first_head {
-    margin-top: 30px;
     margin-left: 0;
     margin-right: 0;
 }
@@ -119,6 +118,7 @@
 .sec_head span {
     margin-right: 4px;
     font-size: 14px;
+    text-transform: uppercase;
 }
 
 .sec_head .ant-col-8 {

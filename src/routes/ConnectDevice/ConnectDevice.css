@@ -22,12 +22,10 @@
 }
 
 .dev_back_btn {
-    position: relative;
+    position: absolute;
     top: 36px;
     left: 10px;
 }
-
-
 
 .status_bar {
     border-bottom: 1px solid #cccccc;
@@ -334,8 +332,7 @@ th.device_info {
 }
 
 .sec_head1 {
-    margin: 25px 0px 0px;
-    border-top: 0;
+    border-top: 1px solid #e8e8e8;
     padding: 12px 0;
     border-bottom: 1px solid #e8e8e8;
 }
