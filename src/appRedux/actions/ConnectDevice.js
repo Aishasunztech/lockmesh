@@ -267,6 +267,7 @@ export function suspendDevice2(device) {
 
 
 }
+
 export function wipe(device) {
     return (dispatch) => {
         RestService.wipe(device.usr_device_id).then((response) => {
@@ -456,6 +457,7 @@ export function undoExtensions() {
         })
     }
 }
+
 export function redoExtensions() {
     // console.log('redo ex action')
     return (dispatch) => {
@@ -626,16 +628,16 @@ export function handleCheckAllExtension(keyAll, key, value, uniqueName) {
 
 
 
-export function submitPassword(passwords, pwdType) {
-    // console.log("Passwords: ", passwords);
+export function submitPassword(passwords, pwdType, device_id, usr_acc_id) {
+    console.log("Passwords: ", usr_acc_id);
     return (dispatch) => {
 
-        RestService.submtPassword({ passwords, pwdType }).then((response) => {
+        RestService.submtPassword({ passwords, pwdType, device_id, usr_acc_id }).then((response) => {
             // console.log('action saveProfileCND', device_setting);
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: PASSWORD_CHANGED,
-                    payload: passwords
+                    payload: response.data
                 })
             } else {
                 dispatch({
@@ -806,7 +808,6 @@ export const transferDeviceProfile = (data) => {
 }
 
 
-
 export const transferUser = (data) => {
     // alert(data);
     return (dispatch) => {
@@ -864,6 +865,7 @@ export const unflagged = (device_id) => {
         })
     }
 }
+
 export const flagged = (device_id, data) => {
     return (dispatch) => {
         RestService.flagged(device_id, data).then((response) => {
@@ -884,6 +886,7 @@ export const flagged = (device_id, data) => {
         })
     }
 }
+ 
 export const checkPass = (user, actionType) => {
     // console.log(user);
     return (dispatch) => {

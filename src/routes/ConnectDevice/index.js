@@ -348,13 +348,13 @@ class ConnectDevice extends Component {
         </div>
       );
     } else if (this.props.pageName === GUEST_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
+      return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
     } else if (this.props.pageName === ENCRYPTED_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
+      return (<Password pwdType={this.props.pageName}  device_details={this.props.device_details} />);
     } else if (this.props.pageName === DURESS_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
+      return (<Password pwdType={this.props.pageName}  device_details={this.props.device_details} />);
     } else if (this.props.pageName === ADMIN_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
+      return (<Password pwdType={this.props.pageName}  device_details={this.props.device_details} />);
     } else if (this.props.pageName === SECURE_SETTING && isSync) {
       return (
         <SettingAppPermissions
