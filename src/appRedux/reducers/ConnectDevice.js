@@ -1357,6 +1357,11 @@ export default (state = initialState, action) => {
                 reSync: action.payload
             }
         }
+        case PASSWORD_CHANGED: {
+            return {
+                ...state,
+            }
+        }
 
         case ACK_INSTALLED_APPS: {
             // console.log("add app in app_list")

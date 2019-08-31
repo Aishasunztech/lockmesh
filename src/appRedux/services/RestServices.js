@@ -793,7 +793,10 @@ const RestService = {
     // },
 
     getDashboardData: () => {
-        return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());       
+        return axios.get(BASE_URL + 'users/dashboard-data', RestService.getHeader());
+    },
+    submtPassword: (data) => {
+        return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
     }
 
 }
