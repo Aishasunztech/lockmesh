@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -10,15 +10,18 @@ import {
 import styles from "./password.css";
 import { convertToLang } from '../../utils/commonUtils';
 import { ONLY_NUMBER_ARE_ALLOWED, PASSWORDS_ARE_INCONSISTENT, PLEASE_INPUT_YOUR_PASSWORD, Password_TEXT, PLEASE_CONFIRM_YOUR_PASSWORD, PASSWORD_AGAIN, SET_PASSWORD } from '../../../constants/DeviceConstants';
-import { DURESS_PASSWORD } from '../../../constants/Constants';
+import { DURESS_PASSWORD, ENCRYPTED_PASSWORD } from '../../../constants/Constants';
 import { Button_passwordreset } from '../../../constants/ButtonConstants';
+import { GUEST_PASSWORD } from '../../../constants/ActionTypes';
 
+const confirm = Modal.confirm
 
 class Password extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pwdType: ''
+            pwdType: '',
+            setPasswordFor: ''
         }
         this.formItemLayout = {
             labelCol: {
@@ -36,13 +39,16 @@ class Password extends Component {
     }
     componentDidMount() {
         this.setState({
-            pwdType: this.props.pwdType
+            pwdType: this.props.pwdType,
+            setPasswordFor: this.props.pwdType === ENCRYPTED_PASSWORD ? "ENCRYPTED PASSWORD" : (this.props.pwdType === GUEST_PASSWORD) ? "GUEST PASSWORD" : (this.props.pwdType === DURESS_PASSWORD) ? "RESET DURESS PASSWORD" : "ADMIN PANEL CODE"
         });
     }
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
             this.setState({
-                pwdType: this.props.pwdType
+                pwdType: this.props.pwdType,
+                setPasswordFor: this.props.pwdType === ENCRYPTED_PASSWORD ? "ENCRYPTED PASSWORD" : (this.props.pwdType === GUEST_PASSWORD) ? "GUEST PASSWORD" : (this.props.pwdType === DURESS_PASSWORD) ? "RESET DURESS PASSWORD" : "ADMIN PANEL CODE"
+
             });
         }
     }
@@ -51,11 +57,18 @@ class Password extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
 
             if (!err) {
-                if (this.state.pwdType === DURESS_PASSWORD) {
-                    this.props.submitPassword({ pwd: 'clear', confirm: 'clear' }, this.state.pwdType, this.props.translation);
-                } else {
-                    this.props.submitPassword(values, this.state.pwdType, this.props.translation);
-                }
+                let _this = this
+                // let setPasswordFor = _this.state.pwdType === ENCRYPTED_PASSWORD ? "ENCRYPTED PASSWORD" : (_this.state.pwdType === GUEST_PASSWORD) ? "GUEST PASSWORD" : "ADMIN PANEL CODE"
+                confirm({
+                    title: (_this.state.pwdType === DURESS_PASSWORD) ? "Do you really want to RESET DURESS PASSWORD ? " : "Do you really want to change your " + this.state.setPasswordFor + " ?",
+                    onOk: () => {
+                        if (_this.state.pwdType === DURESS_PASSWORD) {
+                            _this.props.submitPassword({ pwd: 'clear', confirm: 'clear' }, _this.state.pwdType);
+                        } else {
+                            _this.props.submitPassword(values, _this.state.pwdType);
+                        }
+                    }
+                })
             }
         });
     }
@@ -91,53 +104,57 @@ class Password extends Component {
     }
     render() {
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form" autoComplete="new-password">
-                {(this.state.pwdType !== DURESS_PASSWORD) ?
-                    <Fragment>
-                        <Form.Item {...this.formItemLayout}>
-                            {
-                                this.props.form.getFieldDecorator('pwd', {
-                                    rules: [
-                                        {
-                                            required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_YOUR_PASSWORD], "Please input your password!"),
-                                        }, {
-                                            validator: this.validateToNextPassword,
-                                        }
-                                    ],
-                                })(
+            <div style={{ textAlign: "center", marginTop: '40px' }}>
+                <h3>{this.state.setPasswordFor}</h3>
+                <Form onSubmit={this.handleSubmit} className="login-form" autoComplete="new-password">
+                    {(this.state.pwdType !== DURESS_PASSWORD) ?
+                        <Fragment>
+                            <Form.Item {...this.formItemLayout}>
+                                {
+                                    this.props.form.getFieldDecorator('pwd', {
+                                        rules: [
+                                            {
+                                                required: true, message: convertToLang(this.props.translation[PLEASE_INPUT_YOUR_PASSWORD], "Please input your password!"),
+                                            }, {
+                                                validator: this.validateToNextPassword,
+                                            }
+                                        ],
+                                    })(
 
-                                    <Input.Password placeholder={convertToLang(this.props.translation[Password_TEXT], "Password")} type="password" pattern="^[0-9]*$" style={{ width: '100%' }} />
-                                )
-                            }
+                                        <Input.Password placeholder={convertToLang(this.props.translation[Password_TEXT], "Password")} type="password" pattern="^[0-9]*$" style={{ width: '100%' }} />
+                                    )
+                                }
+                            </Form.Item>
+
+                            <Form.Item {...this.formItemLayout} className="pwdinput" >
+                                {
+                                    this.props.form.getFieldDecorator('confirm', {
+                                        rules: [
+                                            {
+                                                required: true, message: convertToLang(this.props.translation[PLEASE_CONFIRM_YOUR_PASSWORD], "Please confirm your password!"),
+                                            }, {
+                                                validator: this.compareToFirstPassword,
+                                            }
+                                        ],
+                                    })(
+                                        <Input.Password type="password" pattern="^[0-9]*$" placeholder={convertToLang(this.props.translation[PASSWORD_AGAIN], "Password Again")} onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
+                                    )
+                                }
+                            </Form.Item>
+                            <Form.Item {...this.formItemLayout} className="pwdinput">
+                                <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[SET_PASSWORD], "Set Password")}</Button>
+                            </Form.Item>
+                        </Fragment>
+                        :
+                        <Form.Item {...this.formItemLayout} className="pwdinput">
+                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[""], "Reset Duress Password")}</Button>
                         </Form.Item>
 
-                        <Form.Item {...this.formItemLayout} className="pwdinput" >
-                            {
-                                this.props.form.getFieldDecorator('confirm', {
-                                    rules: [
-                                        {
-                                            required: true, message: convertToLang(this.props.translation[PLEASE_CONFIRM_YOUR_PASSWORD], "Please confirm your password!"),
-                                        }, {
-                                            validator: this.compareToFirstPassword,
-                                        }
-                                    ],
-                                })(
-                                    <Input.Password type="password" pattern="^[0-9]*$" placeholder={convertToLang(this.props.translation[PASSWORD_AGAIN], "Password Again")} onBlur={this.handleConfirmBlur} style={{ width: '100%' }} />
-                                )
-                            }
-                        </Form.Item>
-                        <Form.Item {...this.formItemLayout} className="pwdinput">
-                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[SET_PASSWORD], "Set Password")}</Button>
-                        </Form.Item>
-                    </Fragment>
-                    :
-                    <Fragment>
-                        <Form.Item {...this.formItemLayout} className="pwdinput">
-                            <Button type="primary" htmlType="submit" className="login-form-button" style={{ width: '100%' }}> {convertToLang(this.props.translation[Button_passwordreset], "Reset Password")}</Button>
-                        </Form.Item>
-                    </Fragment>
-                }
-            </Form>
+                    }
+
+
+                </Form>
+            </div>
         )
     }
 }

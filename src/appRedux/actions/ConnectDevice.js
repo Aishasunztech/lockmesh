@@ -54,7 +54,8 @@ import {
     DELETE_SIM,
     SIM_HISTORY,
     MESSAGE_HANDLER,
-    TRANSFER_HISTORY
+    TRANSFER_HISTORY,
+    PASSWORD_CHANGED
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -625,28 +626,23 @@ export function handleCheckAllExtension(keyAll, key, value, uniqueName) {
 
 
 
-export function submitPassword(passwords, pwdType, translation = {}) {
+export function submitPassword(passwords, pwdType) {
     // console.log("Passwords: ", passwords);
     return (dispatch) => {
-        dispatch({
-            type: SHOW_MESSAGE,
-            payload: {
-                showMessage: true,
-                messageType: 'success',
-                messageText: convertToLang(translation[PASSWORD_SAVED], "Password saved")
+
+        RestService.submtPassword({ passwords, pwdType }).then((response) => {
+            // console.log('action saveProfileCND', device_setting);
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: PASSWORD_CHANGED,
+                    payload: passwords
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
             }
-        })
-        dispatch({
-            type: pwdType,
-            payload: passwords
-        })
-        dispatch({
-            type: SHOW_MESSAGE,
-            payload: {
-                showMessage: false,
-                messageType: 'success',
-                messageText: convertToLang(translation[PASSWORD_SAVED], "Password saved")
-            }
+
         })
     }
 }
