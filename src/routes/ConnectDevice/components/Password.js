@@ -52,6 +52,7 @@ class Password extends Component {
             });
         }
     }
+
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -61,11 +62,15 @@ class Password extends Component {
                 // let setPasswordFor = _this.state.pwdType === ENCRYPTED_PASSWORD ? "ENCRYPTED PASSWORD" : (_this.state.pwdType === GUEST_PASSWORD) ? "GUEST PASSWORD" : "ADMIN PANEL CODE"
                 confirm({
                     title: (_this.state.pwdType === DURESS_PASSWORD) ? "Do you really want to RESET DURESS PASSWORD ? " : "Do you really want to change your " + this.state.setPasswordFor + " ?",
+                    okText: 'Yes',
+                    cancelText: 'No',
                     onOk: () => {
+                        this.props.form.resetFields();
                         if (_this.state.pwdType === DURESS_PASSWORD) {
-                            _this.props.submitPassword({ pwd: 'clear', confirm: 'clear' }, _this.state.pwdType);
+                            console.log(this.props.device_details, ' kj')
+                            _this.props.submitPassword({ pwd: 'clear', confirm: 'clear' }, _this.state.pwdType, this.props.device_details.device_id, this.props.device_details.id);
                         } else {
-                            _this.props.submitPassword(values, _this.state.pwdType);
+                            _this.props.submitPassword(values, _this.state.pwdType,  this.props.device_details.device_id, this.props.device_details.id);
                         }
                     }
                 })

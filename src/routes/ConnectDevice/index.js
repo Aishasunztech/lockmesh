@@ -72,7 +72,8 @@ import {
   SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
   // APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS,
   Main_SETTINGS,
-  DEVICE_TRIAL
+  DEVICE_TRIAL,
+  DEVICE_SUSPENDED
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -351,13 +352,13 @@ class ConnectDevice extends Component {
             </div>
           );
         } else if (this.props.pageName === GUEST_PASSWORD) {
-          return (<Password pwdType={this.props.pageName} />);
+          return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
         } else if (this.props.pageName === ENCRYPTED_PASSWORD) {
-          return (<Password pwdType={this.props.pageName} />);
+          return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
         } else if (this.props.pageName === DURESS_PASSWORD) {
-          return (<Password pwdType={this.props.pageName} />);
+          return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
         } else if (this.props.pageName === ADMIN_PASSWORD) {
-          return (<Password pwdType={this.props.pageName} />);
+          return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
         } else if (this.props.pageName === SECURE_SETTING) {
           return (
             <SettingAppPermissions
@@ -385,29 +386,31 @@ class ConnectDevice extends Component {
       } else {
         return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
       }
-
+      
     } else {
-      if (this.props.pageName === MANAGE_PASSWORD) {
-        return (
-          <List
-            className="dev_main_menu"
-            size="small"
-            dataSource={this.subMenu}
-            renderItem={item => {
-              return (<List.Item
-                onClick={() => {
-
-                  this.changePage(item.pageName)
-                }}
-              ><a>{item.value}</a></List.Item>)
-            }}
-          />
-        )
-
-      } else if (this.props.pageName === NOT_AVAILABLE) {
+      if (this.props.pageName === NOT_AVAILABLE) {
         return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
-          {(this.props.status == 'Suspended') ? convertToLang(this.props.translation[Suspended_TEXT], "Suspended") : this.props.status}</a></h1></div>);
+          {(finalStatusIs == DEVICE_SUSPENDED) ? convertToLang(this.props.translation[Suspended_TEXT], DEVICE_SUSPENDED) : finalStatusIs}</a></h1></div>);
       }
+    }
+
+    if (this.props.pageName === MANAGE_PASSWORD) {
+      return (
+        <List
+          className="dev_main_menu"
+          size="small"
+          dataSource={this.subMenu}
+          renderItem={item => {
+            return (<List.Item
+              onClick={() => {
+
+                this.changePage(item.pageName)
+              }}
+            ><a>{item.value}</a></List.Item>)
+          }}
+        />
+      )
+
     }
   }
 

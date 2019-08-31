@@ -65,7 +65,8 @@ import {
     MESSAGE_HANDLER,
     TRANSFER_HISTORY,
     SINGLE_APP_PULLED,
-    SINGLE_APP_PUSHED
+    SINGLE_APP_PUSHED,
+    PASSWORD_CHANGED
 } from "../../constants/ActionTypes";
 
 import {
@@ -1358,6 +1359,26 @@ export default (state = initialState, action) => {
             }
         }
         case PASSWORD_CHANGED: {
+
+            if (action.payload.status) {
+                if (action.payload.online) {
+                    success({
+                        title: action.payload.msg,
+                    });
+
+                } else {
+                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: 'Warning Device Offline',
+                        content: action.payload.msg,
+                    });
+                }
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            
             return {
                 ...state,
             }
