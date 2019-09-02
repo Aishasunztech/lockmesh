@@ -77,84 +77,8 @@ export default class PricingModal extends Component {
             }
             console.log(this.state.pkg_features, 'featured');
             let _this = this;
-
-            Modal.confirm({
-                title: 'Save Package ?',
-                cancelText: 'Cancel',
-                okText: 'Save',
-                content: <div>
-                    <Row>
-                    <Divider />
-                        <Col span={12}><p>Package Name</p>
-                            {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                        </Col>
-                        <Col span={12}>
-                            <p >{this.state.pkgName}</p>
-                        </Col>
-
-
-                        <Col span={12}><p>Package Term</p>
-                            {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                        </Col>
-                        <Col span={12}>
-                            <p >{this.state.pkgTerms}</p>
-                        </Col>
-
-
-                        <Col span={12}><p>Package Price</p>
-                            {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                        </Col>
-                        <Col span={12}>
-                            <p >{this.state.pkgPrice}</p>
-                        </Col>
-
-
-                        <Col span={12}><p>Sim id</p>
-                            {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                        </Col>
-                        <Col span={12}>
-                            <p >{this.state.pkg_features.sim_id ? 'yes' : 'No' }</p>
-                        </Col>
-
-
-                        <Col span={12}><p>Chat id</p>
-                            {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                        </Col>
-                        <Col span={12}>
-                            <p >{this.state.pkg_features.chat_id ? 'yes' : 'No'}</p>
-                        </Col>
-
-                        <Col span={12}><p>Pgp Email</p>
-                            {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                        </Col>
-                        <Col span={12}>
-                            <p >{this.state.pkg_features.pgp_email ? 'yes' : 'No'}</p>
-                        </Col>
-
-                        <Col span={12}><p>Vpn</p>
-                            {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
-                        </Col>
-                        <Col span={12}>
-                            <p >{this.state.pkg_features.vpn ? 'yes' : 'No'}</p>
-                        </Col>
-                    </Row>
-                </div>,
-                onOk() {
-                    console.log('OK');
-                    _this.props.setPackage(data);
-                    _this.props.showPricingModal(false);
-                    _this.setState({
-                        pkgPrice: 0,
-                        pkg_features: pkg_features,
-                        pkgTerm: '',
-                        pkgName: '',
-                        outerTab: '1'
-                    })
-                },
-                onCancel() {
-                    console.log('Cancel');
-                },
-            });
+showConfirm(this, data)
+            
 
             // this.props.setPackage(data);
             // this.props.showPricingModal(false);
@@ -238,4 +162,84 @@ export default class PricingModal extends Component {
             </Modal>
         )
     }
+}
+
+function showConfirm  (_this, data)  {
+    Modal.confirm({
+        title: 'Save Package ?',
+        cancelText: 'Cancel',
+        okText: 'Save',
+        content: <div>
+            <Row>
+            <Divider />
+                <Col span={12}><p>Package Name</p>
+                    {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
+                </Col>
+                <Col span={12}>
+                    <p >{_this.state.pkgName}</p>
+                </Col>
+
+
+                <Col span={12}><p>Package Term</p>
+                    {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
+                </Col>
+                <Col span={12}>
+                    <p >{_this.state.pkgTerms}</p>
+                </Col>
+
+
+                <Col span={12}><p>Package Price</p>
+                    {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
+                </Col>
+                <Col span={12}>
+                    <p >{_this.state.pkgPrice}</p>
+                </Col>
+
+
+                <Col span={12}><p>Sim id</p>
+                    {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
+                </Col>
+                <Col span={12}>
+                    <p >{_this.state.pkg_features.sim_id ? 'yes' : 'No' }</p>
+                </Col>
+
+
+                <Col span={12}><p>Chat id</p>
+                    {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
+                </Col>
+                <Col span={12}>
+                    <p >{_this.state.pkg_features.chat_id ? 'yes' : 'No'}</p>
+                </Col>
+
+                <Col span={12}><p>Pgp Email</p>
+                    {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
+                </Col>
+                <Col span={12}>
+                    <p >{_this.state.pkg_features.pgp_email ? 'yes' : 'No'}</p>
+                </Col>
+
+                <Col span={12}><p>Vpn</p>
+                    {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
+                </Col>
+                <Col span={12}>
+                    <p >{_this.state.pkg_features.vpn ? 'yes' : 'No'}</p>
+                </Col>
+            </Row>
+        </div>,
+        onOk() {
+            console.log('OK');
+            _this.props.setPackage(data);
+            _this.props.showPricingModal(false);
+            _this.setState({
+                pkgPrice: 0,
+                pkg_features: pkg_features,
+                pkgTerm: '',
+                pkgName: '',
+                outerTab: '1'
+            })
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+    });
 }
