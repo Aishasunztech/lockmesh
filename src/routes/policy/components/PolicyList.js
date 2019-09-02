@@ -289,6 +289,7 @@ class PolicyList extends Component {
                             // onExpand={this.onExpandRow}
                             expandedRowRender={(record) => {
                                 // console.log("expandTabSelected", record);
+
                                 // console.log("table row", this.state.expandTabSelected[record.rowKey]);
                                 return (
                                     <div>{
