@@ -9,7 +9,7 @@ import { DEVICE_STATUS } from '../../../constants/DeviceConstants';
 import { appsColumns, extensionColumns, controlColumns } from '../../utils/columnsUtils';
 // import AppList from "./AppList";
 
-export default class TableHistory extends Component {
+export default class DeviceSettings extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,137 +25,25 @@ export default class TableHistory extends Component {
         this.controlColumns = controlColumns(props.translation);
     }
 
-    cotrolsValues = () => {
-        // console.log(this.state.controls, 'controls are');
+    controlValues = () => {
         if (Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object) {
 
             let data = [];
-            if (this.state.controls.controls.wifi_status !== undefined) {
-                data.push({
-                    label: 'Wifi',
-                    // status: this.state.controls.controls.wifi_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.wifi_status}
-                        checked={(this.state.controls.controls.wifi_status === true || this.state.controls.controls.wifi_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-            } if (this.state.controls.controls.bluetooth_status !== undefined) {
-                data.push({
-                    label: 'Bluetooth',
-                    // status: this.state.controls.controls.bluetooth_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.bluetooth_status}
-                        checked={(this.state.controls.controls.bluetooth_status === true || this.state.controls.controls.bluetooth_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-            }
-            if (this.state.controls.controls.hotspot_status !== undefined) {
-                data.push({
-                    label: 'Hotspot',
-                    // status: this.state.controls.controls.hotspot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.hotspot_status}
-                        checked={(this.state.controls.controls.hotspot_status === true || this.state.controls.controls.hotspot_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-            }
-
-            if (this.state.controls.controls.location_status !== undefined) {
-                data.push({
-                    label: 'Location Services',
-                    // status: this.state.controls.controls.call_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.location_status}
-                        checked={(this.state.controls.controls.location_status === true || this.state.controls.controls.location_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            }
-
-            if (this.state.controls.controls.screenshot_status !== undefined) {
-                data.push({
-                    label: 'Screen Capture',
-                    // status: this.state.controls.controls.screenshot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.screenshot_status}
-                        checked={(this.state.controls.controls.screenshot_status === true || this.state.controls.controls.screenshot_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-            }
-            if (this.state.controls.controls.call_status !== undefined) {
-                data.push({
-                    label: 'Block Calls',
-                    // status: this.state.controls.controls.call_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.call_status}
-                        checked={(this.state.controls.controls.call_status === true || this.state.controls.controls.call_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            }
-
-            if (this.state.controls.controls.nfc_status !== undefined) {
-                data.push({
-                    label: 'NFC',
-                    // status: this.state.controls.controls.nfc_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.nfc_status}
-                        checked={(this.state.controls.controls.nfc_status === true || this.state.controls.controls.nfc_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            } if (this.state.controls.controls.camera_status !== undefined) {
-                data.push({
-                    label: 'Camera',
-                    // status: this.state.controls.controls.camera_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.camera_status}
-                        checked={(this.state.controls.controls.camera_status === true || this.state.controls.controls.camera_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            } if (this.state.controls.controls.mic_status !== undefined) {
-                data.push({
-                    label: 'Mic',
-                    // status: this.state.controls.controls.mic_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.mic_status}
-                        checked={(this.state.controls.controls.mic_status === true || this.state.controls.controls.mic_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            } if (this.state.controls.controls.speaker_status !== undefined) {
-                data.push({
-                    label: 'Speaker',
-                    // status: this.state.controls.controls.speaker_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.speaker_status}
-                        checked={(this.state.controls.controls.speaker_status === true || this.state.controls.controls.speaker_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            }
-
+            this.state.controls.controls.map(control=>{
+                if(control.isChanged){
+                    data.push({
+                        key: control.setting_name,
+                        label: control.setting_name,
+                        status: <Switch
+                            size="small"
+                            value={control.setting_status}
+                            checked={(control.setting_status === true || control.setting_status === 1) ? true : false}
+                            disabled={true}
+                        />,
+                    })
+                }
+            })
+            
             return data;
         }
     }
@@ -376,7 +264,7 @@ export default class TableHistory extends Component {
                                         bordered={false}
                                         columns={this.controlColumns}
                                         align='center'
-                                        dataSource={this.cotrolsValues()}
+                                        dataSource={this.controlValues()}
                                         pagination={false}
 
                                     />
@@ -393,7 +281,7 @@ export default class TableHistory extends Component {
                                             bordered={false}
                                             columns={this.controlColumns}
                                             align='center'
-                                            dataSource={this.cotrolsValues()}
+                                            dataSource={this.controlValues()}
                                             pagination={false}
 
                                         />
