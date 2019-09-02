@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -76,6 +76,30 @@ export function bulkActivateDevice(devices) {
                     dispatch({
                         type: BULK_ACTIVATE_DEVICES,
                         response: response.data,
+                    });
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+
+}
+
+export function getbulkHistory() {
+
+    return (dispatch) => {
+        RestService.getbulkHistory().then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+
+                if (response.data) {
+                    dispatch({
+                        type: BULK_HISTORY,
+                        payload: response.data,
                     });
                 }
 

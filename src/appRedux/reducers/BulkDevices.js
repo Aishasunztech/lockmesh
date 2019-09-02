@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -11,6 +11,7 @@ const error = Modal.error
 
 const initialState = {
     bulkDevices: [],
+    bulkDevicesHistory: [],
     msg: "",
     showMsg: false,
     isloading: false,
@@ -28,6 +29,16 @@ export default (state = initialState, action) => {
                 showMsg: "hello",
                 bulkDevices: [],
             }
+
+        case BULK_HISTORY:
+
+            console.log("action.payload history at red : ", action.payload)
+            return {
+                ...state,
+                isloading: false,
+                bulkDevicesHistory: action.payload,
+            }
+
 
         case BULK_DEVICES_LIST:
             return {
@@ -68,7 +79,7 @@ export default (state = initialState, action) => {
 
         case BULK_ACTIVATE_DEVICES:
 
-        console.log('at red BULK_ACTIVATE_DEVICES ', action.response)
+            console.log('at red BULK_ACTIVATE_DEVICES ', action.response)
             if (action.response.status) {
 
                 action.response.data.map((item) => {

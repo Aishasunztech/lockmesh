@@ -426,7 +426,7 @@ const RestService = {
         return axios.post(BASE_URL + 'users/suspend/' + device_id, device_id, RestService.getHeader())
     },
 
-    
+
 
 
     // suspend dealer account
@@ -826,6 +826,11 @@ const RestService = {
         return axios.post(BASE_URL + 'users/bulkActivate', device_ids,
             RestService.getHeader()
         )
+    },
+
+    // get bulk devices history
+    getbulkHistory: () => {
+        return axios.get(BASE_URL + 'users/getBulkHistory', RestService.getHeader())
     },
 
 
