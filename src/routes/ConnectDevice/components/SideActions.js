@@ -351,7 +351,7 @@ class SideActions extends Component {
             applyPolicyConfirm: false,
             isSaveProfileBtn: false,
             transferHistoryModal: false,
-            DEVICE_TRANSFERED_DONE: 'not transfer',
+            // DEVICE_TRANSFERED_DONE: 'not transfer',
 
         }
         this.otpModalRef = React.createRef();
@@ -517,8 +517,8 @@ class SideActions extends Component {
     transferDeviceProfile = (obj) => {
         // console.log('at transferDeviceProfile')
         let _this = this;
-        confirm({
-            content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+        confirm({ // Are You Sure, You want to Transfer Flagged Device to this Requested Device ?
+            content: `Are you sure you want to transfer, Flagged ${obj.flagged_device.device_id} to ${obj.reqDevice.device_id} ?`, //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
             onOk() {
                 // console.log('OK');
                 _this.props.transferDeviceProfile(obj);
@@ -526,7 +526,7 @@ class SideActions extends Component {
                 //     reqDevice: device,
                 //     flagged_device: _this.props.device_details,
                 // }
-                _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
+                // _this.setState({ DEVICE_TRANSFERED_DONE: new Date() })
 
             },
             onCancel() {
@@ -854,8 +854,8 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                <Tooltip title="Coming Soon">
-                                    {/* <Button
+                                {/* <Tooltip title="Coming Soon"> */}
+                                {/* <Button
                                     type="default"
                                     onClick={() => this.handleTransfer()}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }}
@@ -864,11 +864,11 @@ class SideActions extends Component {
                                     <Icon type="swap" />
                                     {convertToLang(this.props.translation[Button_Transfer], "Transfer")} </Button> */}
 
-                                    {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
-                                    <Button type="default"
-                                        // onClick={() => this.handleTransferHistoryModal(true)} 
-                                        style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
-                                </Tooltip>
+                                {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
+                                <Button type="default"
+                                    onClick={() => this.handleTransferHistoryModal(true)}
+                                    style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
+                                {/* </Tooltip> */}
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
@@ -925,7 +925,7 @@ class SideActions extends Component {
                                 <Button
                                     onClick={() => this.refs.edit_device.showModal(this.props.device, this.props.editDevice)}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#FF861C', color: '#fff' }}
-                                    disabled={(this.props.device_details.finalStatus == "Transfered" || this.props.device_details.transfer_user_status == '1') ? true : false}
+                                    disabled={(this.props.device_details.finalStatus == "Transfered") ? true : false} // this.props.device_details.transfer_user_status == '1'
                                 >
                                     <Icon type='edit' />
 

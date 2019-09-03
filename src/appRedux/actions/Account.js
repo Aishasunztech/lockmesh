@@ -360,6 +360,7 @@ export const resetPrice = () => {
 }
 
 export const setPrice = (field, value, price_for = '') => {
+    // console.log('action called successfully')
     return (dispatch) => {
         dispatch({
             type: SET_PRICE,

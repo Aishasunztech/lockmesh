@@ -25,18 +25,24 @@ class PricingForm extends Component {
             twelve_month: 0
         }
     }
-    setPrice = (fieldName) => {
+    setPrice = (fieldName, value) => {
         if (fieldName) {
-            let value = this.props.form.getFieldValue(fieldName)
-            if (value > 0) {
-
-                if (value && fieldName && this.props.price_for) {
+            // let value = this.props.form.getFieldValue(fieldName)
+            if (value >= 0 || value == '') {
+// console.log('set set price called ok', value)
+                if (fieldName && this.props.price_for) {
                     this.props.setPrice(fieldName, value, this.props.price_for);
                 }
-                this.props.form.setFieldsValue({ [fieldName]: '' })
+                // this.props.form.setFieldsValue({ [fieldName]: '' })
             }
         }
+    }
 
+    componentDidUpdate(prevProps){
+        // console.log(this.props.innerTab, 'llllllllll', prevProps.innerTab)
+        if(this.props.innerTab !== prevProps.innerTab){
+            this.props.form.resetFields()
+        }
     }
 
     render() {
@@ -52,12 +58,12 @@ class PricingForm extends Component {
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('1 month', {
 
-                            })(<Input type='number' min={0} />)}
+                            })(<Input type='number' onChange={e =>  this.setPrice('1 month', e.target.value)} min={0} />)}
 
                         </Form.Item>
                     </Col>
                     <Col span={5}>
-                        <Button type="primary" onClick={() => this.setPrice('1 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
+                        {/* <Button type="primary" onClick={() => this.setPrice('1 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                     </Col>
                     <Col span={7}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['1 month'] ? this.props.innerTabData['1 month'] : 0 : 0}</h4>
@@ -70,13 +76,13 @@ class PricingForm extends Component {
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('3 month', {
 
-                            })(<Input type='number' min={0} />)}
+                            })(<Input type='number' onChange={e =>  this.setPrice('3 month', e.target.value)} min={0} />)}
 
 
                         </Form.Item>
                     </Col>
                     <Col span={5}>
-                        <Button type="primary" onClick={() => this.setPrice('3 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
+                        {/* <Button type="primary" onClick={() => this.setPrice('3 month')} >{convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                     </Col>
                     <Col span={7}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['3 month'] ? this.props.innerTabData['3 month'] : 0 : 0}</h4>
@@ -88,13 +94,13 @@ class PricingForm extends Component {
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('6 month', {
 
-                            })(<Input type='number' min={0} />)}
+                            })(<Input type='number' onChange={e =>  this.setPrice('6 month', e.target.value)} min={0} />)}
 
 
                         </Form.Item>
                     </Col>
                     <Col span={5}>
-                        <Button type="primary" onClick={() => this.setPrice('6 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
+                        {/* <Button type="primary" onClick={() => this.setPrice('6 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                     </Col>
                     <Col span={7}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData['6 month'] ? this.props.innerTabData['6 month'] : 0 : 0}</h4>
@@ -106,12 +112,12 @@ class PricingForm extends Component {
                             wrapperCol={{ span: 15 }}>
                             {getFieldDecorator('12 month', {
 
-                            })(<Input type='number' min={0} />)}
+                            })(<Input type='number' onChange={e =>  this.setPrice('12 month', e.target.value)} min={0} />)}
 
                         </Form.Item>
                     </Col>
                     <Col span={5}>
-                        <Button type="primary" onClick={() => this.setPrice('12 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button>
+                        {/* <Button type="primary" onClick={() => this.setPrice('12 month')}>{convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                     </Col>
                     <Col span={7}>
                         <h4 className='priceText'>{convertToLang(this.props.translation[PRICE], "PRICE")} : ${this.props.innerTabData ? this.props.innerTabData["12 month"] ? this.props.innerTabData['12 month'] : 0 : 0}</h4>

@@ -255,7 +255,7 @@ class AddApk extends Component {
         const apkProps = {
             name: 'apk',
             multiple: false,
-            action: `${BASE_URL}users/upload?fieldName=apk`,
+            action: `${BASE_URL}users/upload?fieldName=apk&screen=autoUpdate`,
             headers: { 'authorization': token },
             accept: '.apk',
             disabled: this.state.disableApk,

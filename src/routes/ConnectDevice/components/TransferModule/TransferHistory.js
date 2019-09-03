@@ -253,9 +253,13 @@ class TransferHistory extends Component {
         let THIS_DEVICE_TRANSFERED_TO = (filtered[filtered.length - 1]) ? `to Device ID ${filtered[filtered.length - 1].transfered_to}` : "";
 
         if (this.props.device.finalStatus == "Transfered") {
-            Modal.error({ title: `This device account was transfered ${THIS_DEVICE_TRANSFERED_TO}` });
+            Modal.error({ title: `This device account transfered ${THIS_DEVICE_TRANSFERED_TO}` });
         } else if (transfer === "User") {
-            this.setState({ visibleUser: true });
+            if (this.props.device.finalStatus !== "Flagged") {
+                Modal.error({ title: 'Plaese Flag the device first to Transfer' });
+            } else {
+                this.setState({ visibleUser: true });
+            }
         } else if (this.props.user.type === ADMIN && transfer === "Device") {
             Modal.error({ title: 'Sorry, Not Allowed for Admin to Transfer the Dealer Device.' });
         } else if (this.props.flagged === "Unflag") {
@@ -290,9 +294,12 @@ class TransferHistory extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={8} className="gutter-row" justify="center" >
-                                <Button onClick={() => this.checkDeviceStatus("Device")}
-                                // disabled={(this.props.device.finalStatus == "Transfered") ? true : false}
-                                >DEVICE TRANSFER</Button>
+                                <Button
+                                    onClick={() => this.checkDeviceStatus("Device")}
+                                    disabled={(this.props.user.type === ADMIN) ? true : false}
+                                >
+                                    DEVICE TRANSFER
+                                </Button>
                             </Col>
                             <Col span={8} className="gutter-row" style={{ textAlign: 'center', marginTop: '5px' }}><h3>-OR-</h3></Col>
                             <Col span={8} className="gutter-row" justify="center" >
@@ -400,7 +407,7 @@ class TransferHistory extends Component {
                             }}
                         >
                             <Button key="back" type="button" onClick={() => { this.handleCancelUser() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
-                            <Button type="primary" htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
+                            <Button type="primary" disabled={(addNewUserValue) ? false : true} htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                         </Form.Item>
                     </Form>
                     <AddUser ref="add_user" translation={this.props.translation} />
