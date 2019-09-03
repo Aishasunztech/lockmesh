@@ -1,4 +1,4 @@
-// Customizer const
+// Customize const
 export const TOGGLE_COLLAPSED_NAV = 'TOGGLE_COLLAPSE_MENU';
 export const WINDOW_WIDTH = 'WINDOW-WIDTH';
 export const SWITCH_LANGUAGE = 'SWITCH-LANGUAGE';
@@ -61,8 +61,6 @@ export const USER_CREDITS = 'USER_CREDITS';
 export const REJECT_REQUEST = 'REJECT_REQUEST'
 export const ACCEPT_REQUEST = 'ACCEPT_REQUEST'
 
-
-
 //Dealer const
 export const DEALERS_LIST = 'DEALERS_LIST';
 export const SUSPEND_DEALERS = 'SUSPEND_DEALERS';
@@ -80,7 +78,7 @@ export const UNLINK_APK = 'UNLINK_APK';
 export const ADD_APK = 'ADD_APK';
 export const EDIT_APK = 'EDIT_APK';
 export const APK_STATUS_CHANGED = 'APK_STATUS_CHANGED';
-export const PERMSSION_SAVED = 'PERMSSION_SAVED';
+export const PERMISSION_SAVED = 'PERMISSION_SAVED';
 export const RESET_UPLOAD_FORM = 'RESET_UPLOAD_FORM';
 export const RESET_AUTH_UPDATE = 'RESET_AUTH_UPDATE';
 export const CHECK_APK_NAME = 'CHECK_APK_NAME';
@@ -142,7 +140,8 @@ export const SHOW_PULL_APPS_MODAL = 'SHOW_PULL_APPS_MODAL';
 
 export const SAVE_POLICY = 'SAVE_POLICY';
 export const APPLY_POLICY = 'APPLY_POLICY';
-export const POLICY_PERMSSION_SAVED = 'POLICY_PERMSSION_SAVED';
+export const POLICY_PERMISSION_SAVED = 'POLICY_PERMISSION_SAVED';
+export const GET_SYSTEM_PERMISSIONS = 'GET_SYSTEM_PERMISSIONS';
 
 export const APPLY_SETTINGS = 'APPLY_SETTINGS';
 
