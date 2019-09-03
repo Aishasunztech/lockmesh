@@ -7,7 +7,6 @@ import { APK_APP_NAME } from '../../../constants/ApkConstants';
 import { Guest, ENCRYPTED, ENABLE, EXTENSION_NAME, ADMIN_PASSWORD_IS_CHANGED, ENCRYPTED_PASSWORD_IS_CHANGED, GUEST_PASSWORD_IS_CHANGED, DURESS_PASSWORD_IS_CHANGED } from '../../../constants/TabConstants';
 import { DEVICE_STATUS } from '../../../constants/DeviceConstants';
 import { appsColumns, extensionColumns, controlColumns } from '../../utils/columnsUtils';
-// import AppList from "./AppList";
 
 export default class DeviceSettings extends Component {
     constructor(props) {
@@ -26,12 +25,14 @@ export default class DeviceSettings extends Component {
     }
 
     controlValues = () => {
-        if (Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object) {
+        console.log(this.state.controls, 'apply setting controls')
+        if (this.state.controls.controls && this.state.controls.controls.length > 0) {
 
             let data = [];
             this.state.controls.controls.map(control=>{
                 if(control.isChanged){
                     data.push({
+                        rowKey: control.setting_name,
                         key: control.setting_name,
                         label: control.setting_name,
                         status: <Switch
@@ -56,7 +57,6 @@ export default class DeviceSettings extends Component {
                 for (let obj of data) {
                     if (obj.isChanged !== undefined && obj.isChanged === true) {
                         // if(applist.includes(obj)){
-
                         // }else{
                         applist.push(obj);
                         // }
@@ -165,12 +165,10 @@ export default class DeviceSettings extends Component {
         }
 
         if (datalist.length > 0) {
-            return (
-                data.map((item, index) => {
-
-                    // console.log(item);
+            return data.map((item, index) => {
                     return {
-                        key: item.app_id,
+                        rowKey: item.app_id,
+                        key: index,
                         app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
                         label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
                         // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
@@ -194,7 +192,7 @@ export default class DeviceSettings extends Component {
                         />,
                     }
                 })
-            )
+            
         }
     }
 
@@ -252,8 +250,8 @@ export default class DeviceSettings extends Component {
                 }
                 {
                     this.props.showChangedControls ?
-                        Object.entries(this.state.controls).length > 0 ?
-                            Object.entries(this.state.controls.controls).length > 0 ?
+                        this.state.controls.length > 0 ?
+                        this.state.controls.controls.length > 0 ?
                                 <div>
                                     {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
                                     <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
@@ -271,8 +269,9 @@ export default class DeviceSettings extends Component {
 
                                 </div> : false : false
                         : this.props.showChangedControls === undefined ?
-                            Object.entries(this.state.controls).length > 0 ?
-                                Object.entries(this.state.controls.controls).length > 0 ?
+                        
+                            this.state.controls.length > 0 ?
+                                this.state.controls.controls.length > 0 ?
                                     <div>
                                         <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
                                         <Table
