@@ -15,7 +15,14 @@ import {
 import styles from './policy.css';
 import RestService from '../../../appRedux/services/RestServices'
 import { BASE_URL } from '../../../constants/Application';
-import { POLICY_SAVE_CONFIRMATION, PLEASE_INPUT_POLICY_NAME, POLICY_APP_NAME, POLICY_NOTE, POLICY_COMMAND, NAME } from '../../../constants/PolicyConstants';
+import {
+    POLICY_SAVE_CONFIRMATION,
+    PLEASE_INPUT_POLICY_NAME,
+    POLICY_APP_NAME,
+    POLICY_NOTE,
+    POLICY_COMMAND,
+    NAME
+} from '../../../constants/PolicyConstants';
 import { Button_Save, Button_Cancel, Button_AddApps, Button_Add } from '../../../constants/ButtonConstants';
 import { convertToLang } from '../../utils/commonUtils';
 import { Tab_POLICY_SELECTED_APPS, Guest, ENCRYPTED, ENABLE, Tab_SECURE_SETTING } from '../../../constants/TabConstants';
@@ -338,141 +345,27 @@ class EditPolicy extends Component {
 
 
     renderSystemPermissions = () => {
+
         const { controls } = this.state.editAblePolicy;
 
         if (controls) {
-
-            return [{
-                rowKey: 'wifi_status',
-                name: 'Wifi',
-                action: (
-                    <Switch
-                        checked={controls.wifi_status}
-                        onClick={(e) => {
-                            return this.props.handleEditPolicy(e, 'wifi_status', '', 'controls', this.state.editAblePolicy.id)
-                        }}
-                        size="small"
-                    />
-                )
-            },
-            {
-                rowKey: 'bluetooth_status',
-                name: 'Bluetooth',
-                action: (
-                    <Switch
-                        checked={controls.bluetooth_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'bluetooth_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-            },
-            {
-                rowKey: 'bluetooth_sharing_status',
-                name: 'Bluetooth File Sharing',
-                action: (
-                    <Switch
-                        checked={controls.bluetooth_sharing_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'bluetooth_sharing_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-            },
-            {
-                rowKey: 'screenshot_status',
-                name: 'Screen Capture',
-                action: (
-                    <Switch
-                        checked={controls.screenshot_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'screenshot_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-            }, {
-                rowKey: 'location_status',
-                name: 'Location',
-                action: (
-                    <Switch
-                        checked={controls.location_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'location_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-            },
-            {
-                rowKey: 'hotspot_status',
-                name: 'Hotspot',
-                action: (
-                    <Switch
-                        checked={controls.hotspot_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'hotspot_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-
-            },
-            {
-                rowKey: 'call_status',
-                name: 'Block Calls',
-                action: (
-                    <Switch
-                        checked={controls.call_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'call_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-
-            },
-            {
-                rowKey: 'nfc_status',
-                name: 'NFC',
-                action: (
-                    <Switch
-                        checked={controls.nfc_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'nfc_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-
-            },
-            {
-                rowKey: 'camera_status',
-                name: 'Camera',
-                action: (
-                    <Switch
-                        checked={controls.camera_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'camera_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-
-            },
-            {
-                rowKey: 'mic_status',
-                name: 'Mic',
-                action: (
-                    <Switch
-                        checked={controls.mic_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'mic_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-
-            },
-            {
-                rowKey: 'speaker_status',
-                name: 'Speaker',
-                action: (
-                    <Switch
-                        checked={controls.speaker_status}
-                        onClick={(e) => this.props.handleEditPolicy(e, 'speaker_status', '', 'controls', this.state.editAblePolicy.id)}
-                        size="small"
-                    />
-                )
-
-            },
-
-            ]
+            return controls.map(control => {
+                return {
+                    rowKey: control.setting_name,
+                    name: control.setting_name,
+                    action: (
+                        <Switch
+                            checked={(control.setting_status === 1 || control.setting_status === true) ? true : false}
+                            onClick={(e) => {
+                                return this.props.handleEditPolicy(e, control.setting_name, '', 'controls', this.state.editAblePolicy.id)
+                            }}
+                            size="small"
+                        />
+                    )
+                }
+            })
         }
+
     }
 
     SavePolicyChanges = () => {

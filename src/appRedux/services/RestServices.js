@@ -233,6 +233,9 @@ const RestService = {
         //   console.log('api called ')
         return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
     },
+    getSystemPermissions: () => {
+        return axios.get(BASE_URL + 'users/get_system_permissions', RestService.getHeader());
+    },
 
     deleteORStatusPolicy: (data) => {
         //   console.log('api called ')

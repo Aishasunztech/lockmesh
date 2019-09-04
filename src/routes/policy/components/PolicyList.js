@@ -140,9 +140,10 @@ class PolicyList extends Component {
                                 >
                                     {convertToLang(this.props.translation[Button_Delete], "DELETE")}
                                 </Button>
-                            </Fragment>) : null
+                            </Fragment>
+                        ) : null
                 ,
-                policy_info:
+                policy_info: (
                     <Fragment>
                         <a onClick={() =>
                             this.expandRow(policy.id, 'info', true)
@@ -151,13 +152,18 @@ class PolicyList extends Component {
                         </a>
                         <span className="exp_txt">{convertToLang(this.props.translation[POLICY_EXPAND], "Expand")}</span>
                     </Fragment>
+                )
                 ,
                 permission: <span style={{ fontSize: 15, fontWeight: 400 }}>{(policy.permission_count == 'All') ? convertToLang(this.props.translation[Tab_All], "All") : policy.permission_count}</span>,
                 permissions: (policy.dealer_permission !== undefined || policy.dealer_permission !== null) ? policy.dealer_permission : [],
-                policy_status: (<Switch size='small' checked={policy.status === 1 || policy.status === true ? true : false}
-                    onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id, this.props.translation) }
-                    } disabled={(policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ? false : true
-                    } />),
+                policy_status: (
+                    <Switch
+                        size='small'
+                        checked={policy.status === 1 || policy.status === true ? true : false}
+                        onChange={(e) => { this.props.handlePolicyStatus(e, 'status', policy.id, this.props.translation) }}
+                        disabled={(policy.dealer_id === this.props.user.id || this.props.user.type === ADMIN) ? false : true}
+                    />
+                ),
                 policy_note: (policy.policy_note) ? `${policy.policy_note}` : "N/A",
                 policy_command: (policy.command_name) ? `${policy.command_name}` : "N/A",
                 policy_name: (policy.policy_name) ? `${policy.policy_name}` : "N/A",
@@ -225,6 +231,7 @@ class PolicyList extends Component {
             }
         }
     }
+
     handlePagination = (value) => {
         var x = Number(value)
         this.setState({
@@ -280,10 +287,14 @@ class PolicyList extends Component {
                             expandedRowRender={(record, index, indent, expanded) => {
                             
                                 return (
-                                    <div>{
-                                        this.state.savePolicyButton ?
-                                            <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], "Save Changes")} </Button>
-                                            : false}
+                                    <div>
+                                        {/* Save Policy Button */}
+                                        {/* {
+                                            this.state.savePolicyButton ?
+                                                <Button onClick={() => this.SavePolicyChanges(record)}> {convertToLang(this.props.translation[Button_Save_Changes], "Save Changes")} </Button>
+                                                : false
+                                        } */}
+
                                         <PolicyInfo
                                             key={record.policy_id}
                                             push_apps={this.props.push_apps}

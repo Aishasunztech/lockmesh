@@ -160,7 +160,6 @@ const initialState = {
     undoExtensions: [],
     redoExtensions: [],
     controls: {},
-    changedCtrls: {},
     undoControls: [],
     redoControls: [],
     activities: [],
@@ -339,7 +338,7 @@ export default (state = initialState, action) => {
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
             state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
-            //  console.log('controls form reduvcer of getdeviceapp', action.controls)
+             console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
             return {
@@ -502,7 +501,6 @@ export default (state = initialState, action) => {
 
             return {
                 ...state,
-                changedCtrls: {},
                 pageName: MAIN_MENU,
                 showMessage: false,
                 applyBtn: false,
@@ -790,24 +788,25 @@ export default (state = initialState, action) => {
         }
 
         case HANDLE_CHECK_CONTROL: {
-            let changedControls = JSON.parse(JSON.stringify(state.controls));
-            // if (action.payload.key === 'wifi_status') {
-            //     changedControls[action.payload.key] = true;
-            // } else {
-            changedControls.controls[action.payload.key] = action.payload.value;
-            state.changedCtrls[action.payload.key] = action.payload.value;
-            // }
+            // copy of System Permission state #removed JSON.parse(JSON.stringify())
+            let controls = JSON.parse(JSON.stringify(state.controls));
+            // let controls = state.controls.controls;
 
-            state.controls = JSON.parse(JSON.stringify(changedControls));
-            let controls = state.controls;
-            state.undoControls.push(JSON.parse(JSON.stringify(changedControls)));
-            // console.log('reduver aongds', state.controls);
+            let index = controls.controls.findIndex((control) => control.setting_name === action.payload.key);
+            if (index) {
+                console.log("permission index:", index);
+
+                controls.controls[index].setting_status = action.payload.value;
+                controls.controls[index].isChanged = true;
+               
+                // push into stack
+                state.undoControls.push(JSON.parse(JSON.stringify(controls)));
+                state.controls = JSON.parse(JSON.stringify(controls));
+            }
 
             return {
                 ...state,
                 controls: state.controls,
-                forceUpdate: state.forceUpdate + 1,
-                changedCtrls: state.changedCtrls,
                 applyBtn: true,
                 undoBtn: true,
                 clearBtn: true,
@@ -1174,7 +1173,6 @@ export default (state = initialState, action) => {
                 redoBtn: false,
                 undoBtn: false,
                 applyBtn: false,
-                changedCtrls: {},
                 pageName: MAIN_MENU
             }
         }
@@ -1378,7 +1376,7 @@ export default (state = initialState, action) => {
                     title: action.payload.msg,
                 });
             }
-            
+
             return {
                 ...state,
             }

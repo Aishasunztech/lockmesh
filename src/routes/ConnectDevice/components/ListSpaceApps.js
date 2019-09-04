@@ -106,7 +106,7 @@ class ListSpaceApps extends Component {
                             if (this.props.type === "guest") {
                                 if (app.guest === true || app.guest === 1) {
                                     return (
-                                        <Col span={6} style={{ padding: 8, textAlign: "center" }}>
+                                        <Col key={app.id} span={6} style={{ padding: 8, textAlign: "center" }}>
                                             <Avatar
                                                 size={"small"}
                                                 src={`${BASE_URL}users/getFile/${app.icon}`}
@@ -121,7 +121,7 @@ class ListSpaceApps extends Component {
                             } else {
                                 if (app.encrypted === true || app.encrypted === 1) {
                                     return (
-                                        <Col span={6} style={{ padding: 8, textAlign: "center" }}>
+                                        <Col key={app.id} span={6} style={{ padding: 8, textAlign: "center" }}>
                                             <Avatar
                                                 size={"small"}
                                                 src={`${BASE_URL}users/getFile/${app.icon}`}
@@ -138,7 +138,7 @@ class ListSpaceApps extends Component {
 
                         {this.props.type === "encrypted" ?
                             (this.props.extension.encrypted === true || this.props.extension.encrypted === 1) ?
-                                <Col span={6} style={{ padding: 8, textAlign: "center" }}>
+                                <Col  span={6} style={{ padding: 8, textAlign: "center" }}>
                                     <Avatar
                                         size={"small"}
                                         src={require("assets/images/secure_setting.png")}
