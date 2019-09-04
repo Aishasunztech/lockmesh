@@ -29,8 +29,23 @@ export default class DeviceSettings extends Component {
         if (this.state.controls.controls && this.state.controls.controls.length > 0) {
 
             let data = [];
-            this.state.controls.controls.map(control=>{
+            this.state.controls.controls.map(control => {
                 // if(control.isChanged){
+                if (this.props.showChangedControls) {
+                    if (control.isChanged) {
+                        data.push({
+                            rowKey: control.setting_name,
+                            key: control.setting_name,
+                            label: control.setting_name,
+                            status: <Switch
+                                size="small"
+                                value={control.setting_status}
+                                checked={(control.setting_status === true || control.setting_status === 1) ? true : false}
+                                disabled={true}
+                            />,
+                        })
+                    }
+                } else {
                     data.push({
                         rowKey: control.setting_name,
                         key: control.setting_name,
@@ -42,9 +57,10 @@ export default class DeviceSettings extends Component {
                             disabled={true}
                         />,
                     })
+                }
                 // }
             })
-            
+
             return data;
         }
     }
@@ -166,38 +182,50 @@ export default class DeviceSettings extends Component {
 
         if (datalist.length > 0) {
             return data.map((item, index) => {
-                    return {
-                        rowKey: item.app_id,
-                        key: index,
-                        app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                        label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                        // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
-                        guest: <Switch
-                            size="small"
-                            value={item.guest}
-                            checked={(item.guest === true || item.guest === 1) ? true : false}
-                            disabled={true}
-                        />,
-                        encrypted: <Switch
-                            size="small"
-                            value={item.encrypted}
-                            checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
-                            disabled={true}
-                        />,
-                        enable: <Switch
-                            size="small"
-                            value={item.enable}
-                            checked={(item.enable === true || item.enable === 1) ? true : false}
-                            disabled={true}
-                        />,
-                    }
-                })
-            
+                return {
+                    rowKey: item.app_id,
+                    key: index,
+                    app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                    label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                    // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
+                    guest: <Switch
+                        size="small"
+                        value={item.guest}
+                        checked={(item.guest === true || item.guest === 1) ? true : false}
+                        disabled={true}
+                    />,
+                    encrypted: <Switch
+                        size="small"
+                        value={item.encrypted}
+                        checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
+                        disabled={true}
+                    />,
+                    enable: <Switch
+                        size="small"
+                        value={item.enable}
+                        checked={(item.enable === true || item.enable === 1) ? true : false}
+                        disabled={true}
+                    />,
+                }
+            })
+
         }
     }
 
     render() {
-        console.log('dfkjslafaf', this.props.controls)
+        console.log('dfkjslafaf', this.props.controls);
+        let changes = 0;
+        if (this.state.controls) {
+            if (this.state.controls.controls) {
+                this.state.controls.controls.map(item => {
+                    if (item.isChanged) {
+                        changes++
+                    }
+                })
+
+            }
+        }
+
         return (
             <div>
                 {
@@ -251,27 +279,29 @@ export default class DeviceSettings extends Component {
                 }
                 {
                     this.props.showChangedControls ?
-                        this.state.controls.length > 0 ?
-                        this.state.controls.controls.length > 0 ?
-                                <div>
-                                    {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
-                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
+                        changes > 0 ?
+                            Object.entries(this.state.controls).length > 0 ?
+                                this.state.controls.controls.length > 0 ?
 
-                                    <Table
-                                        style={{ margin: 0, padding: 0 }}
-                                        size='default'
-                                        bordered={false}
-                                        columns={this.controlColumns}
-                                        align='center'
-                                        dataSource={this.controlValues()}
-                                        pagination={false}
+                                    <div>
+                                        {/* {console.log('if', Object.entries(this.state.controls.controls).length > 0)} */}
+                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
 
-                                    />
+                                        <Table
+                                            style={{ margin: 0, padding: 0 }}
+                                            size='default'
+                                            bordered={false}
+                                            columns={this.controlColumns}
+                                            align='center'
+                                            dataSource={this.controlValues()}
+                                            pagination={false}
 
-                                </div> : false : false
+                                        />
+
+                                    </div> : false : false : false
                         : this.props.showChangedControls === undefined ?
-                        
-                        Object.keys(this.state.controls).length > 0 ?
+
+                            Object.keys(this.state.controls).length > 0 ?
                                 this.state.controls.controls.length > 0 ?
                                     <div>
                                         <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
