@@ -292,7 +292,7 @@ const SelectedPullApps = (props) => {
                 props.resetSeletedRows()
             }}
             onCancel={() => {
-                props.showPushAppsModal(true);
+                props.showPullAppsModal(true);
                 props.showSelectedPullAppsModal(false);
             }}
             // cancelText='Back'
