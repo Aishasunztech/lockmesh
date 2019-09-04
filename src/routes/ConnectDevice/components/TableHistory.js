@@ -115,13 +115,13 @@ class TableHistory extends Component {
                 pagination={false}
                 onExpand={this.onExpandRow}
                 expandedRowRender={record => {
-                    console.log("record", record);
+                    console.log("record", record, this.props.type);
 
                     let app_list = (record.app_list !== undefined && record.app_list !== null && record.app_list !== '') ? record.app_list : [];
                     let extensions = (record.secure_apps !== undefined && record.secure_apps !== null && record.secure_apps !== '') ? record.secure_apps : [];
 
                     let controls = (record.controls && record.controls.length) ? record.controls: [];
-                    
+
                     console.log("table history controls: ", controls);
                     let push_apps = record.push_apps === null || record.push_apps === 'null' ? [] : record.push_apps;
                     let passwords = record.passwords;

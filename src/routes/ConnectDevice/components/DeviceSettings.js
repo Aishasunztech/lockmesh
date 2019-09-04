@@ -30,7 +30,7 @@ export default class DeviceSettings extends Component {
 
             let data = [];
             this.state.controls.controls.map(control=>{
-                if(control.isChanged){
+                // if(control.isChanged){
                     data.push({
                         rowKey: control.setting_name,
                         key: control.setting_name,
@@ -42,7 +42,7 @@ export default class DeviceSettings extends Component {
                             disabled={true}
                         />,
                     })
-                }
+                // }
             })
             
             return data;
@@ -197,6 +197,7 @@ export default class DeviceSettings extends Component {
     }
 
     render() {
+        console.log('dfkjslafaf', this.props.controls)
         return (
             <div>
                 {
@@ -270,7 +271,7 @@ export default class DeviceSettings extends Component {
                                 </div> : false : false
                         : this.props.showChangedControls === undefined ?
                         
-                            this.state.controls.length > 0 ?
+                        Object.keys(this.state.controls).length > 0 ?
                                 this.state.controls.controls.length > 0 ?
                                     <div>
                                         <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
