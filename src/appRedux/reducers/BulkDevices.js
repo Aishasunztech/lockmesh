@@ -1,6 +1,6 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
@@ -15,6 +15,7 @@ const initialState = {
     msg: "",
     showMsg: false,
     isloading: false,
+    usersOfDealers: []
 };
 
 export default (state = initialState, action) => {
@@ -39,22 +40,43 @@ export default (state = initialState, action) => {
                 bulkDevicesHistory: action.payload,
             }
 
+        case BULK_USERS:
+
+            console.log("action.payload BULK_USERS at red : ", action.payload)
+            if (action.payload.status) {
+                return {
+                    ...state,
+                    isloading: false,
+                    usersOfDealers: action.payload.users_list,
+                }
+            }
+
+
 
         case BULK_DEVICES_LIST:
-            return {
-                ...state,
-                isloading: false,
-                bulkDevices: action.payload.data,
+            console.log("action.payload BULK_DEVICES_LIST, ", action.payload)
+            if (action.payload.status) {
+                return {
+                    ...state,
+                    isloading: false,
+                    bulkDevices: action.payload.data,
+                    usersOfDealers: action.payload.users_list
+                }
+            } else {
+                return {
+                    ...state,
+                }
             }
 
         case BULK_SUSPEND_DEVICES:
+            let devices = state.bulkDevices;
             if (action.response.status) {
 
                 console.log('BULK_SUSPEND_DEVICES ', state.bulkDevices)
                 action.response.data.map((item) => {
-                    let bulkObjIndex = state.bulkDevices.findIndex((obj => obj.device_id === item.device_id));
+                    let bulkObjIndex = devices.findIndex((obj => obj.device_id === item.device_id));
                     if (bulkObjIndex !== -1) {
-                        state.bulkDevices[bulkObjIndex] = item;
+                        devices[bulkObjIndex] = item;
                     }
                 })
                 success({
@@ -67,10 +89,10 @@ export default (state = initialState, action) => {
                 });
             }
 
-            console.log('BULK_SUSPEND_DEVICES after', state.bulkDevices)
+            console.log('BULK_SUSPEND_DEVICES after', devices)
             return {
                 ...state,
-                bulkDevices: [...state.bulkDevices],
+                bulkDevices: devices,
                 msg: action.response.msg,
                 showMsg: true,
             }

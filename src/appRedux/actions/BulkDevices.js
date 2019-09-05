@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -18,7 +18,7 @@ export function getBulkDevicesList(data) {
         RestService.getBulkDevicesList(data).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
-                    console.log('at action file on response')
+                    console.log('at action file on response', response)
                     dispatch({
                         type: BULK_DEVICES_LIST,
                         payload: response.data,
@@ -99,6 +99,30 @@ export function getbulkHistory() {
                 if (response.data) {
                     dispatch({
                         type: BULK_HISTORY,
+                        payload: response.data,
+                    });
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                });
+            }
+        });
+    }
+
+}
+
+export function getUsersOfDealers(data) {
+console.log("getUsersOfDealers ", data)
+    return (dispatch) => {
+        RestService.getUsersOfDealers(data).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                // console.log('response', response.data);
+
+                if (response.data) {
+                    dispatch({
+                        type: BULK_USERS,
                         payload: response.data,
                     });
                 }

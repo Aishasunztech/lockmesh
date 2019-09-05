@@ -1137,6 +1137,13 @@ export function usersColumns(translation, handleSearch) {
 export function userDevicesListColumns(translation, handleSearch) {
     return ([
         {
+            title: '#',
+            dataIndex: 'counter',
+            align: 'center',
+            className: 'row',
+            render: (text, record, index) => ++index,
+        },
+        {
             // title: (this.state.tabselect === "5") ? <Button type="danger" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => this.deleteAllUnlinkedDevice()} >Delete All Selected</Button>:'',
             title: convertToLang(translation[ACTION], "ACTION"),
             dataIndex: 'action',

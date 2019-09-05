@@ -8,7 +8,8 @@ import {
     getBulkDevicesList,
     bulkSuspendDevice,
     bulkActivateDevice,
-    getbulkHistory
+    getbulkHistory,
+    getUsersOfDealers
 } from "../../appRedux/actions/BulkDevices";
 import {
 
@@ -25,7 +26,7 @@ import { getUserList } from "../../appRedux/actions/Users";
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, componentSearch, titleCase, convertToLang, checkRemainTermDays } from '../utils/commonUtils'
 // import { ADMIN } from '../../constants/Constants';
 import { Button_Confirm, Button_Cancel, Button_Edit } from '../../constants/ButtonConstants';
-import { devicesColumns } from '../utils/columnsUtils';
+import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
 
 import FilterDeives from './components/filterDevices';
 
@@ -48,45 +49,98 @@ class BulkActivities extends Component {
         super(props);
 
         this.actionList = [
-            { key: 'PUSH APPS', value: "Push Apps" },
-            { key: 'PULL APPS', value: "Pull Apps" },
-            { key: 'PUSH POLICY', value: "Push Policy" },
-            { key: 'SET PERMISSIONS', value: "Set Permissions" },
+            // { key: 'PUSH APPS', value: "Push Apps" },
+            // { key: 'PULL APPS', value: "Pull Apps" },
+            // { key: 'PUSH POLICY', value: "Push Policy" },
+            // { key: 'SET PERMISSIONS', value: "Set Permissions" },
             { key: 'ACTIVATE DEVICES', value: "Activate Devices" },
             { key: 'SUSPEND DEVICES', value: "Suspend Devices" },
-            { key: 'UNLINK DEVICES', value: "Unlink Devices" },
-            { key: 'WIPE DEVICES', value: "Wipe Devices" }
+            // { key: 'UNLINK DEVICES', value: "Unlink Devices" },
+            // { key: 'WIPE DEVICES', value: "Wipe Devices" }
         ];
 
-        let columns = devicesColumns(props.translation, this.handleColumnSearch);
+        // let columns = devicesColumns(props.translation, this.handleColumnSearch);
+
+
+
+        let columns = userDevicesListColumns(props.translation, this.handleSearch);
+
         this.state = {
-            columns: columns,
+            columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
             filteredDevices: [],
             selectedAction: "Null",
             selectedDealers: [],
             selectedUsers: [],
             dealerList: [],
             historyModalShow: false,
+            allUsers: [],
+            allDealers: []
         }
     }
+
+
+    handleTableChange = (pagination, query, sorter) => {
+        console.log('check sorter func: ', sorter)
+        let columns = this.state.columns;
+
+        columns.forEach(column => {
+            if (column.children) {
+                if (Object.keys(sorter).length > 0) {
+                    if (column.dataIndex == sorter.field) {
+                        if (this.state.sorterKey == sorter.field) {
+                            column.children[0]['sortOrder'] = sorter.order;
+                        } else {
+                            column.children[0]['sortOrder'] = "ascend";
+                        }
+                    } else {
+                        column.children[0]['sortOrder'] = "";
+                    }
+                    this.setState({ sorterKey: sorter.field });
+                } else {
+                    if (this.state.sorterKey == column.dataIndex) column.children[0]['sortOrder'] = "ascend";
+                }
+            }
+        })
+        this.setState({
+            columns: columns
+        });
+    }
+
+
+
 
     componentDidMount() {
         this.props.getAllDealers();
         this.props.getUserList();
 
+
+
         this.setState({
             filteredDevices: this.props.devices,
-            dealerList: this.props.dealerList
+            dealerList: this.props.dealerList,
         })
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log('hi')
         if (this.props.devices != nextProps.devices || this.props.dealerList != nextProps.dealerList) {
+            console.log('componentWillReceiveProps ', nextProps.devices)
             this.setState({
                 filteredDevices: nextProps.devices,
                 dealerList: this.props.dealerList
             })
         }
+
+
+
+        let allDealers = nextProps.dealerList.map((item) => {
+            return ({ key: item.dealer_id, label: item.dealer_name })
+        });
+
+        let allUsers = nextProps.users_list.map((item) => {
+            return ({ key: item.user_id, label: item.user_name })
+        });
+        this.setState({ allUsers, allDealers })
     }
 
 
@@ -198,7 +252,7 @@ class BulkActivities extends Component {
     }
 
     renderList(list) {
-        console.log('renderList ', list)
+        // console.log('renderList ', list)
         return list.map((device, index) => {
 
             var status = device.finalStatus;
@@ -206,12 +260,12 @@ class BulkActivities extends Component {
 
             let color = getColor(status);
             var style = { margin: '0', width: 'auto', textTransform: 'uppercase' }
-            var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
+            // var text = convertToLang(this.props.translation[Button_Edit], "EDIT");
 
-            if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
-                style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
-                text = "ACTIVATE";
-            }
+            // if ((status === DEVICE_PENDING_ACTIVATION) || (status === DEVICE_UNLINKED)) {
+            //     style = { margin: '0 8px 0 0', width: 'auto', display: 'none', textTransform: 'uppercase' }
+            //     text = "ACTIVATE";
+            // }
 
             return {
                 rowKey: index,
@@ -247,7 +301,8 @@ class BulkActivities extends Component {
                 model: checkValue(device.model),
                 // start_date: device.start_date ? `${new Date(device.start_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
                 // expiry_date: device.expiry_date ? `${new Date(device.expiry_date).toJSON().slice(0,10).replace(/-/g,'-')}` : "N/A",
-                dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
+                dealer_name: <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a>,
+                // dealer_name: (this.props.user.type === ADMIN) ? <a onClick={() => { this.goToDealer(device) }}>{checkValue(device.dealer_name)}</a> : <a >{checkValue(device.dealer_name)}</a>,
                 online: device.online === 'online' ? (<span style={{ color: "green" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>) : (<span style={{ color: "red" }}>{device.online.charAt(0).toUpperCase() + device.online.slice(1)}</span>),
                 s_dealer: checkValue(device.s_dealer),
                 s_dealer_name: checkValue(device.s_dealer_name),
@@ -258,13 +313,49 @@ class BulkActivities extends Component {
         });
     }
 
+    handleChangeUser = (values) => {
+        let selectAll = values.filter(e => e.key === "all");
+        let selectedUsers = values.filter(e => e.key !== "all");
+
+        if (selectAll.length > 0) {
+            selectedUsers = this.state.allUsers;
+        }
+
+        let data = {
+            dealers: this.state.selectedDealers,
+            users: selectedUsers
+        }
+        this.props.getBulkDevicesList(data);
+        this.setState({ selectedUsers })
+    }
+
+    handleChangeDealer = (values) => {
+        let selectAll = values.filter(e => e.key === "all");
+        let selectedDealers = values.filter(e => e.key !== "all");
+
+        if (selectAll.length > 0) {
+            selectedDealers = this.state.allDealers;
+        }
+
+        let data = {
+            dealers: selectedDealers,
+            users: this.state.selectedUsers
+        }
+
+        console.log('handle change data is: ', data)
+        this.props.getBulkDevicesList(data);
+        this.setState({ selectedDealers });
+
+    }
+
     render() {
 
+        console.log("parent this.props.devices ", this.props.devices)
         // let data = "NULL ";
         // if (this.state.selectedDealers.length) {
         //     data = this.state.selectedDealers.map((item) => { return `${item.label}, ` });
         // }
-        // console.log('data is: ', ...data);
+        // console.log('data is: ', this.props.dealerList.length , this.state.selectedDealers.length);
         // console.log('update data is: ', ...data.slice(0, ...data.length - 1));
 
 
@@ -325,11 +416,13 @@ class BulkActivities extends Component {
                                 maxTagCount="2"
                                 style={{ width: '100%' }}
                                 placeholder={convertToLang(this.props.translation[""], "Select Dealers")}
-                                onChange={(e) => { console.log(e); this.setState({ selectedDealers: e }) }}
-                                onDeselect={this.handleCancel}
-                                onBlur={() => { this.handleMultipleSelect() }}
+                                onChange={this.handleChangeDealer}
+                            // onDeselect={this.handleCancel}
+                            // onBlur={() => { this.handleMultipleSelect() }}
                             >
+                                <Select.Option key="allDealers" value="all">Select All</Select.Option>
                                 {this.props.dealerList.map((item, index) => {
+                                    // disabled={(this.props.dealerList.length === this.state.selectedDealers.length) ? true : false}
                                     return (<Select.Option key={item.id} value={item.dealer_id}>{item.dealer_name}</Select.Option>)
                                 })}
                             </Select>
@@ -349,13 +442,15 @@ class BulkActivities extends Component {
                                 labelInValue
                                 maxTagCount="2"
                                 style={{ width: '100%' }}
-                                onBlur={this.handleMultipleSelect}
-                                onDeselect={this.handleCancel}
+                                // onBlur={this.handleMultipleSelect}
+                                // onDeselect={this.handleCancel}
                                 placeholder={convertToLang(this.props.translation[""], "Select Users")}
-                                onChange={(e) => this.setState({ selectedUsers: e })}
+                                onChange={this.handleChangeUser}
                             >
+                                <Select.Option key="allUsers" value="all">Select All</Select.Option>
                                 {this.props.users_list.map((item, index) => {
-                                    return (<Select.Option key={item.id} value={item.user_id}>{item.user_name}</Select.Option>)
+                                    // disabled={(this.props.users_list.length === this.state.selectedUsers.length) ? true : false} key={item.id}
+                                    return (<Select.Option value={item.user_id}>{item.user_name}</Select.Option>)
                                 })}
                             </Select>
                         </Col>
@@ -372,6 +467,7 @@ class BulkActivities extends Component {
                         bulkActivateDevice={this.props.bulkActivateDevice}
                         renderList={this.renderList}
                         translation={this.props.translation}
+                        onChangeTableSorting={this.handleTableChange}
                     />
 
                 </Card>
@@ -382,6 +478,7 @@ class BulkActivities extends Component {
                     history={this.props.history}
                     renderList={this.renderList}
                     columns={this.state.columns}
+                    // onChangeTableSorting={this.handleTableChange}
                     translation={this.props.translation}
                 />
 
@@ -491,16 +588,17 @@ const mapDispatchToProps = (dispatch) => {
         getUserList: getUserList,
         bulkSuspendDevice: bulkSuspendDevice,
         bulkActivateDevice: bulkActivateDevice,
-        getbulkHistory: getbulkHistory
+        getbulkHistory: getbulkHistory,
+        getUsersOfDealers: getUsersOfDealers
     }, dispatch);
 }
 
 const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users }) => {
-    console.log(bulkDevices.bulkDevicesHistory, 'devices.bulkDevices ', bulkDevices.bulkDevices)
+    console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices)
     return {
         devices: bulkDevices.bulkDevices,
         history: bulkDevices.bulkDevicesHistory,
-        users_list: users.users_list,
+        users_list: bulkDevices.usersOfDealers, // users.users_list,
         dealerList: dealers.dealers,
         user: auth.authUser,
         routing: routing,

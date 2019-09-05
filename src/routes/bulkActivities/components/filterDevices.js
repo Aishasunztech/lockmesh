@@ -11,7 +11,7 @@ import BulkSuspendDevices from './bulkSuspendDevices';
 import BulkActivateDevices from './bulkActivateDevices';
 import { getStatus, getColor, checkValue, getSortOrder, checkRemainDays, titleCase, convertToLang, checkRemainTermDays } from '../../utils/commonUtils'
 
-import { bulkDevicesColumns, devicesColumns } from '../../utils/columnsUtils';
+import { bulkDevicesColumns, devicesColumns, userDevicesListColumns } from '../../utils/columnsUtils';
 
 
 
@@ -21,7 +21,8 @@ import {
   DEVICE_UNLINKED,
   ADMIN,
   DEVICE_SUSPENDED,
-  DEVICE_ACTIVATED
+  DEVICE_ACTIVATED,
+  DEVICE_TRIAL
 } from '../../../constants/Constants'
 
 import { Button_Remove, Button_Add, Button_AddAll, Button_AddExceptSelected, Button_RemoveAll, Button_RemoveExcept, Button_Save, Button_Cancel, Button_DeleteExceptSelected, Button_Yes, Button_No, Button_Edit } from '../../../constants/ButtonConstants';
@@ -29,16 +30,17 @@ const confirm = Modal.confirm;
 const success = Modal.success
 const error = Modal.error
 
+var copyDevices = [];
 var status = true;
 
 class FilterDevices extends Component {
   constructor(props) {
     super(props);
     // let columns = bulkDevicesColumns(props.translation, this.handleSearch);
-    let columns = devicesColumns(props.translation, this.handleSearch);
+    let columns = userDevicesListColumns(props.translation, this.handleSearch); //devicesColumns(props.translation, this.handleSearch);
 
     this.state = {
-      columns: columns,
+      columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
       sorterKey: '',
       sortOrder: 'ascend',
       showDealersModal: false,
@@ -125,8 +127,10 @@ class FilterDevices extends Component {
   componentWillReceiveProps(nextProps) {
 
     if (this.props.translation !== nextProps.translation) {
+      let columns = userDevicesListColumns(nextProps.translation, this.handleSearch);
+
       this.setState({
-        columns: devicesColumns(nextProps.translation, this.handleSearchInModal),
+        columns: columns.filter(e => e.dataIndex != "action" && e.dataIndex != "activation_code"),
       })
     }
 
@@ -139,6 +143,15 @@ class FilterDevices extends Component {
 
     let action = nextProps.handleActionValue;
     if (this.props.handleActionValue != action) {
+
+      // let updateSelectedDevices = this.props.devices.map((item) => {
+      //   return (
+      //     this.state.selectedDevices.filter(e => e.device_id == item.device_id)
+      //   )
+      // })
+
+      console.log('child this.props.devices ', this.props.devices)
+
 
       let updateSelectedDevices = this.state.selectedDevices;
       let { copySelectedDevices } = this.state;
@@ -320,29 +333,29 @@ class FilterDevices extends Component {
       return originalData;
     }
   }
-  handleSearch = (e, global = false) => {
+  // handleSearch = (e, global = false) => {
 
-    let fieldName = e.target.name;
-    let fieldValue = e.target.value;
-    // console.log("fieldName", fieldName);
-    // console.log("fieldValue", fieldValue);
-    // console.log("global", global);
-    if (global) {
-      let searchedData = this.searchAllFields(this.state.selectedDevices, fieldValue, fieldName)
-      // console.log("searchedData", searchedData);
-      this.setState({
-        selectedDevices: searchedData,
-        copySelectedDevices: searchedData
-      });
-    } else {
+  //   let fieldName = e.target.name;
+  //   let fieldValue = e.target.value;
+  //   console.log("fieldName", fieldName);
+  //   console.log("fieldValue", fieldValue);
+  //   console.log("global", global);
+  //   if (global) {
+  //     let searchedData = this.searchAllFields(this.state.selectedDevices, fieldValue, fieldName)
+  //     // console.log("searchedData", searchedData);
+  //     this.setState({
+  //       selectedDevices: searchedData,
+  //       copySelectedDevices: searchedData
+  //     });
+  //   } else {
 
-      let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
-      // console.log("searchedData", searchedData);
-      this.setState({
-        dealerList: searchedData
-      });
-    }
-  }
+  //     let searchedData = this.searchField(this.props.dealerList, fieldName, fieldValue);
+  //     // console.log("searchedData", searchedData);
+  //     this.setState({
+  //       dealerList: searchedData
+  //     });
+  //   }
+  // }
 
 
   handleSearchInModal = (e, global = false) => {
@@ -368,6 +381,51 @@ class FilterDevices extends Component {
     }
   }
 
+
+  handleSearch = (e) => {
+
+    let demoDevices = [];
+    // if (status) {
+    copyDevices = this.state.selectedDevices;
+    //   status = false;
+    // }
+    console.log("devices", copyDevices);
+
+    if (e.target.value.length) {
+      console.log("keyname", e.target.name);
+      console.log("value", e.target.value);
+      // console.log(this.state.devices);
+      copyDevices.forEach((device) => {
+        console.log("device", device);
+
+        if (device[e.target.name] !== undefined) {
+          if ((typeof device[e.target.name]) === 'string') {
+            // console.log("lsdjfls", device[e.target.name])
+            if (device[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+              demoDevices.push(device);
+            }
+          } else if (device[e.target.name] !== null) {
+            // console.log("else lsdjfls", device[e.target.name])
+            if (device[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+              demoDevices.push(device);
+            }
+          } else {
+            // demoDevices.push(device);
+          }
+        } else {
+          demoDevices.push(device);
+        }
+      });
+      // console.log("searched value", demoDevices);
+      this.setState({
+        selectedDevices: demoDevices
+      })
+    } else {
+      this.setState({
+        selectedDevices: copyDevices
+      })
+    }
+  }
 
 
   rejectPemission = (dealer_id) => {
@@ -512,9 +570,15 @@ class FilterDevices extends Component {
 
 
   getUnSelectedDevices = (devices) => {
-    let selectedIDs = this.state.selectedDevices.map((item) => item.id);
-    let fDevices = devices.filter(e => !selectedIDs.includes(e.id));
-    return fDevices;
+
+    console.log('this.state.selectedDevices filter ', this.state.selectedDevices)
+    if (this.state.selectedDevices.length > 0) {
+      let selectedIDs = this.state.selectedDevices.map((item) => item.id);
+      let fDevices = devices.filter(e => !selectedIDs.includes(e.id));
+      return fDevices;
+    } else {
+      return devices
+    }
   }
 
   applyAction = () => {
@@ -608,8 +672,14 @@ class FilterDevices extends Component {
     let updateSelectedDevices = devices;
 
     if (action === "SUSPEND DEVICES") {
-      updateSelectedDevices = devices.filter((device) => device.finalStatus != DEVICE_SUSPENDED)
+      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_TRIAL || device.finalStatus == DEVICE_ACTIVATED)
+    } else if (action === "ACTIVATE DEVICES") {
+      updateSelectedDevices = devices.filter((device) => device.finalStatus == DEVICE_SUSPENDED)
     }
+
+    // this.setState({
+    //   selectedDevices: updateSelectedDevices
+    // });
 
     return updateSelectedDevices;
   }

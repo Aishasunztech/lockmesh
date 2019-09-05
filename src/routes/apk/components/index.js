@@ -359,41 +359,45 @@ class Apk extends Component {
                                     </div>
 
                                 </Col>
-                                <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                                    <div>
-                                        <Link
-                                            to="#" onClick={() => this.showPwdConfirmModal(true)}
-                                        >
-                                            <Card className="manage_sec" style={{ borderRadius: 12 }}>
-                                                <div>
-                                                    <h2 style={{ textAlign: "center", width: "80%", margin: "0 auto" }}>
-                                                        <Icon type="lock" className="lock_icon2" />
+                                {((this.props.user.type === 'admin')) ?
+                                    <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                                        <div>
+                                            <Link
+                                                to="#" onClick={() => this.showPwdConfirmModal(true)}
+                                            >
+                                                <Card className="manage_sec" style={{ borderRadius: 12 }}>
+                                                    <div>
+                                                        <h2 style={{ textAlign: "center", width: "80%", margin: "0 auto" }}>
+                                                            <Icon type="lock" className="lock_icon2" />
 
-                                                        {convertToLang(this.props.translation[""], "Bulk Device Activities")} </h2>
-                                                    <Divider className="mb-0" />
-                                                    <Row style={{ padding: '12px 0 0px' }}>
-                                                        <Col span={8} className="text-center">
-                                                            <Icon type="mobile" className="policy_icon" />
-                                                        </Col>
-                                                        <Col span={16} style={{ padding: '0' }}>
-                                                            <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                                <Markup content={convertToLang(this.props.translation[""], "PUSH/PULL Apks To All OR Selected Devices.")} />
-                                                            </h5>
-                                                            <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                                <Markup content={convertToLang(this.props.translation[""], "Make Permission Changes To All OR Selected Devices")} />
-                                                            </h5>
-                                                            <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
-                                                                <Markup content={convertToLang(this.props.translation[""], "Push Policy, Suspend, Wipe to ALL OR Selected Devices ")} />
-                                                            </h5>
-                                                            <h5 className="" > {convertToLang(this.props.translation[""], "and more...")} </h5>
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-                                            </Card>
-                                            <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
-                                        </Link>
-                                    </div>
-                                </Col>
+                                                            {convertToLang(this.props.translation[""], "Bulk Device Activities")} </h2>
+                                                        <Divider className="mb-0" />
+                                                        <Row style={{ padding: '12px 0 0px' }}>
+                                                            <Col span={8} className="text-center">
+                                                                <Icon type="mobile" className="policy_icon" />
+                                                            </Col>
+                                                            <Col span={16} style={{ padding: '0' }}>
+                                                                <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                                    <Markup content={convertToLang(this.props.translation[""], "PUSH/PULL Apks To All OR Selected Devices.")} />
+                                                                </h5>
+                                                                <h5 style={{ display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                                    <Markup content={convertToLang(this.props.translation[""], "Make Permission Changes To All OR Selected Devices")} />
+                                                                </h5>
+                                                                <h5 style={{ marginBottom: 0, display: 'inline-flex' }}><span className="diamond_icon">&#9670;</span>
+                                                                    <Markup content={convertToLang(this.props.translation[""], "Push Policy, Suspend, Wipe to ALL OR Selected Devices ")} />
+                                                                </h5>
+                                                                <h5 className="" > {convertToLang(this.props.translation[""], "and more...")} </h5>
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                </Card>
+                                                <Button type="primary" size="small" className="open_btn"> {convertToLang(this.props.translation[Button_Open], "Open")} </Button>
+                                            </Link>
+                                        </div>
+                                    </Col>
+                                    :
+                                    <Col />
+                                }
                                 <PasswordModal
                                     translation={this.props.translation}
                                     pwdConfirmModal={this.state.pwdConfirmModal}

@@ -259,6 +259,7 @@ export default class Activity extends Component {
 
                             },
                         ]}
+                        onChange={this.props.onChangeTableSorting}
                         bordered
                         rowClassName={(record, index) =>
                             this.state.expandedRowKeys.includes(record.key) ? 'exp_row' : ''

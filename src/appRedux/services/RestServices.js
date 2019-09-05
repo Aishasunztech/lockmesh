@@ -833,6 +833,12 @@ const RestService = {
         return axios.get(BASE_URL + 'users/getBulkHistory', RestService.getHeader())
     },
 
+    // get users of selected dealers
+    getUsersOfDealers: (data) => {
+        console.log("at rest file", data)
+        return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
+    },
+
 
 }
 export default RestService;
