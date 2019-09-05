@@ -68,27 +68,27 @@ export default class PricingModal extends Component {
             // console.log('no error found', values);
 
             if (this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
-            let data = {
-                pkgName: this.state.pkgName,
-                pkgTerm: this.state.pkgTerms,
-                pkgPrice: this.state.pkgPrice,
-                pkgFeatures: this.state.pkg_features,
-                dealer_id: this.props.dealer_id
-            }
-            console.log(this.state.pkg_features, 'featured');
-            let _this = this;
-showConfirm(this, data)
-            
+                let data = {
+                    pkgName: this.state.pkgName,
+                    pkgTerm: this.state.pkgTerms,
+                    pkgPrice: this.state.pkgPrice,
+                    pkgFeatures: this.state.pkg_features,
+                    dealer_id: this.props.dealer_id
+                }
+                console.log(this.state.pkg_features, 'featured');
+                let _this = this;
+                showConfirm(this, data)
 
-            // this.props.setPackage(data);
-            // this.props.showPricingModal(false);
-            // this.setState({
-            //     pkgPrice: 0,
-            //     pkg_features: pkg_features,
-            //     pkgTerm: '',
-            //     pkgName: '',
-            // })
-            // }
+
+                // this.props.setPackage(data);
+                // this.props.showPricingModal(false);
+                // this.setState({
+                //     pkgPrice: 0,
+                //     pkg_features: pkg_features,
+                //     pkgTerm: '',
+                //     pkgName: '',
+                // })
+                // }
             }
             // })
         }
@@ -129,10 +129,10 @@ showConfirm(this, data)
                 destroyOnClose={true}
                 title={<div>{convertToLang(this.props.translation[Button_SET_PRICE], "Set Price")}</div>}
                 visible={this.props.pricing_modal}
-                onOk={this.handleSubmit}
+                onOk={() => { this.handleSubmit() }}
                 okText={convertToLang(this.props.translation[Button_Save], "Save")}
                 okButtonProps={{ disabled: this.state.outerTab === '1' ? !this.props.isPriceChanged : false }}
-                onCancel={() => { this.props.showPricingModal(false); this.props.resetPrice(); this.setState({outerTab: '1'}) }}
+                onCancel={() => { this.props.showPricingModal(false); this.props.resetPrice(); this.setState({ outerTab: '1' }) }}
                 // footer={null}
                 width='650px'
                 className="set_price_modal"
@@ -164,14 +164,14 @@ showConfirm(this, data)
     }
 }
 
-function showConfirm  (_this, data)  {
+function showConfirm(_this, data) {
     Modal.confirm({
         title: 'Save Package ?',
         cancelText: 'Cancel',
         okText: 'Save',
         content: <div>
             <Row>
-            <Divider />
+                <Divider />
                 <Col span={12}><p>Package Name</p>
                     {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                 </Col>
@@ -200,7 +200,7 @@ function showConfirm  (_this, data)  {
                     {/* <Button type="primary" onClick={() => this.setPrice('pkgName')}> {convertToLang(this.props.translation[Button_SET], "SET")} </Button> */}
                 </Col>
                 <Col span={12}>
-                    <p >{_this.state.pkg_features.sim_id ? 'yes' : 'No' }</p>
+                    <p >{_this.state.pkg_features.sim_id ? 'yes' : 'No'}</p>
                 </Col>
 
 
