@@ -68,33 +68,22 @@ export default class PricingModal extends Component {
             // console.log('no error found', values);
 
             if (this.state.pkg_features && this.state.pkgName && this.state.pkgTerms && this.state.pkgName !== '' && this.state.pkgTerms !== '') {
+                let pkgName = this.state.pkgName;
+                let pkgTerm = this.state.pkgTerms;
+                let pkgPrice = this.state.pkgPricepkgTerms;
+                let pkgFeatures = this.state.pkg_featurespkgTerms;
+                let dealer_id = this.props.dealer_id
+
                 let data = {
-                    pkgName: this.state.pkgName,
-                    pkgTerm: this.state.pkgTerms,
-                    pkgPrice: this.state.pkgPrice,
-                    pkgFeatures: this.state.pkg_features,
-                    dealer_id: this.props.dealer_id
+                    pkgName: pkgName,
+                    pkgTerm: pkgTerm,
+                    pkgPrice: pkgPrice,
+                    pkgFeatures: pkgFeatures,
+                    dealer_id: dealer_id
                 }
-                console.log(this.state.pkg_features, 'featured');
-                let _this = this;
                 showConfirm(this, data)
-
-
-                // this.props.setPackage(data);
-                // this.props.showPricingModal(false);
-                // this.setState({
-                //     pkgPrice: 0,
-                //     pkg_features: pkg_features,
-                //     pkgTerm: '',
-                //     pkgName: '',
-                // })
-                // }
             }
-            // })
         }
-
-        // console.log('submit data is', data)
-
     }
 
     setPkgDetail = (value, field, is_pkg_feature = false) => {
