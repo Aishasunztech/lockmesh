@@ -1,12 +1,13 @@
 
 import {
-    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS,
+    BULK_SUSPEND_DEVICES, LOADING, BULK_DEVICES_LIST, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS,
 } from "../../constants/ActionTypes";
 import { message, Modal } from 'antd';
 
 
 const success = Modal.success
 const error = Modal.error
+const warning = Modal.warning;
 
 
 const initialState = {
@@ -15,7 +16,9 @@ const initialState = {
     msg: "",
     showMsg: false,
     isloading: false,
-    usersOfDealers: []
+    usersOfDealers: [],
+
+    noOfApp_push_pull: 0,
 };
 
 export default (state = initialState, action) => {
@@ -127,6 +130,34 @@ export default (state = initialState, action) => {
                 msg: action.response.msg,
                 showMsg: true,
             }
+
+
+        case BULK_PUSH_APPS: {
+            let noOfApps = 0
+            if (action.payload.status) {
+                if (action.payload.online) {
+                    success({
+                        title: action.payload.msg, // "Apps are Being pushed"
+                    });
+                } else {
+                    // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
+                    warning({
+                        title: action.payload.msg, //  'Warning Device Offline',
+                        content: action.payload.content // "Apps pushed to device. Action will be performed when device is back online", // 'Apps pushed to device. Action will be performed when device is back online',
+                    });
+                }
+                noOfApps = action.payload.noOfApps
+            } else {
+                error({
+                    title: action.payload.msg,
+                });
+            }
+            return {
+                ...state,
+                noOfApp_push_pull: noOfApps
+            }
+        }
+
 
 
         default:

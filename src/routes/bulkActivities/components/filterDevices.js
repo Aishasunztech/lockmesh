@@ -385,10 +385,10 @@ class FilterDevices extends Component {
   handleSearch = (e) => {
 
     let demoDevices = [];
-    // if (status) {
+    if (status) {
     copyDevices = this.state.selectedDevices;
-    //   status = false;
-    // }
+      status = false;
+    }
     console.log("devices", copyDevices);
 
     if (e.target.value.length) {

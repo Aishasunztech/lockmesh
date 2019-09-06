@@ -9,11 +9,33 @@ import {
     bulkSuspendDevice,
     bulkActivateDevice,
     getbulkHistory,
-    getUsersOfDealers
-} from "../../appRedux/actions/BulkDevices";
-import {
+    getUsersOfDealers,
 
-} from '../../appRedux/actions'
+    applyBulkPushApps
+} from "../../appRedux/actions/BulkDevices";
+
+import {
+    showHistoryModal,
+    showSaveProfileModal,
+    saveProfile,
+    savePolicy,
+    hanldeProfileInput,
+    transferDeviceProfile,
+    getDealerApps,
+    loadDeviceProfile,
+    showPushAppsModal,
+    showPullAppsModal,
+    applyPushApps,
+    applyPullApps,
+    writeImei,
+    getActivities,
+    hidePolicyConfirm,
+    applyPolicy,
+    applySetting,
+    getProfiles,
+    wipe,
+    simHistory
+} from "../../appRedux/actions/ConnectDevice";
 
 import CustomScrollbars from "../../util/CustomScrollbars";
 
@@ -29,6 +51,7 @@ import { Button_Confirm, Button_Cancel, Button_Edit } from '../../constants/Butt
 import { devicesColumns, userDevicesListColumns } from '../utils/columnsUtils';
 
 import FilterDeives from './components/filterDevices';
+import PushPullApps from './components/pushPullApps';
 
 import {
     DEVICE_PENDING_ACTIVATION,
@@ -49,7 +72,7 @@ class BulkActivities extends Component {
         super(props);
 
         this.actionList = [
-            // { key: 'PUSH APPS', value: "Push Apps" },
+            { key: 'PUSH APPS', value: "Push Apps" },
             // { key: 'PULL APPS', value: "Pull Apps" },
             // { key: 'PUSH POLICY', value: "Push Policy" },
             // { key: 'SET PERMISSIONS', value: "Set Permissions" },
@@ -74,10 +97,76 @@ class BulkActivities extends Component {
             dealerList: [],
             historyModalShow: false,
             allUsers: [],
-            allDealers: []
+            allDealers: [],
+
+            pushAppsModal: false,
+            apk_list: [],
         }
     }
 
+
+    // Start Action Related
+    onPushAppsSelection = (selectedRowKeys, selectedRows) => {
+        this.setState({
+            selectedPushApps: selectedRows,
+            selectedPushAppKeys: selectedRowKeys
+        })
+
+    }
+
+    onPullAppsSelection = (selectedRowKeys, selectedRows) => {
+
+        this.setState({
+            selectedPullApps: selectedRows,
+            selectedPullAppKeys: selectedRowKeys
+        })
+    }
+
+
+
+    showPushAppsModal = (visible) => {
+        // console.log(this.state.apk_list)
+
+        if (visible) {
+            this.setState({
+                pushAppsModal: visible,
+                // selectedApps: this.state.apk_list
+            })
+        } else {
+            this.setState({
+                pushAppsModal: visible
+            })
+        }
+    }
+
+    showPullAppsModal = (visible) => {
+        this.setState({
+            pullAppsModal: visible,
+        })
+    }
+
+    onCancelModel = () => {
+        this.setState({
+            selectedPushAppKeys: [],
+            selectedPullAppKeys: [],
+            pushApps: [],
+            pullApps: []
+        })
+    }
+
+
+
+
+    onPullAppsSelection = (selectedRowKeys, selectedRows) => {
+
+        this.setState({
+            selectedPullApps: selectedRows,
+            selectedPullAppKeys: selectedRowKeys
+        })
+    }
+
+
+    // End Action related
 
     handleTableChange = (pagination, query, sorter) => {
         console.log('check sorter func: ', sorter)
@@ -112,7 +201,7 @@ class BulkActivities extends Component {
     componentDidMount() {
         this.props.getAllDealers();
         this.props.getUserList();
-
+        this.props.getDealerApps();
 
 
         this.setState({
@@ -129,6 +218,10 @@ class BulkActivities extends Component {
                 filteredDevices: nextProps.devices,
                 dealerList: this.props.dealerList
             })
+        } else {
+            // this.setState({
+            //     apk_list: nextProps.apk_list
+            // })
         }
 
 
@@ -348,6 +441,16 @@ class BulkActivities extends Component {
 
     }
 
+    handleChangeAction = (e) => {
+
+        if (e === "PUSH APPS") {
+            this.setState({ pushAppsModal: true });
+        }
+
+        this.setState({ selectedAction: e });
+
+    }
+
     render() {
 
         console.log("parent this.props.devices ", this.props.devices)
@@ -393,7 +496,7 @@ class BulkActivities extends Component {
                                 style={{ width: '100%' }}
                                 className="pos_rel"
                                 placeholder={convertToLang(this.props.translation[""], "Select any action")}
-                                onChange={(e) => this.setState({ selectedAction: e })}
+                                onChange={this.handleChangeAction}
                             >
                                 <Select.Option value="Null">{convertToLang(this.props.translation[""], "Select any action")}</Select.Option>
                                 {this.actionList.map((item, index) => {
@@ -403,6 +506,7 @@ class BulkActivities extends Component {
                         </Col>
                     </Row>
                     <p>Selected: <span className="font_26">{this.state.selectedAction.toUpperCase()}</span></p>
+
 
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
@@ -569,6 +673,16 @@ class BulkActivities extends Component {
                 </Modal> */}
 
 
+                <PushPullApps
+                    showPushAppsModal={this.showPushAppsModal}
+                    pushAppsModal={this.state.pushAppsModal}
+                    apk_list={this.props.apk_list}
+                    onPushAppsSelection={this.onPushAppsSelection}
+                    applyPushApps={this.props.applyPushApps}
+                    showPullAppsModal={this.showPullAppsModal}
+                    translation={this.props.translation}
+                />
+
             </Fragment >
         )
         // } else {
@@ -589,12 +703,17 @@ const mapDispatchToProps = (dispatch) => {
         bulkSuspendDevice: bulkSuspendDevice,
         bulkActivateDevice: bulkActivateDevice,
         getbulkHistory: getbulkHistory,
-        getUsersOfDealers: getUsersOfDealers
+        getUsersOfDealers: getUsersOfDealers,
+
+        showPushAppsModal: showPushAppsModal,
+        getDealerApps: getDealerApps,
+        applyPushApps: applyBulkPushApps,
     }, dispatch);
 }
 
-const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users }) => {
-    console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices)
+const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users, device_details }, otherProps) => {
+    console.log(bulkDevices.usersOfDealers, 'usersOfDealers ,devices.bulkDevices ', bulkDevices.bulkDevices);
+    console.log("device_details.apk_list", device_details.apk_list);
     return {
         devices: bulkDevices.bulkDevices,
         history: bulkDevices.bulkDevicesHistory,
@@ -602,7 +721,10 @@ const mapStateToProps = ({ routing, auth, settings, dealers, bulkDevices, users 
         dealerList: dealers.dealers,
         user: auth.authUser,
         routing: routing,
-        translation: settings.translation
+        translation: settings.translation,
+
+        pushAppsModal: device_details.pushAppsModal,
+        apk_list: device_details.apk_list,
     };
 }
 

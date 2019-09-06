@@ -69,6 +69,7 @@ export const BULK_SUSPEND_DEVICES = 'BULK_SUSPEND_DEVICES';
 export const BULK_ACTIVATE_DEVICES = 'BULK_ACTIVATE_DEVICES';
 export const BULK_HISTORY = 'BULK_HISTORY';
 export const BULK_USERS = 'BULK_USERS';
+export const BULK_PUSH_APPS = 'BULK_PUSH_APPS';
 
 
 //Dealer const

@@ -839,6 +839,30 @@ const RestService = {
         return axios.post(BASE_URL + 'users/getUsersOfDealers', data, RestService.getHeader())
     },
 
+    applyBulkPushApps: (push_apps, deviceIds, usrAccIds) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_pushapps', {
+            push_apps: push_apps,
+            deviceIds: deviceIds,
+            usrAccIds: usrAccIds
+        }, RestService.getHeader());
+    },
+
+    applyBulkPolicy: (deviceIds, userAccIds, policyId) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_policy', {
+            deviceIds: deviceIds,
+            policyId: policyId,
+            userAccIds: userAccIds
+        }, RestService.getHeader());
+    },
+
+    applyBulkPullApps: (pull_apps, deviceIds, usrAccIds) => {
+        return axios.post(BASE_URL + 'users/apply_bulk_pullapps', {
+            pull_apps: pull_apps,
+            deviceIds: deviceIds,
+            usrAccIds: usrAccIds
+        }, RestService.getHeader());
+    },
+
 
 }
 export default RestService;

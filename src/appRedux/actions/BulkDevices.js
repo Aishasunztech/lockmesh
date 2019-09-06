@@ -1,4 +1,4 @@
-import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS } from "../../constants/ActionTypes";
+import { BULK_DEVICES_LIST, BULK_SUSPEND_DEVICES, LOADING, INVALID_TOKEN, BULK_LOADING, BULK_ACTIVATE_DEVICES, BULK_HISTORY, BULK_USERS, BULK_PUSH_APPS } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
 
@@ -135,4 +135,29 @@ console.log("getUsersOfDealers ", data)
         });
     }
 
+}
+
+
+export const applyBulkPushApps = (apps, deviceIds, usrAccIds) => {
+    apps.forEach((el) => {
+        el.enable = (typeof (el.enable) === Boolean || typeof (el.enable) === 'Boolean' || typeof (el.enable) === 'boolean') ? el.enable : false;
+        el.guest = (typeof (el.guest) === Boolean || typeof (el.guest) === 'Boolean' || typeof (el.guest) === 'boolean') ? el.guest : false;
+        el.encrypted = (typeof (el.encrypted) === Boolean || typeof (el.encrypted) === 'Boolean' || typeof (el.encrypted) === 'boolean') ? el.encrypted : false;
+        delete el.apk_logo;
+        delete el.apk_status;
+    })
+    return (dispatch) => {
+        RestService.applyPushApps(apps, deviceIds, usrAccIds).then((response) => {
+            if (RestService.checkAuth(response.data)) {
+                dispatch({
+                    type: BULK_PUSH_APPS,
+                    payload: response.data,
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        })
+    }
 }
