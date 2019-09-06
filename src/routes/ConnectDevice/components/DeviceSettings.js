@@ -7,9 +7,8 @@ import { APK_APP_NAME } from '../../../constants/ApkConstants';
 import { Guest, ENCRYPTED, ENABLE, EXTENSION_NAME, ADMIN_PASSWORD_IS_CHANGED, ENCRYPTED_PASSWORD_IS_CHANGED, GUEST_PASSWORD_IS_CHANGED, DURESS_PASSWORD_IS_CHANGED } from '../../../constants/TabConstants';
 import { DEVICE_STATUS } from '../../../constants/DeviceConstants';
 import { appsColumns, extensionColumns, controlColumns } from '../../utils/columnsUtils';
-// import AppList from "./AppList";
 
-export default class TableHistory extends Component {
+export default class DeviceSettings extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,136 +24,42 @@ export default class TableHistory extends Component {
         this.controlColumns = controlColumns(props.translation);
     }
 
-    cotrolsValues = () => {
-        // console.log(this.state.controls, 'controls are');
-        if (Object.entries(this.state.controls).length > 0 && this.state.controls.constructor === Object) {
+    controlValues = () => {
+        console.log(this.state.controls, 'apply setting controls')
+        if (this.state.controls.controls && this.state.controls.controls.length > 0) {
 
             let data = [];
-            if (this.state.controls.controls.wifi_status !== undefined) {
-                data.push({
-                    label: 'Wifi',
-                    // status: this.state.controls.controls.wifi_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.wifi_status}
-                        checked={(this.state.controls.controls.wifi_status === true || this.state.controls.controls.wifi_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-            } if (this.state.controls.controls.bluetooth_status !== undefined) {
-                data.push({
-                    label: 'Bluetooth',
-                    // status: this.state.controls.controls.bluetooth_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.bluetooth_status}
-                        checked={(this.state.controls.controls.bluetooth_status === true || this.state.controls.controls.bluetooth_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-            }
-            if (this.state.controls.controls.hotspot_status !== undefined) {
-                data.push({
-                    label: 'Hotspot',
-                    // status: this.state.controls.controls.hotspot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.hotspot_status}
-                        checked={(this.state.controls.controls.hotspot_status === true || this.state.controls.controls.hotspot_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-            }
-
-            if (this.state.controls.controls.location_status !== undefined) {
-                data.push({
-                    label: 'Location Services',
-                    // status: this.state.controls.controls.call_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.location_status}
-                        checked={(this.state.controls.controls.location_status === true || this.state.controls.controls.location_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            }
-
-            if (this.state.controls.controls.screenshot_status !== undefined) {
-                data.push({
-                    label: 'Screen Capture',
-                    // status: this.state.controls.controls.screenshot_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.screenshot_status}
-                        checked={(this.state.controls.controls.screenshot_status === true || this.state.controls.controls.screenshot_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-            }
-            if (this.state.controls.controls.call_status !== undefined) {
-                data.push({
-                    label: 'Block Calls',
-                    // status: this.state.controls.controls.call_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.call_status}
-                        checked={(this.state.controls.controls.call_status === true || this.state.controls.controls.call_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            }
-
-            if (this.state.controls.controls.nfc_status !== undefined) {
-                data.push({
-                    label: 'NFC',
-                    // status: this.state.controls.controls.nfc_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.nfc_status}
-                        checked={(this.state.controls.controls.nfc_status === true || this.state.controls.controls.nfc_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            } if (this.state.controls.controls.camera_status !== undefined) {
-                data.push({
-                    label: 'Camera',
-                    // status: this.state.controls.controls.camera_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.camera_status}
-                        checked={(this.state.controls.controls.camera_status === true || this.state.controls.controls.camera_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            } if (this.state.controls.controls.mic_status !== undefined) {
-                data.push({
-                    label: 'Mic',
-                    // status: this.state.controls.controls.mic_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.mic_status}
-                        checked={(this.state.controls.controls.mic_status === true || this.state.controls.controls.mic_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            } if (this.state.controls.controls.speaker_status !== undefined) {
-                data.push({
-                    label: 'Speaker',
-                    // status: this.state.controls.controls.speaker_status ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>
-                    status: <Switch
-                        size="small"
-                        value={this.state.controls.controls.speaker_status}
-                        checked={(this.state.controls.controls.speaker_status === true || this.state.controls.controls.speaker_status === 1) ? true : false}
-                        disabled={true}
-                    />,
-                })
-
-            }
+            this.state.controls.controls.map(control => {
+                // if(control.isChanged){
+                if (this.props.showChangedControls) {
+                    if (control.isChanged) {
+                        data.push({
+                            rowKey: control.setting_name,
+                            key: control.setting_name,
+                            label: control.setting_name,
+                            status: <Switch
+                                size="small"
+                                value={control.setting_status}
+                                checked={(control.setting_status === true || control.setting_status === 1) ? true : false}
+                                disabled={true}
+                            />,
+                        })
+                    }
+                } else {
+                    data.push({
+                        rowKey: control.setting_name,
+                        key: control.setting_name,
+                        label: control.setting_name,
+                        status: <Switch
+                            size="small"
+                            value={control.setting_status}
+                            checked={(control.setting_status === true || control.setting_status === 1) ? true : false}
+                            disabled={true}
+                        />,
+                    })
+                }
+                // }
+            })
 
             return data;
         }
@@ -168,7 +73,6 @@ export default class TableHistory extends Component {
                 for (let obj of data) {
                     if (obj.isChanged !== undefined && obj.isChanged === true) {
                         // if(applist.includes(obj)){
-
                         // }else{
                         applist.push(obj);
                         // }
@@ -277,40 +181,51 @@ export default class TableHistory extends Component {
         }
 
         if (datalist.length > 0) {
-            return (
-                data.map((item, index) => {
+            return data.map((item, index) => {
+                return {
+                    rowKey: item.app_id,
+                    key: index,
+                    app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                    label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
+                    // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
+                    guest: <Switch
+                        size="small"
+                        value={item.guest}
+                        checked={(item.guest === true || item.guest === 1) ? true : false}
+                        disabled={true}
+                    />,
+                    encrypted: <Switch
+                        size="small"
+                        value={item.encrypted}
+                        checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
+                        disabled={true}
+                    />,
+                    enable: <Switch
+                        size="small"
+                        value={item.enable}
+                        checked={(item.enable === true || item.enable === 1) ? true : false}
+                        disabled={true}
+                    />,
+                }
+            })
 
-                    // console.log(item);
-                    return {
-                        key: item.app_id,
-                        app_name: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                        label: item.label === undefined || item.label === 'undefined' ? item.apk_name : item.label,
-                        // guest: (item.guest === 1 || item.guest === true) ? <span style={{ color: "green", fontSize: 13, fontWeight: "500" }}>ON</span> : <span style={{ color: "red", fontSize: 13, fontWeight: "500" }}>OFF</span>,
-                        guest: <Switch
-                            size="small"
-                            value={item.guest}
-                            checked={(item.guest === true || item.guest === 1) ? true : false}
-                            disabled={true}
-                        />,
-                        encrypted: <Switch
-                            size="small"
-                            value={item.encrypted}
-                            checked={(item.encrypted === true || item.encrypted === 1) ? true : false}
-                            disabled={true}
-                        />,
-                        enable: <Switch
-                            size="small"
-                            value={item.enable}
-                            checked={(item.enable === true || item.enable === 1) ? true : false}
-                            disabled={true}
-                        />,
-                    }
-                })
-            )
         }
     }
 
     render() {
+        console.log('dfkjslafaf', this.props.controls);
+        let changes = 0;
+        if (this.state.controls) {
+            if (this.state.controls.controls) {
+                this.state.controls.controls.map(item => {
+                    if (item.isChanged) {
+                        changes++
+                    }
+                })
+
+            }
+        }
+
         return (
             <div>
                 {
@@ -364,27 +279,30 @@ export default class TableHistory extends Component {
                 }
                 {
                     this.props.showChangedControls ?
-                        Object.entries(this.state.controls).length > 0 ?
-                            Object.entries(this.state.controls.controls).length > 0 ?
-                                <div>
-                                    {console.log('if', Object.entries(this.state.controls.controls).length > 0)}
-                                    <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
-
-                                    <Table
-                                        style={{ margin: 0, padding: 0 }}
-                                        size='default'
-                                        bordered={false}
-                                        columns={this.controlColumns}
-                                        align='center'
-                                        dataSource={this.cotrolsValues()}
-                                        pagination={false}
-
-                                    />
-
-                                </div> : false : false
-                        : this.props.showChangedControls === undefined ?
+                        changes > 0 ?
                             Object.entries(this.state.controls).length > 0 ?
-                                Object.entries(this.state.controls.controls).length > 0 ?
+                                this.state.controls.controls.length > 0 ?
+
+                                    <div>
+                                        {/* {console.log('if', Object.entries(this.state.controls.controls).length > 0)} */}
+                                        <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
+
+                                        <Table
+                                            style={{ margin: 0, padding: 0 }}
+                                            size='default'
+                                            bordered={false}
+                                            columns={this.controlColumns}
+                                            align='center'
+                                            dataSource={this.controlValues()}
+                                            pagination={false}
+
+                                        />
+
+                                    </div> : false : false : false
+                        : this.props.showChangedControls === undefined ?
+
+                            Object.keys(this.state.controls).length > 0 ?
+                                this.state.controls.controls.length > 0 ?
                                     <div>
                                         <Divider> {convertToLang(this.props.translation[SYSTEM_PERMISSION], "SYSTEM PERMISSION")}</Divider>
                                         <Table
@@ -393,7 +311,7 @@ export default class TableHistory extends Component {
                                             bordered={false}
                                             columns={this.controlColumns}
                                             align='center'
-                                            dataSource={this.cotrolsValues()}
+                                            dataSource={this.controlValues()}
                                             pagination={false}
 
                                         />

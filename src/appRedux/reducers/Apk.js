@@ -8,7 +8,7 @@ import {
 	POST_DROPDOWN,
 	GET_DROPDOWN,
 	GET_PAGINATION,
-	PERMSSION_SAVED,
+	PERMISSION_SAVED,
 	RESET_UPLOAD_FORM,
 	CHECK_APK_NAME,
 	AUTHENTICATE_UPDATE_USER,
@@ -152,7 +152,7 @@ export default (state = initialState, action) => {
 				options: state.options
 			}
 		}
-		case PERMSSION_SAVED: {
+		case PERMISSION_SAVED: {
 			success({
 				title: action.payload
 			});;

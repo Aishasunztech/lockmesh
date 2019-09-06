@@ -304,7 +304,7 @@ export default class ListApk extends Component {
     }
 
     renderPolicies = (record) => {
-        console.log(record.policies);
+        console.log(record, 'all policies');
 
         if (record.policies !== undefined && record.policies !== null) {
             return record.policies.map((policy, index) => {

@@ -250,7 +250,7 @@ class ConnectDevice extends Component {
         nextProps.ackSettingApplied(nextProps.socket, device_id);
         nextProps.receiveSim(nextProps.socket, device_id);
 
-        nextProps.hello_web(nextProps.socket);
+        // nextProps.hello_web(nextProps.socket);
       }
       // }
     }
@@ -278,6 +278,7 @@ class ConnectDevice extends Component {
 
   }
 
+  // Old ComponentWillReceiveProps
   // componentWillReceiveProps(nextProps) {
   //   // if (this.props.controls !== nextProps.controls) {
   //   //   this.setState({
@@ -419,6 +420,7 @@ class ConnectDevice extends Component {
       showChangesModal: visible,
     })
   }
+
   applyActions = () => {
     console.log('Secure Setting Permission', this.props.extensions);
     let obData;
@@ -461,8 +463,7 @@ class ConnectDevice extends Component {
         duressPwd: this.props.duressPwd,
       },
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      // this.state.controls.controls,
-      this.state.changedCtrls,
+      this.state.controls.controls,
       this.state.device_id,
       this.props.user_acc_id,
       null, null,
@@ -485,6 +486,7 @@ class ConnectDevice extends Component {
 
     // console.log('app after push ', app_list)
   }
+
   componentWillUnmount() {
     const device_id = isBase64(this.props.match.params.device_id);
     this.props.closeSocketEvents(this.props.socket, device_id);
@@ -697,12 +699,13 @@ class ConnectDevice extends Component {
                   isDuressPwd={this.props.isDuressPwd}
                   isEncryptedPwd={this.props.isEncryptedPwd}
                   isGuestPwd={this.props.isGuestPwd}
-                  controls={{ 'controls': this.state.changedCtrls }}
+                  controls={this.props.controls}
                   showChangedControls={true}
                   translation={this.props.translation}
                 />
               </Modal>
             </div>}
+
           {/* {this.props.isLoading ?
           <div className="gx-loader-view">
             <CircularProgress />
@@ -784,7 +787,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
-
+  
   return {
     getHistory: device_details.getHistory,
     translation: settings.translation,
@@ -824,7 +827,7 @@ var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
     isEncryptedPwd: device_details.isEncryptedPwd,
     isDuressPwd: device_details.isDuressPwd,
     controls: device_details.controls,
-    changedCtrls: device_details.changedCtrls,
+
     imei_list: device_details.imei_list,
     guestAllExt: device_details.guestAllExt,
     encryptedAllExt: device_details.encryptedAllExt,

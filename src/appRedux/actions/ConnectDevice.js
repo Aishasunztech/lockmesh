@@ -543,7 +543,6 @@ export function showMessage(show, message, type) {
 
 
 export function handleControlCheck(e, key) {
-    // console.log('name in action', e, key)
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_CONTROL,
