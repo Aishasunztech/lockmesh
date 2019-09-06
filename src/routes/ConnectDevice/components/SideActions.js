@@ -42,7 +42,9 @@ import {
     applySetting,
     getProfiles,
     wipe,
-    simHistory
+    simHistory,
+    handleChecked,
+    resetPushApps
 } from "../../../appRedux/actions/ConnectDevice";
 
 import { getNewDevicesList } from "../../../appRedux/actions/Common";
@@ -91,7 +93,6 @@ var status = true;
 
 
 class PasswordModal extends Component {
-    // console.log('object,', props.actionType)
     render() {
         return (
             <Modal
@@ -156,7 +157,7 @@ const PushAppsModal = (props) => {
                     props.showSelectedPushAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPushAppsModal(false); props.resetSeletedRows() }}
+            onCancel={() => { props.showPushAppsModal(false, 'clear'); props.resetSeletedRows(); props.resetPushApps() }}
             okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
@@ -192,11 +193,22 @@ const SelectedPushApps = (props) => {
             }
             visible={props.selectedAppsModal}
             onOk={() => {
-                props.applyPushApps(props.apk_list);
+                let data = [];
+                for (let app of props.apk_list) {
+                    let isAvailable = props.selectedAppKeys !== undefined ? (props.selectedAppKeys.length) ? props.selectedAppKeys.find(el => (el === app.apk_id) ? true : false) : false : false;
+                    if (isAvailable) {
+                        data.push(app);
+                    }
+                }
+
+                console.log(props.apk_list, 'submited', data)
+
+              props.applyPushApps(data);
                 props.showSelectedPushAppsModal(false);
-                props.showPushAppsModal(false)
+                props.hidePushAppsModal(false)
                 props.showPullAppsModal(false)
                 props.resetSeletedRows()
+                props.resetPushApps()
             }}
             // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
             onCancel={() => {
@@ -211,11 +223,13 @@ const SelectedPushApps = (props) => {
             <DealerApps
                 apk_list={props.apk_list}
                 isSwitchable={false}
+                selectedAppKeys={props.selectedAppKeys}
                 selectedApps={props.selectedPushApps}
                 type='push'
                 // buttonText={props.actionType == PUSH_APPS ? convertToLang(props.translation[PUSH], PUSH) : convertToLang(props.translation[PULL], PULL)}
                 disabledSwitch={true}
                 translation={props.translation}
+                onlyShowSelected={props.onlyShowSelected}
             />
         </Modal>
     )
@@ -382,7 +396,7 @@ class SideActions extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props !== nextProps) {
-            //   console.log(nextProps.pullAppsModal, 'reciceve')
+            // console.log(nextProps.apk_list, 'reciceve')
             this.setState({
                 historyModal: nextProps.historyModal,
                 applyPolicyConfirm: nextProps.applyPolicyConfirm,
@@ -394,6 +408,7 @@ class SideActions extends Component {
                 activities: nextProps.activities,
                 isSaveProfileBtn: nextProps.isSaveProfileBtn,
                 apk_list: nextProps.apk_list,
+                dump_apks: JSON.parse(JSON.stringify(nextProps.apk_list))
                 // selectedApps: nextProps.apk_list
             })
         }
@@ -459,7 +474,7 @@ class SideActions extends Component {
         let dumyList = [];
         if (this.state.selectedPullAppKeys.length && this.state.selectedPullApps.length) {
             for (let app of this.state.selectedPullApps) {
-                console.log(app)
+                // console.log(app)
                 if (this.state.selectedPullAppKeys.includes(app.app_id)) {
                     dumyList.push(app)
                 }
@@ -581,7 +596,7 @@ class SideActions extends Component {
 
 
     showPushAppsModal = (visible) => {
-        console.log(this.state.apk_list)
+        // console.log(this.state.apk_list, 'working')
 
         if (visible) {
             this.setState({
@@ -590,7 +605,9 @@ class SideActions extends Component {
             })
         } else {
             this.setState({
-                pushAppsModal: visible
+                // apk_list: JSON.parse(JSON.stringify(this.state.dump_apks)),
+                pushAppsModal: visible,
+                selectedApps: JSON.parse(JSON.stringify(this.state.dump_apks)),
             })
         }
     }
@@ -630,13 +647,14 @@ class SideActions extends Component {
     handleSimHistory = () => {
         this.refs.history_sim.showModal();
     }
-    handleChecked = (e, key, app_id) => {
-        this.state.selectedPushApps.map((el) => {
-            if (el.apk_id === app_id) {
-                el[key] = e;
-            }
-        })
-    }
+
+    // handleChecked = (e, key, app_id) => {
+    //     this.state.apk_list.map((el) => {
+    //         if (el.apk_id === app_id) {
+    //             el[key] = e;
+    //         }
+    //     })
+    // }
 
     handleFlag(flagged) {
 
@@ -655,7 +673,7 @@ class SideActions extends Component {
     }
 
     handleTransfer = () => {
-        console.log('hi');
+        // console.log('hi');
 
         this.props.getNewDevicesList();
         this.refs.new_device.showModal(false);
@@ -681,8 +699,9 @@ class SideActions extends Component {
 
 
     applyPushApps = (apps) => {
-        this.props.applyPushApps(this.state.pushApps, this.props.device_id, this.props.usr_acc_id);
+        this.props.applyPushApps(apps, this.props.device_id, this.props.usr_acc_id);
         this.setState({ selectedApps: [], selectedAppKeys: [], })
+        this.props.resetPushApps();
         this.props.getActivities(this.props.device_id)
     }
 
@@ -718,8 +737,17 @@ class SideActions extends Component {
     //     })
     // }
 
+    showPushAppsModal_arfan = (visible) => {
+        this.props.showPushAppsModal(visible);
+        // this.props.resetPushApps();
+        this.setState({
+            pushAppsModal: visible,
+            selectedApps: this.state.apk_list
+        })
+    }
+
     render() {
-        // console.log('device is: ', this.props.device.transfer_status)
+        // console.log(this.state.app_list, 'device is: ', this.props.app_list)
         const device_status = (this.props.device.account_status === "suspended") ? "Unsuspend" : "suspended";
         const button_type = (device_status === "Unsuspend") ? "dashed" : "danger";
         const flaggedButtonText = (this.props.device.flagged !== 'Not flagged') ? convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG") : convertToLang(this.props.translation[Button_Flag], "Flag");
@@ -1087,7 +1115,7 @@ class SideActions extends Component {
 
                 <PushAppsModal
                     pushAppsModal={this.props.pushAppsModal}
-                    showPushAppsModal={this.props.showPushAppsModal}
+                    showPushAppsModal={this.showPushAppsModal_arfan}
                     handleComponentSearch={this.handleComponentSearch}
                     apk_list={this.state.apk_list}
                     // app list props is added because push apps will not show installed apps again to push
@@ -1097,9 +1125,10 @@ class SideActions extends Component {
                     showSelectedPushAppsModal={this.showSelectedPushAppsModal}
                     resetSeletedRows={this.resetSeletedRows}
                     selectedPushApps={this.state.selectedPushApps}
-                    handleChecked={this.handleChecked}
+                    handleChecked={this.props.handleChecked}
                     device={this.props.device}
                     translation={this.props.translation}
+                    resetPushApps={this.props.resetPushApps}
                 />
 
                 <PullAppsModal
@@ -1122,15 +1151,19 @@ class SideActions extends Component {
                 <SelectedPushApps
                     selectedAppsModal={this.state.selectedPushAppsModal}
                     showSelectedPushAppsModal={this.showSelectedPushAppsModal}
-                    apk_list={this.state.pushApps}
+                    selectedAppKeys={this.state.selectedPushAppKeys}
+                    apk_list={this.props.apk_list}
                     selectedPushApps={this.state.selectedPushApps}
                     resetSeletedRows={this.resetSeletedRows}
                     applyPushApps={this.applyPushApps}
                     actionType={this.state.actionType}
                     showPushAppsModal={this.props.showPushAppsModal}
+                    hidePushAppsModal={this.showPushAppsModal_arfan}
                     showPullAppsModal={this.props.showPullAppsModal}
                     device={this.props.device}
                     translation={this.props.translation}
+                    resetPushApps={this.props.resetPushApps}
+                    onlyShowSelected={true}
                 />
 
                 <SelectedPullApps
@@ -1234,7 +1267,9 @@ function mapDispatchToProps(dispatch) {
         getProfiles: getProfiles,
         getSimIDs: getSimIDs,
         getChatIDs: getChatIDs,
-        getPgpEmails: getPGPEmails
+        getPgpEmails: getPGPEmails,
+        handleChecked: handleChecked,
+        resetPushApps: resetPushApps
     }, dispatch);
 }
 var mapStateToProps = ({ device_details, auth, settings, devices, sidebar }, otherProps) => {

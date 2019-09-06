@@ -66,7 +66,9 @@ import {
     TRANSFER_HISTORY,
     SINGLE_APP_PULLED,
     SINGLE_APP_PUSHED,
-    PASSWORD_CHANGED
+    PASSWORD_CHANGED,
+    PUSH_APP_CHECKED,
+    RESET_PUSH_APPS
 } from "../../constants/ActionTypes";
 
 import {
@@ -252,6 +254,25 @@ export default (state = initialState, action) => {
             }
 
         }
+
+
+        case PUSH_APP_CHECKED: {
+            let key = action.payload.key;
+            let value = action.payload.value;
+            let apk_id = action.payload.apk_id
+
+            let apklist = state.apk_list;
+            let index = apklist.findIndex(apk => apk.apk_id == apk_id);
+            if(index > -1){
+                apklist[index][key] = value
+            }
+           return{
+               ...state,
+               apk_list: apklist
+           }
+            
+        }
+
         case SUSPEND_DEVICE2: {
             if (action.response.status) {
 
@@ -316,6 +337,15 @@ export default (state = initialState, action) => {
                 isloading: false,
             }
         }
+
+
+        case RESET_PUSH_APPS: {
+            return {
+                ...state,
+                apk_list: JSON.parse(JSON.stringify(state.apk_list_dump)) 
+            }
+        }
+
         case WIPE_DEVICE: {
             // console.log(action.response.msg);
             if (action.response.status) {
@@ -1182,7 +1212,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 apk_list: action.payload,
-                apk_list_dump: action.payload
+                apk_list_dump: JSON.parse(JSON.stringify(action.payload)) 
             }
         }
 
