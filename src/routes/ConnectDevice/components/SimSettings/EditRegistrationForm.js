@@ -20,7 +20,8 @@ class EditSim extends Component {
             visible: false,
             guest: props.editSim.guest ? true : false,
             encrypt: props.editSim.encrypt ? true : false,
-            validateStatus: ''
+            validateStatus: '',
+            componentHide: false
         }
     }
 
@@ -34,9 +35,17 @@ class EditSim extends Component {
             values['encrypt'] = this.state.encrypt ? 1 : 0;
             values['data_limit'] = "";
             values['device_id'] = this.props.deviceID;
+            if (this.props.unRegSims.length) {
+                values['status'] = "Active";
+            }
+
+            // console.log("this.props.unRegSims.length ", this.props.unRegSims.length);
+            // console.log("this.props.indexUnr ", this.props.indexUnr)
 
             if (!err) {
                 this.props.AddSimHandler(values);
+                this.setState({ componentHide: true });
+                
                 if (this.props.unRegSims) {
                     if (this.props.unRegSims.length == this.props.indexUnr + 1) {
                         this.handleCancel();
@@ -95,6 +104,8 @@ class EditSim extends Component {
     }
 
     render() {
+
+        if (this.state.componentHide) { return null }
         // console.log('props of editSim', this.props.editSim);
         console.log("unRegSims console for edit form: ", this.props.unRegSims)
         const { editSim } = this.props;

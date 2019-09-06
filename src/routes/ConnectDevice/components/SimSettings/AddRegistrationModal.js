@@ -52,7 +52,7 @@ export default class RegisterSimModal extends Component {
                                     AddSimHandler={this.handleSubmitReg}
                                     handleCancel={this.handleCancel}
                                     editSim={sim}
-                                    unRegSims={true}
+                                    unRegSims={this.props.unRegSims}
                                     indexUnr={index}
                                     translation={this.props.translation}
                                     deviceID={this.props.deviceID}
