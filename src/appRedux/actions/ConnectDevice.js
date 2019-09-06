@@ -56,6 +56,8 @@ import {
     MESSAGE_HANDLER,
     TRANSFER_HISTORY,
     PASSWORD_CHANGED,
+    PUSH_APP_CHECKED,
+    RESET_PUSH_APPS,
     GET_UNREG_SIMS
 } from "../../constants/ActionTypes"
 
@@ -1067,6 +1069,34 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
         })
     }
 }
+
+
+export const handleChecked = ( value, key, apk_id) => {
+
+    return (dispatch) => {
+        dispatch({
+            type: PUSH_APP_CHECKED,
+            payload: {
+                apk_id: apk_id,
+                key: key,
+                value: value
+            },
+        })
+
+    }
+}
+
+export const resetPushApps = ( ) => {
+
+    return (dispatch) => {
+        dispatch({
+            type:   RESET_PUSH_APPS,
+        })
+
+    }
+}
+
+
 export const applyPolicy = (deviceId, userAccId, policyId) => {
     return (dispatch) => {
         RestService.applyPolicy(deviceId, userAccId, policyId).then((response) => {
