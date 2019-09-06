@@ -231,10 +231,10 @@ export const receiveSim = (socket, deviceId) => {
     return (dispatch) => {
         if(socket){
             socket.on(RECV_SIM_DATA + deviceId, (response) => {
-                // console.log("2: RECEIVE_SIM_DATA fro mobile at client side");
+                console.log("2: RECEIVE_SIM_DATA fro mobile at client side", response);
                 dispatch({
                     type: RECEIVE_SIM_DATA,
-                    payload: true
+                    payload: response,
                 })
             })
         } else {

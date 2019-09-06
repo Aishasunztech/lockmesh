@@ -68,7 +68,8 @@ import {
     SINGLE_APP_PUSHED,
     PASSWORD_CHANGED,
     PUSH_APP_CHECKED,
-    RESET_PUSH_APPS
+    RESET_PUSH_APPS,
+    GET_UNREG_SIMS
 } from "../../constants/ActionTypes";
 
 import {
@@ -189,6 +190,7 @@ const initialState = {
     simUpdated: false,
     simDeleted: false,
     simHistoryList: [],
+    unRegSims: [],
 
     // Transfer
     transferHistoryList: [],
@@ -263,14 +265,14 @@ export default (state = initialState, action) => {
 
             let apklist = state.apk_list;
             let index = apklist.findIndex(apk => apk.apk_id == apk_id);
-            if(index > -1){
+            if (index > -1) {
                 apklist[index][key] = value
             }
-           return{
-               ...state,
-               apk_list: apklist
-           }
-            
+            return {
+                ...state,
+                apk_list: apklist
+            }
+
         }
 
         case SUSPEND_DEVICE2: {
@@ -342,7 +344,7 @@ export default (state = initialState, action) => {
         case RESET_PUSH_APPS: {
             return {
                 ...state,
-                apk_list: JSON.parse(JSON.stringify(state.apk_list_dump)) 
+                apk_list: JSON.parse(JSON.stringify(state.apk_list_dump))
             }
         }
 
@@ -368,7 +370,7 @@ export default (state = initialState, action) => {
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
             state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
-             console.log('controls form reduvcer of getdeviceapp', action.controls)
+            console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
             return {
@@ -828,7 +830,7 @@ export default (state = initialState, action) => {
 
                 controls.controls[index].setting_status = action.payload.value;
                 controls.controls[index].isChanged = true;
-               
+
                 // push into stack
                 state.undoControls.push(JSON.parse(JSON.stringify(controls)));
                 state.controls = JSON.parse(JSON.stringify(controls));
@@ -1212,7 +1214,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 apk_list: action.payload,
-                apk_list_dump: JSON.parse(JSON.stringify(action.payload)) 
+                apk_list_dump: JSON.parse(JSON.stringify(action.payload))
             }
         }
 
@@ -1302,10 +1304,18 @@ export default (state = initialState, action) => {
             }
         }
         case RECEIVE_SIM_DATA: {
-            if (action.payload) {
+            if (action.payload.unRegSims.length > 0) {
+                console.log('unRegSims red')
                 return {
                     ...state,
-                    simUpdated: new Date()
+                    unRegSims: action.payload.unRegSims
+                }
+            } else {
+                console.log('not unRegSims red')
+                return {
+                    ...state,
+                    simUpdated: new Date(),
+                    unRegSims: []
                 }
             }
         }
@@ -1347,6 +1357,25 @@ export default (state = initialState, action) => {
                 });
                 return {
                     ...state
+                }
+            }
+        }
+
+        case GET_UNREG_SIMS: {
+            console.log("action.payload.data ", action.payload.data);
+
+            if (action.response.status) {
+
+                return {
+                    ...state,
+                    isloading: false,
+                    unRegSims: action.payload.data
+                }
+            } else {
+                return {
+                    ...state,
+                    isloading: false,
+                    unRegSims: []
                 }
             }
         }

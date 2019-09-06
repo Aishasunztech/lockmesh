@@ -765,6 +765,10 @@ const RestService = {
         return axios.get(BASE_URL + 'users/sim-history/' + device_id, RestService.getHeader());
     },
 
+    getUnRegisterSims: (device_id) => {
+        return axios.get(BASE_URL + 'users/get-unRegSims/' + device_id, RestService.getHeader());
+    },
+
     // Dealer Agents Section
     getAgentList: () => {
         return axios.get(BASE_URL + 'users/agents', RestService.getHeader())

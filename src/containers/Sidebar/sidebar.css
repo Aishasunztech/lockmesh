@@ -4,7 +4,7 @@
 }
 
 .side_bar_main.gx-mb-4 {
-    margin-bottom: 20px !important;
+    margin-bottom: 10px !important;
 }
 
 .notification_icn {
@@ -90,7 +90,7 @@
 }
 
 .gx-app-nav li {
-    padding: 0px 16px 0px 16px;
+    padding: 0px 20px 0px 20px;
     font-size: 20px;
 }
 

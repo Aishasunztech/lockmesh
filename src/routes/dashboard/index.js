@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Col, Row, Icon, Card, Avatar } from "antd";
+import { Col, Row, Icon, Card, Avatar, Badge } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Auxiliary from "util/Auxiliary";
@@ -59,49 +59,55 @@ class Dashboard extends Component {
                                 <Card className='dashboard-card'>
                                     {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
                                     <Avatar
-                                        src={require("../../assets/images/active_device.jpg")}
+                                        src={require("../../assets/images/dashboard/active_device.png")}
                                         // className="gx-size-40 gx-pointer gx-mr-3"
                                         alt=""
                                     />
                                 </Card>
-                                <span className='db-span-qnty'>{this.props.items.activeDevices}</span>
-                                <span className='db-span-text'> Active Devices</span>
+                                <div className="dash_btm_txt">
+                                    <span className='db-span-qnty'>{this.props.items.activeDevices}</span>
+                                    <span className='db-span-text'>Active Devices</span>
+                                </div>
                             </Link>
                             </div>
                         </Col>
                         <Col xl={4} lg={4} md={4} sm={12} xs={12}>
                             <div className='dashboard-item-div'>
-                                <Link to='devices'>
+                                <Link to='devices' className="">
+
                                     <Card className='dashboard-card'>
-                                        {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
                                         <Avatar
-                                            src={require("../../assets/images/online_device.jpg")}
+                                            src={require("../../assets/images/dashboard/online_device.png")}
                                             // className="gx-size-40 gx-pointer gx-mr-3"
                                             alt=""
                                         />
                                     </Card>
-                                    <span className='db-span-qnty'>{this.props.items.onlineDevices}</span>
-                                    <span className='db-span-text'> Online Devices</span>
+                                    <div className="dash_btm_txt">
+                                        <span className='db-span-qnty'>{this.props.items.onlineDevices}</span>
+                                        <span className='db-span-text'>Online Devices</span>
+                                    </div>
                                 </Link>
                             </div>
                         </Col>
-
                         {
                             this.props.authUser.type == DEALER || this.props.authUser.type == SDEALER ?
 
                                 <Col xl={4} lg={4} md={4} sm={12} xs={12}>
                                     <div className='dashboard-item-div'>
                                         <Link to='devices'>
-                                            <Card className='dashboard-card'>
-                                                <i className="fa fa-mobile dashboard-icon " aria-hidden="true" />
-                                                {/* <Avatar
-                                                    src={require("../../assets/images/link_request.jpg")}
-                                                    // className="gx-size-40 gx-pointer gx-mr-3"
-                                                    alt=""
-                                                /> */}
-                                            </Card>
-                                            <span className='db-span-qnty'>{this.props.items.link_requests}</span>
-                                            <span className='db-span-text'> Link Request</span>
+                                            <Badge count={1} >
+                                                <Card className='dashboard-card head-example'>
+                                                    <Avatar
+                                                        src={require("../../assets/images/dashboard/link_device.png")}
+                                                        // className="gx-size-40 gx-pointer gx-mr-3"
+                                                        alt=""
+                                                    />
+                                                </Card>
+                                            </Badge>
+                                            <div className="dash_btm_txt">
+                                                <span className='db-span-qnty'>{this.props.items.link_requests}</span>
+                                                <span className='db-span-text'>Link Request</span>
+                                            </div>
                                         </Link>
                                     </div>
                                 </Col> : null
@@ -113,13 +119,15 @@ class Dashboard extends Component {
                                     <Card className='dashboard-card'>
                                         {/* <i className="icon icon-user dashboard-icon " aria-hidden="true" /> */}
                                         <Avatar
-                                            src={require("../../assets/images/users.png")}
+                                            src={require("../../assets/images/dashboard/users.png")}
                                             // className="gx-size-40 gx-pointer gx-mr-3"
                                             alt=""
                                         />
                                     </Card>
-                                    <span className='db-span-qnty'>{this.props.items.users}</span>
-                                    <span className='db-span-text'> Users</span>
+                                    <div className="dash_btm_txt">
+                                        <span className='db-span-qnty'>{this.props.items.users}</span>
+                                        <span className='db-span-text'>Users</span>
+                                    </div>
                                 </Link>
                             </div>
                         </Col>
@@ -133,13 +141,15 @@ class Dashboard extends Component {
                                             <Card className='dashboard-card'>
                                                 {/* <i className="icon icon-avatar dashboard-icon " aria-hidden="true" /> */}
                                                 <Avatar
-                                                    src={require("../../assets/images/dealers.jpg")}
+                                                    src={require("../../assets/images/dashboard/dealers.png")}
                                                     // className="gx-size-40 gx-pointer gx-mr-3"
                                                     alt=""
                                                 />
                                             </Card>
-                                            <span className='db-span-qnty'>{this.props.items.dealers}</span>
-                                            <span className='db-span-text'> Dealers</span>
+                                            <div className="dash_btm_txt">
+                                                <span className='db-span-qnty'>{this.props.items.dealers}</span>
+                                                <span className='db-span-text'>Dealers</span>
+                                            </div>
                                         </Link>
                                     </div>
                                 </Col> : null
@@ -155,13 +165,15 @@ class Dashboard extends Component {
                                                 <Card className='dashboard-card'>
                                                     {/* <i className="icon icon-avatar dashboard-icon " aria-hidden="true" /> */}
                                                     <Avatar
-                                                        src={require("../../assets/images/sdealers.jpg")}
+                                                        src={require("../../assets/images/dashboard/sdealers.png")}
                                                         // className="gx-size-40 gx-pointer gx-mr-3"
                                                         alt=""
                                                     />
                                                 </Card>
-                                                <span className='db-span-qnty'>{this.props.items.sdealers}</span>
-                                                <span className='db-span-text'> S-dealers</span>
+                                                <div className="dash_btm_txt">
+                                                    <span className='db-span-qnty'>{this.props.items.sdealers}</span>
+                                                    <span className='db-span-text'>S-Dealers</span>
+                                                </div>
                                             </Link>
                                         </div>
                                     </Col>
@@ -172,13 +184,15 @@ class Dashboard extends Component {
                                                 <Card className='dashboard-card'>
                                                     {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
                                                     <Avatar
-                                                        src={require("../../assets/images/policy.png")}
+                                                        src={require("../../assets/images/dashboard/policy.png")}
                                                         // className="gx-size-40 gx-pointer gx-mr-3"
                                                         alt=""
                                                     />
                                                 </Card>
-                                                <span className='db-span-qnty'>{this.props.items.policies}</span>
-                                                <span className='db-span-text'>  Policies</span>
+                                                <div className="dash_btm_txt">
+                                                    <span className='db-span-qnty'>{this.props.items.policies}</span>
+                                                    <span className='db-span-text'>Manage Policy</span>
+                                                </div>
                                             </Link>
                                         </div>
                                     </Col>
@@ -189,13 +203,15 @@ class Dashboard extends Component {
                                                     {/* <i className="icon icon-apps dashboard-icon " aria-hidden="true" /> */}
 
                                                     <Avatar
-                                                        src={require("../../assets/images/manageApks.png")}
+                                                        src={require("../../assets/images/dashboard/manageApks.png")}
                                                         // className="gx-size-40 gx-pointer gx-mr-3"
                                                         alt=""
                                                     />
                                                 </Card>
-                                                <span className='db-span-qnty'>{this.props.items.apks}</span>
-                                                <span className='db-span-text'>  Apk's</span>
+                                                <div className="dash_btm_txt">
+                                                    <span className='db-span-qnty'>{this.props.items.apks}</span>
+                                                    <span className='db-span-text'>Manage APK's</span>
+                                                </div>
                                             </Link>
                                         </div>
                                     </Col>
@@ -205,13 +221,15 @@ class Dashboard extends Component {
                                                 <Card className='dashboard-card'>
                                                     {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
                                                     <Avatar
-                                                        src={require("../../assets/images/secure_market.png")}
+                                                        src={require("../../assets/images/dashboard/secure_market.png")}
                                                         // className="gx-size-40 gx-pointer gx-mr-3"
                                                         alt=""
                                                     />
                                                 </Card>
-                                                {/* <span className='db-span-qnty'>12</span> */}
-                                                <span className='db-span-text'> Secure Market</span>
+                                                <div className="dash_btm_txt">
+                                                    {/* <span className='db-span-qnty'>12</span> */}
+                                                    <span className='db-span-text'>Secure Market</span>
+                                                </div>
                                             </Link>
                                         </div>
                                     </Col>
@@ -225,11 +243,15 @@ class Dashboard extends Component {
                                         <div className='dashboard-item-div'>
                                             <Link to='set-prices'>
                                                 <Card className='dashboard-card'>
-                                                    {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
-                                                    <Icon type="dollar" style={{ fontSize: '32px' }} />
+                                                    <Avatar
+                                                        src={require("../../assets/images/dashboard/package.png")}
+                                                        alt=""
+                                                    />
                                                 </Card>
-                                                {/* <span className='db-span-qnty'>12</span> */}
-                                                <span className='db-span-text'> Packages & ID</span>
+                                                <div className="dash_btm_txt">
+                                                    {/* <span className='db-span-qnty'>12</span> */}
+                                                    <span className='db-span-text'>Packages & ID</span>
+                                                </div>
                                             </Link>
                                         </div>
                                     </Col>
@@ -239,13 +261,15 @@ class Dashboard extends Component {
                                                 <Card className='dashboard-card'>
                                                     {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
                                                     <Avatar
-                                                        src={require("../../assets/images/management.png")}
+                                                        src={require("../../assets/images/dashboard/managedata.png")}
                                                         // className="gx-size-40 gx-pointer gx-mr-3"
                                                         alt=""
                                                     />
                                                 </Card>
-                                                {/* <span className='db-span-qnty'>12</span> */}
-                                                <span className='db-span-text'> Manage Data</span>
+                                                <div className="dash_btm_txt">
+                                                    {/* <span className='db-span-qnty'>12</span> */}
+                                                    <span className='db-span-text'>Manage Data</span>
+                                                </div>
                                             </Link>
                                         </div>
                                     </Col>
@@ -255,13 +279,15 @@ class Dashboard extends Component {
                                             <Card className='dashboard-card'>
                                                 {/* <i className="fa fa-mobile dashboard-icon " aria-hidden="true" /> */}
                                                 <Avatar
-                                                    src={require("../../assets/images/credits.png")}
+                                                    src={require("../../assets/images/dashboard/credits.png")}
                                                     // className="gx-size-40 gx-pointer gx-mr-3"
                                                     alt=""
                                                 />
                                             </Card>
-                                            {/* <span className='db-span-qnty'>12</span> */}
-                                            <span className='db-span-text'> Credits</span>
+                                            <div className="dash_btm_txt">
+                                                {/* <span className='db-span-qnty'>12</span> */}
+                                                <span className='db-span-text'>Credits</span>
+                                            </div>
                                             {/* </Link> */}
                                         </div>
                                     </Col>
