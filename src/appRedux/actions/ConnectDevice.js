@@ -55,7 +55,8 @@ import {
     SIM_HISTORY,
     MESSAGE_HANDLER,
     TRANSFER_HISTORY,
-    PASSWORD_CHANGED
+    PASSWORD_CHANGED,
+    GET_UNREG_SIMS
 } from "../../constants/ActionTypes"
 
 import RestService from '../services/RestServices';
@@ -885,7 +886,7 @@ export const flagged = (device_id, data) => {
         })
     }
 }
- 
+
 export const checkPass = (user, actionType) => {
     // console.log(user);
     return (dispatch) => {
@@ -1229,6 +1230,29 @@ export const handleSimUpdate = (data) => {
                     type: UPDATE_SIM,
                     response: response.data,
                     payload: data
+                })
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+
+
+        })
+    }
+}
+
+export const getUnRegisterSims = (data) => {
+    console.log('getUnRegisterSims data is: ', data)
+    return (dispatch) => {
+        RestService.getUnRegisterSims(data).then((response) => {
+            // console.log('response is: ', response);
+            if (RestService.checkAuth(response.data)) {
+                console.log(response.data);
+                dispatch({
+                    type: GET_UNREG_SIMS,
+                    // response: response.data,
+                    payload: response.data
                 })
             } else {
                 dispatch({

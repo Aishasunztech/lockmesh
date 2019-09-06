@@ -66,7 +66,8 @@ import {
     TRANSFER_HISTORY,
     SINGLE_APP_PULLED,
     SINGLE_APP_PUSHED,
-    PASSWORD_CHANGED
+    PASSWORD_CHANGED,
+    GET_UNREG_SIMS
 } from "../../constants/ActionTypes";
 
 import {
@@ -187,6 +188,7 @@ const initialState = {
     simUpdated: false,
     simDeleted: false,
     simHistoryList: [],
+    unRegSims: [],
 
     // Transfer
     transferHistoryList: [],
@@ -1272,10 +1274,18 @@ export default (state = initialState, action) => {
             }
         }
         case RECEIVE_SIM_DATA: {
-            if (action.payload) {
+            if (action.payload.unRegSims.length > 0) {
+                console.log('unRegSims red')
                 return {
                     ...state,
-                    simUpdated: new Date()
+                    unRegSims: action.payload.unRegSims
+                }
+            } else {
+                console.log('not unRegSims red')
+                return {
+                    ...state,
+                    simUpdated: new Date(),
+                    unRegSims: []
                 }
             }
         }
@@ -1317,6 +1327,25 @@ export default (state = initialState, action) => {
                 });
                 return {
                     ...state
+                }
+            }
+        }
+
+        case GET_UNREG_SIMS: {
+            console.log("action.payload.data ", action.payload.data);
+
+            if (action.response.status) {
+
+                return {
+                    ...state,
+                    isloading: false,
+                    unRegSims: action.payload.data
+                }
+            } else {
+                return {
+                    ...state,
+                    isloading: false,
+                    unRegSims: []
                 }
             }
         }
