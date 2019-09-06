@@ -477,7 +477,7 @@ class BulkActivities extends Component {
                     handleHistoryCancel={this.handleHistoryCancel}
                     history={this.props.history}
                     renderList={this.renderList}
-                    columns={this.state.columns}
+                    columns={this.state.columns.filter(e => e.dataIndex != "status")}
                     // onChangeTableSorting={this.handleTableChange}
                     translation={this.props.translation}
                 />

@@ -276,7 +276,7 @@ export default class Activity extends Component {
                                     bordered={false}
                                     columns={this.props.columns}
                                     align='center'
-                                    dataSource={this.props.renderList([])}
+                                    dataSource={this.props.renderList(JSON.parse(record.data))}
                                     pagination={false}
                                     scroll={{ x: true }}
                                 />
