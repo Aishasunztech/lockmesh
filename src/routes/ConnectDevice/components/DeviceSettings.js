@@ -217,12 +217,13 @@ export default class DeviceSettings extends Component {
         let changes = 0;
         if (this.state.controls) {
             if (this.state.controls.controls) {
-                this.state.controls.controls.map(item => {
-                    if (item.isChanged) {
-                        changes++
-                    }
-                })
-
+                if (Object.keys(this.state.controls.controls).length > 0) {
+                    this.state.controls.controls.map(item => {
+                        if (item.isChanged) {
+                            changes++
+                        }
+                    })
+                }
             }
         }
 
