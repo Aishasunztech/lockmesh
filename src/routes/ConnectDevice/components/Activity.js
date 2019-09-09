@@ -134,14 +134,14 @@ export default class Activity extends Component {
     renderApps = (apps) => {
 
         return apps.map(app => {
-            // console.log(app.app_id);
+            console.log(app, `${BASE_URL}users/getFile/${(app.logo) ? `${app.logo}` : `icon_${app.package_name}${app.label}`}`);
             return ({
-                key: app.app_id,
+                key: app.apk_id,
                 app_name:
                     <Fragment>
                         <Avatar
                             size={"small"}
-                            src={`${BASE_URL}users/getFile/${app.icon}`}
+                            src={`${BASE_URL}users/getFile/${(app.logo) ? `${app.logo}` : `icon_${app.package_name}${app.label}`}`}
                         // style={{ width: "30px", height: "30px" }} 
                         />
                         <br />
@@ -281,9 +281,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-
-                            else if (record.action_name === 'APPS PULLED') {
+                            } else if (record.action_name === 'APPS PULLED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -297,8 +295,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-                            else if (record.action_name === 'IMEI CHANGED') {
+                            } else if (record.action_name === 'IMEI CHANGED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -319,8 +316,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-                            else if (record.action_name === 'POLICY APPLIED') {
+                            } else if (record.action_name === 'POLICY APPLIED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -338,8 +334,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-                            else if (record.action_name === 'PROFILE APPLIED') {
+                            } else if (record.action_name === 'PROFILE APPLIED') {
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -362,11 +357,7 @@ export default class Activity extends Component {
                                         pagination={false}
                                     />
                                 )
-                            }
-
-
-
-                            else if (record.action_name === 'SETTING CHANGED') {
+                            } else if (record.action_name === 'SETTING CHANGED') {
                                 let controls = {
                                     'controls': JSON.parse(record.data.controls)
                                 }

@@ -176,9 +176,10 @@ export default class DeviceSettings extends Component {
         // console.log(JSON.parse(datalist));
         // console.log(this.props.type, 'datalist is type of');
         let data = JSON.parse(JSON.stringify(datalist));
-        if (this.props.type === 'profile') {
-            data = JSON.parse(JSON.stringify(datalist))
-        }
+        
+        // if (this.props.type === 'profile') {
+        //     data = JSON.parse(JSON.stringify(datalist))
+        // }
 
         if (datalist.length > 0) {
             return data.map((item, index) => {
