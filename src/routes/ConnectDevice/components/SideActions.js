@@ -203,7 +203,7 @@ const SelectedPushApps = (props) => {
 
                 console.log(props.apk_list, 'submited', data)
 
-              props.applyPushApps(data);
+                props.applyPushApps(data);
                 props.showSelectedPushAppsModal(false);
                 props.hidePushAppsModal(false)
                 props.showPullAppsModal(false)
@@ -365,6 +365,7 @@ class SideActions extends Component {
             applyPolicyConfirm: false,
             isSaveProfileBtn: false,
             transferHistoryModal: false,
+            changedCtrls: [],
             // DEVICE_TRANSFERED_DONE: 'not transfer',
 
         }
