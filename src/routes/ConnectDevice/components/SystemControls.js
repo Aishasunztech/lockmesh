@@ -17,6 +17,7 @@ export default class SystemControls extends Component {
   }
 
   componentDidMount() {
+    console.log('SystemControls.componentDidMount: ', this.props.controls)
     if (this.props.controls) {
       this.setState({
         controls: this.props.controls.controls,
@@ -84,11 +85,12 @@ export default class SystemControls extends Component {
   }
 
   render() {
-    console.log("systemControls.render()");
+    console.log("systemControls.render()", this.state.controls);
     let objIndex = -1;
     if (this.state.settings && this.state.settings.length) {
       objIndex = this.state.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
     }
+    console.log("object Index: ", objIndex);
 
     if (this.state.controls) {
 

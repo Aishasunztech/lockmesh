@@ -213,22 +213,23 @@ export default class DeviceSettings extends Component {
     }
 
     render() {
-        console.log('dfkjslafaf', this.props.controls);
+        console.log('controls of devices: ', this.props.controls);
+        
+        // find the length of changed controls. it can be refactored
         let changes = 0;
-        if (this.state.controls) {
-            if (this.state.controls.controls) {
-                if (Object.keys(this.state.controls.controls).length > 0) {
-                    this.state.controls.controls.map(item => {
-                        if (item.isChanged) {
-                            changes++
-                        }
-                    })
-                }
+        if (this.state.controls && Object.entries(this.state.controls).length) {
+            if (this.state.controls.controls && this.state.controls.controls.length) {
+                this.state.controls.controls.map(item => {
+                    if (item.isChanged) {
+                        changes++
+                    }
+                })
             }
         }
 
         return (
             <div>
+                {/* push apps listing */}
                 {
                     this.props.isPushApps === true && this.props.type !== 'profile' ?
                         <div>
@@ -245,6 +246,8 @@ export default class DeviceSettings extends Component {
                             />
                         </div> : null
                 }
+                
+                {/* applisting */}
                 {
                     this.state.applist.length > 0 ?
                         <div>
@@ -259,8 +262,10 @@ export default class DeviceSettings extends Component {
                                 pagination={false}
 
                             />
-                        </div> : false
+                        </div> : null
                 }
+
+                {/* secure extensions */}
                 {
                     this.state.extensions.length ?
                         <div>
@@ -276,8 +281,10 @@ export default class DeviceSettings extends Component {
                                 pagination={false}
 
                             /></div>
-                        : false
+                        : null
                 }
+
+                {/* controls */}
                 {
                     this.props.showChangedControls ?
                         changes > 0 ?
@@ -299,7 +306,7 @@ export default class DeviceSettings extends Component {
 
                                         />
 
-                                    </div> : false : false : false
+                                    </div> : null : null : null
                         : this.props.showChangedControls === undefined ?
 
                             Object.keys(this.state.controls).length > 0 ?
@@ -317,8 +324,9 @@ export default class DeviceSettings extends Component {
 
                                         />
 
-                                    </div> : false : false : false
+                                    </div> : null : null : null
                 }
+
                 {(this.props.type === 'profile') ?
 
                     <div>
@@ -328,11 +336,14 @@ export default class DeviceSettings extends Component {
                         }
                         {
                             this.props.passwords.admin_password ? <div> <Badge status="success" text={convertToLang(this.props.translation[ADMIN_PASSWORD_IS_CHANGED], "Admin Password is changed")} /> </div> : false
-                        }{
+                        }
+                        {
                             this.props.passwords.encrypted_password ? <div><Badge status="error" text={convertToLang(this.props.translation[ENCRYPTED_PASSWORD_IS_CHANGED], "Encrypted Password is changed")} /> </div> : false
-                        }{
+                        }
+                        {
                             this.props.passwords.guest_password ? <div><Badge status="processing" text={convertToLang(this.props.translation[GUEST_PASSWORD_IS_CHANGED], "Guest Password is changed")} /></div> : false
-                        }{
+                        }
+                        {
                             this.props.passwords.duress_password ? <div><Badge status="warning" text={convertToLang(this.props.translation[DURESS_PASSWORD_IS_CHANGED], "Duress Password is changed")} /></div> : false
                         }
                     </div>

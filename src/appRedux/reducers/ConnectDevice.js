@@ -370,7 +370,7 @@ export default (state = initialState, action) => {
             state.undoApps.push(JSON.parse(JSON.stringify(action.payload)));
             state.undoExtensions.push(JSON.parse(JSON.stringify(action.extensions)));
             state.undoControls.push(JSON.parse(JSON.stringify(action.controls)));
-            console.log('controls form reduvcer of getdeviceapp', action.controls)
+            // console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
             return {
@@ -824,8 +824,10 @@ export default (state = initialState, action) => {
             let controls = JSON.parse(JSON.stringify(state.controls));
             // let controls = state.controls.controls;
 
+            // console.log(action.payload.key);
+            // console.log(controls.controls);
             let index = controls.controls.findIndex((control) => control.setting_name === action.payload.key);
-            if (index) {
+            if (index > -1) {
                 console.log("permission index:", index);
 
                 controls.controls[index].setting_status = action.payload.value;
