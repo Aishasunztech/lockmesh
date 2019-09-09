@@ -387,7 +387,7 @@ class ConnectDevice extends Component {
       } else {
         return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
       }
-      
+
     } else {
       if (this.props.pageName === NOT_AVAILABLE) {
         return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
@@ -441,17 +441,21 @@ class ConnectDevice extends Component {
     console.log('System Permissions main', this.props.controls);
     console.log('System Permissions', this.props.controls.settings);
 
-    if (this.props.controls.settings.length) {
-      let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
-      if (index >= 0) {
-        app_list.push(this.props.controls.settings[index])
+    if (this.props.controls && this.props.controls.settings) {
+      if (this.props.controls.settings.length) {
+        let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
+        if (index >= 0) {
+          app_list.push(this.props.controls.settings[index])
+        }
       }
     }
 
-    if (this.props.extensions.length) {
-      let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
-      if (index >= 0) {
-        app_list.push(this.props.extensions[index])
+    if (this.props.extensions) {
+      if (this.props.extensions.length) {
+        let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
+        if (index >= 0) {
+          app_list.push(this.props.extensions[index])
+        }
       }
     }
 
@@ -787,7 +791,7 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
-  
+
   return {
     getHistory: device_details.getHistory,
     translation: settings.translation,

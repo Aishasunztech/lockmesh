@@ -1487,9 +1487,16 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
+            // console.log("ACK_SETTING_APPLIED ", action.payload.app_list)
+            // console.log("ACK_SETTING_APPLIED controls ", action.payload.controls)
+            let controls = {};
+            controls["controls"] = action.payload.controls;
+            // console.log("ACK_SETTING_APPLIED after controls ", action.payload.controls)
+
             return {
                 ...state,
                 app_list: action.payload.app_list,
+                controls: controls,
             }
         }
 
