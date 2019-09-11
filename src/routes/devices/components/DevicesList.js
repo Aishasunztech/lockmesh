@@ -323,7 +323,7 @@ class DevicesList extends Component {
                 //    this.props.resetTabSelected()
                 // this.props.refreshComponent();
                 // console.log('this.refs.tablelist.props.rowSelection', this.refs.tablelist.props.rowSelection)
-                this.resetSeletedRows();
+                this.resetSelectedRows();
                 if (this.refs.tablelist.props.rowSelection !== null) {
                     this.refs.tablelist.props.rowSelection.selectedRowKeys = []
                 }
@@ -342,7 +342,7 @@ class DevicesList extends Component {
         });
     }
 
-    resetSeletedRows = () => {
+    resetSelectedRows = () => {
         // console.log('table ref', this.refs.tablelist)
         this.setState({
             selectedRowKeys: [],

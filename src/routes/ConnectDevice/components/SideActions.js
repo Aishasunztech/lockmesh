@@ -157,7 +157,7 @@ const PushAppsModal = (props) => {
                     props.showSelectedPushAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPushAppsModal(false, 'clear'); props.resetSeletedRows(); props.resetPushApps() }}
+            onCancel={() => { props.showPushAppsModal(false, 'clear'); props.resetSelectedRows(); props.resetPushApps() }}
             okText={convertToLang(props.translation[PUSH_APP_TEXT], "PUSH APP")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
         >
@@ -207,10 +207,10 @@ const SelectedPushApps = (props) => {
                 props.showSelectedPushAppsModal(false);
                 props.hidePushAppsModal(false)
                 props.showPullAppsModal(false)
-                props.resetSeletedRows()
+                props.resetSelectedRows()
                 props.resetPushApps()
             }}
-            // onCancel={() => { props.showSelectedAppsModal(false); props.resetSeletedRows() }}
+            // onCancel={() => { props.showSelectedAppsModal(false); props.resetSelectedRows() }}
             onCancel={() => {
                 props.actionType == PUSH_APPS ? props.showPushAppsModal(true) : props.showPullAppsModal(true);
                 props.showSelectedPushAppsModal(false);
@@ -270,7 +270,7 @@ const PullAppsModal = (props) => {
                     props.showSelectedPullAppsModal(true);
                 }
             }}
-            onCancel={() => { props.showPullAppsModal(false); props.resetSeletedRows(); }}
+            onCancel={() => { props.showPullAppsModal(false); props.resetSelectedRows(); }}
             // okText="Pull Apps"
             okText={convertToLang(props.translation[PULL_APPS_TEXT], "PULL APP")}
             cancelText={convertToLang(props.translation[Button_Cancel], "Cancel")}
@@ -303,7 +303,7 @@ const SelectedPullApps = (props) => {
                 props.showSelectedPullAppsModal(false);
                 props.showPushAppsModal(false)
                 props.showPullAppsModal(false)
-                props.resetSeletedRows()
+                props.resetSelectedRows()
             }}
             onCancel={() => {
                 props.showPullAppsModal(true);
@@ -713,7 +713,7 @@ class SideActions extends Component {
         this.props.getActivities(this.props.device_id)
     }
 
-    resetSeletedRows = () => {
+    resetSelectedRows = () => {
         // console.log('table ref')
         this.setState({
             selectedPushAppKeys: [],
@@ -1124,7 +1124,7 @@ class SideActions extends Component {
                     onPushAppsSelection={this.onPushAppsSelection}
                     selectedPushAppKeys={this.state.selectedPushAppKeys}
                     showSelectedPushAppsModal={this.showSelectedPushAppsModal}
-                    resetSeletedRows={this.resetSeletedRows}
+                    resetSelectedRows={this.resetSelectedRows}
                     selectedPushApps={this.state.selectedPushApps}
                     handleChecked={this.props.handleChecked}
                     device={this.props.device}
@@ -1141,7 +1141,7 @@ class SideActions extends Component {
                     showSelectedPullAppsModal={this.showSelectedPullAppsModal}
                     selectedPullApps={this.state.selectedPullApps}
                     selectedPullAppKeys={this.state.selectedPullAppKeys}
-                    resetSeletedRows={this.resetSeletedRows}
+                    resetSelectedRows={this.resetSelectedRows}
                     onCancelModel={this.onCancelModel}
                     device={this.props.device}
                     translation={this.props.translation}
@@ -1155,7 +1155,7 @@ class SideActions extends Component {
                     selectedAppKeys={this.state.selectedPushAppKeys}
                     apk_list={this.props.apk_list}
                     selectedPushApps={this.state.selectedPushApps}
-                    resetSeletedRows={this.resetSeletedRows}
+                    resetSelectedRows={this.resetSelectedRows}
                     applyPushApps={this.applyPushApps}
                     actionType={this.state.actionType}
                     showPushAppsModal={this.props.showPushAppsModal}
@@ -1172,7 +1172,7 @@ class SideActions extends Component {
                     showSelectedPullAppsModal={this.showSelectedPullAppsModal}
                     app_list={this.state.pullApps}
                     selectedPullApps={this.state.selectedPullApps}
-                    resetSeletedRows={this.resetSeletedRows}
+                    resetSelectedRows={this.resetSelectedRows}
                     applyPullApps={this.applyPullApps}
                     actionType={this.state.actionType}
                     showPushAppsModal={this.props.showPushAppsModal}
