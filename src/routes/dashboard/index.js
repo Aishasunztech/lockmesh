@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from "react";
-import { Col, Row, Icon, Card, Avatar, Badge } from "antd";
+import { Col, Row, Icon, Card, Avatar, Badge, Modal } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Auxiliary from "util/Auxiliary";
 import { Link } from 'react-router-dom'
 import AppFilter from '../../components/AppFilter';
+import NewDevice from '../../components/NewDevices';
 import { getStatus, componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
 import {
     ADMIN,
@@ -18,7 +19,15 @@ import styles from './dashboard.css'
 import {
     getDashboardData
 } from "../../appRedux/actions/Dashboard";
-
+import { rejectDevice, addDevice, getDevicesList } from '../../appRedux/actions/Devices';
+import {
+    getNewCashRequests,
+    getUserCredit,
+    rejectRequest,
+    acceptRequest
+} from "../../appRedux/actions/SideBar";
+import { transferDeviceProfile } from "../../appRedux/actions/ConnectDevice";
+import { Button_Yes, Button_No } from "../../constants/ButtonConstants";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -28,6 +37,32 @@ class Dashboard extends Component {
 
     componentDidMount() {
         this.props.getDashboardData();
+    }
+
+    transferDeviceProfile = (obj) => {
+        console.log('at req transferDeviceProfile')
+        let _this = this;
+        Modal.confirm({
+            content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
+            onOk() {
+                // console.log('OK');
+                _this.props.transferDeviceProfile(obj);
+            },
+            onCancel() { },
+            okText: convertToLang(this.props.translation[Button_Yes], 'Yes'),
+            cancelText: convertToLang(this.props.translation[Button_No], 'No'),
+        });
+    }
+
+    handleLinkRequests = () => {
+
+        this.props.getNewCashRequests();
+        // this.props.getNewDevicesList()
+        this.props.getUserCredit()
+        this.refs.new_device.showModal(false);
+        this.props.getDevicesList();
+
+        // alert('its working');
     }
 
     render() {
@@ -49,6 +84,20 @@ class Dashboard extends Component {
                     // translation={this.props.translation}
                     // pageHeading={convertToLang(this.props.translation[''], "Dashboard")}
                     pageHeading="Dashboard"
+                />
+
+                <NewDevice
+                    ref='new_device'
+                    devices={this.props.devices}
+                    addDevice={this.props.addDevice}
+                    rejectDevice={this.props.rejectDevice}
+                    authUser={this.props.authUser}
+                    requests={this.props.requests}
+                    acceptRequest={this.props.acceptRequest}
+                    rejectRequest={this.props.rejectRequest}
+                    translation={this.props.translation}
+                    flaggedDevices={this.props.flaggedDevices}
+                    transferDeviceProfile={this.transferDeviceProfile}
                 />
 
                 <Auxiliary>
@@ -95,6 +144,7 @@ class Dashboard extends Component {
                                 <Col xl={4} lg={4} md={4} sm={12} xs={12}>
                                     <div className='dashboard-item-div'>
                                         <Link to='devices'>
+                                            {/* <a href="javascript:void(0)" onClick={this.handleLinkRequests} > */}
                                             <Badge count={1} >
                                                 <Card className='dashboard-card head-example'>
                                                     <Avatar
@@ -108,6 +158,7 @@ class Dashboard extends Component {
                                                 <span className='db-span-qnty'>{this.props.items.link_requests}</span>
                                                 <span className='db-span-text'>Link Request</span>
                                             </div>
+                                            {/* </a> */}
                                         </Link>
                                     </div>
                                 </Col> : null
@@ -306,14 +357,29 @@ class Dashboard extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getDashboardData: getDashboardData
+        getDashboardData: getDashboardData,
+
+        addDevice: addDevice,
+        rejectDevice: rejectDevice,
+        acceptRequest: acceptRequest,
+        rejectRequest: rejectRequest,
+        transferDeviceProfile: transferDeviceProfile,
+
+        getNewCashRequests: getNewCashRequests,
+        getUserCredit: getUserCredit,
+        getDevicesList: getDevicesList,
     }, dispatch);
 }
-var mapStateToProps = ({ dashboard, auth }) => {
+var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
     console.log("dashboard::", auth.authUser);
     return {
         items: dashboard.dashboard_items,
-        authUser: auth.authUser
+        authUser: auth.authUser,
+
+        flaggedDevices: devices.devices,
+        devices: devices.newDevices,
+        requests: sidebar.newRequests,
+        translation: settings.translation,
     };
 }
 
