@@ -73,7 +73,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import {
-    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE,
+    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Main_SETTINGS,
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
@@ -855,6 +855,7 @@ export default (state = initialState, action) => {
             // console.log(action.payload.main,' obj index is', objIndex)
             if (objIndex > -1) {
                 changedControls.settings[objIndex][action.payload.key] = action.payload.value;
+                changedControls.settings[objIndex]["isChanged"] = true;
                 // console.log(changedSettings[objIndex], 'app is the ', changedSettings[objIndex][action.payload.key])
             }
 
@@ -938,11 +939,13 @@ export default (state = initialState, action) => {
         case HANDLE_CHECK_EXTENSION: {
 
             let changedExtensions = JSON.parse(JSON.stringify(state.extensions));
-
+            // console.log('hi at reducer')
+            // console.log("changedExtensions at reducer: ", changedExtensions)
 
             changedExtensions.forEach(extension => {
                 if (extension.uniqueName === action.payload.uniqueName) {
                     if (action.payload.app_id === '000') {
+                        extension["isChanged"] = true;
                         extension[action.payload.key] = (action.payload.value === true || action.payload.value === 1) ? 1 : 0;
                     } else {
                         let objIndex = extension.subExtension.findIndex((obj => obj.app_id === action.payload.app_id));
@@ -1487,10 +1490,15 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
-            // console.log("ACK_SETTING_APPLIED ", action.payload.app_list)
+            console.log("ACK_SETTING_APPLIED ", action.payload.app_list)
+            console.log("ACK_SETTING_APPLIED extensions ", action.extensions)
             // console.log("ACK_SETTING_APPLIED controls ", action.payload.controls)
+
+            let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
+            console.log('settings are: ', settings);
             let controls = {};
             controls["controls"] = action.payload.controls;
+            controls["settings"] = [settings[settings.length - 1]];
             // console.log("ACK_SETTING_APPLIED after controls ", action.payload.controls)
 
             return {

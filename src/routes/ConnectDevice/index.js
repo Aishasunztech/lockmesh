@@ -118,7 +118,7 @@ class ConnectDevice extends Component {
       // changedCtrls: {},
 
       showChangesModal: false,
-      controls: [],
+      // controls: [],
       imei_list: [],
       showMessage: false,
       messageText: '',
@@ -198,9 +198,10 @@ class ConnectDevice extends Component {
   // }
 
   componentDidUpdate(prevProps) {
+    // console.log('hi')
     const device_id = isBase64(this.props.match.params.device_id);
     if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
-      // console.log('show message sate', this.props.showMessage)
+      // console.log('this.props.controls componentDidUpdate ', this.props.controls)
       this.setState({
         controls: this.props.controls,
         changedCtrls: this.props.changedCtrls,
@@ -706,6 +707,11 @@ class ConnectDevice extends Component {
                   controls={this.props.controls}
                   showChangedControls={true}
                   translation={this.props.translation}
+                  auth={this.props.auth}
+                  settings={this.props.controls.settings}
+                  pageName={this.props.pageName}
+                  controlsExists={this.props.pageName === SYSTEM_CONTROLS ? true : false}
+                  // extensions={this.props.extensions}
                 />
               </Modal>
             </div>}
@@ -790,7 +796,10 @@ function mapDispatchToProps(dispatch) {
     hello_web: hello_web,
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
+var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
+
+  console.log("device_details.extensions ", device_details.extensions)
+  // console.log(device_details.pageName, "device_details.controls ", device_details.controls)
 
   return {
     getHistory: device_details.getHistory,

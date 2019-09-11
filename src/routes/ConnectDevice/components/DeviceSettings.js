@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Divider, Badge, Switch } from "antd";
-import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME, PUSH_APPS_TEXT } from '../../../constants/Constants';
+import { Table, Divider, Badge, Switch, Col, Row } from "antd";
+import { APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS, PERMISSION_NAME, PUSH_APPS_TEXT, ADMIN, ANDROID_SETTING_PERMISSION, Main_SETTINGS, SECURE_SETTING, SYSTEM_CONTROLS } from '../../../constants/Constants';
 import { convertToLang } from '../../utils/commonUtils';
 import { PUSH_APPS } from '../../../constants/ActionTypes';
 import { APK_APP_NAME } from '../../../constants/ApkConstants';
-import { Guest, ENCRYPTED, ENABLE, EXTENSION_NAME, ADMIN_PASSWORD_IS_CHANGED, ENCRYPTED_PASSWORD_IS_CHANGED, GUEST_PASSWORD_IS_CHANGED, DURESS_PASSWORD_IS_CHANGED } from '../../../constants/TabConstants';
+import { Guest, ENCRYPTED, ENABLE, EXTENSION_NAME, ADMIN_PASSWORD_IS_CHANGED, ENCRYPTED_PASSWORD_IS_CHANGED, GUEST_PASSWORD_IS_CHANGED, DURESS_PASSWORD_IS_CHANGED, ENCRYPT } from '../../../constants/TabConstants';
 import { DEVICE_STATUS } from '../../../constants/DeviceConstants';
 import { appsColumns, extensionColumns, controlColumns } from '../../utils/columnsUtils';
 
@@ -176,7 +176,7 @@ export default class DeviceSettings extends Component {
         // console.log(JSON.parse(datalist));
         // console.log(this.props.type, 'datalist is type of');
         let data = JSON.parse(JSON.stringify(datalist));
-        
+
         // if (this.props.type === 'profile') {
         //     data = JSON.parse(JSON.stringify(datalist))
         // }
@@ -214,22 +214,41 @@ export default class DeviceSettings extends Component {
     }
 
     render() {
-        console.log('controls of devices: ', this.props.controls);
-        
+        // console.log("this.props.controls. ischanged", this.props.controls.isChanged)
+
+
         // find the length of changed controls. it can be refactored
         let changes = 0;
         if (this.state.controls && Object.entries(this.state.controls).length) {
             if (this.state.controls.controls && this.state.controls.controls.length) {
                 this.state.controls.controls.map(item => {
+
                     if (item.isChanged) {
                         changes++
                     }
+                    // console.log(item, "item.isChanged",item.isChanged)
                 })
             }
         }
 
+        let objIndex = -1;
+        if (this.props.settings && this.props.settings.length) {
+            objIndex = this.props.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
+        }
+
+        let extenObjIndex = -1;
+        if (this.props.extensions && this.props.extensions.length) {
+            extenObjIndex = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
+        }
+
+        // console.log(this.props.extensions, 'check extension  ', this.props.extensions[extenObjIndex].isChanged);
+
+        // console.log("extenObjIndex ", extenObjIndex)
+        // console.log("this.props.extensions extenObjIndex ", this.props.extensions[extenObjIndex])
+
         return (
             <div>
+
                 {/* push apps listing */}
                 {
                     this.props.isPushApps === true && this.props.type !== 'profile' ?
@@ -247,7 +266,7 @@ export default class DeviceSettings extends Component {
                             />
                         </div> : null
                 }
-                
+
                 {/* applisting */}
                 {
                     this.state.applist.length > 0 ?
@@ -266,6 +285,38 @@ export default class DeviceSettings extends Component {
                         </div> : null
                 }
 
+                {/* secure extension for all */}
+
+                {(this.props.extensions && extenObjIndex >= 0) ?
+                    (this.props.extensions && this.props.extensions[extenObjIndex].isChanged) ?
+                        <Fragment>
+                            <Divider > {convertToLang(this.props.translation[SECURE_SETTING_PERMISSION], "Secure Settings Permission")} </Divider>
+
+                            <Row className="sec_head">
+                                <Col span={8}>
+                                    <span>{convertToLang(this.props.translation[Guest], "Guest")} </span>
+                                    <Switch disabled
+                                        checked={this.props.extensions[extenObjIndex].guest === 1 ? true : false}
+                                        size="small" />
+                                </Col>
+                                <Col span={8}>
+                                    <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span>
+                                    <Switch disabled
+                                        checked={this.props.extensions[extenObjIndex].encrypted === 1 ? true : false}
+                                        size="small" />
+                                </Col>
+                                <Col span={8}>
+                                    <span>{convertToLang(this.props.translation[ENABLE], "Enable")} </span>
+                                    <Switch disabled
+                                        checked={this.props.extensions[extenObjIndex].enable === 1 ? true : false}
+                                        size="small" />
+                                </Col>
+                            </Row>
+                        </Fragment>
+                        : null
+                    : null
+                }
+
                 {/* secure extensions */}
                 {
                     this.state.extensions.length ?
@@ -282,6 +333,33 @@ export default class DeviceSettings extends Component {
                                 pagination={false}
 
                             /></div>
+                        : null
+                }
+
+                {/* System Control setting for all */}
+                {
+                    (this.props.controls && objIndex >= 0) ?
+                        (this.props.auth.authUser.type === ADMIN && this.props.settings && this.props.settings.length && this.props.settings[objIndex].isChanged) ?
+                            <Fragment>
+                                <Divider > {convertToLang(this.props.translation[ANDROID_SETTING_PERMISSION], "Android Settings Permission")} </Divider>
+                                <div className="row width_100 m-0 sec_head1">
+                                    <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                                        <span>Guest</span>
+                                        <Switch
+                                            disabled
+                                            checked={this.props.settings[objIndex].guest === 1 || this.props.settings[objIndex].guest === true ? true : false} size="small" />
+                                    </div>
+                                    <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                                        <span>Encrypt</span>
+                                        <Switch disabled checked={this.props.settings[objIndex].encrypted === 1 || this.props.settings[objIndex].encrypted === true ? true : false} size="small" />
+                                    </div>
+                                    <div className="col-md-4 col-sm-4 col-xs-4 p-0 text-center">
+                                        <span>Enable</span>
+                                        <Switch disabled checked={this.props.settings[objIndex].enable === 1 || this.props.settings[objIndex].enable === true ? true : false} size="small" />
+                                    </div>
+                                </div>
+                            </Fragment>
+                            : null
                         : null
                 }
 
