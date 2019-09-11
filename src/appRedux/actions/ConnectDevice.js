@@ -380,6 +380,7 @@ export function loadDeviceProfile(app_list) {
 
 export function applySetting(app_list, passwords, extensions, controls, device_id, usr_acc_id, type = 'setting', name = '') {
 
+    console.log('app list after apply settings ::: ', app_list);
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -1071,7 +1072,7 @@ export const applyPushApps = (apps, deviceId, usrAccId) => {
 }
 
 
-export const handleChecked = ( value, key, apk_id) => {
+export const handleChecked = (value, key, apk_id) => {
 
     return (dispatch) => {
         dispatch({
@@ -1086,11 +1087,11 @@ export const handleChecked = ( value, key, apk_id) => {
     }
 }
 
-export const resetPushApps = ( ) => {
+export const resetPushApps = () => {
 
     return (dispatch) => {
         dispatch({
-            type:   RESET_PUSH_APPS,
+            type: RESET_PUSH_APPS,
         })
 
     }

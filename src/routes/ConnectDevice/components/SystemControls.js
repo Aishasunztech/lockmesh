@@ -85,12 +85,14 @@ export default class SystemControls extends Component {
   }
 
   render() {
-    console.log("systemControls.render()", this.state.controls);
+    // console.log("systemControls.render()", this.props.controls);
+    // console.log("this.state.settings ", this.state.settings);
+    // console.log("this.props.auth.authUser.type ", this.props.auth.authUser.type);
     let objIndex = -1;
     if (this.state.settings && this.state.settings.length) {
       objIndex = this.state.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
     }
-    console.log("object Index: ", objIndex);
+    // console.log("object Index: ", objIndex);
 
     if (this.state.controls) {
 
