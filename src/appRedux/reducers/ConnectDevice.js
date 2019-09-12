@@ -73,7 +73,7 @@ import {
 } from "../../constants/ActionTypes";
 
 import {
-    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Main_SETTINGS,
+    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Main_SETTINGS, SECURE_SETTING,
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
@@ -373,6 +373,11 @@ export default (state = initialState, action) => {
             // console.log('controls form reduvcer of getdeviceapp', action.controls)
             let applications = action.payload;
             let check = handleCheckedAll(applications);
+            // console.log('abaid app list ', action.payload);
+            // console.log(action.payload.filter(e => e.uniqueName == SECURE_SETTING))
+
+            // console.log("action.extensions  ", action.extensions)
+
             return {
                 ...state,
                 app_list: action.payload,
@@ -1491,9 +1496,13 @@ export default (state = initialState, action) => {
 
         case ACK_SETTING_APPLIED: {
             console.log("ACK_SETTING_APPLIED ", action.payload.app_list)
-            console.log("ACK_SETTING_APPLIED extensions ", action.extensions)
+            console.log("ACK_SETTING_APPLIED extensions ", action.payload.extensions)
             // console.log("ACK_SETTING_APPLIED controls ", action.payload.controls)
-
+            console.log("states extensions: ", state.extensions);
+            let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING); //action.payload.extensions
+            console.log("updated extension is: ", action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING))
+            // state.extensions[0].subExtension = action.payload.extensions
+            // let secureSettings = action.payload.extensions.filter(e => e.uniqueName == SECURE_SETTING);
             let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
             console.log('settings are: ', settings);
             let controls = {};
@@ -1505,6 +1514,7 @@ export default (state = initialState, action) => {
                 ...state,
                 app_list: action.payload.app_list,
                 controls: controls,
+                extensions: extensions
             }
         }
 
