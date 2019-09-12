@@ -86,40 +86,42 @@ class SettingAppPermissions extends Component {
     console.log("render list extension", extension);
 
     if (this.state.extension !== undefined && this.state.extension !== null && Object.keys(extension).length) {
-
-      return this.state.extension.subExtension.map((ext, index) => {
-        return {
-          key: index,
-          name: (
-            <Fragment>
-              <Avatar
-                className="perm_icons"
-                size={"small"}
-                src={`${BASE_URL}users/getFile/${ext.icon}`}
-              // style={{ width: "30px", height: "30px" }} 
-              />
-              <div className="line_break"><a className="perm_txt">{ext.label}</a></div>
-            </Fragment>),
-          // name: ext.label,
-          guest: <Switch checked={ext.guest === 1 ? true : false} size="small"
-            onClick={(e) => {
-              // console.log("guest", e);
-              this.handleChecked(e, "guest", ext.app_id);
-            }}
-          />,
-          encrypted: <Switch checked={ext.encrypted === 1 ? true : false} size="small"
-            onClick={(e) => {
-              // console.log("guest", e);
-              this.handleChecked(e, "encrypted", ext.app_id);
-            }}
-          />
-        }
-      })
+      if (this.state.extension.subExtension) {
+        return this.state.extension.subExtension.map((ext, index) => {
+          return {
+            key: index,
+            name: (
+              <Fragment>
+                <Avatar
+                  className="perm_icons"
+                  size={"small"}
+                  src={`${BASE_URL}users/getFile/${ext.icon}`}
+                // style={{ width: "30px", height: "30px" }} 
+                />
+                <div className="line_break"><a className="perm_txt">{ext.label}</a></div>
+              </Fragment>),
+            // name: ext.label,
+            guest: <Switch checked={ext.guest === 1 ? true : false} size="small"
+              onClick={(e) => {
+                // console.log("guest", e);
+                this.handleChecked(e, "guest", ext.app_id);
+              }}
+            />,
+            encrypted: <Switch checked={ext.encrypted === 1 ? true : false} size="small"
+              onClick={(e) => {
+                // console.log("guest", e);
+                this.handleChecked(e, "encrypted", ext.app_id);
+              }}
+            />
+          }
+        })
+      }
     }
   }
   render() {
     const { extension, isExtension } = this.props;
-    // console.log('extenion ate is', extension)
+    // const { extension } = this.state;
+    console.log( isExtension , this.props.extension, 'extenion ate is')
     if (isExtension) {
       return (
         <Fragment>
@@ -143,19 +145,19 @@ class SettingAppPermissions extends Component {
               <span>{convertToLang(this.props.translation[Guest], "Guest")} </span> <Switch onClick={(e) => {
                 // console.log("guest", e);
                 this.handleChecked(e, "guest");
-              }} checked={extension.guest === 1 ? true : false} size="small" />
+              }} checked={extension.guest ? true : false} size="small" />
             </Col>
             <Col span={8}>
               <span>{convertToLang(this.props.translation[ENCRYPT], "Encrypt")} </span> <Switch onClick={(e) => {
                 // console.log("guest", e);
                 this.handleChecked(e, "encrypted");
-              }} checked={extension.encrypted === 1 ? true : false} size="small" />
+              }} checked={extension.encrypted ? true : false} size="small" />
             </Col>
             <Col span={8}>
               <span>{convertToLang(this.props.translation[ENABLE], "Enable")} </span> <Switch onClick={(e) => {
                 // console.log("guest", e);
                 this.handleChecked(e, "enable");
-              }} checked={extension.enable === 1 ? true : false} size="small" />
+              }} checked={extension.enable ? true : false} size="small" />
             </Col>
           </Row>
           <div className="sec_set_table">
