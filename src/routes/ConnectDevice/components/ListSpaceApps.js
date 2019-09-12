@@ -103,7 +103,7 @@ class ListSpaceApps extends Component {
                 <div style={{ height: 335, overflow: 'overlay', borderTop: '1px solid #e8e8e8' }}>
                     <Row className="m-0">
                         {this.state.app_list.map(app => {
-                            if( !app.extension){
+                            if (!app.extension) {
                                 if (this.props.type === "guest") {
                                     if (app.guest === true || app.guest === 1) {
                                         return (
@@ -138,34 +138,37 @@ class ListSpaceApps extends Component {
                             } else {
                                 return null
                             }
-                           
+
                         })}
 
                         {/* Secure Setting in App Permission Space */}
-                        {this.props.type === "encrypted" ?
-                            (this.props.extension.encrypted === true || this.props.extension.encrypted === 1) ?
-                                <Col  span={6} style={{ padding: 8, textAlign: "center" }}>
-                                    <Avatar
-                                        size={"small"}
-                                        src={require("assets/images/secure_setting.png")}
-                                    // style={{ width: "30px", height: "30px" }} 
-                                    />
-                                    <br />
-                                    <div className="line_break2" style={{ fontSize: 10 }}>{this.props.extension.label}</div>
-                                    <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(this.props.extension.enable === true || this.props.extension.enable === 1) ? "" : "(Disabled)"}</div>
-                                </Col> : null
-                            :
-                            (this.props.extension.guest === true || this.props.extension.guest === 1) ?
-                                <Col span={6} style={{ padding: 8, textAlign: "center" }}>
-                                    <Avatar
-                                        size={"small"}
-                                        src={require("assets/images/secure_setting.png")}
-                                    // style={{ width: "30px", height: "30px" }} 
-                                    />
-                                    <br />
-                                    <div className="line_break2" style={{ fontSize: 10 }}>{this.props.extension.label}</div>
-                                    <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(this.props.extension.enable === true || this.props.extension.enable === 1) ? "" : "(Disabled)"}</div>
-                                </Col> : null
+                        {
+                            (this.props.extension) ?
+                                this.props.type === "encrypted" ?
+                                    (this.props.extension.encrypted === true || this.props.extension.encrypted === 1) ?
+                                        <Col span={6} style={{ padding: 8, textAlign: "center" }}>
+                                            <Avatar
+                                                size={"small"}
+                                                src={require("assets/images/secure_setting.png")}
+                                            // style={{ width: "30px", height: "30px" }} 
+                                            />
+                                            <br />
+                                            <div className="line_break2" style={{ fontSize: 10 }}>{this.props.extension.label}</div>
+                                            <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(this.props.extension.enable === true || this.props.extension.enable === 1) ? "" : "(Disabled)"}</div>
+                                        </Col> : null
+                                    :
+                                    (this.props.extension.guest === true || this.props.extension.guest === 1) ?
+                                        <Col span={6} style={{ padding: 8, textAlign: "center" }}>
+                                            <Avatar
+                                                size={"small"}
+                                                src={require("assets/images/secure_setting.png")}
+                                            // style={{ width: "30px", height: "30px" }} 
+                                            />
+                                            <br />
+                                            <div className="line_break2" style={{ fontSize: 10 }}>{this.props.extension.label}</div>
+                                            <div className="line_break2" style={{ fontSize: 10, color: 'red' }}>{(this.props.extension.enable === true || this.props.extension.enable === 1) ? "" : "(Disabled)"}</div>
+                                        </Col> : null
+                                : null
                         }
 
                     </Row>
