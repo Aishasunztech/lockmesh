@@ -4,7 +4,7 @@ import { BASE_URL } from '../../../constants/Application';
 import Permissions from './Permissions';
 import styles from './app.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
     convertToLang
@@ -314,9 +314,9 @@ export default class ListApk extends Component {
                     policy_name: <Link to={{
                         pathname: '/policy',
                         state: {
-                          id: policy.policy_id
+                            id: policy.policy_id
                         }
-                      }}>{policy.policy_name}</Link>,
+                    }}>{policy.policy_name}</Link>,
                     policy_command: policy.command_name
 
                 }
@@ -392,30 +392,33 @@ export default class ListApk extends Component {
                                                         translation={this.props.translation}
                                                     />
                                                 </Tabs.TabPane>
-                                                <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
-                                                    <Table
-                                                        columns={[
-                                                            {
-                                                                title: "#",
-                                                                dataIndex: 'counter',
-                                                                align: 'center',
-                                                                className: 'row',
-                                                                render: (text, record, index) => ++index,
-                                                            },
-                                                            {
-                                                                key: "policy_name",
-                                                                dataIndex: "policy_name",
-                                                                title: 'Policy Name'
-                                                            },
-                                                            {
-                                                                key: "policy_command",
-                                                                dataIndex: "policy_command",
-                                                                title: 'Policy Command'
-                                                            }
-                                                        ]}
-                                                        dataSource={this.renderPolicies(record)}
-                                                    />
-                                                </Tabs.TabPane>
+                                                {(this.props.user.type === ADMIN) ?
+                                                    <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
+                                                        <Table
+                                                            columns={[
+                                                                {
+                                                                    title: "#",
+                                                                    dataIndex: 'counter',
+                                                                    align: 'center',
+                                                                    className: 'row',
+                                                                    render: (text, record, index) => ++index,
+                                                                },
+                                                                {
+                                                                    key: "policy_name",
+                                                                    dataIndex: "policy_name",
+                                                                    title: 'Policy Name'
+                                                                },
+                                                                {
+                                                                    key: "policy_command",
+                                                                    dataIndex: "policy_command",
+                                                                    title: 'Policy Command'
+                                                                }
+                                                            ]}
+                                                            dataSource={this.renderPolicies(record)}
+                                                        />
+                                                    </Tabs.TabPane>
+                                                    : null
+                                                }
                                             </Tabs>
                                         </Fragment>
                                         /*<Fragment>
@@ -479,30 +482,33 @@ export default class ListApk extends Component {
                                                         translation={this.props.translation}
                                                     />
                                                 </Tabs.TabPane>
-                                                <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
-                                                    <Table
-                                                        columns={[
-                                                            {
-                                                                title: "#",
-                                                                dataIndex: 'counter',
-                                                                align: 'center',
-                                                                className: 'row',
-                                                                render: (text, record, index) => ++index,
-                                                            },
-                                                            {
-                                                                key: "policy_name",
-                                                                dataIndex: "policy_name",
-                                                                title: 'Policy Name'
-                                                            },
-                                                            {
-                                                                key: "policy_command",
-                                                                dataIndex: "policy_command",
-                                                                title: 'Policy Command'
-                                                            }
-                                                        ]}
-                                                        dataSource={this.renderPolicies(record)}
-                                                    />
-                                                </Tabs.TabPane>
+                                                {(this.props.user.type === ADMIN) ?
+                                                    <Tabs.TabPane tab={convertToLang(this.props.translation['POLICIES'], "POLICIES")} key="2">
+                                                        <Table
+                                                            columns={[
+                                                                {
+                                                                    title: "#",
+                                                                    dataIndex: 'counter',
+                                                                    align: 'center',
+                                                                    className: 'row',
+                                                                    render: (text, record, index) => ++index,
+                                                                },
+                                                                {
+                                                                    key: "policy_name",
+                                                                    dataIndex: "policy_name",
+                                                                    title: 'Policy Name'
+                                                                },
+                                                                {
+                                                                    key: "policy_command",
+                                                                    dataIndex: "policy_command",
+                                                                    title: 'Policy Command'
+                                                                }
+                                                            ]}
+                                                            dataSource={this.renderPolicies(record)}
+                                                        />
+                                                    </Tabs.TabPane>
+                                                    : null
+                                                }
                                             </Tabs>
                                         </Fragment>
                                     );

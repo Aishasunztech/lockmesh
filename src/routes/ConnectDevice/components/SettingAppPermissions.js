@@ -169,7 +169,7 @@ class SettingAppPermissions extends Component {
     } else {
       return (
         <Fragment>
-          <h1 class="not_syn_txt"><a>{convertToLang(this.props.translation[SECURE_SETTINGS], "Secure Settings")} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
+          <h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[SECURE_SETTINGS], "Secure Settings")} <br></br> {convertToLang(this.props.translation[NOT_AVAILABLE], "Not Available")}</a></h1>
         </Fragment>
       )
     }

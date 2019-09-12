@@ -925,7 +925,7 @@ class SideActions extends Component {
                     <Card>
                         <Row gutter={16} type="flex" justify="center" align="top">
                             <Col span={12} className="gutter-row" justify="center" >
-                                {/* <Tooltip title="Coming Soon"> */}
+                                <Tooltip title="Coming Soon">
                                 {/* <Button
                                     type="default"
                                     onClick={() => this.handleTransfer()}
@@ -937,9 +937,9 @@ class SideActions extends Component {
 
                                 {/* <Button type="default" onClick={() => { if (flagged === "Unflag") { this.handleTransfer(this.props.device_id) } else { Modal.error({ title: 'Plaese Flag the device first to Transfer' }); } }} style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button> */}
                                 <Button type="default"
-                                    onClick={() => this.handleTransferHistoryModal(true)}
+                                    // onClick={() => this.handleTransferHistoryModal(true)}
                                     style={{ width: "100%", marginBottom: 16, backgroundColor: '#00336C', color: '#fff' }} ><Icon type="swap" />  {convertToLang(this.props.translation[Button_Transfer], "Transfer")}</Button>
-                                {/* </Tooltip> */}
+                                </Tooltip>
                                 <Button type={button_type}
                                     onClick={() => (device_status === "Unsuspend") ? this.handleActivateDevice(this.props.device) : this.handleSuspendDevice(this.props.device, this)}
                                     style={{ width: "100%", marginBottom: 16, fontSize: "12px" }}
@@ -1273,12 +1273,12 @@ class SideActions extends Component {
         )
     }
     handleSuspendDevice = (device, _this) => {
-        this.refs.suspend.handleSuspendDevice(device, this.props.refreshDevice);
+        this.refs.suspend.handleSuspendDevice(device);
 
     }
 
     handleActivateDevice = (device) => {
-        this.refs.activate.handleActivateDevice(device, this.props.refreshDevice);
+        this.refs.activate.handleActivateDevice(device);
 
     }
 }
@@ -1376,13 +1376,13 @@ function showConfirm(device, action, _this, msg, type) {
                 }
                 if (type === 'flagged') {
                     action(device.device_id)
-                    _this.props.activateDevice(device)
+                    // _this.props.activateDevice(device)
                 }
                 if (type === 'unlink') {
                     _this.props.history.goBack();
                     _this.props.getDevicesList();
                 } else {
-                    _this.props.refreshDevice(device.device_id);
+                    // _this.props.refreshDevice(device.device_id);
                 }
                 //  message.success('Action Done Susscefully ');
 
@@ -1397,7 +1397,7 @@ function showConfirmPolcy(_this) {
     confirm({
         title: convertToLang(_this.props.translation[DO_YOU_WANT_TO_APPLY], "Do you want to apply") + " # " + _this.state.policyName + convertToLang(_this.props.translation[POLICY_ON_DEVICE], " policy on device?"),
         onOk() {
-            _this.props.applyPolicy(_this.props.device.device_id, _this.props.device.id, _this.state.policyId)
+            _this.props.applyPolicy(_this.props.device.device_id, _this.props.device.id, _this.state.policyId , _this.state.policyName);
         },
         okText: convertToLang(_this.props.translation[Button_Ok], "Ok"),
         cancelText: convertToLang(_this.props.translation[Button_Cancel], "Cancel"),

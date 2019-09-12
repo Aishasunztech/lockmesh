@@ -336,7 +336,8 @@ class ConnectDevice extends Component {
               />
             </div>
           );
-        } else if (this.props.pageName === APPS) {
+        }
+        else if (this.props.pageName === APPS) {
           return (
             <div className="guest_encrypt">
               <Tabs type="line" className="text-center" size="small">
@@ -384,16 +385,36 @@ class ConnectDevice extends Component {
               translation={this.props.translation}
             />
           );
+        } else {
+          // if (this.props.pageName === MAIN_MENU) {
+          return (
+            <div>
+              <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
+              <List
+                className="dev_main_menu"
+                size="small"
+                dataSource={this.mainMenu}
+                renderItem={item => {
+                  return (<List.Item
+                    onClick={() => {
+                      this.changePage(item.pageName)
+                    }}
+                  ><a>{item.value}</a></List.Item>)
+                }}
+              />
+            </div>
+          );
+          // }
         }
       } else {
         return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
       }
 
     } else {
-      if (this.props.pageName === NOT_AVAILABLE) {
-        return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
-          {(finalStatusIs == DEVICE_SUSPENDED) ? convertToLang(this.props.translation[Suspended_TEXT], DEVICE_SUSPENDED) : finalStatusIs}</a></h1></div>);
-      }
+      // if (this.props.pageName === NOT_AVAILABLE) {
+      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
+        {(finalStatusIs == DEVICE_SUSPENDED) ? convertToLang(this.props.translation[Suspended_TEXT], DEVICE_SUSPENDED) : finalStatusIs}</a></h1></div>);
+      // }
     }
 
     if (this.props.pageName === MANAGE_PASSWORD) {
@@ -711,7 +732,7 @@ class ConnectDevice extends Component {
                   settings={this.props.controls.settings}
                   pageName={this.props.pageName}
                   controlsExists={this.props.pageName === SYSTEM_CONTROLS ? true : false}
-                  // extensions={this.props.extensions}
+                // extensions={this.props.extensions}
                 />
               </Modal>
             </div>}

@@ -301,7 +301,7 @@ export function wipe(device) {
 }
 
 export function unlinkDevice(device) {
-    console.log('you are at action file of unlinkDevice', device)
+    // console.log('you are at action file of unlinkDevice', device)
     return (dispatch) => {
         RestService.unlinkDevice(device).then((response) => {
             // console.log('response to unlink device', response);
@@ -380,7 +380,7 @@ export function loadDeviceProfile(app_list) {
 
 export function applySetting(app_list, passwords, extensions, controls, device_id, usr_acc_id, type = 'setting', name = '') {
 
-    console.log('app list after apply settings ::: ', app_list);
+    // console.log('app list after apply settings ::: ', app_list);
     return (dispatch) => {
         let device_setting = {
             app_list: app_list,
@@ -632,7 +632,7 @@ export function handleCheckAllExtension(keyAll, key, value, uniqueName) {
 
 
 export function submitPassword(passwords, pwdType, device_id, usr_acc_id) {
-    console.log("Passwords: ", usr_acc_id);
+    // console.log("Passwords: ", usr_acc_id);
     return (dispatch) => {
 
         RestService.submtPassword({ passwords, pwdType, device_id, usr_acc_id }).then((response) => {
@@ -640,7 +640,12 @@ export function submitPassword(passwords, pwdType, device_id, usr_acc_id) {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: PASSWORD_CHANGED,
-                    payload: response.data
+                    payload: {
+                       response:  response.data,
+                       passwords: passwords,
+                       pwdType: pwdType,
+
+                    }
                 })
             } else {
                 dispatch({
@@ -710,7 +715,8 @@ export function saveProfile(app_list, passwords = null, profileName, usr_acc_id,
                     }
                 })
                 dispatch({
-                    type: SAVE_PROFILE
+                    type: SAVE_PROFILE,
+                    response: response.data
                 })
                 dispatch({
                     type: SHOW_MESSAGE,
@@ -856,7 +862,7 @@ export const unflagged = (device_id) => {
                     response: response.data,
                     device_id: device_id,
                     payload: {
-                        // device: response.data.data,
+                        device: response.data.data,
                         msg: response.data.msg,
                     }
                 })
@@ -1098,14 +1104,18 @@ export const resetPushApps = () => {
 }
 
 
-export const applyPolicy = (deviceId, userAccId, policyId) => {
+export const applyPolicy = (deviceId, userAccId, policyId, policyName) => {
     return (dispatch) => {
         RestService.applyPolicy(deviceId, userAccId, policyId).then((response) => {
+            getActivities(deviceId);
             if (RestService.checkAuth(response.data)) {
+
                 // console.log(response.data);
                 dispatch({
                     type: APPLY_POLICY,
                     payload: response.data,
+                    policyId: policyId,
+                    policyName: policyName
                 })
             } else {
                 dispatch({
@@ -1116,6 +1126,7 @@ export const applyPolicy = (deviceId, userAccId, policyId) => {
     }
 }
 export const getActivities = (device_id) => {
+    // console.log('object', 'activitiers')
     return (dispatch) => {
         RestService.getActivities(device_id).then((response) => {
             if (RestService.checkAuth(response.data)) {
@@ -1187,12 +1198,12 @@ export const simRegister = (data) => {
 }
 
 export const simHistory = (device_id) => {
-    console.log('device_id is: ', device_id)
+    // console.log('device_id is: ', device_id)
     return (dispatch) => {
         RestService.simHistory(device_id).then((response) => {
             // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
+                // console.log(response.data);
                 dispatch({
                     type: SIM_HISTORY,
                     payload: response.data
@@ -1212,7 +1223,7 @@ export const getSims = (device_id) => {
         RestService.getSims(device_id).then((response) => {
             // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
+                // console.log(response.data);
                 dispatch({
                     type: GET_SIMS,
                     payload: response.data
@@ -1230,12 +1241,12 @@ export const getSims = (device_id) => {
 }
 
 export const deleteSim = (data) => {
-    console.log('data is: ', data)
+    // console.log('data is: ', data)
     return (dispatch) => {
         RestService.deleteSim(data).then((response) => {
             // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
+                // console.log(response.data);
                 dispatch({
                     type: DELETE_SIM,
                     response: response.data,
@@ -1251,12 +1262,12 @@ export const deleteSim = (data) => {
 }
 
 export const handleSimUpdate = (data) => {
-    console.log('data is: ', data)
+    // console.log('data is: ', data)
     return (dispatch) => {
         RestService.handleSimUpdate(data).then((response) => {
             // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
+                // console.log(response.data);
                 dispatch({
                     type: UPDATE_SIM,
                     response: response.data,
@@ -1274,12 +1285,12 @@ export const handleSimUpdate = (data) => {
 }
 
 export const getUnRegisterSims = (data) => {
-    console.log('getUnRegisterSims data is: ', data)
+    // console.log('getUnRegisterSims data is: ', data)
     return (dispatch) => {
         RestService.getUnRegisterSims(data).then((response) => {
             // console.log('response is: ', response);
             if (RestService.checkAuth(response.data)) {
-                console.log(response.data);
+                // console.log(response.data);
                 dispatch({
                     type: GET_UNREG_SIMS,
                     // response: response.data,
