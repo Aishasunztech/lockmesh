@@ -58,7 +58,7 @@ export function getUserCredit() {
 }
 export function rejectRequest(request) {
     return (dispatch) => {
-        // console.log(request)
+        console.log(request, 'reject request called')
         RestService.rejectRequest(request).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({

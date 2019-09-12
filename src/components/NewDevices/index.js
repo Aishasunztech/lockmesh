@@ -35,16 +35,18 @@ export default class NewDevices extends Component {
             NewRequests: [],
             sectionVisible: true,
             flaggedDevicesModal: false,
-            reqDevice: ''
+            reqDevice: '',
+            showLInkRequest: false
         }
     }
 
 
 
-    showModal = (sectionVisible = true) => {
+    showModal = (sectionVisible = true, showLInkRequest = false ) => {
         this.setState({
             visible: true,
-            sectionVisible
+            sectionVisible,
+            showLInkRequest: showLInkRequest
         });
     }
 
@@ -77,7 +79,7 @@ export default class NewDevices extends Component {
         }
     }
     rejectDevice(device) {
-
+console.log('reject device called')
         this.props.rejectDevice(device);
     }
 
@@ -111,7 +113,7 @@ export default class NewDevices extends Component {
 
 
     renderList1(list) {
-        // console.log(list);
+        console.log(list);
         return list.map((request) => {
             return {
                 key: request.id ? `${request.id}` : "N/A",
@@ -132,7 +134,7 @@ export default class NewDevices extends Component {
 
     }
     renderList(list, flagged = false) {
-
+console.log(list , 'list of devices are',flagged)
         return list.map((device) => {
             const device_status = (device.account_status === "suspended") ? "ACTIVATE" : "SUSPEND";
             // const device_status =  "SUSPEND";
@@ -167,6 +169,7 @@ export default class NewDevices extends Component {
             let acceptButton = <Button type="primary" size="small" style={{ margin: '0 8px 0 8px' }} onClick={() => { this.refs.add_device_modal.showModal(device, this.props.addDevice); this.setState({ visible: false }) }}> {convertToLang(this.props.translation[Button_ACCEPT], "ACCEPT")}</Button>;
 
             let actionButns;
+            console.log(this.state.sectionVisible, 'section visible state')
             if (this.state.sectionVisible) {
                 if (this.props.flaggedDevices !== undefined) {
                     if (flagged) {
@@ -186,7 +189,15 @@ export default class NewDevices extends Component {
                 }
 
             } else {
-                actionButns = (<Fragment>{transferButton}</Fragment>);
+                if(this.state.showLInkRequest){
+                    actionButns = (<Fragment>
+                        <Fragment>{declineButton}</Fragment>
+                        <Fragment>{acceptButton}</Fragment>
+                        <Fragment>{transferButton}</Fragment>
+                    </Fragment>);
+                }else{
+                    actionButns = (<Fragment>{transferButton}</Fragment>);
+                }
             }
 
             return {
@@ -206,7 +217,7 @@ export default class NewDevices extends Component {
 
     filterList = (devices) => {
         let dumyDevices = [];
-        // console.log('check Devices at filterList ', devices)
+        console.log('check Devices at filterList ', devices)
         if (devices !== undefined) {
             devices.filter(function (device) {
                 if (device.finalStatus !== DEVICE_UNLINKED) {
@@ -224,7 +235,7 @@ export default class NewDevices extends Component {
 
     render() {
         let flaggedDevices = this.filterList(this.props.flaggedDevices)
-        // console.log('check flaggedDevices ', flaggedDevices)
+        console.log('check flaggedDevices ', flaggedDevices, 'requests', this.props.requests, 'NewDevices', this.props.devices)
         return (
             <div>
                 <Modal

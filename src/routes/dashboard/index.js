@@ -54,18 +54,27 @@ class Dashboard extends Component {
         });
     }
 
+
+    componentWillReceiveProps(nextProps){
+        if(this.props !== nextProps){
+            console.log(nextProps.devices, 'next props are')
+        }
+    }
+
     handleLinkRequests = () => {
 
-        this.props.getNewCashRequests();
+        // this.props.getNewCashRequests();
         // this.props.getNewDevicesList()
-        this.props.getUserCredit()
-        this.refs.new_device.showModal(false);
-        this.props.getDevicesList();
+        // this.props.getUserCredit()
 
-        // alert('its working');
+
+        // this.refs.new_device.showModal(false, true); // sectionvisible, showLInkRequest
+
+        // this.props.getDevicesList();
     }
 
     render() {
+        console.log(this.props.devices, 'devices or new link request')
         return (
             <div>
                 <AppFilter
@@ -145,7 +154,7 @@ class Dashboard extends Component {
                                     <div className='dashboard-item-div'>
                                         {/* <Link to='devices'> */}
                                             <a href="javascript:void(0)" onClick={this.handleLinkRequests} >
-                                            <Badge count={1} >
+                                            <Badge count={this.props.devices ? this.props.devices.length : 0} >
                                                 <Card className='dashboard-card head-example'>
                                                     <Avatar
                                                         src={require("../../assets/images/dashboard/link_device.png")}
@@ -155,7 +164,7 @@ class Dashboard extends Component {
                                                 </Card>
                                             </Badge>
                                             <div className="dash_btm_txt">
-                                                <span className='db-span-qnty'>{this.props.items.link_requests}</span>
+                                                <span className='db-span-qnty'>{this.props.devices ? this.props.devices.length : 0}</span>
                                                 <span className='db-span-text'>Link Request</span>
                                             </div>
                                             </a>
