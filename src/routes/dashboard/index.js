@@ -40,7 +40,7 @@ class Dashboard extends Component {
     }
 
     transferDeviceProfile = (obj) => {
-        console.log('at req transferDeviceProfile')
+        // console.log('at req transferDeviceProfile')
         let _this = this;
         Modal.confirm({
             content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
@@ -143,8 +143,8 @@ class Dashboard extends Component {
 
                                 <Col xl={4} lg={4} md={4} sm={12} xs={12}>
                                     <div className='dashboard-item-div'>
-                                        <Link to='devices'>
-                                            {/* <a href="javascript:void(0)" onClick={this.handleLinkRequests} > */}
+                                        {/* <Link to='devices'> */}
+                                            <a href="javascript:void(0)" onClick={this.handleLinkRequests} >
                                             <Badge count={1} >
                                                 <Card className='dashboard-card head-example'>
                                                     <Avatar
@@ -158,8 +158,8 @@ class Dashboard extends Component {
                                                 <span className='db-span-qnty'>{this.props.items.link_requests}</span>
                                                 <span className='db-span-text'>Link Request</span>
                                             </div>
-                                            {/* </a> */}
-                                        </Link>
+                                            </a>
+                                        {/* </Link> */}
                                     </div>
                                 </Col> : null
                         }
@@ -371,7 +371,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
-    console.log("dashboard::", auth.authUser);
+    // console.log("dashboard::", auth.authUser);
     return {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,

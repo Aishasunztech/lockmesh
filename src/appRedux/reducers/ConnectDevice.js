@@ -73,11 +73,11 @@ import {
 } from "../../constants/ActionTypes";
 
 import {
-    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Main_SETTINGS,
+    NOT_AVAILABLE, MAIN_MENU, WARNNING, PROCEED_WITH_WIPING_THE_DEVICE, Main_SETTINGS, SAVE_PROFILE_TEXT,
 } from '../../constants/Constants';
 
 import { message, Modal, Alert, Icon } from 'antd';
-import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED } from '../../constants/SocketConstants';
+import { ACK_UNINSTALLED_APPS, ACK_INSTALLED_APPS, ACK_SETTING_APPLIED, ACTION_IN_PROCESS } from '../../constants/SocketConstants';
 // import { Button_Cancel } from '../../constants/ButtonConstants';
 // import { convertToLang } from '../../routes/utils/commonUtils';
 // import { WIPE_DEVICE_DESCRIPTION } from '../../constants/DeviceConstants';
@@ -196,6 +196,8 @@ const initialState = {
     transferHistoryList: [],
     getHistory: ''
 };
+let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
+
 
 export default (state = initialState, action) => {
 
@@ -277,9 +279,14 @@ export default (state = initialState, action) => {
 
         case SUSPEND_DEVICE2: {
             if (action.response.status) {
-
+                // console.log(state.device, 'device is the', action.response.data)
                 state.device = action.response.data;
-                state.device.account_status = 'suspended';
+                let date = getCurrentDate();
+                state.activities.push({
+                    action_name: 'SUSPENDED',
+                    created_at: date
+                })
+                // state.device.account_status = 'suspended';
 
                 success({
                     title: action.response.msg,
@@ -294,18 +301,24 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isloading: false,
+                device: state.device,
+                activities: state.activities,
                 pageName: NOT_AVAILABLE
             }
 
         }
 
         case FLAG_DEVICE: {
-
+            // console.log(state.device, 'def devbice is ', action.payload.device)
             if (action.response.status) {
 
-                state.device = action.response.data;
+                state.device = action.payload.device;
                 state.pageName = NOT_AVAILABLE;
                 state.status = 'Suspended';
+                state.activities.push({
+                    action_name: 'FLAGED',
+                    created_at: getCurrentDate()
+                })
                 success({
                     title: action.response.msg,
                 });
@@ -317,13 +330,23 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
+                device: state.device,
+                activities: state.activities,
                 isloading: false,
             }
         }
 
         case UNFLAG_DEVICE: {
-            // console.log(action.response.msg);
+            // console.log(action.payload.device, 'unflage device is the ');
             if (action.response.status) {
+
+                state.device = action.payload.device;
+                state.activities.push({
+                    action_name: 'UNFLAGED',
+                    created_at: getCurrentDate()
+                })
+
+
                 success({
                     title: action.response.msg,
                 });
@@ -336,6 +359,8 @@ export default (state = initialState, action) => {
             // console.log('action done ', state.device)
             return {
                 ...state,
+                device: state.device,
+                activities: state.activities,
                 isloading: false,
             }
         }
@@ -405,6 +430,7 @@ export default (state = initialState, action) => {
 
 
         case GET_PROFILES: {
+            console.log(action.payload, 'profils are')
             return {
                 ...state,
                 isloading: true,
@@ -421,6 +447,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_ACTIVITIES: {
+            // console.log('action to palylad activities', action.payload.data)
             return {
                 ...state,
                 activities: action.payload.data
@@ -476,6 +503,16 @@ export default (state = initialState, action) => {
         }
         case APPLY_POLICY: {
             if (action.payload.status) {
+                // console.log(action.policyId, 'policy id', action.policyName, 'policyName', state.activities);
+               let date = getCurrentDate();
+                state.activities.push({
+                    action_name: 'POLICY APPLIED',
+                    created_at: date,
+                    data: {
+                        policy_name: action.policyName,
+                        policy_id: action.policyId
+                    }
+                })
                 if (action.payload.online) {
                     success({
                         title: action.payload.msg, // "Policy is Being applied",
@@ -493,10 +530,12 @@ export default (state = initialState, action) => {
                     title: action.payload.msg,
                 });
             }
+            // console.log(state.activities, 'new activities')
             return {
                 ...state,
                 is_policy_process: 1,
-                applyPolicyConfirm: false
+                applyPolicyConfirm: false,
+                activities: state.activities
             }
         }
 
@@ -629,12 +668,17 @@ export default (state = initialState, action) => {
 
         case ACTIVATE_DEVICE2: {
 
-            //  console.log(state.device, 'active device done', action.payload.device);
+            //  console.log(state.device, 'active device done', action.response.device);
             if (action.response.status) {
 
                 state.device = action.response.data;
                 state.status = '';
-                state.pageName = 'main_menu'
+                state.pageName = 'main_menu';
+                let date = getCurrentDate();
+                state.activities.push({
+                    action_name: 'ACTIVE',
+                    created_at: date
+                })
                 success({
                     title: action.response.msg,
                 });
@@ -650,6 +694,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 device: state.device,
+                activities: state.activities,
                 isloading: true
             }
         }
@@ -769,8 +814,14 @@ export default (state = initialState, action) => {
         }
 
         case SAVE_PROFILE: {
+            // console.log(action.response, 'response from save profle');
+            if(action.response.status){
+                state.profiles.push(action.response.data)
+            }
+            // console.log('new profiles are', state.profiles)
             return {
                 ...state,
+                profiles: state.profiles,
                 isSaveProfileBtn: false,
             }
         }
@@ -828,7 +879,7 @@ export default (state = initialState, action) => {
             // console.log(controls.controls);
             let index = controls.controls.findIndex((control) => control.setting_name === action.payload.key);
             if (index > -1) {
-                console.log("permission index:", index);
+                // console.log("permission index:", index);
 
                 controls.controls[index].setting_status = action.payload.value;
                 controls.controls[index].isChanged = true;
@@ -1310,13 +1361,13 @@ export default (state = initialState, action) => {
         }
         case RECEIVE_SIM_DATA: {
             if (action.payload.unRegSims.length > 0) {
-                console.log('unRegSims red')
+                // console.log('unRegSims red')
                 return {
                     ...state,
                     unRegSims: action.payload.unRegSims
                 }
             } else {
-                console.log('not unRegSims red')
+                // console.log('not unRegSims red')
                 return {
                     ...state,
                     simUpdated: new Date(),
@@ -1367,7 +1418,7 @@ export default (state = initialState, action) => {
         }
 
         case GET_UNREG_SIMS: {
-            console.log("action.payload.data ", action.payload.data);
+            // console.log("action.payload.data ", action.payload.data);
 
             if (action.response.status) {
 
@@ -1422,27 +1473,41 @@ export default (state = initialState, action) => {
         }
         case PASSWORD_CHANGED: {
 
-            if (action.payload.status) {
-                if (action.payload.online) {
+            // console.log('password reducer', action.payload)
+
+            if (action.payload.response.status) {
+                if (action.payload.response.online) {
+
                     success({
-                        title: action.payload.msg,
+                        title: action.payload.response.msg,
                     });
 
                 } else {
                     // message.warning(<Fragment><span>Warning Device Offline</span> <div>Apps pushed to device. </div> <div>Action will be performed when device is back online</div></Fragment>)
                     warning({
                         title: 'Warning Device Offline',
-                        content: action.payload.msg,
+                        content: action.payload.response.msg,
                     });
                 }
+                if(action.payload.pwdType){
+                    pwdObject[action.payload.pwdType] = action.payload.passwords.pwd ? action.payload.passwords.pwd : null;
+                }
+
+                state.activities.push({
+                    action_name: 'PASSWORD',
+                    created_at: getCurrentDate(),
+                    data: {passwords : JSON.stringify(pwdObject)}
+                })
+
             } else {
                 error({
-                    title: action.payload.msg,
+                    title: action.payload.response.msg,
                 });
             }
 
             return {
                 ...state,
+                activities: state.activities
             }
         }
 
@@ -1490,12 +1555,12 @@ export default (state = initialState, action) => {
         }
 
         case ACK_SETTING_APPLIED: {
-            console.log("ACK_SETTING_APPLIED ", action.payload.app_list)
-            console.log("ACK_SETTING_APPLIED extensions ", action.extensions)
+            // console.log("ACK_SETTING_APPLIED ", action.payload.app_list)
+            // console.log("ACK_SETTING_APPLIED extensions ", action.extensions)
             // console.log("ACK_SETTING_APPLIED controls ", action.payload.controls)
 
             let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
-            console.log('settings are: ', settings);
+            // console.log('settings are: ', settings);
             let controls = {};
             controls["controls"] = action.payload.controls;
             controls["settings"] = [settings[settings.length - 1]];
@@ -1620,3 +1685,9 @@ function handleCheckedAllExts(extensions) {
 //         },
 //     });
 // }
+
+function getCurrentDate(){
+    var tempDate = new Date();
+    var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
+    return date
+}
