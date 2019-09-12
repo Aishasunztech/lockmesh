@@ -89,7 +89,9 @@ import TransferHistory from './TransferModule/TransferHistory'
 
 const confirm = Modal.confirm;
 var coppyList = [];
+var coppyAppList = [];
 var status = true;
+var appStatus = true;
 
 
 class PasswordModal extends Component {
@@ -253,7 +255,7 @@ const PullAppsModal = (props) => {
                         className="search_heading1"
                         onKeyUp={
                             (e) => {
-                                // props.handleComponentSearch(e.target.value, 'pull_apps')
+                                props.handleComponentPullSearch(e.target.value, props.app_list)
                             }
                         }
                         autoComplete="new-password"
@@ -347,6 +349,7 @@ class SideActions extends Component {
             actionType: PUSH_APPS,
 
             apk_list: [],
+            app_list: [],
 
             selectedPushAppsModal: false,
             selectedPushAppKeys: [],
@@ -389,6 +392,7 @@ class SideActions extends Component {
             changedCtrls: this.props.changedCtrls,
             isSaveProfileBtn: this.props.isSaveProfileBtn,
             apk_list: this.props.apk_list,
+            app_list: this.props.app_list,
             // selectedApps: this.props.apk_list
         });
 
@@ -409,6 +413,7 @@ class SideActions extends Component {
                 activities: nextProps.activities,
                 isSaveProfileBtn: nextProps.isSaveProfileBtn,
                 apk_list: nextProps.apk_list,
+                app_list: nextProps.app_list,
                 dump_apks: JSON.parse(JSON.stringify(nextProps.apk_list))
                 // selectedApps: nextProps.apk_list
             })
@@ -562,9 +567,11 @@ class SideActions extends Component {
         })
     }
 
-    handleComponentSearch = (value) => {
+    handleComponentSearch = (value, label) => {
         try {
-            // console.log(value, 'value')
+            // console.log(value, 'value & label', label)
+            // console.log('apk_list ', this.props.apk_list);
+            // console.log('app_list ', this.props.app_list);
             if (value.length) {
                 // console.log(value, 'value')
                 if (status) {
@@ -589,6 +596,41 @@ class SideActions extends Component {
 
                 this.setState({
                     apk_list: coppyList,
+                })
+            }
+        } catch (error) {
+        }
+    }
+
+    handleComponentPullSearch = (value, app_list) => {
+        try {
+            // console.log(value, 'value & label', label)
+            // console.log('apk_list ', this.props.apk_list);
+            // console.log('app_list ', app_list);
+            if (value.length) {
+                // console.log(value, 'value')
+                if (appStatus) {
+                    // console.log('status')
+                    coppyAppList = app_list // renderApps(this.props.apk_list); // this.props.app_list;
+                    appStatus = false;
+                }
+                // console.log(renderApps(this.props.apk_list), 'coppyAppList ::', coppyAppList)
+                let foundList = componentSearch(coppyAppList, value);
+                // console.log('found devics', foundList)
+                if (foundList.length) {
+                    this.setState({
+                        app_list: foundList,
+                    })
+                } else {
+                    this.setState({
+                        app_list: []
+                    })
+                }
+            } else {
+                appStatus = true;
+
+                this.setState({
+                    app_list: coppyAppList,
                 })
             }
         } catch (error) {
@@ -1135,8 +1177,8 @@ class SideActions extends Component {
                 <PullAppsModal
                     pullAppsModal={this.state.pullAppsModal}
                     showPullAppsModal={this.props.showPullAppsModal}
-                    handleComponentSearch={this.handleComponentSearch}
-                    app_list={this.props.app_list}
+                    handleComponentPullSearch={this.handleComponentPullSearch}
+                    app_list={this.state.app_list}
                     onPullAppsSelection={this.onPullAppsSelection}
                     showSelectedPullAppsModal={this.showSelectedPullAppsModal}
                     selectedPullApps={this.state.selectedPullApps}

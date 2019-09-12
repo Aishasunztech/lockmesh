@@ -798,7 +798,7 @@ function mapDispatchToProps(dispatch) {
 }
 var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
 
-  console.log("device_details.extensions ", device_details.extensions)
+  // console.log("device_details.extensions ", device_details.extensions)
   // console.log(device_details.pageName, "device_details.controls ", device_details.controls)
 
   return {
