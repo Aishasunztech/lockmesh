@@ -107,7 +107,8 @@
     width: 298px;
     margin: 0;
     border-radius: 0px;
-    padding-top: 23px;
+    /* padding-top: 23px; */
+    margin-top: 23px;
 }
 
 .ant-table-small {
