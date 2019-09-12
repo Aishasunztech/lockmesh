@@ -63,7 +63,7 @@ export default class Activity extends Component {
             {
                 title: convertToLang(props.translation[DEVICE_IMEI_2], "IMEI2"),
                 dataIndex: 'imei2',
-                key: '1',
+                key: '2',
                 render: text => <a href="javascript:;">{text}</a>,
             },
         ];
@@ -188,6 +188,17 @@ export default class Activity extends Component {
         }
     }
 
+    renderPasswords = (record) => {
+        if(record.data.passwords){
+            let passwords = JSON.parse(record.data.passwords);
+            for(let key of Object.keys(passwords)){
+                if(passwords[key] !== null && passwords[key] !== 'null' && passwords[key]){
+                    return key.replace(/_/g,' ').toUpperCase() ;
+                }
+            }
+        }
+         
+    }
 
     renderList = () => {
         let data = this.state.activities;
@@ -196,7 +207,7 @@ export default class Activity extends Component {
                 console.log(row.data);
                 return {
                     key: index,
-                    action_name: row.action_name.toUpperCase(),
+                    action_name: row.action_name.toUpperCase() === 'PASSWORD' ? 'PASSWORD CHANGED' : row.action_name.toUpperCase(),
                     created_at: getFormattedDate(row.created_at),
                     data: row.data
                 }
@@ -296,6 +307,7 @@ export default class Activity extends Component {
                                     />
                                 )
                             } else if (record.action_name === 'IMEI CHANGED') {
+                                // console.log(record.data, 'expanded row is the')
                                 return (
                                     <Table
                                         style={{ margin: 0, padding: 0 }}
@@ -379,6 +391,14 @@ export default class Activity extends Component {
                                     />
                                 )
 
+                            } else if(record.action_name === 'PASSWORD CHANGED'){
+                                // console.log( 'password recoerd i sthe ', JSON.parse(record.data.passwords));
+                               
+                                return (
+                                   <div>
+                                       <p style={{margin: 'auto'}} >{this.renderPasswords(record)} is Changed</p>
+                                   </div>
+                                )
                             }
 
                         }}

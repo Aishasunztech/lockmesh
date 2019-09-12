@@ -40,7 +40,7 @@ class Dashboard extends Component {
     }
 
     transferDeviceProfile = (obj) => {
-        console.log('at req transferDeviceProfile')
+        // console.log('at req transferDeviceProfile')
         let _this = this;
         Modal.confirm({
             content: "Are You Sure, You want to Transfer Flagged Device to this Requested Device ?", //convertToLang(_this.props.translation[ARE_YOU_SURE_YOU_WANT_TRANSFER_THE_DEVICE], "Are You Sure, You want to Transfer this Device"),
@@ -54,18 +54,27 @@ class Dashboard extends Component {
         });
     }
 
+
+    componentWillReceiveProps(nextProps){
+        if(this.props !== nextProps){
+            console.log(nextProps.devices, 'next props are')
+        }
+    }
+
     handleLinkRequests = () => {
 
-        this.props.getNewCashRequests();
+        // this.props.getNewCashRequests();
         // this.props.getNewDevicesList()
-        this.props.getUserCredit()
-        this.refs.new_device.showModal(false);
-        this.props.getDevicesList();
+        // this.props.getUserCredit()
 
-        // alert('its working');
+
+        // this.refs.new_device.showModal(false, true); // sectionvisible, showLInkRequest
+
+        // this.props.getDevicesList();
     }
 
     render() {
+        console.log(this.props.devices, 'devices or new link request')
         return (
             <div>
                 <AppFilter
@@ -143,9 +152,9 @@ class Dashboard extends Component {
 
                                 <Col xl={4} lg={4} md={4} sm={12} xs={12}>
                                     <div className='dashboard-item-div'>
-                                        <Link to='devices'>
-                                            {/* <a href="javascript:void(0)" onClick={this.handleLinkRequests} > */}
-                                            <Badge count={1} >
+                                        {/* <Link to='devices'> */}
+                                            <a href="javascript:void(0)" onClick={this.handleLinkRequests} >
+                                            <Badge count={this.props.devices ? this.props.devices.length : 0} >
                                                 <Card className='dashboard-card head-example'>
                                                     <Avatar
                                                         src={require("../../assets/images/dashboard/link_device.png")}
@@ -155,11 +164,11 @@ class Dashboard extends Component {
                                                 </Card>
                                             </Badge>
                                             <div className="dash_btm_txt">
-                                                <span className='db-span-qnty'>{this.props.items.link_requests}</span>
+                                                <span className='db-span-qnty'>{this.props.devices ? this.props.devices.length : 0}</span>
                                                 <span className='db-span-text'>Link Request</span>
                                             </div>
-                                            {/* </a> */}
-                                        </Link>
+                                            </a>
+                                        {/* </Link> */}
                                     </div>
                                 </Col> : null
                         }
@@ -371,7 +380,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
-    console.log("dashboard::", auth.authUser);
+    // console.log("dashboard::", auth.authUser);
     return {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,
