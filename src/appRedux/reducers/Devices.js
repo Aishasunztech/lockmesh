@@ -263,15 +263,16 @@ export default (state = initialState, action) => {
             }
             break;
 
+
         case EDIT_DEVICE:
-let filteredDevices = state.newDevices;
+            let filteredDevices = state.newDevices;
             if (action.response.status) {
                 let objIndex4 = state.devices.findIndex((obj => obj.device_id === action.payload.formData.device_id));
                 state.devices[objIndex4] = action.response.data[0];
 
                 var alldevices = state.newDevices;
-                var device_id = action.device.device_id;
-                 filteredDevices = alldevices.filter(device => device.device_id !== device_id);
+                var device_id = action.payload.formData.device_id;
+                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
 
                 success({
                     title: action.response.msg,
@@ -396,8 +397,8 @@ let filteredDevices = state.newDevices;
                 // console.log(state.newDevices, 'new devices from reducer')
                 var alldevices = state.devices;
                 var device_id = action.device.device_id;
-                 filteredDevices = alldevices.filter(device => device.device_id !== device_id);
-                 filteredNewDevices = filteredNewDevices.filter(device => device.device_id !== device_id);
+                filteredDevices = alldevices.filter(device => device.device_id !== device_id);
+                filteredNewDevices = filteredNewDevices.filter(device => device.device_id !== device_id);
                 success({
                     title: action.response.msg,
                 });
