@@ -79,7 +79,7 @@ export default class NewDevices extends Component {
         }
     }
     rejectDevice(device) {
-console.log('reject device called')
+// console.log('reject device called')
         this.props.rejectDevice(device);
     }
 

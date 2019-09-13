@@ -43,6 +43,7 @@ import {
   DEVICE_VERSION,
   DEVICE_TRANSFERED,
   DEVICE_LASTONLINE,
+  DEVICE_FIRMWAREINFO,
 } from '../../../constants/DeviceConstants';
 
 import {
@@ -88,6 +89,7 @@ export var initialSettings = {
     { "key": "online", "value": DEVICE_MODE },
     { "key": "type", "value": DEVICE_TYPE },
     { "key": "version", "value": DEVICE_VERSION },
+    { "key": "firmware_info", "value": DEVICE_FIRMWAREINFO },
     { "key": "flagged", "value": DEVICE_FLAGGED },
     { "key": "name", "value": DEVICE_NAME },
     { "key": "account_email", "value": DEVICE_ACCOUNT_EMAIL },
