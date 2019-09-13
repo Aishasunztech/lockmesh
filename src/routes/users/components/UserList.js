@@ -123,7 +123,7 @@ class UserList extends Component {
     componentDidMount() {
         this.setState({
             users: this.props.users,
-            // expandedRowKeys: this.props.expandedRowsKey
+            expandedRowKeys: this.props.expandedRowsKey
         });
         // this.handleScroll()
     }
@@ -156,6 +156,12 @@ class UserList extends Component {
 
     componentDidUpdate(prevProps) {
 
+        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
+        //     this.setState({
+        //         expandedRowKeys: this.props.expandedRowsKey
+        //     })
+        // }
+        
         if (this.props !== prevProps) {
 
             // console.log('this.props.expandr', this.props)

@@ -119,10 +119,16 @@ class DealerList extends Component {
 
     componentDidUpdate(prevProps) {
 
+        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
+        //     this.setState({
+        //         expandedRowKeys: this.props.expandedRowsKey
+        //     })
+        // }
+        
         if (this.props !== prevProps) {
             this.setState({
                 columns: this.props.columns,
-                // expandedRowKeys: this.props.expandedRowKeys
+                expandedRowKeys: this.props.expandedRowKeys
             })
         }
     }
@@ -351,6 +357,12 @@ export default class Tab extends Component {
 
     componentDidUpdate(prevProps) {
 
+        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
+        //     this.setState({
+        //         expandedRowKeys: this.props.expandedRowsKey
+        //     })
+        // }
+
         if (this.props !== prevProps) {
 
             this.setState({
@@ -358,7 +370,7 @@ export default class Tab extends Component {
                 columns: this.props.columns,
                 tabselect: this.props.tabselect,
                 selectedOptions: this.props.selectedOptions,
-                // expandedRowKeys: this.props.expandedRowsKey
+                expandedRowKeys: this.props.expandedRowsKey
             })
         }
     }
