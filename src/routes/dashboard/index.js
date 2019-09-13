@@ -67,8 +67,7 @@ class Dashboard extends Component {
         // this.props.getNewDevicesList()
         // this.props.getUserCredit()
 
-
-        // this.refs.new_device.showModal(false, true); // sectionvisible, showLInkRequest
+        this.refs.new_device.showModal(false, true); // sectionvisible, showLInkRequest
 
         // this.props.getDevicesList();
     }
@@ -368,11 +367,11 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getDashboardData: getDashboardData,
 
-        addDevice: addDevice,
-        rejectDevice: rejectDevice,
-        acceptRequest: acceptRequest,
-        rejectRequest: rejectRequest,
-        transferDeviceProfile: transferDeviceProfile,
+        addDevice: addDevice,  // for link requests
+        rejectDevice: rejectDevice, // for link requests
+        acceptRequest: acceptRequest,  // for credit requests
+        rejectRequest: rejectRequest, // for credit requests
+        // transferDeviceProfile: transferDeviceProfile,
 
         getNewCashRequests: getNewCashRequests,
         getUserCredit: getUserCredit,
@@ -380,7 +379,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
-    // console.log("dashboard::", auth.authUser);
+    console.log("dashboard::", devices.newDevices);
     return {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,
