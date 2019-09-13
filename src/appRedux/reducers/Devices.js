@@ -399,10 +399,10 @@ export default (state = initialState, action) => {
             var alldevices = state.devices;
             var device_id = action.device_id;
             var filteredDevices = alldevices.filter(device => device.device_id !== device_id);
-console.log('reducer filtered devices are', filteredDevices)
+// console.log('reducer filtered devices are', filteredDevices);
             return {
                 ...state,
-                devices: filteredDevices,
+                newDevices: filteredDevices,
             }
         }
 
