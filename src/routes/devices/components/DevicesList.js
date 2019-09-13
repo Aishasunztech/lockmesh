@@ -186,7 +186,7 @@ class DevicesList extends Component {
                 size="small"
                 style={{ margin: '0 8px 0 0', color: "#fff", background: "#000", textTransform: 'uppercase' }}
                 onClick={() => { (device.finalStatus == "Transfered") ? this.props.unlinkConfirm(device) : this.props.unflagConfirm(device) }}
-                // disabled={(device.finalStatus == "Transfered") ? true : false}
+            // disabled={(device.finalStatus == "Transfered") ? true : false}
             >{convertToLang(this.props.translation[Button_UNFLAG], "UNFLAG")} </Button>;
 
             // console.log(device.usr_device_id,'key', device.device_id)
@@ -233,6 +233,7 @@ class DevicesList extends Component {
                 flagged: device.flagged,
                 type: checkValue(device.type),
                 version: checkValue(device.version),
+                firmware_info: checkValue(device.firmware_info),
                 device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : "N/A",
                 // device_id: ((status !== DEVICE_PRE_ACTIVATION)) ? checkValue(device.device_id) : (device.validity) ? (this.props.tabselect == '3') ? `${device.validity}` : "N/A" : "N/A",
                 user_id: <a onClick={() => { this.handleUserId(device.user_id) }}>{checkValue(device.user_id)}</a>,
