@@ -123,13 +123,13 @@ class UserList extends Component {
     componentDidMount() {
         this.setState({
             users: this.props.users,
-            expandedRowKeys: this.props.expandedRowsKey
+            // expandedRowKeys: this.props.expandedRowsKey
         });
         // this.handleScroll()
     }
 
     onExpandRow = (expanded, record) => {
-        // console.log(expanded, 'data is expanded', record);
+        console.log(expanded, 'data is expanded', record);
         if (expanded) {
             if (!this.state.expandedRowKeys.includes(record.rowKey)) {
                 this.state.expandedRowKeys.push(record.rowKey);
@@ -162,7 +162,7 @@ class UserList extends Component {
             this.setState({
                 columns: this.props.columns,
                 users: this.props.users,
-                expandedRowKeys: this.props.expandedRowsKey
+                // expandedRowKeys: this.props.expandedRowsKey
             })
         }
     }
@@ -175,7 +175,7 @@ class UserList extends Component {
         } else {
             styleType = "users_fix_card_dealer"
         }
-        // console.log(this.state.expandedRowKeys)
+        console.log("render function: ", this.state.expandedRowKeys)
         return (
             <Fragment>
                 <Card className={`fix_card ${styleType}`}>
@@ -199,7 +199,7 @@ class UserList extends Component {
                             }}
                             expandIconColumnIndex={3}
                             expandedRowKeys={this.state.expandedRowKeys}
-                            onExpand={this.onExpandRow}
+                            onExpand={(expended, record) => this.onExpandRow(expended, record)}
                             expandIconAsCell={false}
                             defaultExpandedRowKeys={(this.props.location.state) ? [this.props.location.state.id] : []}
                             columns={this.state.columns}

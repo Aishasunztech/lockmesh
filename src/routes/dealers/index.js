@@ -96,7 +96,7 @@ class Dealers extends Component {
     // };
 
     handleTableChange = (pagination, query, sorter) => {
-        console.log('check sorter func: ', sorter)
+        // console.log('check sorter func: ', sorter)
         let { columns } = this.state;
 
         columns.forEach(column => {
