@@ -132,6 +132,7 @@ class ConnectDevice extends Component {
 
   changePage = (pageName) => {
     if (this.props.device_details.finalStatus === DEVICE_ACTIVATED || this.props.device_details.finalStatus === DEVICE_TRIAL) {
+      console.log(pageName, 'page name')
       this.props.changePage(pageName);
       this.setState({ dynamicBackButton: true })
     }
@@ -385,6 +386,23 @@ class ConnectDevice extends Component {
               translation={this.props.translation}
             />
           );
+        } else if (this.props.pageName === MANAGE_PASSWORD) {
+          return (
+            <List
+              className="dev_main_menu"
+              size="small"
+              dataSource={this.subMenu}
+              renderItem={item => {
+                return (<List.Item
+                  onClick={() => {
+
+                    this.changePage(item.pageName)
+                  }}
+                ><a>{item.value}</a></List.Item>)
+              }}
+            />
+          )
+
         } else {
           // if (this.props.pageName === MAIN_MENU) {
           return (
@@ -417,24 +435,6 @@ class ConnectDevice extends Component {
       // }
     }
 
-    if (this.props.pageName === MANAGE_PASSWORD) {
-      return (
-        <List
-          className="dev_main_menu"
-          size="small"
-          dataSource={this.subMenu}
-          renderItem={item => {
-            return (<List.Item
-              onClick={() => {
-
-                this.changePage(item.pageName)
-              }}
-            ><a>{item.value}</a></List.Item>)
-          }}
-        />
-      )
-
-    }
   }
 
   applyActionButton = (visible = true) => {
@@ -483,11 +483,11 @@ class ConnectDevice extends Component {
 
     this.props.applySetting(
       app_list, {
-        adminPwd: this.props.adminPwd,
-        guestPwd: this.props.guestPwd,
-        encryptedPwd: this.props.encryptedPwd,
-        duressPwd: this.props.duressPwd,
-      },
+      adminPwd: this.props.adminPwd,
+      guestPwd: this.props.guestPwd,
+      encryptedPwd: this.props.encryptedPwd,
+      duressPwd: this.props.duressPwd,
+    },
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
       this.state.controls.controls,
       this.state.device_id,

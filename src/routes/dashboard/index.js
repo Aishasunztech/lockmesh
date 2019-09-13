@@ -67,8 +67,7 @@ class Dashboard extends Component {
         // this.props.getNewDevicesList()
         // this.props.getUserCredit()
 
-
-        // this.refs.new_device.showModal(false, true); // sectionvisible, showLInkRequest
+        this.refs.new_device.showModal(false, true); // sectionvisible, showLInkRequest
 
         // this.props.getDevicesList();
     }
@@ -148,29 +147,29 @@ class Dashboard extends Component {
                             </div>
                         </Col>
                         {
-                            this.props.authUser.type == DEALER || this.props.authUser.type == SDEALER ?
+                            // this.props.authUser.type == DEALER || this.props.authUser.type == SDEALER ?
 
-                                <Col xl={4} lg={4} md={4} sm={12} xs={12}>
-                                    <div className='dashboard-item-div'>
-                                        {/* <Link to='devices'> */}
-                                            <a href="javascript:void(0)" onClick={this.handleLinkRequests} >
-                                            <Badge count={this.props.devices ? this.props.devices.length : 0} >
-                                                <Card className='dashboard-card head-example'>
-                                                    <Avatar
-                                                        src={require("../../assets/images/dashboard/link_device.png")}
-                                                        // className="gx-size-40 gx-pointer gx-mr-3"
-                                                        alt=""
-                                                    />
-                                                </Card>
-                                            </Badge>
-                                            <div className="dash_btm_txt">
-                                                <span className='db-span-qnty'>{this.props.devices ? this.props.devices.length : 0}</span>
-                                                <span className='db-span-text'>Link Request</span>
-                                            </div>
-                                            </a>
-                                        {/* </Link> */}
-                                    </div>
-                                </Col> : null
+                            //     <Col xl={4} lg={4} md={4} sm={12} xs={12}>
+                            //         <div className='dashboard-item-div'>
+                            //             {/* <Link to='devices'> */}
+                            //                 <a href="javascript:void(0)" onClick={this.handleLinkRequests} >
+                            //                 <Badge count={this.props.devices ? this.props.devices.length : 0} >
+                            //                     <Card className='dashboard-card head-example'>
+                            //                         <Avatar
+                            //                             src={require("../../assets/images/dashboard/link_device.png")}
+                            //                             // className="gx-size-40 gx-pointer gx-mr-3"
+                            //                             alt=""
+                            //                         />
+                            //                     </Card>
+                            //                 </Badge>
+                            //                 <div className="dash_btm_txt">
+                            //                     <span className='db-span-qnty'>{this.props.devices ? this.props.devices.length : 0}</span>
+                            //                     <span className='db-span-text'>Link Request</span>
+                            //                 </div>
+                            //                 </a>
+                            //             {/* </Link> */}
+                            //         </div>
+                            //     </Col> : null
                         }
 
                         <Col xl={4} lg={4} md={4} sm={12} xs={12}>
@@ -368,11 +367,11 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getDashboardData: getDashboardData,
 
-        addDevice: addDevice,
-        rejectDevice: rejectDevice,
-        acceptRequest: acceptRequest,
-        rejectRequest: rejectRequest,
-        transferDeviceProfile: transferDeviceProfile,
+        addDevice: addDevice,  // for link requests
+        rejectDevice: rejectDevice, // for link requests
+        acceptRequest: acceptRequest,  // for credit requests
+        rejectRequest: rejectRequest, // for credit requests
+        // transferDeviceProfile: transferDeviceProfile,
 
         getNewCashRequests: getNewCashRequests,
         getUserCredit: getUserCredit,
@@ -380,7 +379,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 var mapStateToProps = ({ dashboard, auth, devices, sidebar, settings }) => {
-    // console.log("dashboard::", auth.authUser);
+    console.log("dashboard::", devices.newDevices);
     return {
         items: dashboard.dashboard_items,
         authUser: auth.authUser,
