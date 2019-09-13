@@ -6,7 +6,7 @@ import AppFilter from '../../components/AppFilter';
 import UserList from "./components/UserList";
 import { getStatus, componentSearch, titleCase, convertToLang } from '../utils/commonUtils';
 
-
+import { isArray } from "util";
 import {
     ADMIN,
 } from '../../constants/Constants'
@@ -68,6 +68,7 @@ class Users extends Component {
             users: [],
             originalUsers: [],
             expandedRowsKeys: [],
+            SearchValues: []
         }
 
     }
@@ -264,47 +265,123 @@ class Users extends Component {
         // console.log(e.target.name , e.target.value);
 
         let demoUsers = [];
+        let demoSearchValues = this.state.SearchValues;
         if (status) {
             coppyUsers = this.state.users;
             status = false;
         }
-        //   console.log("devices", coppyDevices);
+        // console.log("demoSearchValues ", demoSearchValues);
 
-        if (e.target.value.length) {
+        let targetName = e.target.name;
+        let targetValue = e.target.value;
+
+        if (targetValue.length || Object.keys(demoSearchValues).length) {
+            demoSearchValues[targetName] = { key: targetName, value: targetValue };
+            this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
             // console.log("keyname", e.target.name);
             // console.log("value", e.target.value);
             // console.log(this.state.devices);
             coppyUsers.forEach((user) => {
-                //  console.log("user", user[e.target.name] !== undefined);
+                // console.log(user, "user", user[e.target.name] !== undefined);
 
-                if (user[e.target.name] !== undefined) {
-                    if ((typeof user[e.target.name]) === 'string') {
-                        // console.log("string check", user[e.target.name])
-                        if (user[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
-                            demoUsers.push(user);
+                // if (user[e.target.name] !== undefined) {
+
+                let searchColsAre = Object.keys(demoSearchValues).length;
+                let searchUsers = 0;
+                // if (typeof (user[targetName]) === 'string' && user[targetName] !== null && user[targetName] !== undefined) {
+                // console.log("string check", user[e.target.name])
+
+                if (searchColsAre > 0) {
+                    Object.values(demoSearchValues).forEach((data) => {
+
+                        if (typeof (user[data.key]) === 'string' && user[data.key] !== null && user[data.key] !== undefined) {
+
+                            if (data.value == "") {
+                                searchUsers++;
+                            } else if (user[data.key]) {
+                                if (user[data.key].toUpperCase().includes(data.value.toUpperCase())) {
+                                    searchUsers++;
+                                }
+                            }
+                        } else if (isArray(user[data.key])) {
+                            if (user[data.key].length.toString().toUpperCase().includes(data.value.toUpperCase())) {
+                                searchUsers++;
+                            }
                         }
-                    } else if (user[e.target.name] !== null) {
-                        // console.log("else null check", user[e.target.name])
-                        if (user[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
-                            demoUsers.push(user);
-                        }
-                    } else {
-                        // demoUsers.push(user);
+
+                    })
+
+                    if (searchColsAre === searchUsers) {
+                        demoUsers.push(user);
                     }
+
                 } else {
-                    demoUsers.push(user);
+                    if (user[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
+                        demoUsers.push(user);
+                    }
                 }
+
+
             });
             //  console.log("searched value", demoUsers);
             this.setState({
-                users: demoUsers
+                users: demoUsers,
+                SearchValues: demoSearchValues
             })
         } else {
             this.setState({
-                users: coppyUsers
+                users: coppyUsers,
+                SearchValues: demoSearchValues
             })
         }
     }
+
+    // handleSearch = (e) => {
+    //     // console.log('============ check search value ========')
+    //     // console.log(e.target.name , e.target.value);
+
+    //     let demoUsers = [];
+    //     if (status) {
+    //         coppyUsers = this.state.users;
+    //         status = false;
+    //     }
+    //     //   console.log("devices", coppyDevices);
+
+    //     if (e.target.value.length) {
+    //         // console.log("keyname", e.target.name);
+    //         // console.log("value", e.target.value);
+    //         // console.log(this.state.devices);
+    //         coppyUsers.forEach((user) => {
+    //              console.log("user", user[e.target.name] !== undefined);
+
+    //             if (user[e.target.name] !== undefined) {
+    //                 if ((typeof user[e.target.name]) === 'string') {
+    //                     // console.log("string check", user[e.target.name])
+    //                     if (user[e.target.name].toUpperCase().includes(e.target.value.toUpperCase())) {
+    //                         demoUsers.push(user);
+    //                     }
+    //                 } else if (user[e.target.name] !== null) {
+    //                     // console.log("else null check", user[e.target.name])
+    //                     if (user[e.target.name].toString().toUpperCase().includes(e.target.value.toUpperCase())) {
+    //                         demoUsers.push(user);
+    //                     }
+    //                 } else {
+    //                     // demoUsers.push(user);
+    //                 }
+    //             } else {
+    //                 demoUsers.push(user);
+    //             }
+    //         });
+    //         //  console.log("searched value", demoUsers);
+    //         this.setState({
+    //             users: demoUsers
+    //         })
+    //     } else {
+    //         this.setState({
+    //             users: coppyUsers
+    //         })
+    //     }
+    // }
 
     render() {
         // console.log(this.state.expandedRowsKeys, 'refs is');

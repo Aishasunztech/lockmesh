@@ -1019,7 +1019,7 @@ export function usersColumns(translation, handleSearch) {
             title: (
                 <div>
                     <Input.Search
-                        name="device_id"
+                        name="devicesList"
                         key="device_id"
                         id="device_id"
                         className="search_heading device_id_w"
