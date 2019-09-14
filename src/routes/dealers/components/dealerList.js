@@ -101,7 +101,7 @@ class DealerList extends Component {
             searchText: '',
             columns: [],
             pagination: this.props.pagination,
-            expandedRowKeys: [],
+            expandedRowKeys: props.expandedRowKeys, // [],
             redirect: false,
             dealer_id: '',
 
@@ -119,6 +119,12 @@ class DealerList extends Component {
 
     componentDidUpdate(prevProps) {
 
+        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
+        //     this.setState({
+        //         expandedRowKeys: this.props.expandedRowsKey
+        //     })
+        // }
+        
         if (this.props !== prevProps) {
             this.setState({
                 columns: this.props.columns,
@@ -350,6 +356,12 @@ export default class Tab extends Component {
     }
 
     componentDidUpdate(prevProps) {
+
+        // if (this.props.expandedRowsKey !== prevProps.expandedRowsKey) {
+        //     this.setState({
+        //         expandedRowKeys: this.props.expandedRowsKey
+        //     })
+        // }
 
         if (this.props !== prevProps) {
 
