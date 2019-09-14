@@ -238,6 +238,11 @@ export default class DeviceSidebar extends Component {
                 key: 29,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation["Last Online"], "Last Online"))}:</a>),
                 value: checkValue(device_details.lastOnline)
+            },
+            {
+                key: 30,
+                name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation["Note"], "Note"))}:</a>),
+                value: checkValue(device_details.note)
             }
         ]
     }
