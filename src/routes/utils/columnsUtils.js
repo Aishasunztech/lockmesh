@@ -1427,7 +1427,7 @@ export function dealerColumns(translation, handleSearch) {
     {
         title: (
             <Input.Search
-                name="connected_devices"
+                name="devicesList"
                 key="connected_devices"
                 id="connected_devices"
                 className="search_heading"
