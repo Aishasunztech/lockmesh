@@ -245,6 +245,9 @@ const RestService = {
         //   console.log('api called ')
         return axios.get(BASE_URL + "users/get_app_permissions", RestService.getHeader());
     },
+    getSystemPermissions: () => {
+        return axios.get(BASE_URL + 'users/get_system_permissions', RestService.getHeader());
+    },
 
     deleteORStatusPolicy: (data) => {
         //   console.log('api called ')
@@ -775,6 +778,10 @@ const RestService = {
         return axios.get(BASE_URL + 'users/sim-history/' + device_id, RestService.getHeader());
     },
 
+    getUnRegisterSims: (device_id) => {
+        return axios.get(BASE_URL + 'users/get-unRegSims/' + device_id, RestService.getHeader());
+    },
+
     // Dealer Agents Section
     getAgentList: () => {
         return axios.get(BASE_URL + 'users/agents', RestService.getHeader())
@@ -863,6 +870,9 @@ const RestService = {
         }, RestService.getHeader());
     },
 
+    submtPassword: (data) => {
+        return axios.post(BASE_URL + 'users/submit-device-passwords', data, RestService.getHeader());
+    }
 
 }
 export default RestService;

@@ -5,11 +5,11 @@ import {
     GET_APPS_PERMISSIONS,
     HANDLE_CHECK_SYSTEM_PERMISSIONS,
     SAVE_POLICY,
-    PERMSSION_SAVED,
+    PERMISSION_SAVED,
     HANDLE_CHECK_ALL_APP_POLICY,
     HANDLE_POLICY_STATUS,
     EDIT_POLICY,
-    POLICY_PERMSSION_SAVED,
+    POLICY_PERMISSION_SAVED,
     SAVE_POLICY_CHANGES,
     CHECK_HANDLE_ALL_POLICY,
     DEFAULT_POLICY_CHANGE,
@@ -18,7 +18,8 @@ import {
     CHECK_TOGGLE_BUTTONS,
     RESET_POLICY,
     RESET_ADD_POLICY_FORM,
-    HANDLE_APPS_GOTTED
+    HANDLE_APPS_GOTTED,
+    GET_SYSTEM_PERMISSIONS
 } from "../../constants/ActionTypes";
 
 import RestService from '../services/RestServices';
@@ -41,9 +42,10 @@ export function getPolicies() {
 
 }
 
-export function getAppPermissions(device_id) {
+export function getAppPermissions() {
+    
     return (dispatch) => {
-        RestService.getAppPermissions(device_id).then((response) => {
+        RestService.getAppPermissions().then((response) => {
 
             if (RestService.checkAuth(response.data)) {
                 if (response.data.status) {
@@ -62,6 +64,26 @@ export function getAppPermissions(device_id) {
     }
 }
 
+export function getSystemPermissions() {
+    return (dispatch) => {
+        RestService.getSystemPermissions().then((response) => {
+
+            if (RestService.checkAuth(response.data)) {
+                if (response.data.status) {
+                    dispatch({
+                        type: GET_SYSTEM_PERMISSIONS,
+                        payload: response.data
+                    })
+                }
+
+            } else {
+                dispatch({
+                    type: INVALID_TOKEN
+                })
+            }
+        });
+    }
+}
 
 export function getDefaultApps() {
     return (dispatch) => {
@@ -79,7 +101,7 @@ export function getDefaultApps() {
 }
 
 
-export function handleChekSystemPermission(e, key) {
+export function handleCheckSystemPermission(e, key) {
     return (dispatch) => {
         dispatch({
             type: HANDLE_CHECK_SYSTEM_PERMISSIONS,
@@ -313,7 +335,7 @@ export function savePermission(policy_id, dealers, action) {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
-                    type: POLICY_PERMSSION_SAVED,
+                    type: POLICY_PERMISSION_SAVED,
                     payload: response.data.msg,
                     permission_count: response.data.permission_count,
                     policy_id: policy_id,

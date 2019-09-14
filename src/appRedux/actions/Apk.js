@@ -5,7 +5,7 @@ import {
     UNLINK_APK,
     EDIT_APK,
     LOADING,
-    PERMSSION_SAVED,
+    PERMISSION_SAVED,
     RESET_UPLOAD_FORM,
     // CHECK_APK_NAME,
     AUTHENTICATE_UPDATE_USER,
@@ -168,7 +168,7 @@ export function savePermission(apk_id, dealers, action) {
             if (RestService.checkAuth(response.data)) {
 
                 dispatch({
-                    type: PERMSSION_SAVED,
+                    type: PERMISSION_SAVED,
                     payload: response.data.msg,
                     permission_count: response.data.permission_count,
                     apk_id: apk_id,

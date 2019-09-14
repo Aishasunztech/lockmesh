@@ -548,7 +548,7 @@ class Devices extends Component {
                     this.state.columns[indxRemainingDays].className = 'hide';
                     this.state.columns[indxRemainingDays].children[0].className = 'hide';
                 }
-                
+
             }
 
             let indexTransfered = this.state.columns.findIndex(k => k.dataIndex === 'transfered_to');
@@ -557,8 +557,8 @@ class Devices extends Component {
                 //     this.state.columns[indexTransfered].className = '';
                 //     this.state.columns[indexTransfered].children[0].className = '';
                 // } else {
-                    this.state.columns[indexTransfered].className = 'hide';
-                    this.state.columns[indexTransfered].children[0].className = 'hide';
+                this.state.columns[indexTransfered].className = 'hide';
+                this.state.columns[indexTransfered].children[0].className = 'hide';
                 // }
             }
 
@@ -1008,11 +1008,13 @@ class Devices extends Component {
 
                     if (searchColsAre > 0) {
                         Object.values(demoSearchValues).forEach((data) => {
-                            
+
                             if (data.value == "") {
                                 searchDevices++;
-                            } else if (device[data.key].toUpperCase().includes(data.value.toUpperCase())) {
-                                searchDevices++;
+                            } else if (device[data.key]) {
+                                if (device[data.key].toUpperCase().includes(data.value.toUpperCase())) {
+                                    searchDevices++;
+                                }
                             }
                         })
 

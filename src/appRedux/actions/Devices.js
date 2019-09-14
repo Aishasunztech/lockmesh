@@ -296,13 +296,13 @@ export function getAllPGPEmails() {
 }
 export function rejectDevice(device) {
     return (dispatch) => {
-        // console.log(device)
+        // console.log(device , 'action of reject device')
         RestService.rejectDevice(device).then((response) => {
             if (RestService.checkAuth(response.data)) {
                 dispatch({
                     type: REJECT_DEVICE,
                     response: response.data,
-                    device_id: device,
+                    device: device,
                 })
             } else {
                 dispatch({

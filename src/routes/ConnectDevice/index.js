@@ -72,7 +72,8 @@ import {
   SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
   // APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS,
   Main_SETTINGS,
-  DEVICE_TRIAL
+  DEVICE_TRIAL,
+  DEVICE_SUSPENDED
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -117,7 +118,7 @@ class ConnectDevice extends Component {
       // changedCtrls: {},
 
       showChangesModal: false,
-      controls: [],
+      // controls: [],
       imei_list: [],
       showMessage: false,
       messageText: '',
@@ -131,6 +132,7 @@ class ConnectDevice extends Component {
 
   changePage = (pageName) => {
     if (this.props.device_details.finalStatus === DEVICE_ACTIVATED || this.props.device_details.finalStatus === DEVICE_TRIAL) {
+      console.log(pageName, 'page name')
       this.props.changePage(pageName);
       this.setState({ dynamicBackButton: true })
     }
@@ -197,9 +199,10 @@ class ConnectDevice extends Component {
   // }
 
   componentDidUpdate(prevProps) {
+    // console.log('hi')
     const device_id = isBase64(this.props.match.params.device_id);
     if (this.props.forceUpdate !== prevProps.forceUpdate || this.props.controls !== prevProps.controls || this.props.imei_list !== prevProps.imei_list || this.props.showMessage !== prevProps.showMessage) {
-      // console.log('show message sate', this.props.showMessage)
+      // console.log('this.props.controls componentDidUpdate ', this.props.controls)
       this.setState({
         controls: this.props.controls,
         changedCtrls: this.props.changedCtrls,
@@ -249,7 +252,7 @@ class ConnectDevice extends Component {
         nextProps.ackSettingApplied(nextProps.socket, device_id);
         nextProps.receiveSim(nextProps.socket, device_id);
 
-        nextProps.hello_web(nextProps.socket);
+        // nextProps.hello_web(nextProps.socket);
       }
       // }
     }
@@ -277,6 +280,7 @@ class ConnectDevice extends Component {
 
   }
 
+  // Old ComponentWillReceiveProps
   // componentWillReceiveProps(nextProps) {
   //   // if (this.props.controls !== nextProps.controls) {
   //   //   this.setState({
@@ -311,94 +315,126 @@ class ConnectDevice extends Component {
 
   renderScreen = () => {
     const isSync = (this.props.isSync === 1 || this.props.isSync === true) ? true : false;
+    let finalStatusIs = this.props.device_details.finalStatus;
 
-    if (this.props.pageName === MAIN_MENU && isSync) {
-      return (
-        <div>
-          <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
-          <List
-            className="dev_main_menu"
-            size="small"
-            dataSource={this.mainMenu}
-            renderItem={item => {
-              return (<List.Item
-                onClick={() => {
-                  this.changePage(item.pageName)
+    if (finalStatusIs === "Active" || finalStatusIs === "Trial") {
+      if (isSync) {
+        if (this.props.pageName === MAIN_MENU) {
+          return (
+            <div>
+              <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
+              <List
+                className="dev_main_menu"
+                size="small"
+                dataSource={this.mainMenu}
+                renderItem={item => {
+                  return (<List.Item
+                    onClick={() => {
+                      this.changePage(item.pageName)
+                    }}
+                  ><a>{item.value}</a></List.Item>)
                 }}
-              ><a>{item.value}</a></List.Item>)
-            }}
-          />
-        </div>
-      );
-    } else if (this.props.pageName === APPS && isSync) {
-      return (
-        <div className="guest_encrypt">
-          <Tabs type="line" className="text-center" size="small">
-            <TabPane tab={<span className="green">{convertToLang(this.props.translation[GUEST], "GUEST")}</span>} key="1" >
-              <ListSpaceApp
-                type="guest"
               />
-            </TabPane>
-            <TabPane tab={<span className="green">{convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED")}</span>} key="2" forceRender={true}>
-              <ListSpaceApp
-                type="encrypted"
-              />
-            </TabPane>
-          </Tabs>
-        </div>
-      );
-    } else if (this.props.pageName === GUEST_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === ENCRYPTED_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === DURESS_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === ADMIN_PASSWORD && isSync) {
-      return (<Password pwdType={this.props.pageName} />);
-    } else if (this.props.pageName === SECURE_SETTING && isSync) {
-      return (
-        <SettingAppPermissions
-          pageName={this.props.pageName}
-          translation={this.props.translation}
-        />
+            </div>
+          );
+        }
+        else if (this.props.pageName === APPS) {
+          return (
+            <div className="guest_encrypt">
+              <Tabs type="line" className="text-center" size="small">
+                <TabPane tab={<span className="green">{convertToLang(this.props.translation[GUEST], "GUEST")}</span>} key="1" >
+                  <ListSpaceApp
+                    type="guest"
+                  />
+                </TabPane>
+                <TabPane tab={<span className="green">{convertToLang(this.props.translation[ENCRYPTED], "ENCRYPTED")}</span>} key="2" forceRender={true}>
+                  <ListSpaceApp
+                    type="encrypted"
+                  />
+                </TabPane>
+              </Tabs>
+            </div>
+          );
+        } else if (this.props.pageName === GUEST_PASSWORD) {
+          return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
+        } else if (this.props.pageName === ENCRYPTED_PASSWORD) {
+          return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
+        } else if (this.props.pageName === DURESS_PASSWORD) {
+          return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
+        } else if (this.props.pageName === ADMIN_PASSWORD) {
+          return (<Password pwdType={this.props.pageName} device_details={this.props.device_details} />);
+        } else if (this.props.pageName === SECURE_SETTING) {
+          return (
+            <SettingAppPermissions
+              pageName={this.props.pageName}
+              translation={this.props.translation}
+            />
 
-      );
-    } else if (this.props.pageName === SYSTEM_CONTROLS && isSync) {
-      return (<SystemControls
+          );
+        } else if (this.props.pageName === SYSTEM_CONTROLS) {
+          return (
+            <SystemControls
+              auth={this.props.auth}
+              controls={this.state.controls}
+              handleCheckAllExtension={this.props.handleCheckAllExtension}
+              handleControlCheck={this.props.handleControlCheck}
+              handleMainSettingCheck={this.props.handleMainSettingCheck}
+              guestAllExt={this.props.guestAllExt}
+              encryptedAllExt={this.props.encryptedAllExt}
+              checked_app_id={this.props.checked_app_id}
+              secureSettingsMain={this.props.secureSettingsMain}
+              translation={this.props.translation}
+            />
+          );
+        } else if (this.props.pageName === MANAGE_PASSWORD) {
+          return (
+            <List
+              className="dev_main_menu"
+              size="small"
+              dataSource={this.subMenu}
+              renderItem={item => {
+                return (<List.Item
+                  onClick={() => {
 
-        controls={this.state.controls}
-        handleCheckAllExtension={this.props.handleCheckAllExtension}
-        handleControlCheck={this.props.handleControlCheck}
-        handleMainSettingCheck={this.props.handleMainSettingCheck}
-        guestAllExt={this.props.guestAllExt}
-        encryptedAllExt={this.props.encryptedAllExt}
-        checked_app_id={this.props.checked_app_id}
-        secureSettingsMain={this.props.secureSettingsMain}
-        translation={this.props.translation}
-      />);
-    } else if (this.props.pageName === MANAGE_PASSWORD) {
-      return (
-        <List
-          className="dev_main_menu"
-          size="small"
-          dataSource={this.subMenu}
-          renderItem={item => {
-            return (<List.Item
-              onClick={() => {
-
-                this.changePage(item.pageName)
+                    this.changePage(item.pageName)
+                  }}
+                ><a>{item.value}</a></List.Item>)
               }}
-            ><a>{item.value}</a></List.Item>)
-          }}
-        />
-      )
+            />
+          )
 
-    } else if (this.props.pageName === NOT_AVAILABLE) {
-      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
-        {(this.props.status == 'Suspended') ? convertToLang(this.props.translation[Suspended_TEXT], "Suspended") : this.props.status}</a></h1></div>);
+        } else {
+          // if (this.props.pageName === MAIN_MENU) {
+          return (
+            <div>
+              <div style={{ color: 'orange', width: '50%', float: 'left' }}></div>
+              <List
+                className="dev_main_menu"
+                size="small"
+                dataSource={this.mainMenu}
+                renderItem={item => {
+                  return (<List.Item
+                    onClick={() => {
+                      this.changePage(item.pageName)
+                    }}
+                  ><a>{item.value}</a></List.Item>)
+                }}
+              />
+            </div>
+          );
+          // }
+        }
+      } else {
+        return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
+      }
+
     } else {
-      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
+      // if (this.props.pageName === NOT_AVAILABLE) {
+      return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
+        {(finalStatusIs == DEVICE_SUSPENDED) ? convertToLang(this.props.translation[Suspended_TEXT], DEVICE_SUSPENDED) : finalStatusIs}</a></h1></div>);
+      // }
     }
+
   }
 
   applyActionButton = (visible = true) => {
@@ -406,6 +442,7 @@ class ConnectDevice extends Component {
       showChangesModal: visible,
     })
   }
+
   applyActions = () => {
     console.log('Secure Setting Permission', this.props.extensions);
     let obData;
@@ -426,30 +463,33 @@ class ConnectDevice extends Component {
     console.log('System Permissions main', this.props.controls);
     console.log('System Permissions', this.props.controls.settings);
 
-    if (this.props.controls.settings.length) {
-      let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
-      if (index >= 0) {
-        app_list.push(this.props.controls.settings[index])
+    if (this.props.controls && this.props.controls.settings) {
+      if (this.props.controls.settings.length) {
+        let index = this.props.controls.settings.findIndex(item => item.uniqueName === Main_SETTINGS)
+        if (index >= 0) {
+          app_list.push(this.props.controls.settings[index])
+        }
       }
     }
 
-    if (this.props.extensions.length) {
-      let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
-      if (index >= 0) {
-        app_list.push(this.props.extensions[index])
+    if (this.props.extensions) {
+      if (this.props.extensions.length) {
+        let index = this.props.extensions.findIndex(item => item.uniqueName === SECURE_SETTING)
+        if (index >= 0) {
+          app_list.push(this.props.extensions[index])
+        }
       }
     }
 
     this.props.applySetting(
       app_list, {
-        adminPwd: this.props.adminPwd,
-        guestPwd: this.props.guestPwd,
-        encryptedPwd: this.props.encryptedPwd,
-        duressPwd: this.props.duressPwd,
-      },
+      adminPwd: this.props.adminPwd,
+      guestPwd: this.props.guestPwd,
+      encryptedPwd: this.props.encryptedPwd,
+      duressPwd: this.props.duressPwd,
+    },
       (objIndex !== undefined && objIndex !== -1) ? this.props.extensions[objIndex].subExtension : [],
-      // this.state.controls.controls,
-      this.state.changedCtrls,
+      this.state.controls.controls,
       this.state.device_id,
       this.props.user_acc_id,
       null, null,
@@ -472,6 +512,7 @@ class ConnectDevice extends Component {
 
     // console.log('app after push ', app_list)
   }
+
   componentWillUnmount() {
     const device_id = isBase64(this.props.match.params.device_id);
     this.props.closeSocketEvents(this.props.socket, device_id);
@@ -572,12 +613,12 @@ class ConnectDevice extends Component {
     // let completeStep = this.props.complete_policy_step;
     // let policy_loading = (this.props.is_policy_applying === 1) ? (this.props.is_policy_finish === false) ? 1 : this.props.is_policy_process : this.props.is_policy_process
 
-    let BackBtnstyle;
-    if (this.state.dynamicBackButton) {
-      BackBtnstyle = "pt-42 status_bar"
-    } else {
-      BackBtnstyle = "pt-60 status_bar"
-    }
+    // let BackBtnstyle;
+    // if (this.state.dynamicBackButton) {
+    //   BackBtnstyle = "pt-42 status_bar"
+    // } else {
+    //   BackBtnstyle = "pt-60 status_bar"
+    // }
     return (
       (this.props.device_found) ?
         <div className="gutter-example">
@@ -604,10 +645,10 @@ class ConnectDevice extends Component {
                       <a className="dev_back_btn" onClick={() => {
                         this.onBackHandler();
                       }}>
-                        {(this.state.dynamicBackButton) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
+                        {(this.state.dynamicBackButton && this.props.pageName !== MAIN_MENU) ? (<span><Icon type="left" />{convertToLang(this.props.translation[Button_Back], "Back")}</span>) : null}
 
                       </a>
-                      <div className={BackBtnstyle}>
+                      <div className="pt-60 status_bar">
                         <div className="col-md-6 col-xs-6 col-sm-6 active_st">
                           <h5><span style={color}>{this.capitalizeFirstLetter(finalStatus)}</span></h5>
                         </div>
@@ -684,12 +725,18 @@ class ConnectDevice extends Component {
                   isDuressPwd={this.props.isDuressPwd}
                   isEncryptedPwd={this.props.isEncryptedPwd}
                   isGuestPwd={this.props.isGuestPwd}
-                  controls={{ 'controls': this.state.changedCtrls }}
+                  controls={this.props.controls}
                   showChangedControls={true}
                   translation={this.props.translation}
+                  auth={this.props.auth}
+                  settings={this.props.controls.settings}
+                  pageName={this.props.pageName}
+                  controlsExists={this.props.pageName === SYSTEM_CONTROLS ? true : false}
+                // extensions={this.props.extensions}
                 />
               </Modal>
             </div>}
+
           {/* {this.props.isLoading ?
           <div className="gx-loader-view">
             <CircularProgress />
@@ -770,7 +817,10 @@ function mapDispatchToProps(dispatch) {
     hello_web: hello_web,
   }, dispatch);
 }
-var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
+var mapStateToProps = ({ routing, device_details, auth, socket, settings }, ownProps) => {
+
+  // console.log("device_details.extensions ", device_details.extensions)
+  // console.log(device_details.pageName, "device_details.controls ", device_details.controls)
 
   return {
     getHistory: device_details.getHistory,
@@ -811,7 +861,7 @@ var mapStateToProps = ({ routing, device_details, auth, socket, settings }) => {
     isEncryptedPwd: device_details.isEncryptedPwd,
     isDuressPwd: device_details.isDuressPwd,
     controls: device_details.controls,
-    changedCtrls: device_details.changedCtrls,
+
     imei_list: device_details.imei_list,
     guestAllExt: device_details.guestAllExt,
     encryptedAllExt: device_details.encryptedAllExt,

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 // import styles1 from './users_fixheader.css';
 import CustomScrollbars from "../../../util/CustomScrollbars";
+import scrollIntoView from 'scroll-into-view';
 
 import { Card, Row, Col, List, Button, message, Table, Icon, Switch, Modal } from "antd";
 import UserDeviceList from './UserDeviceList'
@@ -123,7 +124,8 @@ class UserList extends Component {
         this.setState({
             users: this.props.users,
             expandedRowKeys: this.props.expandedRowsKey
-        })
+        });
+        // this.handleScroll()
     }
 
     onExpandRow = (expanded, record) => {
@@ -141,6 +143,17 @@ class UserList extends Component {
         }
     }
 
+    handleScroll = () => {
+        if (this.props.location.state) {
+            scrollIntoView(document.querySelector('.exp_row'), {
+                align: {
+                    top: 0,
+                    left: 0
+                },
+            });
+        }
+    }
+
     componentDidUpdate(prevProps) {
 
         if (this.props !== prevProps) {
@@ -154,6 +167,7 @@ class UserList extends Component {
         }
     }
     render() {
+        this.handleScroll()
         let type = this.props.user.type
         let styleType = "";
         if (type === ADMIN) {

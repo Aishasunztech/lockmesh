@@ -32,7 +32,8 @@ import {
     USER_ID,
     DEVICE_TYPE,
     DEVICE_VERSION,
-    REMAINING_TERM_DAYS
+    REMAINING_TERM_DAYS,
+    DEVICE_FIRMWAREINFO
 } from '../../constants/DeviceConstants';
 import {
     // DEVICE_ID,
@@ -382,6 +383,31 @@ export function devicesColumns(translation, handleSearch, SearchValues = []) {
                     dataIndex: 'version',
                     key: 'version',
                     sorter: (a, b) => { return a.version.localeCompare(b.version) },
+                    sortDirections: ['ascend', 'descend'],
+                }
+            ]
+        },
+        {
+            title: (
+                <Input.Search
+                    name="firmware_info"
+                    key="firmware_info"
+                    id="firmware_info"
+                    className="search_heading"
+                    onChange={handleSearch}
+                    // onFocus={handleSearch}
+                    autoComplete="new-password"
+                    placeholder={convertToLang(translation[DEVICE_FIRMWAREINFO], "FIRMWARE INFO")}
+                />
+            ),
+            dataIndex: 'firmware_info',
+            children: [
+                {
+                    title: convertToLang(translation[DEVICE_FIRMWAREINFO], "FIRMWARE INFO"),
+                    align: "center",
+                    dataIndex: 'firmware_info',
+                    key: 'firmware_info',
+                    sorter: (a, b) => { return a.firmware_info.localeCompare(b.firmware_info) },
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -2089,7 +2115,6 @@ export function policyColumns(translation, handleSearch) {
                     key: 'created_by',
                     // ...this.getColumnSearchProps('status'),
                     sorter: (a, b) => { return a.created_by.localeCompare(b.created_by) },
-
                     sortDirections: ['ascend', 'descend'],
                 }
             ]
@@ -2281,6 +2306,15 @@ export function featureApkColumns(translation) {
             width: "100",
             key: 'apk_name',
             sorter: (a, b) => { return a.apk_name.localeCompare(b.apk_name) },
+            sortDirections: ['ascend', 'descend'],
+            defaultSortOrder: "ascend"
+        },
+        {
+            title: convertToLang(translation[''], "PACKAGE NAME"),
+            dataIndex: 'package_name',
+            width: "100",
+            key: 'package_name',
+            sorter: (a, b) => { return a.package_name.localeCompare(b.package_name) },
             sortDirections: ['ascend', 'descend'],
             defaultSortOrder: "ascend"
         },

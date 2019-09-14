@@ -3,7 +3,6 @@ import { Modal, message, Input, Table, Switch, Avatar } from 'antd';
 import { componentSearch, getFormattedDate, convertToLang } from '../../utils/commonUtils';
 import Moment from 'react-moment';
 import { SECURE_SETTING, DATE, PROFILE_NAME } from '../../../constants/Constants';
-// import DeviceSettings from './DeviceSettings';
 import { BASE_URL } from '../../../constants/Application';
 // import styles from './Applist.css';
 import { POLICY_APP_NAME, POLICY_NAME, ACTIVITY } from '../../../constants/PolicyConstants';

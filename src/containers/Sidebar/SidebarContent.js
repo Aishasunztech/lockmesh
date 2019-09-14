@@ -96,7 +96,7 @@ class SidebarContent extends Component {
     this.props.getNewDevicesList()
     this.props.getUserCredit()
     this.refs.new_device.showModal();
-    this.props.getDevicesList();
+    // this.props.getDevicesList();
 
     // alert('its working');
   }

@@ -310,7 +310,7 @@ function showConfirm(_this, id, action, btn_title, name = "") {
         value = value;
     }
     confirm({
-        title: `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this ")}  ${value} ${name ? `(${name})` : "cc"} ?`,
+        title: `${convertToLang(_this.props.translation[DO_YOU_WANT_TO], "Do you want to ")} ${title_Action} ${convertToLang(_this.props.translation[OF_THIS], " of this ")}  ${value} ${name ? `(${name})` : ""} ?`,
         onOk() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject);

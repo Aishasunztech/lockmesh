@@ -36,7 +36,8 @@ import {
     REMAINING_TERM_DAYS,
     ONLINE,
     DEVICE_TYPE,
-    DEVICE_VERSION
+    DEVICE_VERSION,
+    DEVICE_FIRMWAREINFO
 } from '../../../constants/DeviceConstants';
 import { Button_Refresh } from '../../../constants/ButtonConstants';
 import { ADMIN } from '../../../constants/Constants';
@@ -119,7 +120,6 @@ export default class DeviceSidebar extends Component {
                 key: 13,
                 name: (<a href="javascript:void(0)">{titleCase(convertToLang(this.props.translation[DEVICE_DEALER_NAME], "DEALER NAME"))}:</a>),
                 value: (<span className="captilize">{(this.props.auth.authUser.type === ADMIN) ? <a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a> : <a >{checkValue(device_details.dealer_name)}</a>}</span>)
-                // value: (<span className="captilize"><a onClick={() => { this.goToDealer(device_details) }}>{checkValue(device_details.dealer_name)}</a></span>)
             },
             {
                 key: 14,
@@ -145,6 +145,11 @@ export default class DeviceSidebar extends Component {
                 key: 5,
                 name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_VERSION], "VERSION"))}:</a>),
                 value: checkValue(device_details.version)
+            },
+            {
+                key: 5,
+                name: (<a href="javascript:void(0)" >{titleCase(convertToLang(this.props.translation[DEVICE_FIRMWAREINFO], "FIRMWARE INFO"))}:</a>),
+                value: <span >{checkValue(device_details.firmware_info)}</span>
             },
             {
                 key: 6,
@@ -313,7 +318,6 @@ export default class DeviceSidebar extends Component {
                 state: { id: this.state.dealer_id }
             }} />
         }
-        console.log('device detail', this.props.device_details)
         return (
             <Card>
                 <Table

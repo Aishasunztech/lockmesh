@@ -43,7 +43,7 @@ export default (state = initialSidebar, action) => {
                 });
             }
 
-
+console.log('reducers filterddevices', filteredRequests)
             return {
                 ...state,
                 newRequests: filteredRequests,
