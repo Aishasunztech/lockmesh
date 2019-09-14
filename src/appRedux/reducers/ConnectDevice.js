@@ -376,14 +376,20 @@ export default (state = initialState, action) => {
         case WIPE_DEVICE: {
             // console.log(action.response.msg);
             if (action.response.status) {
-                success({
-                    title: action.response.msg,
-                });
+                if (action.response.online) {
+                    success({
+                        title: action.response.msg,
+                    });
+                } else {
+                    warning({
+                        title: action.response.msg, //  'Warning Device Offline',
+                        content: action.response.content // "Wipe command sent to device. Action will be performed when device is back online", // 'Apps pushed to device. Action will be performed when device is back online',
+                    });
+                }
             } else {
                 error({
                     title: action.response.msg,
                 });
-
             }
             // console.log('action done ', state.device)
             return {
@@ -509,7 +515,7 @@ export default (state = initialState, action) => {
         case APPLY_POLICY: {
             if (action.payload.status) {
                 // console.log(action.policyId, 'policy id', action.policyName, 'policyName', state.activities);
-               let date = getCurrentDate();
+                let date = getCurrentDate();
                 state.activities.push({
                     action_name: 'POLICY APPLIED',
                     created_at: date,
@@ -820,7 +826,7 @@ export default (state = initialState, action) => {
 
         case SAVE_PROFILE: {
             // console.log(action.response, 'response from save profle');
-            if(action.response.status){
+            if (action.response.status) {
                 state.profiles.push(action.response.data)
             }
             // console.log('new profiles are', state.profiles)
@@ -1494,14 +1500,14 @@ export default (state = initialState, action) => {
                         content: action.payload.response.msg,
                     });
                 }
-                if(action.payload.pwdType){
+                if (action.payload.pwdType) {
                     pwdObject[action.payload.pwdType] = action.payload.passwords.pwd ? action.payload.passwords.pwd : null;
                 }
 
                 state.activities.push({
                     action_name: 'PASSWORD',
                     created_at: getCurrentDate(),
-                    data: {passwords : JSON.stringify(pwdObject)}
+                    data: { passwords: JSON.stringify(pwdObject) }
                 })
 
             } else {
@@ -1694,8 +1700,8 @@ function handleCheckedAllExts(extensions) {
 //     });
 // }
 
-function getCurrentDate(){
+function getCurrentDate() {
     var tempDate = new Date();
-    var date = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
+    var date = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate() + ' ' + tempDate.getHours() + ':' + tempDate.getMinutes() + ':' + tempDate.getSeconds();
     return date
 }

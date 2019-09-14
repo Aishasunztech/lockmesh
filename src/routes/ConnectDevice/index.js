@@ -51,6 +51,7 @@ import {
   ackFinishedPushApps,
   ackFinishedPullApps,
   ackFinishedPolicy,
+  ackFinishedWipe,
   actionInProcess,
   ackImeiChanged,
   getAppJobQueue,
@@ -243,6 +244,7 @@ class ConnectDevice extends Component {
         nextProps.ackFinishedPushApps(nextProps.socket, device_id);
         nextProps.ackFinishedPullApps(nextProps.socket, device_id);
         nextProps.ackFinishedPolicy(nextProps.socket, device_id);
+        nextProps.ackFinishedWipe(nextProps.socket, device_id);
         nextProps.ackImeiChanged(nextProps.socket, device_id);
         nextProps.ackSinglePushApp(nextProps.socket, device_id);
         nextProps.ackSinglePullApp(nextProps.socket, device_id);
@@ -798,6 +800,7 @@ function mapDispatchToProps(dispatch) {
     ackFinishedPullApps: ackFinishedPullApps,
     ackFinishedPushApps: ackFinishedPushApps,
     ackFinishedPolicy: ackFinishedPolicy,
+    ackFinishedWipe: ackFinishedWipe,
     ackImeiChanged: ackImeiChanged,
     actionInProcess: actionInProcess,
     getActivities: getActivities,
