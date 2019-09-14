@@ -986,7 +986,7 @@ class Devices extends Component {
 
     handleSearch = (e) => {
 
-        // this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
+        this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
         // console.log()
         let response = handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 

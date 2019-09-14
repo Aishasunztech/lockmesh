@@ -223,67 +223,69 @@ export function convertToLang(lngWord, constant) {
 export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch) {
   // handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 
+  // console.log("e, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch ", e.target.value, copy_status, copyRequireSearchData, demoSearchValues, requireForSearch)
 
   let demoData = [];
-  // let demoSearchValues = this.state.SearchValues;
   if (copy_status) {
-    // copyRequireSearchData = this.state.filteredDevices;
     copyRequireSearchData = requireForSearch;
     copy_status = false;
   }
 
   let targetName = e.target.name;
   let targetValue = e.target.value;
+  let searchColsAre = Object.keys(demoSearchValues).length;
 
-  console.log(demoSearchValues, 'value  is: ', targetValue)
+  // console.log(demoSearchValues, 'value  is: ', targetValue)
 
   if (targetValue.length || Object.keys(demoSearchValues).length) {
     demoSearchValues[targetName] = { key: targetName, value: targetValue };
-    // this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
 
     copyRequireSearchData.forEach((obj) => {
       // console.log('device is: ', device);
-      // if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
+      // if (obj[targetName] !== undefined) {
 
-      let searchColsAre = Object.keys(demoSearchValues).length;
-      let searchDevices = 0;
+        let searchRecords = 0;
 
-      if (searchColsAre > 0) {
-        Object.values(demoSearchValues).forEach((data) => {
+        if (searchColsAre > 0) {
+          Object.values(demoSearchValues).forEach((data) => {
 
-          if (typeof (obj[targetName]) === 'string' && obj[targetName] !== null && obj[targetName] !== undefined) {
+            if (obj[data.key] !== undefined && obj[data.key] !== null) {
+              if (data.value == "") {
+                searchRecords++;
+              } else if (typeof (obj[data.key]) === 'string') {
+                if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                  searchRecords++;
+                }
+              } else
+                // if (obj[data.key] !== null) {
+                  if (isArray(obj[data.key])) {
 
-            if (data.value == "") {
-              searchDevices++;
-            } else if (obj[data.key]) {
-              if (obj[data.key].toString().toUpperCase().includes(data.value.toUpperCase())) {
-                searchDevices++;
-              }
+                    if (data.key == "devicesList") {
+                      if (obj[data.key].length.toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                        searchRecords++;
+                      }
+                    }
+
+                  } else if (obj[data.key].toString().toUpperCase().includes(data.value.toString().toUpperCase())) {
+                    searchRecords++;
+                  }
+                // }
             }
-          } else if (isArray(obj[data.key])) {
-            // if (data.key == "devicesList") {
-              if (obj[data.key].length.toString().toUpperCase().includes(data.value.toUpperCase())) {
-                searchDevices++;
-              }
-            // } else {
-            //   if (obj[data.key].length.toString().toUpperCase().includes(data.value.toUpperCase())) {
-            //     searchDevices++;
-            //   }
-            // }
+          })
 
+          if (searchColsAre === searchRecords) {
+            demoData.push(obj);
           }
-        })
-
-        if (searchColsAre === searchDevices) {
-          demoData.push(obj);
         }
-      }
-      else {
-        if (obj[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
-          demoData.push(obj);
+        else {
+          if (obj[targetName].toString().toUpperCase().includes(targetValue.toString().toUpperCase())) {
+            demoData.push(obj);
+          }
         }
-      }
-      // } 
+      // }
+      // else {
+      //   // demoData.push(obj);
+      // }
     });
     return {
       copy_status,
@@ -315,8 +317,20 @@ export function filterData_RelatedToMultipleSearch(devices, SearchValues) {
         // console.log('search key is: ', search.key)
         if (search.value == "") {
           searchDevices++;
-        } else if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
-          searchDevices++;
+        } else if (typeof (device[search.key]) === 'string') {
+          if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
+            searchDevices++;
+          }
+        } else if (isArray(device[search.key])) {
+          if (search.key == "devicesList") {
+            if (device[search.key].length.toString().toUpperCase().includes(search.value.toUpperCase())) {
+              searchDevices++;
+            }
+          }
+        } else {
+          if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
+            searchDevices++;
+          }
         }
 
       }

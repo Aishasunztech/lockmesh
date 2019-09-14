@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 import { Input, Modal, Select, Button } from "antd";
-import { componentSearch, getDealerStatus, titleCase, convertToLang } from '../utils/commonUtils';
+import { componentSearch, getDealerStatus, titleCase, convertToLang, handleMultipleSearch, filterData_RelatedToMultipleSearch } from '../utils/commonUtils';
 import { getDealerList, suspendDealer, deleteDealer, activateDealer, undoDealer, updatePassword, editDealer } from "../../appRedux/actions/Dealers";
 import { getDropdown, postDropdown, postPagination, getPagination } from '../../appRedux/actions/Common';
 import { resetUploadForm } from "../../appRedux/actions/Apk";
@@ -165,41 +165,47 @@ class Dealers extends Component {
         // alert('value');
         // alert(value);
         // let type = value.toLowerCase();
+        let dealers = [];
         switch (value) {
             case 'active':
+                dealers = this.filterList('active', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('active', this.props.dealers)),
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '2'
                 })
 
                 break;
             case 'suspended':
+                dealers = this.filterList('suspended', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('suspended', this.props.dealers)),
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '4'
                 })
                 break;
 
             case 'all':
+                dealers = this.props.dealers;
                 this.setState({
-                    dealers: this.handleSearch12(this.props.dealers),
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '1'
                 })
                 break;
             case "unlinked":
+                dealers = this.filterList('unlinked', this.props.dealers);
                 this.setState({
-                    dealers: this.handleSearch12(this.filterList('unlinked', this.props.dealers)),
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '3'
                 })
                 break;
 
             default:
+                dealers = this.props.dealers;
                 this.setState({
-                    dealers: this.handleSearch12(this.props.dealers),
+                    dealers: this.handleSearch12(dealers),
                     column: this.state.columns,
                     tabselect: '1'
                 })
@@ -642,118 +648,135 @@ class Dealers extends Component {
 
     handleSearch = (e) => {
 
-        let demoDealers = [];
-        let demoSearchValues = this.state.SearchValues;
-        if (status) {
-            copyDealers = this.state.dealers;
-            status = false;
-        }
-        console.log("coppydealers ", copyDealers);
+        this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
 
-        let targetName = e.target.name;
-        let targetValue = e.target.value;
+        let response = handleMultipleSearch(e, status, copyDealers, this.state.SearchValues, this.state.dealers)
 
-        // if (e.target.value.length) {
-        if (targetValue.length || Object.keys(demoSearchValues).length) {
-            demoSearchValues[targetName] = { key: targetName, value: targetValue };
-            this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
+        console.log(response.SearchValues, "response is: ===========> ", response)
+        this.setState({
+            dealers: response.demoData,
+            SearchValues: response.SearchValues
+        });
+        status = response.copy_status;
+        copyDealers = response.copyRequireSearchData;
 
-            // console.log("keyname", e.target.name);
-            // console.log("value", e.target.value);
-            // console.log(this.state.dealers);
-            copyDealers.forEach((dealer) => {
-                // console.log("device", dealer);
-                // console.log('dealer amount is', dealer[e.target.name])
 
-                let searchColsAre = Object.keys(demoSearchValues).length;
-                let searchDealers = 0;
+        // let demoDealers = [];
+        // let demoSearchValues = this.state.SearchValues;
+        // if (status) {
+        //     copyDealers = this.state.dealers;
+        //     status = false;
+        // }
+        // console.log("coppydealers ", copyDealers);
 
-                if (searchColsAre > 0) {
-                    Object.values(demoSearchValues).forEach((data) => {
+        // let targetName = e.target.name;
+        // let targetValue = e.target.value;
 
-                        if (data.value == "") {
-                            searchDealers++;
-                        }
-                        else if ((typeof dealer[data.key]) === 'string') {
-                            if (dealer[data.key].toUpperCase().includes(data.value.toUpperCase())) {
-                                searchDealers++;
-                            }
-                        } else if (dealer[data.key] !== null) {
-                            if (isArray(dealer[data.key])) {
-                                // console.log('is it working', data.key)
-                                if (dealer[data.key][0]['total'].toString().toUpperCase().includes(data.value.toUpperCase())) {
-                                    // demoDealers.push(dealer);
-                                    searchDealers++;
-                                }
-                            } else if (dealer[data.key].toString().toUpperCase().includes(data.value.toUpperCase())) {
-                                searchDealers++;
-                            }
+        // // if (e.target.value.length) {
+        // if (targetValue.length || Object.keys(demoSearchValues).length) {
+        //     demoSearchValues[targetName] = { key: targetName, value: targetValue };
+        //     this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
 
-                        } else {
-                            // demoDevices.push(device);
-                        }
+        //     // console.log("keyname", e.target.name);
+        //     // console.log("value", e.target.value);
+        //     // console.log(this.state.dealers);
+        //     copyDealers.forEach((dealer) => {
+        //         // console.log("device", dealer);
+        //         // console.log('dealer amount is', dealer[e.target.name])
 
-                    })
+        //         let searchColsAre = Object.keys(demoSearchValues).length;
+        //         let searchDealers = 0;
 
-                    if (searchColsAre === searchDealers) {
-                        demoDealers.push(dealer);
-                    }
+        //         if (searchColsAre > 0) {
+        //             Object.values(demoSearchValues).forEach((data) => {
 
-                } else {
-                    if (dealer[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
-                        demoDealers.push(dealer);
-                    }
-                }
+        //                 if (data.value == "") {
+        //                     searchDealers++;
+        //                 }
+        //                 else if ((typeof dealer[data.key]) === 'string') {
+        //                     if (dealer[data.key].toUpperCase().includes(data.value.toUpperCase())) {
+        //                         searchDealers++;
+        //                     }
+        //                 } else if (dealer[data.key] !== null) {
+        //                     if (isArray(dealer[data.key])) {
+        //                         // console.log('is it working', data.key)
+        //                         if (dealer[data.key][0]['total'].toString().toUpperCase().includes(data.value.toUpperCase())) {
+        //                             // demoDealers.push(dealer);
+        //                             searchDealers++;
+        //                         }
+        //                     } else if (dealer[data.key].toString().toUpperCase().includes(data.value.toUpperCase())) {
+        //                         searchDealers++;
+        //                     }
 
-            });
-            // console.log("searched value", demoDealers);
-            this.setState({
-                dealers: demoDealers,
-                SearchValues: demoSearchValues
-            })
-        } else {
-            this.setState({
-                dealers: copyDealers,
-                SearchValues: demoSearchValues
-            })
-        }
+        //                 } else {
+        //                     // demoDevices.push(device);
+        //                 }
+
+        //             })
+
+        //             if (searchColsAre === searchDealers) {
+        //                 demoDealers.push(dealer);
+        //             }
+
+        //         } else {
+        //             if (dealer[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
+        //                 demoDealers.push(dealer);
+        //             }
+        //         }
+
+        //     });
+        //     // console.log("searched value", demoDealers);
+        //     this.setState({
+        //         dealers: demoDealers,
+        //         SearchValues: demoSearchValues
+        //     })
+        // } else {
+        //     this.setState({
+        //         dealers: copyDealers,
+        //         SearchValues: demoSearchValues
+        //     })
+        // }
     }
 
 
-    handleSearch12 = (Dealers) => {
-        console.log('check 2nd search data:: ', Dealers);
-        let searchedDealers = [];
-        let searchData = Object.values(this.state.SearchValues);
-        let searchColsAre = Object.keys(this.state.SearchValues).length;
+    handleSearch12 = (dealers) => {
+        // console.log('check 2nd search data:: ', dealers);
 
-        if (searchColsAre) {
-            Dealers.forEach((device) => {
-                let searchDealers = 0;
+        let response = filterData_RelatedToMultipleSearch(dealers, this.state.SearchValues);
+        return response;
 
-                for (let search of searchData) {
-                    // console.log('search is: ', search)
-                    // console.log('search key is: ', search.key)
-                    if (search.value == "") {
-                        searchDealers++;
-                    } else if (isArray(device[search.key])) {
-                        // console.log('is it working', data.key)
-                        if (device[search.key][0]['total'].toString().toUpperCase().includes(search.value.toUpperCase())) {
-                            searchDealers++;
-                        }
-                    } else if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
-                        searchDealers++;
-                    }
+        // let searchedDealers = [];
+        // let searchData = Object.values(this.state.SearchValues);
+        // let searchColsAre = Object.keys(this.state.SearchValues).length;
 
-                }
-                if (searchColsAre === searchDealers) {
-                    searchedDealers.push(device);
-                }
+        // if (searchColsAre) {
+        //     Dealers.forEach((device) => {
+        //         let searchDealers = 0;
 
-            });
-            return searchedDealers;
-        } else {
-            return Dealers;
-        }
+        //         for (let search of searchData) {
+        //             // console.log('search is: ', search)
+        //             // console.log('search key is: ', search.key)
+        //             if (search.value == "") {
+        //                 searchDealers++;
+        //             } else if (isArray(device[search.key])) {
+        //                 // console.log('is it working', data.key)
+        //                 if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
+        //                     searchDealers++;
+        //                 }
+        //             } else if (device[search.key].toString().toUpperCase().includes(search.value.toUpperCase())) {
+        //                 searchDealers++;
+        //             }
+
+        //         }
+        //         if (searchColsAre === searchDealers) {
+        //             searchedDealers.push(device);
+        //         }
+
+        //     });
+        //     return searchedDealers;
+        // } else {
+        //     return Dealers;
+        // }
     }
 
     handleSubmit = (e) => {

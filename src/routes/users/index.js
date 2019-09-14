@@ -264,6 +264,8 @@ class Users extends Component {
         // console.log('============ check search value ========')
         // console.log(e.target.name , e.target.value);
 
+        this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
+        
         let response = handleMultipleSearch(e, status, copyUsers, this.state.SearchValues, this.state.users)
 
         console.log(response.SearchValues, "response is: ===========> ", response)
