@@ -85,14 +85,14 @@ import AppFilter from '../../components/AppFilter';
 import DevicesList from './components/DevicesList';
 import ShowMsg from './components/ShowMsg';
 // import Column from "antd/lib/table/Column";
-import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang, checkValue } from '../utils/commonUtils';
+import { getStatus, componentSearch, titleCase, dealerColsWithSearch, convertToLang, checkValue, handleMultipleSearch, filterData_RelatedToMultipleSearch } from '../utils/commonUtils';
 import CircularProgress from "components/CircularProgress/index";
 import AddDevice from './components/AddDevice';
 import { devicesColumns } from '../utils/columnsUtils';
 import { Sidebar_devices } from "../../constants/SidebarConstants";
 
 
-var coppyDevices = [];
+var copyDevices = [];
 var status = true;
 
 class Devices extends Component {
@@ -818,10 +818,10 @@ class Devices extends Component {
             if (value.length) {
 
                 if (status) {
-                    coppyDevices = this.state.devices;
+                    copyDevices = this.state.devices;
                     status = false;
                 }
-                let foundDevices = componentSearch(coppyDevices, value);
+                let foundDevices = componentSearch(copyDevices, value);
                 if (foundDevices.length) {
                     this.setState({
                         devices: foundDevices,
@@ -835,7 +835,7 @@ class Devices extends Component {
                 status = true;
 
                 this.setState({
-                    devices: coppyDevices,
+                    devices: copyDevices,
                 })
             }
         } catch (error) {
@@ -985,91 +985,109 @@ class Devices extends Component {
 
 
     handleSearch = (e) => {
-        let demoDevices = [];
-        let demoSearchValues = this.state.SearchValues;
-        if (this.state.copy_status) {
-            coppyDevices = this.state.filteredDevices;
-            this.state.copy_status = false;
-        }
 
-        let targetName = e.target.name;
-        let targetValue = e.target.value;
+        // this.state.SearchValues[e.target.name] = { key: e.target.name, value: e.target.value };
+        // console.log()
+        let response = handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 
-        if (targetValue.length || Object.keys(demoSearchValues).length) {
-            demoSearchValues[targetName] = { key: targetName, value: targetValue };
-            this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
+        console.log(response.SearchValues, "response is: ===========> ", response)
+        this.setState({
+            devices: response.demoDevices,
+            SearchValues: response.SearchValues
+        });
+        this.state.copy_status = response.copy_status;
+        copyDevices = response.copyRequireSearchData;
 
-            coppyDevices.forEach((device) => {
-                // console.log('device is: ', device);
-                if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
 
-                    let searchColsAre = Object.keys(demoSearchValues).length;
-                    let searchDevices = 0;
+        // let demoDevices = [];
+        // let demoSearchValues = this.state.SearchValues;
+        // if (this.state.copy_status) {
+        //     copyDevices = this.state.filteredDevices;
+        //     this.state.copy_status = false;
+        // }
 
-                    if (searchColsAre > 0) {
-                        Object.values(demoSearchValues).forEach((data) => {
+        // let targetName = e.target.name;
+        // let targetValue = e.target.value;
 
-                            if (data.value == "") {
-                                searchDevices++;
-                            } else if (device[data.key]) {
-                                if (device[data.key].toUpperCase().includes(data.value.toUpperCase())) {
-                                    searchDevices++;
-                                }
-                            }
-                        })
+        // if (targetValue.length || Object.keys(demoSearchValues).length) {
+        //     demoSearchValues[targetName] = { key: targetName, value: targetValue };
+        //     this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
 
-                        if (searchColsAre === searchDevices) {
-                            demoDevices.push(device);
-                        }
-                    }
-                    else {
-                        if (device[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
-                            demoDevices.push(device);
-                        }
-                    }
-                }
-            });
-            this.setState({
-                devices: demoDevices,
-                SearchValues: demoSearchValues
-            })
-        } else {
-            this.setState({
-                devices: coppyDevices,
-                SearchValues: demoSearchValues
-            })
-        }
+        //     copyDevices.forEach((device) => {
+        //         // console.log('device is: ', device);
+        //         if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
+
+        //             let searchColsAre = Object.keys(demoSearchValues).length;
+        //             let searchDevices = 0;
+
+        //             if (searchColsAre > 0) {
+        //                 Object.values(demoSearchValues).forEach((data) => {
+
+        //                     if (data.value == "") {
+        //                         searchDevices++;
+        //                     } else if (device[data.key]) {
+        //                         if (device[data.key].toUpperCase().includes(data.value.toUpperCase())) {
+        //                             searchDevices++;
+        //                         }
+        //                     }
+        //                 })
+
+        //                 if (searchColsAre === searchDevices) {
+        //                     demoDevices.push(device);
+        //                 }
+        //             }
+        //             else {
+        //                 if (device[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
+        //                     demoDevices.push(device);
+        //                 }
+        //             }
+        //         }
+        //     });
+        //     this.setState({
+        //         devices: demoDevices,
+        //         SearchValues: demoSearchValues
+        //     })
+        // } else {
+        //     this.setState({
+        //         devices: copyDevices,
+        //         SearchValues: demoSearchValues
+        //     })
+        // }
     }
 
 
     handleSearch12 = (devices) => {
-        let searchedDevices = [];
-        let searchData = Object.values(this.state.SearchValues);
-        let searchColsAre = Object.keys(this.state.SearchValues).length;
 
-        if (searchColsAre) {
-            devices.forEach((device) => {
-                let searchDevices = 0;
+        let response = filterData_RelatedToMultipleSearch(devices, this.state.SearchValues);
+        return response;
+        
+        // let searchedDevices = [];
+        // let searchData = Object.values(this.state.SearchValues);
+        // let searchColsAre = Object.keys(this.state.SearchValues).length;
 
-                for (let search of searchData) {
-                    // console.log('search is: ', search)
-                    // console.log('search key is: ', search.key)
-                    if (search.value == "") {
-                        searchDevices++;
-                    } else if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
-                        searchDevices++;
-                    }
+        // if (searchColsAre) {
+        //     devices.forEach((device) => {
+        //         let searchDevices = 0;
 
-                }
-                if (searchColsAre === searchDevices) {
-                    searchedDevices.push(device);
-                }
+        //         for (let search of searchData) {
+        //             // console.log('search is: ', search)
+        //             // console.log('search key is: ', search.key)
+        //             if (search.value == "") {
+        //                 searchDevices++;
+        //             } else if (device[search.key].toUpperCase().includes(search.value.toUpperCase())) {
+        //                 searchDevices++;
+        //             }
 
-            });
-            return searchedDevices;
-        } else {
-            return devices;
-        }
+        //         }
+        //         if (searchColsAre === searchDevices) {
+        //             searchedDevices.push(device);
+        //         }
+
+        //     });
+        //     return searchedDevices;
+        // } else {
+        //     return devices;
+        // }
     }
 
 
