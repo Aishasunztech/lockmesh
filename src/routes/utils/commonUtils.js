@@ -27,7 +27,7 @@ import { DEVICE_DEALER_ID, DEVICE_DEALER_PIN, DEVICE_DEALER_NAME } from '../../c
 
 import { cloneableGenerator } from 'redux-saga/utils';
 import moment from 'moment';
-
+import { isArray } from "util";
 
 export function getStatus(status, account_status, unlink_status, device_status, activation_status) {
 
@@ -224,7 +224,7 @@ export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demo
   // handleMultipleSearch(e, this.state.copy_status, copyDevices, this.state.SearchValues, this.state.filteredDevices)
 
 
-  let demoDevices = [];
+  let demoData = [];
   // let demoSearchValues = this.state.SearchValues;
   if (copy_status) {
     // copyRequireSearchData = this.state.filteredDevices;
@@ -241,57 +241,63 @@ export function handleMultipleSearch(e, copy_status, copyRequireSearchData, demo
     demoSearchValues[targetName] = { key: targetName, value: targetValue };
     // this.state.SearchValues[targetName] = { key: targetName, value: targetValue };
 
-    copyRequireSearchData.forEach((device) => {
+    copyRequireSearchData.forEach((obj) => {
       // console.log('device is: ', device);
-      if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
+      // if ((typeof device[targetName]) === 'string' && device[targetName] !== null && device[targetName] !== undefined) {
 
-        let searchColsAre = Object.keys(demoSearchValues).length;
-        let searchDevices = 0;
+      let searchColsAre = Object.keys(demoSearchValues).length;
+      let searchDevices = 0;
 
-        if (searchColsAre > 0) {
-          Object.values(demoSearchValues).forEach((data) => {
+      if (searchColsAre > 0) {
+        Object.values(demoSearchValues).forEach((data) => {
+
+          if (typeof (obj[targetName]) === 'string' && obj[targetName] !== null && obj[targetName] !== undefined) {
 
             if (data.value == "") {
               searchDevices++;
-            } else if (device[data.key]) {
-              if (device[data.key].toUpperCase().includes(data.value.toUpperCase())) {
+            } else if (obj[data.key]) {
+              if (obj[data.key].toString().toUpperCase().includes(data.value.toUpperCase())) {
                 searchDevices++;
               }
             }
-          })
+          } else if (isArray(obj[data.key])) {
+            // if (data.key == "devicesList") {
+              if (obj[data.key].length.toString().toUpperCase().includes(data.value.toUpperCase())) {
+                searchDevices++;
+              }
+            // } else {
+            //   if (obj[data.key].length.toString().toUpperCase().includes(data.value.toUpperCase())) {
+            //     searchDevices++;
+            //   }
+            // }
 
-          if (searchColsAre === searchDevices) {
-            demoDevices.push(device);
           }
-        }
-        else {
-          if (device[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
-            demoDevices.push(device);
-          }
+        })
+
+        if (searchColsAre === searchDevices) {
+          demoData.push(obj);
         }
       }
+      else {
+        if (obj[targetName].toUpperCase().includes(targetValue.toUpperCase())) {
+          demoData.push(obj);
+        }
+      }
+      // } 
     });
     return {
       copy_status,
       copyRequireSearchData,
-      demoDevices,
+      demoData,
       SearchValues: demoSearchValues
     }
-    // this.setState({
-    //   devices: demoDevices,
-    //   SearchValues: demoSearchValues
-    // })
   } else {
     return {
       copy_status,
       copyRequireSearchData,
-      devices: copyRequireSearchData,
+      demoData: copyRequireSearchData,
       SearchValues: demoSearchValues
     }
-    // this.setState({
-    //   devices: copyRequireSearchData,
-    //   SearchValues: demoSearchValues
-    // })
   }
 }
 

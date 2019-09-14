@@ -992,7 +992,7 @@ class Devices extends Component {
 
         console.log(response.SearchValues, "response is: ===========> ", response)
         this.setState({
-            devices: response.demoDevices,
+            devices: response.demoData,
             SearchValues: response.SearchValues
         });
         this.state.copy_status = response.copy_status;
