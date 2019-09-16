@@ -154,9 +154,9 @@ export default class NewDevices extends Component {
 
             let transferButton;
             if (this.state.sectionVisible) {
-                transferButton = <Button type="default" size="small" style={{ display: 'none', margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={(flagged) ? () => this.transferDevice(device) : () => this.flaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
+                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={(flagged) ? () => this.transferDevice(device) : () => this.flaggedDevices(device)}>{convertToLang(this.props.translation[Button_Transfer], "TRANSFER")}</Button>;
             } else {
-                transferButton = <Button type="default" size="small" style={{ display: 'none', margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() =>
+                transferButton = <Button type="default" size="small" style={{ margin: '0 8px 0 8px', textTransform: "uppercase" }} onClick={() =>
                     this.transferDevice(this.props.device_details, device)
                     // this.setState({
                     //     reqDevice: device
