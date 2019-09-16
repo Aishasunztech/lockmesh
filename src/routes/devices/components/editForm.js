@@ -177,7 +177,8 @@ class EditDevice extends Component {
                                         className="pos_rel"
                                         setFieldsValue={this.state.addNewUserModal ? lastObject.user_id : addNewUserValue}
                                         showSearch
-                                        disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
+                                        disabled
+                                        // disabled={(this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? true : false}
                                         placeholder={convertToLang(this.props.translation[SELECT_USER_ID], "Select User ID")}
                                         optionFilterProp="children"
                                         onChange={this.handleUserChange}

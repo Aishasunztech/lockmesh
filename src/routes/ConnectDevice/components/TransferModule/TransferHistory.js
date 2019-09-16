@@ -407,7 +407,9 @@ class TransferHistory extends Component {
                             }}
                         >
                             <Button key="back" type="button" onClick={() => { this.handleCancelUser() }} > {convertToLang(this.props.translation[Button_Cancel], "Cancel")}</Button>
-                            <Button type="primary" disabled={(addNewUserValue) ? false : true} htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
+                            <Button type="primary"
+                                // disabled={(addNewUserValue) ? false : true} 
+                                htmlType="submit">{convertToLang(this.props.translation[Button_submit], "Submit")}</Button>
                         </Form.Item>
                     </Form>
                     <AddUser ref="add_user" translation={this.props.translation} />
