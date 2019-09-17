@@ -166,12 +166,12 @@ class EditDevice extends Component {
                                 {this.props.form.getFieldDecorator('user_id', {
                                     initialValue: this.state.addNewUserModal ? lastObject.user_id : this.props.device.user_id,
 
-                                    rules: [
-                                        (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
-                                            {
-                                                required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
-                                            }
-                                    ]
+                                    // rules: [
+                                    //     (this.props.device.transfer_status == '1' || this.props.device.transfer_user_status == '1') ? {} :
+                                    //         {
+                                    //             required: true, message: convertToLang(this.props.translation[USER_ID_IS_REQUIRED], "User ID is Required !"),
+                                    //         }
+                                    // ]
                                 })(
                                     <Select
                                         className="pos_rel"
