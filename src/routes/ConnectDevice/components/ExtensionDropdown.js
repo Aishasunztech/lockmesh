@@ -81,7 +81,7 @@ export default class ExtensionDropdown extends Component {
     }
     render() {
         return (
-            <Popover className="list_d_down b-60" placement="bottomRight" content={this.renderDropdown()} trigger="click">
+            <Popover className={ this.props.isPushAppsModal ? "list_d_down":"list_d_down b-60"} placement="bottomRight" content={this.renderDropdown()} trigger="click">
                 <a><Icon type="ellipsis" /></a>
             </Popover>
         )
