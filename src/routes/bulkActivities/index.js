@@ -534,7 +534,13 @@ class BulkActivities extends Component {
                     </Row>
                     <br />
 
-                    <p>Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ? this.state.selectedDealers.map((item) => `${item.label}, `) : "NULL")}</span></p>
+                    <p>Dealers Selected: <span className="font_26">{((this.state.selectedDealers.length) ?
+                        this.state.selectedDealers.map((item, index) => {
+                            return (
+                                this.state.selectedDealers.length - 1 !== index ? `${item.label}, ` : `${item.label}`
+                            )
+                        })
+                        : "NULL")}</span></p>
                     <Row gutter={24} className="">
                         <Col className="col-md-3 col-sm-3 col-xs-3 vertical_center">
                             <span className=""> {convertToLang(this.props.translation[""], "Select Users:")} </span>
@@ -560,7 +566,10 @@ class BulkActivities extends Component {
                         </Col>
                     </Row>
                     <br />
-                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ? this.state.selectedUsers.map((item) => `${item.label}, `) : "NULL"}</span></p>
+                    <p>Users Selected: <span className="font_26">{(this.state.selectedUsers.length) ?
+                         this.state.selectedUsers.map((item, index) => 
+                        this.state.selectedUsers.length-1 !== index ? `${item.label}, `: `${item.label}`
+                         ) : "NULL"}</span></p>
 
                     <FilterDeives
                         devices={this.state.filteredDevices}
