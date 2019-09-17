@@ -125,6 +125,7 @@ class ConnectDevice extends Component {
       messageText: '',
       messageType: '',
       dynamicBackButton: false,
+      apk_list: props.apk_list
     }
     // console.log("hello every body", this.props);
     this.mainMenu = mobileMainMenu(props.translation);
@@ -157,7 +158,6 @@ class ConnectDevice extends Component {
     const device_id = isBase64(this.props.match.params.device_id);
 
     if (device_id !== '') {
-
 
       // this.setState({
       //   pageName: this.props.pageName,
@@ -223,22 +223,29 @@ class ConnectDevice extends Component {
       const device_id = isBase64(this.props.match.params.device_id);
       this.props.getDeviceDetails(device_id);
     }
+   
 
   }
 
   componentWillReceiveProps(nextProps) {
     const device_id = isBase64(nextProps.match.params.device_id);
+
     if (device_id) {
       if (this.props.translation != nextProps.translation) {
         this.mainMenu = mobileMainMenu(nextProps.translation);
         this.subMenu = mobileManagePasswords(nextProps.translation);
       }
 
+      if(this.props.apk_list !== nextProps.apk_list){
+        this.setState({
+          apk_list: nextProps.apk_list
+        })
+      }
       // there is no use of pathname under device id section
       // if(this.props.history.location.pathname !== nextProps.history.location.pathname){
       // if(this.props.pathName !== nextProps.pathName){
       if (this.props.socket === null && nextProps.socket !== null) {
-        console.log('path changed');
+
         // console.log("socket connected component")
         nextProps.actionInProcess(nextProps.socket, device_id);
         nextProps.ackFinishedPushApps(nextProps.socket, device_id);
@@ -704,7 +711,7 @@ class ConnectDevice extends Component {
                     getDevicesList={this.props.getDevicesList}
                     refreshDevice={this.refreshDevice}
                     imei_list={this.props.imei_list}
-                    apk_list={this.props.apk_list}
+                    apk_list={this.state.apk_list}
                   // applySetting = {this.applyActions}
                   />
 

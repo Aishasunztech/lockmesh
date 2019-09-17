@@ -69,7 +69,8 @@ import {
     PASSWORD_CHANGED,
     PUSH_APP_CHECKED,
     RESET_PUSH_APPS,
-    GET_UNREG_SIMS
+    GET_UNREG_SIMS,
+    HANDLE_CHECK_ALL_PUSH_APPS
 } from "../../constants/ActionTypes";
 
 import {
@@ -194,7 +195,10 @@ const initialState = {
 
     // Transfer
     transferHistoryList: [],
-    getHistory: ''
+    getHistory: '',
+    guestAllPushApps: false,
+    enableAllPushApp: false,
+    encryptedAllPushApps: false,
 };
 let pwdObject = { "admin_password": null, "guest_password": null, "encrypted_password": null, "duress_password": null }
 
@@ -270,11 +274,33 @@ export default (state = initialState, action) => {
             if (index > -1) {
                 apklist[index][key] = value
             }
+            let checked = getCheckedAllPushApp(apklist);
+            // console.log(checked, 'checked')
             return {
                 ...state,
-                apk_list: apklist
+                apk_list: JSON.parse(JSON.stringify(apklist)),
+                ...checked
             }
+        }
 
+        case HANDLE_CHECK_ALL_PUSH_APPS: {
+            let key = action.payload.key;
+            let value = action.payload.value;
+            let apklist = state.apk_list;
+            // console.log(key, 'key', 'value', value, 'ajku', apklist)
+            for (let apk of apklist) {
+                apk[key] = value
+                // console.log(apk)
+            }
+            state[key + 'AllPushApps'] = value;
+
+            return {
+                ...state,
+                apk_list: JSON.parse(JSON.stringify(apklist)),
+                guestAllPushApps: state.guestAllPushApps,
+                enableAllPushApps: state.enableAllPushApps,
+                encryptedAllPushApps: state.encryptedAllPushApps,
+            }
         }
 
         case SUSPEND_DEVICE2: {
@@ -369,7 +395,10 @@ export default (state = initialState, action) => {
         case RESET_PUSH_APPS: {
             return {
                 ...state,
-                apk_list: JSON.parse(JSON.stringify(state.apk_list_dump))
+                apk_list: JSON.parse(JSON.stringify(state.apk_list_dump)),
+                guestAllPushApps: false,
+                enableAllPushApps: false,
+                encryptedAllPushApps: false
             }
         }
 
@@ -441,7 +470,7 @@ export default (state = initialState, action) => {
 
 
         case GET_PROFILES: {
-            console.log(action.payload, 'profils are')
+            // console.log(action.payload, 'profils are')
             return {
                 ...state,
                 isloading: true,
@@ -1567,9 +1596,9 @@ export default (state = initialState, action) => {
 
         case ACK_SETTING_APPLIED: {
             // console.log("ACK_SETTING_APPLIED controls ", action.payload.controls)
-            console.log("states extensions: ", state.extensions);
+            // console.log("states extensions: ", state.extensions);
             let extensions = action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING); //action.payload.extensions
-            console.log("updated extension is: ", action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING))
+            // console.log("updated extension is: ", action.payload.app_list.filter(e => e.uniqueName == SECURE_SETTING))
             // state.extensions[0].subExtension = action.payload.extensions
             // let secureSettings = action.payload.extensions.filter(e => e.uniqueName == SECURE_SETTING);
             let settings = action.payload.app_list.filter(e => e.uniqueName == Main_SETTINGS);
@@ -1669,6 +1698,50 @@ function handleCheckedAllExts(extensions) {
     return {
         guestAllExt: guestAll,
         encryptedAllExt: encryptedAll,
+    }
+}
+
+
+function getCheckedAllPushApp(apkList) {
+    let guestCount = 0;
+    let encryptedCount = 0;
+    let enableCount = 0;
+
+    let guestAll = false;
+    let encryptedAll = false;
+    let enableAll = false;
+
+    apkList.forEach(app => {
+        if (app.guest === true || app.guest === 1) {
+            guestCount = guestCount + 1;
+        }
+
+        if (app.encrypted === true || app.encrypted === 1) {
+            encryptedCount = encryptedCount + 1;
+        }
+
+        if (app.enable === true || app.enable === 1) {
+            enableCount = enableCount + 1;
+        }
+
+    })
+
+    if (guestCount === apkList.length) {
+        guestAll = true;
+    }
+
+    if (enableCount === apkList.length) {
+        enableAll = true;
+    }
+
+    if (encryptedCount === apkList.length) {
+        encryptedAll = true;
+    }
+
+    return {
+        guestAllPushApps: guestAll,
+        encryptedAllPushApps: encryptedAll,
+        enableAllPushApps: enableAll,
     }
 }
 
