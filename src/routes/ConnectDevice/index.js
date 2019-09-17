@@ -72,7 +72,8 @@ import {
   SECURE_SETTING, SYSTEM_CONTROLS, NOT_AVAILABLE, MANAGE_PASSWORD, MAIN_MENU, APPS,
   // APPLICATION_PERMISION, SECURE_SETTING_PERMISSION, SYSTEM_PERMISSION, MANAGE_PASSWORDS,
   Main_SETTINGS,
-  DEVICE_TRIAL
+  DEVICE_TRIAL,
+  DEVICE_SUSPENDED
 } from '../../constants/Constants';
 
 import DeviceActions from './components/DeviceActions';
@@ -397,7 +398,7 @@ class ConnectDevice extends Component {
 
     } else if (this.props.pageName === NOT_AVAILABLE) {
       return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_IS], "Device is ")}
-        {(this.props.status == 'Suspended') ? convertToLang(this.props.translation[Suspended_TEXT], "Suspended") : this.props.status}</a></h1></div>);
+        {(this.props.device_details.finalStatus == DEVICE_SUSPENDED) ? convertToLang(this.props.translation[Suspended_TEXT], "Suspended") : this.props.device_details.finalStatus}</a></h1></div>);
     } else {
       return (<div><h1 className="not_syn_txt"><a>{convertToLang(this.props.translation[DEVICE_NOT_SYNCED], "Device is not Synced")}</a></h1></div>)
     }
